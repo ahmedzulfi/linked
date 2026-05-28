@@ -8,8 +8,12 @@ export default function Navbar() {
     <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-[1536px] px-6 sm:px-0">
       <div className="flex items-center justify-between h-14 px-2 pl-5 sm:pl-8 rounded-[13px] border border-[#F3F3F3] bg-[#FBFBFB] shadow-[0_6px_10px_-6px_rgba(0,0,0,0.09)]">
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0">
-          <span className="text-black text-xl font-bold tracking-tight">LinkedPage</span>
+        <Link to="/" className="flex-shrink-0 flex items-center">
+          <img
+            src="/logo.png"
+            alt="LinkedPage"
+            className="h-6 w-auto object-contain"
+          />
         </Link>
 
         {/* Desktop Nav Links */}

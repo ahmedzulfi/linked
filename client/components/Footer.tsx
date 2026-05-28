@@ -34,9 +34,12 @@ export default function Footer() {
         <div className="max-w-[1536px] mx-auto flex flex-col gap-16">
           {/* Large logo */}
           <div className="w-full overflow-hidden">
-            <span className="text-white text-3xl sm:text-4xl font-extrabold tracking-tight block py-2">
-              LinkedPage
-            </span>
+            <img
+              src="/logo.png"
+              alt="LinkedPage"
+              className="h-10 w-auto object-contain brightness-0 invert"
+              style={{ objectPosition: 'left' }}
+            />
           </div>
 
           {/* Links grid */}
