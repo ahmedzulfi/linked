@@ -95,7 +95,7 @@ function HeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full flex flex-col items-center gap-6 pt-32 pb-10 px-4">
+      <div className="relative z-10 w-full flex flex-col items-center gap-6 pb-10 px-4">
         {/* Badge */}
         <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-[#F3F3F3] bg-[#FBFBFB] shadow-[0_6px_10px_-6px_rgba(0,0,0,0.09)]">
           <span className="gradient-text-rainbow text-[15px] sm:text-[17px] leading-[27px] font-normal">
@@ -181,58 +181,10 @@ function HeroSection() {
           </div>
 
           {/* Divider */}
-          <div className="h-[2px] bg-black/5" />
 
-          {/* Template carousel */}
-          <div className="relative">
-            <div
-              ref={carouselRef}
-              className="flex gap-4 overflow-x-auto scrollbar-hide pb-1"
-            >
-              {TEMPLATES_SMALL.map((t, i) => (
-                <div key={i} className="flex-shrink-0 w-[220px]">
-                  <div className="glass-card rounded-[13px] p-2">
-                    <div className="relative rounded-[11px] overflow-hidden border border-[#F3F3F3] bg-[#FBFBFB] aspect-[4/3]">
-                      <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
-                      <div className="absolute bottom-0 left-0 right-0 h-16" style={{ background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, #000 60%)" }} />
-                      <div className="absolute bottom-0 left-0 right-0 px-3 py-2">
-                        <p className="text-white text-sm font-normal">{t.name}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
 
-            {/* Gradient masks */}
-            <div className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none" style={{ background: "linear-gradient(90deg, rgba(255,255,255,0.15) 0%, transparent 100%)" }} />
-            <div className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none" style={{ background: "linear-gradient(270deg, rgba(255,255,255,0.15) 0%, transparent 100%)" }} />
-          </div>
 
-          {/* Carousel footer */}
-          <div className="flex items-center justify-between px-1">
-            <button className="h-9 px-6 rounded-[11px] bg-[#F3F3F3] card-btn-shadow text-black text-[15px] hover:bg-[#e8e8e8] transition-colors whitespace-nowrap">
-              View All Templates
-            </button>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => scrollCarousel("prev")}
-                className="flex items-center justify-center w-8 h-8 rounded-[11px] border border-[#F3F3F3] bg-[#FBFBFB] opacity-50 hover:opacity-100 transition-opacity"
-              >
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-              <button
-                onClick={() => scrollCarousel("next")}
-                className="flex items-center justify-center w-8 h-8 rounded-[11px] border border-[#F3F3F3] bg-[#FBFBFB] hover:opacity-80 transition-opacity"
-              >
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
+
         </div>
       </div>
     </section>
@@ -328,17 +280,17 @@ function TemplatesSection() {
 
 const HOW_IT_WORKS = [
   {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/aaac7a76984ba1c7ee353bf44f9c1df888aaab69?width=979",
+    img: "/process1 (1).png",
     boldText: "Paste your LinkedIn link",
     restText: " and watch LinkedPage scrape your profile data to instantly render a professional personal page.",
   },
   {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/0d5170cee5be1bede6d850c15914f67c06b450ca?width=979",
+    img: "/process1 (2).png",
     boldText: "Customize inline",
     restText: " text and images directly on the screen, and pick from multiple clean layout styles like Bento or minimal.",
   },
   {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/39c1c374b91afee30dd05f7708698ef758d11395?width=979",
+    img: "/process1 (3).png",
     boldText: "Publish or export",
     restText: " instantly to a free subdomain or download the complete source code as a zip file to host anywhere.",
   },
