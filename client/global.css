@@ -77,12 +77,12 @@
   /* Dark gradient button */
   .btn-dark {
     background: linear-gradient(247deg, #2A2A2F 20%, #3A3A42 80%);
-    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+    box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.12), 0 -3px 4px 0 rgba(0, 0, 0, 0.20) inset, 0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
   }
 
   .btn-dark-sm {
     background: linear-gradient(216deg, #2A2A2F 20%, #3A3A42 80%);
-    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+    box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.12), 0 -3px 4px 0 rgba(0, 0, 0, 0.20) inset, 0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
   }
 
   /* Blue gradient button */
@@ -95,18 +95,18 @@
   .card-light {
     background: #FBFBFB;
     border: 1px solid #F3F3F3;
-    box-shadow: 0 6px 10px -6px rgba(0,0,0,0.09);
+    box-shadow: 0 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   /* Card button shadow */
   .card-btn-shadow {
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.02), 0 0 0 1px rgba(0,0,0,0.07), 0 1px 0 0 rgba(255,255,255,0.75) inset;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.07), 0 1px 0 0 rgba(255, 255, 255, 0.75) inset;
   }
 
   /* Dark card */
   .dark-card {
     background: linear-gradient(230deg, #2A2A2F 20%, #3A3A42 80%);
-    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+    box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.12), 0 -3px 4px 0 rgba(0, 0, 0, 0.20) inset, 0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
   }
 
   /* Glass card */
@@ -126,23 +126,23 @@
 
   /* Hero gradient overlay */
   .hero-overlay {
-    background: linear-gradient(180deg, #000 0%, #000 50%, #000 60%, rgba(0,0,0,0) 100%);
+    background: linear-gradient(180deg, #ffffffd5 0%, #ffffffa8 50%, #ffffff52 60%, rgba(0, 0, 0, 0) 100%);
   }
 
   /* Section to dark (top transition) */
   .section-to-dark-top {
-    background: radial-gradient(100% 120% at 50% 0%, #FFF 35%, #FFF 45%, #CEDEF5 58%, #6BA3FF 68%, #4D96FF 75%, #1E3A8A 85%, #0F1729 93%, #000812 100%);
+    background: radial-gradient(100% 120% at 50% 0%, #FFF 35%, #FFF 45%, #D1FAE5 58%, #86EFAC 68%, #10B981 75%, #065F46 85%, #022C22 93%, #000812 100%);
   }
 
   /* Section to dark (bottom transition) */
   .section-to-dark-bottom {
-    background: radial-gradient(100% 120% at 50% 100%, #FFF 35%, #FFF 45%, #CEDEF5 58%, #6BA3FF 68%, #4D96FF 75%, #1E3A8A 85%, #0F1729 93%, #000812 100%);
+    background: radial-gradient(100% 120% at 50% 100%, #FFF 35%, #FFF 45%, #D1FAE5 58%, #86EFAC 68%, #10B981 75%, #065F46 85%, #022C22 93%, #000812 100%);
   }
 
   /* Footer gradient */
   .footer-gradient {
     background: linear-gradient(237deg, #2A2A2F 20%, #3A3A42 80%);
-    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+    box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.12), 0 -3px 4px 0 rgba(0, 0, 0, 0.20) inset, 0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
   }
 
   /* Scrollbar hidden for carousels */
@@ -150,6 +150,7 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
@@ -159,6 +160,7 @@
     opacity: 0;
     transition: opacity 0.2s ease;
   }
+
   .template-card:hover .template-hover-overlay {
     opacity: 1;
   }
