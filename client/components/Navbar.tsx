@@ -12,7 +12,7 @@ export default function Navbar() {
           <img
             src="/logo.png"
             alt="LinkedPage"
-            className="h-[72px] w-auto object-contain"
+            className="h-[48px] w-auto object-contain"
           />
         </Link>
 
