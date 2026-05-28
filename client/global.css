@@ -1,0 +1,165 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+
+    --primary: 219 94% 58%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 9%;
+
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 46%;
+
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 95%;
+    --input: 0 0% 95%;
+    --ring: 219 94% 58%;
+
+    --radius: 0.8125rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-inter;
+  }
+
+  :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  pre,
+  code {
+    overflow-x: auto;
+    white-space: pre;
+  }
+}
+
+@layer utilities {
+  .font-inter {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Dark gradient button */
+  .btn-dark {
+    background: linear-gradient(247deg, #2A2A2F 20%, #3A3A42 80%);
+    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+  }
+
+  .btn-dark-sm {
+    background: linear-gradient(216deg, #2A2A2F 20%, #3A3A42 80%);
+    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+  }
+
+  /* Blue gradient button */
+  .btn-blue {
+    background: linear-gradient(180deg, #3D8BFA 0%, #5BA2F9 100%);
+    box-shadow: 0 6px 12px -5px rgba(58, 137, 253, 0.50);
+  }
+
+  /* Light card */
+  .card-light {
+    background: #FBFBFB;
+    border: 1px solid #F3F3F3;
+    box-shadow: 0 6px 10px -6px rgba(0,0,0,0.09);
+  }
+
+  /* Card button shadow */
+  .card-btn-shadow {
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.02), 0 0 0 1px rgba(0,0,0,0.07), 0 1px 0 0 rgba(255,255,255,0.75) inset;
+  }
+
+  /* Dark card */
+  .dark-card {
+    background: linear-gradient(230deg, #2A2A2F 20%, #3A3A42 80%);
+    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+  }
+
+  /* Glass card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(2px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Rainbow gradient text */
+  .gradient-text-rainbow {
+    background: linear-gradient(93deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Hero gradient overlay */
+  .hero-overlay {
+    background: linear-gradient(180deg, #000 0%, #000 50%, #000 60%, rgba(0,0,0,0) 100%);
+  }
+
+  /* Section to dark (top transition) */
+  .section-to-dark-top {
+    background: radial-gradient(100% 120% at 50% 0%, #FFF 35%, #FFF 45%, #CEDEF5 58%, #6BA3FF 68%, #4D96FF 75%, #1E3A8A 85%, #0F1729 93%, #000812 100%);
+  }
+
+  /* Section to dark (bottom transition) */
+  .section-to-dark-bottom {
+    background: radial-gradient(100% 120% at 50% 100%, #FFF 35%, #FFF 45%, #CEDEF5 58%, #6BA3FF 68%, #4D96FF 75%, #1E3A8A 85%, #0F1729 93%, #000812 100%);
+  }
+
+  /* Footer gradient */
+  .footer-gradient {
+    background: linear-gradient(237deg, #2A2A2F 20%, #3A3A42 80%);
+    box-shadow: 0 5px 6px 0 rgba(0,0,0,0.12), 0 -3px 4px 0 rgba(0,0,0,0.20) inset, 0 1px 0 0 rgba(255,255,255,0.25) inset;
+  }
+
+  /* Scrollbar hidden for carousels */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Template card hover overlay */
+  .template-hover-overlay {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .template-card:hover .template-hover-overlay {
+    opacity: 1;
+  }
+}
