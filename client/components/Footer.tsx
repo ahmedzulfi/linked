@@ -31,8 +31,12 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#FBFBFB] border-t border-gray-200 px-6 sm:px-12 lg:px-20 py-16 text-black font-inter">
-      <div className="max-w-[1536px] mx-auto flex flex-col gap-12">
+    <footer 
+      className="w-full p-6 sm:p-10 lg:p-14 bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/bg.png')" }}
+    >
+      <div className="w-full max-w-[1536px] mx-auto bg-[#FBFBFB] rounded-[24px] border border-gray-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.08)] px-6 sm:px-12 lg:px-20 py-16 text-black font-inter">
+        <div className="flex flex-col gap-12">
         
         {/* Top Section: Giant centered logo */}
         <div className="w-full flex justify-center py-4 border-b border-gray-200 pb-12">
@@ -166,6 +170,7 @@ export default function Footer() {
           <span>Copyright LinkedPage 2026</span>
         </div>
         
+        </div>
       </div>
     </footer>
   );
