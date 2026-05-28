@@ -14,7 +14,7 @@ function DarkButton({ children, className = "" }: { children: React.ReactNode; c
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[#3385F9] text-[25px] leading-[33px] font-normal">{children}</p>
+    <p className="text-[#10B981] text-[25px] leading-[33px] font-normal">{children}</p>
   );
 }
 
@@ -103,14 +103,14 @@ function HeroSection() {
           </span>
           <span className="flex items-center justify-center w-7 h-7 rounded-full btn-dark-sm flex-shrink-0">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
         </div>
 
         {/* Heading */}
-        <h1 className="text-white text-[48px] sm:text-[60px] lg:text-[68px] leading-[1.06] font-normal text-center">
+        <h1 className="text-black text-[48px] sm:text-[60px] lg:text-[68px] leading-[1.06] font-normal text-center">
           LinkedIn to personal micro-site
         </h1>
 
@@ -130,8 +130,8 @@ function HeroSection() {
                 {/* Add button */}
                 <button className="flex items-center justify-center w-9 h-9 rounded-full bg-[#F3F3F3] card-btn-shadow hover:bg-[#e8e8e8] transition-colors">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
 
@@ -144,15 +144,15 @@ function HeroSection() {
                 <button className="flex items-center justify-center w-9 h-9 rounded-full bg-[#F3F3F3] card-btn-shadow hover:bg-[#e8e8e8] transition-colors">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                     <g clipPath="url(#palette-clip)">
-                      <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="7.95378" cy="3.82957" r="0.59" fill="black"/>
-                      <circle cx="10.3104" cy="6.18626" r="0.59" fill="black"/>
-                      <circle cx="3.8296" cy="7.3646" r="0.59" fill="black"/>
-                      <circle cx="5.00813" cy="4.41892" r="0.59" fill="black"/>
+                      <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
+                      <circle cx="7.95378" cy="3.82957" r="0.59" fill="black" />
+                      <circle cx="10.3104" cy="6.18626" r="0.59" fill="black" />
+                      <circle cx="3.8296" cy="7.3646" r="0.59" fill="black" />
+                      <circle cx="5.00813" cy="4.41892" r="0.59" fill="black" />
                     </g>
                     <defs>
                       <clipPath id="palette-clip">
-                        <rect width="14.1406" height="14.1406" fill="white"/>
+                        <rect width="14.1406" height="14.1406" fill="white" />
                       </clipPath>
                     </defs>
                   </svg>
@@ -163,17 +163,17 @@ function HeroSection() {
                 {/* Mic button */}
                 <button className="flex items-center justify-center w-9 h-9 rounded-full bg-[#F3F3F3] card-btn-shadow hover:bg-[#e8e8e8] transition-colors">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
 
                 {/* Send button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full btn-blue opacity-50 hover:opacity-70 transition-opacity">
+                <button className="flex items-center justify-center w-9 h-9 rounded-full btn-green opacity-50 hover:opacity-70 transition-opacity">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
@@ -220,7 +220,7 @@ function HeroSection() {
                 className="flex items-center justify-center w-8 h-8 rounded-[11px] border border-[#F3F3F3] bg-[#FBFBFB] opacity-50 hover:opacity-100 transition-opacity"
               >
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
               <button
@@ -228,7 +228,7 @@ function HeroSection() {
                 className="flex items-center justify-center w-8 h-8 rounded-[11px] border border-[#F3F3F3] bg-[#FBFBFB] hover:opacity-80 transition-opacity"
               >
                 <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                  <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
             </div>
@@ -298,7 +298,7 @@ function TemplatesSection() {
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex-1 h-2 rounded-full border border-[#F3F3F3] bg-[#FBFBFB] shadow-[0_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden mr-8">
-            <div className="h-full w-1/4 rounded-full" style={{ background: "linear-gradient(90deg, #3385F9 0%, #6BA3FF 100%)" }} />
+            <div className="h-full w-1/4 rounded-full" style={{ background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }} />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -306,7 +306,7 @@ function TemplatesSection() {
               className="flex items-center justify-center w-8 h-8 rounded-[13px] border border-[#F3F3F3] bg-[#FBFBFB] opacity-50 hover:opacity-100 transition-opacity"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             <button
@@ -314,7 +314,7 @@ function TemplatesSection() {
               className="flex items-center justify-center w-8 h-8 rounded-[13px] border border-[#F3F3F3] bg-[#FBFBFB] hover:opacity-80 transition-opacity"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="black" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
@@ -401,15 +401,15 @@ function DomainSection() {
               <div className="flex items-center justify-between px-5 py-4 rounded-[11px] bg-white">
                 <div className="flex items-center gap-3">
                   <svg width="16" height="19" viewBox="0 0 16 19" fill="none">
-                    <path d="M13.2211 14.7838L10.4889 12.0515" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M6.92514 13.5241C9.7067 13.5241 11.9616 11.2692 11.9616 8.48764C11.9616 5.70607 9.7067 3.45117 6.92514 3.45117C4.14357 3.45117 1.88867 5.70607 1.88867 8.48764C1.88867 11.2692 4.14357 13.5241 6.92514 13.5241Z" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M13.2211 14.7838L10.4889 12.0515" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M6.92514 13.5241C9.7067 13.5241 11.9616 11.2692 11.9616 8.48764C11.9616 5.70607 9.7067 3.45117 6.92514 3.45117C4.14357 3.45117 1.88867 5.70607 1.88867 8.48764C1.88867 11.2692 4.14357 13.5241 6.92514 13.5241Z" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <span className="text-black text-[17px] leading-[27px]">reidhoffman.linkedpage.me</span>
                 </div>
                 <button className="flex items-center justify-center w-8 h-8 rounded-full btn-dark-sm">
                   <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
-                    <path d="M5.31708 5.31714H12.9129V12.913" stroke="white" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M5.31708 12.913L12.9129 5.31714" stroke="white" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M5.31708 5.31714H12.9129V12.913" stroke="white" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5.31708 12.913L12.9129 5.31714" stroke="white" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
@@ -459,11 +459,10 @@ function BusinessSection() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(i)}
-                className={`h-10 px-10 text-[16px] leading-[23px] rounded-[13px] transition-colors ${
-                  activeTab === i
-                    ? "bg-[#F0F7FF] border border-[#3385F9]/50 text-[#3385F9]"
-                    : "text-white/60 hover:text-white"
-                }`}
+                className={`h-10 px-10 text-[16px] leading-[23px] rounded-[13px] transition-colors ${activeTab === i
+                  ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400"
+                  : "text-white/60 hover:text-white"
+                  }`}
               >
                 {tab}
               </button>
@@ -489,7 +488,7 @@ function BusinessSection() {
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 flex items-center justify-center w-10 h-10 rounded-full btn-dark-sm text-white opacity-70 hover:opacity-100 transition-opacity hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="white" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="white" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
           <button
@@ -497,7 +496,7 @@ function BusinessSection() {
             className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 flex items-center justify-center w-10 h-10 rounded-full btn-dark-sm text-white opacity-70 hover:opacity-100 transition-opacity hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="white" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="white" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
@@ -642,9 +641,9 @@ function FAQSection() {
                 </span>
                 <span className="flex-shrink-0 flex items-center justify-center w-9 h-9 rounded-[13px] btn-dark-sm">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                    <path d="M2.94586 7.5H11.1945" stroke="white" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2.94586 7.5H11.1945" stroke="white" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
                     {openIdx !== i && (
-                      <path d="M7.07001 3.375V11.625" stroke="white" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M7.07001 3.375V11.625" stroke="white" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
                     )}
                   </svg>
                 </span>
@@ -675,10 +674,7 @@ export default function Index() {
 
         {/* Dark wrapper — top gradient transition */}
         <div className="section-to-dark-top h-[300px] sm:h-[400px] -mb-1" />
-        <DomainSection />
-        <BusinessSection />
         {/* Dark wrapper — bottom gradient transition */}
-        <div className="section-to-dark-bottom h-[300px] sm:h-[400px] -mt-1" />
 
         <BrandSection />
 
