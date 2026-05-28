@@ -14,7 +14,7 @@ function DarkButton({ children, className = "" }: { children: React.ReactNode; c
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[#10B981] text-[25px] leading-[33px] font-normal">{children}</p>
+    <p className="text-[#84CC16] text-[25px] leading-[33px] font-normal">{children}</p>
   );
 }
 
@@ -298,7 +298,7 @@ function TemplatesSection() {
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex-1 h-2 rounded-full border border-[#F3F3F3] bg-[#FBFBFB] shadow-[0_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden mr-8">
-            <div className="h-full w-1/4 rounded-full" style={{ background: "linear-gradient(90deg, #10B981 0%, #34D399 100%)" }} />
+            <div className="h-full w-1/4 rounded-full" style={{ background: "linear-gradient(90deg, #84CC16 0%, #A3E635 100%)" }} />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -460,7 +460,7 @@ function BusinessSection() {
                 key={tab}
                 onClick={() => setActiveTab(i)}
                 className={`h-10 px-10 text-[16px] leading-[23px] rounded-[13px] transition-colors ${activeTab === i
-                  ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-400"
+                  ? "bg-lime-500/10 border border-lime-500/30 text-lime-400"
                   : "text-white/60 hover:text-white"
                   }`}
               >

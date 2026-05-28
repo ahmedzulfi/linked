@@ -16,7 +16,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
 
-    --primary: 219 94% 58%;
+    --primary: 82 84% 44%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 0 0% 95%;
@@ -33,7 +33,7 @@
 
     --border: 0 0% 95%;
     --input: 0 0% 95%;
-    --ring: 219 94% 58%;
+    --ring: 82 84% 44%;
 
     --radius: 0.8125rem;
 
@@ -85,10 +85,10 @@
     box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.12), 0 -3px 4px 0 rgba(0, 0, 0, 0.20) inset, 0 1px 0 0 rgba(255, 255, 255, 0.25) inset;
   }
 
-  /* Blue gradient button */
-  .btn-blue {
-    background: linear-gradient(180deg, #3D8BFA 0%, #5BA2F9 100%);
-    box-shadow: 0 6px 12px -5px rgba(58, 137, 253, 0.50);
+  /* Green gradient button */
+  .btn-green {
+    background: linear-gradient(180deg, #84CC16 0%, #A3E635 100%);
+    box-shadow: 0 6px 12px -5px rgba(132, 204, 22, 0.50);
   }
 
   /* Light card */
@@ -131,12 +131,12 @@
 
   /* Section to dark (top transition) */
   .section-to-dark-top {
-    background: radial-gradient(100% 120% at 50% 0%, #FFF 35%, #FFF 45%, #D1FAE5 58%, #86EFAC 68%, #10B981 75%, #065F46 85%, #022C22 93%, #000812 100%);
+    background: radial-gradient(100% 120% at 50% 0%, #FFF 35%, #FFF 45%, #ECFDF5 58%, #D9F99D 68%, #A3E635 75%, #4D7C0F 85%, #1A2E05 93%, #000812 100%);
   }
 
   /* Section to dark (bottom transition) */
   .section-to-dark-bottom {
-    background: radial-gradient(100% 120% at 50% 100%, #FFF 35%, #FFF 45%, #D1FAE5 58%, #86EFAC 68%, #10B981 75%, #065F46 85%, #022C22 93%, #000812 100%);
+    background: radial-gradient(100% 120% at 50% 100%, #FFF 35%, #FFF 45%, #ECFDF5 58%, #D9F99D 68%, #A3E635 75%, #4D7C0F 85%, #1A2E05 93%, #000812 100%);
   }
 
   /* Footer gradient */
