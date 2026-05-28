@@ -87,7 +87,7 @@ function HeroSection() {
       {/* Background image + overlay */}
       <div className="absolute inset-0 z-0">
         <img
-          src="https://api.builder.io/api/v1/image/assets/TEMP/f2cbc765df62d863d383c5876169ffe215e22c34?width=3840"
+          src="/bg.png"
           alt=""
           className="w-full h-full object-cover object-top"
         />
