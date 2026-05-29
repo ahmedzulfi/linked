@@ -210,21 +210,30 @@ function ChatPane({
     },
     {
       id: "sort" as ChatTab,
+      label: "Fonts",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.125" viewBox="0 0 24 24">
+          <path d="M12 4v16" />
+          <path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2" />
+          <path d="M9 20h6" />
         </svg>
       ),
     },
     {
       id: "copy" as ChatTab,
+      label: "Pages",
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.125" viewBox="0 0 24 24">
+          <path d="M15 2a2 2 0 0 1 1.414.586l4 4A2 2 0 0 1 21 8v7a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+          <path d="M15 2v4a2 2 0 0 0 2 2h4" />
+          <path d="M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1" />
         </svg>
       ),
     },
   ];
+
+  const activeTabIndex = chatTabs.findIndex((t) => t.id === activeTab);
+  const isChatActive = activeTab === "chat";
 
   return (
     <section className="w-[360px] h-full flex flex-col bg-white border-r border-[#E6E6E6] shrink-0 overflow-hidden">
@@ -237,30 +246,58 @@ function ChatPane({
         </div>
       </header>
 
-      {/* Tab toolbar */}
-      <div className="p-4 shrink-0">
-        <div className="flex items-center p-1 bg-[#F7F7F7] rounded-[13px] border border-[#E6E6E6]">
-          {chatTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                if (tab.id !== "chat" && tab.id !== "grid" && tab.id !== "theme") {
-                  toast(`Switched to ${tab.id} mode`);
-                }
-              }}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-[9px] transition-all duration-150 text-xs font-medium ${
-                activeTab === tab.id
-                  ? "bg-white shadow-sm text-[#2A2A2F]"
-                  : "text-[#171717]/50 hover:text-[#171717]"
-              }`}
-            >
-              {tab.id === "chat" ? (
-                <span className={activeTab === tab.id ? "text-[#369762]" : ""}>{tab.icon}</span>
-              ) : tab.icon}
-              {tab.label && <span>{tab.label}</span>}
-            </button>
-          ))}
+      {/* Tab toolbar — new design */}
+      <div className="px-4 pt-4 pb-2 shrink-0">
+        <div className="relative bg-[#F7F7F7] border border-[#E6E6E6] rounded-[11px] p-1 flex items-center">
+          {/* Sliding active pill */}
+          <div
+            className="absolute top-1 bottom-1 rounded-[8px] bg-white shadow-sm border border-[#E6E6E6]/60 transition-all duration-300 ease-out pointer-events-none z-0"
+            style={{
+              left: `calc(4px + ${activeTabIndex} * (100% - 8px) / 6)`,
+              width: isChatActive ? `calc((100% - 8px) / 6 + 28px)` : `calc((100% - 8px) / 6)`,
+            }}
+          />
+          {chatTabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const isChatTab = tab.id === "chat";
+            const tabLabel = (tab as { label?: string }).label;
+            return (
+              <div key={tab.id} className="relative group flex-1 flex justify-center">
+                <button
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    if (tab.id !== "chat" && tab.id !== "grid" && tab.id !== "theme") {
+                      toast(`Switched to ${tabLabel ?? tab.id} mode`);
+                    }
+                  }}
+                  className={`relative z-10 flex items-center justify-center gap-1.5 h-8 rounded-[8px] w-full cursor-pointer transition-colors duration-150 ${
+                    isActive
+                      ? isChatTab ? "text-[#369762]" : "text-[#2A2A2F]"
+                      : "text-[#171717]/45 hover:text-[#171717]"
+                  }`}
+                >
+                  <span className="shrink-0">{tab.icon}</span>
+                  {isChatTab && (
+                    <span
+                      className="text-xs font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ease-out"
+                      style={{ width: isActive ? "30px" : "0px", opacity: isActive ? 1 : 0 }}
+                    >
+                      Chat
+                    </span>
+                  )}
+                </button>
+                {/* Tooltip for non-chat tabs */}
+                {!isChatTab && (
+                  <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200">
+                    <div className="absolute w-2 h-2 bg-[#2A2A2F] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
+                    <div className="relative px-2.5 py-1 text-[11px] font-medium text-white bg-[#2A2A2F] rounded-md whitespace-nowrap">
+                      {tabLabel}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -828,11 +865,10 @@ function EditorInner() {
                     else toast(`${item.label} coming soon`);
                   }}
                   title={item.label}
-                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${
-                    activeNav === i
+                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
                       ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-sm"
-                      : "text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] border border-transparent"
-                  }`}
+                      : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
+                    }`}
                 >
                   <div className="w-6 h-6 flex items-center justify-center shrink-0">
                     {item.icon}
@@ -853,7 +889,7 @@ function EditorInner() {
                 <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ff4b72] via-[#a855f7] to-[#3b82f6]" />
                 <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#ff4b72] via-[#a855f7] to-[#3b82f6] opacity-30" />
                 <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-[#3b82f6] via-[#a855f7] to-[#ff4b72] opacity-30" />
-                
+
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
                   ONLY $16 to<br />unlock Premium<br />Features
                 </p>
@@ -948,9 +984,8 @@ function EditorInner() {
             <div className="hidden sm:flex items-center gap-0.5 p-0.5 bg-white border border-[#E6E6E6] rounded-full">
               <button
                 onClick={() => setPreviewMode("desktop")}
-                className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-full transition-[background,color] duration-150 ${
-                  previewMode === "desktop" ? "bg-[#F3F3F3] text-black" : "text-[#9CA3AF] hover:text-black"
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-full transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-[#F3F3F3] text-black" : "text-[#9CA3AF] hover:text-black"
+                  }`}
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <rect x="2" y="3" width="20" height="14" rx="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -960,9 +995,8 @@ function EditorInner() {
               </button>
               <button
                 onClick={() => setPreviewMode("mobile")}
-                className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-full transition-[background,color] duration-150 ${
-                  previewMode === "mobile" ? "bg-[#F3F3F3] text-black" : "text-[#9CA3AF] hover:text-black"
-                }`}
+                className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-full transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-[#F3F3F3] text-black" : "text-[#9CA3AF] hover:text-black"
+                  }`}
               >
                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <rect x="5" y="2" width="14" height="20" rx="2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1109,7 +1143,7 @@ function EditorInner() {
                       <h2 className="text-xl font-medium text-[#2A2A2F]">Paste your LinkedIn URL</h2>
                       <p className="text-sm text-[#9CA3AF]">Use the chat panel to paste a LinkedIn URL and generate your micro-site.</p>
                       <button
-                         onClick={() => router.push("/")}
+                        onClick={() => router.push("/")}
                         className="button button-primary mt-2"
                       >
                         Go to home
