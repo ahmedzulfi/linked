@@ -153,10 +153,46 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
   );
 }
 
+const COLOR_PALETTES = [
+  { name: "Alexandria", gradient: "conic-gradient(rgb(245, 250, 255) 0%, rgb(245, 250, 255) 25%, rgb(21, 71, 156) 25%, rgb(21, 71, 156) 50%, rgb(168, 204, 232) 50%, rgb(168, 204, 232) 75%, rgb(123, 163, 207) 75%, rgb(123, 163, 207) 100%)" },
+  { name: "Evergreen", gradient: "conic-gradient(rgb(250, 255, 251) 0%, rgb(250, 255, 251) 25%, rgb(10, 112, 95) 25%, rgb(10, 112, 95) 50%, rgb(168, 217, 190) 50%, rgb(168, 217, 190) 75%, rgb(107, 191, 184) 75%, rgb(107, 191, 184) 100%)" },
+  { name: "Crimson", gradient: "conic-gradient(rgb(255, 250, 250) 0%, rgb(255, 250, 250) 25%, rgb(230, 57, 70) 25%, rgb(230, 57, 70) 50%, rgb(245, 196, 199) 50%, rgb(245, 196, 199) 75%, rgb(240, 145, 153) 75%, rgb(240, 145, 153) 100%)" },
+  { name: "Lavender", gradient: "conic-gradient(rgb(251, 250, 255) 0%, rgb(251, 250, 255) 25%, rgb(139, 92, 246) 25%, rgb(139, 92, 246) 50%, rgb(216, 206, 245) 50%, rgb(216, 206, 245) 75%, rgb(196, 168, 249) 75%, rgb(196, 168, 249) 100%)" },
+  { name: "Sahara", gradient: "conic-gradient(rgb(246, 240, 233) 0%, rgb(246, 240, 233) 25%, rgb(43, 24, 10) 25%, rgb(43, 24, 10) 50%, rgb(148, 135, 124) 50%, rgb(148, 135, 124) 75%, rgb(175, 160, 148) 75%, rgb(175, 160, 148) 100%)" },
+  { name: "Glacier", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(21, 71, 156) 50%, rgb(21, 71, 156) 75%, rgb(168, 204, 232) 75%, rgb(168, 204, 232) 100%)" },
+  { name: "Forest", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(21, 156, 73) 50%, rgb(21, 156, 73) 75%, rgb(168, 232, 186) 75%, rgb(168, 232, 186) 100%)" },
+  { name: "Coral", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(230, 57, 70) 50%, rgb(230, 57, 70) 75%, rgb(232, 190, 168) 75%, rgb(232, 190, 168) 100%)" },
+  { name: "Amethyst", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(97, 57, 230) 50%, rgb(97, 57, 230) 75%, rgb(179, 168, 232) 75%, rgb(179, 168, 232) 100%)" },
+  { name: "Parchment", gradient: "conic-gradient(rgb(239, 235, 229) 0%, rgb(239, 235, 229) 25%, rgb(0, 0, 0) 25%, rgb(0, 0, 0) 50%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%, rgb(225, 184, 117) 75%, rgb(225, 184, 117) 100%)" },
+  { name: "Emerald City", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(31, 81, 76) 25%, rgb(31, 81, 76) 50%, rgb(21, 156, 73) 50%, rgb(21, 156, 73) 75%, rgb(168, 232, 186) 75%, rgb(168, 232, 186) 100%)" },
+  { name: "Navy Pier", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(31, 50, 81) 25%, rgb(31, 50, 81) 50%, rgb(21, 71, 156) 50%, rgb(21, 71, 156) 75%, rgb(168, 204, 232) 75%, rgb(168, 204, 232) 100%)" },
+  { name: "Bordeaux", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(230, 57, 70) 50%, rgb(230, 57, 70) 75%, rgb(232, 190, 168) 75%, rgb(232, 190, 168) 100%)" },
+  { name: "Plum", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(52, 31, 81) 25%, rgb(52, 31, 81) 50%, rgb(97, 57, 230) 50%, rgb(97, 57, 230) 75%, rgb(179, 168, 232) 75%, rgb(179, 168, 232) 100%)" },
+  { name: "Sakura", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(27, 12, 37) 25%, rgb(27, 12, 37) 50%, rgb(255, 147, 228) 50%, rgb(255, 147, 228) 75%, rgb(232, 168, 195) 75%, rgb(232, 168, 195) 100%)" },
+  { name: "Sunset", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(255, 98, 7) 25%, rgb(255, 98, 7) 50%, rgb(255, 206, 147) 50%, rgb(255, 206, 147) 75%, rgb(232, 207, 168) 75%, rgb(232, 207, 168) 100%)" },
+  { name: "Azure", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(7, 152, 255) 25%, rgb(7, 152, 255) 50%, rgb(147, 199, 255) 50%, rgb(147, 199, 255) 75%, rgb(168, 205, 232) 75%, rgb(168, 205, 232) 100%)" },
+  { name: "Peach Blossom", gradient: "conic-gradient(rgb(227, 222, 234) 0%, rgb(227, 222, 234) 25%, rgb(39, 35, 31) 25%, rgb(39, 35, 31) 50%, rgb(198, 138, 98) 50%, rgb(198, 138, 98) 75%, rgb(198, 138, 98) 75%, rgb(198, 138, 98) 100%)" },
+  { name: "Iris", gradient: "conic-gradient(rgb(227, 222, 234) 0%, rgb(227, 222, 234) 25%, rgb(31, 32, 39) 25%, rgb(31, 32, 39) 50%, rgb(98, 125, 198) 50%, rgb(98, 125, 198) 75%, rgb(98, 125, 198) 75%, rgb(98, 125, 198) 100%)" },
+  { name: "Sandstone", gradient: "conic-gradient(rgb(245, 244, 239) 0%, rgb(245, 244, 239) 25%, rgb(42, 41, 40) 25%, rgb(42, 41, 40) 50%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%, rgb(198, 177, 128) 75%, rgb(198, 177, 128) 100%)" },
+  { name: "Slate", gradient: "conic-gradient(rgb(245, 244, 240) 0%, rgb(245, 244, 240) 25%, rgb(44, 44, 44) 25%, rgb(44, 44, 44) 50%, rgb(138, 138, 138) 50%, rgb(138, 138, 138) 75%, rgb(232, 230, 225) 75%, rgb(232, 230, 225) 100%)" },
+  { name: "Botanical", gradient: "conic-gradient(rgb(246, 247, 244) 0%, rgb(246, 247, 244) 25%, rgb(14, 58, 41) 25%, rgb(14, 58, 41) 50%, rgb(53, 193, 139) 50%, rgb(53, 193, 139) 75%, rgb(198, 239, 198) 75%, rgb(198, 239, 198) 100%)" },
+  { name: "Desert", gradient: "conic-gradient(rgb(252, 246, 236) 0%, rgb(252, 246, 236) 25%, rgb(46, 37, 33) 25%, rgb(46, 37, 33) 50%, rgb(178, 162, 139) 50%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 100%)" },
+  { name: "Rosewood", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(184, 43, 64) 25%, rgb(184, 43, 64) 50%, rgb(185, 9, 65) 50%, rgb(185, 9, 65) 75%, rgb(232, 168, 182) 75%, rgb(232, 168, 182) 100%)" },
+  { name: "Terra Cotta", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(143, 56, 56) 50%, rgb(143, 56, 56) 75%, rgb(201, 114, 92) 75%, rgb(201, 114, 92) 100%)" }
+];
+
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
 function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
   const [profileUrl, setProfileUrl] = useState("https://www.linkedin.com/in/reidhoffman");
+  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+
+  const selectPalette = (name: string) => {
+    setIsPaletteOpen(false);
+    toast.success(`Applied ${name} color palette!`);
+    const cleanUrl = profileUrl.split(" --theme")[0].trim();
+    setProfileUrl(`${cleanUrl} --theme ${name.toLowerCase()}`);
+  };
 
   const heroContainerVariants = {
     hidden: {},
@@ -274,25 +310,71 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                 </button>
 
                 {/* Color palette button */}
-                <button
-                  onClick={() => toast.success("Theme customizer panel loaded!")}
-                  className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
-                >
-                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                    <g clipPath="url(#palette-clip)">
-                      <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
-                      <circle cx="7.95378" cy="3.82957" r="0.59" fill="black" />
-                      <circle cx="10.3104" cy="6.18626" r="0.59" fill="black" />
-                      <circle cx="3.8296" cy="7.3646" r="0.59" fill="black" />
-                      <circle cx="5.00813" cy="4.41892" r="0.59" fill="black" />
-                    </g>
-                    <defs>
-                      <clipPath id="palette-clip">
-                        <rect width="14.1406" height="14.1406" fill="white" />
-                      </clipPath>
-                    </defs>
-                  </svg>
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setIsPaletteOpen(!isPaletteOpen)}
+                    className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                      <g clipPath="url(#palette-clip)">
+                        <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="7.95378" cy="3.82957" r="0.59" fill="black" />
+                        <circle cx="10.3104" cy="6.18626" r="0.59" fill="black" />
+                        <circle cx="3.8296" cy="7.3646" r="0.59" fill="black" />
+                        <circle cx="5.00813" cy="4.41892" r="0.59" fill="black" />
+                      </g>
+                      <defs>
+                        <clipPath id="palette-clip">
+                          <rect width="14.1406" height="14.1406" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </button>
+
+                  <AnimatePresence>
+                    {isPaletteOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                        transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] as const }}
+                        style={{ originX: 1, originY: 1 }}
+                        className="absolute right-0 bottom-full mb-3 z-[9999] bg-white border border-[#E6E6E6] rounded-[13px] shadow-xl p-3 flex flex-col gap-3 min-w-[260px] select-none text-left"
+                      >
+                        <div className="flex items-center gap-2 px-1 border-b border-[#F3F3F3] pb-2 text-black">
+                          <svg className="h-4 w-4 text-black" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" />
+                            <circle cx="13.5" cy="6.5" fill="currentColor" r=".5" />
+                            <circle cx="17.5" cy="10.5" fill="currentColor" r=".5" />
+                            <circle cx="6.5" cy="12.5" fill="currentColor" r=".5" />
+                            <circle cx="8.5" cy="7.5" fill="currentColor" r=".5" />
+                          </svg>
+                          <span className="text-sm font-semibold">Color palettes</span>
+                        </div>
+
+                        <div className="flex flex-col gap-1 py-1 max-h-52 overflow-y-auto scrollbar-thin text-black">
+                          {COLOR_PALETTES.map((palette) => (
+                            <button
+                              key={palette.name}
+                              onClick={() => selectPalette(palette.name)}
+                              className="group relative flex items-center gap-3 p-2 w-full text-sm text-black rounded-[8px] hover:bg-[#F3F3F3] transition-all cursor-pointer text-left active:scale-[0.98]"
+                            >
+                              <div
+                                className="rounded-full shrink-0 relative border border-black/5"
+                                style={{
+                                  background: palette.gradient,
+                                  width: "22px",
+                                  height: "22px",
+                                }}
+                              />
+                              <span className="font-medium">{palette.name}</span>
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
 
               <div className="flex items-center gap-3">
