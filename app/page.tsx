@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-//   ─ Small reusable pieces                                                   ─
+// ─── Small reusable pieces ───────────────────────────────────────────────────
 
 function DarkButton({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   return (
@@ -34,7 +34,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-//   ─ Template card data                                                       ─
+// ─── Template card data ───────────────────────────────────────────────────────
 
 const TEMPLATES_LARGE = [
   {
@@ -69,7 +69,7 @@ const FAQ_ITEMS = [
   "Can I export the code of my micro-site?",
 ];
 
-//   ─ Live Preview Modal Component                                             ─
+// ─── Live Preview Modal Component ─────────────────────────────────────────────
 
 function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   if (!isOpen) return null;
@@ -181,7 +181,7 @@ const COLOR_PALETTES = [
   { name: "Terra Cotta", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(143, 56, 56) 50%, rgb(143, 56, 56) 75%, rgb(201, 114, 92) 75%, rgb(201, 114, 92) 100%)" }
 ];
 
-//   ─ Hero Section                                                             ─
+// ─── Hero Section ─────────────────────────────────────────────────────────────
 
 function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
   const [profileUrl, setProfileUrl] = useState("https://www.linkedin.com/in/reidhoffman");
@@ -278,7 +278,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
           variants={heroItemVariants}
           className="w-full max-w-[1040px]      rounded-lg   glass-card  p-4 sm:p-5 flex flex-col gap-5 mt-4"
         >
-          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/80 p-5 flex flex-col gap-4  shadow-[0_6px_10px_-6px_#00000016]  focus-within:ring-2 focus-within:ring-[#8DFFB3]/10 transition-[box-shadow] duration-250 ease-out">
+          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/80 p-5 flex flex-col gap-4  shadow-[0_6px_10px_-6px_#00000016]  focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
             {/* Textarea */}
             <textarea
               value={profileUrl}
@@ -409,7 +409,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
   );
 }
 
-//   ─ Templates Section                                                         
+// ─── Templates Section ────────────────────────────────────────────────────────
 
 function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: string) => void }) {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -538,7 +538,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
   );
 }
 
-//   ─ How It Works Section                                                     ─
+// ─── How It Works Section ─────────────────────────────────────────────────────
 
 const HOW_IT_WORKS = [
   {
@@ -627,7 +627,7 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
   );
 }
 
-//   ─ Business Section (Career Showcase)                                       
+// ─── Business Section (Career Showcase) ──────────────────────────────────────
 
 const BUSINESS_TABS = ["Experience", "Projects", "Education", "Contact"];
 const BUSINESS_CARDS = [
@@ -736,7 +736,7 @@ function BusinessSection() {
   );
 }
 
-//   ─ Features Section                                                         ─
+// ─── Features Section ─────────────────────────────────────────────────────────
 
 const FEATURES = [
   {
@@ -815,7 +815,7 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
   );
 }
 
-//   ─ FAQ Section                                                               
+// ─── FAQ Section ──────────────────────────────────────────────────────────────
 
 function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
@@ -908,7 +908,7 @@ function FAQSection() {
   );
 }
 
-//   ─ Main Page                                                                 
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function Index() {
   const router = useRouter();
@@ -973,5 +973,3 @@ export default function Index() {
     </div>
   );
 }
-
-

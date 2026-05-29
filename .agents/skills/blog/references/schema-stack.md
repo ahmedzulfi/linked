@@ -250,12 +250,12 @@ citation. Google says there is "no need to proactively remove" existing FAQPage 
 
 ```
 FAQPage
-  └   mainEntity (array)
-        └   Question
-              ├   name (the question text)
-              └   acceptedAnswer
-                    └   Answer
-                          └   text (the answer text, 40-60 words)
+  └── mainEntity (array)
+        └── Question
+              ├── name (the question text)
+              └── acceptedAnswer
+                    └── Answer
+                          └── text (the answer text, 40-60 words)
 ```
 
 ### Complete FAQPage Example

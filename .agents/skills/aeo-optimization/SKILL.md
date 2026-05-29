@@ -17,20 +17,20 @@ effort: medium
 ## Why AEO Matters Now
 
 ```
-┌                                                                ┐
+┌────────────────────────────────────────────────────────────────┐
 │  THE GREAT DECOUPLING                                          │
-│                                                                │
+│  ────────────────────────────────────────────────────────────  │
 │  Impressions ≠ Clicks anymore.                                 │
 │  AI engines compile answers from multiple sources.             │
 │  More buyer journey happens inside chat experiences.           │
 │  58% of Google searches = zero clicks (AI overviews).          │
-├                                                                ┤
+├────────────────────────────────────────────────────────────────┤
 │  THE OPPORTUNITY                                               │
-│                                                                │
+│  ────────────────────────────────────────────────────────────  │
 │  Shape what AI engines say about your category and product.    │
 │  Get cited as the authoritative source.                        │
 │  Best answer > Best page ranking.                              │
-└                                                                ┘
+└────────────────────────────────────────────────────────────────┘
 ```
 
 **Key Stats:**
@@ -444,24 +444,24 @@ Triples:
 ## Content Cluster Architecture
 
 ```
-                    ┌                    ─┐
+                    ┌─────────────────────┐
                     │  Category Explainer │
                     │   "What is AEO?"    │
-                    └          ┬          ┘
+                    └──────────┬──────────┘
                                │
-        ┌                      ┼                      ┐
+        ┌──────────────────────┼──────────────────────┐
         │                      │                      │
         ▼                      ▼                      ▼
-┌              ─┐    ┌              ─┐    ┌              ─┐
+┌───────────────┐    ┌───────────────┐    ┌───────────────┐
 │ Product Page  │    │ Product Page  │    │ Product Page  │
 │  "Feature A"  │    │  "Feature B"  │    │  "Feature C"  │
-└      ─┬      ─┘    └      ─┬      ─┘    └      ─┬      ─┘
+└───────┬───────┘    └───────┬───────┘    └───────┬───────┘
         │                    │                    │
         ▼                    ▼                    ▼
-┌              ─┐    ┌              ─┐    ┌              ─┐
+┌───────────────┐    ┌───────────────┐    ┌───────────────┐
 │  Blog Post    │    │  Use Case     │    │  Comparison   │
 │  (supports)   │    │  (industry)   │    │  (vs. alt)    │
-└              ─┘    └              ─┘    └              ─┘
+└───────────────┘    └───────────────┘    └───────────────┘
 ```
 
 **Linking Rules:**

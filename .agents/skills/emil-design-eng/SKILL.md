@@ -52,7 +52,7 @@ Wrong format (never do this):
 ```
 Before: transition: all 300ms
 After: transition: transform 200ms ease-out
-                            
+────────────────────────────
 Before: scale(0)
 After: scale(0.95)
 ```

@@ -30,5 +30,3 @@ dist-ssr
 .next/
 out/
 tsconfig.tsbuildinfo
-
-.vercel

@@ -86,7 +86,7 @@ export default function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@email.com"
-                    className="w-full bg-white text-[#171717] border border-[#E6E6E6]      rounded-lg   h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DFFB3] transition-[border-color] duration-200 font-inter-tight  shadow-[0_6px_10px_-6px_#00000016] "
+                    className="w-full bg-white text-[#171717] border border-[#E6E6E6]      rounded-lg   h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-[border-color] duration-200 font-inter-tight  shadow-[0_6px_10px_-6px_#00000016] "
                   />
                   <button
                     type="submit"
@@ -219,5 +219,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-

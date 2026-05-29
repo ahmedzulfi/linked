@@ -8,7 +8,7 @@ interface ProfilePreviewProps {
   scale?: number;
 }
 
-//   ─ Link icons (inline SVG)                                                   ─
+// ─── Link icons (inline SVG) ───────────────────────────────────────────────────
 function LinkIcon({ icon }: { icon?: string }) {
   if (icon === "linkedin") return (
     <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
@@ -24,7 +24,7 @@ function LinkIcon({ icon }: { icon?: string }) {
   );
 }
 
-//   ─ Minimal Card Template                                                     ─
+// ─── Minimal Card Template ─────────────────────────────────────────────────────
 function MinimalCard({ profile }: { profile: ProfileData }) {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 font-inter">
@@ -53,7 +53,7 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
           {profile.skills.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-6">
               {profile.skills.slice(0, 8).map((skill, i) => (
-                <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#D4FBE5] text-[#064e3b]">
+                <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#DCEAFF] text-[#1A4A8A]">
                   {skill.name}
                 </span>
               ))}
@@ -83,7 +83,7 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
                 <a
                   key={i}
                   href={link.url}
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DFFB3] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DFFB3]"
+                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
                 >
                   <LinkIcon icon={link.icon} />
                   {link.label}
@@ -97,7 +97,7 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
   );
 }
 
-//   ─ Bento Grid Template                                                       ─
+// ─── Bento Grid Template ───────────────────────────────────────────────────────
 function BentoGrid({ profile }: { profile: ProfileData }) {
   return (
     <div className="min-h-screen bg-[#FBFBFB] p-6 font-inter">
@@ -123,11 +123,11 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
         </div>
 
         {/* Skills */}
-        <div className="bg-[#D4FBE5]/40 border border-[#8DFFB3]/30 rounded-[16px] p-5">
-          <p className="text-xs font-medium text-[#064e3b] uppercase tracking-wide mb-3">Skills</p>
+        <div className="bg-[#DCEAFF]/40 border border-[#8DB8FF]/30 rounded-[16px] p-5">
+          <p className="text-xs font-medium text-[#1A4A8A] uppercase tracking-wide mb-3">Skills</p>
           <div className="flex flex-wrap gap-1.5">
             {profile.skills.map((skill, i) => (
-              <span key={i} className="text-[11px] font-medium px-2 py-0.5   rounded-lg bg-white border border-[#8DFFB3]/40 text-[#064e3b]">
+              <span key={i} className="text-[11px] font-medium px-2 py-0.5   rounded-lg bg-white border border-[#8DB8FF]/40 text-[#1A4A8A]">
                 {skill.name}
               </span>
             ))}
@@ -156,7 +156,7 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
                 <a
                   key={i}
                   href={link.url}
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DFFB3] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DFFB3]"
+                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
                 >
                   <LinkIcon icon={link.icon} />
                   {link.label}
@@ -170,7 +170,7 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
   );
 }
 
-//   ─ Full Scroll Template                                                       
+// ─── Full Scroll Template ──────────────────────────────────────────────────────
 function FullScroll({ profile }: { profile: ProfileData }) {
   return (
     <div className="min-h-screen bg-[#F3F3F3] font-inter">
@@ -197,7 +197,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
               <a
                 key={i}
                 href={link.url}
-                className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DFFB3] transition-colors px-3 py-1.5   rounded-lg bg-white border border-[#E6E6E6] hover:border-[#8DFFB3]"
+                className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg bg-white border border-[#E6E6E6] hover:border-[#8DB8FF]"
               >
                 <LinkIcon icon={link.icon} />
                 {link.label}
@@ -247,7 +247,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
   );
 }
 
-//   ─ Dark Template                                                             ─
+// ─── Dark Template ─────────────────────────────────────────────────────────────
 function DarkTemplate({ profile }: { profile: ProfileData }) {
   return (
     <div className="min-h-screen bg-[#0D0D10] font-inter">
@@ -261,7 +261,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
           />
           <div>
             <h1 className="text-xl font-medium text-white mb-0.5">{profile.name}</h1>
-            <p className="text-sm text-[#8DFFB3]">{profile.headline}</p>
+            <p className="text-sm text-[#8DB8FF]">{profile.headline}</p>
             {profile.location && <p className="text-xs text-[#ffffff40] mt-0.5">{profile.location}</p>}
           </div>
         </div>
@@ -273,7 +273,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
         {profile.skills.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-8">
             {profile.skills.map((skill, i) => (
-              <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg border border-[#ffffff15] text-[#8DFFB3]">
+              <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg border border-[#ffffff15] text-[#8DB8FF]">
                 {skill.name}
               </span>
             ))}
@@ -291,7 +291,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
                 <div className="w-px bg-[#ffffff15] flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm font-medium text-white">{exp.title}</p>
-                  <p className="text-xs text-[#8DFFB3]/70">{exp.company} · {exp.duration}</p>
+                  <p className="text-xs text-[#8DB8FF]/70">{exp.company} · {exp.duration}</p>
                   {exp.description && <p className="text-xs text-[#ffffff50] leading-relaxed mt-1">{exp.description}</p>}
                 </div>
               </div>
@@ -306,7 +306,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
               <a
                 key={i}
                 href={link.url}
-                className="flex items-center gap-1.5 text-xs font-medium text-[#ffffff60] hover:text-white transition-colors px-3 py-1.5   rounded-lg border border-[#ffffff15] hover:border-[#8DFFB3]/50"
+                className="flex items-center gap-1.5 text-xs font-medium text-[#ffffff60] hover:text-white transition-colors px-3 py-1.5   rounded-lg border border-[#ffffff15] hover:border-[#8DB8FF]/50"
               >
                 <LinkIcon icon={link.icon} />
                 {link.label}
@@ -319,7 +319,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
   );
 }
 
-//   ─ Main exported component                                                   ─
+// ─── Main exported component ───────────────────────────────────────────────────
 export default function ProfilePreview({ profile, template, scale = 1 }: ProfilePreviewProps) {
   const PREVIEW_W = 1024;
   const PREVIEW_H = 768;
@@ -349,5 +349,3 @@ export default function ProfilePreview({ profile, template, scale = 1 }: Profile
     </div>
   );
 }
-
-

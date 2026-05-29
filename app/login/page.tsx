@@ -59,7 +59,7 @@ export default function LoginPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto  max-w-[1536px]">
 
-        {/*    Left: Form    */}
+        {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
           <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md">
@@ -136,7 +136,7 @@ export default function LoginPage() {
                         </label>
                         <button
                           type="button"
-                          className="text-xs text-[#8DFFB3] font-medium hover:underline"
+                          className="text-xs text-[#8DB8FF] font-medium hover:underline"
                           onClick={() => toast.info("Password reset link sent to your email!")}
                         >
                           Forgot password?
@@ -200,8 +200,8 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/*    Right: Hero Illustration    */}
-        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DFFB3]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
+        {/* ── Right: Hero Illustration ── */}
+        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"
@@ -219,5 +219,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
