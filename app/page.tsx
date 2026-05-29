@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -67,32 +67,49 @@ const FAQ_ITEMS = [
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
 function HeroSection() {
-  const { scrollY } = useScroll();
-  const bgY = useTransform(scrollY, [0, 800], [0, 160]);
-  const bgTransform = useTransform(bgY, (y) => `translate3d(0, ${y}px, 0)`);
-  
-  const cardY = useTransform(scrollY, [0, 800], [0, -40]);
-  const cardTransform = useTransform(cardY, (y) => `translate3d(0, ${y}px, 0)`);
+  const heroContainerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const heroItemVariants = {
+    hidden: { opacity: 0, y: 15, scale: 0.98 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.4,
+        ease: [0.23, 1, 0.32, 1] as const
+      }
+    }
+  };
 
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-24 pb-16">
       {/* Background image + overlay */}
-      <motion.div 
-        style={{ transform: bgTransform }}
-        className="absolute inset-0 z-0 select-none pointer-events-none opacity-90 will-change-transform"
-      >
+      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
         <img
           src="/bg.png"
           alt=""
           className="w-full h-full object-cover object-top"
         />
         <div className="absolute inset-0 hero-overlay" />
-      </motion.div>
+      </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center">
+      <motion.div 
+        variants={heroContainerVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative z-10 w-full max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
+      >
         {/* Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#E6E6E6] bg-white shadow-sm">
+        <motion.div variants={heroItemVariants} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#E6E6E6] bg-white shadow-sm">
           <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
             Create in under 60 seconds
           </span>
@@ -102,19 +119,22 @@ function HeroSection() {
               <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </span>
-        </div>
+        </motion.div>
 
         {/* Heading */}
-        <h1 className="text-black text-[38px] sm:text-[51px] leading-[1.1] font-medium tracking-tight max-w-4xl font-inter-tight">
+        <motion.h1 
+          variants={heroItemVariants}
+          className="text-black text-[38px] sm:text-[51px] leading-[1.1] font-medium tracking-tight max-w-4xl font-inter-tight"
+        >
           LinkedIn to personal micro-site
-        </h1>
+        </motion.h1>
 
         {/* Prompt card */}
         <motion.div 
-          style={{ transform: cardTransform }}
-          className="w-full max-w-[1040px] rounded-[13px] glass-card p-4 sm:p-5 flex flex-col gap-5 mt-4 will-change-transform"
+          variants={heroItemVariants}
+          className="w-full max-w-[1040px] rounded-[13px] glass-card p-4 sm:p-5 flex flex-col gap-5 mt-4"
         >
-          <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-5 flex flex-col gap-4 shadow-sm">
+          <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-5 flex flex-col gap-4 shadow-sm focus-within:ring-2 focus-within:ring-[#8DB8FF]/40 transition-[box-shadow] duration-250 ease-out">
             {/* Textarea */}
             <textarea
               className="w-full bg-transparent text-[#171717] text-[16px] sm:text-[18px] leading-[27px] resize-none outline-none placeholder:text-[#171717]/40 min-h-[72px] font-inter-tight"
@@ -178,7 +198,7 @@ function HeroSection() {
             </div>
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -203,12 +223,13 @@ function TemplatesSection() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 20, scale: 0.96 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
-        duration: 0.3,
+        duration: 0.35,
         ease: [0.23, 1, 0.32, 1] as const
       }
     }
@@ -248,7 +269,7 @@ function TemplatesSection() {
                 key={i} 
                 className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
               >
-                <div className="relative aspect-square rounded-[13px] overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px] shadow-sm">
+                <div className="relative aspect-square rounded-[13px] overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px] shadow-sm transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                   <img src={t.img} alt={t.name} className="w-full h-full object-cover rounded-[8px]" />
                   {/* Bottom gradient overlay inside padding */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
@@ -334,10 +355,11 @@ function HowItWorksSection() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
+    hidden: { opacity: 0, y: 25, scale: 0.97 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.4,
         ease: [0.23, 1, 0.32, 1] as const
@@ -367,7 +389,7 @@ function HowItWorksSection() {
         >
           {HOW_IT_WORKS.map((item, i) => (
             <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
-              <div className="rounded-[13px] border border-[#E6E6E6] bg-white shadow-sm overflow-hidden p-2">
+              <div className="rounded-[13px] border border-[#E6E6E6] bg-white shadow-sm overflow-hidden p-2 transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                 <img
                   src={item.img}
                   alt={item.boldText}
@@ -451,7 +473,7 @@ function BusinessSection() {
             className="flex gap-6 overflow-x-auto scrollbar-hide rounded-[13px] border border-[#E6E6E6] p-2 bg-[#FBFBFB]"
           >
             {BUSINESS_CARDS.map((src, i) => (
-              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px] rounded-[8px] overflow-hidden shadow-sm">
+              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px] rounded-[8px] overflow-hidden shadow-sm transition-transform duration-300 ease-out hover:scale-[1.005] will-change-transform">
                 <img src={src} alt={`Business card ${i + 1}`} className="w-full h-auto rounded-[8px] object-cover" />
               </div>
             ))}
@@ -503,10 +525,11 @@ function FeaturesSection() {
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 25 },
+    hidden: { opacity: 0, y: 25, scale: 0.97 },
     visible: {
       opacity: 1,
       y: 0,
+      scale: 1,
       transition: {
         duration: 0.4,
         ease: [0.23, 1, 0.32, 1] as const
@@ -536,7 +559,7 @@ function FeaturesSection() {
         >
           {FEATURES.map((f, i) => (
             <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
-              <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-2 overflow-hidden shadow-sm">
+              <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-2 overflow-hidden shadow-sm transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                 <img
                   src={f.img}
                   alt={f.text}

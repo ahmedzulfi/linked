@@ -195,10 +195,10 @@ To deliver premium interfaces that feel tactile and responsive, all page motions
 - **Spring Physics (Interpreted Tabs):**
   Use `stiffness: 380` and `damping: 30` to simulate quick settling and high physical momentum without bouncy overshoot.
 
-### 2. Parallax Scrolling Rules
-- **Hero Background Parallax:** Offset translateY slowly at a `20%` scroll depth multiplier (`translate3d(0, scrollY * 0.2, 0)`) to create spatial depth.
-- **Hero Card Lift:** Offset translateY inversely at a `-5%` multiplier (`translate3d(0, scrollY * -0.05, 0)`) to visually decouple content from background layers.
-- **Hardware Acceleration:** Always animate scroll layers using `translate3d(0, Y, 0)` on the GPU rather than main-thread top/left/y properties to avoid layout thrashing.
+### 2. Smooth Scrolling Guidelines
+- **Lenis Smooth Scroll:** Integrated globally with a customized interpolation (`lerp: 0.15`) and duration (`0.8s`) for a tighter, responsive scrolling action.
+- **Parallax Scroll Disabled:** Scroll-based translation offsets are removed from backgrounds and content containers to guarantee visual stability and layout readability.
+- **Hardware Acceleration:** Ensure interactive transitions are composited on the GPU rather than layout-triggering properties.
 
 ### 3. Tactile Micro-Interactions
 - **Active Press Scale:**
@@ -218,7 +218,7 @@ To deliver premium interfaces that feel tactile and responsive, all page motions
 - Do preserve the soft, high-key palette and avoid harsh outlines.
 - Do keep body copy and labels clean, plain, and highly legible with Inter Tight.
 - Do specify exact target properties for CSS transitions (avoid `transition: all`).
-- Do use hardware-accelerated transforms for scroll-tied animations.
+- Do use hardware-accelerated transforms for interactive transitions.
 - Don't introduce sharp corners or aggressive geometric styling.
 - Don't overuse shadows; depth should feel subtle and atmospheric.
 - Don't make secondary controls louder than the main CTA.
