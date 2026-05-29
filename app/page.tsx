@@ -1,6 +1,8 @@
+"use client";
+
 import { useState, useRef } from "react";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
@@ -388,102 +390,6 @@ function BusinessSection() {
   );
 }
 
-// ─── Domain Section ───────────────────────────────────────────────────────────
-
-function DomainSection() {
-  return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-b border-[#E6E6E6]">
-      <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
-        <div className="flex flex-col items-center gap-8 text-center">
-          <div className="flex flex-col gap-2">
-            <SectionLabel>Instant publishing</SectionLabel>
-            <h2 className="text-black text-[28px] sm:text-[38px] leading-[46px] font-normal font-inter-tight">
-              Claim Your Free Subdomain or Export ZIP
-            </h2>
-          </div>
-
-          {/* Search box */}
-          <div className="w-full max-w-[800px] relative mt-2">
-            <div className="absolute -inset-0.5 opacity-15 blur-[4px] rounded-[13px]" style={{ background: "linear-gradient(92deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
-            <div className="relative p-1 rounded-[13px] overflow-hidden bg-white border border-[#E6E6E6] shadow-sm">
-              <div className="flex items-center justify-between px-5 py-4 rounded-[11px] bg-white">
-                <div className="flex items-center gap-3">
-                  <svg width="16" height="19" viewBox="0 0 16 19" fill="none">
-                    <path d="M13.2211 14.7838L10.4889 12.0515" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M6.92514 13.5241C9.7067 13.5241 11.9616 11.2692 11.9616 8.48764C11.9616 5.70607 9.7067 3.45117 6.92514 3.45117C4.14357 3.45117 1.88867 5.70607 1.88867 8.48764C1.88867 11.2692 4.14357 13.5241 6.92514 13.5241Z" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span className="text-black text-[16px] sm:text-[17px] font-medium leading-[27px] font-inter-tight">reidhoffman.linkedpage.me</span>
-                </div>
-                <button className="flex items-center justify-center w-8 h-8 rounded-full btn-dark-sm active:scale-95 transition-all text-white shadow-sm">
-                  <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
-                    <path d="M5.31708 5.31714H12.9129V12.913" stroke="currentColor" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M5.31708 12.913L12.9129 5.31714" stroke="currentColor" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <p className="text-[#171717]/60 text-[13px] leading-[19px] underline cursor-pointer hover:text-black font-inter-tight transition-colors">
-            Need local files? Download clean code zip
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ─── Brand Section ────────────────────────────────────────────────────────────
-
-const BRAND_CARDS = [
-  {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/9f3a1f22cc257cf4f0da1f8d5b8c463fc3e20c54?width=1498",
-    boldText: "Notion meets Linktree",
-    restText: " aesthetics that combine clean bento grid designs with rich professional content.",
-  },
-  {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/8ef521fbb820f1b4a44b8f4b078009658f2a6baf?width=1498",
-    boldText: "No dashboards or bloat",
-    restText: " — edit your content directly on the page and get a beautiful result in under 60 seconds.",
-  },
-];
-
-function BrandSection() {
-  return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-[#E6E6E6]">
-      <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
-          <div className="flex flex-col">
-            <SectionLabel>Make it uniquely yours</SectionLabel>
-            <SectionHeading>Designed for Professionals</SectionHeading>
-          </div>
-          <DarkButton className="self-start sm:self-auto">Create Page</DarkButton>
-        </div>
-
-        {/* 2-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {BRAND_CARDS.map((card, i) => (
-            <div key={i} className="flex flex-col gap-4">
-              <div className="rounded-[13px] border border-[#E6E6E6] bg-[#FBFBFB] shadow-sm overflow-hidden p-2">
-                <img
-                  src={card.img}
-                  alt={card.boldText}
-                  className="w-full rounded-[8px] object-cover aspect-[129/116]"
-                />
-              </div>
-              <p className="text-[16px] leading-[24px] text-[#171717]/60 font-inter-tight">
-                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">{card.boldText}</span>
-                {card.restText}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // ─── Features Section ─────────────────────────────────────────────────────────
 
 const FEATURES = [
@@ -559,7 +465,7 @@ function FAQSection() {
         {/* FAQ items */}
         <div className="flex flex-col gap-4 max-w-4xl mx-auto">
           {FAQ_ITEMS.map((question, i) => (
-            <div key={i} className="rounded-[13px] border border-[#E6E6E6] bg-[#FBFBFB] shadow-sm overflow-hidden transition-all duration-150">
+            <div key={i} className="rounded-[13px] border border-[#E6E6E6] bg-[#FBFBFB] shadow-sm overflow-hidden transition-all duration-150 font-inter">
               <button
                 className="w-full flex items-center justify-between px-6 py-5 text-left"
                 onClick={() => toggle(i)}
@@ -600,8 +506,6 @@ export default function Index() {
         <TemplatesSection />
         <HowItWorksSection />
         <BusinessSection />
-        <DomainSection />
-        <BrandSection />
         <FeaturesSection />
         <FAQSection />
       </main>

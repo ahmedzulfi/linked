@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -8,7 +10,7 @@ export default function Navbar() {
     <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-[1536px] px-6 sm:px-0 font-inter">
       <div className="flex items-center justify-between h-14 px-7 py-8 bg-white/70 backdrop-blur-md rounded-[13px] border border-[#E6E6E6] shadow-sm">
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0 flex items-center">
+        <Link href="/" className="flex-shrink-0 flex items-center">
           <img
             src="/logo.png"
             alt="LinkedPage"
@@ -18,11 +20,11 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         <div className="hidden lg:flex items-center gap-6">
-          <Link to="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Features</Link>
-          <Link to="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">FAQ</Link>
-          <Link to="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Templates</Link>
-          <Link to="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Pricing</Link>
-          <Link to="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Docs</Link>
+          <Link href="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Features</Link>
+          <Link href="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">FAQ</Link>
+          <Link href="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Templates</Link>
+          <Link href="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Pricing</Link>
+          <Link href="/" className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight">Docs</Link>
         </div>
 
         {/* Right side */}
@@ -110,14 +112,14 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {mobileOpen && (
         <div className="mt-2 rounded-[13px] border border-[#E6E6E6] bg-white/95 backdrop-blur-md shadow-md p-4 flex flex-col gap-3 lg:hidden">
-          <Link to="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Features</Link>
-          <Link to="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>FAQ</Link>
-          <Link to="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Templates</Link>
-          <Link to="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Pricing</Link>
-          <Link to="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Docs</Link>
+          <Link href="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Features</Link>
+          <Link href="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>FAQ</Link>
+          <Link href="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Templates</Link>
+          <Link href="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Pricing</Link>
+          <Link href="/" className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" onClick={() => setMobileOpen(false)}>Docs</Link>
           <div className="flex items-center gap-2 pt-2 border-t border-[#E6E6E6]">
             <button className="flex-1 h-10 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-97 transition-all">Log in</button>
-            <button className="flex-1 h-10 rounded-[13px] btn-dark text-white text-[12px] font-medium active:scale-97 transition-all">Get started</button>
+            <button className="flex-1 h-10 rounded-[13px] btn-dark text-white text-[12px] font-medium active:scale-97 transition-all font-inter-tight">Get started</button>
           </div>
         </div>
       )}

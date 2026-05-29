@@ -1,32 +1,32 @@
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Instagram, Linkedin, Twitter, ArrowRight } from "lucide-react";
 
 const productLinks = [
-  { label: "How It Works", to: "/" },
-  { label: "Features", to: "/" },
-  { label: "Templates", to: "/" },
-  { label: "Pricing", to: "/" },
+  { label: "How It Works", href: "/" },
+  { label: "Features", href: "/" },
+  { label: "Templates", href: "/" },
+  { label: "Pricing", href: "/" },
 ];
 
 const technologyLinks = [
-  { label: "Scraping Engine", to: "/" },
-  { label: "Bento Generator", to: "/" },
-  { label: "ZIP Export", to: "/" },
-  { label: "API Docs", to: "/" },
+  { label: "Scraping Engine", href: "/" },
+  { label: "Bento Generator", href: "/" },
+  { label: "ZIP Export", href: "/" },
+  { label: "API Docs", href: "/" },
 ];
 
 const companyLinks = [
-  { label: "Our Philosophy", to: "/" },
-  { label: "Support Docs", to: "/" },
-  { label: "FAQ", to: "/" },
-  { label: "Contact Us", to: "/" },
+  { label: "Our Philosophy", href: "/" },
+  { label: "Support Docs", href: "/" },
+  { label: "FAQ", href: "/" },
+  { label: "Contact Us", href: "/" },
 ];
 
 const legalLinks = [
-  { label: "Privacy Policy", to: "/" },
-  { label: "Terms of Service", to: "/" },
-  { label: "Cookie Policy", to: "/" },
-  { label: "Security Info", to: "/" },
+  { label: "Privacy Policy", href: "/" },
+  { label: "Terms of Service", href: "/" },
+  { label: "Cookie Policy", href: "/" },
+  { label: "Security Info", href: "/" },
 ];
 
 export default function Footer() {
@@ -98,7 +98,7 @@ export default function Footer() {
                 {productLinks.map((link) => (
                   <Link
                     key={link.label}
-                    to={link.to}
+                    href={link.href}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
@@ -116,7 +116,7 @@ export default function Footer() {
                 {technologyLinks.map((link) => (
                   <Link
                     key={link.label}
-                    to={link.to}
+                    href={link.href}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
@@ -134,7 +134,7 @@ export default function Footer() {
                 {companyLinks.map((link) => (
                   <Link
                     key={link.label}
-                    to={link.to}
+                    href={link.href}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
@@ -152,7 +152,7 @@ export default function Footer() {
                 {legalLinks.map((link) => (
                   <Link
                     key={link.label}
-                    to={link.to}
+                    href={link.href}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}

@@ -7,38 +7,56 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%; /* #FFFFFF */
-    --foreground: 0 0% 0%; /* #000000 (on-surface) */
+    --background: 0 0% 100%;
+    /* #FFFFFF */
+    --foreground: 0 0% 0%;
+    /* #000000 (on-surface) */
 
-    --card: 0 0% 98.4%; /* #FBFBFB (tertiary) */
-    --card-foreground: 0 0% 9%; /* #171717 (on-surface-muted) */
+    --card: 0 0% 98.4%;
+    /* #FBFBFB (tertiary) */
+    --card-foreground: 0 0% 9%;
+    /* #171717 (on-surface-muted) */
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
-    --primary: 240 5.3% 17.6%; /* #2A2A2F */
-    --primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: 240 5.3% 17.6%;
+    /* #2A2A2F */
+    --primary-foreground: 0 0% 100%;
+    /* #FFFFFF */
 
-    --secondary: 0 0% 95.3%; /* #F3F3F3 */
-    --secondary-foreground: 0 0% 0%; /* #000000 */
+    --secondary: 0 0% 95.3%;
+    /* #F3F3F3 */
+    --secondary-foreground: 0 0% 0%;
+    /* #000000 */
 
-    --muted: 0 0% 96.9%; /* #F7F7F7 (surface-muted) */
-    --muted-foreground: 0 0% 9%; /* #171717 */
+    --muted: 0 0% 96.9%;
+    /* #F7F7F7 (surface-muted) */
+    --muted-foreground: 0 0% 9%;
+    /* #171717 */
 
-    --accent: 217 100% 77.6%; /* #8DB8FF */
+    --accent: 217 100% 77.6%;
+    /* #8DB8FF */
     --accent-foreground: 0 0% 0%;
 
-    --accent-green: 140 100% 77.6%; /* #8DFFB3 */
-    --accent-green-dark: 140 47.1% 40.4%; /* #369762 */
+    --accent-green: 140 100% 77.6%;
+    /* #8DFFB3 */
+    --accent-green-dark: 140 47.1% 40.4%;
+    /* #369762 */
 
-    --destructive: 0 74.3% 62.5%; /* #E45A5A (error) */
+    --destructive: 0 74.3% 62.5%;
+    /* #E45A5A (error) */
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90.2%; /* #E6E6E6 */
-    --input: 0 0% 100%; /* #FFFFFF */
-    --ring: 217 100% 77.6%; /* #8DB8FF */
+    --border: 0 0% 90.2%;
+    /* #E6E6E6 */
+    --input: 0 0% 100%;
+    /* #FFFFFF */
+    --ring: 217 100% 77.6%;
+    /* #8DB8FF */
 
-    --radius: 0.8125rem; /* 13px */
+    --radius: 0.8125rem;
+    /* 13px */
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -103,7 +121,7 @@
   /* Dark flat button with tactile inner shadow */
   .btn-dark {
     background-color: #2A2A2F;
-    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1), inset 0 1px 2px rgba(255,255,255,0.1), 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), box-shadow 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
   }
 
@@ -113,7 +131,7 @@
 
   .btn-dark-sm {
     background-color: #2A2A2F;
-    box-shadow: inset 0 -1.5px 3px rgba(0,0,0,0.1), inset 0 1px 2px rgba(255,255,255,0.1), 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: inset 0 -1.5px 3px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), box-shadow 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
   }
 
@@ -125,7 +143,7 @@
   .btn-green {
     background-color: #2A2A2F;
     color: #FFFFFF;
-    box-shadow: inset 0 -2px 4px rgba(0,0,0,0.1), inset 0 1px 2px rgba(255,255,255,0.1);
+    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1);
     transition: opacity 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
   }
 
@@ -171,6 +189,7 @@
   /* Hero gradient overlay */
   .hero-overlay {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0.95) 100%);
+    opacity: 30%;
   }
 
   /* Section to dark (top transition) - modified to be simple soft transition */
