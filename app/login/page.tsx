@@ -62,7 +62,7 @@ export default function LoginPage() {
         {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
-          <div className="relative button-secondary rounded p-8 w-full max-w-sm">
+          <div className="relative bg-white border border-[#E6E6E6] rounded p-8 w-full max-w-sm shadow-sm">
             <div className="flex flex-col gap-5">
 
               {/* Header */}
@@ -169,11 +169,10 @@ export default function LoginPage() {
 
                 {/* Submit */}
                 <button
-                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
-                    (isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid))
-                      ? "opacity-50 select-none pointer-events-none"
-                      : ""
-                  }`}
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${(isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid))
+                    ? "opacity-50 select-none pointer-events-none"
+                    : ""
+                    }`}
                   type="submit"
                   disabled={isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid)}
                 >
@@ -206,7 +205,7 @@ export default function LoginPage() {
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"
-            src="https://www.webild.io/images/bgtest2.webp"
+            src="/public/bg.png"
           />
           <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
           <img

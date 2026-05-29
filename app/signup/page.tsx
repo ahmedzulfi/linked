@@ -73,7 +73,7 @@ export default function SignupPage() {
         {/* ── Left: Signup Form (exact reference UI) ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Outer card — button-secondary + rounded + p-8 as in reference */}
-          <div className="relative button-secondary rounded p-8 w-full max-w-sm">
+          <div className="relative bg-white border border-[#E6E6E6] rounded p-8 w-full max-w-sm shadow-sm">
             <div className="flex flex-col gap-5">
 
               {/* Header */}
