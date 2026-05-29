@@ -4,12 +4,16 @@ import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { toast } from "sonner";
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
-function DarkButton({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function DarkButton({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
   return (
-    <button className={`inline-flex items-center justify-center h-10 px-6 rounded-[13px] btn-dark text-white text-[12px] font-medium whitespace-nowrap hover:bg-[#3E3E45] ${className}`}>
+    <button 
+      onClick={onClick}
+      className={`inline-flex items-center justify-center h-10 px-6 rounded-[13px] btn-dark text-white text-[12px] font-medium whitespace-nowrap hover:bg-[#3E3E45] ${className}`}
+    >
       {children}
     </button>
   );
@@ -64,9 +68,95 @@ const FAQ_ITEMS = [
   "Can I export the code of my micro-site?",
 ];
 
+// ─── Live Preview Modal Component ─────────────────────────────────────────────
+
+function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 15 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 15 }}
+        transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+        className="w-full max-w-2xl bg-white rounded-[18px] border border-[#E6E6E6] shadow-xl overflow-hidden text-left flex flex-col max-h-[85vh] select-none"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#F3F3F3]">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#369762]" />
+            <span className="text-[13px] font-semibold text-black font-mono">reidhoffman.linkedpage.me</span>
+          </div>
+          <button 
+            onClick={onClose}
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-[#F3F3F3] text-black hover:bg-[#EAEAEA] transition-colors active:scale-90 font-bold"
+          >
+            &times;
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-[#F7F7F7]">
+          {/* Micro-site content */}
+          <div className="bg-white rounded-[13px] border border-[#E6E6E6] p-6 flex flex-col gap-4 shadow-sm">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+                <img 
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256" 
+                  alt="Reid Hoffman" 
+                  className="w-full h-full object-cover" 
+                />
+              </div>
+              <div>
+                <h3 className="text-[20px] font-bold text-black font-inter-tight leading-tight">Reid Hoffman</h3>
+                <p className="text-[13px] text-gray-500 font-inter-tight">Co-founder LinkedIn | Partner at Greylock</p>
+              </div>
+            </div>
+            <p className="text-[14px] text-[#171717]/80 leading-relaxed font-inter-tight">
+              Entrepreneur, executive, and venture capitalist. Passionate about building products that connect people and scale networks to transform industries.
+            </p>
+          </div>
+
+          {/* Bento blocks */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="bg-white rounded-[13px] border border-[#E6E6E6] p-4 flex flex-col gap-2 shadow-sm">
+              <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Experience</span>
+              <p className="text-[14px] font-semibold text-black font-inter-tight">Greylock Partners</p>
+              <p className="text-[12px] text-gray-500 font-inter-tight">Partner • 2009 - Present</p>
+            </div>
+            <div className="bg-white rounded-[13px] border border-[#E6E6E6] p-4 flex flex-col gap-2 shadow-sm">
+              <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Education</span>
+              <p className="text-[14px] font-semibold text-black font-inter-tight">Stanford University</p>
+              <p className="text-[12px] text-gray-500 font-inter-tight">BS in Cognitive Science</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer actions */}
+        <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F3F3] bg-white">
+          <button 
+            onClick={() => toast.success("Code ZIP export complete! check your downloads.")}
+            className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] transition-colors active:scale-95"
+          >
+            Export ZIP Source
+          </button>
+          <button 
+            onClick={() => { toast.success("Micro-site published live on reidhoffman.linkedpage.me!"); onClose(); }}
+            className="h-10 px-5 rounded-[13px] bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20] text-[12px] font-medium hover:bg-[#D4FCD4] transition-colors active:scale-95"
+          >
+            Publish Live
+          </button>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
-function HeroSection() {
+function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
+  const [profileUrl, setProfileUrl] = useState("https://www.linkedin.com/in/reidhoffman");
+
   const heroContainerVariants = {
     hidden: {},
     visible: {
@@ -86,6 +176,19 @@ function HeroSection() {
         duration: 0.4,
         ease: [0.23, 1, 0.32, 1] as const
       }
+    }
+  };
+
+  const enhancePrompt = () => {
+    if (!profileUrl.trim()) {
+      toast.error("Please paste a LinkedIn URL first!");
+      return;
+    }
+    if (!profileUrl.includes("--theme")) {
+      setProfileUrl(prev => `${prev.trim()} --theme bento --layout modern --accent sky-blue`);
+      toast.success("Prompt enhanced with theme and layout parameters!");
+    } else {
+      toast.info("Prompt is already enhanced!");
     }
   };
 
@@ -109,7 +212,11 @@ function HeroSection() {
         className="relative z-10 w-full max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
       >
         {/* Badge */}
-        <motion.div variants={heroItemVariants} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#E6E6E6] bg-white shadow-sm">
+        <motion.div 
+          variants={heroItemVariants} 
+          onClick={() => onGenerate(profileUrl)}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#E6E6E6] bg-white shadow-sm cursor-pointer hover:bg-gray-50 active:scale-97 transition-all"
+        >
           <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
             Create in under 60 seconds
           </span>
@@ -137,8 +244,9 @@ function HeroSection() {
           <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-5 flex flex-col gap-4 shadow-sm focus-within:ring-2 focus-within:ring-[#8DB8FF]/40 transition-[box-shadow] duration-250 ease-out">
             {/* Textarea */}
             <textarea
+              value={profileUrl}
+              onChange={(e) => setProfileUrl(e.target.value)}
               className="w-full bg-transparent text-[#171717] text-[16px] sm:text-[18px] leading-[27px] resize-none outline-none placeholder:text-[#171717]/40 min-h-[72px] font-inter-tight"
-              defaultValue="https://www.linkedin.com/in/reidhoffman"
               placeholder="Paste your LinkedIn profile URL here..."
             />
 
@@ -146,7 +254,10 @@ function HeroSection() {
             <div className="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-[#F3F3F3]">
               <div className="flex items-center gap-3">
                 {/* Add button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
+                <button 
+                  onClick={() => toast.success("Custom content block selector opened!")}
+                  className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+                >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
@@ -154,12 +265,18 @@ function HeroSection() {
                 </button>
 
                 {/* Enhance prompt button */}
-                <button className="h-10 px-5 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap">
+                <button 
+                  onClick={enhancePrompt}
+                  className="h-10 px-5 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap"
+                >
                   Enhance prompt
                 </button>
 
                 {/* Color palette button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
+                <button 
+                  onClick={() => toast.success("Theme customizer panel loaded!")}
+                  className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+                >
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                     <g clipPath="url(#palette-clip)">
                       <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
@@ -179,7 +296,10 @@ function HeroSection() {
 
               <div className="flex items-center gap-3">
                 {/* Mic button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
+                <button 
+                  onClick={() => toast("Listening for profile voice commands...")}
+                  className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+                >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
@@ -188,7 +308,10 @@ function HeroSection() {
                 </button>
 
                 {/* Send button (Primary action) */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-[#2A2A2F] text-white shadow-md hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
+                <button 
+                  onClick={() => onGenerate(profileUrl)}
+                  className="flex items-center justify-center w-9 h-9 rounded-full bg-[#2A2A2F] text-white shadow-md hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+                >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
@@ -205,7 +328,7 @@ function HeroSection() {
 
 // ─── Templates Section ────────────────────────────────────────────────────────
 
-function TemplatesSection() {
+function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: string) => void }) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scrollCarousel = (dir: "prev" | "next") => {
@@ -236,7 +359,7 @@ function TemplatesSection() {
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden border-t border-[#E6E6E6]">
+    <section id="templates" className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden border-t border-[#E6E6E6]">
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -250,7 +373,12 @@ function TemplatesSection() {
             <SectionLabel>Browse our collection</SectionLabel>
             <SectionHeading>Start with a Template</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">View All Templates</DarkButton>
+          <DarkButton 
+            onClick={() => toast.success("Loaded all templates!")}
+            className="self-start sm:self-auto"
+          >
+            View All Templates
+          </DarkButton>
         </div>
 
         {/* Template cards carousel */}
@@ -283,7 +411,10 @@ function TemplatesSection() {
                     <div className="relative">
                       <div className="absolute -inset-1 opacity-20 blur-[4px]" style={{ background: "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
                       <div className="relative p-0.5 rounded-[13px] overflow-hidden bg-white">
-                        <button className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out shadow-md">
+                        <button 
+                          onClick={() => onSelectTemplate(t.name)}
+                          className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out shadow-md"
+                        >
                           Customize this look
                         </button>
                       </div>
@@ -344,7 +475,7 @@ const HOW_IT_WORKS = [
   },
 ];
 
-function HowItWorksSection() {
+function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
   const containerVariants = {
     hidden: {},
     visible: {
@@ -368,7 +499,7 @@ function HowItWorksSection() {
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-t border-b border-[#E6E6E6]">
+    <section id="how-it-works" className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-t border-b border-[#E6E6E6]">
       <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
@@ -376,7 +507,12 @@ function HowItWorksSection() {
             <SectionLabel>How It Works</SectionLabel>
             <SectionHeading>Get your page in under 60 seconds</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">Generate Now</DarkButton>
+          <DarkButton 
+            onClick={onStartGen}
+            className="self-start sm:self-auto"
+          >
+            Generate Now
+          </DarkButton>
         </div>
 
         {/* 3-column grid with stagger */}
@@ -415,19 +551,35 @@ const BUSINESS_CARDS = [
   "https://api.builder.io/api/v1/image/assets/TEMP/dd2d088a6043ca3ede653099742f96ac52246893?width=2560",
   "https://api.builder.io/api/v1/image/assets/TEMP/bd350a3668e75fb33844ff3cbe4a31706b2273df?width=2560",
   "https://api.builder.io/api/v1/image/assets/TEMP/f502cc59ba5f4d7f14360e66cb7e6447fb3a3c98?width=2560",
+  "https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&q=80&w=1200" // 4th placeholder card image for Contact tab
 ];
 
 function BusinessSection() {
   const [activeTab, setActiveTab] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
 
+  const handleTabClick = (i: number) => {
+    setActiveTab(i);
+    if (carouselRef.current) {
+      const container = carouselRef.current;
+      const slide = container.children[i] as HTMLElement;
+      if (slide) {
+        container.scrollTo({
+          left: slide.offsetLeft - 8,
+          behavior: "smooth"
+        });
+      }
+    }
+  };
+
   const scrollCarousel = (dir: "prev" | "next") => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollBy({ left: dir === "next" ? 600 : -600, behavior: "smooth" });
+    const scrollAmount = carouselRef.current.clientWidth;
+    carouselRef.current.scrollBy({ left: dir === "next" ? scrollAmount : -scrollAmount, behavior: "smooth" });
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-[#E6E6E6]">
+    <section id="showcase" className="py-16 sm:py-20 lg:py-24 bg-white border-b border-[#E6E6E6]">
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -449,7 +601,7 @@ function BusinessSection() {
               return (
                 <button
                   key={tab}
-                  onClick={() => setActiveTab(i)}
+                  onClick={() => handleTabClick(i)}
                   className={`relative h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-colors duration-200 whitespace-nowrap font-inter-tight z-10 ${isActive ? "text-[#1B5E20] font-semibold" : "text-[#171717]/60 hover:text-black"}`}
                 >
                   {isActive && (
@@ -514,7 +666,7 @@ const FEATURES = [
   },
 ];
 
-function FeaturesSection() {
+function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
   const containerVariants = {
     hidden: {},
     visible: {
@@ -538,7 +690,7 @@ function FeaturesSection() {
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-b border-[#E6E6E6]">
+    <section id="features" className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-b border-[#E6E6E6]">
       <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
@@ -546,7 +698,12 @@ function FeaturesSection() {
             <SectionLabel>Clean & Modern Aesthetics</SectionLabel>
             <SectionHeading>A Page with Real Content</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">Try It Free</DarkButton>
+          <DarkButton 
+            onClick={onStartTrial}
+            className="self-start sm:self-auto"
+          >
+            Try It Free
+          </DarkButton>
         </div>
 
         {/* 2-column grid with stagger */}
@@ -593,7 +750,7 @@ function FAQSection() {
   };
 
   return (
-    <section className="py-16 sm:py-20 lg:py-24 bg-white">
+    <section id="faq" className="py-16 sm:py-20 lg:py-24 bg-white">
       <motion.div 
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -671,18 +828,62 @@ function FAQSection() {
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function Index() {
+  const [showPreview, setShowPreview] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const simulateGeneration = (url: string) => {
+    if (!url.trim()) {
+      toast.error("Please paste a valid LinkedIn URL first!");
+      return;
+    }
+    if (isGenerating) return;
+
+    setIsGenerating(true);
+    toast.info("Scraping LinkedIn profile details...");
+
+    setTimeout(() => {
+      toast.info("Parsing experience history and skill tags...");
+      
+      setTimeout(() => {
+        toast.info("Optimizing micro-site page assets...");
+        
+        setTimeout(() => {
+          setIsGenerating(false);
+          toast.success("Generation completed!");
+          setShowPreview(true);
+        }, 800);
+      }, 700);
+    }, 600);
+  };
+
+  const handleSelectTemplate = (templateName: string) => {
+    toast.success(`Selected "${templateName}". Generating layout mock...`);
+    setShowPreview(true);
+  };
+
+  const handleTrial = () => {
+    toast.success("Free trial activated! 0 credit card needed.");
+  };
+
   return (
-    <div className="min-h-screen font-inter bg-white text-black antialiased">
+    <div className="min-h-screen font-inter bg-white text-black antialiased relative">
       <Navbar />
       <main>
-        <HeroSection />
-        <TemplatesSection />
-        <HowItWorksSection />
+        <HeroSection onGenerate={simulateGeneration} />
+        <TemplatesSection onSelectTemplate={handleSelectTemplate} />
+        <HowItWorksSection onStartGen={() => simulateGeneration("https://www.linkedin.com/in/reidhoffman")} />
         <BusinessSection />
-        <FeaturesSection />
+        <FeaturesSection onStartTrial={handleTrial} />
         <FAQSection />
       </main>
       <Footer />
+
+      {/* Scraped Site Live Preview Overlay Modal */}
+      <AnimatePresence>
+        {showPreview && (
+          <PreviewModal isOpen={showPreview} onClose={() => setShowPreview(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

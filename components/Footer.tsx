@@ -1,35 +1,60 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { Instagram, Linkedin, Twitter, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 
 const productLinks = [
-  { label: "How It Works", href: "/" },
-  { label: "Features", href: "/" },
-  { label: "Templates", href: "/" },
-  { label: "Pricing", href: "/" },
+  { label: "How It Works", href: "#how-it-works" },
+  { label: "Features", href: "#features" },
+  { label: "Templates", href: "#templates" },
+  { label: "Pricing", href: "#" },
 ];
 
 const technologyLinks = [
-  { label: "Scraping Engine", href: "/" },
-  { label: "Bento Generator", href: "/" },
-  { label: "ZIP Export", href: "/" },
-  { label: "API Docs", href: "/" },
+  { label: "Scraping Engine", href: "#" },
+  { label: "Bento Generator", href: "#" },
+  { label: "ZIP Export", href: "#" },
+  { label: "API Docs", href: "#" },
 ];
 
 const companyLinks = [
-  { label: "Our Philosophy", href: "/" },
-  { label: "Support Docs", href: "/" },
-  { label: "FAQ", href: "/" },
-  { label: "Contact Us", href: "/" },
+  { label: "Our Philosophy", href: "#" },
+  { label: "Support Docs", href: "#" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact Us", href: "#" },
 ];
 
 const legalLinks = [
-  { label: "Privacy Policy", href: "/" },
-  { label: "Terms of Service", href: "/" },
-  { label: "Cookie Policy", href: "/" },
-  { label: "Security Info", href: "/" },
+  { label: "Privacy Policy", href: "#" },
+  { label: "Terms of Service", href: "#" },
+  { label: "Cookie Policy", href: "#" },
+  { label: "Security Info", href: "#" },
 ];
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !email.includes("@")) {
+      toast.error("Please enter a valid email address!");
+      return;
+    }
+    toast.success(`Subscribed ${email} to our newsletter successfully!`);
+    setEmail("");
+  };
+
+  const handleLinkClick = (label: string, e: React.MouseEvent) => {
+    if (e.currentTarget.getAttribute("href") === "#") {
+      e.preventDefault();
+      toast.info(`${label} portal coming soon!`);
+    } else {
+      toast(`Navigating to ${label}...`);
+    }
+  };
+
   return (
     <footer 
       className="w-full p-6 sm:p-10 lg:p-14 bg-cover bg-center bg-no-repeat select-none pointer-events-none"
@@ -57,16 +82,21 @@ export default function Footer() {
               <span className="font-mono text-xs uppercase tracking-wider text-gray-500 font-semibold font-inter-tight">
                 Newsletter
               </span>
-              <div className="relative w-full max-w-sm mt-1">
+              <form onSubmit={handleSubscribe} className="relative w-full max-w-sm mt-1">
                 <input
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@email.com"
                   className="w-full bg-white text-[#171717] border border-[#E6E6E6] rounded-[13px] h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-[border-color] duration-200 font-inter-tight shadow-sm"
                 />
-                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#171717] hover:text-black active:scale-[0.95] transition-transform duration-120 ease-out">
+                <button 
+                  type="submit"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#171717] hover:text-black active:scale-[0.95] transition-transform duration-120 ease-out"
+                >
                   <ArrowRight size={16} />
                 </button>
-              </div>
+              </form>
               <p className="font-mono text-[9px] text-gray-400 tracking-tight leading-normal uppercase">
                 I accept the terms and conditions
               </p>
@@ -74,13 +104,25 @@ export default function Footer() {
 
             {/* Social Icons */}
             <div className="flex items-center gap-4">
-              <a href="#" className="text-gray-500 hover:text-black transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toast.success("Opening Instagram profile..."); }}
+                className="text-gray-500 hover:text-black transition-colors"
+              >
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-gray-500 hover:text-black transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toast.success("Opening LinkedIn showcase..."); }}
+                className="text-gray-500 hover:text-black transition-colors"
+              >
                 <Linkedin size={20} />
               </a>
-              <a href="#" className="text-gray-500 hover:text-black transition-colors">
+              <a 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); toast.success("Opening X (Twitter) profile..."); }}
+                className="text-gray-500 hover:text-black transition-colors"
+              >
                 <Twitter size={20} />
               </a>
             </div>
@@ -99,6 +141,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
+                    onClick={(e) => handleLinkClick(link.label, e)}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
@@ -117,6 +160,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
+                    onClick={(e) => handleLinkClick(link.label, e)}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
@@ -135,6 +179,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
+                    onClick={(e) => handleLinkClick(link.label, e)}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
@@ -153,6 +198,7 @@ export default function Footer() {
                   <Link
                     key={link.label}
                     href={link.href}
+                    onClick={(e) => handleLinkClick(link.label, e)}
                     className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
