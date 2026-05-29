@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "lenis/dist/lenis.css";
-import LenisProvider from "@/components/LenisProvider";
 
 export const metadata: Metadata = {
   title: "LinkedPage - Convert LinkedIn Profiles to Beautiful Personal Micro-Sites",
@@ -16,9 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen font-inter bg-white text-black antialiased">
-        <LenisProvider>
-          {children}
-        </LenisProvider>
+        {children}
       </body>
     </html>
   );

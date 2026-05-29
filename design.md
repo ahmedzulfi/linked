@@ -195,10 +195,9 @@ To deliver premium interfaces that feel tactile and responsive, all page motions
 - **Spring Physics (Interpreted Tabs):**
   Use `stiffness: 380` and `damping: 30` to simulate quick settling and high physical momentum without bouncy overshoot.
 
-### 2. Smooth Scrolling Guidelines
-- **Lenis Smooth Scroll:** Integrated globally with a customized interpolation (`lerp: 0.15`) and duration (`0.8s`) for a tighter, responsive scrolling action.
-- **Parallax Scroll Disabled:** Scroll-based translation offsets are removed from backgrounds and content containers to guarantee visual stability and layout readability.
-- **Hardware Acceleration:** Ensure interactive transitions are composited on the GPU rather than layout-triggering properties.
+### 2. Performance & Composition Guidelines
+- **Native Scrolling:** Scrolling relies on standard native browser actions with no scroll-jacking or interception.
+- **Hardware Acceleration:** Ensure interactive transitions are composited on the GPU rather than triggering browser repaints, using composite-friendly properties like transforms and opacity.
 
 ### 3. Tactile Micro-Interactions
 - **Active Press Scale:**
