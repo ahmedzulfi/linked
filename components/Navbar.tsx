@@ -27,39 +27,34 @@ export default function Navbar() {
 
         {/* Desktop Nav Links */}
         <div className="hidden lg:flex items-center gap-6">
-          <a 
-            href="#features" 
+          <a
+            href="#features"
             onClick={() => handleNavClick("Features")}
             className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight"
           >
             Features
           </a>
-          <a 
-            href="#faq" 
+          <a
+            href="#faq"
             onClick={() => handleNavClick("FAQ")}
             className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight"
           >
             FAQ
           </a>
-          <a 
-            href="#templates" 
+          <a
+            href="#templates"
             onClick={() => handleNavClick("Templates")}
             className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight"
           >
             Templates
           </a>
-          <button 
+          <button
             onClick={() => toast.info("Pricing plans coming soon!")}
             className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight"
           >
             Pricing
           </button>
-          <button 
-            onClick={() => toast.info("Documentation coming soon!")}
-            className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight"
-          >
-            Docs
-          </button>
+
         </div>
 
         {/* Right side */}
@@ -67,7 +62,7 @@ export default function Navbar() {
           {/* Social Icons - desktop only */}
           <div className="hidden md:flex items-center gap-2">
             {/* Discord */}
-            <button 
+            <button
               onClick={() => toast.success("Redirecting to Discord community...")}
               className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] shadow-sm text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
@@ -84,7 +79,7 @@ export default function Navbar() {
             </button>
 
             {/* X (Twitter) */}
-            <button 
+            <button
               onClick={() => toast.success("Redirecting to Twitter feed...")}
               className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] shadow-sm text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
@@ -101,7 +96,7 @@ export default function Navbar() {
             </button>
 
             {/* Instagram */}
-            <button 
+            <button
               onClick={() => toast.success("Redirecting to Instagram profile...")}
               className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] shadow-sm text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
@@ -121,7 +116,7 @@ export default function Navbar() {
           </div>
 
           {/* Log in (Secondary style) */}
-          <button 
+          <button
             onClick={() => toast.info("Authorization popup coming soon!")}
             className="hidden sm:flex h-10 px-5 items-center justify-center rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap font-inter-tight"
           >
@@ -129,12 +124,12 @@ export default function Navbar() {
           </button>
 
           {/* Get started (Primary style) */}
-          <button 
-            onClick={() => toast.success("Launching site generation wizard...")}
+          <Link
+            href="/onboarding"
             className="flex h-10 px-5 items-center justify-center rounded-[13px] btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
           >
             Get started
-          </button>
+          </Link>
 
           {/* Mobile menu button */}
           <button
@@ -170,52 +165,48 @@ export default function Navbar() {
             style={{ originX: 0.9, originY: 0 }}
             className="mt-2 rounded-[13px] border border-[#E6E6E6] bg-white/95 backdrop-blur-md shadow-md p-4 flex flex-col gap-3 lg:hidden will-change-[transform,opacity]"
           >
-            <a 
-              href="#features" 
-              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" 
+            <a
+              href="#features"
+              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium"
               onClick={() => handleNavClick("Features")}
             >
               Features
             </a>
-            <a 
-              href="#faq" 
-              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" 
+            <a
+              href="#faq"
+              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium"
               onClick={() => handleNavClick("FAQ")}
             >
               FAQ
             </a>
-            <a 
-              href="#templates" 
-              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium" 
+            <a
+              href="#templates"
+              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium"
               onClick={() => handleNavClick("Templates")}
             >
               Templates
             </a>
-            <button 
-              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium text-left" 
+            <button
+              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium text-left"
               onClick={() => { setMobileOpen(false); toast.info("Pricing plans coming soon!"); }}
             >
               Pricing
             </button>
-            <button 
-              className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium text-left" 
-              onClick={() => { setMobileOpen(false); toast.info("Documentation portal coming soon!"); }}
-            >
-              Docs
-            </button>
+
             <div className="flex items-center gap-2 pt-2 border-t border-[#E6E6E6]">
-              <button 
+              <button
                 onClick={() => { setMobileOpen(false); toast.info("Authorization popup coming soon!"); }}
                 className="flex-1 h-10 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out"
               >
                 Log in
               </button>
-              <button 
-                onClick={() => { setMobileOpen(false); toast.success("Launching site generation wizard..."); }}
-                className="flex-1 h-10 rounded-[13px] btn-dark text-white text-[12px] font-medium font-inter-tight"
+              <Link
+                href="/onboarding"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 h-10 rounded-[13px] btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
               >
                 Get started
-              </button>
+              </Link>
             </div>
           </motion.div>
         )}
