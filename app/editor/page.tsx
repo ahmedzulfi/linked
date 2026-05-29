@@ -17,40 +17,40 @@ const navItems: NavItem[] = [
   {
     label: "Home",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    label: "Templates",
+    label: "Website",
     active: true,
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    label: "Publish",
+    label: "Domains",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    label: "Email",
+    label: "Inbox",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    label: "Content",
+    label: "Blogs",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
@@ -58,15 +58,15 @@ const navItems: NavItem[] = [
   {
     label: "Analytics",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
-    label: "Settings",
+    label: "Site Settings",
     icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
@@ -796,56 +796,117 @@ function EditorInner() {
     <div className="h-screen w-full flex overflow-hidden bg-white font-inter select-none">
 
       {/* ── Left Sidebar ── */}
-      <aside className="w-[60px] h-full flex flex-col items-center py-4 border-r border-[#E6E6E6] bg-white shrink-0 justify-between">
-        <div className="flex flex-col items-center gap-2">
-          {/* Logo mark */}
-          <button
-            onClick={() => router.push("/")}
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-[#F3F3F3] text-[#2A2A2F] font-medium text-sm mb-3 hover:bg-[#EAEAEA] transition-colors active:scale-95"
-          >
-            L
-          </button>
+      <div className="w-[60px] h-full shrink-0 relative z-[60]">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-[#F7F7F7] border-r border-[#E6E6E6] transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-[0_0_20px_rgba(0,0,0,0.08)] py-4">
+          <div className="flex flex-col items-start w-full">
+            {/* Project Selector */}
+            <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
+              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px] shadow-sm group-hover:mr-3 transition-all duration-300 relative z-10">
+                H
+              </div>
+              <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
+                <span className="font-medium text-[#2A2A2F] text-[15px]">hi hellow</span>
+                <svg className="w-4 h-4 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
 
-          {navItems.map((item, i) => (
-            <button
-              key={i}
-              onClick={() => {
-                setActiveNav(i);
-                if (i === 2) router.push("/preview");
-                else if (i === 1) setActiveTab("grid");
-                else toast(`${item.label} coming soon`);
-              }}
-              title={item.label}
-              className={`w-10 h-10 flex items-center justify-center rounded-full transition-colors duration-150 ${
-                activeNav === i
-                  ? "bg-[#8DFFB3]/20 text-[#369762]"
-                  : "text-[#171717]/50 hover:bg-[#F7F7F7] hover:text-[#171717]"
-              }`}
-            >
-              {item.icon}
-            </button>
-          ))}
-        </div>
+            <div className="w-full px-4 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="h-px w-full bg-[#E6E6E6]/60" />
+            </div>
 
-        <div className="flex flex-col items-center gap-2">
-          <button
-            onClick={() => toast("New site")}
-            className="w-10 h-10 flex items-center justify-center rounded-full text-[#171717]/50 hover:bg-[#F7F7F7] hover:text-[#171717] transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-            </svg>
-          </button>
-          <button
-            onClick={() => toast("Help & docs")}
-            className="w-10 h-10 flex items-center justify-center rounded-full text-[#171717]/50 hover:bg-[#F7F7F7] hover:text-[#171717] transition-colors"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-            </svg>
-          </button>
-        </div>
-      </aside>
+            {/* Nav Items */}
+            <nav className="flex flex-col gap-[2px] w-full px-2">
+              {navItems.map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setActiveNav(i);
+                    if (i === 1) router.push("/preview"); // Domain logic or similar
+                    else if (i === 1) setActiveTab("grid");
+                    else toast(`${item.label} coming soon`);
+                  }}
+                  title={item.label}
+                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${
+                    activeNav === i
+                      ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-sm"
+                      : "text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] border border-transparent"
+                  }`}
+                >
+                  <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                    {item.icon}
+                  </div>
+                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="flex flex-col items-center w-full mt-auto">
+            {/* Upgrade Card */}
+            <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
+              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px] shadow-sm overflow-hidden text-left mt-2">
+                {/* Custom Gradient Borders */}
+                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ff4b72] via-[#a855f7] to-[#3b82f6]" />
+                <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#ff4b72] via-[#a855f7] to-[#3b82f6] opacity-30" />
+                <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-[#3b82f6] via-[#a855f7] to-[#ff4b72] opacity-30" />
+                
+                <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
+                  ONLY $16 to<br />unlock Premium<br />Features
+                </p>
+                <button className="w-full py-1.5 bg-[#4b93ff] text-white rounded-[8px] text-[13px] font-medium hover:bg-[#3b82f6] transition-colors shadow-sm">
+                  Upgrade Now
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom Links */}
+            <div className="flex flex-col gap-1 w-full px-2">
+              <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
+                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Settings
+                </span>
+              </button>
+              <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
+                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Help
+                </span>
+              </button>
+            </div>
+
+            <div className="w-full px-4 my-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="h-px w-full bg-[#E6E6E6]/60" />
+            </div>
+
+            <div className="px-2 w-full">
+              <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/80 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
+                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Add new website
+                </span>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
 
       {/* ── Chat Pane ── */}
       <ChatPane
