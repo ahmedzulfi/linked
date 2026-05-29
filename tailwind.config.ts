@@ -80,8 +80,8 @@ export default {
           'on-surface': '#000000',
           'on-surface-muted': '#171717',
           border: '#E6E6E6',
-          accent: '#8DB8FF',
-          'accent-soft': '#DCEAFF',
+          accent: '#8DFFB3',
+          'accent-soft': '#D4FBE5',
           'accent-green': '#8DFFB3',
           'accent-green-dark': '#369762',
           success: '#BFE7A9',
@@ -89,7 +89,7 @@ export default {
         },
         // Keep linkedpage mapped to Webild for compatibility
         linkedpage: {
-          blue: '#8DB8FF',
+          blue: '#8DFFB3',
           dark: '#2A2A2F',
           'dark-card': '#FBFBFB',
           'dark-card2': '#F3F3F3',
@@ -130,3 +130,5 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
+
+

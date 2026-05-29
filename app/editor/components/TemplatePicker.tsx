@@ -25,8 +25,8 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
           <div className="h-1 w-4/5 bg-[#F3F3F3] rounded mb-2" />
           <div className="flex gap-1">
             {[1, 2, 3].map(i => (
-              <div key={i} className="h-3 px-2   rounded-lg bg-[#DCEAFF] flex items-center">
-                <div className="h-0.5 w-5 bg-[#8DB8FF] rounded" />
+              <div key={i} className="h-3 px-2   rounded-lg bg-[#D4FBE5] flex items-center">
+                <div className="h-0.5 w-5 bg-[#8DFFB3] rounded" />
               </div>
             ))}
           </div>
@@ -48,7 +48,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
           <div className="h-1 w-3/4 bg-[#F3F3F3] rounded mt-1" />
         </div>
         <div className="bg-white rounded-[6px] border border-[#E6E6E6] p-2">
-          <div className="h-1.5 w-8 bg-[#8DB8FF] rounded mb-1" />
+          <div className="h-1.5 w-8 bg-[#8DFFB3] rounded mb-1" />
           <div className="h-1 w-full bg-[#F3F3F3] rounded" />
           <div className="h-1 w-2/3 bg-[#F3F3F3] rounded mt-1" />
         </div>
@@ -75,7 +75,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
           <div className="h-px w-full bg-[#E6E6E6] my-1" />
           {[1, 2].map(i => (
             <div key={i} className="flex gap-2 items-start">
-              <div className="w-3 h-3   rounded-lg bg-[#8DB8FF] mt-0.5 flex-shrink-0" />
+              <div className="w-3 h-3   rounded-lg bg-[#8DFFB3] mt-0.5 flex-shrink-0" />
               <div className="flex-1 flex flex-col gap-1">
                 <div className="h-1.5 w-14 bg-[#2A2A2F] rounded" />
                 <div className="h-1 w-10 bg-[#E6E6E6] rounded" />
@@ -101,8 +101,8 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
       <div className="h-1 w-4/5 bg-white/10 rounded" />
       <div className="flex gap-1 mt-1">
         {[1, 2, 3].map(i => (
-          <div key={i} className="h-3 px-2   rounded-lg bg-[#8DB8FF]/20 flex items-center">
-            <div className="h-0.5 w-4 bg-[#8DB8FF] rounded" />
+          <div key={i} className="h-3 px-2   rounded-lg bg-[#8DFFB3]/20 flex items-center">
+            <div className="h-0.5 w-4 bg-[#8DFFB3] rounded" />
           </div>
         ))}
       </div>
@@ -162,3 +162,5 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
     </div>
   );
 }
+
+

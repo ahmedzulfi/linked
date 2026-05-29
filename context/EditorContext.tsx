@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { ProfileData, TemplateId, MOCK_PROFILE } from "@/shared/types";
 
-// ─── State Shape ───────────────────────────────────────────────────────────────
+//   ─ State Shape                                                               ─
 interface EditorState {
   profile: ProfileData | null;
   editedProfile: ProfileData | null;
@@ -33,7 +33,7 @@ interface EditorActions {
 
 type EditorContextValue = EditorState & EditorActions;
 
-// ─── Context ───────────────────────────────────────────────────────────────────
+//   ─ Context                                                                   ─
 const EditorContext = createContext<EditorContextValue | null>(null);
 
 const SESSION_KEY = "linkedpage_profile";

@@ -70,7 +70,7 @@ export default function SignupPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto max-w-[1536px]">
 
-        {/* ── Left: Signup Form (exact reference UI) ── */}
+        {/*    Left: Signup Form (exact reference UI)    */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Outer card — button-secondary + rounded + p-8 as in reference */}
           <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md" >
@@ -253,8 +253,8 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* ── Right: Hero Illustration Panel ── */}
-        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
+        {/*    Right: Hero Illustration Panel    */}
+        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DFFB3]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"
@@ -272,3 +272,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
+

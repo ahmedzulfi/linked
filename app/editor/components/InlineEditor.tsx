@@ -62,7 +62,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
     { id: "links", label: "Links", icon: <LinkIcon className="w-5 h-5" /> },
   ];
 
-  // ── Experience helpers ──
+  //    Experience helpers   
   const updateExperience = (index: number, field: keyof ProfileExperience, value: string) => {
     const next = [...profile.experience];
     next[index] = { ...next[index], [field]: value };
@@ -80,7 +80,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
     ]);
   };
 
-  // ── Link helpers ──
+  //    Link helpers   
   const updateLink = (index: number, field: keyof ProfileLink, value: string) => {
     const next = [...profile.links];
     next[index] = { ...next[index], [field]: value };
@@ -120,7 +120,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
       {/* Content */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4" style={{ scrollbarWidth: "none" }}>
 
-        {/* ── Profile Tab ── */}
+        {/*    Profile Tab    */}
         {activeTab === "profile" && (
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg  ">
@@ -170,7 +170,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
           </div>
         )}
 
-        {/* ── Experience Tab ── */}
+        {/*    Experience Tab    */}
         {activeTab === "experience" && (
           <div className="flex flex-col gap-3">
             {profile.experience.map((exp, i) => (
@@ -228,7 +228,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
           </div>
         )}
 
-        {/* ── Links Tab ── */}
+        {/*    Links Tab    */}
         {activeTab === "links" && (
           <div className="flex flex-col gap-3">
             {profile.links.map((link, i) => (

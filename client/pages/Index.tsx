@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// ─── Small reusable pieces ───────────────────────────────────────────────────
+//   ─ Small reusable pieces                                                   ─
 
 function DarkButton({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
@@ -26,7 +26,7 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ─── Template card data ───────────────────────────────────────────────────────
+//   ─ Template card data                                                       ─
 
 const TEMPLATES_LARGE = [
   {
@@ -61,7 +61,7 @@ const FAQ_ITEMS = [
   "Can I export the code of my Website?",
 ];
 
-// ─── Hero Section ─────────────────────────────────────────────────────────────
+//   ─ Hero Section                                                             ─
 
 function HeroSection() {
   return (
@@ -167,7 +167,7 @@ function HeroSection() {
   );
 }
 
-// ─── Templates Section ────────────────────────────────────────────────────────
+//   ─ Templates Section                                                         
 
 function TemplatesSection() {
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -252,7 +252,7 @@ function TemplatesSection() {
   );
 }
 
-// ─── How It Works Section ─────────────────────────────────────────────────────
+//   ─ How It Works Section                                                     ─
 
 const HOW_IT_WORKS = [
   {
@@ -308,7 +308,7 @@ function HowItWorksSection() {
   );
 }
 
-// ─── Business Section (Career Showcase) ──────────────────────────────────────
+//   ─ Business Section (Career Showcase)                                       
 
 const BUSINESS_TABS = ["Experience", "Projects", "Education", "Contact"];
 const BUSINESS_CARDS = [
@@ -388,7 +388,7 @@ function BusinessSection() {
   );
 }
 
-// ─── Domain Section ───────────────────────────────────────────────────────────
+//   ─ Domain Section                                                           ─
 
 function DomainSection() {
   return (
@@ -433,7 +433,7 @@ function DomainSection() {
   );
 }
 
-// ─── Brand Section ────────────────────────────────────────────────────────────
+//   ─ Brand Section                                                             
 
 const BRAND_CARDS = [
   {
@@ -484,7 +484,7 @@ function BrandSection() {
   );
 }
 
-// ─── Features Section ─────────────────────────────────────────────────────────
+//   ─ Features Section                                                         ─
 
 const FEATURES = [
   {
@@ -530,7 +530,7 @@ function FeaturesSection() {
   );
 }
 
-// ─── FAQ Section ──────────────────────────────────────────────────────────────
+//   ─ FAQ Section                                                               
 
 function FAQSection() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
@@ -589,7 +589,7 @@ function FAQSection() {
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+//   ─ Main Page                                                                 
 
 export default function Index() {
   return (

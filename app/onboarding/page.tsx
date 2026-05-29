@@ -187,7 +187,7 @@ function OnboardingWizard() {
                 className="flex flex-col gap-6"
               >
                 <div className="flex flex-col gap-2">
-                  <div className="w-12 h-12      rounded-lg   bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
+                  <div className="w-12 h-12      rounded-lg   bg-[#8DFFB3]/10 flex items-center justify-center text-[#8DFFB3] mb-2">
                     <Sparkles className="w-5 h-5 animate-pulse" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
@@ -204,7 +204,7 @@ function OnboardingWizard() {
                     value={brandName}
                     onChange={(e) => setBrandName(e.target.value)}
                     placeholder="e.g. Reality Cheque"
-                    className="w-full h-12 px-4      rounded-lg   bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DB8FF]/50 transition-shadow font-inter-tight"
+                    className="w-full h-12 px-4      rounded-lg   bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DFFB3]/50 transition-shadow font-inter-tight"
                     autoFocus
                   />
                   {linkedinUrl && (
@@ -244,7 +244,7 @@ function OnboardingWizard() {
                       value={subdomain}
                       onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
                       placeholder="realitycheque"
-                      className="w-full h-12 pl-4 pr-24      rounded-lg   bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DB8FF]/50 transition-shadow font-inter-tight"
+                      className="w-full h-12 pl-4 pr-24      rounded-lg   bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DFFB3]/50 transition-shadow font-inter-tight"
                     />
                     <span className="absolute right-4 text-gray-400 font-semibold text-[14px] font-inter-tight">
                       .webild.co
@@ -277,7 +277,7 @@ function OnboardingWizard() {
                 className="flex flex-col gap-6"
               >
                 <div className="flex flex-col gap-2">
-                  <div className="w-12 h-12      rounded-lg   bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
+                  <div className="w-12 h-12      rounded-lg   bg-[#8DFFB3]/10 flex items-center justify-center text-[#8DFFB3] mb-2">
                     <Layout className="w-5 h-5" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
@@ -296,12 +296,12 @@ function OnboardingWizard() {
                         key={style.id}
                         onClick={() => toggleStyle(style.label)}
                         className={`w-full flex items-start gap-3.5 p-3.5      rounded-lg   border transition-all text-left group active:scale-[0.98] ${isChecked
-                          ? "bg-[#DCEAFF]/20 border-[#8DB8FF]  shadow-[0_6px_10px_-6px_#00000016] "
+                          ? "bg-[#D4FBE5]/20 border-[#8DFFB3]  shadow-[0_6px_10px_-6px_#00000016] "
                           : "bg-[#F7F7F7] border-[#E6E6E6] hover:bg-[#F3F3F3]"
                           }`}
                       >
                         <div className={`mt-0.5 w-5 h-5   rounded-lg border flex items-center justify-center flex-shrink-0 transition-colors ${isChecked
-                          ? "bg-[#8DB8FF] border-[#8DB8FF] text-white"
+                          ? "bg-[#8DFFB3] border-[#8DFFB3] text-white"
                           : "bg-white border-[#C5C5C5] group-hover:border-gray-500"
                           }`}>
                           {isChecked && <Check className="w-5 h-5 stroke-[3px]" />}
@@ -326,7 +326,7 @@ function OnboardingWizard() {
               >
                 <div className="w-16 h-16 rounded-[18px] bg-[#2A2A2F] text-white flex items-center justify-center  shadow-[0_6px_10px_-6px_#00000016]  relative animate-spin">
                   <Sparkles className="w-8 h-8 text-[#8DFFB3]" />
-                  <span className="absolute inset-0 rounded-[18px] border-2 border-dashed border-[#8DB8FF]" />
+                  <span className="absolute inset-0 rounded-[18px] border-2 border-dashed border-[#8DFFB3]" />
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -336,7 +336,7 @@ function OnboardingWizard() {
 
                 <div className="w-full max-w-[280px] h-2 bg-[#F3F3F3]   rounded-lg overflow-hidden border border-[#E6E6E6] mt-4">
                   <motion.div
-                    className="h-full bg-gradient-to-r from-[#8DB8FF] to-[#8DFFB3]"
+                    className="h-full bg-gradient-to-r from-[#8DFFB3] to-[#8DFFB3]"
                     style={{ width: `${loadingProgress}%` }}
                     transition={{ ease: "easeOut" }}
                   />
@@ -386,3 +386,5 @@ export default function OnboardingPage() {
     </Suspense>
   );
 }
+
+

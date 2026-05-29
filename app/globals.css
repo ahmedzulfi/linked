@@ -36,7 +36,7 @@
     /* #171717 */
 
     --accent: 217 100% 77.6%;
-    /* #8DB8FF */
+    /* #8DFFB3 */
     --accent-foreground: 0 0% 0%;
 
     --accent-green: 140 100% 77.6%;
@@ -53,7 +53,7 @@
     --input: 0 0% 100%;
     /* #FFFFFF */
     --ring: 217 100% 77.6%;
-    /* #8DB8FF */
+    /* #8DFFB3 */
 
     --radius: 0.8125rem;
     /* 13px */
@@ -324,7 +324,7 @@
   }
 
   .ds-input:focus {
-    border-color: #8DB8FF;
+    border-color: #8DFFB3;
     box-shadow: 0 0 0 3px rgba(141, 184, 255, 0.15);
   }
 
@@ -335,3 +335,4 @@
     width: 100%;
   }
 }
+

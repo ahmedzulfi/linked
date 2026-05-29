@@ -16,17 +16,17 @@ While the starter comes with a express server, only create endpoint when strictl
 
 ```
 client/                   # React SPA frontend
-├── pages/                # Route components (Index.tsx = home)
-├── components/ui/        # Pre-built UI component library
-├── App.tsx                # App entry point and with SPA routing setup
-└── global.css            # TailwindCSS 3 theming and global styles
+├   pages/                # Route components (Index.tsx = home)
+├   components/ui/        # Pre-built UI component library
+├   App.tsx                # App entry point and with SPA routing setup
+└   global.css            # TailwindCSS 3 theming and global styles
 
 server/                   # Express API backend
-├── index.ts              # Main server setup (express config + routes)
-└── routes/               # API handlers
+├   index.ts              # Main server setup (express config + routes)
+└   routes/               # API handlers
 
 shared/                   # Types used by both client & server
-└── api.ts                # Example of how to share api interfaces
+└   api.ts                # Example of how to share api interfaces
 ```
 
 ## Key Features

@@ -72,8 +72,8 @@ function PublishInner() {
           className="flex flex-col gap-3"
         >
           <div className="flex items-center justify-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#8DB8FF]" />
-            <span className="text-xs font-medium text-[#8DB8FF] uppercase tracking-wide">Published</span>
+            <Sparkles className="w-5 h-5 text-[#8DFFB3]" />
+            <span className="text-xs font-medium text-[#8DFFB3] uppercase tracking-wide">Published</span>
           </div>
           <h1 className="text-3xl font-medium text-black leading-tight">Your page is live!</h1>
           <p className="text-sm text-[#6B6B6B] leading-relaxed">
@@ -178,3 +178,5 @@ export default function PublishPage() {
     </div>
   );
 }
+
+

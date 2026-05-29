@@ -106,7 +106,7 @@ function ConvertInner() {
             {/* Animated ring */}
             <div className="relative w-24 h-24">
               <motion.div
-                className="absolute inset-0   rounded-lg border-4 border-[#E6E6E6] border-t-[#8DB8FF]"
+                className="absolute inset-0   rounded-lg border-4 border-[#E6E6E6] border-t-[#8DFFB3]"
                 animate={{ rotate: isDone ? 0 : 360 }}
                 transition={{ repeat: isDone ? 0 : Infinity, duration: 1.1, ease: "linear" }}
               />
@@ -194,3 +194,5 @@ export default function ConvertPage() {
     </div>
   );
 }
+
+

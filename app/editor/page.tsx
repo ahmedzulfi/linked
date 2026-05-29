@@ -10,7 +10,7 @@ import ProfilePreview from "./components/ProfilePreview";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
-// ─── Left Sidebar Icons ────────────────────────────────────────────────────────
+//   ─ Left Sidebar Icons                                                         
 type NavItem = { icon: React.ReactNode; label: string; active?: boolean };
 
 const navItems: NavItem[] = [
@@ -74,7 +74,7 @@ const navItems: NavItem[] = [
   },
 ];
 
-// ─── Chat Message types ────────────────────────────────────────────────────────
+//   ─ Chat Message types                                                         
 interface ChatMessage {
   id: string;
   role: "user" | "assistant";
@@ -100,7 +100,7 @@ const initialMessages: ChatMessage[] = [
 
 const SUGGESTIONS = ["Change template", "Edit bio", "Add links", "Dark mode"];
 
-// ─── Chat Pane ─────────────────────────────────────────────────────────────────
+//   ─ Chat Pane                                                                 ─
 type ChatTab = "chat" | "preview" | "grid" | "theme" | "sort" | "copy";
 
 function ChatPane({
@@ -419,7 +419,7 @@ function ChatPane({
 function UserMenu() {
   return (
     <div
-      className="absolute z-50 top-12 rounded-2xl origin-top-right border border-white/30 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12),0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
+      className="absolute z-50 top-1 rounded-2xl origin-top-right border border-white/30 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.02),0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -763,7 +763,7 @@ function UserMenu() {
   );
 }
 
-// ─── Main editor inner ─────────────────────────────────────────────────────────
+//   ─ Main editor inner                                                         ─
 function EditorInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -822,11 +822,11 @@ function EditorInner() {
   const mobileScale = 0.45;
 
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
+    <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-emerald-50/60 via-white to-yellow-50/40/40 font-inter select-none">
 
-      {/* ── Left Sidebar ── */}
+      {/*    Left Sidebar    */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
-        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-white/30 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] py-4">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-[#f7f7f7] backdrop-blur-xl border-r border-white/30 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-[0_8px_32px_#ffff] py-4">
           <div className="flex flex-col items-start w-full">
             {/* Project Selector */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
@@ -858,14 +858,14 @@ function EditorInner() {
                   }}
                   title={item.label}
                   className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
-                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-sm"
+                    ? "bg-[#f0fdf4] text-[#8DFFB3] border border-[#8DFFB3]/20 shadow-sm"
                     : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
                     }`}
                 >
                   <div className="w-5 h-5 flex items-center justify-center shrink-0">
                     {item.icon}
                   </div>
-                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
+                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#8DFFB3]" : ""}`}>
                     {item.label}
                   </span>
                 </button>
@@ -878,14 +878,11 @@ function EditorInner() {
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
               <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px] shadow-sm overflow-hidden text-left mt-2">
                 {/* Custom Gradient Borders */}
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ff4b72] via-[#a855f7] to-[#3b82f6]" />
-                <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#ff4b72] via-[#a855f7] to-[#3b82f6] opacity-30" />
-                <div className="absolute top-0 right-0 w-[2px] h-full bg-gradient-to-b from-[#3b82f6] via-[#a855f7] to-[#ff4b72] opacity-30" />
 
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
                   ONLY $16 to<br />unlock Premium<br />Features
                 </p>
-                <button className="w-full py-1.5 bg-[#4b93ff] text-white     rounded-lg  text-[13px] font-medium hover:bg-[#3b82f6] transition-colors shadow-sm">
+                <button className="w-full py-1.5 bg-[#8DFFB3] text-[#2A2A2F]     rounded-lg  text-[13px] font-medium hover:bg-[#8DFFB3] transition-colors shadow-sm">
                   Upgrade Now
                 </button>
               </div>
@@ -936,7 +933,7 @@ function EditorInner() {
         </aside>
       </div>
 
-      {/* ── Chat Pane ── */}
+      {/*    Chat Pane    */}
       <ChatPane
         onCommand={handleCommand}
         profileName={profileName}
@@ -948,21 +945,20 @@ function EditorInner() {
         setActiveTab={setActiveTab}
       />
 
-      {/* ── Canvas ── */}
-      <main className="flex-1 flex flex-col bg-[#F7F7F7] overflow-hidden relative p-5 gap-3">
+      {/*    Canvas    */}
+      <main className="flex-1 flex flex-col bg-[#fff] border overflow-hidden relative p-5 gap-3">
 
-        {/* ── Top bar (outside card) ── */}
+        {/*    Top bar (outside card)    */}
         <div className="flex items-center justify-between shrink-0 h-9">
           {/* Left: Upgrade Plan */}
           <button
             onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
-            className="flex items-center gap-2 h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6]   rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-sm"
-            style={{ boxShadow: "0 0 0 2px rgba(141,184,255,0.12), 0 1px 4px rgba(0,0,0,0.06)" }}
+            className="flex items-center gap-2 h-8 px-3 py-5 text-sm font-medium bg-white border border-[#E6E6E6]   rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-sm"
+            style={{ boxShadow: "0 1px 4px #ffff" }}
           >
-            <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
               <path d="M4 6h16M4 12h16M4 18h7" />
             </svg>
-            Upgrade Plan
           </button>
 
           {/* Right: Share + Publish + Avatar */}
@@ -976,7 +972,7 @@ function EditorInner() {
             <button
               onClick={handlePublish}
               disabled={publishing}
-              className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white   rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-sm"
+              className="h-8 px-5 text-sm font-medium bg-[#8DFFB3] text-[#2A2A2F]   rounded-lg hover:bg-[#369762] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-sm"
             >
               {publishing && <span className="w-3 h-3   rounded-lg border-2 border-white border-t-transparent animate-spin" />}
               Publish
@@ -1003,10 +999,10 @@ function EditorInner() {
           </div>
         </div>
 
-        {/* ── Canvas card ── */}
-        <div className="relative flex-1 bg-white/75 backdrop-blur-xl border border-white/40 rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.06),0_0_0_1px_rgba(255,255,255,0.6)_inset]">
+        {/*    Canvas card    */}
+        <div className="relative flex-1 bg-white/75 backdrop-blur-xl border border-white/40 rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_#ffff_inset]">
 
-          {/* ── Canvas toolbar ── */}
+          {/*    Canvas toolbar    */}
           <div className="relative z-30 flex items-center gap-3 w-full h-[54px] px-4 border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md">
 
             {/* Left: Customize + Page */}
@@ -1044,13 +1040,13 @@ function EditorInner() {
 
             {/* Center: domain availability banner */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6]     rounded-lg ">
+              <div className="flex items-center justify-between gap-3 px-4 pe-2 h-9 bg-[#F7F7F7] border border-[#E6E6E6]     rounded-lg ">
                 <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
-                  <svg className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="w-[14px] h-[14px] text-[#8DFFB3] shrink-0" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
                     <path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" />
                   </svg>
-                  <span className="min-w-0 truncate text-[#3b82f6] font-medium">
+                  <span className="min-w-0 truncate text-[#8DFFB3] font-medium">
                     {editedProfile?.name.toLowerCase().replace(/\s+/g, "") ?? "yourname"}.linkedpage.io
                   </span>
                   <span className="hidden lg:inline text-[#2A2A2F] font-normal">is available!</span>
@@ -1058,7 +1054,7 @@ function EditorInner() {
                 <button
                   onClick={handlePublish}
                   disabled={publishing}
-                  className="shrink-0 flex items-center gap-1.5 h-7     rounded-lg  px-3 text-xs font-medium bg-[#3b82f6] text-white  hover:bg-[#2563eb] transition-colors active:scale-95"
+                  className="shrink-0 flex items-center gap-1.5 h-7     rounded-md  px-3 text-xs font-medium bg-[#8DFFB3] text-[#2A2A2F]  hover:bg-[#369762] transition-colors active:scale-95"
                 >
                   {publishing && <span className="w-3 h-3   rounded-lg border-2 border-white border-t-transparent animate-spin" />}
                   Get Your Domain
@@ -1130,8 +1126,8 @@ function EditorInner() {
             </div>
           </div>
 
-          {/* ── Preview Area ── */}
-          <div className="flex-1 flex items-center justify-center overflow-hidden bg-[#F9F9F9] relative">
+          {/*    Preview Area    */}
+          <div className="flex-1 flex items-center justify-center overflow-hidden mt-4 rounded-2xl bg-[#F9F9F9] relative">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${selectedTemplate}-${previewMode}`}
@@ -1145,7 +1141,7 @@ function EditorInner() {
                   previewMode === "desktop" ? (
                     /* Desktop canvas */
                     <div
-                      className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white shadow-[0_8px_40px_-8px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,0,0,0.04)]"
+                      className="rounded-2xl overflow-hidden border border-[#E6E6E6] bg-white shadow-[0_8px_40px_-8px_#ffff,0_2px_8px_#ffff]"
                       style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
                     >
                       <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
@@ -1155,7 +1151,7 @@ function EditorInner() {
                   ) : (
                     /* Mobile canvas */
                     <div
-                      className="rounded-[32px] overflow-hidden border-[7px] border-[#2A2A2F] bg-white shadow-[0_16px_48px_-12px_rgba(0,0,0,0.22)]"
+                      className="rounded-[32px] overflow-hidden border-[7px] border-[#2A2A2F] bg-white shadow-[0_16px_48px_-12px_#ffff]"
                       style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
                     >
                       <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
@@ -1166,7 +1162,7 @@ function EditorInner() {
                 ) : (
                   /* Empty state */
                   <div
-                    className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white flex flex-col items-center justify-center shadow-[0_8px_40px_-8px_rgba(0,0,0,0.10)]"
+                    className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white flex flex-col items-center justify-center shadow-[0_8px_40px_-8px_#ffff]"
                     style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
                   >
                     <div className="flex flex-col items-center text-center max-w-sm gap-4">
@@ -1207,3 +1203,6 @@ export default function EditorPage() {
     </Suspense>
   );
 }
+
+
+

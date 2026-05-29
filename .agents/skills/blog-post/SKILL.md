@@ -35,9 +35,9 @@ task(
 
 ```
 blogs/
-└── <slug>/
-    ├── post.md        # The blog post content
-    └── hero.png       # REQUIRED: Generated cover image
+└   <slug>/
+    ├   post.md        # The blog post content
+    └   hero.png       # REQUIRED: Generated cover image
 ```
 
 Example: A post about "AI Agents in 2025" → `blogs/ai-agents-2025/`

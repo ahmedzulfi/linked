@@ -23,7 +23,7 @@ import {
 type PreviewMode = "desktop" | "mobile";
 type PublishStep = "idle" | "subdomain" | "publishing" | "done";
 
-// ─── Subdomain input panel ─────────────────────────────────────────────────────
+//   ─ Subdomain input panel                                                     ─
 function PublishPanel({
   onPublish,
   publishing,
@@ -47,7 +47,7 @@ function PublishPanel({
         <p className="text-xs text-[#9CA3AF]">Your free URL on LinkedPage</p>
       </div>
 
-      <div className="flex items-center      rounded-lg   border border-[#E6E6E6] overflow-hidden bg-white focus-within:border-[#8DB8FF] focus-within:shadow-[0_0_0_3px_rgba(141,184,255,0.15)] transition-all duration-150">
+      <div className="flex items-center      rounded-lg   border border-[#E6E6E6] overflow-hidden bg-white focus-within:border-[#8DFFB3] focus-within:shadow-[0_0_0_3px_rgba(141,255,179,0.15)] transition-all duration-150">
         <div className="px-3 py-2.5 bg-[#F3F3F3] border-r border-[#E6E6E6] text-xs text-[#9CA3AF] whitespace-nowrap flex-shrink-0">
           linkedpage.io/
         </div>
@@ -90,7 +90,7 @@ function PublishPanel({
   );
 }
 
-// ─── Published success panel ───────────────────────────────────────────────────
+//   ─ Published success panel                                                   ─
 function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -139,7 +139,7 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   );
 }
 
-// ─── Preview page ──────────────────────────────────────────────────────────────
+//   ─ Preview page                                                               
 export default function PreviewPage() {
   const router = useRouter();
   const { editedProfile, selectedTemplate, useMockProfile } = useEditor();
@@ -226,7 +226,7 @@ export default function PreviewPage() {
     <div className="min-h-screen bg-[#F7F7F7] font-inter">
       <Navbar />
 
-      {/* ── Top toolbar ── */}
+      {/*    Top toolbar    */}
       <div className="fixed top-[88px] left-0 right-0 z-40 px-5">
         <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md      rounded-lg   border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
           {/* Left: back */}
@@ -269,10 +269,10 @@ export default function PreviewPage() {
         </div>
       </div>
 
-      {/* ── Layout: canvas + right panel ── */}
+      {/*    Layout: canvas + right panel    */}
       <div className="flex flex-col lg:flex-row pt-[148px] pb-8 px-5 gap-4 max-w-[1536px] mx-auto">
 
-        {/* ── Canvas ── */}
+        {/*    Canvas    */}
         <div className="flex-1 flex items-start justify-center min-w-0">
           <AnimatePresence mode="wait">
             <motion.div
@@ -331,7 +331,7 @@ export default function PreviewPage() {
           </AnimatePresence>
         </div>
 
-        {/* ── Right publish panel ── */}
+        {/*    Right publish panel    */}
         <div className="w-full lg:w-[280px] flex-shrink-0 flex flex-col gap-4">
 
           {/* Publish card */}
@@ -408,3 +408,5 @@ export default function PreviewPage() {
     </div>
   );
 }
+
+
