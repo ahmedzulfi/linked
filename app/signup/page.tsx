@@ -8,29 +8,45 @@ import Navbar from "@/components/Navbar";
 
 export default function SignupPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordStep, setShowPasswordStep] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const isNameValid = name.trim().length >= 2;
+  const isFirstNameValid = firstName.trim().length >= 1;
+  const isLastNameValid = lastName.trim().length >= 1;
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-  const isPasswordValid = password.length >= 6;
-  const isFormValid = isNameValid && isEmailValid && isPasswordValid;
+  const isPasswordValid = password.length >= 8 && /[\d!@#$%^&*]/.test(password);
 
-  const handleSignup = (e: React.FormEvent) => {
+  // Step 1: name + email valid → reveal password
+  // Step 2: all valid → submit
+  const canContinue = isFirstNameValid && isLastNameValid && isEmailValid;
+  const canSubmit = canContinue && isPasswordValid;
+
+  const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isFormValid) {
-      if (!isNameValid) toast.error("Please enter your full name!");
-      else if (!isEmailValid) toast.error("Please enter a valid email address!");
-      else toast.error("Password must be at least 6 characters!");
+    if (!canContinue) {
+      if (!isFirstNameValid) toast.error("Please enter your first name!");
+      else if (!isLastNameValid) toast.error("Please enter your last name!");
+      else toast.error("Please enter a valid email address!");
+      return;
+    }
+
+    if (!showPasswordStep) {
+      setShowPasswordStep(true);
+      return;
+    }
+
+    if (!isPasswordValid) {
+      toast.error("Password must be at least 8 characters with a number or symbol!");
       return;
     }
 
     setIsSubmitting(true);
     toast.loading("Creating your account...");
-
     setTimeout(() => {
       setIsSubmitting(false);
       toast.dismiss();
@@ -50,170 +66,209 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen bg-white font-inter select-none">
-      {/* Landing page Navbar */}
       <Navbar />
 
-      {/* Page content — padded to clear navbar */}
-      <div className="pt-28 pb-10 px-5 flex items-center justify-center min-h-screen">
-        {/* Center form card — matches reference exactly */}
-        <div
-          className="relative card p-8 flex flex-col gap-5"
-          style={{ width: "min(100%, 380px)" }}
-        >
-          {/* Header */}
-          <div className="flex flex-col gap-1 text-center items-center">
-            <h1 className="text-2xl font-medium text-black w-fit leading-tight font-inter">
-              Create your account
-            </h1>
-            <p className="text-[13px] text-[#6B7280] font-inter">
-              Start building beautiful pages in minutes
-            </p>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 min-h-screen pt-28 md:pt-5">
 
-          {/* Google SSO */}
-          <button
-            type="button"
-            onClick={handleGoogleSignup}
-            className="button button-secondary w-full gap-2.5"
-          >
-            <img
-              className="w-4 h-4 flex-shrink-0"
-              alt="Google"
-              width={16}
-              height={16}
-              src="https://www.webild.io/icons/google.svg"
-            />
-            <span className="text-[13px] font-medium text-black font-inter">
-              Continue with Google
-            </span>
-          </button>
+        {/* ── Left: Signup Form (exact reference UI) ── */}
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Outer card — button-secondary + rounded + p-8 as in reference */}
+          <div className="relative button-secondary rounded p-8 w-full max-w-sm">
+            <div className="flex flex-col gap-5">
 
-          {/* Divider */}
-          <div className="flex items-center gap-3">
-            <div className="ds-divider" />
-            <span className="text-[11px] font-medium text-[#9CA3AF] font-inter uppercase tracking-wide flex-shrink-0">
-              or
-            </span>
-            <div className="ds-divider" />
-          </div>
+              {/* Header */}
+              <div className="flex flex-col gap-1 text-center items-center">
+                <h1 className="text-2xl font-medium text-black w-fit leading-tight">
+                  Create your account
+                </h1>
+                <p className="text-sm text-black">
+                  Get started with Webild today
+                </p>
+              </div>
 
-          {/* Signup form */}
-          <form onSubmit={handleSignup} className="flex flex-col gap-4">
-            {/* Full name */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-medium text-black font-inter">
-                Full name
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Jane Smith"
-                disabled={isSubmitting}
-                className="ds-input disabled:opacity-50"
-                required
-              />
-            </div>
-
-            {/* Email */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-medium text-black font-inter">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                disabled={isSubmitting}
-                className="ds-input disabled:opacity-50"
-                required
-              />
-            </div>
-
-            {/* Password */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-medium text-black font-inter">
-                Password
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="At least 6 characters"
-                  disabled={isSubmitting}
-                  className="ds-input pr-12 disabled:opacity-50"
-                  required
-                />
+              {/* Google SSO */}
+              <div className="flex flex-col gap-3">
                 <button
+                  className="button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 card flex items-center justify-center gap-2 w-full"
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 text-[#9CA3AF] hover:text-black transition-colors duration-150"
+                  onClick={handleGoogleSignup}
                 >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
+                  <img
+                    className="w-auto"
+                    height={16}
+                    width={16}
+                    alt="Google"
+                    src="https://www.webild.io/icons/google.svg"
+                    style={{ color: "transparent" }}
+                  />
+                  Continue with Google
                 </button>
               </div>
-              {password.length > 0 && !isPasswordValid && (
-                <p className="text-[11px] text-[#E45A5A] font-inter">
-                  Password must be at least 6 characters
-                </p>
-              )}
+
+              {/* Divider */}
+              <div className="relative flex items-center gap-4">
+                <div className="flex-1 border-t-2 border-black/5" />
+                <span className="text-xs text-black">or</span>
+                <div className="flex-1 border-t-2 border-black/5" />
+              </div>
+
+              {/* Form */}
+              <form className="flex flex-col gap-4" onSubmit={handleContinue}>
+
+                {/* First name + Last name */}
+                <div className="grid grid-cols-2 gap-3">
+                  {/* First name */}
+                  <div>
+                    <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
+                      <label className="block text-sm font-medium text-black text-nowrap truncate">
+                        First name
+                      </label>
+                    </div>
+                    <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
+                      <input
+                        className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none bg-transparent"
+                        type="text"
+                        placeholder="John"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        disabled={isSubmitting}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Last name */}
+                  <div>
+                    <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
+                      <label className="block text-sm font-medium text-black text-nowrap truncate">
+                        Last name
+                      </label>
+                    </div>
+                    <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
+                      <input
+                        className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none bg-transparent"
+                        type="text"
+                        placeholder="Doe"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        disabled={isSubmitting}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div>
+                  <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
+                    <label className="block text-sm font-medium text-black text-nowrap truncate">
+                      Email
+                    </label>
+                  </div>
+                  <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
+                    <input
+                      className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none bg-transparent"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isSubmitting}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Password (collapsible — matches reference grid-template-rows trick) */}
+                <div
+                  className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.625,0.05,0,1)]"
+                  style={{ gridTemplateRows: showPasswordStep ? "1fr" : "0fr" }}
+                >
+                  <div className="overflow-hidden flex flex-col gap-4 p-px">
+                    <div>
+                      <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
+                        <label className="block text-sm font-medium text-black text-nowrap truncate">
+                          Password
+                        </label>
+                      </div>
+                      <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
+                        <input
+                          className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none pr-10 bg-transparent"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="At least 8 characters and at least 1 special symbol or number"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          disabled={isSubmitting}
+                          required={showPasswordStep}
+                        />
+                        <button
+                          className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-black/75"
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword
+                            ? <EyeOff className="w-4 h-4" />
+                            : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                      {/* Password strength hint */}
+                      {showPasswordStep && password.length > 0 && !isPasswordValid && (
+                        <p className="mt-1.5 text-xs text-[#E45A5A]">
+                          Min 8 characters with at least 1 number or symbol
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <button
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
+                    isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)
+                      ? "opacity-50 select-none pointer-events-none"
+                      : ""
+                  }`}
+                  type="submit"
+                  disabled={isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      Creating account...
+                    </span>
+                  ) : "Continue"}
+                </button>
+              </form>
+
+              {/* Footer */}
+              <div className="text-center text-sm text-black">
+                Already have an account?{" "}
+                <button
+                  className="cursor-pointer text-[#8DB8FF] font-medium hover:underline"
+                  onClick={() => router.push("/login")}
+                >
+                  Sign in
+                </button>
+              </div>
+
             </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={isSubmitting || !isFormValid}
-              className="button button-primary w-full disabled:opacity-50 disabled:pointer-events-none"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                  Creating account...
-                </span>
-              ) : (
-                "Create account"
-              )}
-            </button>
-          </form>
-
-          {/* Terms */}
-          <p className="text-center text-[11px] text-[#9CA3AF] font-inter leading-relaxed">
-            By signing up you agree to our{" "}
-            <button
-              type="button"
-              className="text-[#2A2A2F] hover:underline"
-              onClick={() => toast.info("Terms of Service — coming soon!")}
-            >
-              Terms of Service
-            </button>{" "}
-            and{" "}
-            <button
-              type="button"
-              className="text-[#2A2A2F] hover:underline"
-              onClick={() => toast.info("Privacy Policy — coming soon!")}
-            >
-              Privacy Policy
-            </button>
-          </p>
-
-          {/* Footer */}
-          <p className="text-center text-[13px] text-[#6B7280] font-inter">
-            Already have an account?{" "}
-            <button
-              type="button"
-              className="text-[#2A2A2F] font-medium hover:underline"
-              onClick={() => router.push("/login")}
-            >
-              Sign in
-            </button>
-          </p>
+          </div>
         </div>
+
+        {/* ── Right: Hero Illustration Panel ── */}
+        <div className="relative hidden md:flex rounded-[18px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
+          <img
+            className="absolute inset-0 size-full object-cover opacity-80"
+            alt="Auth background"
+            src="https://www.webild.io/images/bgtest2.webp"
+          />
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
+          <img
+            className="relative z-20 drop-shadow-2xl max-w-[85%] w-auto h-auto"
+            alt="Webild illustration"
+            src="https://www.webild.io/images/input.svg"
+          />
+        </div>
+
       </div>
     </div>
   );

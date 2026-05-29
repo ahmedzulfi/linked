@@ -25,23 +25,17 @@ export default function LoginPage() {
       toast.error("Please enter a valid email address!");
       return;
     }
-
     if (!showPasswordStep) {
       setShowPasswordStep(true);
-      setTimeout(() => {
-        passwordInputRef.current?.focus();
-      }, 100);
+      setTimeout(() => passwordInputRef.current?.focus(), 100);
       return;
     }
-
     if (!isPasswordValid) {
       toast.error("Password must be at least 6 characters!");
       return;
     }
-
     setIsSubmitting(true);
     toast.loading("Authenticating secure session...");
-
     setTimeout(() => {
       setIsSubmitting(false);
       toast.dismiss();
@@ -61,156 +55,167 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-white font-inter select-none">
-      {/* Landing page Navbar */}
       <Navbar />
 
-      {/* Page content — padded to clear navbar */}
-      <div className="pt-28 pb-10 px-5 flex items-center justify-center min-h-screen">
-        {/* Center form card — matches reference exactly */}
-        <div
-          className="relative card p-8 flex flex-col gap-5"
-          style={{ width: "min(100%, 380px)" }}
-        >
-          {/* Header */}
-          <div className="flex flex-col gap-1 text-center items-center">
-            <h1 className="text-2xl font-medium text-black w-fit leading-tight font-inter">
-              Welcome back
-            </h1>
-            <p className="text-[13px] text-[#6B7280] font-inter">
-              Sign in to your account to continue
-            </p>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 min-h-screen pt-28 md:pt-5">
 
-          {/* Google SSO */}
-          <button
-            type="button"
-            onClick={handleGoogleLogin}
-            className="button button-secondary w-full gap-2.5"
-          >
-            <img
-              className="w-4 h-4 flex-shrink-0"
-              alt="Google"
-              width={16}
-              height={16}
-              src="https://www.webild.io/icons/google.svg"
-            />
-            <span className="text-[13px] font-medium text-black font-inter">
-              Continue with Google
-            </span>
-          </button>
+        {/* ── Left: Form ── */}
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Card wrapper — exact reference style */}
+          <div className="relative button-secondary rounded p-8 w-full max-w-sm">
+            <div className="flex flex-col gap-5">
 
-          {/* Divider */}
-          <div className="flex items-center gap-3">
-            <div className="ds-divider" />
-            <span className="text-[11px] font-medium text-[#9CA3AF] font-inter uppercase tracking-wide flex-shrink-0">
-              or
-            </span>
-            <div className="ds-divider" />
-          </div>
+              {/* Header */}
+              <div className="flex flex-col gap-1 text-center items-center">
+                <h1 className="text-2xl font-medium text-black w-fit leading-tight">
+                  Welcome back
+                </h1>
+                <p className="text-sm text-black">
+                  Sign in to your account to continue
+                </p>
+              </div>
 
-          {/* Email + Password Form */}
-          <form onSubmit={handleContinue} className="flex flex-col gap-4">
-            {/* Email */}
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[13px] font-medium text-black font-inter">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                disabled={showPasswordStep || isSubmitting}
-                className="ds-input disabled:opacity-50"
-                required
-              />
-            </div>
+              {/* Google SSO */}
+              <div className="flex flex-col gap-3">
+                <button
+                  className="button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 card flex items-center justify-center gap-2 w-full"
+                  type="button"
+                  onClick={handleGoogleLogin}
+                >
+                  <img
+                    className="w-auto"
+                    height={16}
+                    width={16}
+                    alt="Google"
+                    src="https://www.webild.io/icons/google.svg"
+                  />
+                  Continue with Google
+                </button>
+              </div>
 
-            {/* Password (collapsible) */}
-            <div
-              className={`grid transition-[grid-template-rows,opacity] duration-[280ms] ease-[cubic-bezier(0.23,1,0.32,1)] ${
-                showPasswordStep
-                  ? "grid-rows-[1fr] opacity-100"
-                  : "grid-rows-[0fr] opacity-0"
-              }`}
-            >
-              <div className="overflow-hidden flex flex-col gap-4">
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <label className="text-[13px] font-medium text-black font-inter">
-                      Password
+              {/* Divider */}
+              <div className="relative flex items-center gap-4">
+                <div className="flex-1 border-t-2 border-black/5" />
+                <span className="text-xs text-black">or</span>
+                <div className="flex-1 border-t-2 border-black/5" />
+              </div>
+
+              {/* Form */}
+              <form className="flex flex-col gap-4" onSubmit={handleContinue}>
+
+                {/* Email */}
+                <div>
+                  <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
+                    <label className="block text-sm font-medium text-black text-nowrap truncate">
+                      Email
                     </label>
-                    <button
-                      type="button"
-                      className="text-[12px] text-[#8DB8FF] font-medium font-inter hover:underline"
-                      onClick={() =>
-                        toast.info("Password reset link sent to your email!")
-                      }
-                    >
-                      Forgot password?
-                    </button>
                   </div>
-                  <div className="relative flex items-center">
+                  <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
                     <input
-                      ref={passwordInputRef}
-                      type={showPassword ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      placeholder="Enter your password"
-                      disabled={isSubmitting}
-                      className="ds-input pr-12"
-                      required={showPasswordStep}
+                      className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none bg-transparent"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={showPasswordStep || isSubmitting}
+                      required
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-4 text-[#9CA3AF] hover:text-black transition-colors duration-150"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4" />
-                      ) : (
-                        <Eye className="w-4 h-4" />
-                      )}
-                    </button>
                   </div>
                 </div>
+
+                {/* Password (collapsible) */}
+                <div
+                  className="grid transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.625,0.05,0,1)]"
+                  style={{ gridTemplateRows: showPasswordStep ? "1fr" : "0fr" }}
+                >
+                  <div className="overflow-hidden flex flex-col gap-4 p-px">
+                    <div>
+                      <div className="z-10 flex items-center justify-between gap-1 mb-2 w-full min-w-0 relative">
+                        <label className="block text-sm font-medium text-black text-nowrap truncate">
+                          Password
+                        </label>
+                        <button
+                          type="button"
+                          className="text-xs text-[#8DB8FF] font-medium hover:underline"
+                          onClick={() => toast.info("Password reset link sent to your email!")}
+                        >
+                          Forgot password?
+                        </button>
+                      </div>
+                      <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
+                        <input
+                          ref={passwordInputRef}
+                          className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none pr-10 bg-transparent"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter your password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          disabled={isSubmitting}
+                          required={showPasswordStep}
+                        />
+                        <button
+                          className="absolute cursor-pointer right-3 top-1/2 -translate-y-1/2 text-black/75"
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword
+                            ? <EyeOff className="w-4 h-4" />
+                            : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Submit */}
+                <button
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
+                    (isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid))
+                      ? "opacity-50 select-none pointer-events-none"
+                      : ""
+                  }`}
+                  type="submit"
+                  disabled={isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid)}
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center gap-2">
+                      <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      Processing...
+                    </span>
+                  ) : showPasswordStep ? "Sign in" : "Continue"}
+                </button>
+              </form>
+
+              {/* Footer */}
+              <div className="text-center text-sm text-black">
+                Don't have an account?{" "}
+                <button
+                  className="cursor-pointer text-[#8DB8FF] font-medium hover:underline"
+                  onClick={() => router.push("/signup")}
+                >
+                  Sign up
+                </button>
               </div>
+
             </div>
-
-            {/* Submit */}
-            <button
-              type="submit"
-              disabled={
-                isSubmitting ||
-                (showPasswordStep ? !isPasswordValid : !isEmailValid)
-              }
-              className="button button-primary w-full disabled:opacity-50 disabled:pointer-events-none"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                  Processing...
-                </span>
-              ) : showPasswordStep ? (
-                "Sign in"
-              ) : (
-                "Continue"
-              )}
-            </button>
-          </form>
-
-          {/* Footer */}
-          <p className="text-center text-[13px] text-[#6B7280] font-inter">
-            Don't have an account?{" "}
-            <button
-              type="button"
-              className="text-[#2A2A2F] font-medium hover:underline"
-              onClick={() => router.push("/signup")}
-            >
-              Sign up
-            </button>
-          </p>
+          </div>
         </div>
+
+        {/* ── Right: Hero Illustration ── */}
+        <div className="relative hidden md:flex rounded-[18px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
+          <img
+            className="absolute inset-0 size-full object-cover opacity-80"
+            alt="Auth background"
+            src="https://www.webild.io/images/bgtest2.webp"
+          />
+          <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
+          <img
+            className="relative z-20 drop-shadow-2xl max-w-[85%] w-auto h-auto"
+            alt="Webild input illustration"
+            src="https://www.webild.io/images/input.svg"
+          />
+        </div>
+
       </div>
     </div>
   );
