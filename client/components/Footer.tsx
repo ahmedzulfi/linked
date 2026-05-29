@@ -32,38 +32,38 @@ const legalLinks = [
 export default function Footer() {
   return (
     <footer 
-      className="w-full p-6 sm:p-10 lg:p-14 bg-cover bg-center bg-no-repeat"
+      className="w-full p-6 sm:p-10 lg:p-14 bg-cover bg-center bg-no-repeat select-none pointer-events-none"
       style={{ backgroundImage: "url('/bg.png')" }}
     >
-      <div className="w-full max-w-[1536px] mx-auto bg-[#FBFBFB] rounded-[24px] border border-gray-200/80 shadow-[0_10px_30px_rgba(0,0,0,0.08)] px-6 sm:px-12 lg:px-20 py-16 text-black font-inter">
+      <div className="w-full max-w-[1536px] mx-auto bg-[#FBFBFB] rounded-[18px] border border-[#E6E6E6] shadow-sm px-6 sm:px-12 lg:px-20 py-16 text-black font-inter pointer-events-auto">
         <div className="flex flex-col gap-12">
         
         {/* Top Section: Giant centered logo */}
-        <div className="w-full flex justify-center py-4 border-b border-gray-200 pb-12">
+        <div className="w-full flex justify-center py-4 border-b border-[#E6E6E6] pb-12">
           <img
             src="/logo.png"
             alt="LinkedPage Logo"
-            className="h-[100px] sm:h-[140px] md:h-[160px] w-auto object-contain select-none pointer-events-none"
+            className="h-[80px] sm:h-[120px] md:h-[140px] w-auto object-contain select-none pointer-events-none"
           />
         </div>
 
         {/* Details Grid Section */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pt-4 pb-12 border-b border-gray-200">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pt-4 pb-12 border-b border-[#E6E6E6]">
           
           {/* Left Column: Newsletter & Social */}
-          <div className="md:col-span-4 flex flex-col justify-between gap-10 md:pr-12 md:border-r border-gray-200">
+          <div className="md:col-span-4 flex flex-col justify-between gap-10 md:pr-12 md:border-r border-[#E6E6E6]">
             {/* Newsletter form */}
             <div className="flex flex-col gap-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-gray-500 font-semibold">
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-500 font-semibold font-inter-tight">
                 Newsletter
               </span>
-              <div className="relative w-full max-w-sm mt-2">
+              <div className="relative w-full max-w-sm mt-1">
                 <input
                   type="email"
-                  placeholder="monemail@mail.com"
-                  className="w-full bg-transparent border-b border-gray-300 py-2.5 pr-8 text-sm placeholder-gray-400 outline-none focus:border-black transition-colors"
+                  placeholder="name@email.com"
+                  className="w-full bg-white text-[#171717] border border-[#E6E6E6] rounded-[13px] h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-all font-inter-tight shadow-sm"
                 />
-                <button className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-500 hover:text-black transition-colors">
+                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#171717] hover:text-black active:scale-95 transition-all">
                   <ArrowRight size={16} />
                 </button>
               </div>
@@ -89,17 +89,17 @@ export default function Footer() {
           {/* Right Columns: Nav Links */}
           <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 md:pl-12">
             
-            {/* Nos Formules (Product) */}
+            {/* Product */}
             <div className="flex flex-col gap-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold">
-                Nos formules
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold font-inter-tight">
+                Product
               </span>
               <div className="flex flex-col gap-3">
                 {productLinks.map((link) => (
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-gray-600 hover:text-black text-sm transition-colors duration-200"
+                    className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
                   </Link>
@@ -107,17 +107,17 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Science (Tech) */}
+            {/* Technology */}
             <div className="flex flex-col gap-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold">
-                Science
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold font-inter-tight">
+                Technology
               </span>
               <div className="flex flex-col gap-3">
                 {technologyLinks.map((link) => (
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-gray-600 hover:text-black text-sm transition-colors duration-200"
+                    className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
                   </Link>
@@ -125,17 +125,17 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* La Marque (Brand) */}
+            {/* Brand */}
             <div className="flex flex-col gap-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold">
-                La marque
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold font-inter-tight">
+                Brand
               </span>
               <div className="flex flex-col gap-3">
                 {companyLinks.map((link) => (
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-gray-600 hover:text-black text-sm transition-colors duration-200"
+                    className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
                   </Link>
@@ -143,17 +143,17 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Assistance (Help) */}
+            {/* Support */}
             <div className="flex flex-col gap-4">
-              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold">
-                Assistance
+              <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold font-inter-tight">
+                Support
               </span>
               <div className="flex flex-col gap-3">
                 {legalLinks.map((link) => (
                   <Link
                     key={link.label}
                     to={link.to}
-                    className="text-gray-600 hover:text-black text-sm transition-colors duration-200"
+                    className="text-[#171717]/70 hover:text-black text-sm transition-colors duration-200 font-inter-tight"
                   >
                     {link.label}
                   </Link>
@@ -166,7 +166,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="flex items-center justify-between text-xs text-gray-400 font-mono uppercase tracking-wider">
+        <div className="flex items-center justify-between text-xs text-gray-400 font-mono uppercase tracking-wider font-inter-tight">
           <span>Copyright LinkedPage 2026</span>
         </div>
         

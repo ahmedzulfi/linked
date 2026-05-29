@@ -1,0 +1,188 @@
+---
+version: alpha
+name: Webild Cloud Editorial
+description: A soft, airy landing-page system with bold type, frosted panels, and restrained dark accents.
+colors:
+  primary: "#2A2A2F"
+  primary-contrast: "#FFFFFF"
+  secondary: "#F3F3F3"
+  tertiary: "#FBFBFB"
+  neutral: "#FFFFFF"
+  surface: "#FFFFFF"
+  surface-muted: "#F7F7F7"
+  on-surface: "#000000"
+  on-surface-muted: "#171717"
+  border: "#E6E6E6"
+  accent: "#8DB8FF"
+  accent-soft: "#DCEAFF"
+  success: "#BFE7A9"
+  error: "#E45A5A"
+typography:
+  headline-display:
+    fontFamily: "Inter Tight"
+    fontSize: "51px"
+    fontWeight: 500
+    lineHeight: "51.2px"
+    letterSpacing: "0px"
+  headline-lg:
+    fontFamily: "Inter Tight"
+    fontSize: "38px"
+    fontWeight: 400
+    lineHeight: "46px"
+    letterSpacing: "0px"
+  headline-md:
+    fontFamily: "Inter Tight"
+    fontSize: "29px"
+    fontWeight: 400
+    lineHeight: "35px"
+    letterSpacing: "0px"
+  headline-sm:
+    fontFamily: "Inter Tight"
+    fontSize: "21px"
+    fontWeight: 400
+    lineHeight: "25px"
+    letterSpacing: "0px"
+  body-lg:
+    fontFamily: "Inter Tight"
+    fontSize: "18px"
+    fontWeight: 400
+    lineHeight: "27px"
+    letterSpacing: "0px"
+  body-md:
+    fontFamily: "Inter Tight"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: "24px"
+    letterSpacing: "0px"
+  body-sm:
+    fontFamily: "Inter Tight"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: "20px"
+    letterSpacing: "0px"
+  label-lg:
+    fontFamily: "Inter Tight"
+    fontSize: "13px"
+    fontWeight: 500
+    lineHeight: "18px"
+    letterSpacing: "0px"
+  label-md:
+    fontFamily: "Inter Tight"
+    fontSize: "12px"
+    fontWeight: 500
+    lineHeight: "16px"
+    letterSpacing: "0px"
+  label-sm:
+    fontFamily: "Inter Tight"
+    fontSize: "11px"
+    fontWeight: 500
+    lineHeight: "14px"
+    letterSpacing: "0px"
+  caption:
+    fontFamily: "Inter Tight"
+    fontSize: "11px"
+    fontWeight: 400
+    lineHeight: "14px"
+    letterSpacing: "0px"
+rounded:
+  none: 0px
+  sm: 4px
+  md: 8px
+  lg: 13px
+  xl: 18px
+  full: 9999px
+spacing:
+  xs: 2px
+  sm: 12px
+  md: 18px
+  lg: 40px
+  xl: 90px
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-contrast}"
+    typography: "{typography.label-md}"
+    rounded: "{rounded.lg}"
+    padding: "14px 13px"
+    height: "40px"
+  button-secondary:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.on-surface}"
+    typography: "{typography.label-md}"
+    rounded: "{rounded.lg}"
+    padding: "14px 13px"
+    height: "40px"
+  button-tertiary:
+    backgroundColor: "transparent"
+    textColor: "{colors.on-surface}"
+    typography: "{typography.label-md}"
+    rounded: "{rounded.none}"
+    padding: "0px"
+  card:
+    backgroundColor: "{colors.tertiary}"
+    textColor: "{colors.on-surface-muted}"
+    rounded: "{rounded.lg}"
+    padding: "11px"
+  input:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface-muted}"
+    rounded: "{rounded.lg}"
+    padding: "14px 16px"
+    height: "48px"
+  chip:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface}"
+    typography: "{typography.label-sm}"
+    rounded: "{rounded.full}"
+    padding: "6px 10px"
+  icon-button:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.on-surface}"
+    rounded: "{rounded.full}"
+    size: "36px"
+---
+
+# Webild Cloud Editorial
+
+## Overview
+Webild feels airy, optimistic, and lightly futuristic, with a polished landing-page aesthetic built to inspire quick creation and conversion. The experience balances playful cloudscape imagery with a serious, product-led structure, making it suitable for founders, marketers, and small teams wanting a fast way to launch pages. The overall tone is spacious and inviting rather than dense or technical.
+
+## Colors
+- **Primary (#2A2A2F):** A deep charcoal used for the strongest call-to-action buttons, prominent UI contrast, and dark text accents. It gives the interface a grounded, premium anchor against the bright background.
+- **Secondary (#F3F3F3):** A soft off-white used for neutral buttons and subtle control surfaces. It keeps secondary actions visible without competing with the primary CTA.
+- **Tertiary (#FBFBFB):** The lightest elevated surface tone, ideal for cards and panels that sit above the background with minimal visual weight.
+- **Neutral / Surface (#FFFFFF):** Pure white is used for the base canvas, input areas, and high-clarity containers.
+- **On-surface (#000000):** Crisp black text for headlines, navigation, and essential labels, matching the high-contrast editorial feel.
+- **On-surface-muted (#171717):** A near-black supporting text tone for card content and body copy where full black would feel too stark.
+- **Border (#E6E6E6):** A faint divider color for structural separation and soft edges, especially on floating panels and controls.
+- **Accent (#8DB8FF):** A gentle sky-blue highlight used for active states, visual emphasis, and lightweight interactive cues.
+- **Accent-soft (#DCEAFF):** A pale blue companion for low-emphasis highlights and blended interface accents.
+- **Success (#BFE7A9):** A fresh green used sparingly for positive signals and subtle environmental warmth.
+- **Error (#E45A5A):** A restrained red reserved for destructive states, validation, and alert messaging.
+
+## Typography
+The system uses Inter Tight throughout, which gives the brand a compact, modern, and slightly editorial voice. Headlines rely on lighter weights for h2–h4 and a medium weight for the main display line, creating a sleek contrast with the bold visual imagery. Body text stays at 16px/24px for comfortable reading, while labels and button text move slightly smaller and medium-weight for crisp utility. Letter spacing is neutral, with no visible uppercase tracking treatment, so the hierarchy comes from size, weight, and contrast rather than decorative text styling.
+
+## Layout & Spacing
+The layout is centered around a wide, fixed hero composition with generous negative space and a soft full-bleed background image. Major content sits inside layered floating panels, while the top navigation uses a rounded, inset container that spans most of the viewport width with even internal spacing. The spacing rhythm is simple and airy, using a compact base of 2px for micro-adjustments and then jumping to 12px, 18px, 40px, and 90px for component padding, section separation, and dramatic hero breathing room. Cards and controls prefer consistent internal padding over dense alignment, reinforcing the polished, easygoing feel.
+
+## Elevation & Depth
+Depth is achieved more through translucency, soft borders, and gentle shadows than through dramatic stacking. Panels use pale surfaces with subtle gray edges and light shadowing to appear lifted from the cloud background without feeling heavy. The interface leans flat overall, but the contrast between white controls, frosted containers, and dark CTA buttons creates enough hierarchy for navigation and action. Inner shadow treatment on primary buttons adds a tactile, slightly embossed quality.
+
+## Shapes
+The shape language is soft and rounded, with a notable 13px corner radius on major buttons and cards. Full pills appear on chips, icon buttons, and compact controls, while larger panels keep a moderate rounded rectangle profile. Overall, the system feels approachable and polished rather than angular or architectural.
+
+## Components
+Buttons are the most expressive component family. `button-primary` uses the charcoal `#2A2A2F` background with white text, medium label typography, 14px vertical padding, and a 40px minimum height for a confident CTA. `button-secondary` uses `#F3F3F3` with black text and the same sizing, making it ideal for less dominant actions like “Decline” or “Log in.” `button-tertiary` is text-only and should remain visually quiet for low-emphasis navigation or inline actions.
+
+Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action buttons.
+
+## Do's and Don'ts
+- Do keep primary actions dark, rounded, and compact, with clear white text.
+- Do use generous whitespace and large centered hero compositions.
+- Do preserve the soft, high-key palette and avoid harsh outlines.
+- Do keep body copy and labels clean, plain, and highly legible with Inter Tight.
+- Don't introduce sharp corners or aggressive geometric styling.
+- Don't overuse shadows; depth should feel subtle and atmospheric.
+- Don't make secondary controls louder than the main CTA.
+- Don't compress layouts into dense grids; the system should breathe.

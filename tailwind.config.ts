@@ -14,7 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        inter: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        sans: ['Inter Tight', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        inter: ['Inter Tight', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -60,14 +61,30 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // LinkedPage brand colors
+        // Webild Cloud Editorial brand colors
+        webild: {
+          primary: '#2A2A2F',
+          secondary: '#F3F3F3',
+          tertiary: '#FBFBFB',
+          neutral: '#FFFFFF',
+          surface: '#FFFFFF',
+          'surface-muted': '#F7F7F7',
+          'on-surface': '#000000',
+          'on-surface-muted': '#171717',
+          border: '#E6E6E6',
+          accent: '#8DB8FF',
+          'accent-soft': '#DCEAFF',
+          success: '#BFE7A9',
+          error: '#E45A5A',
+        },
+        // Keep linkedpage mapped to Webild for compatibility
         linkedpage: {
-          blue: '#3385F9',
-          dark: '#000812',
-          'dark-card': '#2A2A2F',
-          'dark-card2': '#3A3A42',
+          blue: '#8DB8FF',
+          dark: '#2A2A2F',
+          'dark-card': '#FBFBFB',
+          'dark-card2': '#F3F3F3',
           light: '#FBFBFB',
-          border: '#F3F3F3',
+          border: '#E6E6E6',
           text: '#171717',
         },
       },
