@@ -74,6 +74,8 @@ export default {
           border: '#E6E6E6',
           accent: '#8DB8FF',
           'accent-soft': '#DCEAFF',
+          'accent-green': '#8DFFB3',
+          'accent-green-dark': '#369762',
           success: '#BFE7A9',
           error: '#E45A5A',
         },

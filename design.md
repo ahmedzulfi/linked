@@ -15,6 +15,8 @@ colors:
   border: "#E6E6E6"
   accent: "#8DB8FF"
   accent-soft: "#DCEAFF"
+  accent-green: "#8DFFB3"
+  accent-green-dark: "#369762"
   success: "#BFE7A9"
   error: "#E45A5A"
 typography:
@@ -157,6 +159,8 @@ Webild feels airy, optimistic, and lightly futuristic, with a polished landing-p
 - **Border (#E6E6E6):** A faint divider color for structural separation and soft edges, especially on floating panels and controls.
 - **Accent (#8DB8FF):** A gentle sky-blue highlight used for active states, visual emphasis, and lightweight interactive cues.
 - **Accent-soft (#DCEAFF):** A pale blue companion for low-emphasis highlights and blended interface accents.
+- **Accent-green (#8DFFB3):** A soft mint green highlight matching the luminance and shade of the sky-blue accent, used for visual accents, progress indicators, and active highlights.
+- **Accent-green-dark (#369762):** A deeper version of the mint green accent, optimized for text readability and high-contrast labels on white backgrounds.
 - **Success (#BFE7A9):** A fresh green used sparingly for positive signals and subtle environmental warmth.
 - **Error (#E45A5A):** A restrained red reserved for destructive states, validation, and alert messaging.
 
