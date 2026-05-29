@@ -61,9 +61,9 @@ export default function Footer() {
                 <input
                   type="email"
                   placeholder="name@email.com"
-                  className="w-full bg-white text-[#171717] border border-[#E6E6E6] rounded-[13px] h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-all font-inter-tight shadow-sm"
+                  className="w-full bg-white text-[#171717] border border-[#E6E6E6] rounded-[13px] h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-[border-color] duration-200 font-inter-tight shadow-sm"
                 />
-                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#171717] hover:text-black active:scale-95 transition-all">
+                <button className="absolute right-4 top-1/2 -translate-y-1/2 text-[#171717] hover:text-black active:scale-[0.95] transition-transform duration-120 ease-out">
                   <ArrowRight size={16} />
                 </button>
               </div>

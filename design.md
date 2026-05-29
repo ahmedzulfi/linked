@@ -181,12 +181,47 @@ Buttons are the most expressive component family. `button-primary` uses the char
 
 Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action buttons.
 
+## Motion & Animation Guidelines
+
+To deliver premium interfaces that feel tactile and responsive, all page motions must follow strict design engineering constraints.
+
+### 1. Easing & Timing System
+- **UI Interactions (Dropdowns, popovers, mobile drawers):**
+  Use strong ease-out curves: `cubic-bezier(0.23, 1, 0.32, 1)`. Keep durations between `150ms` and `250ms`.
+- **Morphing or On-screen movement:**
+  Use strong ease-in-out curves: `cubic-bezier(0.77, 0, 0.175, 1)`. Keep durations between `250ms` and `400ms`.
+- **Active / Press Interactions:**
+  Use crisp ease-out: `cubic-bezier(0.25, 0.46, 0.45, 0.94)`. Keep duration between `100ms` and `160ms`.
+- **Spring Physics (Interpreted Tabs):**
+  Use `stiffness: 380` and `damping: 30` to simulate quick settling and high physical momentum without bouncy overshoot.
+
+### 2. Parallax Scrolling Rules
+- **Hero Background Parallax:** Offset translateY slowly at a `20%` scroll depth multiplier (`translate3d(0, scrollY * 0.2, 0)`) to create spatial depth.
+- **Hero Card Lift:** Offset translateY inversely at a `-5%` multiplier (`translate3d(0, scrollY * -0.05, 0)`) to visually decouple content from background layers.
+- **Hardware Acceleration:** Always animate scroll layers using `translate3d(0, Y, 0)` on the GPU rather than main-thread top/left/y properties to avoid layout thrashing.
+
+### 3. Tactile Micro-Interactions
+- **Active Press Scale:**
+  - Major buttons (CTAs, primary triggers): scale down to `scale(0.97)` on active press.
+  - Minor buttons (icons, smaller control pills): scale down to `scale(0.95)`.
+  - Apply transition directly to the `transform` property. Never use `transition: all`.
+- **Entrance Animation Origin:**
+  - Never animate element entrances from `scale(0)`. Start from `scale(0.95)` combined with `opacity: 0` to simulate spatial materialization.
+- **Stagger Delays:**
+  - When rendering lists or grids (templates, process cards), stagger entry delays between `30ms` and `80ms` per item. Never block page interactivity during staggering.
+- **Touch-Device Guard:**
+  - Restrict all hover states to fine-pointer devices to avoid "sticky hovers" on iOS/Android. Use `@media (hover: hover) and (pointer: fine)` or Tailwind's `future.hoverOnlyWhenSupported` configuration.
+
 ## Do's and Don'ts
 - Do keep primary actions dark, rounded, and compact, with clear white text.
 - Do use generous whitespace and large centered hero compositions.
 - Do preserve the soft, high-key palette and avoid harsh outlines.
 - Do keep body copy and labels clean, plain, and highly legible with Inter Tight.
+- Do specify exact target properties for CSS transitions (avoid `transition: all`).
+- Do use hardware-accelerated transforms for scroll-tied animations.
 - Don't introduce sharp corners or aggressive geometric styling.
 - Don't overuse shadows; depth should feel subtle and atmospheric.
 - Don't make secondary controls louder than the main CTA.
 - Don't compress layouts into dense grids; the system should breathe.
+- Don't animate element entries starting from a scale of 0.
+- Don't trigger animations on keyboard-activated shortcuts.

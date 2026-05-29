@@ -224,7 +224,9 @@
     transition: opacity 180ms cubic-bezier(.165, .84, .44, 1);
   }
 
-  .template-card:hover .template-hover-overlay {
-    opacity: 1;
+  @media (hover: hover) and (pointer: fine) {
+    .template-card:hover .template-hover-overlay {
+      opacity: 1;
+    }
   }
 }

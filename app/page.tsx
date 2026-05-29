@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -8,7 +9,7 @@ import Footer from "@/components/Footer";
 
 function DarkButton({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <button className={`inline-flex items-center justify-center h-10 px-6 rounded-[13px] btn-dark text-white text-[12px] font-medium transition-all duration-150 active:scale-97 whitespace-nowrap hover:bg-[#3E3E45] ${className}`}>
+    <button className={`inline-flex items-center justify-center h-10 px-6 rounded-[13px] btn-dark text-white text-[12px] font-medium whitespace-nowrap hover:bg-[#3E3E45] ${className}`}>
       {children}
     </button>
   );
@@ -66,17 +67,27 @@ const FAQ_ITEMS = [
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
 function HeroSection() {
+  const { scrollY } = useScroll();
+  const bgY = useTransform(scrollY, [0, 800], [0, 160]);
+  const bgTransform = useTransform(bgY, (y) => `translate3d(0, ${y}px, 0)`);
+  
+  const cardY = useTransform(scrollY, [0, 800], [0, -40]);
+  const cardTransform = useTransform(cardY, (y) => `translate3d(0, ${y}px, 0)`);
+
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-24 pb-16">
       {/* Background image + overlay */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
+      <motion.div 
+        style={{ transform: bgTransform }}
+        className="absolute inset-0 z-0 select-none pointer-events-none opacity-90 will-change-transform"
+      >
         <img
           src="/bg.png"
           alt=""
           className="w-full h-full object-cover object-top"
         />
         <div className="absolute inset-0 hero-overlay" />
-      </div>
+      </motion.div>
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center">
@@ -85,7 +96,7 @@ function HeroSection() {
           <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
             Create in under 60 seconds
           </span>
-          <span className="flex items-center justify-center w-7 h-7 rounded-full btn-dark-sm flex-shrink-0 active:scale-95 transition-all">
+          <span className="flex items-center justify-center w-7 h-7 rounded-full btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
@@ -99,7 +110,10 @@ function HeroSection() {
         </h1>
 
         {/* Prompt card */}
-        <div className="w-full max-w-[1040px] rounded-[13px] glass-card p-4 sm:p-5 flex flex-col gap-5 mt-4">
+        <motion.div 
+          style={{ transform: cardTransform }}
+          className="w-full max-w-[1040px] rounded-[13px] glass-card p-4 sm:p-5 flex flex-col gap-5 mt-4 will-change-transform"
+        >
           <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-5 flex flex-col gap-4 shadow-sm">
             {/* Textarea */}
             <textarea
@@ -112,7 +126,7 @@ function HeroSection() {
             <div className="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-[#F3F3F3]">
               <div className="flex items-center gap-3">
                 {/* Add button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-95 transition-all">
+                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
@@ -120,12 +134,12 @@ function HeroSection() {
                 </button>
 
                 {/* Enhance prompt button */}
-                <button className="h-10 px-5 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-97 transition-all whitespace-nowrap">
+                <button className="h-10 px-5 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap">
                   Enhance prompt
                 </button>
 
                 {/* Color palette button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-95 transition-all">
+                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                     <g clipPath="url(#palette-clip)">
                       <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
@@ -145,7 +159,7 @@ function HeroSection() {
 
               <div className="flex items-center gap-3">
                 {/* Mic button */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-95 transition-all">
+                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
@@ -154,7 +168,7 @@ function HeroSection() {
                 </button>
 
                 {/* Send button (Primary action) */}
-                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-[#2A2A2F] text-white shadow-md hover:bg-[#3E3E45] active:scale-95 transition-all">
+                <button className="flex items-center justify-center w-9 h-9 rounded-full bg-[#2A2A2F] text-white shadow-md hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
@@ -163,7 +177,7 @@ function HeroSection() {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -179,9 +193,36 @@ function TemplatesSection() {
     carouselRef.current.scrollBy({ left: dir === "next" ? 520 : -520, behavior: "smooth" });
   };
 
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.05
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: [0.23, 1, 0.32, 1] as const
+      }
+    }
+  };
+
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden border-t border-[#E6E6E6]">
-      <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20"
+      >
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-10">
           <div className="flex flex-col">
@@ -193,12 +234,20 @@ function TemplatesSection() {
 
         {/* Template cards carousel */}
         <div className="relative">
-          <div
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
             ref={carouselRef}
             className="flex gap-5 overflow-x-auto scrollbar-hide pb-4"
           >
             {TEMPLATES_LARGE.map((t, i) => (
-              <div key={i} className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group">
+              <motion.div 
+                variants={itemVariants} 
+                key={i} 
+                className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
+              >
                 <div className="relative aspect-square rounded-[13px] overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px] shadow-sm">
                   <img src={t.img} alt={t.name} className="w-full h-full object-cover rounded-[8px]" />
                   {/* Bottom gradient overlay inside padding */}
@@ -213,16 +262,16 @@ function TemplatesSection() {
                     <div className="relative">
                       <div className="absolute -inset-1 opacity-20 blur-[4px]" style={{ background: "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
                       <div className="relative p-0.5 rounded-[13px] overflow-hidden bg-white">
-                        <button className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-97 transition-all shadow-md">
+                        <button className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out shadow-md">
                           Customize this look
                         </button>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Progress + controls */}
@@ -233,7 +282,7 @@ function TemplatesSection() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => scrollCarousel("prev")}
-              className="flex items-center justify-center w-8 h-8 rounded-[13px] border border-[#E6E6E6] bg-white text-black shadow-sm hover:bg-[#F3F3F3] active:scale-95 transition-all"
+              className="flex items-center justify-center w-8 h-8 rounded-[13px] border border-[#E6E6E6] bg-white text-black shadow-sm hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -241,7 +290,7 @@ function TemplatesSection() {
             </button>
             <button
               onClick={() => scrollCarousel("next")}
-              className="flex items-center justify-center w-8 h-8 rounded-[13px] border border-[#E6E6E6] bg-white text-black shadow-sm hover:bg-[#F3F3F3] active:scale-95 transition-all"
+              className="flex items-center justify-center w-8 h-8 rounded-[13px] border border-[#E6E6E6] bg-white text-black shadow-sm hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -249,7 +298,7 @@ function TemplatesSection() {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -275,6 +324,27 @@ const HOW_IT_WORKS = [
 ];
 
 function HowItWorksSection() {
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.23, 1, 0.32, 1] as const
+      }
+    }
+  };
+
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-t border-b border-[#E6E6E6]">
       <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
@@ -287,10 +357,16 @@ function HowItWorksSection() {
           <DarkButton className="self-start sm:self-auto">Generate Now</DarkButton>
         </div>
 
-        {/* 3-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* 3-column grid with stagger */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
           {HOW_IT_WORKS.map((item, i) => (
-            <div key={i} className="flex flex-col gap-4">
+            <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
               <div className="rounded-[13px] border border-[#E6E6E6] bg-white shadow-sm overflow-hidden p-2">
                 <img
                   src={item.img}
@@ -302,9 +378,9 @@ function HowItWorksSection() {
                 <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">{item.boldText}</span>
                 {item.restText}
               </p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -330,28 +406,41 @@ function BusinessSection() {
 
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-white border-b border-[#E6E6E6]">
-      <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20 flex flex-col gap-8">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20 flex flex-col gap-8"
+      >
         {/* Header */}
         <div className="flex flex-col items-center gap-3 text-center">
           <SectionLabel>Beautiful structures for real content</SectionLabel>
           <SectionHeading>Showcase Your Career</SectionHeading>
         </div>
 
-        {/* Tabs */}
+        {/* Tabs with layout glide */}
         <div className="flex justify-center mt-2">
-          <div className="flex items-center rounded-[13px] bg-[#F3F3F3] p-1 border border-[#E6E6E6] shadow-sm">
-            {BUSINESS_TABS.map((tab, i) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(i)}
-                className={`h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-all duration-150 whitespace-nowrap font-inter-tight ${activeTab === i
-                  ? "bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20] shadow-sm font-semibold"
-                  : "text-[#171717]/60 hover:text-black hover:bg-black/5"
-                  }`}
-              >
-                {tab}
-              </button>
-            ))}
+          <div className="flex items-center rounded-[13px] bg-[#F3F3F3] p-1 border border-[#E6E6E6] shadow-sm relative">
+            {BUSINESS_TABS.map((tab, i) => {
+              const isActive = activeTab === i;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(i)}
+                  className={`relative h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-colors duration-200 whitespace-nowrap font-inter-tight z-10 ${isActive ? "text-[#1B5E20] font-semibold" : "text-[#171717]/60 hover:text-black"}`}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-business-tab"
+                      className="absolute inset-0 bg-[#E6FFE6] border border-[#8DFFB3]/40 rounded-[10px] shadow-sm -z-10"
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                  {tab}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -370,7 +459,7 @@ function BusinessSection() {
           {/* Arrows */}
           <button
             onClick={() => scrollCarousel("prev")}
-            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white border border-[#E6E6E6] text-black shadow-md hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
+            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white border border-[#E6E6E6] text-black shadow-md hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -378,14 +467,14 @@ function BusinessSection() {
           </button>
           <button
             onClick={() => scrollCarousel("next")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white border border-[#E6E6E6] text-black shadow-md hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
+            className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10 rounded-full bg-white border border-[#E6E6E6] text-black shadow-md hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
@@ -404,6 +493,27 @@ const FEATURES = [
 ];
 
 function FeaturesSection() {
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 25 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.23, 1, 0.32, 1] as const
+      }
+    }
+  };
+
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-b border-[#E6E6E6]">
       <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
@@ -416,10 +526,16 @@ function FeaturesSection() {
           <DarkButton className="self-start sm:self-auto">Try It Free</DarkButton>
         </div>
 
-        {/* 2-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* 2-column grid with stagger */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {FEATURES.map((f, i) => (
-            <div key={i} className="flex flex-col gap-4">
+            <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
               <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-2 overflow-hidden shadow-sm">
                 <img
                   src={f.img}
@@ -428,9 +544,9 @@ function FeaturesSection() {
                 />
               </div>
               <p className="text-[#171717] text-[16px] sm:text-[18px] leading-[27px] font-normal font-inter-tight">{f.text}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -455,7 +571,13 @@ function FAQSection() {
 
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-white">
-      <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+        className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20"
+      >
         {/* Header */}
         <div className="flex flex-col items-center gap-3 text-center mb-12">
           <SectionLabel>Frequently Asked Questions</SectionLabel>
@@ -464,33 +586,61 @@ function FAQSection() {
 
         {/* FAQ items */}
         <div className="flex flex-col gap-4 max-w-4xl mx-auto">
-          {FAQ_ITEMS.map((question, i) => (
-            <div key={i} className="rounded-[13px] border border-[#E6E6E6] bg-[#FBFBFB] shadow-sm overflow-hidden transition-all duration-150 font-inter">
-              <button
-                className="w-full flex items-center justify-between px-6 py-5 text-left"
-                onClick={() => toggle(i)}
-              >
-                <span className="text-[#171717] text-[16px] sm:text-[18px] leading-[26px] font-medium font-inter-tight pr-4">
-                  {question}
-                </span>
-                <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white shadow-sm active:scale-95 transition-all">
-                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                    <path d="M2.94586 7.5H11.1945" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
-                    {openIdx !== i && (
-                      <path d="M7.07001 3.375V11.625" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
-                    )}
-                  </svg>
-                </span>
-              </button>
-              {openIdx === i && (
-                <div className="px-6 pb-6 text-[#171717]/60 text-[15px] sm:text-[16px] leading-[24px] font-inter-tight border-t border-[#F3F3F3]/80 pt-4">
-                  {answers[i]}
-                </div>
-              )}
-            </div>
-          ))}
+          {FAQ_ITEMS.map((question, i) => {
+            const isOpen = openIdx === i;
+            return (
+              <div key={i} className="rounded-[13px] border border-[#E6E6E6] bg-[#FBFBFB] shadow-sm overflow-hidden font-inter">
+                <button
+                  className="w-full flex items-center justify-between px-6 py-5 text-left"
+                  onClick={() => toggle(i)}
+                >
+                  <span className="text-[#171717] text-[16px] sm:text-[18px] leading-[26px] font-medium font-inter-tight pr-4">
+                    {question}
+                  </span>
+                  <motion.span 
+                    animate={{ rotate: isOpen ? 90 : 0 }}
+                    transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                    className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white shadow-sm"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+                      <path d="M2.94586 7.5H11.1945" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
+                      <path 
+                        d="M7.07001 3.375V11.625" 
+                        stroke="currentColor" 
+                        strokeWidth="1.17833" 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round"
+                        style={{
+                          transformOrigin: "center",
+                          transition: "transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease",
+                          transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                          opacity: isOpen ? 0 : 1
+                        }}
+                      />
+                    </svg>
+                  </motion.span>
+                </button>
+                
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-6 text-[#171717]/60 text-[15px] sm:text-[16px] leading-[24px] font-inter-tight border-t border-[#F3F3F3]/80 pt-4">
+                        {answers[i]}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }
