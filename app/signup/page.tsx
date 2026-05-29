@@ -65,7 +65,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-inter select-none">
+    <div className="min-h-screen bg-[#fff] font-inter select-none">
       <Navbar />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 min-h-screen pt-28 md:pt-5">
@@ -73,7 +73,7 @@ export default function SignupPage() {
         {/* ── Left: Signup Form (exact reference UI) ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Outer card — button-secondary + rounded + p-8 as in reference */}
-          <div className="relative bg-white border border-[#E6E6E6] rounded-[20px] px-10 py-9 w-full max-w-sm" style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.04), 0 10px 30px -10px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)' }}>
+          <div className="relative bg-white border border-[#E6E6E6] rounded-[20px] px-10 py-9 w-full max-w-md" >
             <div className="flex flex-col gap-5">
 
               {/* Header */}
@@ -222,11 +222,10 @@ export default function SignupPage() {
 
                 {/* Submit */}
                 <button
-                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
-                    isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)
-                      ? "opacity-50 select-none pointer-events-none"
-                      : ""
-                  }`}
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)
+                    ? "opacity-50 select-none pointer-events-none"
+                    : ""
+                    }`}
                   type="submit"
                   disabled={isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)}
                 >
@@ -243,7 +242,7 @@ export default function SignupPage() {
               <div className="text-center text-sm text-black">
                 Already have an account?{" "}
                 <button
-                  className="cursor-pointer text-[#8DB8FF] font-medium hover:underline"
+                  className="cursor-pointer text-[#000] font-medium hover:underline"
                   onClick={() => router.push("/login")}
                 >
                   Sign in
@@ -259,7 +258,7 @@ export default function SignupPage() {
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"
-            src="https://www.webild.io/images/bgtest2.webp"
+            src="/bg.png"
           />
           <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
           <img

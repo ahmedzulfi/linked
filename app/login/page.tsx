@@ -62,7 +62,7 @@ export default function LoginPage() {
         {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
-          <div className="relative bg-white border border-[#E6E6E6] rounded-[20px] px-10 py-9 w-full max-w-sm" style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.04), 0 10px 30px -10px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)' }}>
+          <div className="relative bg-white border border-[#E6E6E6] rounded-[20px] px-10 py-9 w-full max-w-md">
             <div className="flex flex-col gap-5">
 
               {/* Header */}
@@ -189,7 +189,7 @@ export default function LoginPage() {
               <div className="text-center text-sm text-black">
                 Don't have an account?{" "}
                 <button
-                  className="cursor-pointer text-[#8DB8FF] font-medium hover:underline"
+                  className="cursor-pointer text-[#000] font-medium hover:underline"
                   onClick={() => router.push("/signup")}
                 >
                   Sign up
@@ -205,7 +205,7 @@ export default function LoginPage() {
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"
-            src="https://www.webild.io/images/bgtest2.webp"
+            src="/bg.png"
           />
           <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
           <img
