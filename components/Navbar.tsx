@@ -15,7 +15,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-[1536px] px-6 sm:px-0 font-inter">
-      <div className="flex items-center justify-between h-14 px-7 py-8 bg-white/70 backdrop-blur-md rounded-[13px] border border-[#E6E6E6] shadow-sm">
+      <div className="flex items-center justify-between h-14 px-7 py-8 bg-white/70 backdrop-blur-md rounded-[13px] border border-[#E6E6E6]/10 shadow-sm">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 flex items-center">
           <img
@@ -125,7 +125,7 @@ export default function Navbar() {
 
           {/* Get started (Primary style) */}
           <Link
-            href="/onboarding"
+            href="/editor"
             className="flex h-10 px-5 items-center justify-center rounded-[13px] btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
           >
             Get started
@@ -202,7 +202,7 @@ export default function Navbar() {
                 Log in
               </Link>
               <Link
-                href="/onboarding"
+                href="/editor"
                 onClick={() => setMobileOpen(false)}
                 className="flex-1 h-10 rounded-[13px] btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
               >

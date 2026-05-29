@@ -246,7 +246,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 w-full max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
+        className="relative z-10 w-full pt-0  -translate-y-14 max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
       >
         {/* Badge */}
         <motion.div
@@ -924,19 +924,32 @@ export default function Index() {
   }, []);
 
   const simulateGeneration = (url: string) => {
-    if (!url.trim()) {
-      toast.error("Please paste a valid LinkedIn URL first!");
+    const raw = url.split(" --theme")[0].trim();
+    if (!raw) {
+      toast.error("Please paste a LinkedIn URL first!");
       return;
     }
-    router.push(`/onboarding?url=${encodeURIComponent(url)}`);
+    if (!raw.includes("linkedin.com/in/")) {
+      toast.error("Please paste a valid LinkedIn profile URL (linkedin.com/in/…)");
+      return;
+    }
+    router.push(`/convert?url=${encodeURIComponent(raw)}`);
   };
 
   const handleSelectTemplate = (templateName: string) => {
-    router.push(`/onboarding?template=${encodeURIComponent(templateName)}`);
+    // Map landing-page template name → editor template id
+    const map: Record<string, string> = {
+      "Minimal Card": "minimal-card",
+      "Bento Grid": "bento-grid",
+      "Full-Page Scroll": "full-scroll",
+      "Dark Bento": "dark",
+    };
+    const id = map[templateName] ?? "minimal-card";
+    router.push(`/editor?template=${id}`);
   };
 
   const handleTrial = () => {
-    router.push("/onboarding");
+    router.push("/editor");
   };
 
   return (

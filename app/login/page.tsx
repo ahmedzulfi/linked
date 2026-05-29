@@ -54,15 +54,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-inter select-none">
+    <div className="min-h-screen bg-[#f8f8f8] font-inter select-none">
       <Navbar />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 p-5 min-h-screen pt-28 md:pt-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto  max-w-[1536px]">
 
         {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
-          <div className="relative bg-white border border-[#E6E6E6] rounded-[20px] px-10 py-9 w-full max-w-md">
+          <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md">
             <div className="flex flex-col gap-5">
 
               {/* Header */}
