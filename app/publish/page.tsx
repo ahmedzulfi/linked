@@ -58,8 +58,8 @@ function PublishInner() {
           transition={{ type: "spring", stiffness: 340, damping: 28, delay: 0.05 }}
           className="relative w-24 h-24"
         >
-          <div className="absolute inset-0 rounded-full bg-[#8DFFB3]/30 blur-xl" />
-          <div className="absolute inset-0 rounded-full bg-[#8DFFB3] flex items-center justify-center border border-[#369762]/20">
+          <div className="absolute inset-0   rounded-lg bg-[#8DFFB3]/30 blur-xl" />
+          <div className="absolute inset-0   rounded-lg bg-[#8DFFB3] flex items-center justify-center border border-[#369762]/20">
             <Check className="w-10 h-10 text-[#1a5c3a]" strokeWidth={2.5} />
           </div>
         </motion.div>
@@ -92,7 +92,7 @@ function PublishInner() {
             onClick={copy}
             className="flex items-center gap-3 p-4 bg-[#F7F7F7] border border-[#E6E6E6] rounded-[16px] cursor-pointer hover:border-[#C0C0C0] active:scale-[0.98] transition-[transform,border-color] duration-150"
           >
-            <div className="w-8 h-8 rounded-full bg-white border border-[#E6E6E6] flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8   rounded-lg bg-white border border-[#E6E6E6] flex items-center justify-center flex-shrink-0">
               <ExternalLink className="w-5 h-5 text-[#6B6B6B]" />
             </div>
             <p className="text-sm text-black font-medium flex-1 text-left truncate">{url}</p>
@@ -170,7 +170,7 @@ export default function PublishPage() {
       <Navbar />
       <Suspense fallback={
         <main className="flex-1 flex items-center justify-center">
-          <div className="w-5 h-5 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          <div className="w-5 h-5   rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
         </main>
       }>
         <PublishInner />

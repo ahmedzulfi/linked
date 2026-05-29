@@ -178,7 +178,7 @@ export default function LoginPage() {
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      <span className="w-5 h-5   rounded-lg border-2 border-white border-t-transparent animate-spin" />
                       Processing...
                     </span>
                   ) : showPasswordStep ? "Sign in" : "Continue"}

@@ -106,7 +106,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium rounded-[8px] transition-[background-color,color] duration-150 ${activeTab === tab.id
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium     rounded-lg  transition-[background-color,color] duration-150 ${activeTab === tab.id
               ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] "
               : "text-[#6B6B6B] hover:text-black"
               }`}
@@ -123,12 +123,12 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
         {/* ── Profile Tab ── */}
         {activeTab === "profile" && (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6] rounded-[13px]">
+            <div className="flex items-center gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg  ">
               {/* Avatar preview */}
               <img
                 src={profile.avatarUrl || "https://i.pravatar.cc/80?img=47"}
                 alt={profile.name}
-                className="w-12 h-12 rounded-full object-cover border border-[#E6E6E6] flex-shrink-0"
+                className="w-12 h-12   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
               />
               <div className="flex flex-col gap-0.5 min-w-0">
                 <p className="text-sm font-medium text-black truncate">{profile.name}</p>
@@ -176,7 +176,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
             {profile.experience.map((exp, i) => (
               <div
                 key={i}
-                className="flex flex-col gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6] rounded-[13px] relative"
+                className="flex flex-col gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg   relative"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
@@ -187,7 +187,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
                   </div>
                   <button
                     onClick={() => removeExperience(i)}
-                    className="p-1 rounded-md hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
+                    className="p-1     rounded-lg  hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>
@@ -234,7 +234,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
             {profile.links.map((link, i) => (
               <div
                 key={i}
-                className="flex flex-col gap-2 p-3 bg-[#FBFBFB] border border-[#E6E6E6] rounded-[13px]"
+                className="flex flex-col gap-2 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg  "
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
@@ -243,7 +243,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
                   </div>
                   <button
                     onClick={() => removeLink(i)}
-                    className="p-1 rounded-md hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
+                    className="p-1     rounded-lg  hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
                   >
                     <Trash2 className="w-5 h-5" />
                   </button>

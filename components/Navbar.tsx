@@ -15,7 +15,7 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-2rem)] max-w-[1536px] px-6 sm:px-0 font-inter">
-      <div className="flex items-center justify-between h-14 px-7 py-8 bg-white/70 backdrop-blur-md rounded-[13px] border border-[#E6E6E6]/10  shadow-[0_6px_10px_-6px_#00000016] ">
+      <div className="flex items-center justify-between h-14 px-7 py-8 bg-white/70 backdrop-blur-md      rounded-lg   border border-[#E6E6E6]/10  shadow-[0_6px_10px_-6px_#00000016] ">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0 flex items-center">
           <img
@@ -64,7 +64,7 @@ export default function Navbar() {
             {/* Discord */}
             <button
               onClick={() => toast.success("Redirecting to Discord community...")}
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+              className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#discord-clip)">
@@ -81,7 +81,7 @@ export default function Navbar() {
             {/* X (Twitter) */}
             <button
               onClick={() => toast.success("Redirecting to Twitter feed...")}
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+              className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#x-clip)">
@@ -98,7 +98,7 @@ export default function Navbar() {
             {/* Instagram */}
             <button
               onClick={() => toast.success("Redirecting to Instagram profile...")}
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+              className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clipPath="url(#ig-clip)">
@@ -118,7 +118,7 @@ export default function Navbar() {
           {/* Log in (Secondary style) */}
           <Link
             href="/login"
-            className="hidden sm:flex h-10 px-5 items-center justify-center rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap font-inter-tight"
+            className="hidden sm:flex h-10 px-5 items-center justify-center      rounded-lg   bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap font-inter-tight"
           >
             Log in
           </Link>
@@ -126,14 +126,14 @@ export default function Navbar() {
           {/* Get started (Primary style) */}
           <Link
             href="/editor"
-            className="flex h-10 px-5 items-center justify-center rounded-[13px] btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
+            className="flex h-10 px-5 items-center justify-center      rounded-lg   btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
           >
             Get started
           </Link>
 
           {/* Mobile menu button */}
           <button
-            className="lg:hidden flex items-center justify-center w-9 h-9 rounded-[13px] bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out ml-1"
+            className="lg:hidden flex items-center justify-center w-9 h-9      rounded-lg   bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out ml-1"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -163,7 +163,7 @@ export default function Navbar() {
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
             style={{ originX: 0.9, originY: 0 }}
-            className="mt-2 rounded-[13px] border border-[#E6E6E6] bg-white/95 backdrop-blur-md  shadow-[0_6px_10px_-6px_#00000016]  p-4 flex flex-col gap-3 lg:hidden will-change-[transform,opacity]"
+            className="mt-2      rounded-lg   border border-[#E6E6E6] bg-white/95 backdrop-blur-md  shadow-[0_6px_10px_-6px_#00000016]  p-4 flex flex-col gap-3 lg:hidden will-change-[transform,opacity]"
           >
             <a
               href="#features"
@@ -197,14 +197,14 @@ export default function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 h-10 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out flex items-center justify-center"
+                className="flex-1 h-10      rounded-lg   bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out flex items-center justify-center"
               >
                 Log in
               </Link>
               <Link
                 href="/editor"
                 onClick={() => setMobileOpen(false)}
-                className="flex-1 h-10 rounded-[13px] btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
+                className="flex-1 h-10      rounded-lg   btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
               >
                 Get started
               </Link>

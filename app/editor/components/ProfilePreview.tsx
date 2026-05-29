@@ -35,7 +35,7 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
             <img
               src={profile.avatarUrl}
               alt={profile.name}
-              className="w-16 h-16 rounded-full object-cover border border-[#E6E6E6] flex-shrink-0"
+              className="w-16 h-16   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
             />
             <div className="flex flex-col gap-0.5 min-w-0">
               <h1 className="text-xl font-medium text-black leading-tight">{profile.name}</h1>
@@ -53,7 +53,7 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
           {profile.skills.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-6">
               {profile.skills.slice(0, 8).map((skill, i) => (
-                <span key={i} className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#DCEAFF] text-[#1A4A8A]">
+                <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#DCEAFF] text-[#1A4A8A]">
                   {skill.name}
                 </span>
               ))}
@@ -83,7 +83,7 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
                 <a
                   key={i}
                   href={link.url}
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5 rounded-full border border-[#E6E6E6] hover:border-[#8DB8FF]"
+                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
                 >
                   <LinkIcon icon={link.icon} />
                   {link.label}
@@ -107,7 +107,7 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
           <img
             src={profile.avatarUrl}
             alt={profile.name}
-            className="w-16 h-16 rounded-full object-cover border border-[#E6E6E6] flex-shrink-0"
+            className="w-16 h-16   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
           />
           <div className="min-w-0">
             <h1 className="text-xl font-medium text-black">{profile.name}</h1>
@@ -127,7 +127,7 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
           <p className="text-xs font-medium text-[#1A4A8A] uppercase tracking-wide mb-3">Skills</p>
           <div className="flex flex-wrap gap-1.5">
             {profile.skills.map((skill, i) => (
-              <span key={i} className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-white border border-[#8DB8FF]/40 text-[#1A4A8A]">
+              <span key={i} className="text-[11px] font-medium px-2 py-0.5   rounded-lg bg-white border border-[#8DB8FF]/40 text-[#1A4A8A]">
                 {skill.name}
               </span>
             ))}
@@ -156,7 +156,7 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
                 <a
                   key={i}
                   href={link.url}
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5 rounded-full border border-[#E6E6E6] hover:border-[#8DB8FF]"
+                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
                 >
                   <LinkIcon icon={link.icon} />
                   {link.label}
@@ -182,7 +182,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
         <img
           src={profile.avatarUrl}
           alt={profile.name}
-          className="w-20 h-20 rounded-full object-cover border-4 border-white  shadow-[0_6px_10px_-6px_#00000016]  mb-4"
+          className="w-20 h-20   rounded-lg object-cover border-4 border-white  shadow-[0_6px_10px_-6px_#00000016]  mb-4"
         />
 
         {/* Name + headline */}
@@ -197,7 +197,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
               <a
                 key={i}
                 href={link.url}
-                className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5 rounded-full bg-white border border-[#E6E6E6] hover:border-[#8DB8FF]"
+                className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg bg-white border border-[#E6E6E6] hover:border-[#8DB8FF]"
               >
                 <LinkIcon icon={link.icon} />
                 {link.label}
@@ -218,7 +218,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
           <div className="flex flex-col gap-5">
             {profile.experience.map((exp, i) => (
               <div key={i} className="flex gap-3">
-                <div className="w-1 bg-[#E6E6E6] rounded-full flex-shrink-0 mt-1" />
+                <div className="w-1 bg-[#E6E6E6]   rounded-lg flex-shrink-0 mt-1" />
                 <div>
                   <p className="text-sm font-medium text-black">{exp.title}</p>
                   <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
@@ -235,7 +235,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
             <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Skills</h2>
             <div className="flex flex-wrap gap-1.5">
               {profile.skills.map((skill, i) => (
-                <span key={i} className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-[#F3F3F3] border border-[#E6E6E6] text-[#171717]">
+                <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#F3F3F3] border border-[#E6E6E6] text-[#171717]">
                   {skill.name}
                 </span>
               ))}
@@ -257,7 +257,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
           <img
             src={profile.avatarUrl}
             alt={profile.name}
-            className="w-16 h-16 rounded-full object-cover border border-[#ffffff15]"
+            className="w-16 h-16   rounded-lg object-cover border border-[#ffffff15]"
           />
           <div>
             <h1 className="text-xl font-medium text-white mb-0.5">{profile.name}</h1>
@@ -273,7 +273,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
         {profile.skills.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-8">
             {profile.skills.map((skill, i) => (
-              <span key={i} className="text-[11px] font-medium px-2.5 py-1 rounded-full border border-[#ffffff15] text-[#8DB8FF]">
+              <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg border border-[#ffffff15] text-[#8DB8FF]">
                 {skill.name}
               </span>
             ))}
@@ -306,7 +306,7 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
               <a
                 key={i}
                 href={link.url}
-                className="flex items-center gap-1.5 text-xs font-medium text-[#ffffff60] hover:text-white transition-colors px-3 py-1.5 rounded-full border border-[#ffffff15] hover:border-[#8DB8FF]/50"
+                className="flex items-center gap-1.5 text-xs font-medium text-[#ffffff60] hover:text-white transition-colors px-3 py-1.5   rounded-lg border border-[#ffffff15] hover:border-[#8DB8FF]/50"
               >
                 <LinkIcon icon={link.icon} />
                 {link.label}

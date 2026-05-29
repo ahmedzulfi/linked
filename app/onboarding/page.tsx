@@ -163,11 +163,11 @@ function OnboardingWizard() {
       {/* Header Info */}
       <div className="absolute top-8 left-8 right-8 z-10 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="w-8 h-8 rounded-[13px] bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-lg font-inter-tight">W</span>
+          <span className="w-8 h-8      rounded-lg   bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-lg font-inter-tight">W</span>
           <span className="font-semibold text-[16px] text-black font-inter-tight">Webild</span>
         </div>
         {step < 3 && (
-          <div className="text-[13px] text-gray-500 font-medium font-inter-tight bg-white border border-[#E6E6E6] px-3.5 py-1.5 rounded-[13px]  shadow-[0_6px_10px_-6px_#00000016] ">
+          <div className="text-[13px] text-gray-500 font-medium font-inter-tight bg-white border border-[#E6E6E6] px-3.5 py-1.5      rounded-lg    shadow-[0_6px_10px_-6px_#00000016] ">
             Step {step + 1} of 3
           </div>
         )}
@@ -187,7 +187,7 @@ function OnboardingWizard() {
                 className="flex flex-col gap-6"
               >
                 <div className="flex flex-col gap-2">
-                  <div className="w-12 h-12 rounded-[13px] bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
+                  <div className="w-12 h-12      rounded-lg   bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
                     <Sparkles className="w-5 h-5 animate-pulse" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
@@ -204,7 +204,7 @@ function OnboardingWizard() {
                     value={brandName}
                     onChange={(e) => setBrandName(e.target.value)}
                     placeholder="e.g. Reality Cheque"
-                    className="w-full h-12 px-4 rounded-[13px] bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DB8FF]/50 transition-shadow font-inter-tight"
+                    className="w-full h-12 px-4      rounded-lg   bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DB8FF]/50 transition-shadow font-inter-tight"
                     autoFocus
                   />
                   {linkedinUrl && (
@@ -226,7 +226,7 @@ function OnboardingWizard() {
                 className="flex flex-col gap-6"
               >
                 <div className="flex flex-col gap-2">
-                  <div className="w-12 h-12 rounded-[13px] bg-[#8DFFB3]/10 flex items-center justify-center text-[#369762] mb-2">
+                  <div className="w-12 h-12      rounded-lg   bg-[#8DFFB3]/10 flex items-center justify-center text-[#369762] mb-2">
                     <Globe className="w-5 h-5" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
@@ -244,7 +244,7 @@ function OnboardingWizard() {
                       value={subdomain}
                       onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
                       placeholder="realitycheque"
-                      className="w-full h-12 pl-4 pr-24 rounded-[13px] bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DB8FF]/50 transition-shadow font-inter-tight"
+                      className="w-full h-12 pl-4 pr-24      rounded-lg   bg-[#F7F7F7] border border-[#E6E6E6] text-black text-[16px] font-medium outline-none focus:ring-2 focus:ring-[#8DB8FF]/50 transition-shadow font-inter-tight"
                     />
                     <span className="absolute right-4 text-gray-400 font-semibold text-[14px] font-inter-tight">
                       .webild.co
@@ -254,7 +254,7 @@ function OnboardingWizard() {
                   <div className="flex items-center gap-2 min-h-[24px]">
                     {isDomainChecking ? (
                       <span className="text-[12px] text-gray-400 font-medium animate-pulse font-inter-tight flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-ping" />
+                        <span className="w-1.5 h-1.5   rounded-lg bg-gray-400 animate-ping" />
                         Checking web address availability...
                       </span>
                     ) : domainStatus === "available" ? (
@@ -277,7 +277,7 @@ function OnboardingWizard() {
                 className="flex flex-col gap-6"
               >
                 <div className="flex flex-col gap-2">
-                  <div className="w-12 h-12 rounded-[13px] bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
+                  <div className="w-12 h-12      rounded-lg   bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
                     <Layout className="w-5 h-5" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
@@ -295,12 +295,12 @@ function OnboardingWizard() {
                       <button
                         key={style.id}
                         onClick={() => toggleStyle(style.label)}
-                        className={`w-full flex items-start gap-3.5 p-3.5 rounded-[13px] border transition-all text-left group active:scale-[0.98] ${isChecked
+                        className={`w-full flex items-start gap-3.5 p-3.5      rounded-lg   border transition-all text-left group active:scale-[0.98] ${isChecked
                           ? "bg-[#DCEAFF]/20 border-[#8DB8FF]  shadow-[0_6px_10px_-6px_#00000016] "
                           : "bg-[#F7F7F7] border-[#E6E6E6] hover:bg-[#F3F3F3]"
                           }`}
                       >
-                        <div className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 transition-colors ${isChecked
+                        <div className={`mt-0.5 w-5 h-5   rounded-lg border flex items-center justify-center flex-shrink-0 transition-colors ${isChecked
                           ? "bg-[#8DB8FF] border-[#8DB8FF] text-white"
                           : "bg-white border-[#C5C5C5] group-hover:border-gray-500"
                           }`}>
@@ -334,7 +334,7 @@ function OnboardingWizard() {
                   <p className="text-[13px] text-gray-500 h-6 font-medium animate-pulse font-inter-tight">{loadingText}</p>
                 </div>
 
-                <div className="w-full max-w-[280px] h-2 bg-[#F3F3F3] rounded-full overflow-hidden border border-[#E6E6E6] mt-4">
+                <div className="w-full max-w-[280px] h-2 bg-[#F3F3F3]   rounded-lg overflow-hidden border border-[#E6E6E6] mt-4">
                   <motion.div
                     className="h-full bg-gradient-to-r from-[#8DB8FF] to-[#8DFFB3]"
                     style={{ width: `${loadingProgress}%` }}
@@ -352,7 +352,7 @@ function OnboardingWizard() {
               {step > 0 ? (
                 <button
                   onClick={prevStep}
-                  className="h-10 px-5 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-semibold hover:bg-[#EAEAEA] active:scale-[0.97] transition-all font-inter-tight"
+                  className="h-10 px-5      rounded-lg   bg-[#F3F3F3] text-black text-[12px] font-semibold hover:bg-[#EAEAEA] active:scale-[0.97] transition-all font-inter-tight"
                 >
                   Back
                 </button>
@@ -362,7 +362,7 @@ function OnboardingWizard() {
 
               <button
                 onClick={nextStep}
-                className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-[0.97] transition-all font-inter-tight flex items-center gap-1.5  shadow-[0_6px_10px_-6px_#00000016] "
+                className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-[0.97] transition-all font-inter-tight flex items-center gap-1.5  shadow-[0_6px_10px_-6px_#00000016] "
               >
                 <span>Continue</span>
                 <ArrowRight className="w-5 h-5" />

@@ -18,7 +18,7 @@ export default function NotFound() {
           className="flex flex-col items-center gap-8 max-w-sm text-center"
         >
           {/* Icon */}
-          <div className="w-16 h-16 rounded-full bg-[#F3F3F3] flex items-center justify-center">
+          <div className="w-16 h-16   rounded-lg bg-[#F3F3F3] flex items-center justify-center">
             <Compass className="w-7 h-7 text-[#9CA3AF]" />
           </div>
 

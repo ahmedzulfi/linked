@@ -73,7 +73,7 @@ function ConvertInner() {
             transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
             className="flex flex-col items-center gap-8 max-w-md text-center"
           >
-            <div className="w-16 h-16 rounded-full bg-[#FEF2F2] flex items-center justify-center">
+            <div className="w-16 h-16   rounded-lg bg-[#FEF2F2] flex items-center justify-center">
               <AlertCircle className="w-7 h-7 text-[#E45A5A]" />
             </div>
             <div className="flex flex-col gap-2">
@@ -106,11 +106,11 @@ function ConvertInner() {
             {/* Animated ring */}
             <div className="relative w-24 h-24">
               <motion.div
-                className="absolute inset-0 rounded-full border-4 border-[#E6E6E6] border-t-[#8DB8FF]"
+                className="absolute inset-0   rounded-lg border-4 border-[#E6E6E6] border-t-[#8DB8FF]"
                 animate={{ rotate: isDone ? 0 : 360 }}
                 transition={{ repeat: isDone ? 0 : Infinity, duration: 1.1, ease: "linear" }}
               />
-              <div className="absolute inset-[10px] rounded-full bg-[#0A66C2] flex items-center justify-center">
+              <div className="absolute inset-[10px]   rounded-lg bg-[#0A66C2] flex items-center justify-center">
                 <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                 </svg>
@@ -121,7 +121,7 @@ function ConvertInner() {
                     initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    className="absolute inset-0 rounded-full bg-[#8DFFB3] flex items-center justify-center"
+                    className="absolute inset-0   rounded-lg bg-[#8DFFB3] flex items-center justify-center"
                   >
                     <svg viewBox="0 0 24 24" className="w-9 h-9 stroke-[#1a5c3a] fill-none" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                       <path d="M5 13l4 4L19 7" />
@@ -150,17 +150,17 @@ function ConvertInner() {
             </div>
 
             {/* Progress bar */}
-            <div className="w-full h-1.5 bg-[#F3F3F3] rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-[#F3F3F3]   rounded-lg overflow-hidden">
               <motion.div
-                className="h-full bg-[#2A2A2F] rounded-full"
+                className="h-full bg-[#2A2A2F]   rounded-lg"
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
               />
             </div>
 
             {urlParam && (
-              <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-[#E6E6E6] bg-[#FBFBFB] max-w-full overflow-hidden">
-                <div className="w-2 h-2 rounded-full bg-[#8DFFB3] flex-shrink-0 animate-pulse" />
+              <div className="flex items-center gap-2 px-3 py-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB] max-w-full overflow-hidden">
+                <div className="w-2 h-2   rounded-lg bg-[#8DFFB3] flex-shrink-0 animate-pulse" />
                 <p className="text-xs text-[#171717] truncate font-medium">{urlParam}</p>
               </div>
             )}
@@ -186,7 +186,7 @@ export default function ConvertPage() {
       <Navbar />
       <Suspense fallback={
         <main className="flex-1 flex items-center justify-center">
-          <div className="w-5 h-5 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          <div className="w-5 h-5   rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
         </main>
       }>
         <ConvertInner />

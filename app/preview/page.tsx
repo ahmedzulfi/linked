@@ -47,7 +47,7 @@ function PublishPanel({
         <p className="text-xs text-[#9CA3AF]">Your free URL on LinkedPage</p>
       </div>
 
-      <div className="flex items-center rounded-[13px] border border-[#E6E6E6] overflow-hidden bg-white focus-within:border-[#8DB8FF] focus-within:shadow-[0_0_0_3px_rgba(141,184,255,0.15)] transition-all duration-150">
+      <div className="flex items-center      rounded-lg   border border-[#E6E6E6] overflow-hidden bg-white focus-within:border-[#8DB8FF] focus-within:shadow-[0_0_0_3px_rgba(141,184,255,0.15)] transition-all duration-150">
         <div className="px-3 py-2.5 bg-[#F3F3F3] border-r border-[#E6E6E6] text-xs text-[#9CA3AF] whitespace-nowrap flex-shrink-0">
           linkedpage.io/
         </div>
@@ -107,7 +107,7 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <div className="w-5 h-5 rounded-full bg-[#8DFFB3] flex items-center justify-center">
+        <div className="w-5 h-5   rounded-lg bg-[#8DFFB3] flex items-center justify-center">
           <Check className="w-5 h-5 text-[#1a5c3a]" strokeWidth={2.5} />
         </div>
         <h3 className="text-sm font-medium text-black">Your page is live!</h3>
@@ -228,7 +228,7 @@ export default function PreviewPage() {
 
       {/* ── Top toolbar ── */}
       <div className="fixed top-[88px] left-0 right-0 z-40 px-5">
-        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md rounded-[13px] border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
+        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md      rounded-lg   border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
           {/* Left: back */}
           <button
             onClick={() => router.push("/editor")}
@@ -242,7 +242,7 @@ export default function PreviewPage() {
           <div className="flex items-center gap-1 p-1 bg-[#F3F3F3] rounded-[10px]">
             <button
               onClick={() => setPreviewMode("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
               <Monitor className="w-5 h-5" />
@@ -250,7 +250,7 @@ export default function PreviewPage() {
             </button>
             <button
               onClick={() => setPreviewMode("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
               <Smartphone className="w-5 h-5" />
@@ -394,7 +394,7 @@ export default function PreviewPage() {
                 "Always up-to-date with LinkedIn",
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-2 text-xs text-[#171717]">
-                  <div className="w-5 h-5 rounded-full bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5   rounded-lg bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
                     <Check className="w-2.5 h-2.5 text-[#1a5c3a]" strokeWidth={2.5} />
                   </div>
                   {item}
