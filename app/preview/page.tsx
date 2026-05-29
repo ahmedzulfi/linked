@@ -68,7 +68,7 @@ function PublishPanel({
 
       {slug && isValid && (
         <p className="text-xs text-[#369762] flex items-center gap-1">
-          <Check className="w-3.5 h-3.5" />
+          <Check className="w-5 h-5" />
           linkedpage.io/{slug} is available!
         </p>
       )}
@@ -80,9 +80,9 @@ function PublishPanel({
           }`}
       >
         {publishing ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <Loader2 className="w-5 h-5 animate-spin" />
         ) : (
-          <Globe className="w-4 h-4" />
+          <Globe className="w-5 h-5" />
         )}
         {publishing ? "Publishing…" : "Publish for free"}
       </button>
@@ -107,8 +107,8 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-full bg-[#8DFFB3] flex items-center justify-center">
-          <Check className="w-3.5 h-3.5 text-[#1a5c3a]" strokeWidth={2.5} />
+        <div className="w-5 h-5 rounded-full bg-[#8DFFB3] flex items-center justify-center">
+          <Check className="w-5 h-5 text-[#1a5c3a]" strokeWidth={2.5} />
         </div>
         <h3 className="text-sm font-medium text-black">Your page is live!</h3>
       </div>
@@ -117,12 +117,12 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
         className="flex items-center gap-2 p-3 bg-[#F3F3F3] rounded-[10px] cursor-pointer group"
         onClick={copy}
       >
-        <Globe className="w-4 h-4 text-[#9CA3AF] flex-shrink-0" />
+        <Globe className="w-5 h-5 text-[#9CA3AF] flex-shrink-0" />
         <p className="text-sm text-black flex-1 truncate font-medium">linkedpage.io/{slug}</p>
         {copied ? (
-          <Check className="w-4 h-4 text-[#369762] flex-shrink-0" />
+          <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
         ) : (
-          <Share2 className="w-4 h-4 text-[#9CA3AF] group-hover:text-black flex-shrink-0 transition-colors" />
+          <Share2 className="w-5 h-5 text-[#9CA3AF] group-hover:text-black flex-shrink-0 transition-colors" />
         )}
       </div>
 
@@ -132,7 +132,7 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
         rel="noopener noreferrer"
         className="button button-secondary w-full justify-center gap-2"
       >
-        <ExternalLink className="w-4 h-4" />
+        <ExternalLink className="w-5 h-5" />
         Open your page
       </a>
     </div>
@@ -197,7 +197,7 @@ export default function PreviewPage() {
   if (!editedProfile) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <Loader2 className="w-6 h-6 animate-spin text-[#9CA3AF]" />
+        <Loader2 className="w-5 h-5 animate-spin text-[#9CA3AF]" />
       </div>
     );
   }
@@ -234,7 +234,7 @@ export default function PreviewPage() {
             onClick={() => router.push("/editor")}
             className="flex items-center gap-1.5 text-[11px] font-medium text-[#6B6B6B] hover:text-black transition-colors"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
+            <ArrowLeft className="w-5 h-5" />
             <span className="hidden sm:inline">Back to editor</span>
           </button>
 
@@ -245,7 +245,7 @@ export default function PreviewPage() {
               className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
-              <Monitor className="w-3.5 h-3.5" />
+              <Monitor className="w-5 h-5" />
               Desktop
             </button>
             <button
@@ -253,7 +253,7 @@ export default function PreviewPage() {
               className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
-              <Smartphone className="w-3.5 h-3.5" />
+              <Smartphone className="w-5 h-5" />
               Mobile
             </button>
           </div>
@@ -263,7 +263,7 @@ export default function PreviewPage() {
             onClick={() => router.push("/editor")}
             className="button button-secondary !py-1.5 !px-3 !text-[11px] flex items-center gap-1.5"
           >
-            <Pencil className="w-3.5 h-3.5" />
+            <Pencil className="w-5 h-5" />
             <span className="hidden sm:inline">Edit</span>
           </button>
         </div>
@@ -375,9 +375,9 @@ export default function PreviewPage() {
               className={`button button-secondary w-full justify-center gap-2 ${exportLoading ? "opacity-60 pointer-events-none" : ""}`}
             >
               {exportLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <Download className="w-4 h-4" />
+                <Download className="w-5 h-5" />
               )}
               {exportLoading ? "Generating…" : "Download ZIP"}
             </button>
@@ -394,7 +394,7 @@ export default function PreviewPage() {
                 "Always up-to-date with LinkedIn",
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-2 text-xs text-[#171717]">
-                  <div className="w-4 h-4 rounded-full bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5 rounded-full bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
                     <Check className="w-2.5 h-2.5 text-[#1a5c3a]" strokeWidth={2.5} />
                   </div>
                   {item}

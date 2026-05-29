@@ -177,7 +177,7 @@ function ChatPane({
     {
       id: "chat" as ChatTab,
       icon: (
-        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         </svg>
       ),
@@ -186,7 +186,7 @@ function ChatPane({
     {
       id: "preview" as ChatTab,
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
           <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         </svg>
@@ -195,7 +195,7 @@ function ChatPane({
     {
       id: "grid" as ChatTab,
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         </svg>
       ),
@@ -203,7 +203,7 @@ function ChatPane({
     {
       id: "theme" as ChatTab,
       icon: (
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
         </svg>
       ),
@@ -251,15 +251,14 @@ function ChatPane({
         <div className="relative bg-[#F7F7F7] border border-[#E6E6E6] rounded-[11px] p-1 flex items-center">
           {/* Sliding active pill */}
           <div
-            className="absolute top-1 bottom-1 rounded-[8px] bg-white  shadow-[0_6px_10px_-6px_#00000016]  border border-[#E6E6E6]/60 transition-all duration-300 ease-out pointer-events-none z-0"
+            className="absolute top-1 bottom-1 rounded-[8px] bg-white shadow-sm border border-[#E6E6E6]/60 transition-all duration-300 ease-out pointer-events-none z-0"
             style={{
               left: `calc(4px + ${activeTabIndex} * (100% - 8px) / 6)`,
-              width: isChatActive ? `calc((100% - 8px) / 6 + 28px)` : `calc((100% - 8px) / 6)`,
+              width: `calc((100% - 8px) / 6)`,
             }}
           />
           {chatTabs.map((tab) => {
             const isActive = activeTab === tab.id;
-            const isChatTab = tab.id === "chat";
             const tabLabel = (tab as { label?: string }).label;
             return (
               <div key={tab.id} className="relative group flex-1 flex justify-center">
@@ -271,29 +270,16 @@ function ChatPane({
                     }
                   }}
                   className={`relative z-10 flex items-center justify-center gap-1.5 h-8 rounded-[8px] w-full cursor-pointer transition-colors duration-150 ${isActive
-                    ? isChatTab ? "text-[#369762]" : "text-[#2A2A2F]"
+                    ? "text-[#2A2A2F]"
                     : "text-[#171717]/45 hover:text-[#171717]"
                     }`}
                 >
-                  <span className="shrink-0">{tab.icon}</span>
-                  {isChatTab && (
-                    <span
-                      className="text-xs font-medium whitespace-nowrap overflow-hidden transition-all duration-300 ease-out"
-                      style={{ width: isActive ? "30px" : "0px", opacity: isActive ? 1 : 0 }}
-                    >
-                      Chat
-                    </span>
-                  )}
+                  <span className="shrink-0 ">{tab.icon}</span>
+
                 </button>
                 {/* Tooltip for non-chat tabs */}
-                {!isChatTab && (
-                  <div className="absolute z-50 top-full left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200">
-                    <div className="absolute w-2 h-2 bg-[#2A2A2F] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
-                    <div className="relative px-2.5 py-1 text-[11px] font-medium text-white bg-[#2A2A2F] rounded-md whitespace-nowrap">
-                      {tabLabel}
-                    </div>
-                  </div>
-                )}
+
+
               </div>
             );
           })}
@@ -322,7 +308,7 @@ function ChatPane({
                       </div>
                     ) : (
                       <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-[#8DFFB3] flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="w-5 h-5 rounded-full bg-[#8DFFB3] flex items-center justify-center shrink-0 mt-0.5">
                           <div className="w-3 h-3 rounded-full bg-[#369762] border-2 border-white" />
                         </div>
                         <div className="flex flex-col gap-1">
@@ -372,7 +358,7 @@ function ChatPane({
                     onClick={() => toast("Attach file")}
                     className="w-8 h-8 rounded-full bg-white border border-[#E6E6E6] flex items-center justify-center text-[#171717]/50 hover:text-[#171717] transition-colors"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                     </svg>
                   </button>
@@ -381,7 +367,7 @@ function ChatPane({
                       onClick={() => toast("Voice input")}
                       className="w-8 h-8 rounded-full flex items-center justify-center text-[#171717]/50 hover:bg-[#F3F3F3] transition-colors"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                       </svg>
                     </button>
@@ -389,7 +375,7 @@ function ChatPane({
                       onClick={() => sendMessage()}
                       className="w-8 h-8 rounded-full bg-[#8DFFB3] text-[#2A2A2F] flex items-center justify-center hover:bg-[#369762] hover:text-white transition-colors active:scale-[0.95]"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path d="M5 10l7-7m0 0l7 7m-7-7v18" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                       </svg>
                     </button>
@@ -426,7 +412,7 @@ function ChatPane({
 function UserMenu() {
   return (
     <div
-      className="absolute z-50 top-12 rounded-[13px] origin-top-right border border-[#E6E6E6] bg-white  shadow-[0_6px_10px_-6px_#00000016]  right-0 w-72 p-5"
+      className="absolute z-50 top-12 rounded-[13px] origin-top-right border border-[#E6E6E6] bg-white shadow-lg right-0 w-72 p-5"
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -596,7 +582,7 @@ function UserMenu() {
             }}
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5"
               height="24"
               width="24"
               aria-hidden="true"
@@ -640,7 +626,7 @@ function UserMenu() {
             }}
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5"
               height="24"
               width="24"
               aria-hidden="true"
@@ -675,7 +661,7 @@ function UserMenu() {
             }}
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5"
               height="24"
               width="24"
               aria-hidden="true"
@@ -725,7 +711,7 @@ function UserMenu() {
           }}
         >
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5"
             height="24"
             width="24"
             aria-hidden="true"
@@ -833,16 +819,16 @@ function EditorInner() {
 
       {/* ── Left Sidebar ── */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
-        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-[#F7F7F7] border-r border-[#E6E6E6] transition-all duration-300 overflow-hidden flex flex-col justify-between group  shadow-[0_6px_10px_-6px_#00000016]  hover:shadow-[0_0_20px_rgba(0,0,0,0.08)] py-4">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-[#F7F7F7] border-r border-[#E6E6E6] transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-[0_0_20px_rgba(0,0,0,0.08)] py-4">
           <div className="flex flex-col items-start w-full">
             {/* Project Selector */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
-              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px]  shadow-[0_6px_10px_-6px_#00000016]  group-hover:mr-3 transition-all duration-300 relative z-10">
+              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px] shadow-sm group-hover:mr-3 transition-all duration-300 relative z-10">
                 H
               </div>
               <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
                 <span className="font-medium text-[#2A2A2F] text-[15px]">hi hellow</span>
-                <svg className="w-4 h-4 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -865,11 +851,11 @@ function EditorInner() {
                   }}
                   title={item.label}
                   className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
-                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20  shadow-[0_6px_10px_-6px_#00000016] "
+                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-sm"
                     : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
                     }`}
                 >
-                  <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                  <div className="w-5 h-5 flex items-center justify-center shrink-0">
                     {item.icon}
                   </div>
                   <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
@@ -883,7 +869,7 @@ function EditorInner() {
           <div className="flex flex-col items-center w-full mt-auto">
             {/* Upgrade Card */}
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
-              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden text-left mt-2">
+              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px] shadow-sm overflow-hidden text-left mt-2">
                 {/* Custom Gradient Borders */}
                 <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-[#ff4b72] via-[#a855f7] to-[#3b82f6]" />
                 <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-[#ff4b72] via-[#a855f7] to-[#3b82f6] opacity-30" />
@@ -892,7 +878,7 @@ function EditorInner() {
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
                   ONLY $16 to<br />unlock Premium<br />Features
                 </p>
-                <button className="w-full py-1.5 bg-[#4b93ff] text-white rounded-[8px] text-[13px] font-medium hover:bg-[#3b82f6] transition-colors  shadow-[0_6px_10px_-6px_#00000016] ">
+                <button className="w-full py-1.5 bg-[#4b93ff] text-white rounded-[8px] text-[13px] font-medium hover:bg-[#3b82f6] transition-colors shadow-sm">
                   Upgrade Now
                 </button>
               </div>
@@ -901,7 +887,7 @@ function EditorInner() {
             {/* Bottom Links */}
             <div className="flex flex-col gap-1 w-full px-2">
               <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
-                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
                   <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -912,7 +898,7 @@ function EditorInner() {
                 </span>
               </button>
               <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
-                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
                   <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -929,7 +915,7 @@ function EditorInner() {
 
             <div className="px-2 w-full">
               <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/80 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
-                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
                   <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                   </svg>
@@ -956,184 +942,248 @@ function EditorInner() {
       />
 
       {/* ── Canvas ── */}
-      {/* Canvas */}
-      <main className="flex-1 flex flex-col overflow-hidden relative">
+      <main className="flex-1 flex flex-col bg-[#F7F7F7] overflow-hidden relative p-5 gap-3">
 
-        {/* Row 1: Dark top bar */}
-        <div className="flex items-center justify-between px-4 h-[52px] bg-[#1C1C1E] shrink-0">
-          <button
-            onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
-            className="relative h-8 px-4 text-sm font-medium text-[#171717] bg-white rounded-full hover:bg-white/90 transition-colors active:scale-95 overflow-hidden"
-          >
-            <span className="absolute inset-0 rounded-full pointer-events-none" style={{ padding: "1.5px", background: "linear-gradient(to right, #f97316, #ec4899, #3b82f6)", WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }} />
-            Upgrade Plan
-          </button>
-
-          <div className="flex items-center gap-2.5">
-            <AnimatePresence>
-              {isDirty && (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }}
-                  onClick={() => { resetEdits(); toast("Edits reset"); }}
-                  className="h-8 px-3 text-xs font-medium text-white/50 hover:text-white transition-colors"
-                >
-                  Reset
-                </motion.button>
-              )}
-            </AnimatePresence>
-            <button
-              onClick={() => { navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`); toast.success("Share link copied!"); }}
-              className="h-8 px-4 text-sm font-medium bg-white/10 border border-white/20 text-white rounded-full hover:bg-white/20 transition-colors"
-            >
-              Share
-            </button>
-            <button
-              onClick={handlePublish} disabled={publishing}
-              className="h-8 px-5 text-sm font-semibold bg-[#3b82f6] text-white rounded-full hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5"
-            >
-              {publishing && <span className="w-3 h-3 rounded-full border-2 border-white border-t-transparent animate-spin" />}
-              Publish
-            </button>
-            <div className="relative">
-              <button onClick={() => setIsUserMenuOpen(!isUserMenuOpen)} className="w-8 h-8 rounded-full overflow-hidden border-2 border-white/20 hover:border-white/40 transition-colors">
-                <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
-              </button>
-              <AnimatePresence>
-                {isUserMenuOpen && (
-                  <motion.div initial={{ opacity: 0, scale: 0.95, y: -8 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: -8 }} transition={{ duration: 0.15, ease: "easeOut" }} className="absolute right-0 top-10 z-50">
-                    <UserMenu />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-
-        {/* Row 2: White toolbar */}
-        <div className="flex items-center gap-3 px-4 h-[48px] bg-white border-b border-[#E6E6E6] shrink-0">
-          <div className="relative group">
-            <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px] text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors whitespace-nowrap">
-              <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
-                <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
-                <path d="M7.2 2.2 8 5.1" />
-                <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
-              </svg>
-              Customize
-            </button>
-            <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 left-full top-1/2 -translate-y-1/2 ml-2">
-              <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -left-1 top-1/2 -translate-y-1/2" />
-              <div className="relative px-3 py-1 text-xs text-white bg-[#171717] rounded-md whitespace-nowrap">Edit text, images, colors, fonts, and layouts</div>
-            </div>
-          </div>
-
-          <div className="relative group">
-            <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px] text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
-              <span>Home</span>
-              <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="m6 9 6 6 6-6" />
-              </svg>
-            </button>
-            <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
-              <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
-              <div className="relative px-3 py-1 text-xs text-white bg-[#171717] rounded-md whitespace-nowrap">Switch and manage site pages</div>
-            </div>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between gap-3 px-3 h-8 bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px]">
-              <span className="flex items-center min-w-0 gap-2 text-sm">
-                <svg className="w-[13px] h-[13px] text-[#3b82f6] shrink-0" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
-                  <path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" />
-                </svg>
-                <span className="text-[#3b82f6] font-medium truncate min-w-0">
-                  {editedProfile?.name.toLowerCase().replace(/\s+/g, "") ?? "yourname"}.linkedpage.io
-                </span>
-                <span className="hidden lg:inline text-[#2A2A2F]/60 text-xs whitespace-nowrap">is available!</span>
-              </span>
-              <button onClick={handlePublish} disabled={publishing} className="shrink-0 flex items-center gap-1 h-6 px-3 text-xs font-semibold bg-[#3b82f6] text-white rounded-[6px] hover:bg-[#2563eb] transition-colors active:scale-95">
-                {publishing && <span className="w-2.5 h-2.5 rounded-full border-2 border-white border-t-transparent animate-spin" />}
-                Get Your Domain
-              </button>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-0.5">
-            <button disabled title="Undo" className="w-8 h-8 flex items-center justify-center text-[#171717]/25 cursor-not-allowed rounded-[7px]">
-              <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
-              </svg>
-            </button>
-            <button disabled title="Redo" className="w-8 h-8 flex items-center justify-center text-[#171717]/25 cursor-not-allowed rounded-[7px]">
-              <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
-              </svg>
-            </button>
-            <button disabled title="Version history" className="w-8 h-8 flex items-center justify-center text-[#171717]/25 cursor-not-allowed rounded-[7px]">
-              <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" />
-              </svg>
-            </button>
-            <div className="w-px h-4 bg-[#E6E6E6] mx-1" />
-            <button onClick={() => setPreviewMode("desktop")} title="Desktop" className={`w-8 h-8 flex items-center justify-center rounded-[7px] transition-all duration-150 ${previewMode === "desktop" ? "bg-[#F3F3F3] text-[#2A2A2F]" : "text-[#171717]/35 hover:text-[#2A2A2F] hover:bg-[#F7F7F7]"}`}>
-              <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <rect height="14" width="20" rx="2" x="2" y="3" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
-              </svg>
-            </button>
-            <button onClick={() => setPreviewMode("mobile")} title="Mobile" className={`w-8 h-8 flex items-center justify-center rounded-[7px] transition-all duration-150 ${previewMode === "mobile" ? "bg-[#F3F3F3] text-[#2A2A2F]" : "text-[#171717]/35 hover:text-[#2A2A2F] hover:bg-[#F7F7F7]"}`}>
-              <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <rect height="20" width="14" rx="2" ry="2" x="5" y="2" /><path d="M12 18h.01" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Preview Area */}
-        <div className="flex-1 overflow-hidden bg-[#EFEFEF] flex items-center justify-center">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={`${selectedTemplate}-${previewMode}`}
-              initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
-              className="w-full h-full flex items-center justify-center p-8"
-            >
-              {editedProfile ? (
-                previewMode === "desktop" ? (
-                  <div
-                    className="rounded-[12px] overflow-hidden border border-[#E6E6E6] bg-white w-full h-full"
-                    style={{ maxWidth: 1024 * desktopScale, maxHeight: 768 * desktopScale, boxShadow: "0 4px 24px rgba(0,0,0,0.08)" }}
+                {/* ── Top bar (outside card) ── */}
+                <div className="flex items-center justify-between shrink-0 h-9">
+                  {/* Left: Upgrade Plan */}
+                  <button
+                    onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
+                    className="flex items-center gap-2 h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-full text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-sm"
+                    style={{ boxShadow: "0 0 0 2px rgba(141,184,255,0.12), 0 1px 4px rgba(0,0,0,0.06)" }}
                   >
-                    <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
-                      <ProfilePreview profile={editedProfile} template={selectedTemplate} />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="rounded-[32px] overflow-hidden border-[7px] border-[#2A2A2F] bg-white" style={{ width: 375 * mobileScale, height: 812 * mobileScale, boxShadow: "0 16px 48px -12px rgba(0,0,0,0.22)" }}>
-                    <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
-                      <ProfilePreview profile={editedProfile} template={selectedTemplate} />
-                    </div>
-                  </div>
-                )
-              ) : (
-                <div className="flex flex-col items-center text-center max-w-sm gap-4">
-                  <div className="w-14 h-14 bg-[#2A2A2F] rounded-[18px] flex items-center justify-center transform rotate-3  shadow-[0_6px_10px_-6px_#00000016] ">
-                    <svg className="w-6 h-6 text-white transform -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    <svg className="w-[13px] h-[13px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M4 6h16M4 12h16M4 18h7" />
                     </svg>
-                  </div>
-                  <h2 className="text-xl font-medium text-[#2A2A2F]">Paste your LinkedIn URL</h2>
-                  <p className="text-sm text-[#9CA3AF]">Use the chat panel to paste a LinkedIn URL and generate your micro-site.</p>
-                  <button onClick={() => router.push("/")} className="mt-2 px-4 py-2 bg-[#2A2A2F] text-white text-sm font-medium rounded-[8px] hover:bg-[#3A3A42] transition-colors">
-                    Go to home
+                    Upgrade Plan
                   </button>
-                </div>
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
 
-      </main>
-    </div>
+                  {/* Right: Share + Publish + Avatar */}
+                  <div className="flex items-center gap-2 relative">
+                    <button
+                      onClick={() => { navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`); toast.success("Share link copied!"); }}
+                      className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-full text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-sm"
+                    >
+                      Share
+                    </button>
+                    <button
+                      onClick={handlePublish}
+                      disabled={publishing}
+                      className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white rounded-full hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-sm"
+                    >
+                      {publishing && <span className="w-3 h-3 rounded-full border-2 border-white border-t-transparent animate-spin" />}
+                      Publish
+                    </button>
+                    <button
+                      onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                      className="w-8 h-8 rounded-full bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-sm hover:scale-105 active:scale-95 transition-transform ml-1"
+                    >
+                      <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+                    </button>
+                    <AnimatePresence>
+                      {isUserMenuOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                          transition={{ duration: 0.15, ease: "easeOut" }}
+                          className="absolute right-0 top-10 z-50"
+                        >
+                          <UserMenu />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </div>
+
+                {/* ── Canvas card ── */}
+                <div className="relative flex-1 bg-white border border-[#E6E6E6] rounded-[14px] flex flex-col overflow-hidden shadow-sm">
+
+                  {/* ── Canvas toolbar ── */}
+                  <div className="relative z-30 flex items-center gap-3 w-full h-[54px] px-4 border-b border-[#E6E6E6]/70 shrink-0">
+
+                    {/* Left: Customize + Page */}
+                    <div className="flex items-center gap-2">
+                      {/* Customize button */}
+                      <div className="relative group">
+                        <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px] text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                          <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
+                            <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
+                            <path d="M7.2 2.2 8 5.1" />
+                            <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
+                          </svg>
+                          Customize
+                        </button>
+                        <div className="hidden md:block absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 left-full top-1/2 -translate-y-1/2 ml-2">
+                          <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -left-1 top-1/2 -translate-y-1/2" />
+                          <div className="relative px-3 py-1 text-xs text-white bg-[#171717] rounded-md whitespace-nowrap">Edit text, images, colors, fonts, and layouts</div>
+                        </div>
+                      </div>
+
+                      {/* Page switcher */}
+                      <div className="relative group">
+                        <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px] text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                          <span className="text-sm leading-tight">Home</span>
+                          <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="m6 9 6 6 6-6" />
+                          </svg>
+                        </button>
+                        <div className="hidden md:block absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
+                          <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
+                          <div className="relative px-3 py-1 text-xs text-white bg-[#171717] rounded-md whitespace-nowrap">Switch and manage site pages</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Center: domain availability banner */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px]">
+                        <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
+                          <svg className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
+                            <path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" />
+                          </svg>
+                          <span className="min-w-0 truncate text-[#3b82f6] font-medium">
+                            {editedProfile?.name.toLowerCase().replace(/\s+/g, "") ?? "yourname"}.linkedpage.io
+                          </span>
+                          <span className="hidden lg:inline text-[#2A2A2F] font-normal">is available!</span>
+                        </span>
+                        <button
+                          onClick={handlePublish}
+                          disabled={publishing}
+                          className="shrink-0 flex items-center gap-1.5 h-7 px-3 text-xs font-medium bg-[#3b82f6] text-white rounded-[6px] hover:bg-[#2563eb] transition-colors active:scale-95"
+                        >
+                          {publishing && <span className="w-3 h-3 rounded-full border-2 border-white border-t-transparent animate-spin" />}
+                          Get Your Domain
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Right: undo/redo + history + device toggle (icon-only) */}
+                    <div className="flex items-center gap-1.5">
+                      {/* Undo */}
+                      <div className="relative group">
+                        <button disabled className="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#171717]/30 cursor-not-allowed">
+                          <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      {/* Redo */}
+                      <div className="relative group">
+                        <button disabled className="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#171717]/30 cursor-not-allowed">
+                          <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      {/* History */}
+                      <div className="relative group">
+                        <button disabled className="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#171717]/30 cursor-not-allowed">
+                          <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" />
+                          </svg>
+                        </button>
+                        <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
+                          <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
+                          <div className="relative px-3 py-1 text-xs text-white bg-[#171717] rounded-md whitespace-nowrap">Version history</div>
+                        </div>
+                      </div>
+
+                      {/* Divider */}
+                      <div className="w-px h-4 bg-[#E6E6E6] mx-0.5" />
+
+                      {/* Device toggle */}
+                      <div className="relative group">
+                        <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-[8px] overflow-hidden p-0.5 gap-0.5">
+                          <button
+                            onClick={() => setPreviewMode("desktop")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "desktop" ? "bg-white shadow-sm text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
+                          >
+                            <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                              <rect height="14" width="20" rx="2" x="2" y="3" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={() => setPreviewMode("mobile")}
+                            className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "mobile" ? "bg-white shadow-sm text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
+                          >
+                            <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                              <rect height="20" width="14" rx="2" ry="2" x="5" y="2" /><path d="M12 18h.01" />
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 right-full top-1/2 -translate-y-1/2 mr-2">
+                          <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -right-1 top-1/2 -translate-y-1/2" />
+                          <div className="relative px-3 py-1 text-xs text-white bg-[#171717] rounded-md whitespace-nowrap">Switch between desktop and mobile</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Preview Area ── */}
+          <div className="flex-1 flex items-center justify-center overflow-hidden bg-[#F9F9F9] relative">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={`${selectedTemplate}-${previewMode}`}
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+                className="w-full h-full flex items-center justify-center p-6"
+              >
+                {editedProfile ? (
+                  previewMode === "desktop" ? (
+                    /* Desktop canvas */
+                    <div
+                      className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white shadow-[0_8px_40px_-8px_rgba(0,0,0,0.10),0_2px_8px_rgba(0,0,0,0.04)]"
+                      style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
+                    >
+                      <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                      </div>
+                    </div>
+                  ) : (
+                    /* Mobile canvas */
+                    <div
+                      className="rounded-[32px] overflow-hidden border-[7px] border-[#2A2A2F] bg-white shadow-[0_16px_48px_-12px_rgba(0,0,0,0.22)]"
+                      style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
+                    >
+                      <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  /* Empty state */
+                  <div
+                    className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white flex flex-col items-center justify-center shadow-[0_8px_40px_-8px_rgba(0,0,0,0.10)]"
+                    style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
+                  >
+                    <div className="flex flex-col items-center text-center max-w-sm gap-4">
+                      <div className="w-14 h-14 bg-[#2A2A2F] rounded-[18px] flex items-center justify-center transform rotate-3 shadow-sm">
+                        <svg className="w-5 h-5 text-white transform -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                        </svg>
+                      </div>
+                      <h2 className="text-xl font-medium text-[#2A2A2F]">Paste your LinkedIn URL</h2>
+                      <p className="text-sm text-[#9CA3AF]">Use the chat panel to paste a LinkedIn URL and generate your micro-site.</p>
+                      <button onClick={() => router.push("/")} className="mt-2 px-4 py-2 bg-[#2A2A2F] text-white text-sm font-medium rounded-[8px] hover:bg-[#3A3A42] transition-colors">
+                        Go to home
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+      </div>
+    </main>
+
+    </div >
   );
 }
 
@@ -1142,11 +1192,11 @@ export default function EditorPage() {
     <Suspense
       fallback={
         <div className="h-screen w-full flex items-center justify-center bg-[#F7F7F7]">
-          <div className="w-6 h-6 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          <div className="w-5 h-5 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
         </div>
       }
     >
       <EditorInner />
     </Suspense>
   );
-}
+}

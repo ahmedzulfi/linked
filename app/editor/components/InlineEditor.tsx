@@ -57,9 +57,9 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
   const [activeTab, setActiveTab] = useState<Tab>("profile");
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: "profile", label: "Profile", icon: <User className="w-3.5 h-3.5" /> },
-    { id: "experience", label: "Experience", icon: <Briefcase className="w-3.5 h-3.5" /> },
-    { id: "links", label: "Links", icon: <LinkIcon className="w-3.5 h-3.5" /> },
+    { id: "profile", label: "Profile", icon: <User className="w-5 h-5" /> },
+    { id: "experience", label: "Experience", icon: <Briefcase className="w-5 h-5" /> },
+    { id: "links", label: "Links", icon: <LinkIcon className="w-5 h-5" /> },
   ];
 
   // ── Experience helpers ──
@@ -107,8 +107,8 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium rounded-[8px] transition-[background-color,color] duration-150 ${activeTab === tab.id
-                ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] "
-                : "text-[#6B6B6B] hover:text-black"
+              ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] "
+              : "text-[#6B6B6B] hover:text-black"
               }`}
           >
             {tab.icon}
@@ -180,7 +180,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <Briefcase className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                    <Briefcase className="w-5 h-5 text-[#9CA3AF]" />
                     <span className="text-xs font-medium text-[#9CA3AF]">
                       Experience {i + 1}
                     </span>
@@ -189,7 +189,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
                     onClick={() => removeExperience(i)}
                     className="p-1 rounded-md hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
                 <EditableField
@@ -222,7 +222,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               onClick={addExperience}
               className="button button-secondary w-full gap-2"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" />
               Add experience
             </button>
           </div>
@@ -238,14 +238,14 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <LinkIcon className="w-3.5 h-3.5 text-[#9CA3AF]" />
+                    <LinkIcon className="w-5 h-5 text-[#9CA3AF]" />
                     <span className="text-xs font-medium text-[#9CA3AF]">Link {i + 1}</span>
                   </div>
                   <button
                     onClick={() => removeLink(i)}
                     className="p-1 rounded-md hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-5 h-5" />
                   </button>
                 </div>
                 <EditableField
@@ -267,7 +267,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               onClick={addLink}
               className="button button-secondary w-full gap-2"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-5 h-5" />
               Add link
             </button>
 

@@ -159,8 +159,8 @@ export default function LoginPage() {
                           onClick={() => setShowPassword(!showPassword)}
                         >
                           {showPassword
-                            ? <EyeOff className="w-4 h-4" />
-                            : <Eye className="w-4 h-4" />}
+                            ? <EyeOff className="w-5 h-5" />
+                            : <Eye className="w-5 h-5" />}
                         </button>
                       </div>
                     </div>
@@ -178,7 +178,7 @@ export default function LoginPage() {
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
-                      <span className="w-3.5 h-3.5 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                      <span className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin" />
                       Processing...
                     </span>
                   ) : showPasswordStep ? "Sign in" : "Continue"}

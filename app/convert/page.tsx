@@ -82,11 +82,11 @@ function ConvertInner() {
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
               <button onClick={() => router.push("/")} className="button button-secondary flex-1 gap-2">
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className="w-5 h-5" />
                 Change URL
               </button>
               <button onClick={handleRetry} className="button button-primary flex-1 gap-2">
-                <RefreshCw className="w-4 h-4" />
+                <RefreshCw className="w-5 h-5" />
                 Try again
               </button>
             </div>
@@ -186,7 +186,7 @@ export default function ConvertPage() {
       <Navbar />
       <Suspense fallback={
         <main className="flex-1 flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          <div className="w-5 h-5 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
         </main>
       }>
         <ConvertInner />

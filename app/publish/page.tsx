@@ -72,7 +72,7 @@ function PublishInner() {
           className="flex flex-col gap-3"
         >
           <div className="flex items-center justify-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#8DB8FF]" />
+            <Sparkles className="w-5 h-5 text-[#8DB8FF]" />
             <span className="text-xs font-medium text-[#8DB8FF] uppercase tracking-wide">Published</span>
           </div>
           <h1 className="text-3xl font-medium text-black leading-tight">Your page is live!</h1>
@@ -93,13 +93,13 @@ function PublishInner() {
             className="flex items-center gap-3 p-4 bg-[#F7F7F7] border border-[#E6E6E6] rounded-[16px] cursor-pointer hover:border-[#C0C0C0] active:scale-[0.98] transition-[transform,border-color] duration-150"
           >
             <div className="w-8 h-8 rounded-full bg-white border border-[#E6E6E6] flex items-center justify-center flex-shrink-0">
-              <ExternalLink className="w-3.5 h-3.5 text-[#6B6B6B]" />
+              <ExternalLink className="w-5 h-5 text-[#6B6B6B]" />
             </div>
             <p className="text-sm text-black font-medium flex-1 text-left truncate">{url}</p>
             {copied ? (
-              <Check className="w-4 h-4 text-[#369762] flex-shrink-0" />
+              <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
             ) : (
-              <Copy className="w-4 h-4 text-[#9CA3AF] flex-shrink-0" />
+              <Copy className="w-5 h-5 text-[#9CA3AF] flex-shrink-0" />
             )}
           </div>
         </motion.div>
@@ -114,11 +114,11 @@ function PublishInner() {
           <p className="text-xs text-[#9CA3AF] font-medium uppercase tracking-wide">Share</p>
           <div className="grid grid-cols-2 gap-3">
             <button onClick={shareOnTwitter} className="button button-secondary justify-center gap-2">
-              <Twitter className="w-4 h-4" />
+              <Twitter className="w-5 h-5" />
               Post on X
             </button>
             <button onClick={shareOnLinkedIn} className="button button-secondary justify-center gap-2">
-              <Linkedin className="w-4 h-4" />
+              <Linkedin className="w-5 h-5" />
               Share on LinkedIn
             </button>
           </div>
@@ -147,14 +147,14 @@ function PublishInner() {
             onClick={() => router.push("/editor")}
             className="button button-secondary flex-1 w-full justify-center gap-2"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-5 h-5" />
             Edit your page
           </button>
           <button
             onClick={() => router.push("/")}
             className="button button-primary flex-1 w-full justify-center gap-2"
           >
-            <Sparkles className="w-4 h-4" />
+            <Sparkles className="w-5 h-5" />
             Create another
           </button>
         </motion.div>
@@ -170,7 +170,7 @@ export default function PublishPage() {
       <Navbar />
       <Suspense fallback={
         <main className="flex-1 flex items-center justify-center">
-          <div className="w-6 h-6 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          <div className="w-5 h-5 rounded-full border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
         </main>
       }>
         <PublishInner />

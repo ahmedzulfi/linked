@@ -32,7 +32,7 @@ export default function NotFound() {
 
           {/* CTA */}
           <Link href="/" className="button button-primary gap-2">
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-5 h-5" />
             Back to home
           </Link>
         </motion.div>

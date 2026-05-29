@@ -188,7 +188,7 @@ function OnboardingWizard() {
               >
                 <div className="flex flex-col gap-2">
                   <div className="w-12 h-12 rounded-[13px] bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
-                    <Sparkles className="w-6 h-6 animate-pulse" />
+                    <Sparkles className="w-5 h-5 animate-pulse" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
                     Name your web project
@@ -227,7 +227,7 @@ function OnboardingWizard() {
               >
                 <div className="flex flex-col gap-2">
                   <div className="w-12 h-12 rounded-[13px] bg-[#8DFFB3]/10 flex items-center justify-center text-[#369762] mb-2">
-                    <Globe className="w-6 h-6" />
+                    <Globe className="w-5 h-5" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
                     Set your subdomain
@@ -278,7 +278,7 @@ function OnboardingWizard() {
               >
                 <div className="flex flex-col gap-2">
                   <div className="w-12 h-12 rounded-[13px] bg-[#8DB8FF]/10 flex items-center justify-center text-[#8DB8FF] mb-2">
-                    <Layout className="w-6 h-6" />
+                    <Layout className="w-5 h-5" />
                   </div>
                   <h1 className="text-[29px] leading-tight font-medium text-black font-inter-tight">
                     Select design layers
@@ -304,7 +304,7 @@ function OnboardingWizard() {
                           ? "bg-[#8DB8FF] border-[#8DB8FF] text-white"
                           : "bg-white border-[#C5C5C5] group-hover:border-gray-500"
                           }`}>
-                          {isChecked && <Check className="w-3.5 h-3.5 stroke-[3px]" />}
+                          {isChecked && <Check className="w-5 h-5 stroke-[3px]" />}
                         </div>
                         <div className="flex flex-col gap-0.5">
                           <span className="text-[14px] font-semibold text-black font-inter-tight leading-tight">{style.label}</span>
@@ -365,7 +365,7 @@ function OnboardingWizard() {
                 className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-[0.97] transition-all font-inter-tight flex items-center gap-1.5  shadow-[0_6px_10px_-6px_#00000016] "
               >
                 <span>Continue</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-5 h-5" />
               </button>
             </div>
           )}
