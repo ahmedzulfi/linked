@@ -276,9 +276,9 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
         {/* Prompt card */}
         <motion.div
           variants={heroItemVariants}
-          className="w-full max-w-[1040px] rounded-[13px]  p-4 sm:p-5 flex flex-col gap-5 mt-4"
+          className="w-full max-w-[1040px] rounded-[13px] glass-card  p-4 sm:p-5 flex flex-col gap-5 mt-4"
         >
-          <div className="rounded-[13px] border border-[#E6E6E6] bg-white/20 p-5 flex flex-col gap-4 shadow-sm focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
+          <div className="rounded-[13px] border border-[#E6E6E6] bg-white/80 p-5 flex flex-col gap-4 shadow-sm focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
             {/* Textarea */}
             <textarea
               value={profileUrl}

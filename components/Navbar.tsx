@@ -116,12 +116,12 @@ export default function Navbar() {
           </div>
 
           {/* Log in (Secondary style) */}
-          <button
-            onClick={() => toast.info("Authorization popup coming soon!")}
+          <Link
+            href="/login"
             className="hidden sm:flex h-10 px-5 items-center justify-center rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap font-inter-tight"
           >
             Log in
-          </button>
+          </Link>
 
           {/* Get started (Primary style) */}
           <Link
@@ -194,12 +194,13 @@ export default function Navbar() {
             </button>
 
             <div className="flex items-center gap-2 pt-2 border-t border-[#E6E6E6]">
-              <button
-                onClick={() => { setMobileOpen(false); toast.info("Authorization popup coming soon!"); }}
-                className="flex-1 h-10 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out"
+              <Link
+                href="/login"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 h-10 rounded-[13px] bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out flex items-center justify-center"
               >
                 Log in
-              </button>
+              </Link>
               <Link
                 href="/onboarding"
                 onClick={() => setMobileOpen(false)}
