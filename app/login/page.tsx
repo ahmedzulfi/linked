@@ -62,7 +62,7 @@ export default function LoginPage() {
         {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
-          <div className="relative bg-white border border-[#E6E6E6] rounded p-8 w-full max-w-sm shadow-sm">
+          <div className="relative bg-white border border-[#E6E6E6] rounded-[20px] px-10 py-9 w-full max-w-sm" style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.04), 0 10px 30px -10px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.03)' }}>
             <div className="flex flex-col gap-5">
 
               {/* Header */}
@@ -201,11 +201,11 @@ export default function LoginPage() {
         </div>
 
         {/* ── Right: Hero Illustration ── */}
-        <div className="relative hidden md:flex rounded-[18px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
+        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"
-            src="/public/bg.png"
+            src="https://www.webild.io/images/bgtest2.webp"
           />
           <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
           <img
