@@ -240,7 +240,11 @@ function ChatPane({
       {/* Header */}
       <header className="h-[72px] flex items-center px-6 border-b border-white/20 shrink-0 bg-white/60 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <span className="font-bold text-lg tracking-tight text-[#2A2A2F]">LinkedPage</span>
+          <img
+            src="/logo.png"
+            alt="LinkedPage"
+            className="h-7 w-auto object-contain"
+          />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
           <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{profileName}</span>
         </div>
@@ -312,7 +316,10 @@ function ChatPane({
                           <div className="w-3 h-3   rounded-lg bg-[#369762] border-2 border-white" />
                         </div>
                         <div className="flex flex-col gap-1">
-                          <span className="text-xs font-medium text-[#2A2A2F]">LinkedPage AI</span>
+                          <span className="text-xs font-medium text-[#2A2A2F] flex items-center gap-1.5">
+                            <img src="/logo.png" alt="LinkedPage" className="h-3.5 w-auto object-contain opacity-80" />
+                            AI
+                          </span>
                           <p className="text-[14px] text-[#171717]/70 leading-relaxed">{msg.content}</p>
                         </div>
                       </div>
