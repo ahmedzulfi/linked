@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -276,9 +276,9 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
         {/* Prompt card */}
         <motion.div
           variants={heroItemVariants}
-          className="w-full max-w-[1040px] rounded-[13px] glass-card p-4 sm:p-5 flex flex-col gap-5 mt-4"
+          className="w-full max-w-[1040px] rounded-[13px]  p-4 sm:p-5 flex flex-col gap-5 mt-4"
         >
-          <div className="rounded-[13px] border border-[#E6E6E6] bg-white p-5 flex flex-col gap-4 shadow-sm focus-within:ring-2 focus-within:ring-[#8DB8FF]/40 transition-[box-shadow] duration-250 ease-out">
+          <div className="rounded-[13px] border border-[#E6E6E6] bg-white/20 p-5 flex flex-col gap-4 shadow-sm focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
             {/* Textarea */}
             <textarea
               value={profileUrl}
@@ -914,6 +914,14 @@ export default function Index() {
   const router = useRouter();
   const [showPreview, setShowPreview] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success") === "true") {
+      setShowPreview(true);
+      window.history.replaceState({}, "", "/");
+    }
+  }, []);
 
   const simulateGeneration = (url: string) => {
     if (!url.trim()) {
