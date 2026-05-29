@@ -488,11 +488,11 @@ function BrandSection() {
 
 const FEATURES = [
   {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/9282b15717e16cada3f81012071a8856a4b3105e?width=1498",
+    img: "/feature (1).png",
     text: "Fully responsive layouts optimized for mobile, tablet, and desktop viewing.",
   },
   {
-    img: "https://api.builder.io/api/v1/image/assets/TEMP/91b295fbb67800a1b125262ad3faebbedd654106?width=1498",
+    img: "/feature (2).png",
     text: "Export clean static code zip files to host on GitHub Pages, Vercel, or Netlify.",
   },
 ];
