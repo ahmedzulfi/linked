@@ -236,19 +236,19 @@ function ChatPane({
   const isChatActive = activeTab === "chat";
 
   return (
-    <section className="w-[360px] h-full flex flex-col bg-white border-r border-[#E6E6E6] shrink-0 overflow-hidden">
+    <section className="w-[360px] h-full flex flex-col bg-white/80 backdrop-blur-xl border-r border-white/30 shrink-0 overflow-hidden">
       {/* Header */}
-      <header className="h-[72px] flex items-center px-6 border-b border-[#E6E6E6]/50 shrink-0">
+      <header className="h-[72px] flex items-center px-6 border-b border-white/20 shrink-0 bg-white/60 backdrop-blur-md">
         <div className="flex items-center gap-3">
           <span className="font-bold text-lg tracking-tight text-[#2A2A2F]">LinkedPage</span>
-          <div className="w-px h-4 bg-[#E6E6E6]" />
+          <div className="w-px h-4 bg-[#2A2A2F]/15" />
           <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{profileName}</span>
         </div>
       </header>
 
       {/* Tab toolbar — new design */}
       <div className="px-4 pt-4 pb-2 shrink-0">
-        <div className="relative bg-[#F7F7F7] border border-[#E6E6E6] rounded-[11px] p-1 flex items-center">
+        <div className="relative bg-black/5 backdrop-blur-sm border border-white/40 rounded-[11px] p-1 flex items-center">
           {/* Sliding active pill */}
           <div
             className="absolute top-1 bottom-1     rounded-lg  bg-white shadow-sm border border-[#E6E6E6]/60 transition-all duration-300 ease-out pointer-events-none z-0"
@@ -412,7 +412,7 @@ function ChatPane({
 function UserMenu() {
   return (
     <div
-      className="absolute z-50 top-12 rounded-xl origin-top-right border border-white/30 bg-white/80 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12),0_1px_0_rgba(255,255,255,0.5)_inset] right-0 w-72 p-5"
+      className="absolute z-50 top-12 rounded-2xl origin-top-right border border-white/30 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.12),0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -481,7 +481,7 @@ function UserMenu() {
           </div>
         </div>
         <div
-          className="border-t border-[#E6E6E6]"
+          className="border-t border-black/8"
           style={{
             scrollbarWidth: "thin",
             scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -495,7 +495,7 @@ function UserMenu() {
           }}
         >
           <div
-            className="relative p-4 flex flex-col gap-2 bg-[#F7F7F7] border border-[#E6E6E6] rounded-[10px]"
+            className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]"
             style={{
               scrollbarWidth: "thin",
               scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -696,7 +696,7 @@ function UserMenu() {
           </button>
         </div>
         <div
-          className="border-t border-[#E6E6E6]"
+          className="border-t border-black/8"
           style={{
             scrollbarWidth: "thin",
             scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -815,11 +815,11 @@ function EditorInner() {
   const mobileScale = 0.45;
 
   return (
-    <div className="h-screen w-full flex overflow-hidden bg-white font-inter select-none">
+    <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
 
       {/* ── Left Sidebar ── */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
-        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/70 backdrop-blur-md border-r border-white/40 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-[0_0_24px_rgba(0,0,0,0.10)] py-4">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-white/30 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] py-4">
           <div className="flex flex-col items-start w-full">
             {/* Project Selector */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
@@ -997,10 +997,10 @@ function EditorInner() {
         </div>
 
         {/* ── Canvas card ── */}
-        <div className="relative flex-1 bg-white border border-[#E6E6E6] rounded-[14px] flex flex-col overflow-hidden shadow-sm">
+        <div className="relative flex-1 bg-white/75 backdrop-blur-xl border border-white/40 rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.06),0_0_0_1px_rgba(255,255,255,0.6)_inset]">
 
           {/* ── Canvas toolbar ── */}
-          <div className="relative z-30 flex items-center gap-3 w-full h-[54px] px-4 border-b border-[#E6E6E6]/70 shrink-0">
+          <div className="relative z-30 flex items-center gap-3 w-full h-[54px] px-4 border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md">
 
             {/* Left: Customize + Page */}
             <div className="flex items-center gap-2">
@@ -1015,8 +1015,8 @@ function EditorInner() {
                   Customize
                 </button>
                 <div className="hidden md:block absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 left-full top-1/2 -translate-y-1/2 ml-2">
-                  <div className="absolute w-2 h-2 bg-black/80 rotate-45 -left-1 top-1/2 -translate-y-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-black/80 backdrop-blur-md border border-white/10 rounded-md whitespace-nowrap shadow-lg">Edit text, images, colors, fonts, and layouts</div>
+                  <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -left-1 top-1/2 -translate-y-1/2" />
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Edit text, images, colors, fonts, and layouts</div>
                 </div>
               </div>
 
@@ -1029,8 +1029,8 @@ function EditorInner() {
                   </svg>
                 </button>
                 <div className="hidden md:block absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
-                  <div className="absolute w-2 h-2 bg-black/80 rotate-45 -top-1 left-1/2 -translate-x-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-black/80 backdrop-blur-md border border-white/10 rounded-md whitespace-nowrap shadow-lg">Switch and manage site pages</div>
+                  <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Switch and manage site pages</div>
                 </div>
               </div>
             </div>
@@ -1087,8 +1087,8 @@ function EditorInner() {
                   </svg>
                 </button>
                 <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
-                  <div className="absolute w-2 h-2 bg-black/80 rotate-45 -top-1 left-1/2 -translate-x-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-black/80 backdrop-blur-md border border-white/10 rounded-md whitespace-nowrap shadow-lg">Version history</div>
+                  <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Version history</div>
                 </div>
               </div>
 
@@ -1116,8 +1116,8 @@ function EditorInner() {
                   </button>
                 </div>
                 <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 right-full top-1/2 -translate-y-1/2 mr-2">
-                  <div className="absolute w-2 h-2 bg-black/80 rotate-45 -right-1 top-1/2 -translate-y-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-black/80 backdrop-blur-md border border-white/10 rounded-md whitespace-nowrap shadow-lg">Switch between desktop and mobile</div>
+                  <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -right-1 top-1/2 -translate-y-1/2" />
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Switch between desktop and mobile</div>
                 </div>
               </div>
             </div>
