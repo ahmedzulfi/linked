@@ -19,7 +19,7 @@ function OnboardingWizard() {
 
   // Get initial values from query parameters if available
   const linkedinUrl = searchParams.get("url") || "";
-  const initialBrandName = linkedinUrl 
+  const initialBrandName = linkedinUrl
     ? linkedinUrl.replace(/https?:\/\/(www\.)?linkedin\.com\/in\//, "").replace(/\/$/, "").replace(/[-_]/g, " ").replace(/\b\w/g, c => c.toUpperCase())
     : "Reality Cheque";
 
@@ -29,9 +29,9 @@ function OnboardingWizard() {
     initialBrandName.toLowerCase().replace(/[^a-z0-9]/g, "") || "realitycheque"
   );
   const [selectedStyles, setSelectedStyles] = useState<string[]>([
-    "Modern Professional", 
-    "Clear CTAs", 
-    "Trust-Building Layout", 
+    "Modern Professional",
+    "Clear CTAs",
+    "Trust-Building Layout",
     "Vibrant Community Focus" // Default all checked as in mockup
   ]);
   const [isDomainChecking, setIsDomainChecking] = useState(false);
@@ -119,8 +119,8 @@ function OnboardingWizard() {
   };
 
   const toggleStyle = (label: string) => {
-    setSelectedStyles(prev => 
-      prev.includes(label) 
+    setSelectedStyles(prev =>
+      prev.includes(label)
         ? prev.filter(s => s !== label)
         : [...prev, label]
     );
@@ -167,7 +167,7 @@ function OnboardingWizard() {
           <span className="font-semibold text-[16px] text-black font-inter-tight">Webild</span>
         </div>
         {step < 3 && (
-          <div className="text-[13px] text-gray-500 font-medium font-inter-tight bg-white border border-[#E6E6E6] px-3.5 py-1.5 rounded-[13px] shadow-sm">
+          <div className="text-[13px] text-gray-500 font-medium font-inter-tight bg-white border border-[#E6E6E6] px-3.5 py-1.5 rounded-[13px]  shadow-[0_6px_10px_-6px_#00000016] ">
             Step {step + 1} of 3
           </div>
         )}
@@ -175,7 +175,7 @@ function OnboardingWizard() {
 
       {/* Main Container */}
       <div className="w-full max-w-[540px] px-6 z-10">
-        <div className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] p-8 sm:p-10 rounded-[18px] shadow-xl relative overflow-hidden min-h-[420px] flex flex-col justify-between">
+        <div className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] p-8 sm:p-10 rounded-[18px]  shadow-[0_6px_10px_-6px_#00000016]  relative overflow-hidden min-h-[420px] flex flex-col justify-between">
           <AnimatePresence mode="wait" custom={1}>
             {step === 0 && (
               <motion.div
@@ -295,17 +295,15 @@ function OnboardingWizard() {
                       <button
                         key={style.id}
                         onClick={() => toggleStyle(style.label)}
-                        className={`w-full flex items-start gap-3.5 p-3.5 rounded-[13px] border transition-all text-left group active:scale-[0.98] ${
-                          isChecked 
-                            ? "bg-[#DCEAFF]/20 border-[#8DB8FF] shadow-sm" 
-                            : "bg-[#F7F7F7] border-[#E6E6E6] hover:bg-[#F3F3F3]"
-                        }`}
+                        className={`w-full flex items-start gap-3.5 p-3.5 rounded-[13px] border transition-all text-left group active:scale-[0.98] ${isChecked
+                          ? "bg-[#DCEAFF]/20 border-[#8DB8FF]  shadow-[0_6px_10px_-6px_#00000016] "
+                          : "bg-[#F7F7F7] border-[#E6E6E6] hover:bg-[#F3F3F3]"
+                          }`}
                       >
-                        <div className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 transition-colors ${
-                          isChecked 
-                            ? "bg-[#8DB8FF] border-[#8DB8FF] text-white" 
-                            : "bg-white border-[#C5C5C5] group-hover:border-gray-500"
-                        }`}>
+                        <div className={`mt-0.5 w-5 h-5 rounded-full border flex items-center justify-center flex-shrink-0 transition-colors ${isChecked
+                          ? "bg-[#8DB8FF] border-[#8DB8FF] text-white"
+                          : "bg-white border-[#C5C5C5] group-hover:border-gray-500"
+                          }`}>
                           {isChecked && <Check className="w-3.5 h-3.5 stroke-[3px]" />}
                         </div>
                         <div className="flex flex-col gap-0.5">
@@ -326,7 +324,7 @@ function OnboardingWizard() {
                 animate={{ opacity: 1 }}
                 className="flex flex-col items-center justify-center text-center gap-6 py-10"
               >
-                <div className="w-16 h-16 rounded-[18px] bg-[#2A2A2F] text-white flex items-center justify-center shadow-lg relative animate-spin">
+                <div className="w-16 h-16 rounded-[18px] bg-[#2A2A2F] text-white flex items-center justify-center  shadow-[0_6px_10px_-6px_#00000016]  relative animate-spin">
                   <Sparkles className="w-8 h-8 text-[#8DFFB3]" />
                   <span className="absolute inset-0 rounded-[18px] border-2 border-dashed border-[#8DB8FF]" />
                 </div>
@@ -337,8 +335,8 @@ function OnboardingWizard() {
                 </div>
 
                 <div className="w-full max-w-[280px] h-2 bg-[#F3F3F3] rounded-full overflow-hidden border border-[#E6E6E6] mt-4">
-                  <motion.div 
-                    className="h-full bg-gradient-to-r from-[#8DB8FF] to-[#8DFFB3]" 
+                  <motion.div
+                    className="h-full bg-gradient-to-r from-[#8DB8FF] to-[#8DFFB3]"
                     style={{ width: `${loadingProgress}%` }}
                     transition={{ ease: "easeOut" }}
                   />
@@ -364,7 +362,7 @@ function OnboardingWizard() {
 
               <button
                 onClick={nextStep}
-                className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-[0.97] transition-all font-inter-tight flex items-center gap-1.5 shadow-sm"
+                className="h-10 px-5 rounded-[13px] bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-[0.97] transition-all font-inter-tight flex items-center gap-1.5  shadow-[0_6px_10px_-6px_#00000016] "
               >
                 <span>Continue</span>
                 <ArrowRight className="w-4 h-4" />

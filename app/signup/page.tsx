@@ -262,7 +262,7 @@ export default function SignupPage() {
           />
           <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px]" />
           <img
-            className="relative z-20 drop-shadow-2xl max-w-[85%] w-auto h-auto"
+            className="relative z-20 drop- shadow-[0_6px_10px_-6px_#00000016]  max-w-[85%] w-auto h-auto"
             alt="Webild illustration"
             src="https://www.webild.io/images/input.svg"
           />

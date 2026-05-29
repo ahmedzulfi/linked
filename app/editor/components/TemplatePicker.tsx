@@ -13,7 +13,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
   if (template.id === "minimal-card") {
     return (
       <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
-        <div className="w-full max-w-[140px] bg-white rounded-[8px] border border-[#E6E6E6] p-3 shadow-sm">
+        <div className="w-full max-w-[140px] bg-white rounded-[8px] border border-[#E6E6E6] p-3  shadow-[0_6px_10px_-6px_#00000016] ">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-7 h-7 rounded-full bg-[#E6E6E6]" />
             <div className="flex flex-col gap-1">
@@ -128,11 +128,10 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.06, ease: [0.23, 1, 0.32, 1] }}
               onClick={() => onSelect(template.id)}
-              className={`relative group rounded-[13px] overflow-hidden border text-left transition-[border-color,box-shadow] duration-200 active:scale-[0.97] ${
-                isSelected
+              className={`relative group rounded-[13px] overflow-hidden border text-left transition-[border-color,box-shadow] duration-200 active:scale-[0.97] ${isSelected
                   ? "border-[#2A2A2F] shadow-[0_0_0_2px_#2A2A2F]"
                   : "border-[#E6E6E6] hover:border-[#C0C0C0]"
-              }`}
+                }`}
             >
               {/* Preview area */}
               <div className="h-[110px] w-full overflow-hidden">

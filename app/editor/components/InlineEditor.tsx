@@ -106,11 +106,10 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium rounded-[8px] transition-[background-color,color] duration-150 ${
-              activeTab === tab.id
-                ? "bg-white text-black shadow-sm"
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium rounded-[8px] transition-[background-color,color] duration-150 ${activeTab === tab.id
+                ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] "
                 : "text-[#6B6B6B] hover:text-black"
-            }`}
+              }`}
           >
             {tab.icon}
             {tab.label}

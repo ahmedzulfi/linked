@@ -182,7 +182,7 @@ function FullScroll({ profile }: { profile: ProfileData }) {
         <img
           src={profile.avatarUrl}
           alt={profile.name}
-          className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md mb-4"
+          className="w-20 h-20 rounded-full object-cover border-4 border-white  shadow-[0_6px_10px_-6px_#00000016]  mb-4"
         />
 
         {/* Name + headline */}

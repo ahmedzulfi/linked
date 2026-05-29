@@ -58,7 +58,7 @@ export default function Footer() {
       className="w-full p-6 sm:p-10 lg:p-14 bg-cover bg-center bg-no-repeat select-none pointer-events-none"
       style={{ backgroundImage: "url('/bg.png')" }}
     >
-      <div className="w-full max-w-[1536px] mx-auto bg-[#FBFBFB] rounded-[18px] border border-[#E6E6E6] shadow-sm px-6 sm:px-12 lg:px-20 py-16 text-black font-inter pointer-events-auto">
+      <div className="w-full max-w-[1536px] mx-auto bg-[#FBFBFB] rounded-[18px] border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  px-6 sm:px-12 lg:px-20 py-16 text-black font-inter pointer-events-auto">
         <div className="flex flex-col gap-12">
 
           {/* Top Section: Giant centered logo */}
@@ -86,7 +86,7 @@ export default function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@email.com"
-                    className="w-full bg-white text-[#171717] border border-[#E6E6E6] rounded-[13px] h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-[border-color] duration-200 font-inter-tight shadow-sm"
+                    className="w-full bg-white text-[#171717] border border-[#E6E6E6] rounded-[13px] h-[48px] px-4 pr-12 text-sm placeholder-[#171717]/40 outline-none focus:border-[#8DB8FF] transition-[border-color] duration-200 font-inter-tight  shadow-[0_6px_10px_-6px_#00000016] "
                   />
                   <button
                     type="submit"

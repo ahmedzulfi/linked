@@ -76,9 +76,8 @@ function PublishPanel({
       <button
         onClick={() => isValid && onPublish(slug)}
         disabled={!isValid || publishing}
-        className={`button button-primary w-full justify-center gap-2 ${
-          !isValid || publishing ? "opacity-50 pointer-events-none" : ""
-        }`}
+        className={`button button-primary w-full justify-center gap-2 ${!isValid || publishing ? "opacity-50 pointer-events-none" : ""
+          }`}
       >
         {publishing ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -229,7 +228,7 @@ export default function PreviewPage() {
 
       {/* ── Top toolbar ── */}
       <div className="fixed top-[88px] left-0 right-0 z-40 px-5">
-        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md rounded-[13px] border border-[#E6E6E6] shadow-sm">
+        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md rounded-[13px] border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
           {/* Left: back */}
           <button
             onClick={() => router.push("/editor")}
@@ -243,18 +242,16 @@ export default function PreviewPage() {
           <div className="flex items-center gap-1 p-1 bg-[#F3F3F3] rounded-[10px]">
             <button
               onClick={() => setPreviewMode("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${
-                previewMode === "desktop" ? "bg-white text-black shadow-sm" : "text-[#6B6B6B] hover:text-black"
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
+                }`}
             >
               <Monitor className="w-3.5 h-3.5" />
               Desktop
             </button>
             <button
               onClick={() => setPreviewMode("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${
-                previewMode === "mobile" ? "bg-white text-black shadow-sm" : "text-[#6B6B6B] hover:text-black"
-              }`}
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-[8px] transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
+                }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
               Mobile
