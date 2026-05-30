@@ -243,6 +243,7 @@ function ChatPane({
             return (
               <div key={tab.id} className="relative group flex-1 flex justify-center">
                 <button
+                  id={tab.id === "grid" ? "onboarding-templates-tab" : undefined}
                   onClick={() => {
                     setActiveTab(tab.id);
                     if (tab.id !== "chat" && tab.id !== "grid" && tab.id !== "theme") {
@@ -963,6 +964,44 @@ function EditorInner() {
   const [activeTab, setActiveTab] = useState<ChatTab>("chat");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingCoords, setOnboardingCoords] = useState<{
+    templates?: DOMRect;
+    publish?: DOMRect;
+    preview?: DOMRect;
+  }>({});
+
+  useEffect(() => {
+    if (searchParams.get("onboarding") === "true") {
+      setShowOnboarding(true);
+      setActiveTab("grid"); // Set to Grid (Templates) tab initially during onboarding
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (!showOnboarding) return;
+
+    const measure = () => {
+      const templatesEl = document.getElementById("onboarding-templates-tab");
+      const publishEl = document.getElementById("onboarding-publish-btn");
+      const previewEl = document.getElementById("onboarding-preview-canvas");
+
+      setOnboardingCoords({
+        templates: templatesEl?.getBoundingClientRect(),
+        publish: publishEl?.getBoundingClientRect(),
+        preview: previewEl?.getBoundingClientRect(),
+      });
+    };
+
+    // Delay a short amount to ensure render completion before measurement
+    const t = setTimeout(measure, 600);
+    window.addEventListener("resize", measure);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", measure);
+    };
+  }, [showOnboarding]);
+
   useEffect(() => {
     if (!editedProfile) useMockProfile();
   }, [editedProfile, useMockProfile]);
@@ -1161,6 +1200,7 @@ function EditorInner() {
               Share
             </button>
             <button
+              id="onboarding-publish-btn"
               onClick={handlePublish}
               disabled={publishing}
               className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white   rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5   shadow-[0_6px_10px_-6px_#00000016]"
@@ -1315,6 +1355,7 @@ function EditorInner() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={`${selectedTemplate}-${previewMode}`}
+                id="onboarding-preview-canvas"
                 initial={{ opacity: 0, scale: 0.97 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.97 }}
@@ -1369,6 +1410,106 @@ function EditorInner() {
 
         </div>
       </main>
+
+      {/* ── Onboarding Overlay ── */}
+      <AnimatePresence>
+        {showOnboarding && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => {
+              setShowOnboarding(false);
+              const params = new URLSearchParams(window.location.search);
+              params.delete("onboarding");
+              const query = params.toString();
+              router.replace(`${window.location.pathname}${query ? `?${query}` : ""}`);
+            }}
+            className="fixed inset-0 z-[100] cursor-pointer bg-black/15 backdrop-blur-[1px]"
+          >
+            {onboardingCoords.templates && (
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: onboardingCoords.templates.top + onboardingCoords.templates.height / 2,
+                  left: onboardingCoords.templates.left + onboardingCoords.templates.width / 2,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div className="w-6 h-6 rounded-full bg-[#8DB8FF]/30 flex items-center justify-center relative">
+                  <span className="absolute inset-0 rounded-full bg-[#8DB8FF]/40 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <div className="w-3 h-3 rounded-full bg-[#3b82f6] border-2 border-white shadow-sm" />
+                </div>
+                <div
+                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.08)] whitespace-nowrap text-left flex flex-col gap-0.5"
+                  style={{
+                    top: onboardingCoords.templates.height / 2 + 10,
+                    left: 0,
+                  }}
+                >
+                  <span className="text-[12px] font-bold text-black">🎨 Templates</span>
+                  <span className="text-[10px] text-[#171717]/60">Switch design layers instantly</span>
+                </div>
+              </div>
+            )}
+
+            {onboardingCoords.publish && (
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: onboardingCoords.publish.top + onboardingCoords.publish.height / 2,
+                  left: onboardingCoords.publish.left + onboardingCoords.publish.width / 2,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div className="w-6 h-6 rounded-full bg-[#8DFFB3]/30 flex items-center justify-center relative">
+                  <span className="absolute inset-0 rounded-full bg-[#8DFFB3]/40 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <div className="w-3 h-3 rounded-full bg-[#369762] border-2 border-white shadow-sm" />
+                </div>
+                <div
+                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.08)] whitespace-nowrap text-left flex flex-col gap-0.5"
+                  style={{
+                    top: onboardingCoords.publish.height / 2 + 10,
+                    right: 0,
+                    transform: "translateX(30%)",
+                  }}
+                >
+                  <span className="text-[12px] font-bold text-black">🚀 Go Live</span>
+                  <span className="text-[10px] text-[#171717]/60">Launch your site in one click</span>
+                </div>
+              </div>
+            )}
+
+            {onboardingCoords.preview && (
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: onboardingCoords.preview.top + onboardingCoords.preview.height / 2,
+                  left: onboardingCoords.preview.left + onboardingCoords.preview.width / 2,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <div className="w-6 h-6 rounded-full bg-[#8DB8FF]/30 flex items-center justify-center relative">
+                  <span className="absolute inset-0 rounded-full bg-[#8DB8FF]/40 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <div className="w-3 h-3 rounded-full bg-[#3b82f6] border-2 border-white shadow-sm" />
+                </div>
+                <div
+                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] whitespace-nowrap text-center flex flex-col gap-0.5"
+                  style={{
+                    top: 24,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                  }}
+                >
+                  <span className="text-[12px] font-bold text-black">✏️ Click to Edit</span>
+                  <span className="text-[10px] text-[#171717]/60">Select any text element to edit inline</span>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
     </div >
   );

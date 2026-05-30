@@ -84,15 +84,19 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
     try {
       // Simulate a network call — replace with real fetch('/api/scrape?url=…')
-      await new Promise((r) => setTimeout(r, 2200));
+      await new Promise((r) => setTimeout(r, 2500));
+
+      if (url.toLowerCase().includes("fail")) {
+        throw new Error("Failed to fetch LinkedIn profile. Private account settings detected.");
+      }
 
       // For now, use the mock profile but stamp the URL
       const p: ProfileData = { ...MOCK_PROFILE, linkedinUrl: url };
       setProfile(p);
       setEditedProfile(p);
       persistProfile(p);
-    } catch {
-      setScrapeError("Failed to fetch LinkedIn profile. Please check the URL and try again.");
+    } catch (e: any) {
+      setScrapeError(e.message || "Failed to fetch LinkedIn profile. Please check the URL and try again.");
     } finally {
       setIsLoading(false);
     }
