@@ -136,7 +136,7 @@ export default function ChatPane({
   ];
 
   return (
-    <section className="w-[360px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
+    <section className="w-[510px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
       {/* Title Header */}
       <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
@@ -317,7 +317,7 @@ export default function ChatPane({
         )}
 
         {activeTab === "grid" && (
-          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
+          <div className="flex-1 overflow-y-auto pb-6" style={{ scrollbarWidth: "none" }}>
             <TemplatePicker selected={selectedTemplate} onSelect={onSelectTemplate} />
           </div>
         )}
