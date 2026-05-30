@@ -1275,6 +1275,7 @@ export default function Index() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [brandName, setBrandName] = useState("Creative Portfolio");
   const [subdomain, setSubdomain] = useState("realitycheque.io");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -1325,194 +1326,199 @@ export default function Index() {
   return (
     <div className="min-h-screen font-inter bg-[#FBFBFB] text-black antialiased relative overflow-x-hidden">
       
-      {/* ── Editor Style Navbar/Top-bar (No shadow) ── */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-md border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none shadow-none">
-        {/* Left Logo Side */}
-        <div className="flex items-center gap-3">
-          <img
-            src="/logo.png"
-            alt="Webild"
-            className="h-7 w-auto object-contain cursor-pointer"
-            onClick={() => router.push("/")}
-          />
-          <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{brandName}</span>
-        </div>
+      {/* ── Original Floating Navbar ── */}
+      <Navbar />
 
-        {/* Right Action Side */}
-        <div className="flex items-center gap-2 relative">
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(`https://${subdomain}`);
-              toast.success("Site link copied to clipboard!");
-            }}
-            className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
-          >
-            Share
-          </button>
-          
-          <button
-            onClick={() => {
-              toast.loading("Publishing changes...");
-              setTimeout(() => {
-                toast.dismiss();
-                toast.success("Your site updates are live!");
-              }, 1000);
-            }}
-            className="h-8 px-5 text-xs font-semibold bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-all active:scale-[0.97]"
-          >
-            Publish
-          </button>
+      {/* ── Sidebar Toggle Trigger ── */}
+      {!isSidebarOpen && (
+        <button
+          onClick={() => setIsSidebarOpen(true)}
+          className="fixed left-5 top-28 z-40 w-10 h-10 rounded-full bg-white border border-[#E6E6E6] hover:bg-[#F7F7F7] active:scale-95 flex items-center justify-center shadow-[0_6px_10px_-6px_#00000016] transition-all"
+          title="Open Sidebar"
+        >
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      )}
 
-          {/* User Menu Avatar Trigger */}
-          <button
-            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
-          >
-            <img 
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-              alt="Avatar" 
-              className="w-full h-full object-cover" 
+      {/* ── Floating Overlay Sidebar (Closed by default, gap on left) ── */}
+      <AnimatePresence>
+        {isSidebarOpen && (
+          <>
+            {/* Backdrop overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSidebarOpen(false)}
+              className="fixed inset-0 z-45 bg-black/15 backdrop-blur-[2px]"
             />
-          </button>
 
-          {/* User Dropdown Menu */}
-          <AnimatePresence>
-            {isUserMenuOpen && (
-              <UserMenu />
-            )}
-          </AnimatePresence>
-        </div>
-      </header>
-
-      {/* ── Main Container (Sidebar + Content Side-by-Side) ── */}
-      <div className="flex pt-14 min-h-screen relative z-10">
-        
-        {/* ── Sidebar (Sticky Left, same as Dashboard but Home active) ── */}
-        <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
-          
-          {/* Top navigation items */}
-          <div className="flex flex-col gap-6">
-            
-            {/* New Website Button */}
-            <button 
-              onClick={() => router.push("/onboarding")}
-              className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
+            {/* Floating Sidebar Panel */}
+            <motion.aside
+              initial={{ opacity: 0, x: -60, scale: 0.95 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: -60, scale: 0.95 }}
+              transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+              className="fixed left-5 top-28 bottom-5 w-[260px] border border-[#E6E6E6] bg-white/95 backdrop-blur-md px-6 py-6 flex flex-col justify-between z-50 select-none rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
             >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
-                <rect width="18" height="18" x="3" y="3" rx="2" />
-                <path d="M9 12h6M12 9v6" />
-              </svg>
-              New Website
-            </button>
-
-            {/* Menu Items (Home Active) */}
-            <div className="flex flex-col gap-1.5">
-              <button 
-                className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
-                style={{ boxShadow: "0 6px 10px -6px #00000016" }}
-              >
-                <Home className="w-[18px] h-[18px] text-[#1A68FF]" />
-                Home
-              </button>
-
-              <button 
-                onClick={() => router.push("/editor")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
-              >
-                <LayoutIcon className="w-[18px] h-[18px] text-black" />
-                Templates
-              </button>
-
-              <button 
-                onClick={() => router.push("/dashboard")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
-              >
-                <Folder className="w-[18px] h-[18px] text-black" />
-                All Websites
-              </button>
-            </div>
-
-            {/* Recent Websites Section */}
-            <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
               
-              <div 
-                onClick={() => router.push("/dashboard")}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
-              >
-                <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
-                  c
+              {/* Top navigation items */}
+              <div className="flex flex-col gap-6">
+                
+                {/* Header with Close button */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-black/40 uppercase tracking-wider">Navigation</span>
+                  <button 
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-black/5 text-[#171717]/60 hover:text-black transition-colors"
+                  >
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M18 6 6 18M6 6l12 12" />
+                    </svg>
+                  </button>
                 </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
+
+                {/* New Website Button */}
+                <button 
+                  onClick={() => {
+                    setIsSidebarOpen(false);
+                    router.push("/onboarding");
+                  }}
+                  className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
+                >
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M9 12h6M12 9v6" />
+                  </svg>
+                  New Website
+                </button>
+
+                {/* Menu Items (Home Active) */}
+                <div className="flex flex-col gap-1.5">
+                  <button 
+                    className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all text-left"
+                    style={{ boxShadow: "0 6px 10px -6px #00000016" }}
+                  >
+                    <Home className="w-[18px] h-[18px] text-[#1A68FF]" />
+                    Home
+                  </button>
+
+                  <button 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      router.push("/editor");
+                    }}
+                    className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
+                  >
+                    <LayoutIcon className="w-[18px] h-[18px] text-black" />
+                    Templates
+                  </button>
+
+                  <button 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      router.push("/dashboard");
+                    }}
+                    className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
+                  >
+                    <Folder className="w-[18px] h-[18px] text-black" />
+                    All Websites
+                  </button>
+                </div>
+
+                {/* Recent Websites Section */}
+                <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
+                  <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
+                  
+                  <div 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      router.push("/dashboard");
+                    }}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
+                      c
+                    </div>
+                    <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
+                  </div>
+                </div>
+
               </div>
-            </div>
 
-          </div>
+              {/* Bottom navigation & pricing items */}
+              <div className="flex flex-col gap-6">
+                
+                {/* Pricing, Documentation, Settings */}
+                <div className="flex flex-col gap-1">
+                  <button 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      toast.info("Pricing modal coming soon!");
+                    }}
+                    className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
+                  >
+                    <CreditCard className="w-[18px] h-[18px] text-black" />
+                    Pricing
+                  </button>
 
-          {/* Bottom navigation & pricing items */}
-          <div className="flex flex-col gap-6">
-            
-            {/* Pricing, Documentation, Settings */}
-            <div className="flex flex-col gap-1">
-              <button 
-                onClick={() => toast.info("Pricing modal coming soon!")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
-              >
-                <CreditCard className="w-[18px] h-[18px] text-black" />
-                Pricing
-              </button>
+                  <button 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      toast.info("Documentation coming soon!");
+                    }}
+                    className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
+                  >
+                    <BookOpen className="w-[18px] h-[18px] text-black" />
+                    Documentation
+                  </button>
 
-              <button 
-                onClick={() => toast.info("Documentation coming soon!")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
-              >
-                <BookOpen className="w-[18px] h-[18px] text-black" />
-                Documentation
-              </button>
+                  <button 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      toast.info("Settings panel coming soon!");
+                    }}
+                    className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
+                  >
+                    <Settings className="w-[18px] h-[18px] text-black" />
+                    Settings
+                  </button>
+                </div>
 
-              <button 
-                onClick={() => toast.info("Settings panel coming soon!")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
-              >
-                <Settings className="w-[18px] h-[18px] text-black" />
-                Settings
-              </button>
-            </div>
+                {/* Upgrade Plan Card with rainbow glow */}
+                <div className="p-5 rounded-[16px] bg-white/80 border border-[#E6E6E6] relative overflow-hidden flex flex-col gap-3 shadow-[0_0_15px_rgba(255,100,100,0.04)] before:absolute before:inset-0 before:rounded-[16px] before:border before:border-transparent before:bg-gradient-to-r before:from-pink-400 before:via-purple-400 before:to-blue-400 before:[mask-image:linear-gradient(white,white)_padding-box,linear-gradient(white,white)] before:[mask-clip:padding-box,border-box] before:pointer-events-none">
+                  <p className="text-[13px] font-bold text-black leading-tight">
+                    ONLY $16 to unlock Premium Features
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setIsSidebarOpen(false);
+                      toast.success("Upgrade Plan triggered!");
+                    }}
+                    className="w-full h-9 rounded-[8px] bg-[#3B82F6] hover:bg-[#2563eb] text-white text-[12px] font-bold flex items-center justify-center shadow-[0_4px_10px_rgba(59,130,246,0.3)] active:scale-[0.98] transition-all"
+                  >
+                    Upgrade Now
+                  </button>
+                </div>
 
-            {/* Upgrade Plan Card with rainbow glow */}
-            <div className="p-5 rounded-[16px] bg-white/80 border border-[#E6E6E6] relative overflow-hidden flex flex-col gap-3 shadow-[0_0_15px_rgba(255,100,100,0.04)] before:absolute before:inset-0 before:rounded-[16px] before:border before:border-transparent before:bg-gradient-to-r before:from-pink-400 before:via-purple-400 before:to-blue-400 before:[mask-image:linear-gradient(white,white)_padding-box,linear-gradient(white,white)] before:[mask-clip:padding-box,border-box] before:pointer-events-none">
-              <p className="text-[13px] font-bold text-black leading-tight">
-                ONLY $16 to unlock Premium Features
-              </p>
-              <button 
-                onClick={() => toast.success("Upgrade Plan triggered!")}
-                className="w-full h-9 rounded-[8px] bg-[#3B82F6] hover:bg-[#2563eb] text-white text-[12px] font-bold flex items-center justify-center shadow-[0_4px_10px_rgba(59,130,246,0.3)] active:scale-[0.98] transition-all"
-              >
-                Upgrade Now
-              </button>
-            </div>
+              </div>
 
-          </div>
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
 
-        </aside>
-
-        {/* ── Shifted Hero/Landing Content (Right Side) ── */}
-        <main className="flex-1 min-w-0 relative">
-          {/* Background Image inside main content container to align with screen background */}
-          <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
-            <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
-          </div>
-
-          <div className="relative z-10">
-            <HeroSection onGenerate={simulateGeneration} />
-            <TemplatesSection onSelectTemplate={handleSelectTemplate} />
-            <BusinessSection />
-            <FeaturesSection onStartTrial={handleTrial} />
-            <FAQSection />
-            <Footer />
-          </div>
+      {/* ── Main Full-Width Container ── */}
+      <div className="relative z-10 w-full min-h-screen">
+        <main className="w-full relative">
+          <HeroSection onGenerate={simulateGeneration} />
+          <TemplatesSection onSelectTemplate={handleSelectTemplate} />
+          <BusinessSection />
+          <FeaturesSection onStartTrial={handleTrial} />
+          <FAQSection />
+          <Footer />
         </main>
       </div>
 

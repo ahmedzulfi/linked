@@ -181,6 +181,15 @@ Buttons are the most expressive component family. `button-primary` uses the char
 
 Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action buttons.
 
+### Floating Overlay Sidebar
+The sidebar layout for floating navigation overlays uses a custom panel:
+- **Structure:** Absolute or fixed container with a left gap (`left-5`), top gap (`top-28`), and bottom gap (`bottom-5`).
+- **Width:** `260px` to maintain narrow, crisp spacing.
+- **Backdrop:** Light dark backdrop overlay (`bg-black/15`) with a subtle blur effect (`backdrop-blur-[2px]`).
+- **Surface & Shadows:** High-fidelity frosted glass effect (`bg-white/95 backdrop-blur-md`) with soft border division (`border border-[#E6E6E6]`) and atmospheric shadow (`shadow-[0_12px_32px_rgba(0,0,0,0.12)]`).
+- **Corner Radius:** Approachable rounded corners (`rounded-[16px]`).
+- **Trigger:** Sleek, floating pill or circle trigger button (`w-10 h-10 rounded-full`) featuring a minimalist chevron icon, offset in alignment to open/close panels cleanly.
+
 ## Motion & Animation Guidelines
 
 To deliver premium interfaces that feel tactile and responsive, all page motions must follow strict design engineering constraints.
