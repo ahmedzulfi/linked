@@ -297,7 +297,59 @@ export default function DashboardPage() {
             >
               Manage and access all your websites websites in one place.
             </p>
-
+            <div
+              className="relative flex items-center gap-1 px-3 py-3 rounded-sm button-secondary w-full md:w-80 h-fit text-base md:text-lg mt-2"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <svg
+                className="lucide lucide-search h-[1em] text-black"
+                height="24"
+                width="24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                <path
+                  d="m21 21-4.34-4.34"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  }}
+                />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  }}
+                />
+              </svg>
+              <input
+                className="w-full placeholder:text-black focus:outline-none text-base md:text-lg bg-transparent border-none p-0 focus:ring-0"
+                type="text"
+                placeholder="Search websites..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </div>
           </div>
 
           {/* Websites Grid */}
@@ -306,7 +358,13 @@ export default function DashboardPage() {
 
               {/* User-Styled Website card using exact code */}
               <div
-                className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
+                className={`relative flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group ${
+                  (!searchQuery || 
+                   brandName.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                   subdomain.toLowerCase().includes(searchQuery.toLowerCase())) 
+                    ? "flex" 
+                    : "hidden"
+                }`}
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
