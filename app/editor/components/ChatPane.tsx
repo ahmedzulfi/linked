@@ -114,22 +114,26 @@ export default function ChatPane({
   const chatTabs = [
     {
       id: "chat" as ChatTab,
-      icon: <MessageSquare className="w-4 h-4" />,
+      icon: (isActive: boolean) => (
+        <MessageSquare className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+      ),
       label: "Chat",
     },
     {
       id: "grid" as ChatTab,
-      icon: <LayoutGrid className="w-4 h-4" />,
+      icon: (isActive: boolean) => (
+        <LayoutGrid className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+      ),
       label: "Templates",
     },
     {
       id: "theme" as ChatTab,
-      icon: <Edit2 className="w-4 h-4" />,
+      icon: (isActive: boolean) => (
+        <Edit2 className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+      ),
       label: "Edit",
     },
   ];
-
-  const activeTabIndex = chatTabs.findIndex((t) => t.id === activeTab);
 
   return (
     <section className="w-[360px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
@@ -147,36 +151,61 @@ export default function ChatPane({
         </span>
       </div>
 
-      {/* Tabs Toolbar with Animated Pill */}
+      {/* Tabs Toolbar with Custom Premium Expandable Style */}
       <div className="px-6 py-3 border-b border-[#E6E6E6]/30 bg-[#FBFBFB] shrink-0">
-        <div className="relative flex bg-[#F3F3F5] rounded-xl p-[3px] h-9">
-          {/* Animated sliding pill */}
-          {activeTabIndex !== -1 && (
-            <motion.div
-              className="absolute top-[3px] bottom-[3px] bg-white rounded-[9px] shadow-[0_2px_5px_rgba(0,0,0,0.06)] border border-[#E6E6E6]/40"
-              style={{
-                width: `calc(100% / 3 - 4px)`,
-                left: `calc(${activeTabIndex} * (100% / 3) + 2px)`,
-              }}
-              layoutId="activeTabPill"
-              transition={{ type: "spring", stiffness: 380, damping: 30 }}
-            />
-          )}
-
+        <div className="relative flex items-center bg-zinc-100 rounded-xl p-[4px] h-10 w-full gap-1">
           {chatTabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
-              <button
+              <motion.button
+                layout
                 key={tab.id}
                 id={tab.id === "grid" ? "onboarding-templates-tab" : undefined}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative z-10 flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold cursor-pointer transition-colors duration-150 ${
-                  isActive ? "text-black" : "text-gray-500 hover:text-black"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none ${
+                  isActive 
+                    ? "flex-grow text-blue-500 px-4 font-['Inter_Tight']" 
+                    : "w-12 text-[#171717]/60 hover:bg-zinc-200/40 transition-colors duration-150"
                 }`}
               >
-                {tab.icon}
-                <span>{tab.label}</span>
-              </button>
+                {/* Smoothly animated background pill */}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTabPill"
+                    className="absolute inset-0 bg-blue-50 outline outline-1 outline-blue-500/50 rounded-xl"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+
+                {/* Content wrapper to render above the absolute background pill */}
+                <div className="relative z-10 flex items-center justify-center shrink-0">
+                  {tab.icon(isActive)}
+                </div>
+
+                {/* Label (visible only when active) */}
+                {isActive && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.15, delay: 0.05 }}
+                    className="relative z-10 ml-1.5 text-xs font-semibold whitespace-nowrap text-blue-500 font-['Inter_Tight']"
+                  >
+                    {tab.label}
+                  </motion.span>
+                )}
+
+                {/* Tooltip for inactive tabs */}
+                {!isActive && (
+                  <div className="absolute top-10 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col items-center">
+                    {/* Small arrow pointing up */}
+                    <div className="w-2 h-2 bg-zinc-800 rotate-45 -mb-1 shadow-[0px_5px_6px_0px_rgba(0,0,0,0.12)]" />
+                    <div className="px-3 py-1 bg-gradient-to-b from-zinc-800 to-zinc-700 text-white text-[10px] font-medium font-['Inter_Tight'] rounded-lg shadow-[0px_5px_6px_0px_rgba(0,0,0,0.12),inset_0px_1px_0px_0px_rgba(255,255,255,0.25),inset_0px_-3px_4px_0px_rgba(0,0,0,0.20)] whitespace-nowrap">
+                      {tab.label}
+                    </div>
+                  </div>
+                )}
+              </motion.button>
             );
           })}
         </div>
