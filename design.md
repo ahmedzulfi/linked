@@ -203,6 +203,13 @@ The sidebar editor layout picker for layout presets and AI generation uses:
 - **Card Elements:** Width `208.61px`, height `156.45px` with a `13px` corner radius, an underlying gradient mask, and action overlays on hover.
 - **Interactive Tabs:** Split buttons of width `206.5px` (Presets) and `210.52px` (AI Generator) with hover-active states and glow shadows.
 
+### Media Picker Panel
+The media asset manager and uploader uses:
+- **Dimensions:** Identical structural specifications as the layout picker, maintaining width `486.25px`, height `831.45px`, and content boundaries of `434.09px`.
+- **Card Elements:** Two-column grid of image cards, each sized `w-[208.61px]` by `h-[156.45px]` with a `13px` corner radius, bottom gradient backdrop overlay, category text labels, and click/explore hover states.
+- **Controls & Tabs:** Interactive "Your Uploads" button of width `206.5px` and "Generate Images" button of width `210.52px` with absolute positioning for the glowing multicolor shadow. Includes a standard magnifying glass search field.
+
+
 ## Motion & Animation Guidelines
 
 To deliver premium interfaces that feel tactile and responsive, all page motions must follow strict design engineering constraints.

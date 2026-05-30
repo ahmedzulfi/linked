@@ -6,9 +6,11 @@ import { toast } from "sonner";
 import { ProfileData, TemplateId } from "@/shared/types";
 import TemplatePicker from "./TemplatePicker";
 import InlineEditor from "./InlineEditor";
+import MediaPicker from "./MediaPicker";
+import DomainsPane from "./DomainsPane";
 import { motion, AnimatePresence } from "framer-motion";
 
-export type ChatTab = "chat" | "theme" | "grid";
+export type ChatTab = "chat" | "media" | "grid" | "theme" | "domains" | "fonts" | "pages";
 
 interface ChatPaneProps {
   onCommand: (cmd: string) => void;
@@ -120,6 +122,17 @@ export default function ChatPane({
       label: "Chat",
     },
     {
+      id: "media" as ChatTab,
+      icon: (isActive: boolean) => (
+        <svg className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+          <polygon points="10 8 16 11 10 14 10 8" />
+          <line x1="12" y1="17" x2="12" y2="21" />
+        </svg>
+      ),
+      label: "Media",
+    },
+    {
       id: "grid" as ChatTab,
       icon: (isActive: boolean) => (
         <LayoutGrid className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
@@ -127,11 +140,36 @@ export default function ChatPane({
       label: "Templates",
     },
     {
-      id: "theme" as ChatTab,
+      id: "domains" as ChatTab,
       icon: (isActive: boolean) => (
-        <Edit2 className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+        <svg className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
       ),
-      label: "Edit",
+      label: "Domains",
+    },
+    {
+      id: "fonts" as ChatTab,
+      icon: (isActive: boolean) => (
+        <svg className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="4 7 4 4 20 4 20 7" />
+          <line x1="9" y1="20" x2="15" y2="20" />
+          <line x1="12" y1="4" x2="12" y2="20" />
+        </svg>
+      ),
+      label: "Fonts",
+    },
+    {
+      id: "pages" as ChatTab,
+      icon: (isActive: boolean) => (
+        <svg className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+          <line x1="9" y1="3" x2="9" y2="21" />
+        </svg>
+      ),
+      label: "Pages",
     },
   ];
 
@@ -316,6 +354,12 @@ export default function ChatPane({
           </>
         )}
 
+        {activeTab === "media" && (
+          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
+            <MediaPicker />
+          </div>
+        )}
+
         {activeTab === "grid" && (
           <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
             <TemplatePicker selected={selectedTemplate} onSelect={onSelectTemplate} />
@@ -330,6 +374,60 @@ export default function ChatPane({
               activeTab={editorTab}
               setActiveTab={setEditorTab}
             />
+          </div>
+        )}
+
+        {activeTab === "domains" && (
+          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
+            <DomainsPane />
+          </div>
+        )}
+
+        {activeTab === "fonts" && (
+          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4 flex flex-col gap-4 font-inter text-[#171717]" style={{ scrollbarWidth: "none" }}>
+            <div className="bg-[#fbfbfb] rounded-[13px] border border-black/5 p-4 flex flex-col gap-4">
+              <h3 className="font-semibold text-sm">Typography Settings</h3>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-zinc-400 font-medium">Headline Font</label>
+                <select className="bg-white border border-[#E6E6E6] rounded-lg p-2 text-xs outline-none">
+                  <option>Inter Tight (Default)</option>
+                  <option>Playfair Display</option>
+                  <option>Outfit</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-2">
+                <label className="text-xs text-zinc-400 font-medium">Body Text Font</label>
+                <select className="bg-white border border-[#E6E6E6] rounded-lg p-2 text-xs outline-none">
+                  <option>Inter (Default)</option>
+                  <option>Roboto</option>
+                  <option>Outfit</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "pages" && (
+          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4 flex flex-col gap-4 font-inter text-[#171717]" style={{ scrollbarWidth: "none" }}>
+            <div className="bg-[#fbfbfb] rounded-[13px] border border-black/5 p-4 flex flex-col gap-4">
+              <h3 className="font-semibold text-sm">Pages List</h3>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between border border-[#E6E6E6] bg-white rounded-lg p-3 text-xs">
+                  <span>Home</span>
+                  <span className="text-[10px] bg-green-50 text-green-600 px-1.5 py-0.5 rounded font-bold uppercase">Active</span>
+                </div>
+                <div className="flex items-center justify-between border border-[#E6E6E6] bg-white rounded-lg p-3 text-xs opacity-60">
+                  <span>About</span>
+                  <span className="text-[10px] bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-bold uppercase">Draft</span>
+                </div>
+              </div>
+              <button 
+                onClick={() => toast.success("Added new draft page!")}
+                className="w-full h-10 bg-[#2A2A2F] text-white font-medium rounded-lg text-xs hover:bg-[#3A3A42] transition-colors"
+              >
+                Add new page
+              </button>
+            </div>
           </div>
         )}
       </div>
