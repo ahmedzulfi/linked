@@ -201,7 +201,7 @@ The sidebar layout for floating navigation overlays uses a custom panel:
 The sidebar editor layout picker for layout presets and AI generation uses:
 - **Dimensions:** Width `486.25px`, height `831.45px`, with content region of `434.09px` centered using `26.08px` horizontal margins.
 - **Card Elements:** Width `208.61px`, height `156.45px` with a `13px` corner radius, an underlying gradient mask, and action overlays on hover.
-- **Interactive Tabs:** Split buttons of width `206.5px` (Presets) and `210.52px` (AI Generator) with hover-active states and glow shadows.
+- **Controls:** A simple header "Template Library" and a magnifying glass search field. The previous tab-selector buttons ("Presets" and "Generate AI") have been removed to display the template library directly.
 
 ### Media Picker Panel
 The media asset manager and uploader uses:
