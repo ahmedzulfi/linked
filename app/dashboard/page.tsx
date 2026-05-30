@@ -41,10 +41,19 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-inter flex flex-col text-black antialiased">
+    <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
       
+      {/* ── Background Graphic (Same as Hero bg on Landing Page) ── */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
+        <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
+      </div>
+
       {/* ── Editor Style Navbar/Top-bar ── */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none">
+      <header 
+        className="fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-md border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none"
+        style={{ boxShadow: "0 6px 10px -6px #00000016" }}
+      >
         {/* Left Logo Side */}
         <div className="flex items-center gap-3">
           <img
@@ -65,6 +74,7 @@ export default function DashboardPage() {
               toast.success("Site link copied to clipboard!");
             }}
             className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
+            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
           >
             Share
           </button>
@@ -78,6 +88,7 @@ export default function DashboardPage() {
               }, 1000);
             }}
             className="h-8 px-5 text-xs font-semibold bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-all active:scale-[0.97]"
+            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
           >
             Publish
           </button>
@@ -85,7 +96,8 @@ export default function DashboardPage() {
           {/* User Menu Avatar Trigger */}
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-sm hover:scale-105 active:scale-95 transition-all ml-1"
+            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
+            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
           >
             <img 
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
@@ -104,7 +116,8 @@ export default function DashboardPage() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: -8 }}
                   transition={{ duration: 0.15, ease: "easeOut" }}
-                  className="absolute right-0 top-10 z-50 w-52 bg-white border border-[#EBEBEB] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] py-1.5 flex flex-col"
+                  className="absolute right-0 top-10 z-50 w-52 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
+                  style={{ boxShadow: "0 6px 10px -6px #00000016" }}
                 >
                   <div className="px-4 py-2 border-b border-[#F5F5F7] mb-1">
                     <p className="text-[13px] font-bold text-black truncate">{brandName}</p>
@@ -139,10 +152,10 @@ export default function DashboardPage() {
       </header>
 
       {/* ── Main Container (Sidebar + Content) ── */}
-      <div className="flex-1 flex pt-14 min-h-screen">
+      <div className="flex-1 flex pt-14 min-h-screen relative z-10">
         
         {/* ── Sidebar (Sticky Left) ── */}
-        <aside className="w-[260px] border-r border-[#F3F3F5] px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
+        <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
           
           {/* Top navigation items */}
           <div className="flex flex-col gap-6">
@@ -151,6 +164,7 @@ export default function DashboardPage() {
             <button 
               onClick={() => router.push("/onboarding")}
               className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
+              style={{ boxShadow: "0 6px 10px -6px #00000016" }}
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
                 <rect width="18" height="18" x="3" y="3" rx="2" />
@@ -163,7 +177,7 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-1.5">
               <button 
                 onClick={() => router.push("/")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-[#F9F9FB] flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <Home className="w-[18px] h-[18px] text-black" />
                 Home
@@ -171,7 +185,7 @@ export default function DashboardPage() {
 
               <button 
                 onClick={() => router.push("/editor")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-[#F9F9FB] flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <Layout className="w-[18px] h-[18px] text-black" />
                 Templates
@@ -180,6 +194,7 @@ export default function DashboardPage() {
               {/* Active Tab */}
               <button 
                 className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
+                style={{ boxShadow: "0 6px 10px -6px #00000016" }}
               >
                 <Folder className="w-[18px] h-[18px] text-[#1A68FF]" />
                 All Websites
@@ -190,7 +205,10 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
               <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
               
-              <div className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-[#F9F9FB] cursor-pointer transition-all">
+              <div 
+                className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
+                style={{ boxShadow: "0 6px 10px -6px #00000016" }}
+              >
                 <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
                   c
                 </div>
@@ -207,7 +225,7 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-1">
               <button 
                 onClick={() => toast.info("Pricing modal coming soon!")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-[#F9F9FB] flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <CreditCard className="w-[18px] h-[18px] text-black" />
                 Pricing
@@ -215,7 +233,7 @@ export default function DashboardPage() {
 
               <button 
                 onClick={() => toast.info("Documentation coming soon!")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-[#F9F9FB] flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <BookOpen className="w-[18px] h-[18px] text-black" />
                 Documentation
@@ -223,7 +241,7 @@ export default function DashboardPage() {
 
               <button 
                 onClick={() => toast.info("Settings panel coming soon!")}
-                className="w-full h-10 px-3 rounded-[8px] hover:bg-[#F9F9FB] flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <Settings className="w-[18px] h-[18px] text-black" />
                 Settings
@@ -261,10 +279,11 @@ export default function DashboardPage() {
                 All
               </span>{" "}
               <span
-                className="inline-block relative button-accent -rotate-12 aspect-square align-middle mx-1 rounded-sm h-[1em] w-auto bg-[#3B82F6] p-2 shadow-[0_4px_10px_rgba(59,130,246,0.35)]"
+                className="inline-block relative button-accent -rotate-12 aspect-square align-middle mx-1 rounded-sm h-[1em] w-auto bg-[#3B82F6] p-2"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  boxShadow: "0 6px 10px -6px #00000016"
                 }}
               >
                 <img
@@ -299,10 +318,11 @@ export default function DashboardPage() {
               Manage and access all your websites websites in one place.
             </p>
             <div
-              className="relative flex items-center gap-1.5 px-4 py-2.5 rounded-[12px] bg-[#F3F3F5] hover:bg-[#EAEAEB] w-full h-fit text-base"
+              className="relative flex items-center gap-1.5 px-4 py-2.5 rounded-[12px] bg-[#F3F3F5]/80 hover:bg-[#EAEAEB]/90 backdrop-blur-sm w-full h-fit text-base border border-black/5"
               style={{
                 scrollbarWidth: "thin",
                 scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                boxShadow: "0 6px 10px -6px #00000016"
               }}
             >
               <svg
@@ -359,10 +379,11 @@ export default function DashboardPage() {
               
               {/* User-Styled Website card using exact code */}
               <div
-                className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
+                className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  boxShadow: "0 6px 10px -6px #00000016"
                 }}
               >
                 <div
@@ -405,7 +426,7 @@ export default function DashboardPage() {
                             transition: "opacity 0.3s",
                             width: "1280px",
                             height: "720px",
-                            transform: "scale(0.265)", // scaled to fit the 16:9 card aspect beautifully
+                            transform: "scale(0.265)",
                             transformOrigin: "left top",
                             opacity: 1,
                           }}
@@ -494,7 +515,10 @@ export default function DashboardPage() {
                       {showDropdown && (
                         <>
                           <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
-                          <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] py-1.5 flex flex-col">
+                          <div 
+                            className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
+                            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
+                          >
                             <button 
                               onClick={() => { setShowDropdown(false); router.push("/editor"); }}
                               className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
