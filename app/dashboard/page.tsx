@@ -19,12 +19,16 @@ import { toast } from "sonner";
 
 function UserMenu() {
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, transform: "scale(0.95)" }}
+      animate={{ opacity: 1, transform: "scale(1)" }}
+      exit={{ opacity: 0, transform: "scale(0.95)" }}
+      transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
       className="absolute z-55 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_#ffff,0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-        opacity: 1,
+        transformOrigin: "top right"
       }}
     >
       <div
@@ -360,7 +364,7 @@ function UserMenu() {
           Sign out
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
