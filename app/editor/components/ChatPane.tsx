@@ -250,66 +250,151 @@ export default function ChatPane({
         {activeTab === "chat" && (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 pb-4 pt-4 flex flex-col gap-6" style={{ scrollbarWidth: "none" }}>
-              <AnimatePresence initial={false}>
-                {messages.map((msg) => (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                  >
-                    {msg.role === "user" ? (
-                      <div className="flex justify-end">
-                        <div className="bg-white py-3 px-5 rounded-[18px] max-w-[85%] border border-neutral-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
-                          <p className="text-[14px] text-neutral-800 font-normal leading-normal">{msg.content}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-2.5 w-full">
-                        {/* Header: Blue sphere and name "Webild" */}
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#3b82f6] via-[#1d4ed8] to-[#1e3a8a] relative overflow-hidden shadow-sm flex-shrink-0">
-                            {/* Inner glossy highlight */}
-                            <div className="absolute top-[2px] left-[3px] w-2.5 h-1.5 rounded-full bg-white/40 blur-[0.5px] transform -rotate-12"></div>
-                          </div>
-                          <span className="font-semibold text-[14.5px] text-neutral-900 leading-none">
-                            Webild
-                          </span>
-                        </div>
-                        {/* Message content: No bubble background, plain text */}
-                        <div className="flex flex-col gap-3.5 pl-0 max-w-full">
-                          {msg.content.split("\n\n").map((para, i) => {
-                            // Check if paragraph starts with a subheader like "Color Palette"
-                            if (para.trim().startsWith("Color Palette")) {
-                              return (
-                                <div key={i} className="flex flex-col gap-1 mt-1">
-                                  <span className="text-[12px] font-semibold uppercase tracking-wider text-zinc-400 font-['Inter_Tight']">
-                                    Color Palette
-                                  </span>
-                                  {/* Render rest of text if any, or just empty space */}
-                                  {para.replace("Color Palette", "").trim() && (
-                                    <p className="text-[14px] text-neutral-800 font-normal leading-relaxed">
-                                      {para.replace("Color Palette", "").trim()}
-                                    </p>
-                                  )}
+            <div className="flex-1 overflow-y-auto w-full px-4" style={{ scrollbarWidth: "none" }}>
+              <div className="max-w-[479px] mx-auto flex flex-col gap-6 pb-4 pt-4 w-full">
+                <AnimatePresence initial={false}>
+                  {messages.map((msg) => (
+                    <motion.div
+                      key={msg.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+                      className="w-full flex flex-col"
+                    >
+                      {msg.role === "user" ? (
+                        <div className="w-full flex justify-end items-start">
+                          <div className="max-w-[85%] flex flex-col justify-start items-start">
+                            <div className="BackgroundBorder min-h-9 px-4 py-3 relative bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start">
+                              <div className="OverlayShadow w-24 h-14 left-0 top-0 absolute bg-white/0 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] pointer-events-none" />
+                              <div className="Container self-stretch pb-[0.63px] flex flex-col justify-start items-start">
+                                <div className="HiHellow justify-center text-black text-[15px] font-normal font-['Inter'] leading-7 break-words max-w-full">
+                                  {msg.content}
                                 </div>
-                              );
-                            }
-                            return (
-                              <p key={i} className="text-[14.5px] text-neutral-800 font-normal leading-relaxed whitespace-pre-wrap">
-                                {para}
-                              </p>
-                            );
-                          })}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              <div ref={bottomRef} />
-            </div>
+                      ) : (
+                        <div className="w-full flex flex-col justify-start items-start gap-2">
+                          <div className="self-stretch inline-flex justify-start items-center gap-2">
+                            {/* Logo */}
+                            <div className="Logo relative flex items-center justify-center">
+                              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="8.5" cy="8.5" r="8" fill="url(#blueSphereGrad4)" />
+                                <path d="M4.5 5.5 C 5.5 3.5, 9.5 3.5, 12.5 5.5 C 10.5 4.5, 6.5 4.5, 4.5 5.5 Z" fill="white" opacity="0.4" />
+                                <defs>
+                                  <radialGradient id="blueSphereGrad4" cx="30%" cy="30%" r="70%">
+                                    <stop offset="0%" stopColor="#4fa3ff" />
+                                    <stop offset="40%" stopColor="#1a73e8" />
+                                    <stop offset="100%" stopColor="#0d47a1" />
+                                  </radialGradient>
+                                </defs>
+                              </svg>
+                            </div>
+                            <div className="w-14 h-7 relative">
+                              <div className="Webild left-0 top-[-1px] absolute justify-center text-black text-lg font-medium font-['Inter'] leading-7">Webild</div>
+                            </div>
+                          </div>
+                          
+                          <div className="self-stretch flex flex-col justify-start items-start w-full">
+                            <div className="justify-center text-neutral-900 text-[15px] font-normal font-['Inter'] leading-7 whitespace-pre-wrap w-full">
+                              {msg.content}
+                            </div>
+                          </div>
+
+                          {/* Dynamic attachment previews for the mockup portfolio response */}
+                          {msg.id === "4" && (
+                            <div className="w-full flex flex-col justify-start items-start gap-4 mt-3">
+                              {/* 1. Carousel preview section */}
+                              <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
+                                <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start w-full">
+                                  <div className="SectionStackCarousel self-stretch h-48 relative w-full overflow-hidden">
+                                    <div className="Container w-full max-w-96 h-48 left-0 top-0 absolute">
+                                      <div className="BackgroundBorderShadow w-60 h-28 left-[343.55px] top-[13.58px] absolute origin-top-left rotate-[20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-60 h-28 left-[343.55px] top-[13.58px] absolute origin-top-left rotate-[20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-60 h-28 left-[-126.70px] top-[93.65px] absolute origin-top-left rotate-[-20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-60 h-28 left-[-126.70px] top-[93.65px] absolute origin-top-left rotate-[-20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-72 h-36 left-[174.13px] top-[11.35px] absolute origin-top-left rotate-[10deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-72 h-36 left-[-6.26px] top-[58.77px] absolute origin-top-left rotate-[-10deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-80 h-40 left-[118.69px] top-[2.70px] absolute origin-top-left rotate-[5deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      <div className="BackgroundBorderShadow w-80 h-40 left-[7.20px] top-[29.90px] absolute origin-top-left rotate-[-5deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
+                                      
+                                      <div className="BackgroundBorderShadow w-full max-w-96 h-48 left-[23.33px] top-0 absolute bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100 overflow-hidden flex items-center justify-center p-4">
+                                        <div className="flex flex-col items-center text-center gap-1">
+                                          <span className="font-semibold text-[13px] text-neutral-800">Portfolio Preview</span>
+                                          <span className="text-[11px] text-zinc-400">Template applied to active canvas</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                                    <button className="Button h-9 px-2.5 left-0 top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
+                                      <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
+                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M5 1L1 5L5 9" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                      </div>
+                                    </button>
+                                    <button className="Button h-9 px-2.5 left-[401.49px] top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
+                                      <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
+                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M1 1L5 5L1 9" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                      </div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+
+                                {/* 2. Checklist section */}
+                                <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
+                                  <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
+                                    {[
+                                      "About Me description",
+                                      "Project Showcase grid",
+                                      "Responsive layout support",
+                                      "Contact Form interface",
+                                      "Resume download feature",
+                                      "Skills & Tools inventory",
+                                      "Testimonials section",
+                                      "Custom footer metadata",
+                                      "Navigation header links"
+                                    ].map((item, idx) => (
+                                      <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
+                                        <div className="w-5 h-5 rounded-full border border-[#E6E6E6] flex items-center justify-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                                          <div className="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-80" />
+                                        </div>
+                                        <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{item}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+
+                                {/* 3. Color Palette section */}
+                                <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
+                                  <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
+                                    {[
+                                      { name: "Ocean Breeze", colors: "from-blue-600 to-cyan-400" },
+                                      { name: "Sunset Glow", colors: "from-orange-500 to-rose-400" },
+                                      { name: "Forest Moss", colors: "from-emerald-600 to-teal-400" },
+                                      { name: "Lavender Fields", colors: "from-purple-600 to-pink-400" }
+                                    ].map((palette, idx) => (
+                                      <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
+                                        <div className={`Gradient w-5 h-5 bg-gradient-to-b ${palette.colors} rounded-full shadow-sm`} />
+                                        <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{palette.name}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                  <div ref={bottomRef} />
+                </div>
+              </div>
 
             {/* Input area */}
             <div className="p-4 shrink-0 bg-white flex flex-col gap-3">
