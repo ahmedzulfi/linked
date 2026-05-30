@@ -1303,7 +1303,7 @@ export default function Index() {
       toast.error("Please paste a valid LinkedIn profile URL (linkedin.com/in/…)");
       return;
     }
-    router.push(`/convert?url=${encodeURIComponent(raw)}`);
+    router.push(`/onboarding?url=${encodeURIComponent(raw)}`);
   };
 
   const handleSelectTemplate = (templateName: string) => {

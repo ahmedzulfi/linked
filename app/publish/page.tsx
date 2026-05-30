@@ -4,7 +4,7 @@ import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
   Check,
@@ -21,7 +21,12 @@ function PublishInner() {
   const params = useSearchParams();
   const router = useRouter();
   const slug = params.get("slug") ?? "yourname";
-  const url = `https://linkedpage.io/${slug}`;
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    setUrl(`${window.location.origin}/p/${slug}`);
+  }, [slug]);
+
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {

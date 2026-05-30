@@ -190,6 +190,13 @@ The sidebar layout for floating navigation overlays uses a custom panel:
 - **Corner Radius:** Approachable rounded corners (`rounded-[16px]`).
 - **Trigger:** Sleek, floating pill or circle trigger button (`w-10 h-10 rounded-full`) featuring a minimalist chevron icon, offset in alignment to open/close panels cleanly.
 
+### User Menu (Profile Menu)
+- **Structure:** Absolute container positioned relative to the top right of the navigation header (`right-0 top-10`).
+- **Width:** `280px` (w-72) to accommodate user details and quick actions cleanly.
+- **Surface & Shadows:** Frosted glass panel (`bg-white/70 backdrop-blur-xl`) with a thin border (`border border-black/5` or `border-[#E6E6E6]`) and elevated shadows (`shadow-[0_8px_32px_rgba(0,0,0,0.08)]`).
+- **Corner Radius:** Approvingly rounded corners (`rounded-2xl`).
+- **Details:** Includes user avatar, name, email, quick links, and a log-out action button utilizing the brand's secondary/tertiary colors.
+
 ## Motion & Animation Guidelines
 
 To deliver premium interfaces that feel tactile and responsive, all page motions must follow strict design engineering constraints.

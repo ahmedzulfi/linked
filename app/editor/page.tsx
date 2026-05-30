@@ -1,14 +1,16 @@
 "use client";
 
-import { Suspense, useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEditor } from "@/context/EditorContext";
-import { type TemplateId, TEMPLATES, ProfileData } from "@/shared/types";
-import TemplatePicker from "./components/TemplatePicker";
-import InlineEditor from "./components/InlineEditor";
+import { type TemplateId, TEMPLATES } from "@/shared/types";
 import ProfilePreview from "./components/ProfilePreview";
+import ChatPane, { ChatTab } from "./components/ChatPane";
+import DomainsPane from "./components/DomainsPane";
+import SettingsPane from "./components/SettingsPane";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { UserMenu } from "@/components/UserMenu";
 
 // ─── Left Sidebar Icons ────────────────────────────────────────────────────────
 type NavItem = { icon: React.ReactNode; label: string; active?: boolean };
@@ -50,900 +52,6 @@ const navItems: NavItem[] = [
   },
 ];
 
-// ─── Chat Message types ────────────────────────────────────────────────────────
-interface ChatMessage {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  time: string;
-}
-
-const initialMessages: ChatMessage[] = [
-  {
-    id: "1",
-    role: "user",
-    content: "Build me a LinkedIn micro-site",
-    time: "",
-  },
-  {
-    id: "2",
-    role: "assistant",
-    content:
-      "Got it! I've loaded your LinkedIn profile data and applied the Minimal Card template. Use the canvas on the right to preview. Want me to switch to a different template or adjust anything?",
-    time: "",
-  },
-];
-
-const SUGGESTIONS = ["Change template", "Edit bio", "Add links", "Dark mode"];
-
-// ─── Chat Pane ─────────────────────────────────────────────────────────────────
-type ChatTab = "chat" | "preview" | "grid" | "theme" | "sort" | "copy";
-
-function ChatPane({
-  onCommand,
-  profileName,
-  profile,
-  selectedTemplate,
-  onSelectTemplate,
-  onChangeField,
-  activeTab,
-  setActiveTab,
-}: {
-  onCommand: (cmd: string) => void;
-  profileName: string;
-  profile: ProfileData | null;
-  selectedTemplate: TemplateId;
-  onSelectTemplate: (id: TemplateId) => void;
-  onChangeField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
-  activeTab: ChatTab;
-  setActiveTab: (tab: ChatTab) => void;
-}) {
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
-  const [input, setInput] = useState("");
-  const bottomRef = useRef<HTMLDivElement>(null);
-
-  const sendMessage = (text?: string) => {
-    const msg = text ?? input.trim();
-    if (!msg) return;
-    setInput("");
-
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      role: "user",
-      content: msg,
-      time: "",
-    };
-    setMessages((prev) => [...prev, userMsg]);
-
-    // Simulate AI reply
-    setTimeout(() => {
-      const replies: Record<string, string> = {
-        "change template": "Sure! Switched you to the templates tab. You can select one directly below or ask me.",
-        "edit bio": "Of course. Switched you to the Edit profile tab so you can modify your bio.",
-        "add links": "Open the Edit profile tab and navigate to the Links section.",
-        "dark mode": "Applied Dark Mode template! Check the preview.",
-      };
-      const lower = msg.toLowerCase();
-      let reply = "I'll apply that change to your micro-site now. Let me know if you'd like any tweaks!";
-      for (const [k, v] of Object.entries(replies)) {
-        if (lower.includes(k)) { reply = v; break; }
-      }
-
-      if (lower.includes("change template")) {
-        setActiveTab("grid");
-      } else if (lower.includes("edit bio") || lower.includes("add links")) {
-        setActiveTab("theme");
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        { id: Date.now().toString(), role: "assistant", content: reply, time: "" },
-      ]);
-      onCommand(msg);
-    }, 700);
-  };
-
-  useEffect(() => {
-    if (activeTab === "chat") {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, activeTab]);
-
-  const chatTabs = [
-    {
-      id: "chat" as ChatTab,
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        </svg>
-      ),
-      label: "Chat",
-    },
-    {
-      id: "preview" as ChatTab,
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-          <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        </svg>
-      ),
-    },
-    {
-      id: "grid" as ChatTab,
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        </svg>
-      ),
-    },
-    {
-      id: "theme" as ChatTab,
-      icon: (
-        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        </svg>
-      ),
-    },
-    {
-      id: "sort" as ChatTab,
-      label: "Fonts",
-      icon: (
-        <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.125" viewBox="0 0 24 24">
-          <path d="M12 4v16" />
-          <path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2" />
-          <path d="M9 20h6" />
-        </svg>
-      ),
-    },
-    {
-      id: "copy" as ChatTab,
-      label: "Pages",
-      icon: (
-        <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.125" viewBox="0 0 24 24">
-          <path d="M15 2a2 2 0 0 1 1.414.586l4 4A2 2 0 0 1 21 8v7a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
-          <path d="M15 2v4a2 2 0 0 0 2 2h4" />
-          <path d="M5 7a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h8a2 2 0 0 0 1.732-1" />
-        </svg>
-      ),
-    },
-  ];
-
-  const activeTabIndex = chatTabs.findIndex((t) => t.id === activeTab);
-  const isChatActive = activeTab === "chat";
-
-  return (
-    <section className="w-[360px] h-full flex flex-col bg-white/80 backdrop-blur-xl border-r border-white/30 shrink-0 overflow-hidden">
-      {/* Header */}
-      <header className="h-[72px] flex items-center px-6 border-b border-white/20 shrink-0 bg-white/60 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <img
-            src="/logo.png"
-            alt="LinkedPage"
-            className="h-7 w-auto object-contain"
-          />
-          <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{profileName}</span>
-        </div>
-      </header>
-
-      {/* Tab toolbar — new design */}
-      <div className="px-4 pt-4 pb-2 shrink-0">
-        <div className="relative bg-black/5 backdrop-blur-sm border border-white/40 rounded-[11px] p-1 flex items-center">
-          {/* Sliding active pill */}
-          <div
-            className="absolute top-1 bottom-1     rounded-lg  bg-white   shadow-[0_6px_10px_-6px_#00000016] border border-[#E6E6E6]/60 transition-all duration-300 ease-out pointer-events-none z-0"
-            style={{
-              left: `calc(4px + ${activeTabIndex} * (100% - 8px) / 6)`,
-              width: `calc((100% - 8px) / 6)`,
-            }}
-          />
-          {chatTabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            const tabLabel = (tab as { label?: string }).label;
-            return (
-              <div key={tab.id} className="relative group flex-1 flex justify-center">
-                <button
-                  id={tab.id === "grid" ? "onboarding-templates-tab" : undefined}
-                  onClick={() => {
-                    setActiveTab(tab.id);
-                    if (tab.id !== "chat" && tab.id !== "grid" && tab.id !== "theme") {
-                      toast(`Switched to ${tabLabel ?? tab.id} mode`);
-                    }
-                  }}
-                  className={`relative z-10 flex items-center justify-center gap-1.5 h-8     rounded-lg  w-full cursor-pointer transition-colors duration-150 ${isActive
-                    ? "text-[#2A2A2F]"
-                    : "text-[#171717]/45 hover:text-[#171717]"
-                    }`}
-                >
-                  <span className="shrink-0 ">{tab.icon}</span>
-
-                </button>
-                {/* Tooltip for non-chat tabs */}
-
-
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Tab content area */}
-      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-        {activeTab === "chat" && (
-          <>
-            {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 pb-4 flex flex-col gap-5" style={{ scrollbarWidth: "none" }}>
-              <AnimatePresence initial={false}>
-                {messages.map((msg) => (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-                  >
-                    {msg.role === "user" ? (
-                      <div className="flex justify-end">
-                        <div className="bg-[#F7F7F7] py-3 px-4 rounded-2xl rounded-tr-sm max-w-[85%]">
-                          <p className="text-[14px] text-[#171717] leading-snug">{msg.content}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-start gap-3">
-                        <div className="w-5 h-5   rounded-lg bg-[#8DFFB3] flex items-center justify-center shrink-0 mt-0.5">
-                          <div className="w-3 h-3   rounded-lg bg-[#369762] border-2 border-white" />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <span className="text-xs font-medium text-[#2A2A2F] flex items-center gap-1.5">
-                            <img src="/logo.png" alt="LinkedPage" className="h-3.5 w-auto object-contain opacity-80" />
-                            AI
-                          </span>
-                          <p className="text-[14px] text-[#171717]/70 leading-relaxed">{msg.content}</p>
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              <div ref={bottomRef} />
-            </div>
-
-            {/* Input area */}
-            <div className="p-4 shrink-0 bg-white border-t border-[#E6E6E6]/40">
-              {/* Suggestion pills */}
-              <div className="flex gap-2 mb-3 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
-                {SUGGESTIONS.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => sendMessage(s)}
-                    className="flex-shrink-0 h-6 px-3 bg-[#F7F7F7]   rounded-lg text-[11px] font-medium text-[#171717]/70 hover:bg-[#EAEAEA] hover:text-[#171717] transition-colors duration-150 whitespace-nowrap"
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-
-              {/* Text input */}
-              <div className="bg-[#F7F7F7] rounded-xl p-2 flex flex-col gap-2 border border-[#E6E6E6]/50">
-                <textarea
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-sm p-2 text-[#171717] placeholder:text-[#171717]/40 h-20"
-                  style={{ outline: "none" }}
-                  placeholder="Ask LinkedPage AI…"
-                />
-                <div className="flex items-center justify-between px-1 pb-1">
-                  <button
-                    onClick={() => toast("Attach file")}
-                    className="w-8 h-8   rounded-lg bg-white border border-[#E6E6E6] flex items-center justify-center text-[#171717]/50 hover:text-[#171717] transition-colors"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                    </svg>
-                  </button>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => toast("Voice input")}
-                      className="w-8 h-8   rounded-lg flex items-center justify-center text-[#171717]/50 hover:bg-[#F3F3F3] transition-colors"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => sendMessage()}
-                      className="w-8 h-8   rounded-lg bg-[#8DFFB3] text-[#2A2A2F] flex items-center justify-center hover:bg-[#369762] hover:text-white transition-colors active:scale-[0.95]"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M5 10l7-7m0 0l7 7m-7-7v18" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {activeTab === "grid" && (
-          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-2" style={{ scrollbarWidth: "none" }}>
-            <TemplatePicker selected={selectedTemplate} onSelect={onSelectTemplate} />
-          </div>
-        )}
-
-        {activeTab === "theme" && profile && (
-          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-2" style={{ scrollbarWidth: "none" }}>
-            <InlineEditor profile={profile} onChange={onChangeField} />
-          </div>
-        )}
-
-        {activeTab !== "chat" && activeTab !== "grid" && activeTab !== "theme" && (
-          <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-[#171717]/50 gap-2">
-            <p className="text-sm font-medium uppercase tracking-wider text-xs">Tab Option: {activeTab}</p>
-            <p className="text-xs max-w-[200px]">This editor view is currently in development.</p>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function DomainsPane() {
-  const [searchVal, setSearchVal] = useState("");
-  const [customDomains, setCustomDomains] = useState<{ name: string; status: "active" | "pending" }[]>([
-    { name: "realitycheque.io", status: "active" }
-  ]);
-  const [connecting, setConnecting] = useState(false);
-
-  const handleConnect = () => {
-    const domain = searchVal.trim();
-    if (!domain) return;
-    if (!domain.includes(".")) {
-      toast.error("Please enter a valid domain name (e.g. realitycheque.com)");
-      return;
-    }
-    setConnecting(true);
-    toast.loading("Connecting domain...");
-    setTimeout(() => {
-      toast.dismiss();
-      setConnecting(false);
-      setCustomDomains(prev => [...prev, { name: domain, status: "pending" }]);
-      setSearchVal("");
-      toast.success("Domain added! Please configure your DNS settings.");
-    }, 1200);
-  };
-
-  return (
-    <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
-      {/* Title Header */}
-      <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
-        <span className="font-semibold text-[15px] text-black">Domains & SSL</span>
-        <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">Pro Active</span>
-      </div>
-
-      {/* Content container */}
-      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-6" style={{ scrollbarWidth: "none" }}>
-        {/* Section: Active Domains */}
-        <div className="flex flex-col gap-2.5">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Connected Domains</span>
-          <div className="flex flex-col gap-2">
-            {customDomains.map((dom, i) => (
-              <div key={i} className="p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-xl flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-                <div className="flex flex-col">
-                  <span className="text-[13px] font-bold text-black">{dom.name}</span>
-                  <span className="text-[11px] text-gray-400">
-                    {dom.status === "active" ? "SSL secured & live" : "DNS config pending"}
-                  </span>
-                </div>
-                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                  dom.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700 animate-pulse"
-                }`}>
-                  {dom.status === "active" ? "Active" : "Setup Required"}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Section: Connect Domain Input */}
-        <div className="flex flex-col gap-2.5">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Connect Custom Domain</span>
-          <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              value={searchVal}
-              onChange={(e) => setSearchVal(e.target.value.toLowerCase())}
-              placeholder="e.g. yourname.com"
-              className="w-full h-10 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
-            />
-            <button
-              onClick={handleConnect}
-              disabled={connecting}
-              className="w-full h-10 rounded-lg bg-[#2A2A2F] hover:bg-[#3E3E45] active:scale-95 transition-all text-white text-[12px] font-semibold flex items-center justify-center gap-2 shadow-sm"
-            >
-              {connecting && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
-              Connect Domain
-            </button>
-          </div>
-        </div>
-
-        {/* DNS instructions panel if setup required exists */}
-        {customDomains.some(d => d.status === "pending") && (
-          <div className="p-4 bg-amber-50/50 border border-amber-200/60 rounded-xl flex flex-col gap-2.5">
-            <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider">DNS Settings Required</span>
-            <p className="text-xs text-amber-700/80 leading-relaxed">
-              Configure your domain registrar (Namecheap, GoDaddy, etc.) with the following DNS records:
-            </p>
-            <div className="flex flex-col gap-1.5 font-mono text-[10px] text-gray-600 bg-white p-2.5 rounded-lg border border-amber-200/40">
-              <div>Type: <strong className="text-black">A</strong></div>
-              <div>Host: <strong className="text-black">@</strong></div>
-              <div>Value: <strong className="text-black">76.76.21.21</strong></div>
-              <div className="h-px bg-gray-100 my-1" />
-              <div>Type: <strong className="text-black">CNAME</strong></div>
-              <div>Host: <strong className="text-black">www</strong></div>
-              <div>Value: <strong className="text-black">cname.webild.co</strong></div>
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function SettingsPane({ profileName, router }: { profileName: string; router: any }) {
-  const [siteName, setSiteName] = useState(profileName);
-  const [seoTitle, setSeoTitle] = useState(`${profileName} - Professional Micro-site`);
-  const [seoDesc, setSeoDesc] = useState("Explore my professional experience, projects, education, and social networks.");
-  const [saving, setSaving] = useState(false);
-
-  const handleSaveSettings = () => {
-    setSaving(true);
-    toast.loading("Saving settings...");
-    setTimeout(() => {
-      toast.dismiss();
-      setSaving(false);
-      sessionStorage.setItem("webild_brand_name", siteName);
-      toast.success("Site configuration saved!");
-    }, 1000);
-  };
-
-  const handleDeleteSite = () => {
-    const confirmDel = window.confirm("Are you absolutely sure you want to delete this website? This action is permanent!");
-    if (!confirmDel) return;
-    toast.loading("Deleting site database...");
-    setTimeout(() => {
-      toast.dismiss();
-      sessionStorage.removeItem("webild_brand_name");
-      sessionStorage.removeItem("webild_subdomain");
-      toast.success("Website deleted successfully.");
-      router.push("/dashboard");
-    }, 1500);
-  };
-
-  return (
-    <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
-      {/* Title Header */}
-      <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
-        <span className="font-semibold text-[15px] text-black">Site Settings</span>
-      </div>
-
-      {/* Content container */}
-      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5" style={{ scrollbarWidth: "none" }}>
-        {/* Branding */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Brand Name</label>
-          <input
-            type="text"
-            value={siteName}
-            onChange={(e) => setSiteName(e.target.value)}
-            className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
-          />
-        </div>
-
-        {/* SEO Title */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">SEO Title Tag</label>
-          <input
-            type="text"
-            value={seoTitle}
-            onChange={(e) => setSeoTitle(e.target.value)}
-            className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
-          />
-        </div>
-
-        {/* SEO Description */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Meta Description</label>
-          <textarea
-            value={seoDesc}
-            onChange={(e) => setSeoDesc(e.target.value)}
-            rows={4}
-            className="w-full p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 resize-none font-medium"
-          />
-        </div>
-
-        {/* Save Button */}
-        <button
-          onClick={handleSaveSettings}
-          disabled={saving}
-          className="w-full h-10 rounded-lg bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-sm"
-        >
-          {saving && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
-          Save Configuration
-        </button>
-
-        <div className="border-t border-gray-100 my-2" />
-
-        {/* Danger Zone */}
-        <div className="p-4 border border-red-250 bg-red-50/40 rounded-xl flex flex-col gap-3">
-          <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">Danger Zone</span>
-          <p className="text-xs text-red-700/80 leading-relaxed">
-            Deleting your site will permanently wipe all pages, files, and domains. This cannot be undone.
-          </p>
-          <button
-            onClick={handleDeleteSite}
-            className="w-full h-10 rounded-lg bg-red-650 hover:bg-red-700 text-white text-[12px] font-bold active:scale-95 transition-all shadow-sm"
-          >
-            Delete Website
-          </button>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function UserMenu() {
-  return (
-    <div
-      className="absolute z-50 top-2 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_#ffff,0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
-      style={{
-        scrollbarWidth: "thin",
-        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-        opacity: 1,
-      }}
-    >
-      <div
-        className="space-y-4"
-        style={{
-          scrollbarWidth: "thin",
-          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-        }}
-      >
-        <div
-          className="flex items-center gap-3"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        >
-          <div
-            className="relative shrink-0   rounded-lg h-9 w-9 p-0.5 cursor-pointer border border-[#E6E6E6]"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <img
-              className="h-full w-full object-cover   rounded-lg"
-              height={31}
-              width={31}
-              alt="user"
-              src="https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvb2F1dGhfZ29vZ2xlL2ltZ18zRU93YkZwNzdMU0phZTVnRTFFZnZwaTBTTEYifQ?w=96&q=75"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                color: "transparent",
-              }}
-            />
-          </div>
-          <div
-            className="truncate"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <p
-              className="text-sm font-medium leading-tight text-[#2A2A2F] truncate"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              Ayesha Zulfiqar
-            </p>
-            <p
-              className="text-xs text-[#171717]/60 leading-tight truncate"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              ayeshazulfiqar609@gmail.com
-            </p>
-          </div>
-        </div>
-        <div
-          className="border-t border-black/8"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        />
-        <div
-          className="flex flex-col gap-3"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        >
-          <div
-            className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <div
-              className="flex justify-between"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <span
-                className="text-sm font-medium text-[#2A2A2F]"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                Credits
-              </span>
-              <span
-                className="text-sm font-medium text-[#2A2A2F]"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                16 left
-              </span>
-            </div>
-            <div
-              className="w-full   rounded-lg bg-white border border-[#E6E6E6] overflow-hidden p-0.5"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <div
-                className="relative bg-[#8DFFB3] h-2   rounded-lg transition-all duration-300"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  width: "25%",
-                }}
-              />
-            </div>
-            <div
-              className="text-xs text-[#171717]/70 mt-1 leading-relaxed"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <span
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                You're on the free plan. Unlock additional features and
-                credits by upgrading your plan.
-              </span>
-            </div>
-          </div>
-          <button
-            className="flex items-center justify-center font-medium transition-all duration-150 bg-[#2A2A2F] text-white hover:bg-[#3E3E45] rounded-[9px] w-full text-xs h-9 active:scale-95"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            Upgrade
-          </button>
-        </div>
-        <div className="flex flex-col gap-1">
-          <button
-            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2     rounded-lg  hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <svg
-              className="w-5 h-5"
-              height="24"
-              width="24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <path
-                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-              <circle
-                cx="12"
-                cy="12"
-                r="3"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </svg>
-            Settings
-          </button>
-          <button
-            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2     rounded-lg  hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <svg
-              className="w-5 h-5"
-              height="24"
-              width="24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <path
-                d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </svg>
-            Report a bug
-          </button>
-          <button
-            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2     rounded-lg  hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <svg
-              className="w-5 h-5"
-              height="24"
-              width="24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <path
-                d="M12 7v14"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-              <path
-                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </svg>
-            Documentation
-          </button>
-        </div>
-        <div
-          className="border-t border-black/8"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        />
-        <button
-          className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2     rounded-lg  hover:bg-[#F3F3F3] text-black w-full"
-          type="button"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        >
-          <svg
-            className="w-5 h-5"
-            height="24"
-            width="24"
-            aria-hidden="true"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <path
-              d="m16 17 5-5-5-5"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            />
-            <path
-              d="M21 12H9"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            />
-            <path
-              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            />
-          </svg>
-          Sign out
-        </button>
-      </div>
-    </div>
-  );
-}
-
 // ─── Main editor inner ─────────────────────────────────────────────────────────
 function EditorInner() {
   const router = useRouter();
@@ -962,7 +70,10 @@ function EditorInner() {
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
   const [publishing, setPublishing] = useState(false);
   const [activeTab, setActiveTab] = useState<ChatTab>("chat");
+  const [editorTab, setEditorTab] = useState<"profile" | "experience" | "links">("profile");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingCoords, setOnboardingCoords] = useState<{
@@ -975,6 +86,17 @@ function EditorInner() {
     if (searchParams.get("onboarding") === "true") {
       setShowOnboarding(true);
       setActiveTab("grid"); // Set to Grid (Templates) tab initially during onboarding
+    }
+    
+    try {
+      const userStr = sessionStorage.getItem("linkedpage_user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        setUserName(user.name || "");
+        setUserEmail(user.email || "");
+      }
+    } catch (e) {
+      console.error(e);
     }
   }, [searchParams]);
 
@@ -1031,9 +153,33 @@ function EditorInner() {
     toast.dismiss();
     setPublishing(false);
     toast.success("Your page is live! 🎉");
-    const sub = sessionStorage.getItem("webild_subdomain") || "yourname.io";
+    const sub = sessionStorage.getItem("linkedpage_subdomain") || "yourname.io";
     const slug = sub.replace(".io", "");
     router.push(`/publish?slug=${slug}`);
+  };
+
+  const handleFieldClick = (fieldName: string) => {
+    setActiveTab("theme");
+    if (fieldName === "experience") {
+      setEditorTab("experience");
+    } else if (fieldName === "links") {
+      setEditorTab("links");
+    } else {
+      setEditorTab("profile");
+    }
+    
+    setTimeout(() => {
+      const el = document.getElementById(`editor-field-${fieldName}`);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "center" });
+        const inputEl = el.querySelector("input, textarea");
+        if (inputEl) {
+          (inputEl as HTMLElement).focus();
+        } else {
+          (el as HTMLElement).focus();
+        }
+      }
+    }, 150);
   };
 
   const profileName = editedProfile?.name ?? "Your Profile";
@@ -1099,8 +245,6 @@ function EditorInner() {
             {/* Upgrade Card */}
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
               <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px]   shadow-[0_6px_10px_-6px_#00000016] overflow-hidden text-left mt-2">
-                {/* Custom Gradient Borders */}
-
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
                   ONLY $16 to<br />unlock Premium<br />Features
                 </p>
@@ -1166,6 +310,8 @@ function EditorInner() {
           onChangeField={updateField}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          editorTab={editorTab}
+          setEditorTab={setEditorTab}
         />
       )}
       {activeNav === 2 && (
@@ -1180,16 +326,39 @@ function EditorInner() {
 
         {/* ── Top bar (outside card) ── */}
         <div className="flex items-center justify-between shrink-0 h-9  bg-white">
-          {/* Left: Upgrade Plan */}
-          <button
-            onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
-            className="flex items-center gap-2 h-10 px-2  text-sm font-medium bg-white border border-[#E6E6E6]   rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0_6px_10px_-6px_#00000016]"
-            style={{ boxShadow: " 0 1px 4px #fff" }}
-          >
-            <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-              <path d="M4 6h16M4 12h16M4 18h7" />
-            </svg>
-          </button>
+          {/* Left: Upgrade Plan & Saving Indicator */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
+              className="flex items-center gap-2 h-10 px-2  text-sm font-medium bg-white border border-[#E6E6E6]   rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0_6px_10px_-6px_#00000016]"
+              style={{ boxShadow: " 0 1px 4px #fff" }}
+            >
+              <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h7" />
+              </svg>
+            </button>
+
+            {/* Changes saved dot indicator */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500">
+              {isDirty ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span>Unsaved edits</span>
+                  <button 
+                    onClick={resetEdits}
+                    className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
+                  >
+                    Reset
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>All changes saved</span>
+                </>
+              )}
+            </div>
+          </div>
 
           {/* Right: Share + Publish + Avatar */}
           <div className="flex items-center gap-2 relative">
@@ -1223,7 +392,11 @@ function EditorInner() {
                   transition={{ duration: 0.15, ease: "easeOut" }}
                   className="absolute right-0 top-10 z-50"
                 >
-                  <UserMenu />
+                  <UserMenu 
+                    name={userName} 
+                    email={userEmail} 
+                    onClose={() => setIsUserMenuOpen(false)} 
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
@@ -1282,7 +455,6 @@ function EditorInner() {
                   </span>
                   <span className="hidden lg:inline text-[#2A2A2F] font-normal">is available!</span>
                 </span>
-
               </div>
             </div>
 
@@ -1369,8 +541,8 @@ function EditorInner() {
                       className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white shadow-[0_8px_40px_-8px_#ffff,0_2px_8px_#ffff]"
                       style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
                     >
-                      <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                      <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto" }}>
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} onFieldClick={handleFieldClick} />
                       </div>
                     </div>
                   ) : (
@@ -1379,8 +551,8 @@ function EditorInner() {
                       className="rounded-[32px] overflow-hidden border-[7px] border-[#2A2A2F] bg-white shadow-[0_16px_48px_-12px_#ffff]"
                       style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
                     >
-                      <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto", pointerEvents: "none", userSelect: "none" }}>
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                      <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto" }}>
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} onFieldClick={handleFieldClick} />
                       </div>
                     </div>
                   )
@@ -1449,7 +621,7 @@ function EditorInner() {
                   }}
                 >
                   <span className="text-[12px] font-bold text-black">🎨 Templates</span>
-                  <span className="text-[10px] text-[#171717]/60">Switch design layers instantly</span>
+                  <span className="text-[10px] text-[#171717]/60">Switch layouts instantly</span>
                 </div>
               </div>
             )}
@@ -1476,7 +648,7 @@ function EditorInner() {
                   }}
                 >
                   <span className="text-[12px] font-bold text-black">🚀 Go Live</span>
-                  <span className="text-[10px] text-[#171717]/60">Launch your site in one click</span>
+                  <span className="text-[10px] text-[#171717]/60">Go live in one click</span>
                 </div>
               </div>
             )}
@@ -1503,7 +675,7 @@ function EditorInner() {
                   }}
                 >
                   <span className="text-[12px] font-bold text-black">✏️ Click to Edit</span>
-                  <span className="text-[10px] text-[#171717]/60">Select any text element to edit inline</span>
+                  <span className="text-[10px] text-[#171717]/60">Click any text to edit</span>
                 </div>
               </div>
             )}

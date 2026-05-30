@@ -17,371 +17,50 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
-function UserMenu() {
-  return (
-    <motion.div
-      initial={{ opacity: 0, transform: "scale(0.95)" }}
-      animate={{ opacity: 1, transform: "scale(1)" }}
-      exit={{ opacity: 0, transform: "scale(0.95)" }}
-      transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-      className="absolute z-55 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_#ffff,0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
-      style={{
-        scrollbarWidth: "thin",
-        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-        transformOrigin: "top right"
-      }}
-    >
-      <div
-        className="space-y-4"
-        style={{
-          scrollbarWidth: "thin",
-          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-        }}
-      >
-        <div
-          className="flex items-center gap-3"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        >
-          <div
-            className="relative shrink-0 rounded-lg h-9 w-9 p-0.5 cursor-pointer border border-[#E6E6E6]"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <img
-              className="h-full w-full object-cover rounded-lg"
-              height={31}
-              width={31}
-              alt="user"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                color: "transparent",
-              }}
-            />
-          </div>
-          <div
-            className="truncate"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <p
-              className="text-sm font-medium leading-tight text-[#2A2A2F] truncate"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              Ayesha Zulfiqar
-            </p>
-            <p
-              className="text-xs text-[#171717]/60 leading-tight truncate"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              ayeshazulfiqar609@gmail.com
-            </p>
-          </div>
-        </div>
-        <div
-          className="border-t border-black/8"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        />
-        <div
-          className="flex flex-col gap-3"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        >
-          <div
-            className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <div
-              className="flex justify-between"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <span
-                className="text-sm font-medium text-[#2A2A2F]"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                Credits
-              </span>
-              <span
-                className="text-sm font-medium text-[#2A2A2F]"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                16 left
-              </span>
-            </div>
-            <div
-              className="w-full rounded-lg bg-white border border-[#E6E6E6] overflow-hidden p-0.5"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <div
-                className="relative bg-[#8DFFB3] h-2 rounded-lg transition-all duration-300"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  width: "25%",
-                }}
-              />
-            </div>
-            <div
-              className="text-xs text-[#171717]/70 mt-1 leading-relaxed"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <span
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                You're on the free plan. Unlock additional features and
-                credits by upgrading your plan.
-              </span>
-            </div>
-          </div>
-          <button
-            className="flex items-center justify-center font-medium transition-all duration-150 bg-[#2A2A2F] text-white hover:bg-[#3E3E45] rounded-[9px] w-full text-xs h-9 active:scale-95"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            Upgrade
-          </button>
-        </div>
-        <div className="flex flex-col gap-1">
-          <button
-            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <svg
-              className="w-5 h-5"
-              height="24"
-              width="24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <path
-                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-              <circle
-                cx="12"
-                cy="12"
-                r="3"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </svg>
-            Settings
-          </button>
-          <button
-            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <svg
-              className="w-5 h-5"
-              height="24"
-              width="24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <path
-                d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </svg>
-            Report a bug
-          </button>
-          <button
-            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
-            type="button"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <svg
-              className="w-5 h-5"
-              height="24"
-              width="24"
-              aria-hidden="true"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <path
-                d="M12 7v14"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-              <path
-                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </svg>
-            Documentation
-          </button>
-        </div>
-        <div
-          className="border-t border-black/8"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        />
-        <button
-          className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F3F3F3] text-black w-full"
-          type="button"
-          style={{
-            scrollbarWidth: "thin",
-            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-          }}
-        >
-          <svg
-            className="w-5 h-5"
-            height="24"
-            width="24"
-            aria-hidden="true"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-            }}
-          >
-            <path
-              d="m16 17 5-5-5-5"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            />
-            <path
-              d="M21 12H9"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            />
-            <path
-              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            />
-          </svg>
-          Sign out
-        </button>
-      </div>
-    </motion.div>
-  );
-}
+import { UserMenu } from "@/components/UserMenu";
+import { useEditor } from "@/context/EditorContext";
+import ProfilePreview from "@/app/editor/components/ProfilePreview";
+import { MOCK_PROFILE } from "@/shared/types";
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { editedProfile, selectedTemplate } = useEditor();
+  const activeProfile = editedProfile || MOCK_PROFILE;
+
   const [brandName, setBrandName] = useState("Creative Portfolio");
   const [subdomain, setSubdomain] = useState("realitycheque.io");
   const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-    const storedBrand = sessionStorage.getItem("webild_brand_name");
-    const storedSubdomain = sessionStorage.getItem("webild_subdomain");
-    if (storedBrand) setBrandName(storedBrand);
-    if (storedSubdomain) setSubdomain(storedSubdomain);
-  }, []);
+    const storedBrand = sessionStorage.getItem("linkedpage_brand_name");
+    const storedSubdomain = sessionStorage.getItem("linkedpage_subdomain");
+    if (storedBrand) {
+      setBrandName(storedBrand);
+    } else {
+      setBrandName(activeProfile.name);
+    }
+    
+    if (storedSubdomain) {
+      setSubdomain(storedSubdomain);
+    } else {
+      setSubdomain(`${activeProfile.name.toLowerCase().replace(/\s+/g, "")}.linkedpage.io`);
+    }
+
+    try {
+      const userStr = sessionStorage.getItem("linkedpage_user");
+      if (userStr) {
+        const user = JSON.parse(userStr);
+        setUserName(user.name || "");
+        setUserEmail(user.email || "");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [activeProfile]);
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
@@ -446,7 +125,11 @@ export default function DashboardPage() {
           {/* User Dropdown Menu */}
           <AnimatePresence>
             {isUserMenuOpen && (
-              <UserMenu />
+              <UserMenu 
+                name={userName} 
+                email={userEmail} 
+                onClose={() => setIsUserMenuOpen(false)} 
+              />
             )}
           </AnimatePresence>
         </div>
@@ -614,59 +297,7 @@ export default function DashboardPage() {
             >
               Manage and access all your websites websites in one place.
             </p>
-            <div
-              className="relative flex items-center gap-1.5 px-4 py-2.5 rounded-[12px] bg-[#F3F3F5]/80 hover:bg-[#EAEAEB]/90 backdrop-blur-sm w-full h-fit text-base border border-black/5"
-              style={{
-                scrollbarWidth: "thin",
-                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-              }}
-            >
-              <svg
-                className="lucide lucide-search h-[1em] text-gray-500"
-                height="24"
-                width="24"
-                aria-hidden="true"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                <path
-                  d="m21 21-4.34-4.34"
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  }}
-                />
-                <circle
-                  cx="11"
-                  cy="11"
-                  r="8"
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  }}
-                />
-              </svg>
-              <input
-                className="w-full placeholder:text-gray-400 bg-transparent focus:outline-none text-base md:text-[15px] text-black font-medium"
-                type="text"
-                placeholder="Search websites..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              />
-            </div>
+
           </div>
 
           {/* Websites Grid */}
@@ -703,29 +334,14 @@ export default function DashboardPage() {
                       }}
                     >
                       <div
-                        className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white"
-                        style={{
-                          scrollbarWidth: "thin",
-                          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                        }}
+                        className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none"
                       >
-                        <iframe
-                          className="absolute top-0 left-0 border-none pointer-events-none"
-                          sandbox="allow-scripts allow-same-origin"
-                          src="https://webuild-dev.s3.eu-north-1.amazonaws.com/previews/86be4a9a-430f-4330-9206-d2c1c63b4910/index.html"
-                          tabIndex={-1}
-                          title="Preview"
-                          style={{
-                            scrollbarWidth: "thin",
-                            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                            transition: "opacity 0.3s",
-                            width: "1280px",
-                            height: "720px",
-                            transform: "scale(0.265)",
-                            transformOrigin: "left top",
-                            opacity: 1,
-                          }}
-                        />
+                        <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
+                          <ProfilePreview
+                            profile={activeProfile}
+                            template={selectedTemplate}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -6,6 +6,34 @@ interface ProfilePreviewProps {
   profile: ProfileData;
   template: TemplateId;
   scale?: number;
+  onFieldClick?: (fieldName: string) => void;
+  fluid?: boolean;
+}
+
+// ─── Editable Wrapper for hover outlines & click interactions ───────────────────
+function EditableWrapper({
+  fieldName,
+  onFieldClick,
+  children,
+  className = "",
+}: {
+  fieldName: string;
+  onFieldClick?: (fieldName: string) => void;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  if (!onFieldClick) return <>{children}</>;
+  return (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        onFieldClick(fieldName);
+      }}
+      className={`cursor-pointer hover:outline hover:outline-2 hover:outline-dashed hover:outline-blue-400 hover:outline-offset-2 rounded transition-all ${className}`}
+    >
+      {children}
+    </div>
+  );
 }
 
 // ─── Link icons (inline SVG) ───────────────────────────────────────────────────
@@ -25,29 +53,39 @@ function LinkIcon({ icon }: { icon?: string }) {
 }
 
 // ─── Minimal Card Template ─────────────────────────────────────────────────────
-function MinimalCard({ profile }: { profile: ProfileData }) {
+function MinimalCard({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 font-inter">
       <div className="w-full max-w-lg">
         <div className="bg-white border border-[#E6E6E6] rounded-[20px] p-8 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.04),0_10px_30px_-10px_rgba(0,0,0,0.08)]">
           {/* Header */}
           <div className="flex items-start gap-4 mb-6">
-            <img
-              src={profile.avatarUrl}
-              alt={profile.name}
-              className="w-16 h-16   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
-            />
+            <EditableWrapper fieldName="avatarUrl" onFieldClick={onFieldClick}>
+              <img
+                src={profile.avatarUrl}
+                alt={profile.name}
+                className="w-16 h-16   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
+              />
+            </EditableWrapper>
             <div className="flex flex-col gap-0.5 min-w-0">
-              <h1 className="text-xl font-medium text-black leading-tight">{profile.name}</h1>
-              <p className="text-sm text-[#6B6B6B] leading-tight">{profile.headline}</p>
+              <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
+                <h1 className="text-xl font-medium text-black leading-tight">{profile.name}</h1>
+              </EditableWrapper>
+              <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
+                <p className="text-sm text-[#6B6B6B] leading-tight mt-0.5">{profile.headline}</p>
+              </EditableWrapper>
               {profile.location && (
-                <p className="text-xs text-[#9CA3AF] mt-1">{profile.location}</p>
+                <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
+                  <p className="text-xs text-[#9CA3AF] mt-1">{profile.location}</p>
+                </EditableWrapper>
               )}
             </div>
           </div>
 
           {/* Summary */}
-          <p className="text-sm text-[#171717] leading-relaxed mb-6">{profile.summary}</p>
+          <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
+            <p className="text-sm text-[#171717] leading-relaxed mb-6">{profile.summary}</p>
+          </EditableWrapper>
 
           {/* Skills */}
           {profile.skills.length > 0 && (
@@ -64,32 +102,36 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
 
           {/* Experience */}
           {profile.experience.length > 0 && (
-            <div className="flex flex-col gap-4 mb-6">
-              <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide">Experience</h2>
-              {profile.experience.slice(0, 3).map((exp, i) => (
-                <div key={i} className="flex flex-col gap-0.5">
-                  <p className="text-sm font-medium text-black">{exp.title}</p>
-                  <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
-                  {exp.description && <p className="text-xs text-[#9CA3AF] leading-relaxed mt-0.5">{exp.description}</p>}
-                </div>
-              ))}
-            </div>
+            <EditableWrapper fieldName="experience" onFieldClick={onFieldClick} className="mb-6">
+              <div className="flex flex-col gap-4">
+                <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide">Experience</h2>
+                {profile.experience.slice(0, 3).map((exp, i) => (
+                  <div key={i} className="flex flex-col gap-0.5">
+                    <p className="text-sm font-medium text-black">{exp.title}</p>
+                    <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
+                    {exp.description && <p className="text-xs text-[#9CA3AF] leading-relaxed mt-0.5">{exp.description}</p>}
+                  </div>
+                ))}
+              </div>
+            </EditableWrapper>
           )}
 
           {/* Links */}
           {profile.links.length > 0 && (
-            <div className="flex items-center gap-2 flex-wrap">
-              {profile.links.map((link, i) => (
-                <a
-                  key={i}
-                  href={link.url}
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
-                >
-                  <LinkIcon icon={link.icon} />
-                  {link.label}
-                </a>
-              ))}
-            </div>
+            <EditableWrapper fieldName="links" onFieldClick={onFieldClick}>
+              <div className="flex items-center gap-2 flex-wrap">
+                {profile.links.map((link, i) => (
+                  <a
+                    key={i}
+                    href={link.url}
+                    className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
+                  >
+                    <LinkIcon icon={link.icon} />
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </EditableWrapper>
           )}
         </div>
       </div>
@@ -98,28 +140,40 @@ function MinimalCard({ profile }: { profile: ProfileData }) {
 }
 
 // ─── Bento Grid Template ───────────────────────────────────────────────────────
-function BentoGrid({ profile }: { profile: ProfileData }) {
+function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
   return (
     <div className="min-h-screen bg-[#FBFBFB] p-6 font-inter">
       <div className="max-w-2xl mx-auto grid grid-cols-2 gap-3">
         {/* Hero card */}
         <div className="col-span-2 bg-white border border-[#E6E6E6] rounded-[16px] p-6 flex items-center gap-4">
-          <img
-            src={profile.avatarUrl}
-            alt={profile.name}
-            className="w-16 h-16   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
-          />
-          <div className="min-w-0">
-            <h1 className="text-xl font-medium text-black">{profile.name}</h1>
-            <p className="text-sm text-[#6B6B6B] leading-snug">{profile.headline}</p>
-            {profile.location && <p className="text-xs text-[#9CA3AF] mt-1">{profile.location}</p>}
+          <EditableWrapper fieldName="avatarUrl" onFieldClick={onFieldClick}>
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              className="w-16 h-16   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
+            />
+          </EditableWrapper>
+          <div className="min-w-0 flex-1">
+            <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
+              <h1 className="text-xl font-medium text-black">{profile.name}</h1>
+            </EditableWrapper>
+            <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
+              <p className="text-sm text-[#6B6B6B] leading-snug mt-0.5">{profile.headline}</p>
+            </EditableWrapper>
+            {profile.location && (
+              <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
+                <p className="text-xs text-[#9CA3AF] mt-1">{profile.location}</p>
+              </EditableWrapper>
+            )}
           </div>
         </div>
 
         {/* Summary */}
         <div className="col-span-2 bg-white border border-[#E6E6E6] rounded-[16px] p-5">
           <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-2">About</p>
-          <p className="text-sm text-[#171717] leading-relaxed">{profile.summary}</p>
+          <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
+            <p className="text-sm text-[#171717] leading-relaxed">{profile.summary}</p>
+          </EditableWrapper>
         </div>
 
         {/* Skills */}
@@ -137,32 +191,36 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
         {/* Experience snippets */}
         <div className="bg-white border border-[#E6E6E6] rounded-[16px] p-5">
           <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Experience</p>
-          <div className="flex flex-col gap-2.5">
-            {profile.experience.slice(0, 3).map((exp, i) => (
-              <div key={i} className="flex flex-col gap-0">
-                <p className="text-[12px] font-medium text-black">{exp.title}</p>
-                <p className="text-[11px] text-[#9CA3AF]">{exp.company}</p>
-              </div>
-            ))}
-          </div>
+          <EditableWrapper fieldName="experience" onFieldClick={onFieldClick}>
+            <div className="flex flex-col gap-2.5">
+              {profile.experience.slice(0, 3).map((exp, i) => (
+                <div key={i} className="flex flex-col gap-0">
+                  <p className="text-[12px] font-medium text-black">{exp.title}</p>
+                  <p className="text-[11px] text-[#9CA3AF]">{exp.company}</p>
+                </div>
+              ))}
+            </div>
+          </EditableWrapper>
         </div>
 
         {/* Links */}
         {profile.links.length > 0 && (
           <div className="col-span-2 bg-white border border-[#E6E6E6] rounded-[16px] p-5">
             <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Links</p>
-            <div className="flex items-center gap-2 flex-wrap">
-              {profile.links.map((link, i) => (
-                <a
-                  key={i}
-                  href={link.url}
-                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
-                >
-                  <LinkIcon icon={link.icon} />
-                  {link.label}
-                </a>
-              ))}
-            </div>
+            <EditableWrapper fieldName="links" onFieldClick={onFieldClick}>
+              <div className="flex items-center gap-2 flex-wrap">
+                {profile.links.map((link, i) => (
+                  <a
+                    key={i}
+                    href={link.url}
+                    className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg border border-[#E6E6E6] hover:border-[#8DB8FF]"
+                  >
+                    <LinkIcon icon={link.icon} />
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </EditableWrapper>
           </div>
         )}
       </div>
@@ -171,7 +229,7 @@ function BentoGrid({ profile }: { profile: ProfileData }) {
 }
 
 // ─── Full Scroll Template ──────────────────────────────────────────────────────
-function FullScroll({ profile }: { profile: ProfileData }) {
+function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
   return (
     <div className="min-h-screen bg-[#F3F3F3] font-inter">
       {/* Hero banner */}
@@ -179,54 +237,70 @@ function FullScroll({ profile }: { profile: ProfileData }) {
 
       <div className="max-w-xl mx-auto px-6 -mt-10 pb-16">
         {/* Avatar */}
-        <img
-          src={profile.avatarUrl}
-          alt={profile.name}
-          className="w-20 h-20   rounded-lg object-cover border-4 border-white  shadow-[0_6px_10px_-6px_#00000016]  mb-4"
-        />
+        <EditableWrapper fieldName="avatarUrl" onFieldClick={onFieldClick} className="w-fit mb-4">
+          <img
+            src={profile.avatarUrl}
+            alt={profile.name}
+            className="w-20 h-20   rounded-lg object-cover border-4 border-white  shadow-[0_6px_10px_-6px_#00000016]"
+          />
+        </EditableWrapper>
 
         {/* Name + headline */}
-        <h1 className="text-2xl font-medium text-black mb-1">{profile.name}</h1>
-        <p className="text-sm text-[#6B6B6B] mb-1">{profile.headline}</p>
-        {profile.location && <p className="text-xs text-[#9CA3AF] mb-4">{profile.location}</p>}
+        <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
+          <h1 className="text-2xl font-medium text-black mb-1 leading-tight">{profile.name}</h1>
+        </EditableWrapper>
+        <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
+          <p className="text-sm text-[#6B6B6B] mb-1">{profile.headline}</p>
+        </EditableWrapper>
+        {profile.location && (
+          <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
+            <p className="text-xs text-[#9CA3AF] mb-4">{profile.location}</p>
+          </EditableWrapper>
+        )}
 
         {/* Links */}
         {profile.links.length > 0 && (
-          <div className="flex items-center gap-2 flex-wrap mb-6">
-            {profile.links.map((link, i) => (
-              <a
-                key={i}
-                href={link.url}
-                className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg bg-white border border-[#E6E6E6] hover:border-[#8DB8FF]"
-              >
-                <LinkIcon icon={link.icon} />
-                {link.label}
-              </a>
-            ))}
-          </div>
+          <EditableWrapper fieldName="links" onFieldClick={onFieldClick} className="mb-6">
+            <div className="flex items-center gap-2 flex-wrap">
+              {profile.links.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.url}
+                  className="flex items-center gap-1.5 text-xs font-medium text-[#171717] hover:text-[#8DB8FF] transition-colors px-3 py-1.5   rounded-lg bg-white border border-[#E6E6E6] hover:border-[#8DB8FF]"
+                >
+                  <LinkIcon icon={link.icon} />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </EditableWrapper>
         )}
 
         {/* About */}
         <section className="bg-white rounded-[16px] border border-[#E6E6E6] p-6 mb-4">
           <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">About</h2>
-          <p className="text-sm text-[#171717] leading-relaxed">{profile.summary}</p>
+          <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
+            <p className="text-sm text-[#171717] leading-relaxed">{profile.summary}</p>
+          </EditableWrapper>
         </section>
 
         {/* Experience */}
         <section className="bg-white rounded-[16px] border border-[#E6E6E6] p-6 mb-4">
           <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-4">Experience</h2>
-          <div className="flex flex-col gap-5">
-            {profile.experience.map((exp, i) => (
-              <div key={i} className="flex gap-3">
-                <div className="w-1 bg-[#E6E6E6]   rounded-lg flex-shrink-0 mt-1" />
-                <div>
-                  <p className="text-sm font-medium text-black">{exp.title}</p>
-                  <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
-                  {exp.description && <p className="text-xs text-[#9CA3AF] leading-relaxed mt-1">{exp.description}</p>}
+          <EditableWrapper fieldName="experience" onFieldClick={onFieldClick}>
+            <div className="flex flex-col gap-5">
+              {profile.experience.map((exp, i) => (
+                <div key={i} className="flex gap-3">
+                  <div className="w-1 bg-[#E6E6E6]   rounded-lg flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="text-sm font-medium text-black">{exp.title}</p>
+                    <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
+                    {exp.description && <p className="text-xs text-[#9CA3AF] leading-relaxed mt-1">{exp.description}</p>}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </EditableWrapper>
         </section>
 
         {/* Skills */}
@@ -248,26 +322,38 @@ function FullScroll({ profile }: { profile: ProfileData }) {
 }
 
 // ─── Dark Template ─────────────────────────────────────────────────────────────
-function DarkTemplate({ profile }: { profile: ProfileData }) {
+function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
   return (
     <div className="min-h-screen bg-[#0D0D10] font-inter">
       <div className="max-w-xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <img
-            src={profile.avatarUrl}
-            alt={profile.name}
-            className="w-16 h-16   rounded-lg object-cover border border-[#ffffff15]"
-          />
-          <div>
-            <h1 className="text-xl font-medium text-white mb-0.5">{profile.name}</h1>
-            <p className="text-sm text-[#8DB8FF]">{profile.headline}</p>
-            {profile.location && <p className="text-xs text-[#ffffff40] mt-0.5">{profile.location}</p>}
+          <EditableWrapper fieldName="avatarUrl" onFieldClick={onFieldClick}>
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              className="w-16 h-16   rounded-lg object-cover border border-[#ffffff15]"
+            />
+          </EditableWrapper>
+          <div className="flex-1">
+            <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
+              <h1 className="text-xl font-medium text-white mb-0.5 leading-tight">{profile.name}</h1>
+            </EditableWrapper>
+            <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
+              <p className="text-sm text-[#8DB8FF]">{profile.headline}</p>
+            </EditableWrapper>
+            {profile.location && (
+              <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
+                <p className="text-xs text-[#ffffff40] mt-0.5">{profile.location}</p>
+              </EditableWrapper>
+            )}
           </div>
         </div>
 
         {/* Summary */}
-        <p className="text-sm text-[#ffffff80] leading-relaxed mb-8">{profile.summary}</p>
+        <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
+          <p className="text-sm text-[#ffffff80] leading-relaxed mb-8">{profile.summary}</p>
+        </EditableWrapper>
 
         {/* Skills */}
         {profile.skills.length > 0 && (
@@ -286,33 +372,39 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
         {profile.experience.length > 0 && (
           <div className="flex flex-col gap-5 mb-8">
             <h2 className="text-xs font-medium text-[#ffffff40] uppercase tracking-wide">Experience</h2>
-            {profile.experience.map((exp, i) => (
-              <div key={i} className="flex gap-3">
-                <div className="w-px bg-[#ffffff15] flex-shrink-0 mt-1" />
-                <div>
-                  <p className="text-sm font-medium text-white">{exp.title}</p>
-                  <p className="text-xs text-[#8DB8FF]/70">{exp.company} · {exp.duration}</p>
-                  {exp.description && <p className="text-xs text-[#ffffff50] leading-relaxed mt-1">{exp.description}</p>}
-                </div>
+            <EditableWrapper fieldName="experience" onFieldClick={onFieldClick}>
+              <div className="flex flex-col gap-5">
+                {profile.experience.map((exp, i) => (
+                  <div key={i} className="flex gap-3">
+                    <div className="w-px bg-[#ffffff15] flex-shrink-0 mt-1" />
+                    <div>
+                      <p className="text-sm font-medium text-white">{exp.title}</p>
+                      <p className="text-xs text-[#8DB8FF]/70">{exp.company} · {exp.duration}</p>
+                      {exp.description && <p className="text-xs text-[#ffffff50] leading-relaxed mt-1">{exp.description}</p>}
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </EditableWrapper>
           </div>
         )}
 
         {/* Links */}
         {profile.links.length > 0 && (
-          <div className="flex items-center gap-2 flex-wrap">
-            {profile.links.map((link, i) => (
-              <a
-                key={i}
-                href={link.url}
-                className="flex items-center gap-1.5 text-xs font-medium text-[#ffffff60] hover:text-white transition-colors px-3 py-1.5   rounded-lg border border-[#ffffff15] hover:border-[#8DB8FF]/50"
-              >
-                <LinkIcon icon={link.icon} />
-                {link.label}
-              </a>
-            ))}
-          </div>
+          <EditableWrapper fieldName="links" onFieldClick={onFieldClick}>
+            <div className="flex items-center gap-2 flex-wrap">
+              {profile.links.map((link, i) => (
+                <a
+                  key={i}
+                  href={link.url}
+                  className="flex items-center gap-1.5 text-xs font-medium text-[#ffffff60] hover:text-white transition-colors px-3 py-1.5   rounded-lg border border-[#ffffff15] hover:border-[#8DB8FF]/50"
+                >
+                  <LinkIcon icon={link.icon} />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </EditableWrapper>
         )}
       </div>
     </div>
@@ -320,7 +412,18 @@ function DarkTemplate({ profile }: { profile: ProfileData }) {
 }
 
 // ─── Main exported component ───────────────────────────────────────────────────
-export default function ProfilePreview({ profile, template, scale = 1 }: ProfilePreviewProps) {
+export default function ProfilePreview({ profile, template, scale = 1, onFieldClick, fluid = false }: ProfilePreviewProps) {
+  if (fluid) {
+    return (
+      <div className="w-full min-h-screen">
+        {template === "minimal-card" && <MinimalCard profile={profile} onFieldClick={onFieldClick} />}
+        {template === "bento-grid" && <BentoGrid profile={profile} onFieldClick={onFieldClick} />}
+        {template === "full-scroll" && <FullScroll profile={profile} onFieldClick={onFieldClick} />}
+        {template === "dark" && <DarkTemplate profile={profile} onFieldClick={onFieldClick} />}
+      </div>
+    );
+  }
+
   const PREVIEW_W = 1024;
   const PREVIEW_H = 768;
 
@@ -341,10 +444,10 @@ export default function ProfilePreview({ profile, template, scale = 1 }: Profile
           overflow: "auto",
         }}
       >
-        {template === "minimal-card" && <MinimalCard profile={profile} />}
-        {template === "bento-grid" && <BentoGrid profile={profile} />}
-        {template === "full-scroll" && <FullScroll profile={profile} />}
-        {template === "dark" && <DarkTemplate profile={profile} />}
+        {template === "minimal-card" && <MinimalCard profile={profile} onFieldClick={onFieldClick} />}
+        {template === "bento-grid" && <BentoGrid profile={profile} onFieldClick={onFieldClick} />}
+        {template === "full-scroll" && <FullScroll profile={profile} onFieldClick={onFieldClick} />}
+        {template === "dark" && <DarkTemplate profile={profile} onFieldClick={onFieldClick} />}
       </div>
     </div>
   );

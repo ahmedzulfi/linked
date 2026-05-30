@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { ProfileData, ProfileExperience, ProfileLink } from "@/shared/types";
-import { User, Briefcase, Link as LinkIcon, Plus, Trash2, GraduationCap } from "lucide-react";
+import { User, Briefcase, Link as LinkIcon, Plus, Trash2 } from "lucide-react";
 
 interface InlineEditorProps {
   profile: ProfileData;
   onChange: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  activeTab?: "profile" | "experience" | "links";
+  setActiveTab?: (tab: "profile" | "experience" | "links") => void;
 }
 
 // Reusable editable field
@@ -17,6 +19,7 @@ function EditableField({
   multiline = false,
   placeholder = "",
   className = "",
+  id,
 }: {
   label: string;
   value: string;
@@ -24,6 +27,7 @@ function EditableField({
   multiline?: boolean;
   placeholder?: string;
   className?: string;
+  id?: string;
 }) {
   return (
     <div className="flex flex-col gap-1">
@@ -32,6 +36,7 @@ function EditableField({
       </label>
       {multiline ? (
         <textarea
+          id={id}
           className={`ds-input !h-auto min-h-[80px] resize-none py-3 text-sm ${className}`}
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -40,6 +45,7 @@ function EditableField({
         />
       ) : (
         <input
+          id={id}
           className={`ds-input text-sm ${className}`}
           type="text"
           value={value}
@@ -53,8 +59,15 @@ function EditableField({
 
 type Tab = "profile" | "experience" | "links";
 
-export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
-  const [activeTab, setActiveTab] = useState<Tab>("profile");
+export default function InlineEditor({
+  profile,
+  onChange,
+  activeTab: controlledTab,
+  setActiveTab: controlledSetActive,
+}: InlineEditorProps) {
+  const [localTab, setLocalTab] = useState<Tab>("profile");
+  const activeTab = controlledTab ?? localTab;
+  const setActiveTab = (controlledSetActive ?? setLocalTab) as (tab: Tab) => void;
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profile", icon: <User className="w-5 h-5" /> },
@@ -106,10 +119,11 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium     rounded-lg  transition-[background-color,color] duration-150 ${activeTab === tab.id
-              ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] "
-              : "text-[#6B6B6B] hover:text-black"
-              }`}
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium     rounded-lg  transition-[background-color,color] duration-150 ${
+              activeTab === tab.id
+                ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016]"
+                : "text-[#6B6B6B] hover:text-black"
+            }`}
           >
             {tab.icon}
             {tab.label}
@@ -119,12 +133,10 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
 
       {/* Content */}
       <div className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4" style={{ scrollbarWidth: "none" }}>
-
         {/* ── Profile Tab ── */}
         {activeTab === "profile" && (
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg  ">
-              {/* Avatar preview */}
               <img
                 src={profile.avatarUrl || "https://i.pravatar.cc/80?img=47"}
                 alt={profile.name}
@@ -137,24 +149,28 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
             </div>
 
             <EditableField
+              id="editor-field-name"
               label="Full name"
               value={profile.name}
               onChange={(v) => onChange("name", v)}
               placeholder="Your name"
             />
             <EditableField
+              id="editor-field-headline"
               label="Headline"
               value={profile.headline}
               onChange={(v) => onChange("headline", v)}
               placeholder="Product Designer · Builder"
             />
             <EditableField
+              id="editor-field-location"
               label="Location"
               value={profile.location ?? ""}
               onChange={(v) => onChange("location", v)}
               placeholder="San Francisco, CA"
             />
             <EditableField
+              id="editor-field-summary"
               label="About / Summary"
               value={profile.summary}
               onChange={(v) => onChange("summary", v)}
@@ -162,6 +178,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               placeholder="Write a short bio…"
             />
             <EditableField
+              id="editor-field-avatarUrl"
               label="Avatar URL"
               value={profile.avatarUrl}
               onChange={(v) => onChange("avatarUrl", v)}
@@ -172,7 +189,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
 
         {/* ── Experience Tab ── */}
         {activeTab === "experience" && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3" id="editor-field-experience">
             {profile.experience.map((exp, i) => (
               <div
                 key={i}
@@ -180,8 +197,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <Briefcase className="w-5 h-5 text-[#9CA3AF]" />
-                    <span className="text-xs font-medium text-[#9CA3AF]">
+                    <span className="text-xs font-semibold text-[#9CA3AF]">
                       Experience {i + 1}
                     </span>
                   </div>
@@ -220,17 +236,16 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
 
             <button
               onClick={addExperience}
-              className="button button-secondary w-full gap-2"
+              className="w-full h-10 border border-[#E6E6E6] hover:bg-gray-50 text-black text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-sm mt-2"
             >
-              <Plus className="w-5 h-5" />
-              Add experience
+              <Plus className="w-4 h-4" /> Add experience
             </button>
           </div>
         )}
 
         {/* ── Links Tab ── */}
         {activeTab === "links" && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3" id="editor-field-links">
             {profile.links.map((link, i) => (
               <div
                 key={i}
@@ -238,8 +253,7 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <LinkIcon className="w-5 h-5 text-[#9CA3AF]" />
-                    <span className="text-xs font-medium text-[#9CA3AF]">Link {i + 1}</span>
+                    <span className="text-xs font-semibold text-[#9CA3AF]">Link {i + 1}</span>
                   </div>
                   <button
                     onClick={() => removeLink(i)}
@@ -265,13 +279,12 @@ export default function InlineEditor({ profile, onChange }: InlineEditorProps) {
 
             <button
               onClick={addLink}
-              className="button button-secondary w-full gap-2"
+              className="w-full h-10 border border-[#E6E6E6] hover:bg-gray-50 text-black text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-sm mt-2"
             >
-              <Plus className="w-5 h-5" />
-              Add link
+              <Plus className="w-4 h-4" /> Add link
             </button>
 
-            <p className="text-xs text-[#9CA3AF] text-center">
+            <p className="text-[11px] text-[#9CA3AF] text-center mt-2 font-medium">
               Links appear in your profile header and footer.
             </p>
           </div>
