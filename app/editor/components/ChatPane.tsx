@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { MessageSquare, LayoutGrid, Edit2 } from "lucide-react";
+import { MessageSquare, LayoutGrid, Edit2, Plus, Mic, ArrowUp } from "lucide-react";
 import { toast } from "sonner";
 import { ProfileData, TemplateId } from "@/shared/types";
 import TemplatePicker from "./TemplatePicker";
@@ -34,19 +34,35 @@ const initialMessages: ChatMessage[] = [
   {
     id: "1",
     role: "user",
-    content: "Build me a LinkedIn micro-site",
+    content: "hi hellow",
     time: "",
   },
   {
     id: "2",
     role: "assistant",
-    content:
-      "Got it! I've loaded your LinkedIn profile data and applied the Minimal Card template. Use the canvas on the right to preview. Want me to switch to a different template or adjust anything?",
+    content: "Hello there, please describe your idea. Just share your thoughts with me and I'll help with rest!",
+    time: "",
+  },
+  {
+    id: "3",
+    role: "user",
+    content: "make a portfolio website with random details",
+    time: "",
+  },
+  {
+    id: "4",
+    role: "assistant",
+    content: "Hey there, sounds like you're looking to create a website for your portfolio. I'll start building right away.\n\nA dynamic and modern portfolio website showcasing creative projects with a focus on engaging visuals and clear presentation. The design leverages a warm color palette and bold typography to highlight professional work and client testimonials, creating an inviting user experience.",
     time: "",
   },
 ];
 
-const SUGGESTIONS = ["Change template", "Edit bio", "Add links", "Dark mode"];
+const SUGGESTIONS = [
+  "Refine Hero Headline",
+  "Condense About Description",
+  "Clarify Core Skills",
+  "Add Social Links",
+];
 
 export default function ChatPane({
   onCommand,
@@ -84,6 +100,10 @@ export default function ChatPane({
         "edit bio": "Of course. Switched you to the Edit profile tab so you can modify your bio.",
         "add links": "Open the Edit profile tab and navigate to the Links section.",
         "dark mode": "Applied Dark Mode template! Check the preview.",
+        "refine hero headline": "Certainly! Switched you to the Edit profile tab so you can refine your headline.",
+        "condense about description": "Of course! Let's edit your about description. Switched you to the Edit tab.",
+        "clarify core skills": "Sure! I've updated the focus on your skills. You can refine them in the Edit tab.",
+        "add social links": "Open the Edit profile tab and navigate to the Links section to add your socials.",
       };
       const lower = msg.toLowerCase();
       let reply = "I'll apply that change to your micro-site now. Let me know if you'd like any tweaks!";
@@ -93,8 +113,22 @@ export default function ChatPane({
 
       if (lower.includes("change template")) {
         setActiveTab("grid");
-      } else if (lower.includes("edit bio") || lower.includes("add links")) {
+      } else if (
+        lower.includes("edit bio") ||
+        lower.includes("add links") ||
+        lower.includes("refine hero") ||
+        lower.includes("about description") ||
+        lower.includes("skills") ||
+        lower.includes("social links")
+      ) {
         setActiveTab("theme");
+        if (setEditorTab) {
+          if (lower.includes("social links") || lower.includes("add links")) {
+            setEditorTab("links");
+          } else {
+            setEditorTab("profile");
+          }
+        }
       }
 
       setMessages((prev) => [
@@ -216,7 +250,7 @@ export default function ChatPane({
         {activeTab === "chat" && (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto px-6 pb-4 pt-4 flex flex-col gap-5" style={{ scrollbarWidth: "none" }}>
+            <div className="flex-1 overflow-y-auto px-6 pb-4 pt-4 flex flex-col gap-6" style={{ scrollbarWidth: "none" }}>
               <AnimatePresence initial={false}>
                 {messages.map((msg) => (
                   <motion.div
@@ -227,24 +261,47 @@ export default function ChatPane({
                   >
                     {msg.role === "user" ? (
                       <div className="flex justify-end">
-                        <div className="bg-[#F7F7F7] py-3 px-4 rounded-2xl rounded-tr-sm max-w-[85%] border border-[#E6E6E6]/30">
-                          <p className="text-[13px] text-[#171717] font-medium leading-snug">{msg.content}</p>
+                        <div className="bg-white py-3 px-5 rounded-[18px] max-w-[85%] border border-neutral-200/60 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
+                          <p className="text-[14px] text-neutral-800 font-normal leading-normal">{msg.content}</p>
                         </div>
                       </div>
                     ) : (
-                      <div className="flex items-start gap-3">
-                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#2A2A2F] to-[#4A4A55] flex items-center justify-center shrink-0 shadow-sm mt-0.5">
-                          <svg className="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                          </svg>
-                        </div>
-                        <div className="flex flex-col gap-1 max-w-[80%]">
-                          <span className="text-[11px] font-semibold text-gray-400">
-                            LinkedPage AI
-                          </span>
-                          <div className="bg-[#8DFFB3]/10 border border-[#8DFFB3]/40 rounded-2xl rounded-tl-sm px-4 py-3 shadow-[0_2px_8px_rgba(141,255,179,0.04)]">
-                            <p className="text-[13px] text-[#171717] font-medium leading-relaxed">{msg.content}</p>
+                      <div className="flex flex-col gap-2.5 w-full">
+                        {/* Header: Blue sphere and name "Webild" */}
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#3b82f6] via-[#1d4ed8] to-[#1e3a8a] relative overflow-hidden shadow-sm flex-shrink-0">
+                            {/* Inner glossy highlight */}
+                            <div className="absolute top-[2px] left-[3px] w-2.5 h-1.5 rounded-full bg-white/40 blur-[0.5px] transform -rotate-12"></div>
                           </div>
+                          <span className="font-semibold text-[14.5px] text-neutral-900 leading-none">
+                            Webild
+                          </span>
+                        </div>
+                        {/* Message content: No bubble background, plain text */}
+                        <div className="flex flex-col gap-3.5 pl-0 max-w-full">
+                          {msg.content.split("\n\n").map((para, i) => {
+                            // Check if paragraph starts with a subheader like "Color Palette"
+                            if (para.trim().startsWith("Color Palette")) {
+                              return (
+                                <div key={i} className="flex flex-col gap-1 mt-1">
+                                  <span className="text-[12px] font-semibold uppercase tracking-wider text-zinc-400 font-['Inter_Tight']">
+                                    Color Palette
+                                  </span>
+                                  {/* Render rest of text if any, or just empty space */}
+                                  {para.replace("Color Palette", "").trim() && (
+                                    <p className="text-[14px] text-neutral-800 font-normal leading-relaxed">
+                                      {para.replace("Color Palette", "").trim()}
+                                    </p>
+                                  )}
+                                </div>
+                              );
+                            }
+                            return (
+                              <p key={i} className="text-[14.5px] text-neutral-800 font-normal leading-relaxed whitespace-pre-wrap">
+                                {para}
+                              </p>
+                            );
+                          })}
                         </div>
                       </div>
                     )}
@@ -255,22 +312,22 @@ export default function ChatPane({
             </div>
 
             {/* Input area */}
-            <div className="p-4 shrink-0 bg-white border-t border-[#E6E6E6]/40">
+            <div className="p-4 shrink-0 bg-white flex flex-col gap-3">
               {/* Suggestion pills */}
-              <div className="flex gap-2 mb-3 overflow-x-auto" style={{ scrollbarWidth: "none" }}>
+              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
                     onClick={() => sendMessage(s)}
-                    className="flex-shrink-0 h-6 px-3 bg-[#F3F3F5] hover:bg-[#EAEAEA] rounded-lg text-[11px] font-semibold text-gray-600 hover:text-black transition-colors duration-150 whitespace-nowrap"
+                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-[10px] text-[13px] font-medium text-neutral-800 transition-colors duration-150 whitespace-nowrap shadow-[0_1px_2px_rgba(0,0,0,0.02)] cursor-pointer"
                   >
                     {s}
                   </button>
                 ))}
               </div>
 
-              {/* Text input */}
-              <div className="bg-[#F7F7F7] rounded-xl p-2 flex flex-col gap-2 border border-[#E6E6E6]/50">
+              {/* Text input composer */}
+              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0_4px_12px_rgba(0,0,0,0.03)]">
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -280,34 +337,28 @@ export default function ChatPane({
                       sendMessage();
                     }
                   }}
-                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-sm p-2 text-[#171717] placeholder:text-[#171717]/40 h-20 outline-none"
-                  placeholder="Ask LinkedPage AI…"
+                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-850 placeholder:text-neutral-400 h-16 outline-none"
+                  placeholder="Ask Webild..."
                 />
-                <div className="flex items-center justify-between px-1 pb-1">
+                <div className="flex items-center justify-between px-1">
                   <button
                     onClick={() => toast.info("Attachments coming soon!")}
-                    className="w-8 h-8 rounded-lg bg-white border border-[#E6E6E6] flex items-center justify-center text-[#171717]/50 hover:text-[#171717] transition-colors shadow-sm"
+                    className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 flex items-center justify-center transition-colors cursor-pointer border-none"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                    </svg>
+                    <Plus className="w-[18px] h-[18px]" />
                   </button>
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => toast.info("Voice input coming soon!")}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-[#171717]/50 hover:bg-[#F3F3F3] transition-colors"
+                      className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 flex items-center justify-center transition-colors cursor-pointer border-none"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                      </svg>
+                      <Mic className="w-[18px] h-[18px]" />
                     </button>
                     <button
                       onClick={() => sendMessage()}
-                      className="w-8 h-8 rounded-lg bg-[#2A2A2F] text-white flex items-center justify-center hover:bg-[#3A3A42] transition-colors active:scale-[0.95]"
+                      className="w-9 h-9 rounded-full bg-[#8DB8FF] hover:bg-[#7ca8f0] text-white flex items-center justify-center transition-all cursor-pointer border-none active:scale-[0.93]"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path d="M5 10l7-7m0 0l7 7m-7-7v18" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                      </svg>
+                      <ArrowUp className="w-[18px] h-[18px]" />
                     </button>
                   </div>
                 </div>

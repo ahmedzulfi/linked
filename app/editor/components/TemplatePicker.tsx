@@ -208,13 +208,13 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
 
                         {/* Bottom Gradient overlay */}
                         <div className="w-[208.61000061035156px] h-[78.22116088867188px] absolute bottom-0 left-0 pointer-events-none">
-                          <div className="w-[208.61000061035156px] h-[78.22116088867188px] bg-gradient-to-b from-black/0 to-black/80 absolute inset-0"></div>
+                          <div className="w-[208.61000061035156px] h-[78.22116088867188px] bg-gradient-to-b from-black/0 to-white/80 absolute inset-0"></div>
                         </div>
 
                         {/* Template Name tag */}
                         <div className="flex flex-col absolute bottom-3 left-3 z-10 pointer-events-none">
                           <div className="h-[23.079999923706055px] flex items-center">
-                            <span className="font-medium text-[15.199999809265137px] leading-[23px] capitalize text-white truncate max-w-[180px]">
+                            <span className="font-medium text-[15.199999809265137px] leading-[23px] capitalize text-black/80 truncate max-w-[180px]">
                               {template.name}
                             </span>
                           </div>

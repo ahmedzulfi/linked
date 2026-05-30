@@ -209,6 +209,13 @@ The media asset manager and uploader uses:
 - **Card Elements:** Two-column grid of image cards, each sized `w-[208.61px]` by `h-[156.45px]` with a `13px` corner radius, bottom gradient backdrop overlay, category text labels, and click/explore hover states.
 - **Controls & Tabs:** Interactive "Your Uploads" button of width `206.5px` and "Generate Images" button of width `210.52px` with absolute positioning for the glowing multicolor shadow. Includes a standard magnifying glass search field.
 
+### Chat Panel UI
+The interactive chat composer and conversation view uses:
+- **User Message Bubbles:** Styled with a pure white background, light gray border (`border-neutral-200/60`), subtle card shadow, and rounded corners (`rounded-[18px]`) aligned to the right.
+- **Webild AI Responses:** Rendered bubble-less directly on the panel. Includes a header with a 3D-glossy blue gradient sphere logo and bold text "Webild" in black.
+- **Interactive Suggestions:** Dynamic pill buttons rendered horizontally. Each pill has a light border, white background, black text, and soft shadow.
+- **Input Composer:** A floating white panel with `rounded-[20px]`, `border-neutral-200/80`, and `shadow-[0_4px_12px_rgba(0,0,0,0.03)]` containing a multi-line textarea, a circular left-aligned plus icon button, and right-aligned microphone and blue send buttons.
+
 
 ## Motion & Animation Guidelines
 
