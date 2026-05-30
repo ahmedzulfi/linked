@@ -40,14 +40,6 @@ const navItems: NavItem[] = [
     ),
   },
   {
-    label: "Blogs",
-    icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-      </svg>
-    ),
-  },
-  {
     label: "Site Settings",
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -495,174 +487,6 @@ function DomainsPane() {
               <div>Host: <strong className="text-black">www</strong></div>
               <div>Value: <strong className="text-black">cname.webild.co</strong></div>
             </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function BlogsPane() {
-  const [posts, setPosts] = useState<{ id: string; title: string; slug: string; status: "draft" | "published"; content: string }[]>([
-    { id: "1", title: "My First Blog Post", slug: "my-first-post", status: "published", content: "Hello world! Welcome to my brand new web portfolio. Built with Webild setup wizard in under 60 seconds." },
-    { id: "2", title: "Design Systems in 2026", slug: "design-systems-2026", status: "draft", content: "An in-depth look at how component paradigms have evolved over the years..." }
-  ]);
-
-  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
-  const [editTitle, setEditTitle] = useState("");
-  const [editSlug, setEditSlug] = useState("");
-  const [editContent, setEditContent] = useState("");
-  const [editStatus, setEditStatus] = useState<"draft" | "published">("draft");
-
-  const handleEditPost = (id: string) => {
-    const post = posts.find(p => p.id === id);
-    if (!post) return;
-    setSelectedPostId(id);
-    setEditTitle(post.title);
-    setEditSlug(post.slug);
-    setEditContent(post.content);
-    setEditStatus(post.status);
-  };
-
-  const handleCreatePost = () => {
-    const newId = Date.now().toString();
-    const newPost = {
-      id: newId,
-      title: "Untitled Post",
-      slug: "untitled-post",
-      status: "draft" as const,
-      content: "Write post content here..."
-    };
-    setPosts(prev => [newPost, ...prev]);
-    handleEditPost(newId);
-    toast.success("New blog post created!");
-  };
-
-  const handleSave = () => {
-    if (!selectedPostId) return;
-    setPosts(prev => prev.map(p => p.id === selectedPostId ? {
-      ...p,
-      title: editTitle,
-      slug: editSlug.toLowerCase().replace(/[^a-z0-9-]/g, ""),
-      content: editContent,
-      status: editStatus
-    } : p));
-    setSelectedPostId(null);
-    toast.success("Blog post saved!");
-  };
-
-  const handleDelete = (id: string) => {
-    setPosts(prev => prev.filter(p => p.id !== id));
-    if (selectedPostId === id) setSelectedPostId(null);
-    toast.success("Blog post deleted");
-  };
-
-  return (
-    <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
-      {/* Title Header */}
-      <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
-        <span className="font-semibold text-[15px] text-black">Blogs & Articles</span>
-        {!selectedPostId && (
-          <button
-            onClick={handleCreatePost}
-            className="h-7 px-3 bg-[#2A2A2F] text-white rounded-md text-[11px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all"
-          >
-            + Create
-          </button>
-        )}
-      </div>
-
-      {/* Content container */}
-      <div className="flex-1 overflow-y-auto p-5" style={{ scrollbarWidth: "none" }}>
-        {selectedPostId ? (
-          /* Edit Post Form */
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Title</label>
-              <input
-                type="text"
-                value={editTitle}
-                onChange={(e) => setEditTitle(e.target.value)}
-                className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-semibold"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Slug</label>
-              <input
-                type="text"
-                value={editSlug}
-                onChange={(e) => setEditSlug(e.target.value)}
-                className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-xs font-mono text-black outline-none focus:ring-1 focus:ring-blue-400"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Status</label>
-              <select
-                value={editStatus}
-                onChange={(e) => setEditStatus(e.target.value as "draft" | "published")}
-                className="w-full h-9 px-2 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
-              >
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-              </select>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Content</label>
-              <textarea
-                value={editContent}
-                onChange={(e) => setEditContent(e.target.value)}
-                rows={6}
-                className="w-full p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 resize-none"
-              />
-            </div>
-
-            <div className="flex gap-2 mt-2">
-              <button
-                onClick={handleSave}
-                className="flex-1 h-9 rounded-lg bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all"
-              >
-                Save Post
-              </button>
-              <button
-                onClick={() => setSelectedPostId(null)}
-                className="px-3 h-9 rounded-lg bg-gray-100 hover:bg-gray-200 text-black text-[12px] font-semibold active:scale-95 transition-all"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        ) : (
-          /* Posts List */
-          <div className="flex flex-col gap-3">
-            {posts.map((post) => (
-              <div key={post.id} className="p-3.5 bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl flex items-center justify-between group hover:shadow-sm transition-shadow">
-                <div className="flex flex-col min-w-0 pr-4">
-                  <span className="text-[13px] font-bold text-black truncate">{post.title}</span>
-                  <span className="text-[11px] text-gray-400 font-mono mt-0.5 truncate">/{post.slug}</span>
-                </div>
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <button
-                    onClick={() => handleEditPost(post.id)}
-                    className="w-7 h-7 rounded-lg bg-[#F3F3F5] text-black hover:bg-gray-200 flex items-center justify-center active:scale-90 transition-all"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => handleDelete(post.id)}
-                    className="w-7 h-7 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center active:scale-90 transition-all"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            ))}
           </div>
         )}
       </div>
@@ -1309,9 +1133,6 @@ function EditorInner() {
         <DomainsPane />
       )}
       {activeNav === 3 && (
-        <BlogsPane />
-      )}
-      {activeNav === 4 && (
         <SettingsPane profileName={profileName} router={router} />
       )}
 
