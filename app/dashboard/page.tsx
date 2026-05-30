@@ -10,15 +10,359 @@ import {
   CreditCard, 
   BookOpen, 
   Settings, 
-  LogOut,
-  User,
-  Shield,
   Trash2,
   Edit2,
   ExternalLink,
   Globe
 } from "lucide-react";
 import { toast } from "sonner";
+
+function UserMenu() {
+  return (
+    <div
+      className="absolute z-55 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_#ffff,0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
+      style={{
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+        opacity: 1,
+      }}
+    >
+      <div
+        className="space-y-4"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+        }}
+      >
+        <div
+          className="flex items-center gap-3"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        >
+          <div
+            className="relative shrink-0 rounded-lg h-9 w-9 p-0.5 cursor-pointer border border-[#E6E6E6]"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <img
+              className="h-full w-full object-cover rounded-lg"
+              height={31}
+              width={31}
+              alt="user"
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                color: "transparent",
+              }}
+            />
+          </div>
+          <div
+            className="truncate"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <p
+              className="text-sm font-medium leading-tight text-[#2A2A2F] truncate"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              Ayesha Zulfiqar
+            </p>
+            <p
+              className="text-xs text-[#171717]/60 leading-tight truncate"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              ayeshazulfiqar609@gmail.com
+            </p>
+          </div>
+        </div>
+        <div
+          className="border-t border-black/8"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        />
+        <div
+          className="flex flex-col gap-3"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        >
+          <div
+            className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <div
+              className="flex justify-between"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <span
+                className="text-sm font-medium text-[#2A2A2F]"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                Credits
+              </span>
+              <span
+                className="text-sm font-medium text-[#2A2A2F]"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                16 left
+              </span>
+            </div>
+            <div
+              className="w-full rounded-lg bg-white border border-[#E6E6E6] overflow-hidden p-0.5"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <div
+                className="relative bg-[#8DFFB3] h-2 rounded-lg transition-all duration-300"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  width: "25%",
+                }}
+              />
+            </div>
+            <div
+              className="text-xs text-[#171717]/70 mt-1 leading-relaxed"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <span
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                You're on the free plan. Unlock additional features and
+                credits by upgrading your plan.
+              </span>
+            </div>
+          </div>
+          <button
+            className="flex items-center justify-center font-medium transition-all duration-150 bg-[#2A2A2F] text-white hover:bg-[#3E3E45] rounded-[9px] w-full text-xs h-9 active:scale-95"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            Upgrade
+          </button>
+        </div>
+        <div className="flex flex-col gap-1">
+          <button
+            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <svg
+              className="w-5 h-5"
+              height="24"
+              width="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <path
+                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </svg>
+            Settings
+          </button>
+          <button
+            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <svg
+              className="w-5 h-5"
+              height="24"
+              width="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <path
+                d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </svg>
+            Report a bug
+          </button>
+          <button
+            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <svg
+              className="w-5 h-5"
+              height="24"
+              width="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <path
+                d="M12 7v14"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+              <path
+                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </svg>
+            Documentation
+          </button>
+        </div>
+        <div
+          className="border-t border-black/8"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        />
+        <button
+          className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F3F3F3] text-black w-full"
+          type="button"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        >
+          <svg
+            className="w-5 h-5"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <path
+              d="m16 17 5-5-5-5"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            />
+            <path
+              d="M21 12H9"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            />
+            <path
+              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            />
+          </svg>
+          Sign out
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -35,25 +379,17 @@ export default function DashboardPage() {
     if (storedSubdomain) setSubdomain(storedSubdomain);
   }, []);
 
-  const handleLogout = () => {
-    toast.success("Logging out...");
-    setTimeout(() => router.push("/login"), 1000);
-  };
-
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
       
-      {/* ── Background Graphic (Same as Hero bg on Landing Page) ── */}
+      {/* ── Background Graphic ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
         <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
       </div>
 
-      {/* ── Editor Style Navbar/Top-bar ── */}
-      <header 
-        className="fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-md border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none"
-        style={{ boxShadow: "0 6px 10px -6px #00000016" }}
-      >
+      {/* ── Editor Style Navbar/Top-bar (Removed shadow) ── */}
+      <header className="fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-md border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none shadow-none">
         {/* Left Logo Side */}
         <div className="flex items-center gap-3">
           <img
@@ -66,7 +402,7 @@ export default function DashboardPage() {
           <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{brandName}</span>
         </div>
 
-        {/* Right Action Side (Share + Publish + Avatar matching Editor top bar) */}
+        {/* Right Action Side */}
         <div className="flex items-center gap-2 relative">
           <button
             onClick={() => {
@@ -74,7 +410,6 @@ export default function DashboardPage() {
               toast.success("Site link copied to clipboard!");
             }}
             className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
-            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
           >
             Share
           </button>
@@ -88,7 +423,6 @@ export default function DashboardPage() {
               }, 1000);
             }}
             className="h-8 px-5 text-xs font-semibold bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-all active:scale-[0.97]"
-            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
           >
             Publish
           </button>
@@ -97,7 +431,6 @@ export default function DashboardPage() {
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
-            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
           >
             <img 
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
@@ -109,43 +442,7 @@ export default function DashboardPage() {
           {/* User Dropdown Menu */}
           <AnimatePresence>
             {isUserMenuOpen && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -8 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                  transition={{ duration: 0.15, ease: "easeOut" }}
-                  className="absolute right-0 top-10 z-50 w-52 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
-                  style={{ boxShadow: "0 6px 10px -6px #00000016" }}
-                >
-                  <div className="px-4 py-2 border-b border-[#F5F5F7] mb-1">
-                    <p className="text-[13px] font-bold text-black truncate">{brandName}</p>
-                    <p className="text-[11px] text-[#88888E] truncate">{subdomain}</p>
-                  </div>
-                  <button 
-                    onClick={() => { setIsUserMenuOpen(false); router.push("/editor"); }}
-                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                  >
-                    <User className="w-4 h-4 text-gray-500" />
-                    Builder Editor
-                  </button>
-                  <button 
-                    onClick={() => { setIsUserMenuOpen(false); toast.info("Premium plans unlock all features."); }}
-                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                  >
-                    <Shield className="w-4 h-4 text-gray-500" />
-                    Account Level
-                  </button>
-                  <button 
-                    onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}
-                    className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1.5"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Log out
-                  </button>
-                </motion.div>
-              </>
+              <UserMenu />
             )}
           </AnimatePresence>
         </div>
@@ -164,7 +461,6 @@ export default function DashboardPage() {
             <button 
               onClick={() => router.push("/onboarding")}
               className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
-              style={{ boxShadow: "0 6px 10px -6px #00000016" }}
             >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
                 <rect width="18" height="18" x="3" y="3" rx="2" />
@@ -194,7 +490,6 @@ export default function DashboardPage() {
               {/* Active Tab */}
               <button 
                 className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
-                style={{ boxShadow: "0 6px 10px -6px #00000016" }}
               >
                 <Folder className="w-[18px] h-[18px] text-[#1A68FF]" />
                 All Websites
@@ -207,7 +502,6 @@ export default function DashboardPage() {
               
               <div 
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
-                style={{ boxShadow: "0 6px 10px -6px #00000016" }}
               >
                 <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
                   c
@@ -283,7 +577,6 @@ export default function DashboardPage() {
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  boxShadow: "0 6px 10px -6px #00000016"
                 }}
               >
                 <img
@@ -322,7 +615,6 @@ export default function DashboardPage() {
               style={{
                 scrollbarWidth: "thin",
                 scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                boxShadow: "0 6px 10px -6px #00000016"
               }}
             >
               <svg
@@ -383,7 +675,6 @@ export default function DashboardPage() {
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  boxShadow: "0 6px 10px -6px #00000016"
                 }}
               >
                 <div
@@ -517,7 +808,6 @@ export default function DashboardPage() {
                           <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
                           <div 
                             className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
-                            style={{ boxShadow: "0 6px 10px -6px #00000016" }}
                           >
                             <button 
                               onClick={() => { setShowDropdown(false); router.push("/editor"); }}

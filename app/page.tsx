@@ -6,6 +6,364 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { 
+  Home, 
+  Layout as LayoutIcon, 
+  Folder, 
+  CreditCard, 
+  BookOpen, 
+  Settings, 
+  LogOut,
+  User,
+  Shield
+} from "lucide-react";
+
+function UserMenu() {
+  return (
+    <div
+      className="absolute z-55 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_#ffff,0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
+      style={{
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+        opacity: 1,
+      }}
+    >
+      <div
+        className="space-y-4"
+        style={{
+          scrollbarWidth: "thin",
+          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+        }}
+      >
+        <div
+          className="flex items-center gap-3"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        >
+          <div
+            className="relative shrink-0 rounded-lg h-9 w-9 p-0.5 cursor-pointer border border-[#E6E6E6]"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <img
+              className="h-full w-full object-cover rounded-lg"
+              height={31}
+              width={31}
+              alt="user"
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                color: "transparent",
+              }}
+            />
+          </div>
+          <div
+            className="truncate"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <p
+              className="text-sm font-medium leading-tight text-[#2A2A2F] truncate"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              Ayesha Zulfiqar
+            </p>
+            <p
+              className="text-xs text-[#171717]/60 leading-tight truncate"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              ayeshazulfiqar609@gmail.com
+            </p>
+          </div>
+        </div>
+        <div
+          className="border-t border-black/8"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        />
+        <div
+          className="flex flex-col gap-3"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        >
+          <div
+            className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <div
+              className="flex justify-between"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <span
+                className="text-sm font-medium text-[#2A2A2F]"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                Credits
+              </span>
+              <span
+                className="text-sm font-medium text-[#2A2A2F]"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                16 left
+              </span>
+            </div>
+            <div
+              className="w-full rounded-lg bg-white border border-[#E6E6E6] overflow-hidden p-0.5"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <div
+                className="relative bg-[#8DFFB3] h-2 rounded-lg transition-all duration-300"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  width: "25%",
+                }}
+              />
+            </div>
+            <div
+              className="text-xs text-[#171717]/70 mt-1 leading-relaxed"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <span
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                You're on the free plan. Unlock additional features and
+                credits by upgrading your plan.
+              </span>
+            </div>
+          </div>
+          <button
+            className="flex items-center justify-center font-medium transition-all duration-150 bg-[#2A2A2F] text-white hover:bg-[#3E3E45] rounded-[9px] w-full text-xs h-9 active:scale-95"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            Upgrade
+          </button>
+        </div>
+        <div className="flex flex-col gap-1">
+          <button
+            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <svg
+              className="w-5 h-5"
+              height="24"
+              width="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <path
+                d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 0 3.319-1.915"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+              <circle
+                cx="12"
+                cy="12"
+                r="3"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </svg>
+            Settings
+          </button>
+          <button
+            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <svg
+              className="w-5 h-5"
+              height="24"
+              width="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <path
+                d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </svg>
+            Report a bug
+          </button>
+          <button
+            className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
+            type="button"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <svg
+              className="w-5 h-5"
+              height="24"
+              width="24"
+              aria-hidden="true"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <path
+                d="M12 7v14"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+              <path
+                d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />
+            </svg>
+            Documentation
+          </button>
+        </div>
+        <div
+          className="border-t border-black/8"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        />
+        <button
+          className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F3F3F3] text-black w-full"
+          type="button"
+          style={{
+            scrollbarWidth: "thin",
+            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+          }}
+        >
+          <svg
+            className="w-5 h-5"
+            height="24"
+            width="24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <path
+              d="m16 17 5-5-5-5"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            />
+            <path
+              d="M21 12H9"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            />
+            <path
+              d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            />
+          </svg>
+          Sign out
+        </button>
+      </div>
+    </div>
+  );
+}
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
@@ -914,6 +1272,9 @@ export default function Index() {
   const router = useRouter();
   const [showPreview, setShowPreview] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [brandName, setBrandName] = useState("Creative Portfolio");
+  const [subdomain, setSubdomain] = useState("realitycheque.io");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -921,6 +1282,10 @@ export default function Index() {
       setShowPreview(true);
       window.history.replaceState({}, "", "/");
     }
+    const storedBrand = sessionStorage.getItem("webild_brand_name");
+    const storedSubdomain = sessionStorage.getItem("webild_subdomain");
+    if (storedBrand) setBrandName(storedBrand);
+    if (storedSubdomain) setSubdomain(storedSubdomain);
   }, []);
 
   const simulateGeneration = (url: string) => {
@@ -952,17 +1317,204 @@ export default function Index() {
     router.push("/editor");
   };
 
+  const handleLogout = () => {
+    toast.success("Logging out...");
+    setTimeout(() => router.push("/login"), 1000);
+  };
+
   return (
-    <div className="min-h-screen font-inter bg-white text-black antialiased relative">
-      <Navbar />
-      <main>
-        <HeroSection onGenerate={simulateGeneration} />
-        <TemplatesSection onSelectTemplate={handleSelectTemplate} />
-        <BusinessSection />
-        <FeaturesSection onStartTrial={handleTrial} />
-        <FAQSection />
-      </main>
-      <Footer />
+    <div className="min-h-screen font-inter bg-[#FBFBFB] text-black antialiased relative overflow-x-hidden">
+      
+      {/* ── Editor Style Navbar/Top-bar (No shadow) ── */}
+      <header className="fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-md border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none shadow-none">
+        {/* Left Logo Side */}
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Webild"
+            className="h-7 w-auto object-contain cursor-pointer"
+            onClick={() => router.push("/")}
+          />
+          <div className="w-px h-4 bg-[#2A2A2F]/15" />
+          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{brandName}</span>
+        </div>
+
+        {/* Right Action Side */}
+        <div className="flex items-center gap-2 relative">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(`https://${subdomain}`);
+              toast.success("Site link copied to clipboard!");
+            }}
+            className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
+          >
+            Share
+          </button>
+          
+          <button
+            onClick={() => {
+              toast.loading("Publishing changes...");
+              setTimeout(() => {
+                toast.dismiss();
+                toast.success("Your site updates are live!");
+              }, 1000);
+            }}
+            className="h-8 px-5 text-xs font-semibold bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-all active:scale-[0.97]"
+          >
+            Publish
+          </button>
+
+          {/* User Menu Avatar Trigger */}
+          <button
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+              alt="Avatar" 
+              className="w-full h-full object-cover" 
+            />
+          </button>
+
+          {/* User Dropdown Menu */}
+          <AnimatePresence>
+            {isUserMenuOpen && (
+              <UserMenu />
+            )}
+          </AnimatePresence>
+        </div>
+      </header>
+
+      {/* ── Main Container (Sidebar + Content Side-by-Side) ── */}
+      <div className="flex pt-14 min-h-screen relative z-10">
+        
+        {/* ── Sidebar (Sticky Left, same as Dashboard but Home active) ── */}
+        <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
+          
+          {/* Top navigation items */}
+          <div className="flex flex-col gap-6">
+            
+            {/* New Website Button */}
+            <button 
+              onClick={() => router.push("/onboarding")}
+              className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 12h6M12 9v6" />
+              </svg>
+              New Website
+            </button>
+
+            {/* Menu Items (Home Active) */}
+            <div className="flex flex-col gap-1.5">
+              <button 
+                className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
+                style={{ boxShadow: "0 6px 10px -6px #00000016" }}
+              >
+                <Home className="w-[18px] h-[18px] text-[#1A68FF]" />
+                Home
+              </button>
+
+              <button 
+                onClick={() => router.push("/editor")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <LayoutIcon className="w-[18px] h-[18px] text-black" />
+                Templates
+              </button>
+
+              <button 
+                onClick={() => router.push("/dashboard")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <Folder className="w-[18px] h-[18px] text-black" />
+                All Websites
+              </button>
+            </div>
+
+            {/* Recent Websites Section */}
+            <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
+              <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
+              
+              <div 
+                onClick={() => router.push("/dashboard")}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
+              >
+                <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
+                  c
+                </div>
+                <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Bottom navigation & pricing items */}
+          <div className="flex flex-col gap-6">
+            
+            {/* Pricing, Documentation, Settings */}
+            <div className="flex flex-col gap-1">
+              <button 
+                onClick={() => toast.info("Pricing modal coming soon!")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <CreditCard className="w-[18px] h-[18px] text-black" />
+                Pricing
+              </button>
+
+              <button 
+                onClick={() => toast.info("Documentation coming soon!")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <BookOpen className="w-[18px] h-[18px] text-black" />
+                Documentation
+              </button>
+
+              <button 
+                onClick={() => toast.info("Settings panel coming soon!")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <Settings className="w-[18px] h-[18px] text-black" />
+                Settings
+              </button>
+            </div>
+
+            {/* Upgrade Plan Card with rainbow glow */}
+            <div className="p-5 rounded-[16px] bg-white/80 border border-[#E6E6E6] relative overflow-hidden flex flex-col gap-3 shadow-[0_0_15px_rgba(255,100,100,0.04)] before:absolute before:inset-0 before:rounded-[16px] before:border before:border-transparent before:bg-gradient-to-r before:from-pink-400 before:via-purple-400 before:to-blue-400 before:[mask-image:linear-gradient(white,white)_padding-box,linear-gradient(white,white)] before:[mask-clip:padding-box,border-box] before:pointer-events-none">
+              <p className="text-[13px] font-bold text-black leading-tight">
+                ONLY $16 to unlock Premium Features
+              </p>
+              <button 
+                onClick={() => toast.success("Upgrade Plan triggered!")}
+                className="w-full h-9 rounded-[8px] bg-[#3B82F6] hover:bg-[#2563eb] text-white text-[12px] font-bold flex items-center justify-center shadow-[0_4px_10px_rgba(59,130,246,0.3)] active:scale-[0.98] transition-all"
+              >
+                Upgrade Now
+              </button>
+            </div>
+
+          </div>
+
+        </aside>
+
+        {/* ── Shifted Hero/Landing Content (Right Side) ── */}
+        <main className="flex-1 min-w-0 relative">
+          {/* Background Image inside main content container to align with screen background */}
+          <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
+            <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
+          </div>
+
+          <div className="relative z-10">
+            <HeroSection onGenerate={simulateGeneration} />
+            <TemplatesSection onSelectTemplate={handleSelectTemplate} />
+            <BusinessSection />
+            <FeaturesSection onStartTrial={handleTrial} />
+            <FAQSection />
+            <Footer />
+          </div>
+        </main>
+      </div>
 
       {/* Scraped Site Live Preview Overlay Modal */}
       <AnimatePresence>
