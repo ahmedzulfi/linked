@@ -1491,22 +1491,6 @@ export default function Index() {
                   </button>
                 </div>
 
-                {/* Upgrade Plan Card with rainbow glow */}
-                <div className="p-5 rounded-[16px] bg-white/80 border border-[#E6E6E6] relative overflow-hidden flex flex-col gap-3 shadow-[0_0_15px_rgba(255,100,100,0.04)] before:absolute before:inset-0 before:rounded-[16px] before:border before:border-transparent before:bg-gradient-to-r before:from-pink-400 before:via-purple-400 before:to-blue-400 before:[mask-image:linear-gradient(white,white)_padding-box,linear-gradient(white,white)] before:[mask-clip:padding-box,border-box] before:pointer-events-none">
-                  <p className="text-[13px] font-bold text-black leading-tight">
-                    ONLY $16 to unlock Premium Features
-                  </p>
-                  <button 
-                    onClick={() => {
-                      setIsSidebarOpen(false);
-                      toast.success("Upgrade Plan triggered!");
-                    }}
-                    className="w-full h-9 rounded-[8px] bg-[#3B82F6] hover:bg-[#2563eb] text-white text-[12px] font-bold flex items-center justify-center shadow-[0_4px_10px_rgba(59,130,246,0.3)] active:scale-[0.98] transition-all"
-                  >
-                    Upgrade Now
-                  </button>
-                </div>
-
               </div>
 
             </motion.aside>
