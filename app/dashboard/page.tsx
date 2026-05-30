@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Navbar from "@/components/Navbar";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Home, 
   Layout, 
@@ -10,12 +10,15 @@ import {
   CreditCard, 
   BookOpen, 
   Settings, 
-  Plus,
+  Search,
   MoreHorizontal,
   Edit2,
   ExternalLink,
   Trash2,
-  Globe
+  Globe,
+  LogOut,
+  User,
+  Shield
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -25,6 +28,7 @@ export default function DashboardPage() {
   const [subdomain, setSubdomain] = useState("realitycheque.io");
   const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
     const storedBrand = sessionStorage.getItem("webild_brand_name");
@@ -33,16 +37,114 @@ export default function DashboardPage() {
     if (storedSubdomain) setSubdomain(storedSubdomain);
   }, []);
 
+  const handleLogout = () => {
+    toast.success("Logging out...");
+    setTimeout(() => router.push("/login"), 1000);
+  };
+
   return (
     <div className="min-h-screen bg-white font-inter flex flex-col text-black antialiased">
-      {/* ── Landing Page Navbar ── */}
-      <Navbar />
+      
+      {/* ── Editor Style Navbar/Top-bar ── */}
+      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none">
+        {/* Left Logo Side */}
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo.png"
+            alt="Webild"
+            className="h-7 w-auto object-contain cursor-pointer"
+            onClick={() => router.push("/")}
+          />
+          <div className="w-px h-4 bg-[#2A2A2F]/15" />
+          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{brandName}</span>
+        </div>
+
+        {/* Right Action Side (Share + Publish + Avatar matching Editor top bar) */}
+        <div className="flex items-center gap-2 relative">
+          <button
+            onClick={() => {
+              navigator.clipboard.writeText(`https://${subdomain}`);
+              toast.success("Site link copied to clipboard!");
+            }}
+            className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
+          >
+            Share
+          </button>
+          
+          <button
+            onClick={() => {
+              toast.loading("Publishing changes...");
+              setTimeout(() => {
+                toast.dismiss();
+                toast.success("Your site updates are live!");
+              }, 1000);
+            }}
+            className="h-8 px-5 text-xs font-semibold bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-all active:scale-[0.97]"
+          >
+            Publish
+          </button>
+
+          {/* User Menu Avatar Trigger */}
+          <button
+            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-sm hover:scale-105 active:scale-95 transition-all ml-1"
+          >
+            <img 
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
+              alt="Avatar" 
+              className="w-full h-full object-cover" 
+            />
+          </button>
+
+          {/* User Dropdown Menu */}
+          <AnimatePresence>
+            {isUserMenuOpen && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute right-0 top-10 z-50 w-52 bg-white border border-[#EBEBEB] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] py-1.5 flex flex-col"
+                >
+                  <div className="px-4 py-2 border-b border-[#F5F5F7] mb-1">
+                    <p className="text-[13px] font-bold text-black truncate">{brandName}</p>
+                    <p className="text-[11px] text-[#88888E] truncate">{subdomain}</p>
+                  </div>
+                  <button 
+                    onClick={() => { setIsUserMenuOpen(false); router.push("/editor"); }}
+                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                  >
+                    <User className="w-4 h-4 text-gray-500" />
+                    Builder Editor
+                  </button>
+                  <button 
+                    onClick={() => { setIsUserMenuOpen(false); toast.info("Premium plans unlock all features."); }}
+                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                  >
+                    <Shield className="w-4 h-4 text-gray-500" />
+                    Account Level
+                  </button>
+                  <button 
+                    onClick={() => { setIsUserMenuOpen(false); handleLogout(); }}
+                    className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1.5"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Log out
+                  </button>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
+        </div>
+      </header>
 
       {/* ── Main Container (Sidebar + Content) ── */}
-      <div className="flex-1 flex pt-28 min-h-screen">
+      <div className="flex-1 flex pt-14 min-h-screen">
         
         {/* ── Sidebar (Sticky Left) ── */}
-        <aside className="w-[260px] border-r border-[#F3F3F5] px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-7rem)] sticky top-28 select-none">
+        <aside className="w-[260px] border-r border-[#F3F3F5] px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
           
           {/* Top navigation items */}
           <div className="flex flex-col gap-6">
