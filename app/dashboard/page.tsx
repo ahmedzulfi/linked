@@ -10,15 +10,13 @@ import {
   CreditCard, 
   BookOpen, 
   Settings, 
-  Search,
-  MoreHorizontal,
-  Edit2,
-  ExternalLink,
-  Trash2,
-  Globe,
   LogOut,
   User,
-  Shield
+  Shield,
+  Trash2,
+  Edit2,
+  ExternalLink,
+  Globe
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -232,8 +230,6 @@ export default function DashboardPage() {
               </button>
             </div>
 
-
-
           </div>
 
         </aside>
@@ -361,119 +357,173 @@ export default function DashboardPage() {
           <div className="w-full flex justify-start pl-2">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
               
-              {/* Website card */}
-              <div className="w-full max-w-[390px] bg-white border border-[#EBEBEB] rounded-[16px] overflow-hidden group select-none shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300">
-                
-                {/* Site preview image container */}
-                <div className="relative aspect-[16/10] bg-[#FFF8F3] border-b border-[#F5F5F7] overflow-hidden flex items-center justify-center p-3">
-                  
-                  {/* Simulated preview of bento template matching screenshot exactly */}
-                  <div className="w-full h-full bg-[#FFFBF7] rounded-[10px] border border-[#F3EBE3] p-4 flex flex-col gap-2 relative overflow-hidden shadow-[0_2px_6px_rgba(0,0,0,0.02)]">
-                    <div className="flex items-center justify-between w-full">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#3B82F6]" />
-                      <div className="flex gap-1">
-                        <div className="w-7 h-3.5 bg-[#FF8A00] rounded-[4px] scale-[0.8]" />
-                        <div className="w-7 h-3.5 bg-[#E6E6E6] rounded-[4px] scale-[0.8]" />
-                      </div>
-                    </div>
-                    
-                    {/* Headline & description */}
-                    <div className="flex flex-col gap-1 mt-1 max-w-[55%]">
-                      <h5 className="text-[12px] font-bold text-black leading-tight">Innovate. Design. Create.</h5>
-                      <p className="text-[6px] text-gray-500 leading-normal">Transforming ideas into captivating digital experiences. Explore my journey and portfolio.</p>
-                      <div className="flex gap-1 mt-1">
-                        <div className="w-12 h-3.5 bg-[#FF8A00] rounded-[4px] scale-[0.8]" />
-                        <div className="w-12 h-3.5 bg-[#E6E6E6] border border-[#E6E6E6] rounded-[4px] scale-[0.8]" />
-                      </div>
-                    </div>
-
-                    {/* Bento Images right */}
-                    <div className="absolute right-4 top-8 bottom-4 w-[35%] flex flex-col gap-1.5">
-                      <div className="flex-1 bg-[#E6E6E6] rounded-[6px] overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=150&auto=format&fit=crop&q=60" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1 bg-[#E6E6E6] rounded-[6px] overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=150&auto=format&fit=crop&q=60" className="w-full h-full object-cover" />
-                      </div>
-                    </div>
-
-                    {/* Footer tags */}
-                    <div className="absolute bottom-2 left-4 right-4 flex items-center justify-between gap-1 border-t border-[#F3EBE3] pt-1.5">
-                      <div className="h-1 w-6 bg-[#E6E6E6] rounded" />
-                      <div className="h-1 w-6 bg-[#E6E6E6] rounded" />
-                      <div className="h-1 w-6 bg-[#E6E6E6] rounded" />
-                      <div className="h-1 w-8 bg-[#FF8A00] rounded" />
-                    </div>
-                  </div>
-
-                  {/* Hover Quick Edit Panel overlay */}
-                  <div className="absolute inset-0 bg-black/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
-                    <button 
-                      onClick={() => router.push("/editor")}
-                      className="h-9 px-3.5 rounded-[10px] bg-white border border-[#E6E6E6] text-black font-semibold text-[12px] hover:bg-[#F3F3F5] shadow-sm flex items-center gap-1.5 active:scale-95 transition-all"
+              {/* User-Styled Website card using exact code */}
+              <div
+                className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                <div
+                  onClick={() => router.push("/editor")}
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  }}
+                >
+                  <div
+                    className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center"
+                    style={{
+                      scrollbarWidth: "thin",
+                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                    }}
+                  >
+                    <div
+                      className="relative w-full p-1 rounded-sm flex items-center justify-center"
+                      style={{
+                        scrollbarWidth: "thin",
+                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                      }}
                     >
-                      <Edit2 className="w-3.5 h-3.5" />
-                      Edit
-                    </button>
-                    <button 
-                      onClick={() => router.push("/preview")}
-                      className="h-9 px-3.5 rounded-[10px] bg-[#2A2A2F] text-white font-semibold text-[12px] hover:bg-[#3E3E45] shadow-sm flex items-center gap-1.5 active:scale-95 transition-all"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      Preview
-                    </button>
+                      <div
+                        className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white"
+                        style={{
+                          scrollbarWidth: "thin",
+                          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                        }}
+                      >
+                        <iframe
+                          className="absolute top-0 left-0 border-none pointer-events-none"
+                          sandbox="allow-scripts allow-same-origin"
+                          src="https://webuild-dev.s3.eu-north-1.amazonaws.com/previews/86be4a9a-430f-4330-9206-d2c1c63b4910/index.html"
+                          tabIndex={-1}
+                          title="Preview"
+                          style={{
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                            transition: "opacity 0.3s",
+                            width: "1280px",
+                            height: "720px",
+                            transform: "scale(0.265)", // scaled to fit the 16:9 card aspect beautifully
+                            transformOrigin: "left top",
+                            opacity: 1,
+                          }}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Card Footer */}
-                <div className="p-4 flex items-center justify-between relative">
-                  <div className="flex flex-col gap-0.5">
-                    <h4 className="text-[14px] font-semibold text-black">{brandName}</h4>
-                    <p className="text-[12px] text-[#88888E]">Created 17 hours ago</p>
-                  </div>
-
-                  <div className="relative">
-                    <button 
-                      onClick={() => setShowDropdown(!showDropdown)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:bg-[#F3F3F5] active:scale-90 transition-all"
+                
+                {/* Card Footer details */}
+                <div
+                  className="flex items-start justify-between relative min-w-0"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  }}
+                >
+                  <div
+                    className="min-w-0 max-w-[80%] flex flex-col"
+                    style={{
+                      scrollbarWidth: "thin",
+                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                    }}
+                  >
+                    <h3
+                      className="text-sm font-semibold leading-tight truncate text-black"
+                      style={{
+                        scrollbarWidth: "thin",
+                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                      }}
                     >
-                      <MoreHorizontal className="w-4 h-4" />
-                    </button>
+                      {brandName}
+                    </h3>
+                    <p
+                      className="text-xs leading-tight truncate text-gray-500 mt-1"
+                      style={{
+                        scrollbarWidth: "thin",
+                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                      }}
+                    >
+                      Created 17 hours ago
+                    </p>
+                  </div>
+                  
+                  <div
+                    className="relative"
+                    style={{
+                      scrollbarWidth: "thin",
+                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                    }}
+                  >
+                    <div>
+                      <button
+                        onClick={() => setShowDropdown(!showDropdown)}
+                        className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
+                        aria-haspopup="true"
+                        style={{
+                          scrollbarWidth: "thin",
+                          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                        }}
+                      >
+                        <svg
+                          className="lucide lucide-ellipsis w-full"
+                          height="24"
+                          width="24"
+                          aria-hidden="true"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                          }}
+                        >
+                          <circle cx="12" cy="12" r="1" />
+                          <circle cx="19" cy="12" r="1" />
+                          <circle cx="5" cy="12" r="1" />
+                        </svg>
+                      </button>
 
-                    {/* Settings dropdown menu */}
-                    {showDropdown && (
-                      <>
-                        <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
-                        <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] py-1.5 flex flex-col">
-                          <button 
-                            onClick={() => { setShowDropdown(false); router.push("/editor"); }}
-                            className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                          >
-                            <Edit2 className="w-4 h-4 text-gray-500" />
-                            Edit in Builder
-                          </button>
-                          <button 
-                            onClick={() => { setShowDropdown(false); router.push("/preview"); }}
-                            className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                          >
-                            <Globe className="w-4 h-4 text-gray-500" />
-                            View Live Preview
-                          </button>
-                          <button 
-                            onClick={() => { setShowDropdown(false); toast.error("Delete action is placeholder."); }}
-                            className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            Delete site
-                          </button>
-                        </div>
-                      </>
-                    )}
+                      {/* Dropdown Options */}
+                      {showDropdown && (
+                        <>
+                          <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
+                          <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] shadow-[0_4px_16px_rgba(0,0,0,0.08)] py-1.5 flex flex-col">
+                            <button 
+                              onClick={() => { setShowDropdown(false); router.push("/editor"); }}
+                              className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                            >
+                              <Edit2 className="w-4 h-4 text-gray-500" />
+                              Edit in Builder
+                            </button>
+                            <button 
+                              onClick={() => { setShowDropdown(false); router.push("/preview"); }}
+                              className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                            >
+                              <Globe className="w-4 h-4 text-gray-500" />
+                              View Live Preview
+                            </button>
+                            <button 
+                              onClick={() => { setShowDropdown(false); toast.error("Delete action is placeholder."); }}
+                              className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              Delete site
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </div>
 
               </div>
-
             </div>
           </div>
 
