@@ -23,11 +23,11 @@ const navItems: NavItem[] = [
     ),
   },
   {
-    label: "Website",
+    label: "Design",
     active: true,
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
@@ -40,26 +40,10 @@ const navItems: NavItem[] = [
     ),
   },
   {
-    label: "Inbox",
-    icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-      </svg>
-    ),
-  },
-  {
     label: "Blogs",
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-      </svg>
-    ),
-  },
-  {
-    label: "Analytics",
-    icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
@@ -411,6 +395,378 @@ function ChatPane({
             <p className="text-xs max-w-[200px]">This editor view is currently in development.</p>
           </div>
         )}
+      </div>
+    </section>
+  );
+}
+
+function DomainsPane() {
+  const [searchVal, setSearchVal] = useState("");
+  const [customDomains, setCustomDomains] = useState<{ name: string; status: "active" | "pending" }[]>([
+    { name: "realitycheque.io", status: "active" }
+  ]);
+  const [connecting, setConnecting] = useState(false);
+
+  const handleConnect = () => {
+    const domain = searchVal.trim();
+    if (!domain) return;
+    if (!domain.includes(".")) {
+      toast.error("Please enter a valid domain name (e.g. realitycheque.com)");
+      return;
+    }
+    setConnecting(true);
+    toast.loading("Connecting domain...");
+    setTimeout(() => {
+      toast.dismiss();
+      setConnecting(false);
+      setCustomDomains(prev => [...prev, { name: domain, status: "pending" }]);
+      setSearchVal("");
+      toast.success("Domain added! Please configure your DNS settings.");
+    }, 1200);
+  };
+
+  return (
+    <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
+      {/* Title Header */}
+      <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
+        <span className="font-semibold text-[15px] text-black">Domains & SSL</span>
+        <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">Pro Active</span>
+      </div>
+
+      {/* Content container */}
+      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-6" style={{ scrollbarWidth: "none" }}>
+        {/* Section: Active Domains */}
+        <div className="flex flex-col gap-2.5">
+          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Connected Domains</span>
+          <div className="flex flex-col gap-2">
+            {customDomains.map((dom, i) => (
+              <div key={i} className="p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-xl flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                <div className="flex flex-col">
+                  <span className="text-[13px] font-bold text-black">{dom.name}</span>
+                  <span className="text-[11px] text-gray-400">
+                    {dom.status === "active" ? "SSL secured & live" : "DNS config pending"}
+                  </span>
+                </div>
+                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                  dom.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700 animate-pulse"
+                }`}>
+                  {dom.status === "active" ? "Active" : "Setup Required"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Section: Connect Domain Input */}
+        <div className="flex flex-col gap-2.5">
+          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Connect Custom Domain</span>
+          <div className="flex flex-col gap-2">
+            <input
+              type="text"
+              value={searchVal}
+              onChange={(e) => setSearchVal(e.target.value.toLowerCase())}
+              placeholder="e.g. yourname.com"
+              className="w-full h-10 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
+            />
+            <button
+              onClick={handleConnect}
+              disabled={connecting}
+              className="w-full h-10 rounded-lg bg-[#2A2A2F] hover:bg-[#3E3E45] active:scale-95 transition-all text-white text-[12px] font-semibold flex items-center justify-center gap-2 shadow-sm"
+            >
+              {connecting && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+              Connect Domain
+            </button>
+          </div>
+        </div>
+
+        {/* DNS instructions panel if setup required exists */}
+        {customDomains.some(d => d.status === "pending") && (
+          <div className="p-4 bg-amber-50/50 border border-amber-200/60 rounded-xl flex flex-col gap-2.5">
+            <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider">DNS Settings Required</span>
+            <p className="text-xs text-amber-700/80 leading-relaxed">
+              Configure your domain registrar (Namecheap, GoDaddy, etc.) with the following DNS records:
+            </p>
+            <div className="flex flex-col gap-1.5 font-mono text-[10px] text-gray-600 bg-white p-2.5 rounded-lg border border-amber-200/40">
+              <div>Type: <strong className="text-black">A</strong></div>
+              <div>Host: <strong className="text-black">@</strong></div>
+              <div>Value: <strong className="text-black">76.76.21.21</strong></div>
+              <div className="h-px bg-gray-100 my-1" />
+              <div>Type: <strong className="text-black">CNAME</strong></div>
+              <div>Host: <strong className="text-black">www</strong></div>
+              <div>Value: <strong className="text-black">cname.webild.co</strong></div>
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function BlogsPane() {
+  const [posts, setPosts] = useState<{ id: string; title: string; slug: string; status: "draft" | "published"; content: string }[]>([
+    { id: "1", title: "My First Blog Post", slug: "my-first-post", status: "published", content: "Hello world! Welcome to my brand new web portfolio. Built with Webild setup wizard in under 60 seconds." },
+    { id: "2", title: "Design Systems in 2026", slug: "design-systems-2026", status: "draft", content: "An in-depth look at how component paradigms have evolved over the years..." }
+  ]);
+
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editSlug, setEditSlug] = useState("");
+  const [editContent, setEditContent] = useState("");
+  const [editStatus, setEditStatus] = useState<"draft" | "published">("draft");
+
+  const handleEditPost = (id: string) => {
+    const post = posts.find(p => p.id === id);
+    if (!post) return;
+    setSelectedPostId(id);
+    setEditTitle(post.title);
+    setEditSlug(post.slug);
+    setEditContent(post.content);
+    setEditStatus(post.status);
+  };
+
+  const handleCreatePost = () => {
+    const newId = Date.now().toString();
+    const newPost = {
+      id: newId,
+      title: "Untitled Post",
+      slug: "untitled-post",
+      status: "draft" as const,
+      content: "Write post content here..."
+    };
+    setPosts(prev => [newPost, ...prev]);
+    handleEditPost(newId);
+    toast.success("New blog post created!");
+  };
+
+  const handleSave = () => {
+    if (!selectedPostId) return;
+    setPosts(prev => prev.map(p => p.id === selectedPostId ? {
+      ...p,
+      title: editTitle,
+      slug: editSlug.toLowerCase().replace(/[^a-z0-9-]/g, ""),
+      content: editContent,
+      status: editStatus
+    } : p));
+    setSelectedPostId(null);
+    toast.success("Blog post saved!");
+  };
+
+  const handleDelete = (id: string) => {
+    setPosts(prev => prev.filter(p => p.id !== id));
+    if (selectedPostId === id) setSelectedPostId(null);
+    toast.success("Blog post deleted");
+  };
+
+  return (
+    <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
+      {/* Title Header */}
+      <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
+        <span className="font-semibold text-[15px] text-black">Blogs & Articles</span>
+        {!selectedPostId && (
+          <button
+            onClick={handleCreatePost}
+            className="h-7 px-3 bg-[#2A2A2F] text-white rounded-md text-[11px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all"
+          >
+            + Create
+          </button>
+        )}
+      </div>
+
+      {/* Content container */}
+      <div className="flex-1 overflow-y-auto p-5" style={{ scrollbarWidth: "none" }}>
+        {selectedPostId ? (
+          /* Edit Post Form */
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Title</label>
+              <input
+                type="text"
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-semibold"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Slug</label>
+              <input
+                type="text"
+                value={editSlug}
+                onChange={(e) => setEditSlug(e.target.value)}
+                className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-xs font-mono text-black outline-none focus:ring-1 focus:ring-blue-400"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Status</label>
+              <select
+                value={editStatus}
+                onChange={(e) => setEditStatus(e.target.value as "draft" | "published")}
+                className="w-full h-9 px-2 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
+              >
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+              </select>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Content</label>
+              <textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                rows={6}
+                className="w-full p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 resize-none"
+              />
+            </div>
+
+            <div className="flex gap-2 mt-2">
+              <button
+                onClick={handleSave}
+                className="flex-1 h-9 rounded-lg bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all"
+              >
+                Save Post
+              </button>
+              <button
+                onClick={() => setSelectedPostId(null)}
+                className="px-3 h-9 rounded-lg bg-gray-100 hover:bg-gray-200 text-black text-[12px] font-semibold active:scale-95 transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Posts List */
+          <div className="flex flex-col gap-3">
+            {posts.map((post) => (
+              <div key={post.id} className="p-3.5 bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl flex items-center justify-between group hover:shadow-sm transition-shadow">
+                <div className="flex flex-col min-w-0 pr-4">
+                  <span className="text-[13px] font-bold text-black truncate">{post.title}</span>
+                  <span className="text-[11px] text-gray-400 font-mono mt-0.5 truncate">/{post.slug}</span>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    onClick={() => handleEditPost(post.id)}
+                    className="w-7 h-7 rounded-lg bg-[#F3F3F5] text-black hover:bg-gray-200 flex items-center justify-center active:scale-90 transition-all"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => handleDelete(post.id)}
+                    className="w-7 h-7 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 flex items-center justify-center active:scale-90 transition-all"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-4v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function SettingsPane({ profileName, router }: { profileName: string; router: any }) {
+  const [siteName, setSiteName] = useState(profileName);
+  const [seoTitle, setSeoTitle] = useState(`${profileName} - Professional Micro-site`);
+  const [seoDesc, setSeoDesc] = useState("Explore my professional experience, projects, education, and social networks.");
+  const [saving, setSaving] = useState(false);
+
+  const handleSaveSettings = () => {
+    setSaving(true);
+    toast.loading("Saving settings...");
+    setTimeout(() => {
+      toast.dismiss();
+      setSaving(false);
+      sessionStorage.setItem("webild_brand_name", siteName);
+      toast.success("Site configuration saved!");
+    }, 1000);
+  };
+
+  const handleDeleteSite = () => {
+    const confirmDel = window.confirm("Are you absolutely sure you want to delete this website? This action is permanent!");
+    if (!confirmDel) return;
+    toast.loading("Deleting site database...");
+    setTimeout(() => {
+      toast.dismiss();
+      sessionStorage.removeItem("webild_brand_name");
+      sessionStorage.removeItem("webild_subdomain");
+      toast.success("Website deleted successfully.");
+      router.push("/dashboard");
+    }, 1500);
+  };
+
+  return (
+    <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
+      {/* Title Header */}
+      <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
+        <span className="font-semibold text-[15px] text-black">Site Settings</span>
+      </div>
+
+      {/* Content container */}
+      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5" style={{ scrollbarWidth: "none" }}>
+        {/* Branding */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Brand Name</label>
+          <input
+            type="text"
+            value={siteName}
+            onChange={(e) => setSiteName(e.target.value)}
+            className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
+          />
+        </div>
+
+        {/* SEO Title */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">SEO Title Tag</label>
+          <input
+            type="text"
+            value={seoTitle}
+            onChange={(e) => setSeoTitle(e.target.value)}
+            className="w-full h-9 px-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 font-medium"
+          />
+        </div>
+
+        {/* SEO Description */}
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Meta Description</label>
+          <textarea
+            value={seoDesc}
+            onChange={(e) => setSeoDesc(e.target.value)}
+            rows={4}
+            className="w-full p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-sm text-black outline-none focus:ring-1 focus:ring-blue-400 resize-none font-medium"
+          />
+        </div>
+
+        {/* Save Button */}
+        <button
+          onClick={handleSaveSettings}
+          disabled={saving}
+          className="w-full h-10 rounded-lg bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-sm"
+        >
+          {saving && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+          Save Configuration
+        </button>
+
+        <div className="border-t border-gray-100 my-2" />
+
+        {/* Danger Zone */}
+        <div className="p-4 border border-red-250 bg-red-50/40 rounded-xl flex flex-col gap-3">
+          <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">Danger Zone</span>
+          <p className="text-xs text-red-700/80 leading-relaxed">
+            Deleting your site will permanently wipe all pages, files, and domains. This cannot be undone.
+          </p>
+          <button
+            onClick={handleDeleteSite}
+            className="w-full h-10 rounded-lg bg-red-650 hover:bg-red-700 text-white text-[12px] font-bold active:scale-95 transition-all shadow-sm"
+          >
+            Delete Website
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -853,10 +1209,11 @@ function EditorInner() {
                 <button
                   key={i}
                   onClick={() => {
-                    setActiveNav(i);
-                    if (i === 1) router.push("/preview"); // Domain logic or similar
-                    else if (i === 1) setActiveTab("grid");
-                    else toast(`${item.label} coming soon`);
+                    if (i === 0) {
+                      router.push("/dashboard");
+                    } else {
+                      setActiveNav(i);
+                    }
                   }}
                   title={item.label}
                   className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
@@ -935,17 +1292,28 @@ function EditorInner() {
         </aside>
       </div>
 
-      {/* ── Chat Pane ── */}
-      <ChatPane
-        onCommand={handleCommand}
-        profileName={profileName}
-        profile={editedProfile}
-        selectedTemplate={selectedTemplate}
-        onSelectTemplate={selectTemplate}
-        onChangeField={updateField}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-      />
+      {/* ── Left Column Panel Switcher based on activeNav ── */}
+      {activeNav === 1 && (
+        <ChatPane
+          onCommand={handleCommand}
+          profileName={profileName}
+          profile={editedProfile}
+          selectedTemplate={selectedTemplate}
+          onSelectTemplate={selectTemplate}
+          onChangeField={updateField}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      )}
+      {activeNav === 2 && (
+        <DomainsPane />
+      )}
+      {activeNav === 3 && (
+        <BlogsPane />
+      )}
+      {activeNav === 4 && (
+        <SettingsPane profileName={profileName} router={router} />
+      )}
 
       {/* ── Canvas ── */}
       <main className="flex-1 flex flex-col bg-white overflow-hidden relative p-5 gap-3">
