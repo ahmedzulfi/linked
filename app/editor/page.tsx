@@ -812,7 +812,9 @@ function EditorInner() {
     toast.dismiss();
     setPublishing(false);
     toast.success("Your page is live! 🎉");
-    router.push("/preview");
+    const sub = sessionStorage.getItem("webild_subdomain") || "yourname.io";
+    const slug = sub.replace(".io", "");
+    router.push(`/publish?slug=${slug}`);
   };
 
   const profileName = editedProfile?.name ?? "Your Profile";

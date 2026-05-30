@@ -86,7 +86,7 @@ function OnboardingWizard() {
               sessionStorage.setItem("webild_subdomain", subdomain + ".io");
               sessionStorage.setItem("webild_styles", JSON.stringify(selectedStyles));
               toast.success("Site layout generated successfully!");
-              router.push("/?success=true");
+              router.push("/dashboard");
             }, 500);
             return 100;
           }
