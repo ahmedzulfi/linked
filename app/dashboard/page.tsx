@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Home, 
-  Layout, 
-  Folder, 
-  CreditCard, 
-  BookOpen, 
-  Settings, 
+import {
+  Home,
+  Layout,
+  Folder,
+  CreditCard,
+  BookOpen,
+  Settings,
   Trash2,
   Edit2,
   ExternalLink,
@@ -43,7 +43,7 @@ export default function DashboardPage() {
     } else {
       setBrandName(activeProfile.name);
     }
-    
+
     if (storedSubdomain) {
       setSubdomain(storedSubdomain);
     } else {
@@ -64,7 +64,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
-      
+
       {/* ── Background Graphic ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
         <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
@@ -96,7 +96,7 @@ export default function DashboardPage() {
           >
             Share
           </button>
-          
+
           <button
             onClick={() => {
               toast.loading("Publishing changes...");
@@ -115,20 +115,20 @@ export default function DashboardPage() {
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
           >
-            <img 
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-              alt="Avatar" 
-              className="w-full h-full object-cover" 
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt="Avatar"
+              className="w-full h-full object-cover"
             />
           </button>
 
           {/* User Dropdown Menu */}
           <AnimatePresence>
             {isUserMenuOpen && (
-              <UserMenu 
-                name={userName} 
-                email={userEmail} 
-                onClose={() => setIsUserMenuOpen(false)} 
+              <UserMenu
+                name={userName}
+                email={userEmail}
+                onClose={() => setIsUserMenuOpen(false)}
               />
             )}
           </AnimatePresence>
@@ -137,15 +137,15 @@ export default function DashboardPage() {
 
       {/* ── Main Container (Sidebar + Content) ── */}
       <div className="flex-1 flex pt-14 min-h-screen relative z-10">
-        
+
         {/* ── Sidebar (Sticky Left) ── */}
         <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
-          
+
           {/* Top navigation items */}
           <div className="flex flex-col gap-6">
-            
+
             {/* New Website Button */}
-            <button 
+            <button
               onClick={() => router.push("/onboarding")}
               className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
             >
@@ -158,7 +158,7 @@ export default function DashboardPage() {
 
             {/* Menu Items */}
             <div className="flex flex-col gap-1.5">
-              <button 
+              <button
                 onClick={() => router.push("/")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
@@ -166,7 +166,7 @@ export default function DashboardPage() {
                 Home
               </button>
 
-              <button 
+              <button
                 onClick={() => router.push("/editor")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
@@ -175,7 +175,7 @@ export default function DashboardPage() {
               </button>
 
               {/* Active Tab */}
-              <button 
+              <button
                 className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
               >
                 <Folder className="w-[18px] h-[18px] text-[#1A68FF]" />
@@ -186,8 +186,8 @@ export default function DashboardPage() {
             {/* Recent Websites Section */}
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
               <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
-              
-              <div 
+
+              <div
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
               >
                 <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
@@ -201,10 +201,10 @@ export default function DashboardPage() {
 
           {/* Bottom navigation & pricing items */}
           <div className="flex flex-col gap-6">
-            
+
             {/* Pricing, Documentation, Settings */}
             <div className="flex flex-col gap-1">
-              <button 
+              <button
                 onClick={() => toast.info("Pricing modal coming soon!")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
@@ -212,7 +212,7 @@ export default function DashboardPage() {
                 Pricing
               </button>
 
-              <button 
+              <button
                 onClick={() => toast.info("Documentation coming soon!")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
@@ -220,7 +220,7 @@ export default function DashboardPage() {
                 Documentation
               </button>
 
-              <button 
+              <button
                 onClick={() => toast.info("Settings panel coming soon!")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
@@ -235,7 +235,7 @@ export default function DashboardPage() {
 
         {/* ── Main Content Area ── */}
         <main className="flex-1 flex flex-col items-center px-8 md:px-12 py-10">
-          
+
           {/* User Provided Search and Title Container */}
           <div
             className="flex flex-col gap-4 items-center text-center w-full max-w-[420px] mb-12"
@@ -303,7 +303,7 @@ export default function DashboardPage() {
           {/* Websites Grid */}
           <div className="w-full flex justify-start pl-2">
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
-              
+
               {/* User-Styled Website card using exact code */}
               <div
                 className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
@@ -346,7 +346,7 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Card Footer details */}
                 <div
                   className="flex items-start justify-between relative min-w-0"
@@ -381,7 +381,7 @@ export default function DashboardPage() {
                       Created 17 hours ago
                     </p>
                   </div>
-                  
+
                   <div
                     className="relative"
                     style={{
@@ -426,24 +426,24 @@ export default function DashboardPage() {
                       {showDropdown && (
                         <>
                           <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
-                          <div 
+                          <div
                             className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
                           >
-                            <button 
+                            <button
                               onClick={() => { setShowDropdown(false); router.push("/editor"); }}
                               className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
                             >
                               <Edit2 className="w-4 h-4 text-gray-500" />
                               Edit in Builder
                             </button>
-                            <button 
+                            <button
                               onClick={() => { setShowDropdown(false); router.push("/preview"); }}
                               className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
                             >
                               <Globe className="w-4 h-4 text-gray-500" />
                               View Live Preview
                             </button>
-                            <button 
+                            <button
                               onClick={() => { setShowDropdown(false); toast.error("Delete action is placeholder."); }}
                               className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
                             >
