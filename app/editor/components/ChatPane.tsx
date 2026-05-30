@@ -277,23 +277,8 @@ export default function ChatPane({
                       ) : (
                         <div className="w-full flex flex-col justify-start items-start gap-2">
                           <div className="self-stretch inline-flex justify-start items-center gap-2">
-                            {/* Logo */}
-                            <div className="Logo relative flex items-center justify-center">
-                              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="8.5" cy="8.5" r="8" fill="url(#blueSphereGrad4)" />
-                                <path d="M4.5 5.5 C 5.5 3.5, 9.5 3.5, 12.5 5.5 C 10.5 4.5, 6.5 4.5, 4.5 5.5 Z" fill="white" opacity="0.4" />
-                                <defs>
-                                  <radialGradient id="blueSphereGrad4" cx="30%" cy="30%" r="70%">
-                                    <stop offset="0%" stopColor="#4fa3ff" />
-                                    <stop offset="40%" stopColor="#1a73e8" />
-                                    <stop offset="100%" stopColor="#0d47a1" />
-                                  </radialGradient>
-                                </defs>
-                              </svg>
-                            </div>
-                            <div className="w-14 h-7 relative">
-                              <div className="Webild left-0 top-[-1px] absolute justify-center text-black text-lg font-medium font-['Inter'] leading-7">Webild</div>
-                            </div>
+                            {/* Logo containing text */}
+                            <img src="/logo.png" alt="Logo" className="h-6 w-auto object-contain select-none" />
                           </div>
                           
                           <div className="self-stretch flex flex-col justify-start items-start w-full">
