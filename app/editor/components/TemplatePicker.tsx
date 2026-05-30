@@ -257,7 +257,7 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
                   </div>
                   
                   {/* Template preset cards grid list */}
-                  <div className="flex flex-wrap gap-x-[16.8px] gap-y-[16px] w-[434.0899963378906px] h-[510px] overflow-y-auto pr-1 mt-1 pb-4" style={{ scrollbarWidth: "none" }}>
+                  <div className="grid grid-cols-2 gap-x-[15px] gap-y-[16px] w-[434.0899963378906px] h-[510px] overflow-y-auto mt-1 pb-4" style={{ scrollbarWidth: "none" }}>
                     {filteredTemplates.length > 0 ? (
                       filteredTemplates.map((template) => {
                         const isSelected = selected === template.id;
