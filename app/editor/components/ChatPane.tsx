@@ -153,7 +153,7 @@ export default function ChatPane({
 
       {/* Tabs Toolbar with Custom Premium Expandable Style */}
       <div className="px-6 py-3 border-b border-[#E6E6E6]/30 bg-[#FBFBFB] shrink-0">
-        <div className="relative flex items-center bg-zinc-100 rounded-xl p-[4px] h-10 w-full gap-1">
+        <div className="relative flex items-center justify-center bg-zinc-100 rounded-xl p-[4px] h-10 w-full gap-1.5">
           {chatTabs.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -165,8 +165,8 @@ export default function ChatPane({
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none ${
                   isActive 
-                    ? "flex-grow text-blue-500 px-4 font-['Inter_Tight']" 
-                    : "w-12 text-[#171717]/60 hover:bg-zinc-200/40 transition-colors duration-150"
+                    ? "w-32 text-blue-500 px-4 font-['Inter_Tight']" 
+                    : "w-16 text-[#171717]/60 hover:bg-zinc-200/40 transition-colors duration-150"
                 }`}
               >
                 {/* Smoothly animated background pill */}
