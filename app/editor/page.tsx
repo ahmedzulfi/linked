@@ -57,6 +57,7 @@ function EditorInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const {
+    websiteId,
     editedProfile,
     selectedTemplate,
     updateField,
@@ -64,6 +65,7 @@ function EditorInner() {
     useMockProfile,
     isDirty,
     resetEdits,
+    loadWebsite,
   } = useEditor();
 
   const [activeNav, setActiveNav] = useState(1); // Templates active by default
@@ -83,20 +85,34 @@ function EditorInner() {
   }>({});
 
   useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        const data = await res.json();
+        if (!res.ok) {
+          router.push("/login");
+          return;
+        }
+        setUserName(`${data.user.firstName} ${data.user.lastName}`);
+        setUserEmail(data.user.email);
+      } catch {
+        router.push("/login");
+      }
+    };
+    checkUser();
+  }, [router]);
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      loadWebsite(id);
+    }
+  }, [searchParams, loadWebsite]);
+
+  useEffect(() => {
     if (searchParams.get("onboarding") === "true") {
       setShowOnboarding(true);
       setActiveTab("grid"); // Set to Grid (Templates) tab initially during onboarding
-    }
-    
-    try {
-      const userStr = sessionStorage.getItem("linkedpage_user");
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        setUserName(user.name || "");
-        setUserEmail(user.email || "");
-      }
-    } catch (e) {
-      console.error(e);
     }
   }, [searchParams]);
 
@@ -147,15 +163,30 @@ function EditorInner() {
   };
 
   const handlePublish = async () => {
+    if (!websiteId) {
+      toast.error("Please load or create a website first.");
+      return;
+    }
     setPublishing(true);
-    toast.loading("Publishing your page…");
-    await new Promise((r) => setTimeout(r, 1500));
-    toast.dismiss();
-    setPublishing(false);
-    toast.success("Your page is live! 🎉");
-    const sub = sessionStorage.getItem("linkedpage_subdomain") || "yourname.io";
-    const slug = sub.replace(".io", "");
-    router.push(`/publish?slug=${slug}`);
+    const toastId = toast.loading("Publishing your page…");
+    try {
+      const response = await fetch(`/api/websites/${websiteId}/publish`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      toast.dismiss(toastId);
+      setPublishing(false);
+      if (!response.ok) {
+        toast.error(data.error || "Failed to publish website");
+        return;
+      }
+      toast.success("Your page is live! 🎉");
+      router.push(`/publish?slug=${data.website.subdomainSlug}`);
+    } catch {
+      toast.dismiss(toastId);
+      setPublishing(false);
+      toast.error("Network error. Failed to publish website.");
+    }
   };
 
   const handleFieldClick = (fieldName: string) => {

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEditor } from "@/context/EditorContext";
 import ProfilePreview from "@/app/editor/components/ProfilePreview";
 import Navbar from "@/components/Navbar";
@@ -38,7 +38,36 @@ function PublishPanel({
     : "yourname";
 
   const [slug, setSlug] = useState(suggestedSlug);
+  const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
+  const [checking, setChecking] = useState(false);
+
   const isValid = /^[a-z0-9-]{3,30}$/.test(slug);
+
+  // Debounced subdomain checking
+  useEffect(() => {
+    if (!slug || slug.length < 3) {
+      setIsAvailable(false);
+      return;
+    }
+    setChecking(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/websites/subdomain/check?slug=${encodeURIComponent(slug)}`);
+        const data = await res.json();
+        if (res.ok) {
+          setIsAvailable(data.available);
+        } else {
+          setIsAvailable(false);
+        }
+      } catch {
+        setIsAvailable(false);
+      } finally {
+        setChecking(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [slug]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -47,7 +76,7 @@ function PublishPanel({
         <p className="text-xs text-[#9CA3AF]">Your free URL on LinkedPage</p>
       </div>
 
-      <div className="flex items-center      rounded-lg   border border-[#E6E6E6] overflow-hidden bg-white focus-within:border-[#8DB8FF] focus-within:shadow-[0_0_0_3px_rgba(141,184,255,0.15)] transition-all duration-150">
+      <div className="flex items-center rounded-lg border border-[#E6E6E6] overflow-hidden bg-white focus-within:border-[#8DB8FF] focus-within:shadow-[0_0_0_3px_rgba(141,184,255,0.15)] transition-all duration-150">
         <div className="px-3 py-2.5 bg-[#F3F3F3] border-r border-[#E6E6E6] text-xs text-[#9CA3AF] whitespace-nowrap flex-shrink-0">
           linkedpage.io/
         </div>
@@ -67,16 +96,28 @@ function PublishPanel({
       )}
 
       {slug && isValid && (
-        <p className="text-xs text-[#369762] flex items-center gap-1">
-          <Check className="w-5 h-5" />
-          linkedpage.io/{slug} is available!
-        </p>
+        <div className="text-xs">
+          {checking ? (
+            <span className="text-[#9CA3AF] flex items-center gap-1">
+              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking availability...
+            </span>
+          ) : isAvailable ? (
+            <p className="text-xs text-[#369762] flex items-center gap-1">
+              <Check className="w-4 h-4" />
+              linkedpage.io/{slug} is available!
+            </p>
+          ) : (
+            <p className="text-xs text-[#E45A5A]">
+              linkedpage.io/{slug} is already taken.
+            </p>
+          )}
+        </div>
       )}
 
       <button
-        onClick={() => isValid && onPublish(slug)}
-        disabled={!isValid || publishing}
-        className={`button button-primary w-full justify-center gap-2 ${!isValid || publishing ? "opacity-50 pointer-events-none" : ""
+        onClick={() => isValid && isAvailable && onPublish(slug)}
+        disabled={!isValid || !isAvailable || publishing || checking}
+        className={`button button-primary w-full justify-center gap-2 ${!isValid || !isAvailable || publishing || checking ? "opacity-50 pointer-events-none" : ""
           }`}
       >
         {publishing ? (
@@ -107,7 +148,7 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <div className="w-5 h-5   rounded-lg bg-[#8DFFB3] flex items-center justify-center">
+        <div className="w-5 h-5 rounded-lg bg-[#8DFFB3] flex items-center justify-center">
           <Check className="w-5 h-5 text-[#1a5c3a]" strokeWidth={2.5} />
         </div>
         <h3 className="text-sm font-medium text-black">Your page is live!</h3>
@@ -139,10 +180,11 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   );
 }
 
-// ─── Preview page ──────────────────────────────────────────────────────────────
-export default function PreviewPage() {
+// ─── Preview page inner ────────────────────────────────────────────────────────
+function PreviewInner() {
   const router = useRouter();
-  const { editedProfile, selectedTemplate, useMockProfile } = useEditor();
+  const searchParams = useSearchParams();
+  const { editedProfile, selectedTemplate, useMockProfile, loadWebsite, websiteId } = useEditor();
 
   const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
   const [publishStep, setPublishStep] = useState<PublishStep>("idle");
@@ -151,47 +193,79 @@ export default function PreviewPage() {
   const [exportLoading, setExportLoading] = useState(false);
 
   useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      loadWebsite(id);
+    }
+  }, [searchParams, loadWebsite]);
+
+  useEffect(() => {
     if (!editedProfile) useMockProfile();
   }, [editedProfile, useMockProfile]);
 
   const handlePublish = async (slug: string) => {
+    if (!websiteId) {
+      toast.error("Please load a website draft first.");
+      return;
+    }
     setPublishing(true);
     toast.loading("Publishing your page…");
-    await new Promise((r) => setTimeout(r, 1800));
-    setPublishing(false);
-    toast.dismiss();
-    setPublishedSlug(slug);
-    setPublishStep("done");
-    toast.success(`Your page is live at linkedpage.io/${slug} 🎉`);
+    try {
+      // 1. Update subdomain slug in draft first
+      await fetch(`/api/websites/${websiteId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subdomainSlug: slug }),
+      });
+      // 2. Trigger publish
+      const response = await fetch(`/api/websites/${websiteId}/publish`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      setPublishing(false);
+      toast.dismiss();
+      if (!response.ok) {
+        toast.error(data.error || "Failed to publish website");
+        return;
+      }
+      setPublishedSlug(slug);
+      setPublishStep("done");
+      toast.success(`Your page is live at linkedpage.io/${slug} 🎉`);
+    } catch {
+      setPublishing(false);
+      toast.dismiss();
+      toast.error("Network error. Failed to publish website.");
+    }
   };
 
   const handleExport = async () => {
+    if (!websiteId) {
+      toast.error("Please load a website draft first.");
+      return;
+    }
     setExportLoading(true);
-    toast.loading("Generating ZIP…");
-    await new Promise((r) => setTimeout(r, 1200));
-    setExportLoading(false);
-    toast.dismiss();
-    toast.success("ZIP downloaded!");
-
-    // Create a minimal mock HTML file and download
-    const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${editedProfile?.name ?? "My Page"} – LinkedPage</title>
-  <script>window.alert("This is a static export placeholder from LinkedPage!")</script>
-</head>
-<body>
-  <h1>${editedProfile?.name ?? "My Page"}</h1>
-  <p>${editedProfile?.headline ?? ""}</p>
-</body>
-</html>`;
-    const blob = new Blob([html], { type: "text/html" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `linkedpage-${editedProfile?.name?.toLowerCase().replace(/\s+/g, "-") ?? "site"}.html`;
-    a.click();
+    const toastId = toast.loading("Generating static build export ZIP…");
+    try {
+      const response = await fetch(`/api/websites/${websiteId}/export`, {
+        method: "POST",
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to export build");
+      }
+      const blob = await response.blob();
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `linkedpage-export-${websiteId}.zip`;
+      a.click();
+      toast.dismiss(toastId);
+      toast.success("Build ZIP downloaded successfully!");
+    } catch (e: any) {
+      toast.dismiss(toastId);
+      toast.error(e.message || "Failed to generate zip export.");
+    } finally {
+      setExportLoading(false);
+    }
   };
 
   if (!editedProfile) {
@@ -228,10 +302,10 @@ export default function PreviewPage() {
 
       {/* ── Top toolbar ── */}
       <div className="fixed top-[88px] left-0 right-0 z-40 px-5">
-        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md      rounded-lg   border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
+        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md rounded-lg border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
           {/* Left: back */}
           <button
-            onClick={() => router.push("/editor")}
+            onClick={() => router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")}
             className="flex items-center gap-1.5 text-[11px] font-medium text-[#6B6B6B] hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -239,10 +313,10 @@ export default function PreviewPage() {
           </button>
 
           {/* Center: preview mode */}
-          <div className="flex items-center gap-1 p-1 bg-[#F3F3F3] rounded-[10px]">
+          <div className="flex items-center gap-1 p-1 bg-[#F3F3F5] rounded-[10px]">
             <button
               onClick={() => setPreviewMode("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] " : "text-[#6B6B6B] hover:text-black"
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
               <Monitor className="w-5 h-5" />
@@ -250,7 +324,7 @@ export default function PreviewPage() {
             </button>
             <button
               onClick={() => setPreviewMode("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] " : "text-[#6B6B6B] hover:text-black"
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
               <Smartphone className="w-5 h-5" />
@@ -260,7 +334,7 @@ export default function PreviewPage() {
 
           {/* Right: edit CTA */}
           <button
-            onClick={() => router.push("/editor")}
+            onClick={() => router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")}
             className="button button-secondary !py-1.5 !px-3 !text-[11px] flex items-center gap-1.5"
           >
             <Pencil className="w-5 h-5" />
@@ -345,7 +419,7 @@ export default function PreviewPage() {
                   transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                 >
                   <PublishedPanel
-                    url={`https://linkedpage.io/${publishedSlug}`}
+                    url={publishedSlug ? `https://${publishedSlug}.linkedpage.io` : `https://linkedpage.io/${publishedSlug}`}
                     slug={publishedSlug}
                   />
                 </motion.div>
@@ -394,7 +468,7 @@ export default function PreviewPage() {
                 "Always up-to-date with LinkedIn",
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-2 text-xs text-[#171717]">
-                  <div className="w-5 h-5   rounded-lg bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5 rounded-lg bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
                     <Check className="w-2.5 h-2.5 text-[#1a5c3a]" strokeWidth={2.5} />
                   </div>
                   {item}
@@ -405,6 +479,21 @@ export default function PreviewPage() {
 
         </div>
       </div>
+    </div>
+  );
+}
+
+export default function PreviewPage() {
+  return (
+    <div className="min-h-screen bg-white font-inter flex flex-col">
+      <Navbar />
+      <Suspense fallback={
+        <main className="flex-1 flex items-center justify-center">
+          <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+        </main>
+      }>
+        <PreviewInner />
+      </Suspense>
     </div>
   );
 }

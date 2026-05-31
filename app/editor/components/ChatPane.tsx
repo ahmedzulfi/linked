@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { MessageSquare, LayoutGrid, Edit2, Plus, Mic, ArrowUp } from "lucide-react";
 import { toast } from "sonner";
+import { useEditor } from "@/context/EditorContext";
 import { ProfileData, TemplateId } from "@/shared/types";
 import TemplatePicker from "./TemplatePicker";
 import InlineEditor from "./InlineEditor";
@@ -76,11 +77,12 @@ export default function ChatPane({
   editorTab,
   setEditorTab,
 }: ChatPaneProps) {
+  const { websiteId } = useEditor();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  const sendMessage = (text?: string) => {
+  const sendMessage = async (text?: string) => {
     const msg = text ?? input.trim();
     if (!msg) return;
     setInput("");
@@ -93,24 +95,46 @@ export default function ChatPane({
     };
     setMessages((prev) => [...prev, userMsg]);
 
-    // Simulate AI reply
-    setTimeout(() => {
-      const replies: Record<string, string> = {
-        "change template": "Sure! Switched you to the templates tab. You can select one directly below or ask me.",
-        "edit bio": "Of course. Switched you to the Edit profile tab so you can modify your bio.",
-        "add links": "Open the Edit profile tab and navigate to the Links section.",
-        "dark mode": "Applied Dark Mode template! Check the preview.",
-        "refine hero headline": "Certainly! Switched you to the Edit profile tab so you can refine your headline.",
-        "condense about description": "Of course! Let's edit your about description. Switched you to the Edit tab.",
-        "clarify core skills": "Sure! I've updated the focus on your skills. You can refine them in the Edit tab.",
-        "add social links": "Open the Edit profile tab and navigate to the Links section to add your socials.",
-      };
-      const lower = msg.toLowerCase();
-      let reply = "I'll apply that change to your micro-site now. Let me know if you'd like any tweaks!";
-      for (const [k, v] of Object.entries(replies)) {
-        if (lower.includes(k)) { reply = v; break; }
+    if (!websiteId) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: "No active site loaded. Please select a website from the dashboard first.",
+          time: "",
+        },
+      ]);
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, websiteId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to get AI reply");
       }
 
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now().toString(), role: "assistant", content: data.reply, time: "" },
+      ]);
+
+      if (data.template) {
+        onSelectTemplate(data.template);
+      }
+
+      if (data.profileUpdates) {
+        for (const [k, v] of Object.entries(data.profileUpdates)) {
+          onChangeField(k as keyof ProfileData, v as any);
+        }
+      }
+
+      const lower = msg.toLowerCase();
       if (lower.includes("change template")) {
         setActiveTab("grid");
       } else if (
@@ -131,12 +155,18 @@ export default function ChatPane({
         }
       }
 
+      onCommand(msg);
+    } catch (e: any) {
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: "assistant", content: reply, time: "" },
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: `Error: ${e.message || "Failed to generate AI reply."}`,
+          time: "",
+        },
       ]);
-      onCommand(msg);
-    }, 700);
+    }
   };
 
   useEffect(() => {

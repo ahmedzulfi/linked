@@ -118,12 +118,13 @@ function ChatBubble({
 function OnboardingInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { startScrape, isLoading, scrapeError, editedProfile, clearProfile, useMockProfile } =
+  const { startScrape, startScrapeManual, isLoading, scrapeError, editedProfile, clearProfile, useMockProfile, websiteId } =
     useEditor();
 
   const [step, setStep] = useState<"input" | "loading" | "fallback">("input");
   const [url, setUrl] = useState("");
-  const [pasteData, setPasteData] = useState("");
+  const [zipFile, setZipFile] = useState<File | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -238,20 +239,52 @@ function OnboardingInner() {
     if (step === "loading" && !isLoading) {
       if (scrapeError) {
         setStep("fallback");
-      } else if (editedProfile) {
-        setProgress(100);
-        const t = setTimeout(() => {
-          router.push("/editor?onboarding=true");
-        }, 600);
-        return () => clearTimeout(t);
       }
     }
-  }, [isLoading, scrapeError, editedProfile, step, router]);
+  }, [isLoading, scrapeError, step]);
 
-  const handleManualImport = () => {
-    useMockProfile();
+  // Redirect on website creation success
+  useEffect(() => {
+    if (websiteId && (step === "loading" || isImporting)) {
+      setProgress(100);
+      const t = setTimeout(() => {
+        router.push(`/editor?id=${websiteId}&onboarding=true`);
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  }, [websiteId, step, isImporting, router]);
+
+  const handleZipFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setZipFile(e.target.files[0]);
+    }
+  };
+
+  const handleUploadZip = async () => {
+    if (!zipFile) {
+      toast.error("Please select a LinkedIn export ZIP file first.");
+      return;
+    }
+    setIsImporting(true);
+    const toastId = toast.loading("Processing and parsing ZIP archive...");
+    try {
+      const success = await startScrapeManual(zipFile);
+      if (!success) {
+        setIsImporting(false);
+      }
+      toast.dismiss(toastId);
+    } catch (e: any) {
+      toast.dismiss(toastId);
+      toast.error(e.message || "Failed to process ZIP archive.");
+      setIsImporting(false);
+    }
+  };
+
+  const handleManualImport = async () => {
+    const toastId = toast.loading("Loading default workspace settings...");
+    await useMockProfile();
+    toast.dismiss(toastId);
     toast.success("Proceeding with template data customization.");
-    router.push("/editor?onboarding=true");
   };
 
   const handleBackToInput = () => {
@@ -384,12 +417,53 @@ function OnboardingInner() {
                   and import it below.
                 </p>
 
-                <textarea
-                  placeholder="Paste downloaded profile data details here..."
-                  value={pasteData}
-                  onChange={(e) => setPasteData(e.target.value)}
-                  className="w-full h-24 p-3 bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl text-sm text-black focus:border-[#8DB8FF] outline-none resize-none placeholder:text-gray-300 mb-6"
-                />
+                <div className="flex flex-col items-center gap-3 w-full mb-6">
+                  <label
+                    htmlFor="zip-upload"
+                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-xl p-6 bg-[#FBFBFB] cursor-pointer transition-colors duration-150 relative text-center"
+                  >
+                    <input
+                      id="zip-upload"
+                      type="file"
+                      accept=".zip"
+                      onChange={handleZipFileChange}
+                      className="hidden"
+                      disabled={isImporting}
+                    />
+                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                    </svg>
+                    {zipFile ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[13px] font-semibold text-black truncate max-w-[280px]">
+                          {zipFile.name}
+                        </span>
+                        <span className="text-[11px] text-gray-500 font-medium">
+                          {(zipFile.size / (1024 * 1024)).toFixed(2)} MB
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="text-[13px] font-semibold text-black">
+                          Upload LinkedIn data export ZIP
+                        </span>
+                        <span className="text-[11px] text-gray-500 font-medium">
+                          Should contain Profile.csv and Positions.csv
+                        </span>
+                      </div>
+                    )}
+                  </label>
+
+                  {zipFile && (
+                    <button
+                      onClick={handleUploadZip}
+                      disabled={isImporting}
+                      className="w-full h-10 bg-[#3b82f6] hover:bg-[#2563eb] text-white text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] disabled:opacity-50"
+                    >
+                      {isImporting ? "Processing..." : "Import Profile ZIP"}
+                    </button>
+                  )}
+                </div>
 
                 <div className="flex gap-3 w-full">
                   <button

@@ -27,40 +27,76 @@ export default function DashboardPage() {
   const { editedProfile, selectedTemplate } = useEditor();
   const activeProfile = editedProfile || MOCK_PROFILE;
 
-  const [brandName, setBrandName] = useState("Creative Portfolio");
-  const [subdomain, setSubdomain] = useState("realitycheque.io");
+  const [websites, setWebsites] = useState<any[]>([]);
+  const [loadingWebsites, setLoadingWebsites] = useState(true);
+  const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-    const storedBrand = sessionStorage.getItem("linkedpage_brand_name");
-    const storedSubdomain = sessionStorage.getItem("linkedpage_subdomain");
-    if (storedBrand) {
-      setBrandName(storedBrand);
-    } else {
-      setBrandName(activeProfile.name);
-    }
-
-    if (storedSubdomain) {
-      setSubdomain(storedSubdomain);
-    } else {
-      setSubdomain(`${activeProfile.name.toLowerCase().replace(/\s+/g, "")}.linkedpage.io`);
-    }
-
-    try {
-      const userStr = sessionStorage.getItem("linkedpage_user");
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        setUserName(user.name || "");
-        setUserEmail(user.email || "");
+    // 1. Get current authenticated user
+    const checkUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me");
+        const data = await res.json();
+        if (!res.ok) {
+          router.push("/login");
+          return;
+        }
+        setUserName(`${data.user.firstName} ${data.user.lastName}`);
+        setUserEmail(data.user.email);
+        sessionStorage.setItem("linkedpage_user", JSON.stringify({
+          name: `${data.user.firstName} ${data.user.lastName}`,
+          email: data.user.email
+        }));
+      } catch {
+        router.push("/login");
       }
-    } catch (e) {
-      console.error(e);
+    };
+    checkUser();
+
+    // 2. Load websites
+    const loadSites = async () => {
+      try {
+        const res = await fetch("/api/websites");
+        const data = await res.json();
+        if (res.ok && data.websites) {
+          setWebsites(data.websites);
+        }
+      } catch (err) {
+        console.error("Failed to load websites", err);
+      } finally {
+        setLoadingWebsites(false);
+      }
+    };
+    loadSites();
+  }, [router]);
+
+  const handleDeleteSite = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this website? This action cannot be undone.")) {
+      return;
     }
-  }, [activeProfile]);
+    const toastId = toast.loading("Deleting website draft...");
+    try {
+      const res = await fetch(`/api/websites/${id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      toast.dismiss(toastId);
+      if (res.ok) {
+        toast.success("Website deleted successfully.");
+        setWebsites((prev) => prev.filter((w) => w.id !== id));
+      } else {
+        toast.error(data.error || "Failed to delete website");
+      }
+    } catch {
+      toast.dismiss(toastId);
+      toast.error("Network error. Failed to delete website.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
@@ -82,14 +118,15 @@ export default function DashboardPage() {
             onClick={() => router.push("/")}
           />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{brandName}</span>
+          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{websites[0]?.brandName || "My Dashboard"}</span>
         </div>
 
         {/* Right Action Side */}
         <div className="flex items-center gap-2 relative">
           <button
             onClick={() => {
-              navigator.clipboard.writeText(`https://${subdomain}`);
+              const sub = websites[0] ? `${websites[0].subdomainSlug}.linkedpage.io` : "linkedpage.io";
+              navigator.clipboard.writeText(`https://${sub}`);
               toast.success("Site link copied to clipboard!");
             }}
             className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
@@ -188,12 +225,13 @@ export default function DashboardPage() {
               <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
 
               <div
+                onClick={() => websites[0] && router.push(`/editor?id=${websites[0].id}`)}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
               >
                 <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
                   <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
                 </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
+                <span className="text-[13px] font-semibold text-[#171717] truncate">{websites[0]?.brandName || "No recent sites"}</span>
               </div>
             </div>
 
@@ -345,169 +383,147 @@ export default function DashboardPage() {
 
           {/* Websites Grid */}
           <div className="w-full flex justify-start pl-2">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
-
-              {/* User-Styled Website card using exact code */}
-              <div
-                className={`relative flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group ${
-                  (!searchQuery || 
-                   brandName.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                   subdomain.toLowerCase().includes(searchQuery.toLowerCase())) 
-                    ? "flex" 
-                    : "hidden"
-                }`}
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                <div
-                  onClick={() => router.push("/editor")}
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  }}
+            {loadingWebsites ? (
+              <div className="w-full flex justify-center py-20">
+                <div className="w-6 h-6 rounded-lg border-2 border-slate-200 border-t-[#2A2A2F] animate-spin" />
+              </div>
+            ) : websites.length === 0 ? (
+              <div className="w-full flex flex-col items-center text-center py-20 px-6 bg-white border border-[#E6E6E6] rounded-[20px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg mx-auto">
+                <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-4 border border-[#E6E6E6]">
+                  <Folder className="w-6 h-6 text-[#2A2A2F]/50" />
+                </div>
+                <h3 className="text-lg font-bold text-black mb-1">No websites found</h3>
+                <p className="text-sm text-gray-500 max-w-sm mb-6 leading-relaxed">
+                  Import your LinkedIn profile or start with template data to create your first personal portfolio website.
+                </p>
+                <button
+                  onClick={() => router.push("/onboarding")}
+                  className="px-5 py-2 bg-[#2A2A2F] text-white text-xs font-bold rounded-lg hover:bg-[#3A3A42] transition-transform active:scale-[0.97] shadow-sm"
                 >
-                  <div
-                    className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center"
-                    style={{
-                      scrollbarWidth: "thin",
-                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                    }}
-                  >
-                    <div
-                      className="relative w-full p-1 rounded-sm flex items-center justify-center"
-                      style={{
-                        scrollbarWidth: "thin",
-                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                      }}
-                    >
+                  Create your first website
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
+                {websites
+                  .filter((web) => {
+                    const term = searchQuery.toLowerCase();
+                    return (
+                      !term ||
+                      web.brandName.toLowerCase().includes(term) ||
+                      web.subdomainSlug.toLowerCase().includes(term)
+                    );
+                  })
+                  .map((web) => {
+                    const isDropdownOpen = activeDropdownId === web.id;
+                    return (
                       <div
-                        className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none"
+                        key={web.id}
+                        className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                       >
-                        <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
-                          <ProfilePreview
-                            profile={activeProfile}
-                            template={selectedTemplate}
-                          />
+                        <div onClick={() => router.push(`/editor?id=${web.id}`)}>
+                          <div className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center">
+                            <div className="relative w-full p-1 rounded-sm flex items-center justify-center">
+                              <div className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none">
+                                <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
+                                  <ProfilePreview
+                                    profile={web.profile}
+                                    template={web.templateId}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Card Footer details */}
+                        <div className="flex items-start justify-between relative min-w-0">
+                          <div className="min-w-0 max-w-[80%] flex flex-col">
+                            <h3 className="text-sm font-semibold leading-tight truncate text-black">
+                              {web.brandName}
+                            </h3>
+                            <p className="text-xs leading-tight truncate text-gray-500 mt-1">
+                              {web.isPublished ? (
+                                <span className="text-[#369762] font-semibold flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#369762]" />
+                                  Live: {web.subdomainSlug}.linkedpage.io
+                                </span>
+                              ) : (
+                                <span>Draft (Unpublished)</span>
+                              )}
+                            </p>
+                          </div>
+
+                          <div className="relative">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveDropdownId(isDropdownOpen ? null : web.id);
+                              }}
+                              className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
+                            >
+                              <svg
+                                className="lucide lucide-ellipsis w-full"
+                                height="24"
+                                width="24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle cx="12" cy="12" r="1" />
+                                <circle cx="19" cy="12" r="1" />
+                                <circle cx="5" cy="12" r="1" />
+                              </svg>
+                            </button>
+
+                            {/* Dropdown Options */}
+                            {isDropdownOpen && (
+                              <>
+                                <div className="fixed inset-0 z-10" onClick={() => setActiveDropdownId(null)} />
+                                <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-lg">
+                                  <button
+                                    onClick={() => {
+                                      setActiveDropdownId(null);
+                                      router.push(`/editor?id=${web.id}`);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                  >
+                                    <Edit2 className="w-4 h-4 text-gray-500" />
+                                    Edit in Builder
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setActiveDropdownId(null);
+                                      router.push(`/preview?id=${web.id}`);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                  >
+                                    <Globe className="w-4 h-4 text-gray-500" />
+                                    View Live Preview
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setActiveDropdownId(null);
+                                      handleDeleteSite(web.id);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                    Delete site
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Footer details */}
-                <div
-                  className="flex items-start justify-between relative min-w-0"
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  }}
-                >
-                  <div
-                    className="min-w-0 max-w-[80%] flex flex-col"
-                    style={{
-                      scrollbarWidth: "thin",
-                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                    }}
-                  >
-                    <h3
-                      className="text-sm font-semibold leading-tight truncate text-black"
-                      style={{
-                        scrollbarWidth: "thin",
-                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                      }}
-                    >
-                      {brandName}
-                    </h3>
-                    <p
-                      className="text-xs leading-tight truncate text-gray-500 mt-1"
-                      style={{
-                        scrollbarWidth: "thin",
-                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                      }}
-                    >
-                      Created 17 hours ago
-                    </p>
-                  </div>
-
-                  <div
-                    className="relative"
-                    style={{
-                      scrollbarWidth: "thin",
-                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                    }}
-                  >
-                    <div>
-                      <button
-                        onClick={() => setShowDropdown(!showDropdown)}
-                        className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
-                        aria-haspopup="true"
-                        style={{
-                          scrollbarWidth: "thin",
-                          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                        }}
-                      >
-                        <svg
-                          className="lucide lucide-ellipsis w-full"
-                          height="24"
-                          width="24"
-                          aria-hidden="true"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                          style={{
-                            scrollbarWidth: "thin",
-                            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                          }}
-                        >
-                          <circle cx="12" cy="12" r="1" />
-                          <circle cx="19" cy="12" r="1" />
-                          <circle cx="5" cy="12" r="1" />
-                        </svg>
-                      </button>
-
-                      {/* Dropdown Options */}
-                      {showDropdown && (
-                        <>
-                          <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
-                          <div
-                            className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
-                          >
-                            <button
-                              onClick={() => { setShowDropdown(false); router.push("/editor"); }}
-                              className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                            >
-                              <Edit2 className="w-4 h-4 text-gray-500" />
-                              Edit in Builder
-                            </button>
-                            <button
-                              onClick={() => { setShowDropdown(false); router.push("/preview"); }}
-                              className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                            >
-                              <Globe className="w-4 h-4 text-gray-500" />
-                              View Live Preview
-                            </button>
-                            <button
-                              onClick={() => { setShowDropdown(false); toast.error("Delete action is placeholder."); }}
-                              className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete site
-                            </button>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
+                    );
+                  })}
               </div>
-            </div>
+            )}
           </div>
 
         </main>

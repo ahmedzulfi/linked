@@ -9,9 +9,11 @@ import React, {
   type ReactNode,
 } from "react";
 import { ProfileData, TemplateId, MOCK_PROFILE } from "@/shared/types";
+import { toast } from "sonner";
 
 // ─── State Shape ───────────────────────────────────────────────────────────────
 interface EditorState {
+  websiteId: string | null;
   profile: ProfileData | null;
   editedProfile: ProfileData | null;
   selectedTemplate: TemplateId;
@@ -22,8 +24,12 @@ interface EditorState {
 }
 
 interface EditorActions {
+  setWebsiteId: (id: string | null) => void;
+  loadWebsite: (id: string) => Promise<void>;
+  saveWebsite: () => Promise<void>;
   setLinkedinUrl: (url: string) => void;
   startScrape: (url: string) => Promise<void>;
+  startScrapeManual: (file: File) => Promise<boolean>;
   updateField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
   selectTemplate: (id: TemplateId) => void;
   resetEdits: () => void;
@@ -41,6 +47,7 @@ const TEMPLATE_KEY = "linkedpage_template";
 const URL_KEY = "linkedpage_url";
 
 export function EditorProvider({ children }: { children: ReactNode }) {
+  const [websiteId, setWebsiteId] = useState<string | null>(null);
   const [linkedinUrl, setLinkedinUrlState] = useState("");
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [editedProfile, setEditedProfile] = useState<ProfileData | null>(null);
@@ -48,13 +55,13 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [scrapeError, setScrapeError] = useState<string | null>(null);
 
-  // Rehydrate from sessionStorage on mount
+  // Rehydrate from sessionStorage on mount (fallback/legacy support)
   useEffect(() => {
     try {
       const storedProfile = sessionStorage.getItem(SESSION_KEY);
       const storedTemplate = sessionStorage.getItem(TEMPLATE_KEY) as TemplateId | null;
       const storedUrl = sessionStorage.getItem(URL_KEY);
-      if (storedProfile) {
+      if (storedProfile && !websiteId) {
         const p = JSON.parse(storedProfile) as ProfileData;
         setProfile(p);
         setEditedProfile(p);
@@ -64,7 +71,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore parse errors
     }
-  }, []);
+  }, [websiteId]);
 
   const setLinkedinUrl = useCallback((url: string) => {
     setLinkedinUrlState(url);
@@ -75,7 +82,115 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(p));
   }, []);
 
-  // Mock scrape — in production, this calls /api/scrape
+  // Helper to create a website in the backend and assign it the profile data
+  const createWebsiteWithProfile = useCallback(async (profileData: ProfileData): Promise<string> => {
+    // 1. Create a website draft
+    const createRes = await fetch("/api/websites", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ templateId: selectedTemplate }),
+    });
+    const createData = await createRes.json();
+    if (!createRes.ok || !createData.website) {
+      throw new Error(createData.error || "Failed to create website draft");
+    }
+    const newId = createData.website.id;
+
+    // 2. Save profile data to the website
+    const updateRes = await fetch(`/api/websites/${newId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        brandName: profileData.name,
+        profile: profileData,
+      }),
+    });
+    const updateData = await updateRes.json();
+    if (!updateRes.ok) {
+      throw new Error(updateData.error || "Failed to save profile data to website draft");
+    }
+
+    setWebsiteId(newId);
+    sessionStorage.setItem("linkedpage_brand_name", profileData.name);
+    sessionStorage.setItem("linkedpage_subdomain", `${createData.website.subdomainSlug}.linkedpage.io`);
+    return newId;
+  }, [selectedTemplate]);
+
+  // Load website from API
+  const loadWebsite = useCallback(async (id: string) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/websites/${id}`);
+      const data = await res.json();
+      if (!res.ok || !data.website) {
+        throw new Error(data.error || "Failed to load website details");
+      }
+      const web = data.website;
+      setWebsiteId(web.id);
+      setProfile(web.profile);
+      setEditedProfile(web.profile);
+      setSelectedTemplate(web.templateId || "minimal-card");
+      if (web.profile.linkedinUrl) {
+        setLinkedinUrlState(web.profile.linkedinUrl);
+      }
+      
+      sessionStorage.setItem("linkedpage_brand_name", web.brandName);
+      sessionStorage.setItem("linkedpage_subdomain", `${web.subdomainSlug}.linkedpage.io`);
+    } catch (e: any) {
+      toast.error(e.message || "Failed to load website.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Save changes manually to the backend API
+  const saveWebsite = useCallback(async () => {
+    if (!websiteId || !editedProfile) return;
+    try {
+      const response = await fetch(`/api/websites/${websiteId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          profile: editedProfile,
+          templateId: selectedTemplate,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to save website changes");
+      }
+      setProfile(editedProfile);
+    } catch (e: any) {
+      console.error("Manual save failed:", e);
+    }
+  }, [websiteId, editedProfile, selectedTemplate]);
+
+  // Auto-save changes (debounced)
+  useEffect(() => {
+    if (!websiteId || !editedProfile) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/websites/${websiteId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            profile: editedProfile,
+            templateId: selectedTemplate,
+          }),
+        });
+        if (response.ok) {
+          setProfile(editedProfile);
+        }
+      } catch (err) {
+        console.error("Auto-save failed:", err);
+      }
+    }, 1000); // 1-second debounce
+
+    return () => clearTimeout(timer);
+  }, [websiteId, editedProfile, selectedTemplate]);
+
+  // Scraping logic using the backend URL scraper
   const startScrape = useCallback(async (url: string) => {
     setIsLoading(true);
     setScrapeError(null);
@@ -83,24 +198,63 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     sessionStorage.setItem(URL_KEY, url);
 
     try {
-      // Simulate a network call — replace with real fetch('/api/scrape?url=…')
-      await new Promise((r) => setTimeout(r, 2500));
-
-      if (url.toLowerCase().includes("fail")) {
-        throw new Error("Failed to fetch LinkedIn profile. Private account settings detected.");
+      const response = await fetch("/api/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch LinkedIn profile.");
       }
 
-      // For now, use the mock profile but stamp the URL
-      const p: ProfileData = { ...MOCK_PROFILE, linkedinUrl: url };
-      setProfile(p);
-      setEditedProfile(p);
-      persistProfile(p);
+      const profileData = data.data;
+      setProfile(profileData);
+      setEditedProfile(profileData);
+      persistProfile(profileData);
+
+      // Create site draft in backend
+      await createWebsiteWithProfile(profileData);
     } catch (e: any) {
       setScrapeError(e.message || "Failed to fetch LinkedIn profile. Please check the URL and try again.");
     } finally {
       setIsLoading(false);
     }
-  }, [persistProfile]);
+  }, [persistProfile, createWebsiteWithProfile]);
+
+  // Manual scraping logic via uploaded ZIP file
+  const startScrapeManual = useCallback(async (file: File): Promise<boolean> => {
+    setIsLoading(true);
+    setScrapeError(null);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/scrape/manual", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to parse ZIP archive.");
+      }
+
+      const profileData = data.data;
+      setProfile(profileData);
+      setEditedProfile(profileData);
+      persistProfile(profileData);
+
+      // Create site draft in backend
+      await createWebsiteWithProfile(profileData);
+      return true;
+    } catch (e: any) {
+      setScrapeError(e.message || "Failed to process ZIP archive. Make sure it contains Profile.csv.");
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [persistProfile, createWebsiteWithProfile]);
 
   const updateField = useCallback(
     <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => {
@@ -127,6 +281,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, [profile, persistProfile]);
 
   const clearProfile = useCallback(() => {
+    setWebsiteId(null);
     setProfile(null);
     setEditedProfile(null);
     setScrapeError(null);
@@ -135,11 +290,18 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     sessionStorage.removeItem(URL_KEY);
   }, []);
 
-  const useMockProfile = useCallback(() => {
+  const useMockProfile = useCallback(async () => {
     setProfile(MOCK_PROFILE);
     setEditedProfile(MOCK_PROFILE);
     persistProfile(MOCK_PROFILE);
-  }, [persistProfile]);
+    
+    // Create website draft in backend
+    try {
+      await createWebsiteWithProfile(MOCK_PROFILE);
+    } catch (e) {
+      console.error("Failed to initialize mock website in DB:", e);
+    }
+  }, [persistProfile, createWebsiteWithProfile]);
 
   const isDirty =
     !!profile &&
@@ -149,6 +311,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   return (
     <EditorContext.Provider
       value={{
+        websiteId,
         profile,
         editedProfile,
         selectedTemplate,
@@ -156,8 +319,12 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         isLoading,
         scrapeError,
         isDirty,
+        setWebsiteId,
+        loadWebsite,
+        saveWebsite,
         setLinkedinUrl,
         startScrape,
+        startScrapeManual,
         updateField,
         selectTemplate,
         resetEdits,

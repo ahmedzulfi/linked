@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useEditor } from "@/context/EditorContext";
 
 interface SettingsPaneProps {
   profileName: string;
@@ -9,33 +10,83 @@ interface SettingsPaneProps {
 }
 
 export default function SettingsPane({ profileName, router }: SettingsPaneProps) {
+  const { websiteId } = useEditor();
   const [siteName, setSiteName] = useState(profileName);
   const [seoTitle, setSeoTitle] = useState(`${profileName} - Professional Micro-site`);
   const [seoDesc, setSeoDesc] = useState("Explore my professional experience, projects, education, and social networks.");
   const [saving, setSaving] = useState(false);
 
-  const handleSaveSettings = () => {
+  useEffect(() => {
+    if (!websiteId) return;
+    const fetchDetails = async () => {
+      try {
+        const res = await fetch(`/api/websites/${websiteId}`);
+        const data = await res.json();
+        if (res.ok && data.website) {
+          setSiteName(data.website.brandName || "");
+          setSeoTitle(data.website.seoTitle || "");
+          setSeoDesc(data.website.seoDesc || "");
+        }
+      } catch (err) {
+        console.error("Failed to fetch settings details", err);
+      }
+    };
+    fetchDetails();
+  }, [websiteId]);
+
+  const handleSaveSettings = async () => {
+    if (!websiteId) return;
     setSaving(true);
-    toast.loading("Saving settings...");
-    setTimeout(() => {
-      toast.dismiss();
+    const toastId = toast.loading("Saving settings...");
+    try {
+      const res = await fetch(`/api/websites/${websiteId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          brandName: siteName,
+          seoTitle,
+          seoDesc,
+        }),
+      });
+      const data = await res.json();
+      toast.dismiss(toastId);
       setSaving(false);
-      sessionStorage.setItem("linkedpage_brand_name", siteName);
-      toast.success("Site configuration saved!");
-    }, 1000);
+      if (res.ok) {
+        toast.success("Site configuration saved!");
+        sessionStorage.setItem("linkedpage_brand_name", siteName);
+      } else {
+        toast.error(data.error || "Failed to save settings");
+      }
+    } catch {
+      toast.dismiss(toastId);
+      setSaving(false);
+      toast.error("Failed to save settings. Connection error.");
+    }
   };
 
-  const handleDeleteSite = () => {
+  const handleDeleteSite = async () => {
+    if (!websiteId) return;
     const confirmDel = window.confirm("Are you absolutely sure you want to delete this website? This action is permanent!");
     if (!confirmDel) return;
-    toast.loading("Deleting site database...");
-    setTimeout(() => {
-      toast.dismiss();
-      sessionStorage.removeItem("linkedpage_brand_name");
-      sessionStorage.removeItem("linkedpage_subdomain");
-      toast.success("Website deleted successfully.");
-      router.push("/dashboard");
-    }, 1500);
+    const toastId = toast.loading("Deleting website...");
+    try {
+      const res = await fetch(`/api/websites/${websiteId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      toast.dismiss(toastId);
+      if (res.ok) {
+        toast.success("Website deleted successfully.");
+        sessionStorage.removeItem("linkedpage_brand_name");
+        sessionStorage.removeItem("linkedpage_subdomain");
+        router.push("/dashboard");
+      } else {
+        toast.error(data.error || "Failed to delete website");
+      }
+    } catch {
+      toast.dismiss(toastId);
+      toast.error("Failed to delete website. Connection error.");
+    }
   };
 
   return (
