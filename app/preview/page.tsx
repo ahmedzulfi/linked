@@ -228,7 +228,7 @@ export default function PreviewPage() {
 
       {/* ── Top toolbar ── */}
       <div className="fixed top-[88px] left-0 right-0 z-40 px-5">
-        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md      rounded-lg   border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
+        <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md      rounded-lg   border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
           {/* Left: back */}
           <button
             onClick={() => router.push("/editor")}
@@ -242,7 +242,7 @@ export default function PreviewPage() {
           <div className="flex items-center gap-1 p-1 bg-[#F3F3F3] rounded-[10px]">
             <button
               onClick={() => setPreviewMode("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] " : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
               <Monitor className="w-5 h-5" />
@@ -250,7 +250,7 @@ export default function PreviewPage() {
             </button>
             <button
               onClick={() => setPreviewMode("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016] " : "text-[#6B6B6B] hover:text-black"
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium     rounded-lg  transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] " : "text-[#6B6B6B] hover:text-black"
                 }`}
             >
               <Smartphone className="w-5 h-5" />

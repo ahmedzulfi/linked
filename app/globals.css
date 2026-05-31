@@ -121,7 +121,7 @@
   /* Dark flat button with tactile inner shadow */
   .btn-dark {
     background-color: #2A2A2F;
-    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
     transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), box-shadow 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
   }
 
@@ -131,7 +131,7 @@
 
   .btn-dark-sm {
     background-color: #2A2A2F;
-    box-shadow: inset 0 -1.5px 3px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
     transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), box-shadow 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
   }
 
@@ -143,7 +143,7 @@
   .btn-green {
     background-color: #2A2A2F;
     color: #FFFFFF;
-    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
     transition: opacity 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
   }
 
@@ -155,19 +155,19 @@
   .card-light {
     background: #FBFBFB;
     border: 1px solid #E6E6E6;
-    box-shadow: 0 6px 10px -6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
   }
 
   /* Card button shadow */
   .card-btn-shadow {
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(0, 0, 0, 0.07), 0 1px 0 0 rgba(255, 255, 255, 0.75) inset;
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
   }
 
   /* Dark card */
   .dark-card {
     background: #FBFBFB;
     border: 1px solid #E6E6E6;
-    box-shadow: 0 6px 10px -6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
   }
 
   /* Glass card (frosted panel) */
@@ -175,7 +175,7 @@
     background: rgba(255, 255, 255, 0.507);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(230, 230, 230, 0.4);
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
   }
 
   /* Rainbow gradient text */
@@ -244,7 +244,7 @@
     background-color: #FBFBFB;
     border: 1px solid #E6E6E6;
     border-radius: 13px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.03);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
   }
 
   /* Base button reset + shared styles */
@@ -275,7 +275,7 @@
   .button-primary {
     background-color: #2A2A2F;
     color: #FFFFFF;
-    box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
   }
 
   .button-primary:hover {

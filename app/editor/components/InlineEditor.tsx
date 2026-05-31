@@ -121,7 +121,7 @@ export default function InlineEditor({
             onClick={() => setActiveTab(tab.id)}
             className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium     rounded-lg  transition-[background-color,color] duration-150 ${
               activeTab === tab.id
-                ? "bg-white text-black  shadow-[0_6px_10px_-6px_#00000016]"
+                ? "bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
                 : "text-[#6B6B6B] hover:text-black"
             }`}
           >

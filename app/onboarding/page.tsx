@@ -47,7 +47,7 @@ function AIAvatar({ size = "sm" }: { size?: "sm" | "md" }) {
   const dim = size === "md" ? "w-8 h-8" : "w-7 h-7";
   return (
     <div
-      className={`${dim} rounded-full bg-gradient-to-br from-[#2A2A2F] to-[#4A4A55] flex items-center justify-center flex-shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.12)]`}
+      className={`${dim} rounded-full bg-gradient-to-br from-[#2A2A2F] to-[#4A4A55] flex items-center justify-center flex-shrink-0 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`}
     >
       <Sparkles className="w-3.5 h-3.5 text-white/90" />
     </div>
@@ -87,7 +87,7 @@ function ChatBubble({
       <AIAvatar />
       <div className="flex flex-col gap-1 max-w-[calc(100%-36px)]">
         {message.state === "typing" ? (
-          <div className="bg-white border border-[#E6E6E6] rounded-[14px] rounded-bl-[4px] px-3 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="bg-white border border-[#E6E6E6] rounded-[14px] rounded-bl-[4px] px-3 py-2.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
             <TypingDots />
           </div>
         ) : (
@@ -95,7 +95,7 @@ function ChatBubble({
             initial={{ opacity: 0, filter: "blur(2px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="bg-white border border-[#E6E6E6] rounded-[14px] rounded-bl-[4px] px-3.5 py-2.5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
+            className="bg-white border border-[#E6E6E6] rounded-[14px] rounded-bl-[4px] px-3.5 py-2.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
           >
             <div className="flex items-center gap-2">
               {message.tag && (
@@ -279,7 +279,7 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0_6px_10px_-6px_#00000016] p-8 flex flex-col"
+                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col"
               >
                 <h1 className="text-2xl font-bold tracking-tight text-black text-center mb-2 font-inter-tight">
                   Paste your LinkedIn profile link to get started.
@@ -316,7 +316,7 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0_6px_10px_-6px_#00000016] overflow-hidden flex flex-col"
+                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden flex flex-col"
               >
                 {/* Header */}
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-[#F3F3F5]">
@@ -364,9 +364,9 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/95 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0_6px_10px_-6px_#00000016] p-8 flex flex-col"
+                className="bg-white/95 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col"
               >
-                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-5 shadow-[0_2px_8px_rgba(228,90,90,0.08)]">
+                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                   <AlertCircle className="w-5 h-5 text-[#E45A5A]" />
                 </div>
 

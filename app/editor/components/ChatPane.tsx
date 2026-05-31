@@ -197,11 +197,10 @@ export default function ChatPane({
                 id={tab.id === "grid" ? "onboarding-templates-tab" : undefined}
                 onClick={() => setActiveTab(tab.id)}
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none transition-all duration-300 ${
-                  isActive 
-                    ? "flex-[1.5] text-blue-500 px-3 font-['Inter_Tight']" 
-                    : "flex-1 text-[#171717]/60 hover:bg-zinc-200/40"
-                }`}
+                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none transition-all duration-300 ${isActive
+                  ? "flex-[1.5] text-blue-500 px-3 font-['Inter_Tight']"
+                  : "flex-1 text-[#171717]/60 hover:bg-zinc-200/40"
+                  }`}
               >
                 {/* Smoothly animated background pill */}
                 {isActive && (
@@ -233,8 +232,8 @@ export default function ChatPane({
                 {!isActive && (
                   <div className="absolute top-10 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-[opacity,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] flex flex-col items-center">
                     {/* Small arrow pointing up */}
-                    <div className="w-2 h-2 bg-zinc-800 rotate-45 -mb-1 shadow-[0px_5px_6px_0px_rgba(0,0,0,0.12)]" />
-                    <div className="px-3 py-1 bg-gradient-to-b from-zinc-800 to-zinc-700 text-white text-[10px] font-medium font-['Inter_Tight'] rounded-lg shadow-[0px_5px_6px_0px_rgba(0,0,0,0.12),inset_0px_1px_0px_0px_rgba(255,255,255,0.25),inset_0px_-3px_4px_0px_rgba(0,0,0,0.20)] whitespace-nowrap">
+                    <div className="w-2 h-2 bg-zinc-800 rotate-45 -mb-1 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" />
+                    <div className="px-3 py-1 bg-gradient-to-b from-zinc-800 to-zinc-700 text-white text-[10px] font-medium font-['Inter_Tight'] rounded-lg shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] whitespace-nowrap">
                       {tab.label}
                     </div>
                   </div>
@@ -263,9 +262,9 @@ export default function ChatPane({
                     >
                       {msg.role === "user" ? (
                         <div className="w-full flex justify-end items-start">
-                          <div className="max-w-[85%] flex flex-col justify-start items-start">
+                          <div className="max-w-[85%] flex flex-col  justify-start items-start">
                             <div className="BackgroundBorder min-h-9 px-4 py-3 relative bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start">
-                              <div className="OverlayShadow w-24 h-14 left-0 top-0 absolute bg-white/0 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] pointer-events-none" />
+                              <div className="OverlayShadow w-full h-full  left-0    top-0 absolute bg-white/0 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] pointer-events-none" />
                               <div className="Container self-stretch pb-[0.63px] flex flex-col justify-start items-start">
                                 <div className="HiHellow justify-center text-black text-[15px] font-normal font-['Inter'] leading-7 break-words max-w-full">
                                   {msg.content}
@@ -280,7 +279,7 @@ export default function ChatPane({
                             {/* Logo containing text */}
                             <img src="/logo.png" alt="Logo" className="h-6 w-auto object-contain select-none" />
                           </div>
-                          
+
                           <div className="self-stretch flex flex-col justify-start items-start w-full">
                             <div className="justify-center text-neutral-900 text-[15px] font-normal font-['Inter'] leading-7 whitespace-pre-wrap w-full">
                               {msg.content}
@@ -303,7 +302,7 @@ export default function ChatPane({
                                       <div className="BackgroundBorderShadow w-72 h-36 left-[-6.26px] top-[58.77px] absolute origin-top-left rotate-[-10deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
                                       <div className="BackgroundBorderShadow w-80 h-40 left-[118.69px] top-[2.70px] absolute origin-top-left rotate-[5deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
                                       <div className="BackgroundBorderShadow w-80 h-40 left-[7.20px] top-[29.90px] absolute origin-top-left rotate-[-5deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      
+
                                       <div className="BackgroundBorderShadow w-full max-w-96 h-48 left-[23.33px] top-0 absolute bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100 overflow-hidden flex items-center justify-center p-4">
                                         <div className="flex flex-col items-center text-center gap-1">
                                           <span className="font-semibold text-[13px] text-neutral-800">Portfolio Preview</span>
@@ -311,7 +310,7 @@ export default function ChatPane({
                                         </div>
                                       </div>
                                     </div>
-                                    
+
                                     <button className="Button h-9 px-2.5 left-0 top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
                                       <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
                                         <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -330,56 +329,56 @@ export default function ChatPane({
                                 </div>
                               </div>
 
-                                {/* 2. Checklist section */}
-                                <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
-                                  <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
-                                    {[
-                                      "About Me description",
-                                      "Project Showcase grid",
-                                      "Responsive layout support",
-                                      "Contact Form interface",
-                                      "Resume download feature",
-                                      "Skills & Tools inventory",
-                                      "Testimonials section",
-                                      "Custom footer metadata",
-                                      "Navigation header links"
-                                    ].map((item, idx) => (
-                                      <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
-                                        <div className="w-5 h-5 rounded-full border border-[#E6E6E6] flex items-center justify-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                                          <div className="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-80" />
-                                        </div>
-                                        <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{item}</span>
+                              {/* 2. Checklist section */}
+                              <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
+                                <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
+                                  {[
+                                    "About Me description",
+                                    "Project Showcase grid",
+                                    "Responsive layout support",
+                                    "Contact Form interface",
+                                    "Resume download feature",
+                                    "Skills & Tools inventory",
+                                    "Testimonials section",
+                                    "Custom footer metadata",
+                                    "Navigation header links"
+                                  ].map((item, idx) => (
+                                    <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
+                                      <div className="w-5 h-5 rounded-full border border-[#E6E6E6] flex items-center justify-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+                                        <div className="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-80" />
                                       </div>
-                                    ))}
-                                  </div>
-                                </div>
-
-                                {/* 3. Color Palette section */}
-                                <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
-                                  <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
-                                    {[
-                                      { name: "Ocean Breeze", colors: "from-blue-600 to-cyan-400" },
-                                      { name: "Sunset Glow", colors: "from-orange-500 to-rose-400" },
-                                      { name: "Forest Moss", colors: "from-emerald-600 to-teal-400" },
-                                      { name: "Lavender Fields", colors: "from-purple-600 to-pink-400" }
-                                    ].map((palette, idx) => (
-                                      <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
-                                        <div className={`Gradient w-5 h-5 bg-gradient-to-b ${palette.colors} rounded-full shadow-sm`} />
-                                        <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{palette.name}</span>
-                                      </div>
-                                    ))}
-                                  </div>
+                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{item}</span>
+                                    </div>
+                                  ))}
                                 </div>
                               </div>
-                            )}
-                          </div>
-                        )}
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                  <div ref={bottomRef} />
-                </div>
+
+                              {/* 3. Color Palette section */}
+                              <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
+                                <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
+                                  {[
+                                    { name: "Ocean Breeze", colors: "from-blue-600 to-cyan-400" },
+                                    { name: "Sunset Glow", colors: "from-orange-500 to-rose-400" },
+                                    { name: "Forest Moss", colors: "from-emerald-600 to-teal-400" },
+                                    { name: "Lavender Fields", colors: "from-purple-600 to-pink-400" }
+                                  ].map((palette, idx) => (
+                                    <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
+                                      <div className={`Gradient w-5 h-5 bg-gradient-to-b ${palette.colors} rounded-full shadow-sm`} />
+                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{palette.name}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+                <div ref={bottomRef} />
               </div>
+            </div>
 
             {/* Input area */}
             <div className="p-4 shrink-0 bg-white flex flex-col gap-3">
@@ -445,9 +444,9 @@ export default function ChatPane({
 
         {activeTab === "theme" && profile && (
           <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
-            <InlineEditor 
-              profile={profile} 
-              onChange={onChangeField} 
+            <InlineEditor
+              profile={profile}
+              onChange={onChangeField}
               activeTab={editorTab}
               setActiveTab={setEditorTab}
             />

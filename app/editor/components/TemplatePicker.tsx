@@ -15,7 +15,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
   if (template.id === "minimal-card") {
     return (
       <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
-        <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0_6px_10px_-6px_#00000016]">
+        <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-7 h-7 rounded-lg bg-[#E6E6E6]" />
             <div className="flex flex-col gap-1">

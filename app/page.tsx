@@ -25,7 +25,7 @@ function UserMenu() {
       animate={{ opacity: 1, transform: "scale(1)" }}
       exit={{ opacity: 0, transform: "scale(0.95)" }}
       transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-      className="absolute z-55 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_#ffff,0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5"
+      className="absolute z-55 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/70 backdrop-blur-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] right-0 w-72 p-5"
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
@@ -442,7 +442,7 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 15 }}
         transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
-        className="w-full max-w-2xl bg-white rounded-[18px] border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden text-left flex flex-col max-h-[85vh] select-none"
+        className="w-full max-w-2xl bg-white rounded-[18px] border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden text-left flex flex-col max-h-[85vh] select-none"
       >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#F3F3F3]">
@@ -461,7 +461,7 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 bg-[#F7F7F7]">
           {/* Micro-site content */}
-          <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-6 flex flex-col gap-4  shadow-[0_6px_10px_-6px_#00000016] ">
+          <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-6 flex flex-col gap-4  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16   rounded-lg bg-gray-200 overflow-hidden flex-shrink-0">
                 <img
@@ -482,12 +482,12 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
 
           {/* Bento blocks */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-4 flex flex-col gap-2  shadow-[0_6px_10px_-6px_#00000016] ">
+            <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-4 flex flex-col gap-2  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
               <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Experience</span>
               <p className="text-[14px] font-semibold text-black font-inter-tight">Greylock Partners</p>
               <p className="text-[12px] text-gray-500 font-inter-tight">Partner • 2009 - Present</p>
             </div>
-            <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-4 flex flex-col gap-2  shadow-[0_6px_10px_-6px_#00000016] ">
+            <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-4 flex flex-col gap-2  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
               <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Education</span>
               <p className="text-[14px] font-semibold text-black font-inter-tight">Stanford University</p>
               <p className="text-[12px] text-gray-500 font-inter-tight">BS in Cognitive Science</p>
@@ -614,7 +614,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
         <motion.div
           variants={heroItemVariants}
           onClick={() => onGenerate(profileUrl)}
-          className="flex items-center gap-2 px-3 py-1.5   rounded-lg border border-[#E6E6E6] bg-white  shadow-[0_6px_10px_-6px_#00000016]  cursor-pointer hover:bg-gray-50 active:scale-97 transition-all"
+          className="flex items-center gap-2 px-3 py-1.5   rounded-lg border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  cursor-pointer hover:bg-gray-50 active:scale-97 transition-all"
         >
           <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
             Create in under 60 seconds
@@ -640,7 +640,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
           variants={heroItemVariants}
           className="w-full max-w-[1040px]      rounded-lg   glass-card  p-4 sm:p-5 flex flex-col gap-5 mt-4"
         >
-          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/80 p-5 flex flex-col gap-4  shadow-[0_6px_10px_-6px_#00000016]  focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
+          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/80 p-5 flex flex-col gap-4  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
             {/* Textarea */}
             <textarea
               value={profileUrl}
@@ -701,7 +701,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
                         transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] as const }}
                         style={{ originX: 1, originY: 1 }}
-                        className="absolute right-0 bottom-full mb-3 z-[9999] bg-white border border-[#E6E6E6]      rounded-lg    shadow-[0_6px_10px_-6px_#00000016]  p-3 flex flex-col gap-3 min-w-[260px] select-none text-left"
+                        className="absolute right-0 bottom-full mb-3 z-[9999] bg-white border border-[#E6E6E6]      rounded-lg    shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  p-3 flex flex-col gap-3 min-w-[260px] select-none text-left"
                       >
                         <div className="flex items-center gap-2 px-1 border-b border-[#F3F3F3] pb-2 text-black">
                           <svg className="h-4 w-4 text-black" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -755,7 +755,7 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                 {/* Send button (Primary action) */}
                 <button
                   onClick={() => onGenerate(profileUrl)}
-                  className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+                  className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
@@ -842,7 +842,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
                 key={i}
                 className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
               >
-                <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0_6px_10px_-6px_#00000016]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
+                <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                   <img src={t.img} alt={t.name} className="w-full h-full object-cover     rounded-lg " />
                   {/* Bottom gradient overlay inside padding */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
@@ -858,7 +858,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
                       <div className="relative p-0.5      rounded-lg   overflow-hidden bg-white">
                         <button
                           onClick={() => onSelectTemplate(t.name)}
-                          className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out  shadow-[0_6px_10px_-6px_#00000016] "
+                          className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] "
                         >
                           Customize this look
                         </button>
@@ -873,13 +873,13 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
 
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
-          <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden mr-8">
+          <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden mr-8">
             <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)" }} />
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => scrollCarousel("prev")}
-              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -887,7 +887,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
             </button>
             <button
               onClick={() => scrollCarousel("next")}
-              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
+              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -970,7 +970,7 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
         >
           {HOW_IT_WORKS.map((item, i) => (
             <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
-              <div className="     rounded-lg   border border-[#E6E6E6] bg-white  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden p-2 transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
+              <div className="     rounded-lg   border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden p-2 transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                 <img
                   src={item.img}
                   alt={item.boldText}
@@ -1040,7 +1040,7 @@ function BusinessSection() {
 
         {/* Tabs with layout glide */}
         <div className="flex justify-center mt-2">
-          <div className="flex items-center      rounded-lg   bg-[#F3F3F3] p-1 border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016]  relative">
+          <div className="flex items-center      rounded-lg   bg-[#F3F3F3] p-1 border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  relative">
             {BUSINESS_TABS.map((tab, i) => {
               const isActive = activeTab === i;
               return (
@@ -1052,7 +1052,7 @@ function BusinessSection() {
                   {isActive && (
                     <motion.div
                       layoutId="active-business-tab"
-                      className="absolute inset-0 bg-[#E6FFE6] border border-[#8DFFB3]/40 rounded-[10px]  shadow-[0_6px_10px_-6px_#00000016]  -z-10"
+                      className="absolute inset-0 bg-[#E6FFE6] border border-[#8DFFB3]/40 rounded-[10px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  -z-10"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -1070,7 +1070,7 @@ function BusinessSection() {
             className="flex gap-6 overflow-x-auto scrollbar-hide      rounded-lg   border border-[#E6E6E6] p-2 bg-[#FBFBFB]"
           >
             {BUSINESS_CARDS.map((src, i) => (
-              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0_6px_10px_-6px_#00000016]  transition-transform duration-300 ease-out hover:scale-[1.005] will-change-transform">
+              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.005] will-change-transform">
                 <img src={src} alt={`Business card ${i + 1}`} className="w-full h-auto     rounded-lg  object-cover" />
               </div>
             ))}
@@ -1078,7 +1078,7 @@ function BusinessSection() {
           {/* Arrows */}
           <button
             onClick={() => scrollCarousel("prev")}
-            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
+            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -1086,7 +1086,7 @@ function BusinessSection() {
           </button>
           <button
             onClick={() => scrollCarousel("next")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
+            className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -1161,7 +1161,7 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
         >
           {FEATURES.map((f, i) => (
             <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
-              <div className="     rounded-lg   border border-[#E6E6E6] bg-white p-2 overflow-hidden  shadow-[0_6px_10px_-6px_#00000016]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
+              <div className="     rounded-lg   border border-[#E6E6E6] bg-white p-2 overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                 <img
                   src={f.img}
                   alt={f.text}
@@ -1214,7 +1214,7 @@ function FAQSection() {
           {FAQ_ITEMS.map((question, i) => {
             const isOpen = openIdx === i;
             return (
-              <div key={i} className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden font-inter">
+              <div key={i} className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden font-inter">
                 <button
                   className="w-full flex items-center justify-between px-6 py-5 text-left"
                   onClick={() => toggle(i)}
@@ -1225,7 +1225,7 @@ function FAQSection() {
                   <motion.span
                     animate={{ rotate: isOpen ? 90 : 0 }}
                     transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-                    className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white  shadow-[0_6px_10px_-6px_#00000016] "
+                    className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] "
                   >
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                       <path d="M2.94586 7.5H11.1945" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
@@ -1337,7 +1337,7 @@ export default function Index() {
       {!isSidebarOpen && (
         <button
           onClick={() => setIsSidebarOpen(true)}
-          className="fixed left-5 top-28 z-40 w-10 h-10 rounded-full bg-white border border-[#E6E6E6] hover:bg-[#F7F7F7] active:scale-95 flex items-center justify-center shadow-[0_6px_10px_-6px_#00000016] transition-all"
+          className="fixed left-5 top-28 z-40 w-10 h-10 rounded-full bg-white border border-[#E6E6E6] hover:bg-[#F7F7F7] active:scale-95 flex items-center justify-center shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-all"
           title="Open Sidebar"
         >
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">

@@ -241,7 +241,7 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
           <img
             src={profile.avatarUrl}
             alt={profile.name}
-            className="w-20 h-20   rounded-lg object-cover border-4 border-white  shadow-[0_6px_10px_-6px_#00000016]"
+            className="w-20 h-20   rounded-lg object-cover border-4 border-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
           />
         </EditableWrapper>
 

@@ -79,7 +79,7 @@ function HeroSection() {
       {/* Content */}
       <div className="relative z-10 w-full max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center">
         {/* Badge */}
-        <div className="flex items-center gap-2 px-3 py-1.5   rounded-lg border border-[#E6E6E6] bg-white  shadow-[0_6px_10px_-6px_#00000016] ">
+        <div className="flex items-center gap-2 px-3 py-1.5   rounded-lg border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
           <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
             Create in under 60 seconds
           </span>
@@ -98,7 +98,7 @@ function HeroSection() {
 
         {/* Prompt card */}
         <div className="w-full max-w-[1040px]      rounded-lg   glass-card p-4 sm:p-5 flex flex-col gap-5 mt-4">
-          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/20 p-5 flex flex-col gap-4  shadow-[0_6px_10px_-6px_#00000016] ">
+          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/20 p-5 flex flex-col gap-4  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
             {/* Textarea */}
             <textarea
               className="w-full bg-transparent text-[#171717] text-[16px] sm:text-[18px] leading-[27px] resize-none outline-none placeholder:text-[#171717]/40 min-h-[72px] font-inter-tight"
@@ -152,7 +152,7 @@ function HeroSection() {
                 </button>
 
                 {/* Send button (Primary action) */}
-                <button className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#3E3E45] active:scale-95 transition-all">
+                <button className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#3E3E45] active:scale-95 transition-all">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
@@ -197,7 +197,7 @@ function TemplatesSection() {
           >
             {TEMPLATES_LARGE.map((t, i) => (
               <div key={i} className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group">
-                <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0_6px_10px_-6px_#00000016] ">
+                <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                   <img src={t.img} alt={t.name} className="w-full h-full object-cover     rounded-lg " />
                   {/* Bottom gradient overlay inside padding */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
@@ -211,7 +211,7 @@ function TemplatesSection() {
                     <div className="relative">
                       <div className="absolute -inset-1 opacity-20 blur-[4px]" style={{ background: "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
                       <div className="relative p-0.5      rounded-lg   overflow-hidden bg-white">
-                        <button className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-97 transition-all  shadow-[0_6px_10px_-6px_#00000016] ">
+                        <button className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-97 transition-all  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                           Customize this look
                         </button>
                       </div>
@@ -225,13 +225,13 @@ function TemplatesSection() {
 
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
-          <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden mr-8">
+          <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden mr-8">
             <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)" }} />
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => scrollCarousel("prev")}
-              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-95 transition-all"
+              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -239,7 +239,7 @@ function TemplatesSection() {
             </button>
             <button
               onClick={() => scrollCarousel("next")}
-              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-95 transition-all"
+              className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
                 <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -289,7 +289,7 @@ function HowItWorksSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {HOW_IT_WORKS.map((item, i) => (
             <div key={i} className="flex flex-col gap-4">
-              <div className="     rounded-lg   border border-[#E6E6E6] bg-white  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden p-2">
+              <div className="     rounded-lg   border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden p-2">
                 <img
                   src={item.img}
                   alt={item.boldText}
@@ -337,13 +337,13 @@ function BusinessSection() {
 
         {/* Tabs */}
         <div className="flex justify-center mt-2">
-          <div className="flex items-center      rounded-lg   bg-[#F3F3F3] p-1 border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
+          <div className="flex items-center      rounded-lg   bg-[#F3F3F3] p-1 border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
             {BUSINESS_TABS.map((tab, i) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(i)}
                 className={`h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-all duration-150 whitespace-nowrap font-inter-tight ${activeTab === i
-                  ? "bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20]  shadow-[0_6px_10px_-6px_#00000016]  font-semibold"
+                  ? "bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  font-semibold"
                   : "text-[#171717]/60 hover:text-black hover:bg-black/5"
                   }`}
               >
@@ -360,7 +360,7 @@ function BusinessSection() {
             className="flex gap-6 overflow-x-auto scrollbar-hide      rounded-lg   border border-[#E6E6E6] p-2 bg-[#FBFBFB]"
           >
             {BUSINESS_CARDS.map((src, i) => (
-              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0_6px_10px_-6px_#00000016] ">
+              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                 <img src={src} alt={`Business card ${i + 1}`} className="w-full h-auto     rounded-lg  object-cover" />
               </div>
             ))}
@@ -368,7 +368,7 @@ function BusinessSection() {
           {/* Arrows */}
           <button
             onClick={() => scrollCarousel("prev")}
-            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
+            className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -376,7 +376,7 @@ function BusinessSection() {
           </button>
           <button
             onClick={() => scrollCarousel("next")}
-            className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0_6px_10px_-6px_#00000016]  hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
+            className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
               <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
@@ -405,7 +405,7 @@ function DomainSection() {
           {/* Search box */}
           <div className="w-full max-w-[800px] relative mt-2">
             <div className="absolute -inset-0.5 opacity-15 blur-[4px]      rounded-lg  " style={{ background: "linear-gradient(92deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
-            <div className="relative p-1      rounded-lg   overflow-hidden bg-white border border-[#E6E6E6]  shadow-[0_6px_10px_-6px_#00000016] ">
+            <div className="relative p-1      rounded-lg   overflow-hidden bg-white border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
               <div className="flex items-center justify-between px-5 py-4 rounded-[11px] bg-white">
                 <div className="flex items-center gap-3">
                   <svg width="16" height="19" viewBox="0 0 16 19" fill="none">
@@ -414,7 +414,7 @@ function DomainSection() {
                   </svg>
                   <span className="text-black text-[16px] sm:text-[17px] font-medium leading-[27px] font-inter-tight">reidhoffman.linkedpage.me</span>
                 </div>
-                <button className="flex items-center justify-center w-8 h-8   rounded-lg btn-dark-sm active:scale-95 transition-all text-white  shadow-[0_6px_10px_-6px_#00000016] ">
+                <button className="flex items-center justify-center w-8 h-8   rounded-lg btn-dark-sm active:scale-95 transition-all text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                   <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
                     <path d="M5.31708 5.31714H12.9129V12.913" stroke="currentColor" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
                     <path d="M5.31708 12.913L12.9129 5.31714" stroke="currentColor" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
@@ -465,7 +465,7 @@ function BrandSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {BRAND_CARDS.map((card, i) => (
             <div key={i} className="flex flex-col gap-4">
-              <div className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden p-2">
+              <div className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden p-2">
                 <img
                   src={card.img}
                   alt={card.boldText}
@@ -514,7 +514,7 @@ function FeaturesSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {FEATURES.map((f, i) => (
             <div key={i} className="flex flex-col gap-4">
-              <div className="     rounded-lg   border border-[#E6E6E6] bg-white p-2 overflow-hidden  shadow-[0_6px_10px_-6px_#00000016] ">
+              <div className="     rounded-lg   border border-[#E6E6E6] bg-white p-2 overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                 <img
                   src={f.img}
                   alt={f.text}
@@ -559,7 +559,7 @@ function FAQSection() {
         {/* FAQ items */}
         <div className="flex flex-col gap-4 max-w-4xl mx-auto">
           {FAQ_ITEMS.map((question, i) => (
-            <div key={i} className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0_6px_10px_-6px_#00000016]  overflow-hidden transition-all duration-150">
+            <div key={i} className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden transition-all duration-150">
               <button
                 className="w-full flex items-center justify-between px-6 py-5 text-left"
                 onClick={() => toggle(i)}
@@ -567,7 +567,7 @@ function FAQSection() {
                 <span className="text-[#171717] text-[16px] sm:text-[18px] leading-[26px] font-medium font-inter-tight pr-4">
                   {question}
                 </span>
-                <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white  shadow-[0_6px_10px_-6px_#00000016]  active:scale-95 transition-all">
+                <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  active:scale-95 transition-all">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                     <path d="M2.94586 7.5H11.1945" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
                     {openIdx !== i && (

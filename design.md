@@ -186,14 +186,14 @@ The sidebar layout for floating navigation overlays uses a custom panel:
 - **Structure:** Absolute or fixed container with a left gap (`left-5`), top gap (`top-28`), and bottom gap (`bottom-5`).
 - **Width:** `260px` to maintain narrow, crisp spacing.
 - **Backdrop:** Light dark backdrop overlay (`bg-black/15`) with a subtle blur effect (`backdrop-blur-[2px]`).
-- **Surface & Shadows:** High-fidelity frosted glass effect (`bg-white/95 backdrop-blur-md`) with soft border division (`border border-[#E6E6E6]`) and atmospheric shadow (`shadow-[0_12px_32px_rgba(0,0,0,0.12)]`).
+- **Surface & Shadows:** High-fidelity frosted glass effect (`bg-white/95 backdrop-blur-md`) with soft border division (`border border-[#E6E6E6]`) and atmospheric shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
 - **Corner Radius:** Approachable rounded corners (`rounded-[16px]`).
 - **Trigger:** Sleek, floating pill or circle trigger button (`w-10 h-10 rounded-full`) featuring a minimalist chevron icon, offset in alignment to open/close panels cleanly.
 
 ### User Menu (Profile Menu)
 - **Structure:** Absolute container positioned relative to the top right of the navigation header (`right-0 top-10`).
 - **Width:** `280px` (w-72) to accommodate user details and quick actions cleanly.
-- **Surface & Shadows:** Frosted glass panel (`bg-white/70 backdrop-blur-xl`) with a thin border (`border border-black/5` or `border-[#E6E6E6]`) and elevated shadows (`shadow-[0_8px_32px_rgba(0,0,0,0.08)]`).
+- **Surface & Shadows:** Frosted glass panel (`bg-white/70 backdrop-blur-xl`) with a thin border (`border border-black/5` or `border-[#E6E6E6]`) and unified shadows (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
 - **Corner Radius:** Approvingly rounded corners (`rounded-2xl`).
 - **Details:** Includes user avatar, name, email, quick links, and a log-out action button utilizing the brand's secondary/tertiary colors.
 
@@ -211,10 +211,10 @@ The media asset manager and uploader uses:
 
 ### Chat Panel UI
 The interactive chat composer and conversation view uses:
-- **User Message Bubbles:** Styled with a pure white background, light gray border (`border-neutral-200/60`), subtle card shadow, and rounded corners (`rounded-[18px]`) aligned to the right.
+- **User Message Bubbles:** Styled with a pure white background, light gray border (`border-neutral-200/60`), unified card shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`), and rounded corners (`rounded-[18px]`) aligned to the right.
 - **Webild AI Responses:** Rendered bubble-less directly on the panel. Includes a header with a 3D-glossy blue gradient sphere logo and bold text "Webild" in black.
-- **Interactive Suggestions:** Dynamic pill buttons rendered horizontally. Each pill has a light border, white background, black text, and soft shadow.
-- **Input Composer:** A floating white panel with `rounded-[20px]`, `border-neutral-200/80`, and `shadow-[0_4px_12px_rgba(0,0,0,0.03)]` containing a multi-line textarea, a circular left-aligned plus icon button, and right-aligned microphone and blue send buttons.
+- **Interactive Suggestions:** Dynamic pill buttons rendered horizontally. Each pill has a light border, white background, black text, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
+- **Input Composer:** A floating white panel with `rounded-[20px]`, `border-neutral-200/80`, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`) containing a multi-line textarea, a circular left-aligned plus icon button, and right-aligned microphone and blue send buttons.
 
 
 ## Motion & Animation Guidelines

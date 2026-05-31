@@ -23,7 +23,7 @@ export function UserMenu({
       animate={{ opacity: 1, transform: "scale(1)" }}
       exit={{ opacity: 0, transform: "scale(0.95)" }}
       transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
-      className="absolute z-50 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/95 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.06),0_0_0_1px_rgba(255,255,255,0.4)_inset] right-0 w-72 p-5 text-left"
+      className="absolute z-50 top-10 rounded-2xl origin-top-right border border-[#010101]/5 bg-white/95 backdrop-blur-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] right-0 w-72 p-5 text-left"
     >
       <div className="space-y-4">
         {/* User Info */}

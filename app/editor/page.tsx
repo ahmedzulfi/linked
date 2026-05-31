@@ -193,11 +193,11 @@ function EditorInner() {
 
       {/* ── Left Sidebar ── */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
-        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group   shadow-[0_6px_10px_-6px_#00000016] hover:shadow-[0_8px_32px_#ffff] py-4">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_32px_#ffff] py-4">
           <div className="flex flex-col items-start w-full">
             {/* Project Selector */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
-              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px]   shadow-[0_6px_10px_-6px_#00000016] group-hover:mr-3 transition-all duration-300 relative z-10">
+              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10">
                 H
               </div>
               <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
@@ -226,7 +226,7 @@ function EditorInner() {
                   }}
                   title={item.label}
                   className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
-                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20   shadow-[0_6px_10px_-6px_#00000016]"
+                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
                     : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
                     }`}
                 >
@@ -244,11 +244,11 @@ function EditorInner() {
           <div className="flex flex-col items-center w-full mt-auto">
             {/* Upgrade Card */}
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
-              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px]   shadow-[0_6px_10px_-6px_#00000016] overflow-hidden text-left mt-2">
+              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden text-left mt-2">
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
                   ONLY $16 to<br />unlock Premium<br />Features
                 </p>
-                <button className="w-full py-1.5 bg-[#4b93ff] text-white     rounded-lg  text-[13px] font-medium hover:bg-[#3b82f6] transition-colors   shadow-[0_6px_10px_-6px_#00000016]">
+                <button className="w-full py-1.5 bg-[#4b93ff] text-white     rounded-lg  text-[13px] font-medium hover:bg-[#3b82f6] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                   Upgrade Now
                 </button>
               </div>
@@ -330,7 +330,7 @@ function EditorInner() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
-              className="flex items-center gap-2 h-10 px-2  text-sm font-medium bg-white border border-[#E6E6E6]   rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0_6px_10px_-6px_#00000016]"
+              className="flex items-center gap-2 h-10 px-2  text-sm font-medium bg-white border border-[#E6E6E6]   rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
               style={{ boxShadow: " 0 1px 4px #fff" }}
             >
               <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
@@ -364,7 +364,7 @@ function EditorInner() {
           <div className="flex items-center gap-2 relative">
             <button
               onClick={() => { navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`); toast.success("Share link copied!"); }}
-              className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6]   rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0_6px_10px_-6px_#00000016]"
+              className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6]   rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
             >
               Share
             </button>
@@ -372,14 +372,14 @@ function EditorInner() {
               id="onboarding-publish-btn"
               onClick={handlePublish}
               disabled={publishing}
-              className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white   rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5   shadow-[0_6px_10px_-6px_#00000016]"
+              className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white   rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
             >
               {publishing && <span className="w-3 h-3   rounded-lg border-2 border-white border-t-transparent animate-spin" />}
               Publish
             </button>
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="w-8 h-8   rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white   shadow-[0_6px_10px_-6px_#00000016] hover:scale-105 active:scale-95 transition-transform ml-1"
+              className="w-8 h-8   rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
             >
               <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
             </button>
@@ -499,7 +499,7 @@ function EditorInner() {
                 <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6]     rounded-lg  overflow-hidden p-0.5 gap-0.5">
                   <button
                     onClick={() => setPreviewMode("desktop")}
-                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "desktop" ? "bg-white   shadow-[0_6px_10px_-6px_#00000016] text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "desktop" ? "bg-white   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
                   >
                     <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
                       <rect height="14" width="20" rx="2" x="2" y="3" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
@@ -507,7 +507,7 @@ function EditorInner() {
                   </button>
                   <button
                     onClick={() => setPreviewMode("mobile")}
-                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "mobile" ? "bg-white   shadow-[0_6px_10px_-6px_#00000016] text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "mobile" ? "bg-white   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
                   >
                     <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
                       <rect height="20" width="14" rx="2" ry="2" x="5" y="2" /><path d="M12 18h.01" />
@@ -563,7 +563,7 @@ function EditorInner() {
                     style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
                   >
                     <div className="flex flex-col items-center text-center max-w-sm gap-4">
-                      <div className="w-14 h-14 bg-[#2A2A2F] rounded-[18px] flex items-center justify-center transform rotate-3   shadow-[0_6px_10px_-6px_#00000016]">
+                      <div className="w-14 h-14 bg-[#2A2A2F] rounded-[18px] flex items-center justify-center transform rotate-3   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                         <svg className="w-5 h-5 text-white transform -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
                         </svg>
@@ -614,7 +614,7 @@ function EditorInner() {
                   <div className="w-3 h-3 rounded-full bg-[#3b82f6] border-2 border-white shadow-sm" />
                 </div>
                 <div
-                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.08)] whitespace-nowrap text-left flex flex-col gap-0.5"
+                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] whitespace-nowrap text-left flex flex-col gap-0.5"
                   style={{
                     top: onboardingCoords.templates.height / 2 + 10,
                     left: 0,
@@ -640,7 +640,7 @@ function EditorInner() {
                   <div className="w-3 h-3 rounded-full bg-[#369762] border-2 border-white shadow-sm" />
                 </div>
                 <div
-                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3 shadow-[0_8px_32px_rgba(0,0,0,0.08)] whitespace-nowrap text-left flex flex-col gap-0.5"
+                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] whitespace-nowrap text-left flex flex-col gap-0.5"
                   style={{
                     top: onboardingCoords.publish.height / 2 + 10,
                     right: 0,
@@ -667,7 +667,7 @@ function EditorInner() {
                   <div className="w-3 h-3 rounded-full bg-[#3b82f6] border-2 border-white shadow-sm" />
                 </div>
                 <div
-                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] whitespace-nowrap text-center flex flex-col gap-0.5"
+                  className="absolute bg-white border border-[#E6E6E6] rounded-xl p-3.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] whitespace-nowrap text-center flex flex-col gap-0.5"
                   style={{
                     top: 24,
                     left: "50%",

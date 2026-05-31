@@ -104,6 +104,14 @@ export default {
         sm: "calc(var(--radius) - 4px)",
         card: "13px",
       },
+      boxShadow: {
+        sm: "0px 6px 10px -6px rgba(0,0,0,0.09)",
+        DEFAULT: "0px 6px 10px -6px rgba(0,0,0,0.09)",
+        md: "0px 6px 10px -6px rgba(0,0,0,0.09)",
+        lg: "0px 6px 10px -6px rgba(0,0,0,0.09)",
+        xl: "0px 6px 10px -6px rgba(0,0,0,0.09)",
+        "2xl": "0px 6px 10px -6px rgba(0,0,0,0.09)",
+      },
       maxWidth: {
         content: "1536px",
       },
