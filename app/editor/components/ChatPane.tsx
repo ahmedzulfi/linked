@@ -276,8 +276,8 @@ export default function ChatPane({
                       ) : (
                         <div className="w-full flex flex-col justify-start items-start gap-2">
                           <div className="self-stretch inline-flex justify-start items-center gap-2">
-                            {/* Logo containing text */}
-                            <img src="/logo.png" alt="Logo" className="h-6 w-auto object-contain select-none" />
+                            {/* Logo Icon */}
+                            <img src="/logoicon.png" alt="Logo" className="h-6 w-auto object-contain select-none" />
                           </div>
 
                           <div className="self-stretch flex flex-col justify-start items-start w-full">

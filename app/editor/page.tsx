@@ -197,8 +197,8 @@ function EditorInner() {
           <div className="flex flex-col items-start w-full">
             {/* Project Selector */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
-              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10">
-                H
+              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10 overflow-hidden p-1.5">
+                <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
                 <span className="font-medium text-[#2A2A2F] text-[15px]">hi hellow</span>

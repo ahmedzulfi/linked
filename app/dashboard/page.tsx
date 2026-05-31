@@ -190,8 +190,8 @@ export default function DashboardPage() {
               <div
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
               >
-                <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
-                  c
+                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
+                  <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
                 </div>
                 <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
               </div>
@@ -270,8 +270,7 @@ export default function DashboardPage() {
                   className="absolute inset-0 m-auto h-1/2 w-1/2 invert"
                   height={30}
                   width={30}
-                  src="https://www.webild.io/_next/image?url=/brand/webildlogonew.png&w=48&q=75&dpl=dpl_74fbPg9hDGnd6mNcms3zAGnT6GTo"
-                  srcSet="/_next/image?url=%2Fbrand%2Fwebildlogonew.png&w=32&q=75&dpl=dpl_74fbPg9hDGnd6mNcms3zAGnT6GTo 1x, /_next/image?url=%2Fbrand%2Fwebildlogonew.png&w=48&q=75&dpl=dpl_74fbPg9hDGnd6mNcms3zAGnT6GTo 2x"
+                  src="/logoicon.png"
                   style={{
                     scrollbarWidth: "thin",
                     scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",

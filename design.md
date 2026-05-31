@@ -149,6 +149,10 @@ components:
 ## Overview
 Webild feels airy, optimistic, and lightly futuristic, with a polished landing-page aesthetic built to inspire quick creation and conversion. The experience balances playful cloudscape imagery with a serious, product-led structure, making it suitable for founders, marketers, and small teams wanting a fast way to launch pages. The overall tone is spacious and inviting rather than dense or technical.
 
+## Branding & Logos
+- **logo.png (Full Logo):** Displays the brand icon and the brand name text. Used in standard headers, navbars, and footers where space allows for the complete brand signature.
+- **logoicon.png (Icon Logo):** Displays only the minimalist brand icon. Used in space-constrained slots such as sidebar project selectors, small avatar slots in recent lists, AI response bubble identifiers, and centered header accents.
+
 ## Colors
 - **Primary (#2A2A2F):** A deep charcoal used for the strongest call-to-action buttons, prominent UI contrast, and dark text accents. It gives the interface a grounded, premium anchor against the bright background.
 - **Secondary (#F3F3F3):** A soft off-white used for neutral buttons and subtle control surfaces. It keeps secondary actions visible without competing with the primary CTA.
