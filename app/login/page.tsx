@@ -19,7 +19,7 @@ export default function LoginPage() {
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const isPasswordValid = password.length >= 6;
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isEmailValid) {
       toast.error("Please enter a valid email address!");
@@ -35,22 +35,34 @@ export default function LoginPage() {
       return;
     }
     setIsSubmitting(true);
-    toast.loading("Authenticating secure session...");
-    setTimeout(() => {
+    const loadingToast = toast.loading("Authenticating secure session...");
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      toast.dismiss(loadingToast);
       setIsSubmitting(false);
-      toast.dismiss();
+
+      if (!response.ok) {
+        toast.error(data.error || "Invalid email or password");
+        return;
+      }
+
+      sessionStorage.setItem("linkedpage_user", JSON.stringify(data.user));
       toast.success("Welcome back! Signed in successfully.");
-      router.push("/");
-    }, 1200);
+      router.push("/dashboard");
+    } catch {
+      toast.dismiss(loadingToast);
+      toast.error("Connection failed. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   const handleGoogleLogin = () => {
-    toast.loading("Connecting Google authorization provider...");
-    setTimeout(() => {
-      toast.dismiss();
-      toast.success("Successfully authenticated with Google account!");
-      router.push("/");
-    }, 1000);
+    toast.info("Google Authentication coming in next release!");
   };
 
   return (

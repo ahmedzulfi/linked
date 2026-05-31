@@ -26,7 +26,7 @@ export default function SignupPage() {
   const canContinue = isFirstNameValid && isLastNameValid && isEmailValid;
   const canSubmit = canContinue && isPasswordValid;
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canContinue) {
       if (!isFirstNameValid) toast.error("Please enter your first name!");
@@ -46,13 +46,30 @@ export default function SignupPage() {
     }
 
     setIsSubmitting(true);
-    toast.loading("Creating your account...");
-    setTimeout(() => {
+    const loadingToast = toast.loading("Creating your account...");
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName, lastName, email, password }),
+      });
+      const data = await response.json();
+      toast.dismiss(loadingToast);
       setIsSubmitting(false);
-      toast.dismiss();
+
+      if (!response.ok) {
+        toast.error(data.error || "Failed to create account");
+        return;
+      }
+
+      sessionStorage.setItem("linkedpage_user", JSON.stringify(data.user));
       toast.success("Account created! Welcome to Webild 🎉");
       router.push("/onboarding");
-    }, 1400);
+    } catch {
+      toast.dismiss(loadingToast);
+      toast.error("Connection failed. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   const handleGoogleSignup = () => {
