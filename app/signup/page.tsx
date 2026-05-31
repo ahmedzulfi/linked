@@ -26,7 +26,7 @@ export default function SignupPage() {
   const canContinue = isFirstNameValid && isLastNameValid && isEmailValid;
   const canSubmit = canContinue && isPasswordValid;
 
-  const handleContinue = (e: React.FormEvent) => {
+  const handleContinue = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!canContinue) {
       if (!isFirstNameValid) toast.error("Please enter your first name!");
@@ -47,12 +47,26 @@ export default function SignupPage() {
 
     setIsSubmitting(true);
     toast.loading("Creating your account...");
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstName, lastName, email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Signup failed");
+      }
       toast.dismiss();
-      toast.success("Account created! Welcome to Webild 🎉");
+      toast.success("Account created! Welcome to LinkedPage 🎉");
+      sessionStorage.setItem("linkedpage_user", JSON.stringify(data.user));
       router.push("/onboarding");
-    }, 1400);
+    } catch (err: any) {
+      toast.dismiss();
+      toast.error(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleGoogleSignup = () => {

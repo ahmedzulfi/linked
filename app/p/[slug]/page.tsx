@@ -14,26 +14,47 @@ function PublishedPageInner() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    try {
-      const storedProfile = sessionStorage.getItem("linkedpage_profile");
-      const storedTemplate = sessionStorage.getItem("linkedpage_template") as TemplateId | null;
+    if (!slug) return;
 
-      if (storedProfile) {
-        setProfile(JSON.parse(storedProfile));
-      } else {
-        // Fallback if accessed directly
-        setProfile(MOCK_PROFILE);
+    const fetchPublicSite = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`/api/websites/public?slug=${encodeURIComponent(slug)}`);
+        const data = await res.json();
+        if (data.success && data.profileData) {
+          setProfile(data.profileData);
+          setTemplate(data.template || "minimal-card");
+        } else {
+          console.warn("Public site not found in DB, trying sessionStorage fallback...");
+          const storedProfile = sessionStorage.getItem("linkedpage_profile");
+          const storedTemplate = sessionStorage.getItem("linkedpage_template") as TemplateId | null;
+          if (storedProfile) {
+            setProfile(JSON.parse(storedProfile));
+          } else {
+            setProfile(MOCK_PROFILE);
+          }
+          if (storedTemplate) {
+            setTemplate(storedTemplate);
+          }
+        }
+      } catch (e) {
+        console.error("Error loading published page details:", e);
+        const storedProfile = sessionStorage.getItem("linkedpage_profile");
+        const storedTemplate = sessionStorage.getItem("linkedpage_template") as TemplateId | null;
+        if (storedProfile) {
+          setProfile(JSON.parse(storedProfile));
+        } else {
+          setProfile(MOCK_PROFILE);
+        }
+        if (storedTemplate) {
+          setTemplate(storedTemplate);
+        }
+      } finally {
+        setLoading(false);
       }
+    };
 
-      if (storedTemplate) {
-        setTemplate(storedTemplate);
-      }
-    } catch (e) {
-      console.error("Error loading published page details:", e);
-      setProfile(MOCK_PROFILE);
-    } finally {
-      setLoading(false);
-    }
+    fetchPublicSite();
   }, [slug]);
 
   if (loading) {

@@ -20,47 +20,119 @@ import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 import { useEditor } from "@/context/EditorContext";
 import ProfilePreview from "@/app/editor/components/ProfilePreview";
-import { MOCK_PROFILE } from "@/shared/types";
+import { MOCK_PROFILE, Website } from "@/shared/types";
+
+const formatRelativeTime = (dateStr: string) => {
+  try {
+    const created = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - created.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return "Just now";
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${diffDays}d ago`;
+  } catch {
+    return "Recently";
+  }
+};
 
 export default function DashboardPage() {
   const router = useRouter();
   const { editedProfile, selectedTemplate } = useEditor();
   const activeProfile = editedProfile || MOCK_PROFILE;
 
-  const [brandName, setBrandName] = useState("Creative Portfolio");
-  const [subdomain, setSubdomain] = useState("realitycheque.io");
+  const [websites, setWebsites] = useState<Website[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [activeDropdownId, setActiveDropdownId] = useState<string | null>(null);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
+  const brandName = websites[0]?.name || "Webild Studio";
+  const subdomain = websites[0]?.subdomain || "realitycheque.io";
+
   useEffect(() => {
-    const storedBrand = sessionStorage.getItem("linkedpage_brand_name");
-    const storedSubdomain = sessionStorage.getItem("linkedpage_subdomain");
-    if (storedBrand) {
-      setBrandName(storedBrand);
-    } else {
-      setBrandName(activeProfile.name);
-    }
-
-    if (storedSubdomain) {
-      setSubdomain(storedSubdomain);
-    } else {
-      setSubdomain(`${activeProfile.name.toLowerCase().replace(/\s+/g, "")}.linkedpage.io`);
-    }
-
     try {
       const userStr = sessionStorage.getItem("linkedpage_user");
       if (userStr) {
         const user = JSON.parse(userStr);
         setUserName(user.name || "");
         setUserEmail(user.email || "");
+      } else {
+        router.push("/login");
       }
     } catch (e) {
       console.error(e);
     }
-  }, [activeProfile]);
+  }, [router]);
+
+  const fetchWebsites = async () => {
+    if (!userEmail) return;
+    setIsLoading(true);
+    try {
+      const res = await fetch(`/api/websites?email=${encodeURIComponent(userEmail)}`);
+      const data = await res.json();
+      if (data.success) {
+        setWebsites(data.websites);
+      } else {
+        toast.error(data.error || "Failed to load websites");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Error connecting to server");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userEmail) {
+      fetchWebsites();
+    }
+  }, [userEmail]);
+
+  const handleDeleteWebsite = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this website?")) return;
+    toast.loading("Deleting website...");
+    try {
+      const res = await fetch(`/api/websites?id=${id}&email=${encodeURIComponent(userEmail)}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      toast.dismiss();
+      if (data.success) {
+        toast.success("Website deleted successfully");
+        fetchWebsites();
+      } else {
+        toast.error(data.error || "Failed to delete website");
+      }
+    } catch (err) {
+      toast.dismiss();
+      console.error(err);
+      toast.error("Error deleting website");
+    }
+  };
+
+  const handleEditWebsite = (site: Website) => {
+    sessionStorage.setItem("linkedpage_profile", JSON.stringify(site.profileData));
+    sessionStorage.setItem("linkedpage_template", site.template);
+    sessionStorage.setItem("linkedpage_url", site.profileData.linkedinUrl || "");
+    sessionStorage.setItem("linkedpage_subdomain", site.subdomain);
+    sessionStorage.setItem("linkedpage_brand_name", site.name);
+    router.push("/editor");
+  };
+
+  const filteredWebsites = websites.filter(
+    (site) =>
+      !searchQuery ||
+      site.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      site.subdomain.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
@@ -187,14 +259,24 @@ export default function DashboardPage() {
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
               <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
 
-              <div
-                className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
-              >
-                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
-                  <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
-                </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
-              </div>
+              {isLoading ? (
+                <div className="px-3 text-xs text-gray-400">Loading...</div>
+              ) : websites.length === 0 ? (
+                <div className="px-3 text-xs text-gray-400">No websites yet</div>
+              ) : (
+                websites.slice(0, 3).map((site) => (
+                  <div
+                    key={site.id}
+                    onClick={() => handleEditWebsite(site)}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
+                      <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+                    </div>
+                    <span className="text-[13px] font-semibold text-[#171717] truncate">{site.name}</span>
+                  </div>
+                ))
+              )}
             </div>
 
           </div>
@@ -345,169 +427,189 @@ export default function DashboardPage() {
 
           {/* Websites Grid */}
           <div className="w-full flex justify-start pl-2">
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
-
-              {/* User-Styled Website card using exact code */}
-              <div
-                className={`relative flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group ${
-                  (!searchQuery || 
-                   brandName.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                   subdomain.toLowerCase().includes(searchQuery.toLowerCase())) 
-                    ? "flex" 
-                    : "hidden"
-                }`}
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                }}
-              >
-                <div
-                  onClick={() => router.push("/editor")}
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  }}
+            {isLoading ? (
+              <div className="w-full flex items-center justify-center py-16">
+                <div className="w-8 h-8 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+              </div>
+            ) : filteredWebsites.length === 0 ? (
+              <div className="w-full flex flex-col items-center justify-center py-16 px-4 border border-dashed border-[#E6E6E6] rounded-[16px] bg-white/50 backdrop-blur-sm max-w-xl mx-auto shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                <div className="w-12 h-12 rounded-full bg-[#E8F1FF] flex items-center justify-center mb-4 border border-[#8DB8FF]/30">
+                  <Globe className="w-6 h-6 text-[#1A68FF]" />
+                </div>
+                <h3 className="text-lg font-semibold text-black mb-1">No websites created yet</h3>
+                <p className="text-sm text-gray-500 text-center max-w-sm mb-6">
+                  Create your first personal profile website by importing your LinkedIn profile.
+                </p>
+                <button
+                  onClick={() => router.push("/onboarding")}
+                  className="h-10 px-6 bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] text-sm font-semibold transition-all active:scale-[0.97] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
                 >
+                  Create Website
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
+                {filteredWebsites.map((site) => (
                   <div
-                    className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center"
+                    key={site.id}
+                    className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                     style={{
                       scrollbarWidth: "thin",
                       scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
                     }}
                   >
                     <div
-                      className="relative w-full p-1 rounded-sm flex items-center justify-center"
+                      onClick={() => handleEditWebsite(site)}
                       style={{
                         scrollbarWidth: "thin",
                         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
                       }}
                     >
                       <div
-                        className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none"
-                      >
-                        <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
-                          <ProfilePreview
-                            profile={activeProfile}
-                            template={selectedTemplate}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Footer details */}
-                <div
-                  className="flex items-start justify-between relative min-w-0"
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                  }}
-                >
-                  <div
-                    className="min-w-0 max-w-[80%] flex flex-col"
-                    style={{
-                      scrollbarWidth: "thin",
-                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                    }}
-                  >
-                    <h3
-                      className="text-sm font-semibold leading-tight truncate text-black"
-                      style={{
-                        scrollbarWidth: "thin",
-                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                      }}
-                    >
-                      {brandName}
-                    </h3>
-                    <p
-                      className="text-xs leading-tight truncate text-gray-500 mt-1"
-                      style={{
-                        scrollbarWidth: "thin",
-                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                      }}
-                    >
-                      Created 17 hours ago
-                    </p>
-                  </div>
-
-                  <div
-                    className="relative"
-                    style={{
-                      scrollbarWidth: "thin",
-                      scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                    }}
-                  >
-                    <div>
-                      <button
-                        onClick={() => setShowDropdown(!showDropdown)}
-                        className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
-                        aria-haspopup="true"
+                        className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center"
                         style={{
                           scrollbarWidth: "thin",
                           scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
                         }}
                       >
-                        <svg
-                          className="lucide lucide-ellipsis w-full"
-                          height="24"
-                          width="24"
-                          aria-hidden="true"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
+                        <div
+                          className="relative w-full p-1 rounded-sm flex items-center justify-center"
                           style={{
                             scrollbarWidth: "thin",
                             scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
                           }}
                         >
-                          <circle cx="12" cy="12" r="1" />
-                          <circle cx="19" cy="12" r="1" />
-                          <circle cx="5" cy="12" r="1" />
-                        </svg>
-                      </button>
-
-                      {/* Dropdown Options */}
-                      {showDropdown && (
-                        <>
-                          <div className="fixed inset-0 z-10" onClick={() => setShowDropdown(false)} />
                           <div
-                            className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col"
+                            className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none"
                           >
-                            <button
-                              onClick={() => { setShowDropdown(false); router.push("/editor"); }}
-                              className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                            >
-                              <Edit2 className="w-4 h-4 text-gray-500" />
-                              Edit in Builder
-                            </button>
-                            <button
-                              onClick={() => { setShowDropdown(false); router.push("/preview"); }}
-                              className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
-                            >
-                              <Globe className="w-4 h-4 text-gray-500" />
-                              View Live Preview
-                            </button>
-                            <button
-                              onClick={() => { setShowDropdown(false); toast.error("Delete action is placeholder."); }}
-                              className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              Delete site
-                            </button>
+                            <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
+                              <ProfilePreview
+                                profile={site.profileData}
+                                template={site.template}
+                              />
+                            </div>
                           </div>
-                        </>
-                      )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Footer details */}
+                    <div
+                      className="flex items-start justify-between relative min-w-0"
+                      style={{
+                        scrollbarWidth: "thin",
+                        scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                      }}
+                    >
+                      <div
+                        className="min-w-0 max-w-[80%] flex flex-col"
+                        style={{
+                          scrollbarWidth: "thin",
+                          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                        }}
+                      >
+                        <h3
+                          className="text-sm font-semibold leading-tight truncate text-black"
+                          style={{
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                          }}
+                        >
+                          {site.name}
+                        </h3>
+                        <p
+                          className="text-xs leading-tight truncate text-gray-500 mt-1"
+                          style={{
+                            scrollbarWidth: "thin",
+                            scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                          }}
+                        >
+                          Created {formatRelativeTime(site.createdAt)}
+                        </p>
+                      </div>
+
+                      <div
+                        className="relative"
+                        style={{
+                          scrollbarWidth: "thin",
+                          scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                        }}
+                      >
+                        <div>
+                          <button
+                            onClick={() => setActiveDropdownId(activeDropdownId === site.id ? null : site.id)}
+                            className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
+                            aria-haspopup="true"
+                            style={{
+                              scrollbarWidth: "thin",
+                              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                            }}
+                          >
+                            <svg
+                              className="lucide lucide-ellipsis w-full"
+                              height="24"
+                              width="24"
+                              aria-hidden="true"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                              style={{
+                                scrollbarWidth: "thin",
+                                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                              }}
+                            >
+                              <circle cx="12" cy="12" r="1" />
+                              <circle cx="19" cy="12" r="1" />
+                              <circle cx="5" cy="12" r="1" />
+                            </svg>
+                          </button>
+
+                          {/* Dropdown Options */}
+                          {activeDropdownId === site.id && (
+                            <>
+                              <div className="fixed inset-0 z-10" onClick={() => setActiveDropdownId(null)} />
+                              <div
+                                className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                              >
+                                <button
+                                  onClick={() => { setActiveDropdownId(null); handleEditWebsite(site); }}
+                                  className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                >
+                                  <Edit2 className="w-4 h-4 text-gray-500" />
+                                  Edit in Builder
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setActiveDropdownId(null);
+                                    const slug = site.subdomain.replace(".linkedpage.io", "").replace(".studio", "").toLowerCase();
+                                    router.push(`/p/${slug}`);
+                                  }}
+                                  className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                >
+                                  <Globe className="w-4 h-4 text-gray-500" />
+                                  View Live Preview
+                                </button>
+                                <button
+                                  onClick={() => { setActiveDropdownId(null); handleDeleteWebsite(site.id); }}
+                                  className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                  Delete site
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-
+                ))}
               </div>
-            </div>
+            )}
           </div>
 
         </main>
