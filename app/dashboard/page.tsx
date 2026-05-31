@@ -259,25 +259,17 @@ export default function DashboardPage() {
               >
                 All
               </span>{" "}
-              <span
-                className="inline-block relative button-accent -rotate-12 aspect-square align-middle mx-1 rounded-sm h-[1em] w-auto bg-[#3B82F6] p-2"
+              <img
+                className="h-[1.1em] w-auto object-contain align-middle mx-1.5 shrink-0"
+                height={55}
+                width={55}
+                src="/logoicon.png"
+                alt="Logo"
                 style={{
                   scrollbarWidth: "thin",
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
                 }}
-              >
-                <img
-                  className="absolute inset-0 m-auto h-1/2 w-1/2 invert"
-                  height={30}
-                  width={30}
-                  src="/logoicon.png"
-                  style={{
-                    scrollbarWidth: "thin",
-                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-                    color: "transparent",
-                  }}
-                />
-              </span>{" "}
+              />{" "}
               <span
                 style={{
                   scrollbarWidth: "thin",
