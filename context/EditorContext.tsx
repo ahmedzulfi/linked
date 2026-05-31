@@ -75,7 +75,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(p));
   }, []);
 
-  // Scrape — calls /api/scrape
+  // Mock scrape — in production, this calls /api/scrape
   const startScrape = useCallback(async (url: string) => {
     setIsLoading(true);
     setScrapeError(null);
@@ -83,17 +83,15 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     sessionStorage.setItem(URL_KEY, url);
 
     try {
-      const res = await fetch("/api/scrape", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Failed to fetch LinkedIn profile");
+      // Simulate a network call — replace with real fetch('/api/scrape?url=…')
+      await new Promise((r) => setTimeout(r, 2500));
+
+      if (url.toLowerCase().includes("fail")) {
+        throw new Error("Failed to fetch LinkedIn profile. Private account settings detected.");
       }
 
-      const p: ProfileData = data.data;
+      // For now, use the mock profile but stamp the URL
+      const p: ProfileData = { ...MOCK_PROFILE, linkedinUrl: url };
       setProfile(p);
       setEditedProfile(p);
       persistProfile(p);

@@ -149,42 +149,13 @@ function EditorInner() {
   const handlePublish = async () => {
     setPublishing(true);
     toast.loading("Publishing your page…");
-    
-    try {
-      const userStr = sessionStorage.getItem("linkedpage_user");
-      const user = userStr ? JSON.parse(userStr) : null;
-      const email = user?.email || "guest@linkedpage.io";
-      
-      const sub = sessionStorage.getItem("linkedpage_subdomain") || 
-        `${(editedProfile?.name || "portfolio").toLowerCase().replace(/\s+/g, "")}.linkedpage.io`;
-      const slug = sub.replace(".io", "").replace(".linkedpage", "");
-
-      const res = await fetch("/api/websites", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          name: editedProfile?.name || "My Portfolio",
-          subdomain: sub,
-          template: selectedTemplate,
-          profileData: editedProfile,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Failed to publish website");
-      }
-
-      toast.dismiss();
-      toast.success("Your page is live! 🎉");
-      router.push(`/publish?slug=${slug}`);
-    } catch (err: any) {
-      toast.dismiss();
-      toast.error(err.message || "Failed to publish website. Please try again.");
-    } finally {
-      setPublishing(false);
-    }
+    await new Promise((r) => setTimeout(r, 1500));
+    toast.dismiss();
+    setPublishing(false);
+    toast.success("Your page is live! 🎉");
+    const sub = sessionStorage.getItem("linkedpage_subdomain") || "yourname.io";
+    const slug = sub.replace(".io", "");
+    router.push(`/publish?slug=${slug}`);
   };
 
   const handleFieldClick = (fieldName: string) => {

@@ -147,17 +147,6 @@ export const MOCK_PROFILE: ProfileData = {
   linkedinUrl: "https://linkedin.com/in/alexmorgan",
 };
 
-export interface Website {
-  id: string;
-  userId: string;
-  name: string;
-  subdomain: string;
-  template: TemplateId;
-  profileData: ProfileData;
-  createdAt: string;
-  publishedAt?: string;
-}
-
 export interface ScrapeResponse {
   success: boolean;
   data?: ProfileData;

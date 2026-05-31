@@ -19,7 +19,7 @@ export default function LoginPage() {
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const isPasswordValid = password.length >= 6;
 
-  const handleContinue = async (e: React.FormEvent) => {
+  const handleContinue = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isEmailValid) {
       toast.error("Please enter a valid email address!");
@@ -36,26 +36,12 @@ export default function LoginPage() {
     }
     setIsSubmitting(true);
     toast.loading("Authenticating secure session...");
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Login failed");
-      }
+    setTimeout(() => {
+      setIsSubmitting(false);
       toast.dismiss();
       toast.success("Welcome back! Signed in successfully.");
-      sessionStorage.setItem("linkedpage_user", JSON.stringify(data.user));
       router.push("/");
-    } catch (err: any) {
-      toast.dismiss();
-      toast.error(err.message || "Invalid credentials. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    }, 1200);
   };
 
   const handleGoogleLogin = () => {
