@@ -30,3 +30,6 @@ dist-ssr
 .next/
 out/
 tsconfig.tsbuildinfo
+
+# Data / Database files
+/data/
