@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
 
 interface UserMenuProps {
   name: string;
@@ -104,7 +105,9 @@ export function UserMenu({
 
         <div className="border-t border-black/5" />
         <button
-          onClick={() => {
+          onClick={async () => {
+            await authClient.signOut();
+            sessionStorage.removeItem("linkedpage_user");
             toast.success("Signed out successfully");
             onClose?.();
             router.push("/");

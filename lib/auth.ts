@@ -1,52 +1,49 @@
-import jwt from "jsonwebtoken";
-import { cookies } from "next/headers";
-import { getUserByEmail, User, readDb } from "./db";
+import { betterAuth } from "better-auth";
+import Database from "better-sqlite3";
+import fs from "fs";
+import path from "path";
+import { headers } from "next/headers";
+import { User } from "./db";
 
-const JWT_SECRET = process.env.JWT_SECRET || "linkedpage_local_secret_key_123456";
-const COOKIE_NAME = "linkedpage_auth_token";
-
-export function signToken(payload: { userId: string }): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
+// Ensure data directory exists
+const dbDir = path.join(process.cwd(), "data");
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
 }
 
-export function verifyToken(token: string): { userId: string } | null {
-  try {
-    return jwt.verify(token, JWT_SECRET) as { userId: string };
-  } catch {
-    return null;
-  }
-}
+const db = new Database(path.join(dbDir, "auth.db"));
 
-export async function getAuthToken(): Promise<string | undefined> {
-  const cookieStore = await cookies();
-  return cookieStore.get(COOKIE_NAME)?.value;
-}
-
-export async function setAuthCookie(token: string) {
-  const cookieStore = await cookies();
-  cookieStore.set({
-    name: COOKIE_NAME,
-    value: token,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-  });
-}
-
-export async function clearAuthCookie() {
-  const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_NAME);
-}
+export const auth = betterAuth({
+  database: db,
+  secret: process.env.BETTER_AUTH_SECRET || "linkedpage_local_secret_key_123456_better",
+  baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+  },
+});
 
 export async function getAuthenticatedUser(): Promise<User | null> {
-  const token = await getAuthToken();
-  if (!token) return null;
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session || !session.user) return null;
 
-  const decoded = verifyToken(token);
-  if (!decoded) return null;
+    const nameParts = session.user.name.split(" ");
+    const firstName = nameParts[0] || "";
+    const lastName = nameParts.slice(1).join(" ") || "";
 
-  const db = readDb();
-  return db.users.find((u) => u.id === decoded.userId) || null;
+    return {
+      id: session.user.id,
+      firstName,
+      lastName,
+      email: session.user.email,
+      passwordHash: "",
+      createdAt: session.user.createdAt ? new Date(session.user.createdAt).toISOString() : new Date().toISOString(),
+    };
+  } catch (e) {
+    console.error("Error in getAuthenticatedUser:", e);
+    return null;
+  }
 }

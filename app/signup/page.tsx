@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -48,21 +49,32 @@ export default function SignupPage() {
     setIsSubmitting(true);
     const loadingToast = toast.loading("Creating your account...");
     try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstName, lastName, email, password }),
+      const { data, error } = await authClient.signUp.email({
+        email,
+        password,
+        name: `${firstName} ${lastName}`,
       });
-      const data = await response.json();
+
       toast.dismiss(loadingToast);
       setIsSubmitting(false);
 
-      if (!response.ok) {
-        toast.error(data.error || "Failed to create account");
+      if (error) {
+        toast.error(error.message || "Failed to create account");
         return;
       }
 
-      sessionStorage.setItem("linkedpage_user", JSON.stringify(data.user));
+      if (data && data.user) {
+        sessionStorage.setItem(
+          "linkedpage_user",
+          JSON.stringify({
+            id: data.user.id,
+            firstName,
+            lastName,
+            email: data.user.email,
+          })
+        );
+      }
+
       toast.success("Account created! Welcome to Webild 🎉");
       router.push("/onboarding");
     } catch {

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { authClient } from "@/lib/auth-client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -37,21 +38,35 @@ export default function LoginPage() {
     setIsSubmitting(true);
     const loadingToast = toast.loading("Authenticating secure session...");
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
       });
-      const data = await response.json();
+
       toast.dismiss(loadingToast);
       setIsSubmitting(false);
 
-      if (!response.ok) {
-        toast.error(data.error || "Invalid email or password");
+      if (error) {
+        toast.error(error.message || "Invalid email or password");
         return;
       }
 
-      sessionStorage.setItem("linkedpage_user", JSON.stringify(data.user));
+      if (data && data.user) {
+        const nameParts = (data.user.name || "").split(" ");
+        const firstName = nameParts[0] || "";
+        const lastName = nameParts.slice(1).join(" ") || "";
+
+        sessionStorage.setItem(
+          "linkedpage_user",
+          JSON.stringify({
+            id: data.user.id,
+            firstName,
+            lastName,
+            email: data.user.email,
+          })
+        );
+      }
+
       toast.success("Welcome back! Signed in successfully.");
       router.push("/dashboard");
     } catch {
