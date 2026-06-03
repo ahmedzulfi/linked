@@ -220,6 +220,16 @@ The interactive chat composer and conversation view uses:
 - **Interactive Suggestions:** Dynamic pill buttons rendered horizontally. Each pill has a light border, white background, black text, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
 - **Input Composer:** A floating white panel with `rounded-[20px]`, `border-neutral-200/80`, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`) containing a multi-line textarea, a circular left-aligned plus icon button, and right-aligned microphone and blue send buttons.
 
+### Workspace Setup Loading Timeline
+The step-by-step loading state of profile page generation uses:
+- **Card Container:** Styled with `bg-white/80`, `backdrop-blur-md`, a soft border (`border-[#E6E6E6]`), `rounded-[24px]` corners, and unified card shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
+- **Header:** Features a bold display title in black and secondary description in gray (`text-gray-500`) explaining the background operations.
+- **Timeline Dots:** Uses a dynamic state system mapping scraping progress stages:
+  - **Completed Stage:** Highlighted with a green check circle (`text-[#369762]`) and solid green connector line.
+  - **Active Stage:** Highlighted with a spinning loader (`lucide-loader text-primary animate-spin`), a pinging active dot (`text-[#8DB8FF]`), and a repeating linear gradient dashed line to represent running progress.
+  - **Upcoming Stage:** Represented with a faint gray empty circle (`text-gray-300`) and a faded connector line.
+- **Labels:** Main titles are styled in bold medium text (dimmed to `text-gray-400` when upcoming) and descriptions in `text-gray-400`.
+
 
 ## Motion & Animation Guidelines
 
