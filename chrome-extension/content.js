@@ -57,14 +57,14 @@ function extractProfileData() {
   const location = document.querySelector(".text-body-small.inline.break-words, .pv-text-details__left-panel [class*='location']")?.textContent?.trim() || "San Francisco, CA";
   
   // Find Summary / About section text
-  const summaryEl = document.querySelector("div#about ~ div .display-flex .inline-show-more-text, section.about-section p");
+  const summaryEl = document.querySelector("div#about ~ div .display-flex .inline-show-more-text, section.about-section p, section.summary-section p");
   const summary = summaryEl?.textContent?.trim() || `I'm ${name}. Passionate about building products, driving impact, and solving complex challenges.`;
   
   const avatarUrl = document.querySelector(".pv-top-card-profile-picture__image, .pv-top-card-section__photo")?.getAttribute("src") || "";
 
   // Parse experiences
   const experience = [];
-  const expItems = document.querySelectorAll("section#experience ~ div ul > li, .experience-section li");
+  const expItems = document.querySelectorAll("section#experience ~ div ul > li, .experience-section li, section.experience-section li");
   expItems.forEach(el => {
     const title = el.querySelector("[class*='title'], h3")?.textContent?.trim() || "Role";
     const company = el.querySelector("[class*='subtitle'], h4")?.textContent?.trim() || "Company";
@@ -75,7 +75,7 @@ function extractProfileData() {
 
   // Parse education
   const education = [];
-  const eduItems = document.querySelectorAll("section#education ~ div ul > li, .education-section li");
+  const eduItems = document.querySelectorAll("section#education ~ div ul > li, .education-section li, section.education-section li");
   eduItems.forEach(el => {
     const school = el.querySelector("h3")?.textContent?.trim() || "";
     const degree = el.querySelector("p [class*='degree-name']")?.textContent?.trim() || "";
@@ -87,11 +87,11 @@ function extractProfileData() {
 
   // Parse skills
   const skills = [];
-  const skillItems = document.querySelectorAll("section#skills ~ div ul > li, .skills-section li");
+  const skillItems = document.querySelectorAll("section#skills ~ div ul > li, .skills-section li, section.skills-section li");
   skillItems.forEach(el => {
-    const name = el.querySelector("[class*='title'], span")?.textContent?.trim();
-    if (name) {
-      skills.push({ name });
+    const nameText = el.querySelector("[class*='title'], span")?.textContent?.trim();
+    if (nameText) {
+      skills.push({ name: nameText });
     }
   });
 
@@ -101,7 +101,7 @@ function extractProfileData() {
     location,
     summary,
     avatarUrl,
-    experience: experience.slice(0, 5), // Keep top 5 to avoid blow up
+    experience: experience.slice(0, 5), // Keep top 5
     education: education.slice(0, 3),
     skills: skills.slice(0, 10),
     links: [
@@ -144,3 +144,11 @@ injectButton();
 // Monitor page mutations to re-inject button if LinkedIn loads dynamic sections
 const observer = new MutationObserver(() => injectButton());
 observer.observe(document.body, { childList: true, subtree: true });
+
+// Listen for background trigger scrape actions
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "trigger_scrape") {
+    handleScrape();
+  }
+  return true;
+});

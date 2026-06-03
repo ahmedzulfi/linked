@@ -201,8 +201,56 @@ const COLOR_PALETTES = [
 
 function HeroSection() {
   const router = useRouter();
-  const { setPendingZip } = useEditor();
+  const { setPendingZip, setPendingProfileData } = useEditor();
   const [isDragActive, setIsDragActive] = useState(false);
+  const [hasExtension, setHasExtension] = useState(false);
+  const [isScraping, setIsScraping] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if ((window as any).__linkedpage_extension_installed) {
+        setHasExtension(true);
+      }
+
+      const handleDetection = () => {
+        setHasExtension(true);
+      };
+
+      window.addEventListener("LINKEDPAGE_EXT_DETECTED", handleDetection);
+      return () => {
+        window.removeEventListener("LINKEDPAGE_EXT_DETECTED", handleDetection);
+      };
+    }
+  }, []);
+
+  const handleExtensionScrape = () => {
+    setIsScraping(true);
+    toast.info("Chrome Extension: Scraping LinkedIn profile...");
+
+    const timeout = setTimeout(() => {
+      setIsScraping(false);
+      toast.error("Scraping timed out. Make sure you are logged in to LinkedIn on your browser.");
+    }, 15000);
+
+    const handleSuccess = (e: Event) => {
+      clearTimeout(timeout);
+      const customEvent = e as CustomEvent;
+      const { data } = customEvent.detail;
+
+      setPendingProfileData(data);
+      setIsScraping(false);
+
+      toast.success("Profile scraped successfully! Redirecting to setup...");
+      router.push("/onboarding");
+
+      window.removeEventListener("WEBILD_SCRAPE_SUCCESS", handleSuccess);
+    };
+
+    window.addEventListener("WEBILD_SCRAPE_SUCCESS", handleSuccess);
+
+    // Dispatch trigger event to receiver.js
+    window.dispatchEvent(new CustomEvent("WEBILD_REQUEST_SCRAPE"));
+  };
 
   const handleZipFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -318,52 +366,132 @@ function HeroSection() {
           variants={heroItemVariants}
           className="w-full max-w-[540px] rounded-[28px] bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 p-6 sm:p-8 flex flex-col gap-6 mt-4 shadow-[0_20px_50px_rgba(0,0,0,0.03)]"
         >
-          <div className="text-center select-none">
-            <h2 className="text-lg font-semibold text-[#2A2A2F] mb-1 font-inter">
-              Upload your LinkedIn export ZIP
-            </h2>
-            <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-md mx-auto font-inter">
-              Build your professional website instantly using your LinkedIn archive.
-            </p>
-          </div>
+          {hasExtension ? (
+            // Layout when Extension is installed
+            <div className="flex flex-col gap-5 text-center w-full">
+              <div className="select-none">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8DFFB3]/15 border border-[#8DFFB3]/35 text-[#369762] text-[11px] font-bold mb-3 font-inter">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#369762] animate-pulse" />
+                  Chrome Extension Detected
+                </div>
+                <h2 className="text-lg font-semibold text-[#2A2A2F] mb-1 font-inter">
+                  Generate in 1-Click
+                </h2>
+                <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-md mx-auto font-inter">
+                  We'll use your logged-in LinkedIn session to import your profile instantly.
+                </p>
+              </div>
 
-          <label
-            htmlFor="hero-zip-upload"
-            onDragEnter={handleDrag}
-            onDragOver={handleDrag}
-            onDragLeave={handleDrag}
-            onDrop={handleDrop}
-            className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 sm:p-8 bg-[#FBFBFB]/50 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 relative text-center group active:scale-[0.98] ${
-              isDragActive
-                ? "border-[#8DB8FF] bg-[#8DB8FF]/5 shadow-[0_0_20px_rgba(141,184,255,0.12)]"
-                : "border-[#E6E6E6] hover:border-[#8DB8FF] hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] hover:bg-[#8DB8FF]/5"
-            }`}
-          >
-            <input
-              id="hero-zip-upload"
-              type="file"
-              accept=".zip"
-              onChange={handleZipFileChange}
-              className="hidden"
-            />
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] shadow-sm mb-3 transition-transform duration-200 group-hover:scale-105">
-              <Upload className="w-5 h-5 text-gray-500" />
+              <button
+                onClick={handleExtensionScrape}
+                disabled={isScraping}
+                className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-2 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer disabled:opacity-50"
+              >
+                {isScraping ? (
+                  <>
+                    <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                    Scraping LinkedIn Profile...
+                  </>
+                ) : (
+                  <>Import in 1-Click <ArrowRight className="w-4 h-4" /></>
+                )}
+              </button>
+
+              <div className="flex items-center gap-3 select-none w-full">
+                <div className="h-[1px] bg-[#E6E6E6] flex-1" />
+                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider font-inter">Or upload archive</span>
+                <div className="h-[1px] bg-[#E6E6E6] flex-1" />
+              </div>
+
+              <label
+                htmlFor="hero-zip-upload"
+                onDragEnter={handleDrag}
+                onDragOver={handleDrag}
+                onDragLeave={handleDrag}
+                onDrop={handleDrop}
+                className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 bg-[#FBFBFB]/30 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 relative text-center group active:scale-[0.98] ${
+                  isDragActive
+                    ? "border-[#8DB8FF] bg-[#8DB8FF]/5"
+                    : "border-[#E6E6E6] hover:border-[#8DB8FF]"
+                }`}
+              >
+                <input
+                  id="hero-zip-upload"
+                  type="file"
+                  accept=".zip"
+                  onChange={handleZipFileChange}
+                  className="hidden"
+                />
+                <span className="text-[12.5px] font-semibold text-[#2A2A2F] font-inter">
+                  Select ZIP file
+                </span>
+                <span className="text-[10px] text-gray-400 font-inter">
+                  Drag and drop your LinkedIn ZIP export here
+                </span>
+              </label>
             </div>
-            <span className="text-[13.5px] font-semibold text-[#2A2A2F] mb-0.5 font-inter">
-              Select LinkedIn ZIP file
-            </span>
-            <span className="text-[11px] text-gray-400 font-medium font-inter">
-              Click to browse or drag & drop ZIP archive here
-            </span>
-          </label>
+          ) : (
+            // Default Layout when Extension is NOT installed
+            <>
+              <div className="text-center select-none w-full">
+                <h2 className="text-lg font-semibold text-[#2A2A2F] mb-1 font-inter">
+                  Upload your LinkedIn export ZIP
+                </h2>
+                <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-md mx-auto font-inter">
+                  Build your professional website instantly using your LinkedIn archive.
+                </p>
+              </div>
 
-          <div className="flex flex-col items-center gap-3">
-            <button
-              onClick={() => router.push("/onboarding")}
-              className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
-            >
-              Get Started with Onboarding <ArrowRight className="w-4 h-4" />
-            </button>
+              <label
+                htmlFor="hero-zip-upload"
+                onDragEnter={handleDrag}
+                onDragOver={handleDrag}
+                onDragLeave={handleDrag}
+                onDrop={handleDrop}
+                className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 sm:p-8 bg-[#FBFBFB]/50 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 relative text-center group active:scale-[0.98] ${
+                  isDragActive
+                    ? "border-[#8DB8FF] bg-[#8DB8FF]/5 shadow-[0_0_20px_rgba(141,184,255,0.12)]"
+                    : "border-[#E6E6E6] hover:border-[#8DB8FF] hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] hover:bg-[#8DB8FF]/5"
+                }`}
+              >
+                <input
+                  id="hero-zip-upload"
+                  type="file"
+                  accept=".zip"
+                  onChange={handleZipFileChange}
+                  className="hidden"
+                />
+                <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] shadow-sm mb-3 transition-transform duration-200 group-hover:scale-105">
+                  <Upload className="w-5 h-5 text-gray-500" />
+                </div>
+                <span className="text-[13.5px] font-semibold text-[#2A2A2F] mb-0.5 font-inter">
+                  Select LinkedIn ZIP file
+                </span>
+                <span className="text-[11px] text-gray-400 font-medium font-inter">
+                  Click to browse or drag & drop ZIP archive here
+                </span>
+              </label>
+
+              <div className="flex flex-col items-center gap-3 w-full">
+                <button
+                  onClick={() => router.push("/onboarding")}
+                  className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
+                >
+                  Get Started with Onboarding <ArrowRight className="w-4 h-4" />
+                </button>
+                <a
+                  href="https://github.com/ahmedzulfi/linked"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full h-10 border border-[#E6E6E6] hover:bg-[#F7F7F7] text-black text-[12px] font-medium rounded-[13px] transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer bg-white"
+                >
+                  ⚡ Download Chrome Extension for 1-Click Import
+                </a>
+              </div>
+            </>
+          )}
+
+          <div className="flex justify-center border-t border-[#E6E6E6]/60 pt-4 w-full">
             <button
               onClick={() => router.push("/editor")}
               className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"

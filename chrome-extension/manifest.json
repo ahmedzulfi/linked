@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Webild Portfolio Generator",
+  "name": "Webild Assistant",
   "version": "1.0",
   "description": "Generate a beautiful portfolio website instantly from your logged-in LinkedIn profile.",
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "tabs"
   ],
   "background": {
     "service_worker": "background.js"
