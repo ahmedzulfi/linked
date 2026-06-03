@@ -1,16 +1,30 @@
-// Runs in context of your Webild application (e.g., localhost:3000)
-if (window.location.pathname.startsWith("/onboarding")) {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get("extension") === "true") {
-    // Request scraped data from background service worker
-    chrome.runtime.sendMessage({ action: "get_scraped_data" }, (response) => {
-      if (response && response.data) {
-        sessionStorage.setItem("linkedpage_profile", JSON.stringify(response.data));
-        sessionStorage.setItem("linkedpage_url", response.url);
-        
-        // Redirect directly to the editor to auto-save and initialize onboarding tour
-        window.location.replace("/editor?onboarding=true");
+// Injected script running on localhost:3000 / linkedpage.io
+window.__linkedpage_extension_installed = true;
+document.documentElement.setAttribute("data-linkedpage-extension", "true");
+
+// Dispatch detection event in case the page is already loaded and listening
+window.dispatchEvent(new CustomEvent("LINKEDPAGE_EXT_DETECTED"));
+
+// Periodically check/assert installation state on window
+setInterval(() => {
+  window.__linkedpage_extension_installed = true;
+}, 1000);
+
+// Listen to custom scraping events from the React web app
+window.addEventListener("WEBILD_REQUEST_SCRAPE", (event) => {
+  chrome.runtime.sendMessage({ action: "start_scrape" });
+});
+
+// Listen to message updates from background worker service
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === "scraped_data_available") {
+    // Send data to webpage React context
+    window.dispatchEvent(new CustomEvent("WEBILD_SCRAPE_SUCCESS", {
+      detail: {
+        data: request.data,
+        url: request.url
       }
-    });
+    }));
   }
-}
+  return true;
+});
