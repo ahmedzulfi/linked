@@ -302,32 +302,26 @@ export default function ChatPane({
                       className="w-full flex flex-col"
                     >
                       {msg.role === "user" ? (
-                        <div className="w-full flex justify-end items-start">
-                          <div className="max-w-[85%] flex flex-col  justify-start items-start">
-                            <div className="BackgroundBorder min-h-9 px-4 py-3 relative bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start">
-                              <div className="OverlayShadow w-full h-full  left-0    top-0 absolute bg-white/0 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] pointer-events-none" />
-                              <div className="Container self-stretch pb-[0.63px] flex flex-col justify-start items-start">
-                                <div className="HiHellow justify-center text-black text-[15px] font-normal font-['Inter'] leading-7 break-words max-w-full">
-                                  {msg.content}
-                                </div>
-                              </div>
-                            </div>
+                        <div className="w-full flex justify-end items-start font-inter">
+                          <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                            <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                              {msg.content}
+                            </p>
                           </div>
                         </div>
                       ) : (
-                        <div className="w-full flex flex-col justify-start items-start gap-2">
-                          <div className="self-stretch inline-flex justify-start items-center gap-2">
+                        <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
+                          <div className="flex items-center gap-2 select-none">
                             {/* Logo Icon */}
-                            <img src="/logoicon.png" alt="Logo" className="h-6 w-auto object-contain select-none" />
+                            <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                            <span className="font-semibold text-[13.5px] text-black">Webild</span>
                           </div>
 
-                          <div className="self-stretch flex flex-col justify-start items-start w-full">
-                            <div className="justify-center text-neutral-900 text-[15px] font-normal font-['Inter'] leading-7 whitespace-pre-wrap w-full">
+                          <div className="w-full">
+                            <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal whitespace-pre-wrap w-full">
                               {msg.content}
-                            </div>
+                            </p>
                           </div>
-
-
                         </div>
                       )}
                     </motion.div>
@@ -339,12 +333,13 @@ export default function ChatPane({
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.2 }}
-                      className="w-full flex flex-col justify-start items-start gap-2"
+                      className="w-full flex flex-col justify-start items-start gap-2.5 font-inter"
                     >
-                      <div className="self-stretch inline-flex justify-start items-center gap-2">
-                        <img src="/logoicon.png" alt="Logo" className="h-6 w-auto object-contain select-none animate-pulse" />
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain animate-pulse" />
+                        <span className="font-semibold text-[13.5px] text-black animate-pulse">Webild</span>
                       </div>
-                      <div className="bg-neutral-50 px-4 py-2.5 rounded-xl border border-zinc-100 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
+                      <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
                         <TypingDots />
                       </div>
                     </motion.div>
@@ -362,7 +357,7 @@ export default function ChatPane({
                   <button
                     key={s}
                     onClick={() => sendMessage(s)}
-                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-[10px] text-[13px] font-medium text-neutral-800 transition-colors duration-150 whitespace-nowrap shadow-[0_1px_2px_rgba(0,0,0,0.02)] cursor-pointer"
+                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-black transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
                   >
                     {s}
                   </button>
@@ -370,7 +365,7 @@ export default function ChatPane({
               </div>
 
               {/* Text input composer */}
-              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0_4px_12px_rgba(0,0,0,0.03)]">
+              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
@@ -380,11 +375,11 @@ export default function ChatPane({
                       sendMessage();
                     }
                   }}
-                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-850 placeholder:text-neutral-400 h-16 outline-none"
+                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-800 placeholder:text-neutral-400 h-16 outline-none font-inter"
                   placeholder="Ask Webild..."
                 />
                 {input.length > 200 && (
-                  <div className="text-[10px] text-gray-400 self-end mr-2 -mt-1 select-none">
+                  <div className="text-[10px] text-gray-400 self-end mr-2 -mt-1 select-none font-inter">
                     {input.length} characters
                   </div>
                 )}
@@ -404,7 +399,7 @@ export default function ChatPane({
                     </button>
                     <button
                       onClick={() => sendMessage()}
-                      className="w-9 h-9 rounded-full bg-[#8DB8FF] hover:bg-[#7ca8f0] text-white flex items-center justify-center transition-all cursor-pointer border-none active:scale-[0.93]"
+                      className="w-9 h-9 rounded-full bg-[#8DB8FF] hover:bg-[#7ca8f0] text-white flex items-center justify-center transition-[background-color,transform] duration-100 cursor-pointer border-none active:scale-[0.93]"
                     >
                       <ArrowUp className="w-[18px] h-[18px]" />
                     </button>

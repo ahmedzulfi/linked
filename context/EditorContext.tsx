@@ -22,7 +22,6 @@ interface EditorState {
   scrapeError: string | null;
   isDirty: boolean;
   pendingZip: File | null;
-  pendingProfileData: ProfileData | null;
 }
 
 interface EditorActions {
@@ -32,7 +31,6 @@ interface EditorActions {
   setLinkedinUrl: (url: string) => void;
   startScrape: (url: string) => Promise<void>;
   startScrapeManual: (file: File) => Promise<boolean>;
-  importProfileDirect: (profileData: ProfileData) => Promise<boolean>;
   updateField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
   selectTemplate: (id: TemplateId) => void;
   resetEdits: () => void;
@@ -40,7 +38,6 @@ interface EditorActions {
   useMockProfile: () => void;
   setScrapeError: (err: string | null) => void;
   setPendingZip: (file: File | null) => void;
-  setPendingProfileData: (data: ProfileData | null) => void;
 }
 
 type EditorContextValue = EditorState & EditorActions;
@@ -61,7 +58,6 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [scrapeError, setScrapeError] = useState<string | null>(null);
   const [pendingZip, setPendingZip] = useState<File | null>(null);
-  const [pendingProfileData, setPendingProfileData] = useState<ProfileData | null>(null);
 
   // Rehydrate from sessionStorage on mount (fallback/legacy support)
   useEffect(() => {
@@ -319,23 +315,6 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     }
   }, [persistProfile, createWebsiteWithProfile]);
 
-  const importProfileDirect = useCallback(async (profileData: ProfileData): Promise<boolean> => {
-    setIsLoading(true);
-    setScrapeError(null);
-    try {
-      setProfile(profileData);
-      setEditedProfile(profileData);
-      persistProfile(profileData);
-      await createWebsiteWithProfile(profileData);
-      return true;
-    } catch (e: any) {
-      setScrapeError(e.message || "Failed to import profile data.");
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persistProfile, createWebsiteWithProfile]);
-
   const isDirty =
     !!profile &&
     !!editedProfile &&
@@ -353,14 +332,12 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         scrapeError,
         isDirty,
         pendingZip,
-        pendingProfileData,
         setWebsiteId,
         loadWebsite,
         saveWebsite,
         setLinkedinUrl,
         startScrape,
         startScrapeManual,
-        importProfileDirect,
         updateField,
         selectTemplate,
         resetEdits,
@@ -368,7 +345,6 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         useMockProfile,
         setScrapeError,
         setPendingZip,
-        setPendingProfileData,
       }}
     >
       {children}

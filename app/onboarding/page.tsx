@@ -130,9 +130,6 @@ function OnboardingInner() {
     setScrapeError,
     pendingZip,
     setPendingZip,
-    pendingProfileData,
-    setPendingProfileData,
-    importProfileDirect,
   } = useEditor();
 
   const [step, setStep] = useState<"input" | "loading" | "fallback">("input");
@@ -175,35 +172,6 @@ function OnboardingInner() {
       handleUploadZipWithFile(fileToProcess);
     }
   }, [pendingZip, setPendingZip]);
-
-  // If there's pending profile data from the extension, start processing immediately
-  useEffect(() => {
-    if (pendingProfileData) {
-      const dataToProcess = pendingProfileData;
-      setPendingProfileData(null);
-      setStep("loading");
-      setIsImporting(true);
-      
-      const importData = async () => {
-        const toastId = toast.loading("Importing profile data from extension...");
-        try {
-          const success = await importProfileDirect(dataToProcess);
-          if (!success) {
-            setIsImporting(false);
-            setStep("input");
-          }
-          toast.dismiss(toastId);
-        } catch (e: any) {
-          toast.dismiss(toastId);
-          toast.error(e.message || "Failed to import profile data.");
-          setIsImporting(false);
-          setStep("input");
-        }
-      };
-      
-      importData();
-    }
-  }, [pendingProfileData, setPendingProfileData, importProfileDirect]);
 
   // Chat messages for the loading state — sequentially revealed based on time
   const CHAT_STEPS = [
