@@ -21,52 +21,91 @@ function checkRateLimit(userId: string): boolean {
 }
 
 function buildSystemPrompt(profile: ProfileData, currentTemplate: string): string {
-  return `You are an AI assistant embedded inside LinkedPage, a tool that turns LinkedIn profiles into personal websites. You are helping the user edit their personal page.
+  // Extract simple skills context for the few-shot examples
+  const currentSkills = profile.skills || [];
+  const exampleSkills = [...currentSkills, { name: "Python" }];
 
-CURRENT PAGE STATE:
-- Name: ${profile.name}
-- Headline: ${profile.headline}
-- Location: ${profile.location || "not set"}
-- Summary: ${profile.summary}
-- Current template: ${currentTemplate}
-- Experience: ${profile.experience?.map(e => `${e.title} at ${e.company} (${e.duration})`).join(", ") || "none"}
-- Skills: ${profile.skills?.map(s => s.name).join(", ") || "none"}
-- Links: ${profile.links?.map(l => `${l.label}: ${l.url}`).join(", ") || "none"}
+  return `You are an expert AI website generator and editor assistant for "LinkedPage" (a platform that transforms LinkedIn profiles into personal websites).
+Your task is to conversationally interact with the user and execute their requested updates to their personal page.
 
-AVAILABLE TEMPLATES:
-- minimal-card: Clean white card layout, Notion-style
-- bento-grid: Modular bento grid with skill chips
-- full-scroll: Long-form scrolling layout
-- dark: Dark background, blue accents
+Here is the CURRENT website state:
+- Template: "${currentTemplate}"
+- Profile Data JSON:
+${JSON.stringify(profile, null, 2)}
 
-YOUR JOB:
-Help the user edit their page. You can update any profile fields or switch the template based on what they ask.
+You can modify ANY field in the Profile Data (including name, headline, summary, location, avatarUrl, bannerUrl, experience, education, skills, links).
+You can also change the template to one of the following available templates:
+- "minimal-card" (Clean white card layout, Notion-style)
+- "bento-grid" (Modular bento grid layout with skill chips and experience tiles)
+- "full-scroll" (Long-form scroll with rich sections for experience)
+- "dark" (Sleek dark-themed personal page with subtle glow accents)
 
-RESPONSE FORMAT:
-You MUST always respond with valid JSON and nothing else. No markdown, no explanation outside the JSON. Use this exact structure:
-
+YOUR RESPONSE FORMAT:
+You MUST reply with a single JSON object. Do not output any conversational text or markdown explanation before or after the JSON.
+The JSON must match the following structure exactly:
 {
-  "reply": "your conversational message to the user here",
+  "reply": "Your brief, friendly conversational message back to the user explaining what you updated.",
   "updates": {
     "profile": {
-      // only include fields that should change, omit unchanged fields
-      // valid keys: name, headline, location, summary, avatarUrl
-      // for arrays: experience, skills, links — provide the FULL updated array
+      // ONLY include fields that need to change. Do NOT include fields that are unchanged.
+      // If updating an array (like experience, skills, education, or links), you MUST provide the FULL updated array.
+      // Example to edit summary: { "summary": "New shortened bio text..." }
+      // Example to edit headline: { "headline": "New headline text..." }
     },
-    "template": "template-id-here or null if not changing"
+    "template": "template-id-here" // or null if not changing
   }
 }
 
-RULES:
-- Always include "reply" with a friendly, concise message confirming what you did or answering the question
-- Only include fields in "profile" that the user actually wants to change
-- If the user asks to change the template, set "template" to one of the 4 valid IDs
-- If nothing should change (user is just chatting), set "updates" to { "profile": {}, "template": null }
-- If the user asks to add a skill, return the full skills array with the new skill appended
-- If the user asks to remove something, return the full array without that item
-- Keep replies short — 1 to 2 sentences max
-- Never make up information the user didn't provide
-- If the user asks something you can't do (like upload images), explain briefly and suggest what you can do instead`;
+EXAMPLES:
+
+1. User says: "shorten my summary"
+Response:
+{
+  "reply": "I've shortened your summary to be more concise and highlight your core expertise.",
+  "updates": {
+    "profile": {
+      "summary": "Shortened, high-impact version of their summary here..."
+    },
+    "template": null
+  }
+}
+
+2. User says: "change the theme to dark mode"
+Response:
+{
+  "reply": "I've switched your page template to the sleek Dark Mode theme.",
+  "updates": {
+    "profile": {},
+    "template": "dark"
+  }
+}
+
+3. User says: "add python to my skills"
+Response:
+{
+  "reply": "I have added Python to your skills list.",
+  "updates": {
+    "profile": {
+      "skills": ${JSON.stringify(exampleSkills)}
+    },
+    "template": null
+  }
+}
+
+4. User says: "hi, how are you?"
+Response:
+{
+  "reply": "Hello! I'm here to help you customize and edit your website. Let me know what you'd like to change!",
+  "updates": {
+    "profile": {},
+    "template": null
+  }
+}
+
+Remember:
+- Only update fields the user asked to change. Keep updates minimal.
+- When updating arrays (skills, experience, links, education), you MUST return the COMPLETE array with the additions or removals applied.
+- Maintain professional, clean formatting for all profile edits.`;
 }
 
 export async function POST(request: Request) {
@@ -178,10 +217,32 @@ export async function POST(request: Request) {
     let parsed: { reply: string; updates: { profile: Partial<ProfileData>; template: string | null } };
 
     try {
+      let cleaned = rawContent.trim();
+      
+      // Find first occurrence of '{' and last occurrence of '}' to extract JSON
+      const firstBrace = cleaned.indexOf("{");
+      const lastBrace = cleaned.lastIndexOf("}");
+      
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+      }
+      
       // Strip any accidental markdown code fences
-      const cleaned = rawContent.replace(/```json|```/g, "").trim();
+      cleaned = cleaned.replace(/```json|```/g, "").trim();
+      
+      // Clean up common JSON issues: comments, trailing commas
+      cleaned = cleaned.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1');
+      cleaned = cleaned.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]");
+
       parsed = JSON.parse(cleaned);
-    } catch {
+      if (!parsed.reply) {
+        parsed.reply = "I've updated your website settings.";
+      }
+      if (!parsed.updates) {
+        parsed.updates = { profile: {}, template: null };
+      }
+    } catch (parseErr) {
+      console.warn("[Chat API] JSON parsing failed. Raw content was:", rawContent, "Error details:", parseErr);
       // If JSON parsing fails, treat the whole response as a plain reply with no updates
       parsed = {
         reply: rawContent || "I had trouble understanding that. Could you rephrase?",
