@@ -93,7 +93,15 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
     });
 
     // Extract fields
-    const name = await page.$eval(".top-card-layout__title", (el) => el.textContent?.trim() || "John Doe").catch(() => "John Doe");
+    const name = await page.$eval(".top-card-layout__title", (el) => {
+      const text = el.textContent?.trim();
+      if (!text || text.toLowerCase() === "linkedin") {
+        throw new Error("Invalid profile name scraped.");
+      }
+      return text;
+    }).catch(() => {
+      throw new Error("LinkedIn security challenge or authwall blocked public access. Please use the manual ZIP import option below.");
+    });
     const headline = await page.$eval(".top-card-layout__headline", (el) => el.textContent?.trim() || "Professional expert").catch(() => "Professional expert");
     const location = await page.$eval(".top-card-layout__first-subline, .top-card__subline-item", (el) => el.textContent?.trim() || "San Francisco, CA").catch(() => "San Francisco, CA");
     const summary = await page.$eval(".summary__text", (el) => el.textContent?.trim() || "").catch(() => "");
