@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
-import { getWebsiteById, updateWebsite, readDb } from "@/lib/db";
+import { getWebsiteById, updateWebsite, getWebsiteBySubdomain } from "@/lib/db";
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -9,7 +9,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -29,16 +29,14 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
     if (slug) {
       const cleanSlug = slug.toLowerCase().trim();
-      // Ensure it is not taken by another website
-      const db = readDb();
-      const existing = db.websites.find((w) => w.subdomainSlug === cleanSlug && w.id !== params.id);
-      if (existing) {
+      const existing = await getWebsiteBySubdomain(cleanSlug);
+      if (existing && existing.id !== params.id) {
         return NextResponse.json({ error: "Subdomain is already in use by another website" }, { status: 409 });
       }
       updates.subdomainSlug = cleanSlug;
     }
 
-    const updated = updateWebsite(params.id, updates);
+    const updated = await updateWebsite(params.id, updates);
     if (!updated) {
       return NextResponse.json({ error: "Publish failed" }, { status: 500 });
     }

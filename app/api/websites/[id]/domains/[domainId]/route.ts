@@ -12,7 +12,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -26,7 +26,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Domain connection not found" }, { status: 404 });
     }
 
-    updateWebsite(params.id, { customDomains: nextDomains });
+    await updateWebsite(params.id, { customDomains: nextDomains });
     return NextResponse.json({ success: true, message: "Domain disconnected successfully" });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to disconnect domain" }, { status: 500 });

@@ -4,11 +4,11 @@ import { getWebsiteBySubdomain, getWebsiteByDomain } from "@/lib/db";
 export async function GET(request: Request, { params }: { params: { slug: string } }) {
   try {
     const slug = params.slug;
-    let website = getWebsiteBySubdomain(slug);
+    let website = await getWebsiteBySubdomain(slug);
 
     if (!website) {
       // If not resolved by subdomain, try custom domain
-      website = getWebsiteByDomain(slug);
+      website = await getWebsiteByDomain(slug);
     }
 
     if (!website || !website.isPublished) {

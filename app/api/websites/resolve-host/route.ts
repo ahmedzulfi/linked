@@ -11,14 +11,14 @@ export async function GET(request: Request) {
     }
 
     // Try custom domain first
-    let website = getWebsiteByDomain(host);
+    let website = await getWebsiteByDomain(host);
 
     if (!website) {
       // Try subdomain: e.g. ayesha.linkedpage.io -> ayesha
       const parts = host.split(".");
       if (parts.length > 2) {
         const slug = parts[0];
-        website = getWebsiteBySubdomain(slug);
+        website = await getWebsiteBySubdomain(slug);
       }
     }
 

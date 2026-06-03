@@ -1,20 +1,14 @@
 import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
-import fs from "fs";
-import path from "path";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { headers } from "next/headers";
-import { User } from "./db";
-
-// Ensure data directory exists
-const dbDir = path.join(process.cwd(), "data");
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-
-const db = new Database(path.join(dbDir, "auth.db"));
+import { User, db } from "./db";
+import * as schema from "./schema";
 
 export const auth = betterAuth({
-  database: db,
+  database: drizzleAdapter(db, {
+    provider: "pg",
+    schema,
+  }),
   secret: process.env.BETTER_AUTH_SECRET || "linkedpage_local_secret_key_123456_better",
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   emailAndPassword: {
