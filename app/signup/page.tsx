@@ -76,7 +76,13 @@ export default function SignupPage() {
       }
 
       toast.success("Account created! Welcome to Webild 🎉");
-      router.push("/onboarding");
+      
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("intent") === "save_scrape") {
+        router.push("/editor?onboarding=true");
+      } else {
+        router.push("/onboarding");
+      }
     } catch {
       toast.dismiss(loadingToast);
       toast.error("Connection failed. Please try again.");
@@ -87,9 +93,14 @@ export default function SignupPage() {
   const handleGoogleSignup = () => {
     toast.loading("Connecting Google authorization provider...");
     setTimeout(() => {
-      toast.dismiss();
       toast.success("Successfully signed up with Google!");
-      router.push("/onboarding");
+      
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("intent") === "save_scrape") {
+        router.push("/editor?onboarding=true");
+      } else {
+        router.push("/onboarding");
+      }
     }, 1000);
   };
 

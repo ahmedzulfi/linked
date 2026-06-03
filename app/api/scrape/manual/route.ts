@@ -66,10 +66,8 @@ function parseCSV(csvText: string): Record<string, string>[] {
 
 export async function POST(request: Request) {
   try {
-    const user = await getAuthenticatedUser();
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+    // Auth is optional for manual scraping (allow guests to try it out)
+    const user = await getAuthenticatedUser().catch(() => null);
 
     const formData = await request.formData();
     const file = formData.get("file") as File | null;
@@ -115,8 +113,8 @@ export async function POST(request: Request) {
     }
 
     const pRow = profiles[0];
-    const firstName = pRow["First Name"] || user.firstName;
-    const lastName = pRow["Last Name"] || user.lastName;
+    const firstName = pRow["First Name"] || user?.firstName || "Guest";
+    const lastName = pRow["Last Name"] || user?.lastName || "User";
     const fullName = `${firstName} ${lastName}`;
     const headline = pRow["Headline"] || "Professional Expert";
     const summary = pRow["Summary"] || `I'm ${fullName}. Welcome to my micro-site.`;
