@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, deleteWebsite } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = await getWebsiteById(params.id);
+    const { id } = await params;
+    const website = await getWebsiteById(id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -24,14 +25,15 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = await getWebsiteById(params.id);
+    const { id } = await params;
+    const website = await getWebsiteById(id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -50,21 +52,22 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (seoDesc !== undefined) updates.seoDesc = seoDesc;
     if (profile !== undefined) updates.profile = profile;
 
-    const updatedWebsite = await updateWebsite(params.id, updates);
+    const updatedWebsite = await updateWebsite(id, updates);
     return NextResponse.json({ success: true, website: updatedWebsite });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to save website updates" }, { status: 500 });
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = await getWebsiteById(params.id);
+    const { id } = await params;
+    const website = await getWebsiteById(id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -73,7 +76,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    await deleteWebsite(params.id);
+    await deleteWebsite(id);
     return NextResponse.json({ success: true, message: "Website deleted successfully" });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to delete website" }, { status: 500 });
