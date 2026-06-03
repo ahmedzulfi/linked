@@ -224,7 +224,7 @@ The interactive chat composer and conversation view uses:
 The onboarding interface uses a multi-stage flow to guide users through importing their profile data:
 - **Frosted Glass Container:** Styled as a frosted glass panel (`bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 w-full max-w-[480px]`).
 - **Data Export Instructions:** Structured rows with circular number badges using a soft accent background (`bg-[#8DB8FF]/15 text-[#3b82f6] text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0`).
-- **ZIP Upload Zones:** Uses dashed border (`border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer text-center`), supporting hover shadow glow (`hover:shadow-[0_0_20px_rgba(141,184,255,0.12)]`) and active tactile scale feedback (`active:scale-[0.98]`).
+- **ZIP Upload Zones:** Uses dashed border (`border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer text-center`), supporting hover shadow glow (`hover:shadow-[0_0_20px_rgba(141,184,255,0.12)]`) and active tactile scale feedback (`active:scale-[0.98]`). This ZIP drop card is also showcased in the landing page hero section.
 - **Tactile Click Scale Transition:** Major actions use `active:scale-[0.97]` and minor elements/zones use `active:scale-[0.98]`, with transitions specifically targeted to the `transform` property (`transition-transform duration-100`).
 
 ### Workspace Setup Loading Timeline
