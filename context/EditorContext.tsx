@@ -8,7 +8,7 @@ import React, {
   useEffect,
   type ReactNode,
 } from "react";
-import { ProfileData, TemplateId, MOCK_PROFILE } from "@/shared/types";
+import { ProfileData, TemplateId, MOCK_PROFILE, BLANK_PROFILE } from "@/shared/types";
 import { toast } from "sonner";
 
 // ─── State Shape ───────────────────────────────────────────────────────────────
@@ -167,7 +167,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
   // Auto-save changes (debounced)
   useEffect(() => {
-    if (!websiteId || !editedProfile) return;
+    if (!websiteId || !editedProfile || !isDirty) return;
 
     const timer = setTimeout(async () => {
       try {
@@ -291,13 +291,13 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const useMockProfile = useCallback(async () => {
-    setProfile(MOCK_PROFILE);
-    setEditedProfile(MOCK_PROFILE);
-    persistProfile(MOCK_PROFILE);
+    setProfile(BLANK_PROFILE);
+    setEditedProfile(BLANK_PROFILE);
+    persistProfile(BLANK_PROFILE);
     
     // Create website draft in backend
     try {
-      await createWebsiteWithProfile(MOCK_PROFILE);
+      await createWebsiteWithProfile(BLANK_PROFILE);
     } catch (e) {
       console.error("Failed to initialize mock website in DB:", e);
     }

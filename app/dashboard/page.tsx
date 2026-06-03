@@ -13,7 +13,8 @@ import {
   Trash2,
   Edit2,
   ExternalLink,
-  Globe
+  Globe,
+  Share2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -384,8 +385,16 @@ export default function DashboardPage() {
           {/* Websites Grid */}
           <div className="w-full flex justify-start pl-2">
             {loadingWebsites ? (
-              <div className="w-full flex justify-center py-20">
-                <div className="w-6 h-6 rounded-lg border-2 border-slate-200 border-t-[#2A2A2F] animate-spin" />
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex flex-col gap-3 p-3 rounded-[12px] bg-white border border-[#EBEBEB] animate-pulse">
+                    <div className="w-full bg-gray-100 rounded-[10px] aspect-video" />
+                    <div className="flex flex-col gap-2 mt-1">
+                      <div className="h-4 bg-gray-200 rounded w-1/2" />
+                      <div className="h-3 bg-gray-100 rounded w-3/4" />
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : websites.length === 0 ? (
               <div className="w-full flex flex-col items-center text-center py-20 px-6 bg-white border border-[#E6E6E6] rounded-[20px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg mx-auto">
@@ -454,7 +463,18 @@ export default function DashboardPage() {
                             </p>
                           </div>
 
-                          <div className="relative">
+                          <div className="flex items-center gap-1.5 relative flex-shrink-0">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const sub = web.subdomainSlug ? `${web.subdomainSlug}.linkedpage.io` : "linkedpage.io";
+                                navigator.clipboard.writeText(`https://${sub}`);
+                                toast.success("Site link copied to clipboard!");
+                              }}
+                              className="inline-flex h-8 px-2.5 text-xs font-semibold cursor-pointer items-center justify-center rounded-lg bg-white border border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
+                            >
+                              Share
+                            </button>
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -484,6 +504,19 @@ export default function DashboardPage() {
                               <>
                                 <div className="fixed inset-0 z-10" onClick={() => setActiveDropdownId(null)} />
                                 <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-lg">
+                                  <button
+                                     onClick={(e) => {
+                                       e.stopPropagation();
+                                       const sub = web.subdomainSlug ? `${web.subdomainSlug}.linkedpage.io` : "linkedpage.io";
+                                       navigator.clipboard.writeText(`https://${sub}`);
+                                       toast.success("Site link copied to clipboard!");
+                                       setActiveDropdownId(null);
+                                     }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                  >
+                                    <Share2 className="w-4 h-4 text-gray-500" />
+                                    Share Link
+                                  </button>
                                   <button
                                     onClick={() => {
                                       setActiveDropdownId(null);

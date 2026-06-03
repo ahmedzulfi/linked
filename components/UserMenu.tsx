@@ -42,30 +42,6 @@ export function UserMenu({
           </div>
         </div>
 
-        <div className="border-t border-black/5" />
-
-        {/* Credits */}
-        <div className="flex flex-col gap-3">
-          <div className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]">
-            <div className="flex justify-between">
-              <span className="text-sm font-medium text-[#2A2A2F]">Credits</span>
-              <span className="text-sm font-medium text-[#2A2A2F]">16 left</span>
-            </div>
-            <div className="w-full rounded-lg bg-white border border-[#E6E6E6] overflow-hidden p-0.5">
-              <div className="relative bg-[#8DFFB3] h-2 rounded-lg transition-all duration-300" style={{ width: "25%" }} />
-            </div>
-            <div className="text-xs text-[#171717]/70 mt-1 leading-relaxed">
-              You're on the free plan. Unlock additional features and credits by upgrading your plan.
-            </div>
-          </div>
-          <button
-            onClick={() => { toast.info("Pricing modal coming soon!"); onClose?.(); }}
-            className="flex items-center justify-center font-medium transition-all duration-150 bg-[#2A2A2F] text-white hover:bg-[#3E3E45] rounded-[9px] w-full text-xs h-9 active:scale-95"
-            type="button"
-          >
-            Upgrade
-          </button>
-        </div>
 
         {/* Links */}
         <div className="flex flex-col gap-1">
