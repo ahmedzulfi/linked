@@ -68,7 +68,12 @@ export default function LoginPage() {
       }
 
       toast.success("Welcome back! Signed in successfully.");
-      router.push("/dashboard");
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("intent") === "save_scrape") {
+        router.push("/editor?onboarding=true");
+      } else {
+        router.push("/dashboard");
+      }
     } catch {
       toast.dismiss(loadingToast);
       toast.error("Connection failed. Please try again.");
@@ -217,7 +222,7 @@ export default function LoginPage() {
                 Don't have an account?{" "}
                 <button
                   className="cursor-pointer text-[#000] font-medium hover:underline"
-                  onClick={() => router.push("/signup")}
+                  onClick={() => router.push(`/signup${window.location.search}`)}
                 >
                   Sign up
                 </button>
