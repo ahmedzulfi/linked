@@ -2,6 +2,64 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { ProfileData, MOCK_PROFILE } from "@/shared/types";
 import { chromium } from "playwright";
+import { exec } from "child_process";
+import { promisify } from "util";
+import path from "path";
+
+const execAsync = promisify(exec);
+
+async function runScrapyScraper(url: string): Promise<any> {
+  const pythonPath = "python";
+  const scriptPath = path.join(process.cwd(), "linkedin_scraper", "run_spider.py");
+  
+  const { stdout, stderr } = await execAsync(`"${pythonPath}" "${scriptPath}" "${url}"`, {
+    timeout: 30000,
+  });
+  
+  if (stderr && stderr.includes("Error")) {
+    console.warn("[Scrapy Warning/Error]:", stderr);
+  }
+  
+  const lines = stdout.split("\n");
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+      const parsed = JSON.parse(trimmed);
+      if (parsed.error) {
+        throw new Error(parsed.error);
+      }
+      return parsed;
+    }
+  }
+  throw new Error("Scrapy failed to output valid profile JSON data");
+}
+
+async function scrapeLinkedInProfileWithFallback(url: string): Promise<ProfileData> {
+  console.log(`[Scrape] Attempting Python Scrapy scraper for: ${url}`);
+  try {
+    const scrapyData = await runScrapyScraper(url);
+    console.log(`[Scrape] Scrapy scraper succeeded for: ${url}`);
+    return {
+      ...MOCK_PROFILE,
+      name: scrapyData.name || "John Doe",
+      headline: scrapyData.headline || "Professional expert",
+      summary: scrapyData.summary || `I'm ${scrapyData.name}. Passionate about building products, driving impact, and solving complex challenges.`,
+      location: scrapyData.location || "San Francisco, CA",
+      avatarUrl: scrapyData.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
+      experience: scrapyData.experience && scrapyData.experience.length > 0 ? scrapyData.experience : MOCK_PROFILE.experience,
+      education: scrapyData.education && scrapyData.education.length > 0 ? scrapyData.education : MOCK_PROFILE.education,
+      linkedinUrl: url,
+      links: [
+        { label: "LinkedIn", url, icon: "linkedin" },
+        { label: "Website", url: "#", icon: "website" },
+      ],
+    };
+  } catch (err: any) {
+    console.warn(`[Scrape] Scrapy scraper failed: ${err.message}. Falling back to Playwright...`);
+    return scrapeLinkedInProfile(url);
+  }
+}
+
 
 async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
   const browser = await chromium.launch({ headless: true });
@@ -122,7 +180,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const profileData = await scrapeLinkedInProfile(url);
+    const profileData = await scrapeLinkedInProfileWithFallback(url);
 
     return NextResponse.json({
       success: true,
