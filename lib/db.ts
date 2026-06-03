@@ -1,7 +1,10 @@
-import fs from "fs";
-import path from "path";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
+import { eq } from "drizzle-orm";
+import * as schema from "./schema";
 import { ProfileData, TemplateId, MOCK_PROFILE } from "@/shared/types";
 
+// User interface for app compatibility
 export interface User {
   id: string;
   firstName: string;
@@ -34,92 +37,96 @@ export interface Website {
   updatedAt: string;
 }
 
-const DB_FILE = path.join(process.cwd(), "data", "db.json");
+const connectionString = process.env.DATABASE_URL || "postgresql://postgres:imblue-12345@localhost:4000/linked";
 
-function initDb() {
-  const dir = path.dirname(DB_FILE);
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-  if (!fs.existsSync(DB_FILE)) {
-    fs.writeFileSync(DB_FILE, JSON.stringify({ users: [], websites: [] }, null, 2), "utf8");
-  }
+const pool = new Pool({
+  connectionString,
+});
+
+export const db = drizzle(pool, { schema });
+
+export async function getUserWebsites(userId: string): Promise<Website[]> {
+  const rows = await db.select().from(schema.website).where(eq(schema.website.userId, userId));
+  return rows.map((w) => ({
+    ...w,
+    templateId: w.templateId as TemplateId,
+    customDomains: (w.customDomains || []) as CustomDomain[],
+    profile: w.profile as ProfileData,
+    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    createdAt: w.createdAt.toISOString(),
+    updatedAt: w.updatedAt.toISOString(),
+  }));
 }
 
-export function readDb() {
-  initDb();
-  try {
-    const data = fs.readFileSync(DB_FILE, "utf8");
-    return JSON.parse(data) as { users: User[]; websites: Website[] };
-  } catch (e) {
-    console.error("Failed to read database file, resetting...", e);
-    return { users: [], websites: [] };
-  }
-}
-
-export function writeDb(data: { users: User[]; websites: Website[] }) {
-  initDb();
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), "utf8");
-}
-
-export function getUserByEmail(email: string): User | undefined {
-  const db = readDb();
-  return db.users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-}
-
-export function createUser(firstName: string, lastName: string, email: string, passwordHash: string): User {
-  const db = readDb();
-  const newUser: User = {
-    id: "usr_" + Math.random().toString(36).substring(2, 11),
-    firstName,
-    lastName,
-    email: email.toLowerCase(),
-    passwordHash,
-    createdAt: new Date().toISOString(),
+export async function getWebsiteById(id: string): Promise<Website | undefined> {
+  const rows = await db.select().from(schema.website).where(eq(schema.website.id, id)).limit(1);
+  const w = rows[0];
+  if (!w) return undefined;
+  return {
+    ...w,
+    templateId: w.templateId as TemplateId,
+    customDomains: (w.customDomains || []) as CustomDomain[],
+    profile: w.profile as ProfileData,
+    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    createdAt: w.createdAt.toISOString(),
+    updatedAt: w.updatedAt.toISOString(),
   };
-  db.users.push(newUser);
-  writeDb(db);
-  return newUser;
 }
 
-export function getUserWebsites(userId: string): Website[] {
-  const db = readDb();
-  return db.websites.filter((w) => w.userId === userId);
+export async function getWebsiteBySubdomain(subdomainSlug: string): Promise<Website | undefined> {
+  const rows = await db.select().from(schema.website).where(eq(schema.website.subdomainSlug, subdomainSlug.toLowerCase())).limit(1);
+  const w = rows[0];
+  if (!w) return undefined;
+  return {
+    ...w,
+    templateId: w.templateId as TemplateId,
+    customDomains: (w.customDomains || []) as CustomDomain[],
+    profile: w.profile as ProfileData,
+    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    createdAt: w.createdAt.toISOString(),
+    updatedAt: w.updatedAt.toISOString(),
+  };
 }
 
-export function getWebsiteById(id: string): Website | undefined {
-  const db = readDb();
-  return db.websites.find((w) => w.id === id);
-}
-
-export function getWebsiteBySubdomain(subdomainSlug: string): Website | undefined {
-  const db = readDb();
-  return db.websites.find((w) => w.subdomainSlug.toLowerCase() === subdomainSlug.toLowerCase());
-}
-
-export function getWebsiteByDomain(domainName: string): Website | undefined {
-  const db = readDb();
-  return db.websites.find((w) =>
-    w.customDomains.some((d) => d.name.toLowerCase() === domainName.toLowerCase())
+export async function getWebsiteByDomain(domainName: string): Promise<Website | undefined> {
+  const rows = await db.select().from(schema.website);
+  const match = rows.find((w) =>
+    ((w.customDomains || []) as CustomDomain[]).some(
+      (d) => d.name.toLowerCase() === domainName.toLowerCase()
+    )
   );
+  if (!match) return undefined;
+  return {
+    ...match,
+    templateId: match.templateId as TemplateId,
+    customDomains: (match.customDomains || []) as CustomDomain[],
+    profile: match.profile as ProfileData,
+    publishedProfile: (match.publishedProfile || undefined) as ProfileData | undefined,
+    publishedTemplate: (match.publishedTemplate || undefined) as TemplateId | undefined,
+    createdAt: match.createdAt.toISOString(),
+    updatedAt: match.updatedAt.toISOString(),
+  };
 }
 
-export function createWebsite(userId: string, templateId: TemplateId = "minimal-card"): Website {
-  const db = readDb();
-  const id = "web_" + Math.random().toString(36).substring(2, 11);
-  const user = db.users.find((u) => u.id === userId);
-  const name = user ? `${user.firstName} ${user.lastName}` : "Alex Morgan";
+export async function createWebsite(userId: string, templateId: TemplateId = "minimal-card"): Promise<Website> {
+  const uRows = await db.select().from(schema.user).where(eq(schema.user.id, userId)).limit(1);
+  const user = uRows[0];
+  const name = user ? user.name : "Alex Morgan";
   const slug = name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") + "-" + Math.floor(1000 + Math.random() * 9000);
+  const id = "web_" + Math.random().toString(36).substring(2, 11);
 
-  const newWebsite: Website = {
+  const newWebsite = {
     id,
     userId,
-    brandName: user ? `${user.firstName}'s Portfolio` : "Creative Portfolio",
+    brandName: user ? `${user.name}'s Portfolio` : "Creative Portfolio",
     subdomainSlug: slug,
-    templateId,
+    templateId: templateId as string,
     seoTitle: `${name} - Professional Micro-site`,
     seoDesc: "Explore my professional experience, projects, education, and social networks.",
-    customDomains: [],
+    customDomains: [] as any,
     profile: {
       ...MOCK_PROFILE,
       name,
@@ -129,38 +136,39 @@ export function createWebsite(userId: string, templateId: TemplateId = "minimal-
       education: [],
       skills: [],
       links: [],
-    },
+    } as any,
+    publishedProfile: null,
+    publishedTemplate: null,
     isPublished: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
-  db.websites.push(newWebsite);
-  writeDb(db);
-  return newWebsite;
+  await db.insert(schema.website).values(newWebsite);
+
+  return {
+    ...newWebsite,
+    templateId: newWebsite.templateId as TemplateId,
+    customDomains: newWebsite.customDomains as CustomDomain[],
+    profile: newWebsite.profile as ProfileData,
+    publishedProfile: undefined,
+    publishedTemplate: undefined,
+    createdAt: newWebsite.createdAt.toISOString(),
+    updatedAt: newWebsite.updatedAt.toISOString(),
+  };
 }
 
-export function updateWebsite(id: string, updates: Partial<Omit<Website, "id" | "userId" | "createdAt">>): Website | undefined {
-  const db = readDb();
-  const idx = db.websites.findIndex((w) => w.id === id);
-  if (idx === -1) return undefined;
-
-  const updated = {
-    ...db.websites[idx],
+export async function updateWebsite(id: string, updates: Partial<Omit<Website, "id" | "userId" | "createdAt">>): Promise<Website | undefined> {
+  const formattedUpdates: any = {
     ...updates,
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date(),
   };
-
-  db.websites[idx] = updated;
-  writeDb(db);
-  return updated;
+  
+  await db.update(schema.website).set(formattedUpdates).where(eq(schema.website.id, id));
+  return getWebsiteById(id);
 }
 
-export function deleteWebsite(id: string): boolean {
-  const db = readDb();
-  const originalLength = db.websites.length;
-  db.websites = db.websites.filter((w) => w.id !== id);
-  if (db.websites.length === originalLength) return false;
-  writeDb(db);
+export async function deleteWebsite(id: string): Promise<boolean> {
+  await db.delete(schema.website).where(eq(schema.website.id, id));
   return true;
 }

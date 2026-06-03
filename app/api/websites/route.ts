@@ -10,7 +10,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const websites = getUserWebsites(user.id);
+    const websites = await getUserWebsites(user.id);
     return NextResponse.json({ success: true, websites });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to fetch websites" }, { status: 500 });
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       // Body empty or invalid, proceed with default
     }
 
-    const website = createWebsite(user.id, templateId);
+    const website = await createWebsite(user.id, templateId);
     return NextResponse.json({ success: true, website });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to create website draft" }, { status: 500 });

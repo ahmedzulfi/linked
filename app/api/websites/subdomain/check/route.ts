@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
-import { readDb } from "@/lib/db";
+import { getWebsiteBySubdomain } from "@/lib/db";
 
 export async function GET(request: Request) {
   try {
@@ -21,12 +21,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ available: false, reason: "Invalid format" });
     }
 
-    const db = readDb();
-    const existing = db.websites.find(
-      (w) => w.subdomainSlug.toLowerCase() === slug && w.id !== websiteId
-    );
+    const existing = await getWebsiteBySubdomain(slug);
+    const isAvailable = !existing || existing.id === websiteId;
 
-    return NextResponse.json({ success: true, available: !existing });
+    return NextResponse.json({ success: true, available: isAvailable });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Subdomain verification failed" }, { status: 500 });
   }

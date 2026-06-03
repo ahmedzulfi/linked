@@ -11,7 +11,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }

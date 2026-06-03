@@ -17,7 +17,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Message and websiteId are required" }, { status: 400 });
     }
 
-    const website = getWebsiteById(websiteId);
+    const website = await getWebsiteById(websiteId);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
           ...profileUpdates,
         };
       }
-      updateWebsite(websiteId, dbUpdates);
+      await updateWebsite(websiteId, dbUpdates);
     }
 
     return NextResponse.json({

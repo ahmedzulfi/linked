@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -31,7 +31,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -50,7 +50,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     if (seoDesc !== undefined) updates.seoDesc = seoDesc;
     if (profile !== undefined) updates.profile = profile;
 
-    const updatedWebsite = updateWebsite(params.id, updates);
+    const updatedWebsite = await updateWebsite(params.id, updates);
     return NextResponse.json({ success: true, website: updatedWebsite });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to save website updates" }, { status: 500 });
@@ -64,7 +64,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -73,7 +73,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    deleteWebsite(params.id);
+    await deleteWebsite(params.id);
     return NextResponse.json({ success: true, message: "Website deleted successfully" });
   } catch (e: any) {
     return NextResponse.json({ error: e.message || "Failed to delete website" }, { status: 500 });

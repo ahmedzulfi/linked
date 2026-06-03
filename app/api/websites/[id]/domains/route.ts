@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
-import { getWebsiteById, updateWebsite, readDb } from "@/lib/db";
+import { getWebsiteById, updateWebsite, getWebsiteByDomain } from "@/lib/db";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -9,7 +9,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -31,7 +31,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -52,12 +52,8 @@ export async function POST(request: Request, { params }: { params: { id: string 
     }
 
     // Check if the domain is connected to any website
-    const db = readDb();
-    const isTaken = db.websites.some((w) =>
-      w.customDomains.some((d) => d.name.toLowerCase() === domain)
-    );
-
-    if (isTaken) {
+    const existing = await getWebsiteByDomain(domain);
+    if (existing) {
       return NextResponse.json({ error: "Domain is already connected to another site" }, { status: 409 });
     }
 
@@ -68,7 +64,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     };
 
     const updatedDomains = [...website.customDomains, newDomain];
-    updateWebsite(params.id, { customDomains: updatedDomains });
+    await updateWebsite(params.id, { customDomains: updatedDomains });
 
     return NextResponse.json({ success: true, domain: newDomain });
   } catch (e: any) {

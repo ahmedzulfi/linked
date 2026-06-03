@@ -16,7 +16,7 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = getWebsiteById(params.id);
+    const website = await getWebsiteById(params.id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -51,7 +51,7 @@ export async function POST(
         ...domain,
         status: "active",
       };
-      updateWebsite(params.id, { customDomains: nextDomains });
+      await updateWebsite(params.id, { customDomains: nextDomains });
     }
 
     return NextResponse.json({ success: true, verified });
