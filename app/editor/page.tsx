@@ -101,7 +101,8 @@ function EditorInner() {
 
         // Only load mock/default profile AFTER auth is confirmed
         const id = new URLSearchParams(window.location.search).get("id");
-        if (!id && !editedProfile) {
+        const hasSessionProfile = typeof window !== "undefined" && !!sessionStorage.getItem("linkedpage_profile");
+        if (!id && !editedProfile && !hasSessionProfile) {
           useMockProfile();
         }
       } catch {
@@ -151,9 +152,12 @@ function EditorInner() {
     }
   }, [searchParams]);
 
-  // If user returns from signup with scraped data but no website draft, create it now
+  // If user returns from signup/login with scraped data but no website draft, create it now
   useEffect(() => {
-    const isSaveIntent = document.referrer.includes("/signup") || searchParams.get("onboarding") === "true";
+    const isSaveIntent =
+      document.referrer.includes("/signup") ||
+      document.referrer.includes("/login") ||
+      searchParams.get("onboarding") === "true";
     if (isSaveIntent && !websiteId && editedProfile) {
       // @ts-ignore - useEditor has createWebsiteWithProfile but it might not be exposed, let's just trigger a manual save
       const timer = setTimeout(() => {

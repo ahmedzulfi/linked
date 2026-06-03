@@ -283,7 +283,7 @@ export default function SignupPage() {
                 Already have an account?{" "}
                 <button
                   className="cursor-pointer text-[#000] font-medium hover:underline"
-                  onClick={() => router.push("/login")}
+                  onClick={() => router.push(`/login${window.location.search}`)}
                 >
                   Sign in
                 </button>
