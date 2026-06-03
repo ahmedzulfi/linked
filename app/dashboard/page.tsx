@@ -244,7 +244,7 @@ export default function DashboardPage() {
             {/* Pricing, Documentation, Settings */}
             <div className="flex flex-col gap-1">
               <button
-                onClick={() => toast.info("Pricing modal coming soon!")}
+                onClick={() => router.push("/pricing")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <CreditCard className="w-[18px] h-[18px] text-black" />
@@ -252,7 +252,7 @@ export default function DashboardPage() {
               </button>
 
               <button
-                onClick={() => toast.info("Documentation coming soon!")}
+                onClick={() => router.push("/docs")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <BookOpen className="w-[18px] h-[18px] text-black" />
@@ -260,7 +260,7 @@ export default function DashboardPage() {
               </button>
 
               <button
-                onClick={() => toast.info("Settings panel coming soon!")}
+                onClick={() => router.push("/settings")}
                 className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
                 <Settings className="w-[18px] h-[18px] text-black" />

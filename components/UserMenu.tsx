@@ -46,7 +46,7 @@ export function UserMenu({
         {/* Links */}
         <div className="flex flex-col gap-1">
           <button
-            onClick={() => { toast.info("Settings panel coming soon!"); onClose?.(); }}
+            onClick={() => { router.push("/settings"); onClose?.(); }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
@@ -57,7 +57,7 @@ export function UserMenu({
             Settings
           </button>
           <button
-            onClick={() => { toast.info("Report a bug coming soon!"); onClose?.(); }}
+            onClick={() => { router.push("/report-bug"); onClose?.(); }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
@@ -67,7 +67,7 @@ export function UserMenu({
             Report a bug
           </button>
           <button
-            onClick={() => { toast.info("Documentation coming soon!"); onClose?.(); }}
+            onClick={() => { router.push("/docs"); onClose?.(); }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >

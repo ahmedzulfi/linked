@@ -48,12 +48,12 @@ export default function Navbar() {
           >
             Templates
           </a>
-          <button
-            onClick={() => toast.info("Pricing plans coming soon!")}
+          <Link
+            href="/pricing"
             className="text-[#171717]/85 text-[13px] font-medium leading-[18px] hover:text-black transition-colors font-inter-tight"
           >
             Pricing
-          </button>
+          </Link>
 
         </div>
 
@@ -186,12 +186,13 @@ export default function Navbar() {
             >
               Templates
             </a>
-            <button
+            <Link
+              href="/pricing"
               className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium text-left"
-              onClick={() => { setMobileOpen(false); toast.info("Pricing plans coming soon!"); }}
+              onClick={() => setMobileOpen(false)}
             >
               Pricing
-            </button>
+            </Link>
 
             <div className="flex items-center gap-2 pt-2 border-t border-[#E6E6E6]">
               <Link
