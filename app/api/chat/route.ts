@@ -129,6 +129,8 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
+      const errText = await response.text();
+      console.error("OpenRouter API error details:", response.status, errText);
       return NextResponse.json({
         success: true,
         reply: "I'm having trouble connecting right now. Try again in a moment.",
