@@ -89,6 +89,14 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
     }
   };
 
+  if (!websiteId) {
+    return (
+      <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full items-center justify-center p-6 text-center">
+        <p className="text-sm text-gray-400 font-medium font-['Inter_Tight']">No website loaded. Go back to the dashboard and open a site.</p>
+      </section>
+    );
+  }
+
   return (
     <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
       {/* Title Header */}

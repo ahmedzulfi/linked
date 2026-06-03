@@ -24,7 +24,15 @@ function PublishInner() {
   const [url, setUrl] = useState("");
 
   useEffect(() => {
-    setUrl(`${window.location.origin}/p/${slug}`);
+    const isLocalhost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (isLocalhost) {
+      setUrl(`${window.location.origin}/p/${slug}`);
+    } else {
+      const host = window.location.host;
+      const parts = host.split(".");
+      const mainDomain = parts.length > 2 ? parts.slice(1).join(".") : host;
+      setUrl(`${window.location.protocol}//${slug}.${mainDomain}`);
+    }
   }, [slug]);
 
   const [copied, setCopied] = useState(false);

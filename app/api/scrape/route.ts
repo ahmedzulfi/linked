@@ -35,29 +35,31 @@ async function runScrapyScraper(url: string): Promise<any> {
 }
 
 async function scrapeLinkedInProfileWithFallback(url: string): Promise<ProfileData> {
-  console.log(`[Scrape] Attempting Python Scrapy scraper for: ${url}`);
-  try {
-    const scrapyData = await runScrapyScraper(url);
-    console.log(`[Scrape] Scrapy scraper succeeded for: ${url}`);
-    return {
-      ...MOCK_PROFILE,
-      name: scrapyData.name || "John Doe",
-      headline: scrapyData.headline || "Professional expert",
-      summary: scrapyData.summary || `I'm ${scrapyData.name}. Passionate about building products, driving impact, and solving complex challenges.`,
-      location: scrapyData.location || "San Francisco, CA",
-      avatarUrl: scrapyData.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
-      experience: scrapyData.experience && scrapyData.experience.length > 0 ? scrapyData.experience : MOCK_PROFILE.experience,
-      education: scrapyData.education && scrapyData.education.length > 0 ? scrapyData.education : MOCK_PROFILE.education,
-      linkedinUrl: url,
-      links: [
-        { label: "LinkedIn", url, icon: "linkedin" },
-        { label: "Website", url: "#", icon: "website" },
-      ],
-    };
-  } catch (err: any) {
-    console.warn(`[Scrape] Scrapy scraper failed: ${err.message}. Falling back to Playwright...`);
-    return scrapeLinkedInProfile(url);
+  if (process.env.SCRAPY_ENABLED === "true") {
+    console.log(`[Scrape] Attempting Python Scrapy scraper for: ${url}`);
+    try {
+      const scrapyData = await runScrapyScraper(url);
+      console.log(`[Scrape] Scrapy scraper succeeded for: ${url}`);
+      return {
+        ...MOCK_PROFILE,
+        name: scrapyData.name || "John Doe",
+        headline: scrapyData.headline || "Professional expert",
+        summary: scrapyData.summary || `I'm ${scrapyData.name}. Passionate about building products, driving impact, and solving complex challenges.`,
+        location: scrapyData.location || "San Francisco, CA",
+        avatarUrl: scrapyData.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
+        experience: scrapyData.experience && scrapyData.experience.length > 0 ? scrapyData.experience : MOCK_PROFILE.experience,
+        education: scrapyData.education && scrapyData.education.length > 0 ? scrapyData.education : MOCK_PROFILE.education,
+        linkedinUrl: url,
+        links: [
+          { label: "LinkedIn", url, icon: "linkedin" },
+          { label: "Website", url: "#", icon: "website" },
+        ],
+      };
+    } catch (err: any) {
+      console.warn(`[Scrape] Scrapy scraper failed: ${err.message}. Falling back to Playwright...`);
+    }
   }
+  return scrapeLinkedInProfile(url);
 }
 
 

@@ -34,26 +34,8 @@ interface ChatMessage {
 const initialMessages: ChatMessage[] = [
   {
     id: "1",
-    role: "user",
-    content: "hi hellow",
-    time: "",
-  },
-  {
-    id: "2",
     role: "assistant",
-    content: "Hello there, please describe your idea. Just share your thoughts with me and I'll help with rest!",
-    time: "",
-  },
-  {
-    id: "3",
-    role: "user",
-    content: "make a portfolio website with random details",
-    time: "",
-  },
-  {
-    id: "4",
-    role: "assistant",
-    content: "Hey there, sounds like you're looking to create a website for your portfolio. I'll start building right away.\n\nA dynamic and modern portfolio website showcasing creative projects with a focus on engaging visuals and clear presentation. The design leverages a warm color palette and bold typography to highlight professional work and client testimonials, creating an inviting user experience.",
+    content: `Your page is ready. You can ask me to change the template, update your headline, add links, or tweak any section. What would you like to change?`,
     time: "",
   },
 ];
@@ -316,91 +298,7 @@ export default function ChatPane({
                             </div>
                           </div>
 
-                          {/* Dynamic attachment previews for the mockup portfolio response */}
-                          {msg.id === "4" && (
-                            <div className="w-full flex flex-col justify-start items-start gap-4 mt-3">
-                              {/* 1. Carousel preview section */}
-                              <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
-                                <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start w-full">
-                                  <div className="SectionStackCarousel self-stretch h-48 relative w-full overflow-hidden">
-                                    <div className="Container w-full max-w-96 h-48 left-0 top-0 absolute">
-                                      <div className="BackgroundBorderShadow w-60 h-28 left-[343.55px] top-[13.58px] absolute origin-top-left rotate-[20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-60 h-28 left-[343.55px] top-[13.58px] absolute origin-top-left rotate-[20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-60 h-28 left-[-126.70px] top-[93.65px] absolute origin-top-left rotate-[-20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-60 h-28 left-[-126.70px] top-[93.65px] absolute origin-top-left rotate-[-20deg] opacity-0 bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-72 h-36 left-[174.13px] top-[11.35px] absolute origin-top-left rotate-[10deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-72 h-36 left-[-6.26px] top-[58.77px] absolute origin-top-left rotate-[-10deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-80 h-40 left-[118.69px] top-[2.70px] absolute origin-top-left rotate-[5deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
-                                      <div className="BackgroundBorderShadow w-80 h-40 left-[7.20px] top-[29.90px] absolute origin-top-left rotate-[-5deg] bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100" />
 
-                                      <div className="BackgroundBorderShadow w-full max-w-96 h-48 left-[23.33px] top-0 absolute bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100 overflow-hidden flex items-center justify-center p-4">
-                                        <div className="flex flex-col items-center text-center gap-1">
-                                          <span className="font-semibold text-[13px] text-neutral-800">Portfolio Preview</span>
-                                          <span className="text-[11px] text-zinc-400">Template applied to active canvas</span>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    <button className="Button h-9 px-2.5 left-0 top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
-                                      <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
-                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M5 1L1 5L5 9" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                      </div>
-                                    </button>
-                                    <button className="Button h-9 px-2.5 left-[401.49px] top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
-                                      <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
-                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M1 1L5 5L1 9" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                        </svg>
-                                      </div>
-                                    </button>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* 2. Checklist section */}
-                              <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
-                                <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
-                                  {[
-                                    "About Me description",
-                                    "Project Showcase grid",
-                                    "Responsive layout support",
-                                    "Contact Form interface",
-                                    "Resume download feature",
-                                    "Skills & Tools inventory",
-                                    "Testimonials section",
-                                    "Custom footer metadata",
-                                    "Navigation header links"
-                                  ].map((item, idx) => (
-                                    <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
-                                      <div className="w-5 h-5 rounded-full border border-[#E6E6E6] flex items-center justify-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
-                                        <div className="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-80" />
-                                      </div>
-                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{item}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              {/* 3. Color Palette section */}
-                              <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
-                                <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
-                                  {[
-                                    { name: "Ocean Breeze", colors: "from-blue-600 to-cyan-400" },
-                                    { name: "Sunset Glow", colors: "from-orange-500 to-rose-400" },
-                                    { name: "Forest Moss", colors: "from-emerald-600 to-teal-400" },
-                                    { name: "Lavender Fields", colors: "from-purple-600 to-pink-400" }
-                                  ].map((palette, idx) => (
-                                    <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
-                                      <div className={`Gradient w-5 h-5 bg-gradient-to-b ${palette.colors} rounded-full shadow-sm`} />
-                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{palette.name}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                          )}
                         </div>
                       )}
                     </motion.div>

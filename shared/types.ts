@@ -147,6 +147,41 @@ export const MOCK_PROFILE: ProfileData = {
   linkedinUrl: "https://linkedin.com/in/alexmorgan",
 };
 
+export const BLANK_PROFILE: ProfileData = {
+  name: "Your Name",
+  headline: "Your Professional Headline",
+  location: "Your Location",
+  summary: "Write a short bio or summary of your professional background here.",
+  avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=User&backgroundColor=8db8ff",
+  bannerUrl: "",
+  connections: "",
+  experience: [
+    {
+      title: "Your Role",
+      company: "Your Company",
+      duration: "Duration",
+      description: "Describe your responsibilities and achievements in this role.",
+      logo: "",
+    }
+  ],
+  education: [
+    {
+      degree: "Your Degree",
+      school: "Your School",
+      year: "Year",
+    }
+  ],
+  skills: [
+    { name: "Skill 1" },
+    { name: "Skill 2" },
+  ],
+  links: [
+    { label: "LinkedIn", url: "#", icon: "linkedin" },
+    { label: "Website", url: "#", icon: "website" },
+  ],
+  linkedinUrl: "",
+};
+
 export interface ScrapeResponse {
   success: boolean;
   data?: ProfileData;

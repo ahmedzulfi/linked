@@ -84,6 +84,9 @@ function EditorInner() {
     preview?: DOMRect;
   }>({});
 
+  const [isSubdomainAvailable, setIsSubdomainAvailable] = useState<boolean | null>(null);
+  const [checkingSubdomain, setCheckingSubdomain] = useState(false);
+
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -95,12 +98,44 @@ function EditorInner() {
         }
         setUserName(`${data.user.firstName} ${data.user.lastName}`);
         setUserEmail(data.user.email);
+
+        // Only load mock/default profile AFTER auth is confirmed
+        const id = new URLSearchParams(window.location.search).get("id");
+        if (!id && !editedProfile) {
+          useMockProfile();
+        }
       } catch {
         router.push("/login");
       }
     };
     checkUser();
-  }, [router]);
+  }, [router, editedProfile, useMockProfile]);
+
+  useEffect(() => {
+    const nameSlug = editedProfile?.name.toLowerCase().replace(/\s+/g, "") ?? "";
+    if (nameSlug.length < 3) {
+      setIsSubdomainAvailable(null);
+      return;
+    }
+    setCheckingSubdomain(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/websites/subdomain/check?slug=${nameSlug}${websiteId ? `&websiteId=${websiteId}` : ""}`);
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setIsSubdomainAvailable(data.available);
+        } else {
+          setIsSubdomainAvailable(null);
+        }
+      } catch {
+        setIsSubdomainAvailable(null);
+      } finally {
+        setCheckingSubdomain(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [editedProfile?.name, websiteId]);
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -140,9 +175,7 @@ function EditorInner() {
     };
   }, [showOnboarding]);
 
-  useEffect(() => {
-    if (!editedProfile) useMockProfile();
-  }, [editedProfile, useMockProfile]);
+  // Removed standalone useMockProfile useEffect to prevent mount race condition
 
   useEffect(() => {
     const t = searchParams.get("template") as TemplateId | null;
@@ -181,7 +214,7 @@ function EditorInner() {
         return;
       }
       toast.success("Your page is live! 🎉");
-      router.push(`/publish?slug=${data.website.subdomainSlug}`);
+      router.push(`/publish?slug=${data.slug}`);
     } catch {
       toast.dismiss(toastId);
       setPublishing(false);
@@ -277,7 +310,7 @@ function EditorInner() {
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
               <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden text-left mt-2">
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
-                  ONLY $16 to<br />unlock Premium<br />Features
+                  ONLY {process.env.NEXT_PUBLIC_UPGRADE_PRICE || "$16"} to<br />unlock Premium<br />Features
                 </p>
                 <button className="w-full py-1.5 bg-[#4b93ff] text-white     rounded-lg  text-[13px] font-medium hover:bg-[#3b82f6] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                   Upgrade Now
@@ -484,7 +517,13 @@ function EditorInner() {
                   <span className="min-w-0 truncate text-[#3b82f6] font-medium">
                     {editedProfile?.name.toLowerCase().replace(/\s+/g, "") ?? "yourname"}.linkedpage.io
                   </span>
-                  <span className="hidden lg:inline text-[#2A2A2F] font-normal">is available!</span>
+                  {checkingSubdomain ? (
+                    <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
+                  ) : isSubdomainAvailable === true ? (
+                    <span className="hidden lg:inline text-[#369762] font-normal">is available!</span>
+                  ) : isSubdomainAvailable === false ? (
+                    <span className="hidden lg:inline text-[#E45A5A] font-normal">is taken!</span>
+                  ) : null}
                 </span>
               </div>
             </div>

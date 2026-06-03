@@ -127,6 +127,7 @@ function OnboardingInner() {
   const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const hasStarted = useRef(false);
 
   // Chat messages for the loading state — sequentially revealed
   const CHAT_STEPS: Array<{ text: string; tag: string; triggerAt: number; typingDuration: number }> = [
@@ -163,12 +164,13 @@ function OnboardingInner() {
   // If there's an initial URL query param, auto-start scraping
   useEffect(() => {
     const initialUrl = searchParams.get("url") || "";
-    if (initialUrl) {
+    if (initialUrl && !hasStarted.current) {
+      hasStarted.current = true;
       setUrl(initialUrl);
       handleStartScrape(initialUrl);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, []);
 
   const handleStartScrape = async (targetUrl: string) => {
     const trimmed = targetUrl.trim();
