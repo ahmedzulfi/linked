@@ -128,6 +128,8 @@ function OnboardingInner() {
     useMockProfile,
     websiteId,
     setScrapeError,
+    pendingZip,
+    setPendingZip,
   } = useEditor();
 
   const [step, setStep] = useState<"input" | "loading" | "fallback">("input");
@@ -137,6 +139,39 @@ function OnboardingInner() {
   const [showUrlOption, setShowUrlOption] = useState(false);
   const [progress, setProgress] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  const handleUploadZipWithFile = async (file: File) => {
+    if (file.size > 20 * 1024 * 1024) {
+      toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
+      return;
+    }
+    setStep("loading");
+    setIsImporting(true);
+    const toastId = toast.loading("Processing and parsing ZIP archive...");
+    try {
+      const success = await startScrapeManual(file);
+      if (!success) {
+        setIsImporting(false);
+        setStep("input");
+      }
+      toast.dismiss(toastId);
+    } catch (e: any) {
+      toast.dismiss(toastId);
+      toast.error(e.message || "Failed to process ZIP archive.");
+      setIsImporting(false);
+      setStep("input");
+    }
+  };
+
+  // If there's an uploaded ZIP from the home page, start processing immediately
+  useEffect(() => {
+    if (pendingZip) {
+      const fileToProcess = pendingZip;
+      setPendingZip(null);
+      setZipFile(fileToProcess);
+      handleUploadZipWithFile(fileToProcess);
+    }
+  }, [pendingZip, setPendingZip]);
 
   // Chat messages for the loading state — sequentially revealed based on time
   const CHAT_STEPS = [
@@ -316,23 +351,7 @@ function OnboardingInner() {
       toast.error("Please select a LinkedIn export ZIP file first.");
       return;
     }
-    if (zipFile.size > 20 * 1024 * 1024) {
-      toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
-      return;
-    }
-    setIsImporting(true);
-    const toastId = toast.loading("Processing and parsing ZIP archive...");
-    try {
-      const success = await startScrapeManual(zipFile);
-      if (!success) {
-        setIsImporting(false);
-      }
-      toast.dismiss(toastId);
-    } catch (e: any) {
-      toast.dismiss(toastId);
-      toast.error(e.message || "Failed to process ZIP archive.");
-      setIsImporting(false);
-    }
+    await handleUploadZipWithFile(zipFile);
   };
 
   const handleManualImport = async () => {

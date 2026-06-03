@@ -15,9 +15,12 @@ import {
   Settings, 
   LogOut,
   User,
-  Shield
+  Shield,
+  Upload,
+  ArrowRight
 } from "lucide-react";
 import { UserMenu } from "@/components/UserMenu";
+import { useEditor } from "@/context/EditorContext";
 
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
@@ -196,15 +199,52 @@ const COLOR_PALETTES = [
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
-function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
-  const [profileUrl, setProfileUrl] = useState("https://www.linkedin.com/in/reidhoffman");
-  const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+function HeroSection() {
+  const router = useRouter();
+  const { setPendingZip } = useEditor();
+  const [isDragActive, setIsDragActive] = useState(false);
 
-  const selectPalette = (name: string) => {
-    setIsPaletteOpen(false);
-    toast.success(`Applied ${name} color palette!`);
-    const cleanUrl = profileUrl.split(" --theme")[0].trim();
-    setProfileUrl(`${cleanUrl} --theme ${name.toLowerCase()}`);
+  const handleZipFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
+        e.target.value = "";
+        return;
+      }
+      setPendingZip(file);
+      router.push("/onboarding");
+    }
+  };
+
+  const handleDrag = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setIsDragActive(true);
+    } else if (e.type === "dragleave") {
+      setIsDragActive(false);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      if (!file.name.endsWith(".zip")) {
+        toast.error("Please drop a valid .zip file export.");
+        return;
+      }
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
+        return;
+      }
+      setPendingZip(file);
+      router.push("/onboarding");
+    }
   };
 
   const heroContainerVariants = {
@@ -229,19 +269,6 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
     }
   };
 
-  const enhancePrompt = () => {
-    if (!profileUrl.trim()) {
-      toast.error("Please paste a LinkedIn URL first!");
-      return;
-    }
-    if (!profileUrl.includes("--theme")) {
-      setProfileUrl(prev => `${prev.trim()} --theme bento --layout modern --accent sky-blue`);
-      toast.success("Prompt enhanced with theme and layout parameters!");
-    } else {
-      toast.info("Prompt is already enhanced!");
-    }
-  };
-
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-24 pb-16">
       {/* Background image + overlay */}
@@ -259,18 +286,18 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 w-full pt-0  -translate-y-14 max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
+        className="relative z-10 w-full pt-0 -translate-y-14 max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
       >
         {/* Badge */}
         <motion.div
           variants={heroItemVariants}
-          onClick={() => onGenerate(profileUrl)}
-          className="flex items-center gap-2 px-3 py-1.5   rounded-lg border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  cursor-pointer hover:bg-gray-50 active:scale-97 transition-all"
+          onClick={() => router.push("/onboarding")}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-all"
         >
           <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
             Create in under 60 seconds
           </span>
-          <span className="flex items-center justify-center w-7 h-7   rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
+          <span className="flex items-center justify-center w-7 h-7 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
               <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
               <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
@@ -286,135 +313,63 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
           LinkedIn to personal micro-site
         </motion.h1>
 
-        {/* Prompt card */}
+        {/* ZIP Upload Card */}
         <motion.div
           variants={heroItemVariants}
-          className="w-full max-w-[1040px]      rounded-lg   glass-card  p-4 sm:p-5 flex flex-col gap-5 mt-4"
+          className="w-full max-w-[540px] rounded-[28px] bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 p-6 sm:p-8 flex flex-col gap-6 mt-4 shadow-[0_20px_50px_rgba(0,0,0,0.03)]"
         >
-          <div className="     rounded-lg   border border-[#E6E6E6] bg-white/80 p-5 flex flex-col gap-4  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  focus-within:ring-2 focus-within:ring-[#8DB8FF]/10 transition-[box-shadow] duration-250 ease-out">
-            {/* Textarea */}
-            <textarea
-              value={profileUrl}
-              onChange={(e) => setProfileUrl(e.target.value)}
-              className="w-full bg-transparent text-[#171717] text-[16px] sm:text-[18px] leading-[27px] resize-none outline-none placeholder:text-[#171717]/40 min-h-[72px] font-inter-tight"
-              placeholder="Paste your LinkedIn profile URL here..."
+          <div className="text-center select-none">
+            <h2 className="text-lg font-semibold text-[#2A2A2F] mb-1 font-inter">
+              Upload your LinkedIn export ZIP
+            </h2>
+            <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-md mx-auto font-inter">
+              Build your professional website instantly using your LinkedIn archive.
+            </p>
+          </div>
+
+          <label
+            htmlFor="hero-zip-upload"
+            onDragEnter={handleDrag}
+            onDragOver={handleDrag}
+            onDragLeave={handleDrag}
+            onDrop={handleDrop}
+            className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 sm:p-8 bg-[#FBFBFB]/50 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 relative text-center group active:scale-[0.98] ${
+              isDragActive
+                ? "border-[#8DB8FF] bg-[#8DB8FF]/5 shadow-[0_0_20px_rgba(141,184,255,0.12)]"
+                : "border-[#E6E6E6] hover:border-[#8DB8FF] hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] hover:bg-[#8DB8FF]/5"
+            }`}
+          >
+            <input
+              id="hero-zip-upload"
+              type="file"
+              accept=".zip"
+              onChange={handleZipFileChange}
+              className="hidden"
             />
-
-            {/* Bottom actions */}
-            <div className="flex items-center justify-between flex-wrap gap-3 pt-2 border-t border-[#F3F3F3]">
-              <div className="flex items-center gap-3">
-                {/* Add button */}
-                <button
-                  onClick={() => toast.success("Custom content block selector opened!")}
-                  className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
-                >
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-
-                {/* Enhance prompt button */}
-                <button
-                  onClick={enhancePrompt}
-                  className="h-10 px-5      rounded-lg   bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap"
-                >
-                  Enhance prompt
-                </button>
-
-                {/* Color palette button */}
-                <div className="relative">
-                  <button
-                    onClick={() => setIsPaletteOpen(!isPaletteOpen)}
-                    className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                      <g clipPath="url(#palette-clip)">
-                        <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
-                        <circle cx="7.95378" cy="3.82957" r="0.59" fill="black" />
-                        <circle cx="10.3104" cy="6.18626" r="0.59" fill="black" />
-                        <circle cx="3.8296" cy="7.3646" r="0.59" fill="black" />
-                        <circle cx="5.00813" cy="4.41892" r="0.59" fill="black" />
-                      </g>
-                      <defs>
-                        <clipPath id="palette-clip">
-                          <rect width="14.1406" height="14.1406" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </button>
-
-                  <AnimatePresence>
-                    {isPaletteOpen && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                        transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] as const }}
-                        style={{ originX: 1, originY: 1 }}
-                        className="absolute right-0 bottom-full mb-3 z-[9999] bg-white border border-[#E6E6E6]      rounded-lg    shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  p-3 flex flex-col gap-3 min-w-[260px] select-none text-left"
-                      >
-                        <div className="flex items-center gap-2 px-1 border-b border-[#F3F3F3] pb-2 text-black">
-                          <svg className="h-4 w-4 text-black" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" />
-                            <circle cx="13.5" cy="6.5" fill="currentColor" r=".5" />
-                            <circle cx="17.5" cy="10.5" fill="currentColor" r=".5" />
-                            <circle cx="6.5" cy="12.5" fill="currentColor" r=".5" />
-                            <circle cx="8.5" cy="7.5" fill="currentColor" r=".5" />
-                          </svg>
-                          <span className="text-sm font-semibold">Color palettes</span>
-                        </div>
-
-                        <div className="flex flex-col gap-1 py-1 max-h-52 overflow-y-auto scrollbar-thin text-black">
-                          {COLOR_PALETTES.map((palette) => (
-                            <button
-                              key={palette.name}
-                              onClick={() => selectPalette(palette.name)}
-                              className="group relative flex items-center gap-3 p-2 w-full text-sm text-black     rounded-lg  hover:bg-[#F3F3F3] transition-all cursor-pointer text-left active:scale-[0.98]"
-                            >
-                              <div
-                                className="  rounded-lg shrink-0 relative border border-black/5"
-                                style={{
-                                  background: palette.gradient,
-                                  width: "22px",
-                                  height: "22px",
-                                }}
-                              />
-                              <span className="font-medium">{palette.name}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3">
-                {/* Mic button */}
-                <button
-                  onClick={() => toast("Listening for profile voice commands...")}
-                  className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-
-                {/* Send button (Primary action) */}
-                <button
-                  onClick={() => onGenerate(profileUrl)}
-                  className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
-                >
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
+            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] shadow-sm mb-3 transition-transform duration-200 group-hover:scale-105">
+              <Upload className="w-5 h-5 text-gray-500" />
             </div>
+            <span className="text-[13.5px] font-semibold text-[#2A2A2F] mb-0.5 font-inter">
+              Select LinkedIn ZIP file
+            </span>
+            <span className="text-[11px] text-gray-400 font-medium font-inter">
+              Click to browse or drag & drop ZIP archive here
+            </span>
+          </label>
+
+          <div className="flex flex-col items-center gap-3">
+            <button
+              onClick={() => router.push("/onboarding")}
+              className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
+            >
+              Get Started with Onboarding <ArrowRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => router.push("/editor")}
+              className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
+            >
+              Skip & try with default template data →
+            </button>
           </div>
         </motion.div>
       </motion.div>
@@ -556,8 +511,8 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
 const HOW_IT_WORKS = [
   {
     img: "/process1 (1).png",
-    boldText: "Paste your LinkedIn link",
-    restText: " and watch LinkedPage scrape your profile data to instantly render a professional personal page.",
+    boldText: "Upload LinkedIn ZIP export",
+    restText: " and watch LinkedPage parse your profile data to instantly render a professional personal page.",
   },
   {
     img: "/process1 (2).png",
@@ -836,7 +791,7 @@ function FAQSection() {
   const toggle = (i: number) => setOpenIdx(openIdx === i ? null : i);
 
   const answers: Record<number, string> = {
-    0: "LinkedPage is a web tool that converts a LinkedIn profile URL into a beautiful personal micro-site. You paste your LinkedIn link, the platform scrapes your profile data, and instantly renders a customizable page.",
+    0: "LinkedPage is a web tool that converts a LinkedIn data export ZIP into a beautiful personal micro-site. You upload your LinkedIn ZIP export, the platform parses your profile data, and instantly renders a customizable page.",
     1: "No design or coding experience is required! LinkedPage automatically extracts your career history, skills, and details, then formats them into a polished personal website.",
     2: "You can edit text and images inline, swap and rearrange layout elements, and switch templates (minimal card, bento grid, full-page scroll, or dark mode) directly on the screen.",
     3: "Yes! You can connect your own custom domain, or publish it instantly on a free subdomain (like yourname.linkedpage.me).",
@@ -1164,7 +1119,7 @@ export default function Index() {
       {/* ── Main Full-Width Container ── */}
       <div className="relative z-10 w-full min-h-screen">
         <main className="w-full relative">
-          <HeroSection onGenerate={simulateGeneration} />
+          <HeroSection />
           <TemplatesSection onSelectTemplate={handleSelectTemplate} />
           <BusinessSection />
           <FeaturesSection onStartTrial={handleTrial} />

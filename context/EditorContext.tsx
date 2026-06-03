@@ -21,6 +21,7 @@ interface EditorState {
   isLoading: boolean;
   scrapeError: string | null;
   isDirty: boolean;
+  pendingZip: File | null;
 }
 
 interface EditorActions {
@@ -36,6 +37,7 @@ interface EditorActions {
   clearProfile: () => void;
   useMockProfile: () => void;
   setScrapeError: (err: string | null) => void;
+  setPendingZip: (file: File | null) => void;
 }
 
 type EditorContextValue = EditorState & EditorActions;
@@ -55,6 +57,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("minimal-card");
   const [isLoading, setIsLoading] = useState(false);
   const [scrapeError, setScrapeError] = useState<string | null>(null);
+  const [pendingZip, setPendingZip] = useState<File | null>(null);
 
   // Rehydrate from sessionStorage on mount (fallback/legacy support)
   useEffect(() => {
@@ -328,6 +331,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         isLoading,
         scrapeError,
         isDirty,
+        pendingZip,
         setWebsiteId,
         loadWebsite,
         saveWebsite,
@@ -340,6 +344,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         clearProfile,
         useMockProfile,
         setScrapeError,
+        setPendingZip,
       }}
     >
       {children}
