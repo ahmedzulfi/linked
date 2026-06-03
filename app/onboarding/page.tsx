@@ -377,13 +377,15 @@ function OnboardingInner() {
       scrapeError.toLowerCase().includes("login"));
 
   return (
-    <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col items-center justify-center text-black antialiased relative overflow-hidden">
-      {/* ── Background Graphic (Polished Light Mesh Gradient) ── */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden bg-[#FBFBFB]">
-        <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-[#8DB8FF]/15 to-[#E0EBFF]/5 blur-[120px] opacity-70" />
-        <div className="absolute -bottom-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#8DFFB3]/10 to-[#E0FFE7]/5 blur-[100px] opacity-50" />
-        <div className="absolute top-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-gradient-to-br from-[#E8DBFF]/12 to-[#F5E6FF]/5 blur-[90px] opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-[#FBFBFB]" />
+    <div className="min-h-screen bg-white font-inter flex flex-col items-center justify-center text-black antialiased relative overflow-hidden">
+      {/* Background image + overlay */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
+        <img
+          src="/bg.png"
+          alt=""
+          className="w-full h-full object-cover object-top"
+        />
+        <div className="absolute inset-0 hero-overlay" />
       </div>
 
       {/* ── Content View Area ── */}
