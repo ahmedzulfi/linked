@@ -118,8 +118,17 @@ function ChatBubble({
 function OnboardingInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { startScrape, startScrapeManual, isLoading, scrapeError, editedProfile, clearProfile, useMockProfile, websiteId } =
-    useEditor();
+  const {
+    startScrape,
+    startScrapeManual,
+    isLoading,
+    scrapeError,
+    editedProfile,
+    clearProfile,
+    useMockProfile,
+    websiteId,
+    setScrapeError,
+  } = useEditor();
 
   const [step, setStep] = useState<"input" | "loading" | "fallback">("input");
   const [url, setUrl] = useState("");
@@ -127,50 +136,54 @@ function OnboardingInner() {
   const [isImporting, setIsImporting] = useState(false);
   const [progress, setProgress] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const hasStarted = useRef(false);
 
-  // Chat messages for the loading state — sequentially revealed
-  const CHAT_STEPS: Array<{ text: string; tag: string; triggerAt: number; typingDuration: number }> = [
+  // Chat messages for the loading state — sequentially revealed based on time
+  const CHAT_STEPS = [
     {
       text: "Reading your LinkedIn profile and extracting all public data.",
       tag: "Fetching data",
-      triggerAt: 0,
+      delay: 0,
       typingDuration: 1200,
     },
     {
       text: "Parsing your experience, skills and accomplishments into structured sections.",
       tag: "Thinking",
-      triggerAt: 28,
+      delay: 4000,
       typingDuration: 1400,
     },
     {
       text: "Choosing a color palette and typography that matches your professional identity.",
       tag: "Finalizing colours",
-      triggerAt: 55,
+      delay: 8000,
       typingDuration: 1600,
     },
     {
       text: "Assembling your personalised page layout — almost done.",
       tag: "Building layout",
-      triggerAt: 82,
+      delay: 12000,
       typingDuration: 900,
+    },
+    {
+      text: "LinkedIn is taking longer than usual, still working...",
+      tag: "Still working",
+      delay: 16000,
+      typingDuration: 1200,
     },
   ];
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(
-    CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" as ChatMessageState }))
+    CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" }))
   );
 
-  // If there's an initial URL query param, auto-start scraping
+  // If there's an initial URL query param, auto-start scraping (Strict Mode safe)
   useEffect(() => {
     const initialUrl = searchParams.get("url") || "";
-    if (initialUrl && !hasStarted.current) {
-      hasStarted.current = true;
+    if (initialUrl && step === "input") {
       setUrl(initialUrl);
       handleStartScrape(initialUrl);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchParams, step]);
 
   const handleStartScrape = async (targetUrl: string) => {
     const trimmed = targetUrl.trim();
@@ -178,15 +191,18 @@ function OnboardingInner() {
       toast.error("Please paste a valid LinkedIn profile URL (e.g. linkedin.com/in/username)");
       return;
     }
+    // Remove query parameters from history/URL so back/retry doesn't re-trigger
+    router.replace("/onboarding");
+    
     setStep("loading");
     setProgress(0);
     setChatMessages(CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" })));
     startScrape(trimmed);
   };
 
-  // Progress animation (0 → 98 over ~2.5 s)
+  // Progress animation (0 → 98). Cancel interval immediately if websiteId is set.
   useEffect(() => {
-    if (step !== "loading") return;
+    if (step !== "loading" || websiteId) return;
 
     const interval = setInterval(() => {
       setProgress((prev) => {
@@ -200,43 +216,68 @@ function OnboardingInner() {
     }, 25);
 
     return () => clearInterval(interval);
-  }, [step]);
+  }, [step, websiteId]);
 
-  // Drive chat message reveals based on progress
+  // Drive chat message reveals based on time elapsed
   useEffect(() => {
     if (step !== "loading") return;
 
-    CHAT_STEPS.forEach((s, i) => {
-      if (progress >= s.triggerAt) {
+    setChatMessages(
+      CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" }))
+    );
+
+    const timers: NodeJS.Timeout[] = [];
+
+    CHAT_STEPS.forEach((stepItem, index) => {
+      const typeTimer = setTimeout(() => {
         setChatMessages((prev) => {
-          const current = prev[i];
-          if (current.state === "pending") {
-            // Show typing indicator first
-            const updated = [...prev];
-            updated[i] = { ...current, state: "typing" };
-            // After typing duration, show the real message
-            setTimeout(() => {
-              setChatMessages((p) => {
-                const u = [...p];
-                u[i] = { ...u[i], state: "done" };
-                return u;
-              });
-            }, s.typingDuration);
-            return updated;
+          const updated = [...prev];
+          if (updated[index]) {
+            updated[index] = { ...updated[index], state: "typing" };
           }
-          return prev;
+          return updated;
         });
-      }
+
+        const doneTimer = setTimeout(() => {
+          setChatMessages((prev) => {
+            const updated = [...prev];
+            if (updated[index]) {
+              updated[index] = { ...updated[index], state: "done" };
+            }
+            return updated;
+          });
+        }, stepItem.typingDuration);
+
+        timers.push(doneTimer);
+      }, stepItem.delay);
+
+      timers.push(typeTimer);
     });
+
+    return () => {
+      timers.forEach((t) => clearTimeout(t));
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [progress, step]);
+  }, [step]);
+
+  // Client-side timeout handling: if scraping hangs for 45s, redirect to fallback
+  useEffect(() => {
+    if (step !== "loading") return;
+    const timeout = setTimeout(() => {
+      if (isLoading) {
+        setScrapeError("Request timed out after 45 seconds.");
+        setStep("fallback");
+      }
+    }, 45000);
+    return () => clearTimeout(timeout);
+  }, [step, isLoading, setScrapeError]);
 
   // Scroll to bottom as new messages appear
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
 
-  // Handle scrape success or failure
+  // Handle scrape success or failure transitions
   useEffect(() => {
     if (step === "loading" && !isLoading) {
       if (scrapeError) {
@@ -251,20 +292,31 @@ function OnboardingInner() {
       setProgress(100);
       const t = setTimeout(() => {
         router.push(`/editor?id=${websiteId}&onboarding=true`);
-      }, 600);
+      }, 400);
       return () => clearTimeout(t);
     }
   }, [websiteId, step, isImporting, router]);
 
   const handleZipFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setZipFile(e.target.files[0]);
+      const file = e.target.files[0];
+      if (file.size > 20 * 1024 * 1024) {
+        toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
+        e.target.value = "";
+        setZipFile(null);
+        return;
+      }
+      setZipFile(file);
     }
   };
 
   const handleUploadZip = async () => {
     if (!zipFile) {
       toast.error("Please select a LinkedIn export ZIP file first.");
+      return;
+    }
+    if (zipFile.size > 20 * 1024 * 1024) {
+      toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
       return;
     }
     setIsImporting(true);
@@ -290,16 +342,28 @@ function OnboardingInner() {
   };
 
   const handleBackToInput = () => {
+    const lastUrl = url;
+    router.replace("/onboarding");
     clearProfile();
+    setUrl(lastUrl);
     setStep("input");
   };
 
+  // Check if scrapeError is an authwall or privacy error to display a friendly message
+  const isAuthwallError =
+    scrapeError &&
+    (scrapeError.toLowerCase().includes("authwall") ||
+      scrapeError.toLowerCase().includes("privacy") ||
+      scrapeError.toLowerCase().includes("login"));
+
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col items-center justify-center text-black antialiased relative overflow-hidden">
-      {/* ── Background Graphic ── */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
-        <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
+      {/* ── Background Graphic (Polished Light Mesh Gradient) ── */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden bg-[#FBFBFB]">
+        <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-[#8DB8FF]/15 to-[#E0EBFF]/5 blur-[120px] opacity-70" />
+        <div className="absolute -bottom-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#8DFFB3]/10 to-[#E0FFE7]/5 blur-[100px] opacity-50" />
+        <div className="absolute top-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-gradient-to-br from-[#E8DBFF]/12 to-[#F5E6FF]/5 blur-[90px] opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-[#FBFBFB]" />
       </div>
 
       {/* ── Content View Area ── */}
@@ -406,18 +470,35 @@ function OnboardingInner() {
                 </div>
 
                 <h2 className="text-xl font-bold text-black mb-2 font-inter-tight">Could not fetch public profile.</h2>
-                <p className="text-[14px] text-gray-500 leading-relaxed mb-5">
-                  LinkedIn's privacy restriction is blocking direct access. Please download your settings archive from{" "}
-                  <a
-                    href="https://www.linkedin.com/psettings/member-data"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#3b82f6] font-semibold hover:underline inline-flex items-center gap-0.5"
-                  >
-                    LinkedIn's Settings page
-                  </a>{" "}
-                  and import it below.
-                </p>
+                <div className="text-[14px] text-gray-500 leading-relaxed mb-5">
+                  {isAuthwallError ? (
+                    <span>
+                      LinkedIn couldn't be read publicly. This is normal — upload your data export instead. You can download it from{" "}
+                      <a
+                        href="https://www.linkedin.com/psettings/member-data"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#3b82f6] font-semibold hover:underline inline-flex items-center gap-0.5"
+                      >
+                        LinkedIn's Settings page
+                      </a>.
+                    </span>
+                  ) : (
+                    <span>
+                      {scrapeError || "LinkedIn's privacy restriction is blocking direct access."}{" "}
+                      Please download your settings archive from{" "}
+                      <a
+                        href="https://www.linkedin.com/psettings/member-data"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#3b82f6] font-semibold hover:underline inline-flex items-center gap-0.5"
+                      >
+                        LinkedIn's Settings page
+                      </a>{" "}
+                      and import it below.
+                    </span>
+                  )}
+                </div>
 
                 <div className="flex flex-col items-center gap-3 w-full mb-6">
                   <label
@@ -472,7 +553,7 @@ function OnboardingInner() {
                     onClick={handleBackToInput}
                     className="flex-1 h-10 border border-[#E6E6E6] hover:bg-gray-50 text-black text-[12.5px] font-bold rounded-xl transition-colors active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5"
                   >
-                    <ArrowLeft className="w-4 h-4" /> Back
+                    <ArrowLeft className="w-4 h-4" /> Try again
                   </button>
                   <button
                     onClick={handleManualImport}

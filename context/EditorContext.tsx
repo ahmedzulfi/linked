@@ -35,6 +35,7 @@ interface EditorActions {
   resetEdits: () => void;
   clearProfile: () => void;
   useMockProfile: () => void;
+  setScrapeError: (err: string | null) => void;
 }
 
 type EditorContextValue = EditorState & EditorActions;
@@ -291,6 +292,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const useMockProfile = useCallback(async () => {
+    setScrapeError(null);
     setProfile(BLANK_PROFILE);
     setEditedProfile(BLANK_PROFILE);
     persistProfile(BLANK_PROFILE);
@@ -330,6 +332,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         resetEdits,
         clearProfile,
         useMockProfile,
+        setScrapeError,
       }}
     >
       {children}
