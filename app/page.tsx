@@ -1123,7 +1123,7 @@ export default function Index() {
                   <button 
                     onClick={() => {
                       setIsSidebarOpen(false);
-                      toast.info("Pricing modal coming soon!");
+                      router.push("/pricing");
                     }}
                     className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
                   >
@@ -1134,7 +1134,7 @@ export default function Index() {
                   <button 
                     onClick={() => {
                       setIsSidebarOpen(false);
-                      toast.info("Documentation coming soon!");
+                      router.push("/docs");
                     }}
                     className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
                   >
@@ -1145,7 +1145,7 @@ export default function Index() {
                   <button 
                     onClick={() => {
                       setIsSidebarOpen(false);
-                      toast.info("Settings panel coming soon!");
+                      router.push("/settings");
                     }}
                     className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all text-left"
                   >
