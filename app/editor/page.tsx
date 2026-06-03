@@ -151,6 +151,36 @@ function EditorInner() {
     }
   }, [searchParams]);
 
+  // If user returns from signup with scraped data but no website draft, create it now
+  useEffect(() => {
+    const isSaveIntent = document.referrer.includes("/signup") || searchParams.get("onboarding") === "true";
+    if (isSaveIntent && !websiteId && editedProfile) {
+      // @ts-ignore - useEditor has createWebsiteWithProfile but it might not be exposed, let's just trigger a manual save
+      const timer = setTimeout(() => {
+        if (!websiteId && editedProfile) {
+          fetch("/api/websites", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ templateId: selectedTemplate }),
+          }).then(res => res.json()).then(data => {
+            if (data.website) {
+              const newId = data.website.id;
+              fetch(`/api/websites/${newId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ brandName: editedProfile.name, profile: editedProfile }),
+              }).then(() => {
+                // Reload with the new ID so EditorContext picks it up
+                window.location.replace(`/editor?id=${newId}&onboarding=true`);
+              });
+            }
+          });
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [websiteId, editedProfile, searchParams, selectedTemplate]);
+
   useEffect(() => {
     if (!showOnboarding) return;
 

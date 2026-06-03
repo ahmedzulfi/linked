@@ -85,12 +85,19 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
   // Helper to create a website in the backend and assign it the profile data
   const createWebsiteWithProfile = useCallback(async (profileData: ProfileData): Promise<string> => {
-    // 1. Create a website draft
     const createRes = await fetch("/api/websites", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ templateId: selectedTemplate }),
     });
+    
+    if (createRes.status === 401) {
+      // User is not logged in. Redirect to signup to save their progress
+      window.location.href = "/signup?intent=save_scrape";
+      // We return a dummy promise that never resolves so the rest of the code doesn't crash before redirect
+      await new Promise(() => {});
+    }
+    
     const createData = await createRes.json();
     if (!createRes.ok || !createData.website) {
       throw new Error(createData.error || "Failed to create website draft");
