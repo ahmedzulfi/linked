@@ -35,17 +35,37 @@ const initialMessages: ChatMessage[] = [
   {
     id: "1",
     role: "assistant",
-    content: `Your page is ready. You can ask me to change the template, update your headline, add links, or tweak any section. What would you like to change?`,
+    content: "Your page is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or switch the template. What would you like to adjust?",
     time: "",
   },
 ];
 
 const SUGGESTIONS = [
-  "Refine Hero Headline",
-  "Condense About Description",
-  "Clarify Core Skills",
-  "Add Social Links",
+  "Make my headline more impactful",
+  "Shorten my summary",
+  "Switch to dark template",
+  "Add a GitHub link",
 ];
+
+function TypingDots() {
+  return (
+    <div className="flex items-center gap-[3px] px-1 py-0.5">
+      {[0, 1, 2].map((i) => (
+        <motion.div
+          key={i}
+          className="w-[5px] h-[5px] rounded-full bg-[#2A2A2F]/40"
+          animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
+          transition={{
+            duration: 0.9,
+            repeat: Infinity,
+            delay: i * 0.18,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function ChatPane({
   onCommand,
@@ -62,6 +82,7 @@ export default function ChatPane({
   const { websiteId } = useEditor();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = async (text?: string) => {
@@ -90,6 +111,7 @@ export default function ChatPane({
       return;
     }
 
+    setIsThinking(true);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -117,7 +139,7 @@ export default function ChatPane({
       }
 
       const lower = msg.toLowerCase();
-      if (lower.includes("change template")) {
+      if (lower.includes("change template") || lower.includes("switch template") || lower.includes("switch to")) {
         setActiveTab("grid");
       } else if (
         lower.includes("edit bio") ||
@@ -125,12 +147,17 @@ export default function ChatPane({
         lower.includes("refine hero") ||
         lower.includes("about description") ||
         lower.includes("skills") ||
-        lower.includes("social links")
+        lower.includes("social links") ||
+        lower.includes("headline") ||
+        lower.includes("summary") ||
+        lower.includes("location")
       ) {
         setActiveTab("theme");
         if (setEditorTab) {
-          if (lower.includes("social links") || lower.includes("add links")) {
+          if (lower.includes("social links") || lower.includes("add links") || lower.includes("link")) {
             setEditorTab("links");
+          } else if (lower.includes("skills")) {
+            setEditorTab("experience");
           } else {
             setEditorTab("profile");
           }
@@ -148,6 +175,8 @@ export default function ChatPane({
           time: "",
         },
       ]);
+    } finally {
+      setIsThinking(false);
     }
   };
 
@@ -155,7 +184,7 @@ export default function ChatPane({
     if (activeTab === "chat") {
       bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, activeTab]);
+  }, [messages, activeTab, isThinking]);
 
   const chatTabs = [
     {
@@ -303,6 +332,23 @@ export default function ChatPane({
                       )}
                     </motion.div>
                   ))}
+                  {isThinking && (
+                    <motion.div
+                      key="thinking"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.2 }}
+                      className="w-full flex flex-col justify-start items-start gap-2"
+                    >
+                      <div className="self-stretch inline-flex justify-start items-center gap-2">
+                        <img src="/logoicon.png" alt="Logo" className="h-6 w-auto object-contain select-none animate-pulse" />
+                      </div>
+                      <div className="bg-neutral-50 px-4 py-2.5 rounded-xl border border-zinc-100 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
+                        <TypingDots />
+                      </div>
+                    </motion.div>
+                  )}
                 </AnimatePresence>
                 <div ref={bottomRef} />
               </div>
@@ -337,6 +383,11 @@ export default function ChatPane({
                   className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-850 placeholder:text-neutral-400 h-16 outline-none"
                   placeholder="Ask Webild..."
                 />
+                {input.length > 200 && (
+                  <div className="text-[10px] text-gray-400 self-end mr-2 -mt-1 select-none">
+                    {input.length} characters
+                  </div>
+                )}
                 <div className="flex items-center justify-between px-1">
                   <button
                     onClick={() => toast.info("Attachments coming soon!")}
