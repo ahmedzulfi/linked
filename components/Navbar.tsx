@@ -4,9 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { data: session, isPending } = authClient.useSession();
 
   const handleNavClick = (sectionName: string) => {
     setMobileOpen(false);
@@ -115,21 +117,32 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Log in (Secondary style) */}
-          <Link
-            href="/login"
-            className="hidden sm:flex h-10 px-5 items-center justify-center      rounded-lg   bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap font-inter-tight"
-          >
-            Log in
-          </Link>
-
-          {/* Get started (Primary style) */}
-          <Link
-            href="/editor"
-            className="flex h-10 px-5 items-center justify-center      rounded-lg   btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
-          >
-            Get started
-          </Link>
+          {/* Auth Buttons */}
+          {isPending ? (
+            <div className="hidden sm:flex h-10 px-5 items-center justify-center rounded-lg bg-[#F3F3F3] text-black/50 text-[12px] font-medium animate-pulse w-24" />
+          ) : session ? (
+            <Link
+              href="/dashboard"
+              className="hidden sm:flex h-10 px-5 items-center justify-center rounded-lg btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
+            >
+              Go to dashboard
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="hidden sm:flex h-10 px-5 items-center justify-center rounded-lg bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out whitespace-nowrap font-inter-tight"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/editor"
+                className="flex h-10 px-5 items-center justify-center rounded-lg btn-dark text-white text-[12px] font-medium whitespace-nowrap font-inter-tight"
+              >
+                Get started
+              </Link>
+            </>
+          )}
 
           {/* Mobile menu button */}
           <button
@@ -195,20 +208,34 @@ export default function Navbar() {
             </Link>
 
             <div className="flex items-center gap-2 pt-2 border-t border-[#E6E6E6]">
-              <Link
-                href="/login"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 h-10      rounded-lg   bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out flex items-center justify-center"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/editor"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 h-10      rounded-lg   btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
-              >
-                Get started
-              </Link>
+              {isPending ? (
+                <div className="flex-1 h-10 rounded-lg bg-[#F3F3F3] animate-pulse" />
+              ) : session ? (
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex-1 h-10 rounded-lg btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
+                >
+                  Go to dashboard
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 h-10 rounded-lg bg-[#F3F3F3] text-black text-[12px] font-medium hover:bg-[#EAEAEA] active:scale-[0.97] transition-[transform,background-color] duration-150 ease-out flex items-center justify-center"
+                  >
+                    Log in
+                  </Link>
+                  <Link
+                    href="/editor"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex-1 h-10 rounded-lg btn-dark text-white text-[12px] font-medium font-inter-tight flex items-center justify-center"
+                  >
+                    Get started
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}
