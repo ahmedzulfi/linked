@@ -109,28 +109,60 @@ export async function POST(request: Request) {
       });
     }
 
-    const response = await fetch(`${process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${openrouterApiKey}`,
-        "Content-Type": "application/json",
-        "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-        "X-Title": "LinkedPage Editor",
-      },
-      body: JSON.stringify({
-        model: process.env.OPENROUTER_MODEL || "meta-llama/llama-3.1-8b-instruct:free",
-        messages: [
-          { role: "system", content: buildSystemPrompt(website.profile as ProfileData, website.templateId || "minimal-card") },
-          { role: "user", content: message }
-        ],
-        temperature: 0.7,
-        max_tokens: 800,
-      }),
-    });
+    const modelsToTry = [
+      process.env.OPENROUTER_MODEL || "openrouter/free",
+      "google/gemma-2-9b-it:free",
+      "meta-llama/llama-3.1-8b-instruct:free",
+      "qwen/qwen-2.5-72b-instruct:free",
+      "qwen/qwen-2-7b-instruct:free",
+      "meta-llama/llama-3.3-70b-instruct:free",
+      "meta-llama/llama-3.2-3b-instruct:free"
+    ];
 
-    if (!response.ok) {
-      const errText = await response.text();
-      console.error("OpenRouter API error details:", response.status, errText);
+    const uniqueModels = Array.from(new Set(modelsToTry));
+    let response: Response | null = null;
+    let lastErrorDetails = "";
+    let chosenModel = "";
+
+    for (const model of uniqueModels) {
+      try {
+        console.log(`[Chat API] Attempting OpenRouter call with model: ${model}`);
+        const res = await fetch(`${process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"}/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${openrouterApiKey}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+            "X-Title": "LinkedPage Editor",
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              { role: "system", content: buildSystemPrompt(website.profile as ProfileData, website.templateId || "minimal-card") },
+              { role: "user", content: message }
+            ],
+            temperature: 0.7,
+            max_tokens: 800,
+          }),
+        });
+
+        if (res.ok) {
+          response = res;
+          chosenModel = model;
+          break;
+        } else {
+          const errText = await res.text();
+          console.warn(`[Chat API] OpenRouter model ${model} failed with status ${res.status}:`, errText);
+          lastErrorDetails = `Model ${model} failed (${res.status}): ${errText}`;
+        }
+      } catch (err: any) {
+        console.error(`[Chat API] Error requesting model ${model}:`, err);
+        lastErrorDetails = `Model ${model} network error: ${err.message || err}`;
+      }
+    }
+
+    if (!response) {
+      console.error("[Chat API] All OpenRouter models failed. Last error details:", lastErrorDetails);
       return NextResponse.json({
         success: true,
         reply: "I'm having trouble connecting right now. Try again in a moment.",
@@ -139,6 +171,7 @@ export async function POST(request: Request) {
       });
     }
 
+    console.log(`[Chat API] OpenRouter call succeeded using model: ${chosenModel}`);
     const aiData = await response.json();
     const rawContent = aiData.choices?.[0]?.message?.content || "";
 
