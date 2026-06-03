@@ -87,6 +87,8 @@ export async function POST(request: Request) {
     const entries = zip.getEntries();
     let profileContent = "";
     let positionsContent = "";
+    let skillsContent = "";
+    let educationContent = "";
 
     for (const entry of entries) {
       const name = entry.entryName.toLowerCase();
@@ -94,6 +96,10 @@ export async function POST(request: Request) {
         profileContent = entry.getData().toString("utf8");
       } else if (name.endsWith("positions.csv")) {
         positionsContent = entry.getData().toString("utf8");
+      } else if (name.endsWith("skills.csv")) {
+        skillsContent = entry.getData().toString("utf8");
+      } else if (name.endsWith("education.csv")) {
+        educationContent = entry.getData().toString("utf8");
       }
     }
 
@@ -107,6 +113,8 @@ export async function POST(request: Request) {
     // Parse CSV files
     const profiles = parseCSV(profileContent);
     const positions = positionsContent ? parseCSV(positionsContent) : [];
+    const rawSkills = skillsContent ? parseCSV(skillsContent) : [];
+    const rawEducation = educationContent ? parseCSV(educationContent) : [];
 
     if (profiles.length === 0) {
       return NextResponse.json({ error: "Profile.csv is empty" }, { status: 400 });
@@ -129,6 +137,23 @@ export async function POST(request: Request) {
       return { title, company, duration, description, logo: "" };
     });
 
+    // Map skills
+    const skills = rawSkills
+      .map((s) => ({ name: s["Name"] || s["name"] || "" }))
+      .filter((s) => s.name.length > 0);
+
+    // Map education
+    const education = rawEducation
+      .map((edu) => {
+        const school = edu["School Name"] || edu["school"] || "University";
+        const degree = edu["Degree Name"] || edu["degree"] || "Degree";
+        const started = edu["Started On"] || "";
+        const finished = edu["Finished On"] || "Present";
+        const year = finished ? finished : started;
+        return { school, degree, year };
+      })
+      .filter((edu) => edu.school.length > 0);
+
     const parsedProfile: ProfileData = {
       ...MOCK_PROFILE,
       name: fullName,
@@ -137,7 +162,8 @@ export async function POST(request: Request) {
       location,
       avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(fullName)}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
       experience,
-      skills: MOCK_PROFILE.skills, // Default to mock skills
+      education: education.length > 0 ? education : MOCK_PROFILE.education,
+      skills: skills.length > 0 ? skills : MOCK_PROFILE.skills,
       links: [
         { label: "LinkedIn", url: "https://linkedin.com", icon: "linkedin" },
         { label: "Website", url: "#", icon: "website" },

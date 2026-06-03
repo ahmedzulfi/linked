@@ -134,6 +134,7 @@ function OnboardingInner() {
   const [url, setUrl] = useState("");
   const [zipFile, setZipFile] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
+  const [showUrlOption, setShowUrlOption] = useState(false);
   const [progress, setProgress] = useState(0);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -370,7 +371,7 @@ function OnboardingInner() {
       <main className="w-full flex items-center justify-center px-6 relative z-10">
         <div className="w-full max-w-[480px]">
           <AnimatePresence mode="wait">
-            {/* ── Step 1 — Input URL ── */}
+            {/* ── Step 1 — Upload ZIP or Scrape ── */}
             {step === "input" && (
               <motion.div
                 key="input"
@@ -378,32 +379,159 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col"
+                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col w-full max-w-[480px]"
               >
                 <h1 className="text-2xl font-bold tracking-tight text-black text-center mb-2 font-inter-tight">
-                  Paste your LinkedIn profile link to get started.
+                  Import your LinkedIn Profile
                 </h1>
                 <p className="text-[14px] text-gray-500 text-center mb-6 leading-relaxed">
-                  We'll extract your public profile contents and instantly set up your customizable web portfolio.
+                  Upload your LinkedIn data export ZIP to build a fully structured website instantly.
                 </p>
 
-                <div className="flex flex-col gap-3">
-                  <input
-                    type="text"
-                    placeholder="linkedin.com/in/username"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleStartScrape(url)}
-                    className="w-full h-11 px-4 rounded-xl bg-[#FBFBFB] border border-[#E6E6E6] focus:border-[#8DB8FF] focus:ring-1 focus:ring-[#8DB8FF] outline-none text-[14.5px] font-medium text-black transition-colors"
-                    autoFocus
-                  />
-                  <button
-                    onClick={() => handleStartScrape(url)}
-                    className="h-11 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-bold rounded-xl transition-colors active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-sm"
+                {/* ZIP Upload Section */}
+                <div className="flex flex-col gap-3 w-full mb-5">
+                  <label
+                    htmlFor="zip-upload-primary"
+                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-xl p-6 bg-[#FBFBFB]/50 cursor-pointer transition-colors duration-150 relative text-center"
                   >
-                    Generate Page <ArrowRight className="w-4 h-4" />
-                  </button>
+                    <input
+                      id="zip-upload-primary"
+                      type="file"
+                      accept=".zip"
+                      onChange={handleZipFileChange}
+                      className="hidden"
+                      disabled={isImporting}
+                    />
+                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                    </svg>
+                    {zipFile ? (
+                      <div className="flex flex-col items-center gap-1">
+                        <span className="text-[13px] font-semibold text-black truncate max-w-[280px]">
+                          {zipFile.name}
+                        </span>
+                        <span className="text-[11px] text-gray-500 font-medium">
+                          {(zipFile.size / (1024 * 1024)).toFixed(2)} MB
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center gap-0.5">
+                        <span className="text-[13.5px] font-semibold text-black">
+                          Upload LinkedIn data ZIP
+                        </span>
+                        <span className="text-[11px] text-gray-400 font-medium">
+                          Click to select or drag and drop archive
+                        </span>
+                      </div>
+                    )}
+                  </label>
+
+                  {zipFile && (
+                    <button
+                      onClick={handleUploadZip}
+                      disabled={isImporting}
+                      className="h-11 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-sm disabled:opacity-50"
+                    >
+                      {isImporting ? (
+                        <span className="flex items-center gap-2">
+                          <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                          Importing Data...
+                        </span>
+                      ) : (
+                        <>Import Profile ZIP <ArrowRight className="w-4 h-4" /></>
+                      )}
+                    </button>
+                  )}
                 </div>
+
+                {/* Step-by-Step Instructions */}
+                <div className="bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl p-4 mb-6 text-left">
+                  <h3 className="text-[12.5px] font-bold text-black uppercase tracking-wider mb-2.5">
+                    How to export your profile (takes 5m)
+                  </h3>
+                  <ol className="text-[12.5px] text-gray-500 space-y-2 list-decimal pl-4 leading-relaxed">
+                    <li>
+                      Open LinkedIn's{" "}
+                      <a
+                        href="https://www.linkedin.com/psettings/member-data"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#3b82f6] font-semibold hover:underline"
+                      >
+                        Data Settings
+                      </a>.
+                    </li>
+                    <li>
+                      Select <strong>"Something in particular"</strong> and check the <strong>"Profile"</strong> box.
+                    </li>
+                    <li>
+                      Click <strong>"Request archive"</strong> and enter password.
+                    </li>
+                    <li>
+                      Download the ZIP from email and upload it above.
+                    </li>
+                  </ol>
+                </div>
+
+                <div className="h-px bg-[#E6E6E6] w-full mb-5" />
+
+                {/* Experimental URL Scraper Toggle */}
+                <div className="flex flex-col w-full mb-3">
+                  <button
+                    onClick={() => setShowUrlOption(!showUrlOption)}
+                    className="text-xs font-semibold text-gray-400 hover:text-black flex items-center justify-center gap-1.5 transition-colors self-center bg-transparent border-none cursor-pointer"
+                  >
+                    <span>{showUrlOption ? "Hide experimental options" : "Use experimental URL scraper"}</span>
+                    <svg
+                      className={`w-3.5 h-3.5 transition-transform duration-200 ${showUrlOption ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  <AnimatePresence>
+                    {showUrlOption && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden mt-4 flex flex-col gap-3.5"
+                      >
+                        <div className="flex flex-col gap-2.5">
+                          <input
+                            type="text"
+                            placeholder="linkedin.com/in/username"
+                            value={url}
+                            onChange={(e) => setUrl(e.target.value)}
+                            onKeyDown={(e) => e.key === "Enter" && handleStartScrape(url)}
+                            className="w-full h-11 px-4 rounded-xl bg-[#FBFBFB] border border-[#E6E6E6] focus:border-[#8DB8FF] focus:ring-1 focus:ring-[#8DB8FF] outline-none text-[14px] font-medium text-black transition-colors"
+                          />
+                          <button
+                            onClick={() => handleStartScrape(url)}
+                            className="h-10 bg-neutral-100 hover:bg-neutral-200 text-black text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 border border-[#E6E6E6]"
+                          >
+                            Scrape Profile URL
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-gray-400 leading-relaxed text-center">
+                          ⚠️ LinkedIn's security blocking is highly aggressive. URL scraping frequently encounters security checkpoints (authwalls). ZIP upload is recommended.
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Instant Skip / Demo Data */}
+                <button
+                  onClick={handleManualImport}
+                  className="mt-2 text-xs font-semibold text-gray-400 hover:text-black self-center transition-colors bg-transparent border-none cursor-pointer"
+                >
+                  Skip & try with default template data →
+                </button>
               </motion.div>
             )}
 
