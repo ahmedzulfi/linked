@@ -38,7 +38,7 @@ export default function ReportBugPage() {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject.trim() || !description.trim()) {
       toast.error("Please fill out both the subject and description fields.");
@@ -47,19 +47,35 @@ export default function ReportBugPage() {
     setIsSubmitting(true);
     const toastId = toast.loading("Submitting bug report...");
 
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/report-bug", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subject, description, severity }),
+      });
+      const data = await res.json();
       toast.dismiss(toastId);
-      setIsSubmitting(false);
-      toast.success("Thank you! Your bug report has been logged and our engineering team will look into it.");
+
+      if (!res.ok) {
+        toast.error(data.error || "Failed to submit report.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      toast.success("Bug report submitted! Our team will investigate.");
       setSubject("");
       setDescription("");
       setSeverity("low");
-      
-      // Redirect back to dashboard after brief delay
+
       setTimeout(() => {
         router.push(userName ? "/dashboard" : "/");
       }, 1000);
-    }, 1200);
+    } catch {
+      toast.dismiss(toastId);
+      toast.error("Connection error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
