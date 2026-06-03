@@ -379,12 +379,12 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col w-full max-w-[480px]"
+                className="bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 flex flex-col w-full max-w-[480px] select-none"
               >
-                <h1 className="text-2xl font-bold tracking-tight text-black text-center mb-2 font-inter-tight">
+                <h1 className="text-2xl font-semibold tracking-tight text-[#2A2A2F] text-center mb-2 font-inter">
                   Import your LinkedIn Profile
                 </h1>
-                <p className="text-[14px] text-gray-500 text-center mb-6 leading-relaxed">
+                <p className="text-[14px] text-gray-500 text-center mb-6 leading-relaxed font-inter">
                   Upload your LinkedIn data export ZIP to build a fully structured website instantly.
                 </p>
 
@@ -392,7 +392,7 @@ function OnboardingInner() {
                 <div className="flex flex-col gap-3 w-full mb-5">
                   <label
                     htmlFor="zip-upload-primary"
-                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-xl p-6 bg-[#FBFBFB]/50 cursor-pointer transition-colors duration-150 relative text-center"
+                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] active:scale-[0.98] relative text-center group"
                   >
                     <input
                       id="zip-upload-primary"
@@ -402,12 +402,12 @@ function OnboardingInner() {
                       className="hidden"
                       disabled={isImporting}
                     />
-                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 text-gray-400 mb-2 transition-transform duration-200 group-hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
                     </svg>
                     {zipFile ? (
                       <div className="flex flex-col items-center gap-1">
-                        <span className="text-[13px] font-semibold text-black truncate max-w-[280px]">
+                        <span className="text-[13px] font-semibold text-[#2A2A2F] truncate max-w-[280px]">
                           {zipFile.name}
                         </span>
                         <span className="text-[11px] text-gray-500 font-medium">
@@ -416,7 +416,7 @@ function OnboardingInner() {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-[13.5px] font-semibold text-black">
+                        <span className="text-[13.5px] font-semibold text-[#2A2A2F]">
                           Upload LinkedIn data ZIP
                         </span>
                         <span className="text-[11px] text-gray-400 font-medium">
@@ -430,7 +430,7 @@ function OnboardingInner() {
                     <button
                       onClick={handleUploadZip}
                       disabled={isImporting}
-                      className="h-11 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-sm disabled:opacity-50"
+                      className="h-10 w-full bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] disabled:opacity-50 cursor-pointer"
                     >
                       {isImporting ? (
                         <span className="flex items-center gap-2">
@@ -445,41 +445,34 @@ function OnboardingInner() {
                 </div>
 
                 {/* Step-by-Step Instructions */}
-                <div className="bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl p-4 mb-6 text-left">
-                  <h3 className="text-[12.5px] font-bold text-black uppercase tracking-wider mb-2.5">
+                <div className="bg-[#FBFBFB]/40 border border-[#E6E6E6]/60 rounded-2xl p-5 mb-6 text-left">
+                  <h3 className="text-[11px] font-bold text-[#2A2A2F] uppercase tracking-wider mb-3.5">
                     How to export your profile (takes 5m)
                   </h3>
-                  <ol className="text-[12.5px] text-gray-500 space-y-2 list-decimal pl-4 leading-relaxed">
-                    <li>
-                      Open LinkedIn's{" "}
-                      <a
-                        href="https://www.linkedin.com/psettings/member-data"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#3b82f6] font-semibold hover:underline"
-                      >
-                        Data Settings
-                      </a>.
-                    </li>
-                    <li>
-                      Select <strong>"Something in particular"</strong> and check the <strong>"Profile"</strong> box.
-                    </li>
-                    <li>
-                      Click <strong>"Request archive"</strong> and enter password.
-                    </li>
-                    <li>
-                      Download the ZIP from email and upload it above.
-                    </li>
-                  </ol>
+                  <div className="space-y-3">
+                    {[
+                      { num: 1, text: <>Open LinkedIn's <a href="https://www.linkedin.com/psettings/member-data" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] font-semibold hover:underline">Data Settings</a>.</> },
+                      { num: 2, text: <>Select <strong>"Something in particular"</strong> and check the <strong>"Profile"</strong> box.</> },
+                      { num: 3, text: <>Click <strong>"Request archive"</strong> and enter password.</> },
+                      { num: 4, text: <>Download the ZIP from email and upload it above.</> }
+                    ].map((item) => (
+                      <div key={item.num} className="flex gap-3 text-[12.5px] text-gray-500">
+                        <span className="w-5 h-5 rounded-full bg-[#8DB8FF]/15 text-[#3b82f6] text-[10px] font-bold flex items-center justify-center shrink-0 select-none">
+                          {item.num}
+                        </span>
+                        <span className="leading-normal">{item.text}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="h-px bg-[#E6E6E6] w-full mb-5" />
+                <div className="h-[1px] bg-[#E6E6E6]/60 w-full mb-5" />
 
                 {/* Experimental URL Scraper Toggle */}
                 <div className="flex flex-col w-full mb-3">
                   <button
                     onClick={() => setShowUrlOption(!showUrlOption)}
-                    className="text-xs font-semibold text-gray-400 hover:text-black flex items-center justify-center gap-1.5 transition-colors self-center bg-transparent border-none cursor-pointer"
+                    className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] flex items-center justify-center gap-1.5 transition-[color,transform] duration-150 active:scale-[0.95] self-center bg-transparent border-none cursor-pointer select-none"
                   >
                     <span>{showUrlOption ? "Hide experimental options" : "Use experimental URL scraper"}</span>
                     <svg
@@ -508,16 +501,16 @@ function OnboardingInner() {
                             value={url}
                             onChange={(e) => setUrl(e.target.value)}
                             onKeyDown={(e) => e.key === "Enter" && handleStartScrape(url)}
-                            className="w-full h-11 px-4 rounded-xl bg-[#FBFBFB] border border-[#E6E6E6] focus:border-[#8DB8FF] focus:ring-1 focus:ring-[#8DB8FF] outline-none text-[14px] font-medium text-black transition-colors"
+                            className="ds-input"
                           />
                           <button
                             onClick={() => handleStartScrape(url)}
-                            className="h-10 bg-neutral-100 hover:bg-neutral-200 text-black text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 border border-[#E6E6E6]"
+                            className="h-10 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[12px] font-medium rounded-[13px] border border-[#E6E6E6] transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer"
                           >
                             Scrape Profile URL
                           </button>
                         </div>
-                        <p className="text-[11px] text-gray-400 leading-relaxed text-center">
+                        <p className="text-[11px] text-gray-400 leading-relaxed text-center font-inter">
                           ⚠️ LinkedIn's security blocking is highly aggressive. URL scraping frequently encounters security checkpoints (authwalls). ZIP upload is recommended.
                         </p>
                       </motion.div>
@@ -528,7 +521,7 @@ function OnboardingInner() {
                 {/* Instant Skip / Demo Data */}
                 <button
                   onClick={handleManualImport}
-                  className="mt-2 text-xs font-semibold text-gray-400 hover:text-black self-center transition-colors bg-transparent border-none cursor-pointer"
+                  className="mt-2 text-xs font-medium text-gray-400 hover:text-[#2A2A2F] self-center transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
                 >
                   Skip & try with default template data →
                 </button>
@@ -543,13 +536,13 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg overflow-hidden flex flex-col p-8"
+                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg overflow-hidden flex flex-col p-8 select-none"
               >
                 <div className="cn-card-header group/card-header @container/card-header grid auto-rows-min items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] mb-6">
-                  <div className="cn-card-title cn-font-heading leading-none font-semibold text-lg text-black">
+                  <div className="cn-card-title cn-font-heading leading-none font-semibold text-lg text-black font-inter">
                     Generating your portfolio
                   </div>
-                  <div className="cn-card-description text-sm text-gray-500 mt-1">
+                  <div className="cn-card-description text-sm text-gray-500 mt-1 font-inter">
                     Building your professional website from LinkedIn
                   </div>
                 </div>
@@ -587,7 +580,7 @@ function OnboardingInner() {
                       const showSeparator = idx < arr.length - 1;
 
                       return (
-                        <li key={idx} className="grid items-center text-primary mt-1 gap-x-0">
+                        <li key={idx} className="grid items-center text-[#2A2A2F] mt-1 gap-x-0">
                           <div
                             className="timeline-dot col-start-2 col-end-3 row-start-1 row-end-1 flex items-center justify-center rounded-full border-none mb-1.25"
                             role="status"
@@ -612,7 +605,7 @@ function OnboardingInner() {
                             )}
                             {status === "loading" && (
                               <svg
-                                className="lucide lucide-loader text-primary size-5 animate-spin"
+                                className="lucide lucide-loader text-[#2A2A2F] size-5 animate-spin"
                                 height="20"
                                 width="20"
                                 aria-hidden="true"
@@ -668,11 +661,11 @@ function OnboardingInner() {
                           )}
 
                           <p
-                            className="row-start-1 row-end-1 line-clamp-1 max-w-full truncate col-start-3 col-end-4 mr-auto text-left text-base font-medium ml-4 flex items-center gap-1.5"
+                            className="row-start-1 row-end-1 line-clamp-1 max-w-full truncate col-start-3 col-end-4 mr-auto text-left text-base ml-4 flex items-center gap-1.5"
                             aria-level={3}
                             role="heading"
                           >
-                            <span className={status === "upcoming" ? "text-gray-400" : "text-black"}>
+                            <span className={`font-medium ${status === "upcoming" ? "text-gray-400" : "text-[#2A2A2F] font-semibold font-inter"}`}>
                               {s.title}
                             </span>
                             {status === "loading" && (
@@ -688,7 +681,7 @@ function OnboardingInner() {
                                 >
                                   <circle cx="12" cy="12" r="6" />
                                 </svg>
-                                <span className="text-gray-400 text-xs font-normal">
+                                <span className="text-gray-400 text-xs font-normal font-inter">
                                   Running...
                                 </span>
                               </>
@@ -696,7 +689,7 @@ function OnboardingInner() {
                           </p>
 
                           <div className="text-card-foreground row-start-2 row-end-2 pb-8 col-start-3 col-end-4 mr-auto text-left ml-4">
-                            <span className="text-gray-400 text-sm">
+                            <span className="text-gray-400 text-sm font-inter">
                               {s.description}
                             </span>
                           </div>
@@ -716,14 +709,14 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/95 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col"
+                className="bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 flex flex-col w-full max-w-[480px] select-none"
               >
-                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-5 shadow-sm border border-[#E6E6E6]/40">
                   <AlertCircle className="w-5 h-5 text-[#E45A5A]" />
                 </div>
 
-                <h2 className="text-xl font-bold text-black mb-2 font-inter-tight">Could not fetch public profile.</h2>
-                <div className="text-[14px] text-gray-500 leading-relaxed mb-5">
+                <h2 className="text-xl font-semibold text-[#2A2A2F] mb-2 font-inter">Could not fetch public profile</h2>
+                <div className="text-[13.5px] text-gray-500 leading-relaxed mb-6 font-inter">
                   {isAuthwallError ? (
                     <span>
                       LinkedIn couldn't be read publicly. This is normal — upload your data export instead. You can download it from{" "}
@@ -756,7 +749,7 @@ function OnboardingInner() {
                 <div className="flex flex-col items-center gap-3 w-full mb-6">
                   <label
                     htmlFor="zip-upload"
-                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-xl p-6 bg-[#FBFBFB] cursor-pointer transition-colors duration-150 relative text-center"
+                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] active:scale-[0.98] relative text-center group"
                   >
                     <input
                       id="zip-upload"
@@ -766,12 +759,12 @@ function OnboardingInner() {
                       className="hidden"
                       disabled={isImporting}
                     />
-                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 text-gray-400 mb-2 transition-transform duration-200 group-hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
                     </svg>
                     {zipFile ? (
                       <div className="flex flex-col items-center gap-1">
-                        <span className="text-[13px] font-semibold text-black truncate max-w-[280px]">
+                        <span className="text-[13px] font-semibold text-[#2A2A2F] truncate max-w-[280px]">
                           {zipFile.name}
                         </span>
                         <span className="text-[11px] text-gray-500 font-medium">
@@ -780,10 +773,10 @@ function OnboardingInner() {
                       </div>
                     ) : (
                       <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-[13px] font-semibold text-black">
+                        <span className="text-[13.5px] font-semibold text-[#2A2A2F]">
                           Upload LinkedIn data export ZIP
                         </span>
-                        <span className="text-[11px] text-gray-500 font-medium">
+                        <span className="text-[11px] text-gray-400 font-medium">
                           Should contain Profile.csv and Positions.csv
                         </span>
                       </div>
@@ -794,9 +787,16 @@ function OnboardingInner() {
                     <button
                       onClick={handleUploadZip}
                       disabled={isImporting}
-                      className="w-full h-10 bg-[#3b82f6] hover:bg-[#2563eb] text-white text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] disabled:opacity-50"
+                      className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] disabled:opacity-50 cursor-pointer"
                     >
-                      {isImporting ? "Processing..." : "Import Profile ZIP"}
+                      {isImporting ? (
+                        <span className="flex items-center gap-2">
+                          <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
+                          Processing...
+                        </span>
+                      ) : (
+                        "Import Profile ZIP"
+                      )}
                     </button>
                   )}
                 </div>
@@ -804,15 +804,15 @@ function OnboardingInner() {
                 <div className="flex gap-3 w-full">
                   <button
                     onClick={handleBackToInput}
-                    className="flex-1 h-10 border border-[#E6E6E6] hover:bg-gray-50 text-black text-[12.5px] font-bold rounded-xl transition-colors active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5"
+                    className="flex-1 h-10 bg-white border border-[#E6E6E6] hover:bg-[#FBFBFB] text-black text-[12px] font-medium rounded-[13px] transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    <ArrowLeft className="w-4 h-4" /> Try again
+                    <ArrowLeft className="w-3.5 h-3.5" /> Try again
                   </button>
                   <button
                     onClick={handleManualImport}
-                    className="flex-1 h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12.5px] font-bold rounded-xl transition-colors active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-sm"
+                    className="flex-1 h-10 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[12px] font-medium rounded-[13px] border border-[#E6E6E6]/60 transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer"
                   >
-                    Load Default Data <ArrowRight className="w-4 h-4" />
+                    Load Default Data <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </motion.div>
