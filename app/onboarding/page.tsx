@@ -539,13 +539,21 @@ function OnboardingInner() {
                   </AnimatePresence>
                 </div>
 
-                {/* Instant Skip / Demo Data */}
-                <button
-                  onClick={handleManualImport}
-                  className="mt-2 text-xs font-medium text-gray-400 hover:text-[#2A2A2F] self-center transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
-                >
-                  Skip & try with default template data →
-                </button>
+                {/* Instant Skip / Demo Data & Go Back */}
+                <div className="flex flex-col gap-2 items-center mt-3 w-full">
+                  <button
+                    onClick={handleManualImport}
+                    className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
+                  >
+                    Skip & try with default template data →
+                  </button>
+                  <button
+                    onClick={() => router.push("/")}
+                    className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] flex items-center gap-1 transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
+                  >
+                    <ArrowLeft className="w-3 h-3" /> Back to Home
+                  </button>
+                </div>
               </motion.div>
             )}
 
@@ -836,6 +844,13 @@ function OnboardingInner() {
                     Load Default Data <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
+
+                <button
+                  onClick={() => router.push("/")}
+                  className="mt-4 text-xs font-medium text-gray-400 hover:text-[#2A2A2F] flex items-center gap-1 transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer self-center"
+                >
+                  <ArrowLeft className="w-3 h-3" /> Back to Home
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
