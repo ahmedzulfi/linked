@@ -117,3 +117,25 @@ export const websiteRelations = relations(website, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+// Bug reports submitted via /report-bug page
+export const bugReport = pgTable("bug_report", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => user.id, { onDelete: "set null" }),
+  userEmail: text("user_email"),
+  subject: text("subject").notNull(),
+  description: text("description").notNull(),
+  severity: text("severity").notNull().default("low"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Upgrade-interest log — records when a user clicks "Upgrade to Pro"
+export const upgradeRequest = pgTable("upgrade_request", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => user.id, { onDelete: "cascade" }),
+  userEmail: text("user_email"),
+  plan: text("plan").notNull().default("pro"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+

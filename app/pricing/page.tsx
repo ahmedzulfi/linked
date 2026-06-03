@@ -38,8 +38,39 @@ export default function PricingPage() {
     setPriceText(dynamicPrice);
   }, []);
 
-  const handlePurchase = () => {
-    toast.success("Purchasing flow is coming soon! You have been granted temporary pro privileges.");
+  const [isUpgrading, setIsUpgrading] = useState(false);
+
+  const handlePurchase = async () => {
+    setIsUpgrading(true);
+    const toastId = toast.loading("Registering upgrade intent...");
+    try {
+      const res = await fetch("/api/upgrade", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: "pro" }),
+      });
+      const data = await res.json();
+      toast.dismiss(toastId);
+
+      if (res.ok) {
+        toast.success(
+          "Upgrade request logged! You'll receive an email to complete payment."
+        );
+      } else {
+        // Not logged in — redirect to login first
+        if (res.status === 401) {
+          toast.info("Please log in to upgrade your account.");
+          router.push("/login");
+        } else {
+          toast.error(data.error || "Something went wrong. Please try again.");
+        }
+      }
+    } catch {
+      toast.dismiss(toastId);
+      toast.error("Connection error. Please try again.");
+    } finally {
+      setIsUpgrading(false);
+    }
   };
 
   return (
@@ -240,9 +271,10 @@ export default function PricingPage() {
               <div className="mt-8">
                 <button
                   onClick={handlePurchase}
-                  className="w-full h-11 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform shadow-md"
+                  disabled={isUpgrading}
+                  className="w-full h-11 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform shadow-md disabled:opacity-60"
                 >
-                  Upgrade to Pro
+                  {isUpgrading ? "Processing..." : "Upgrade to Pro"}
                 </button>
               </div>
             </motion.div>
