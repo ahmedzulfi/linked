@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getWebsiteBySubdomain, getWebsiteByDomain } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
   try {
-    const slug = params.slug;
+    const { slug } = await params;
     let website = await getWebsiteBySubdomain(slug);
 
     if (!website) {

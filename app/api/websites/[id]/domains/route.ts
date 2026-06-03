@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getWebsiteByDomain } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = await getWebsiteById(params.id);
+    const { id } = await params;
+    const website = await getWebsiteById(id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -24,14 +25,15 @@ export async function GET(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = await getWebsiteById(params.id);
+    const { id } = await params;
+    const website = await getWebsiteById(id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -64,7 +66,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     };
 
     const updatedDomains = [...website.customDomains, newDomain];
-    await updateWebsite(params.id, { customDomains: updatedDomains });
+    await updateWebsite(id, { customDomains: updatedDomains });
 
     return NextResponse.json({ success: true, domain: newDomain });
   } catch (e: any) {

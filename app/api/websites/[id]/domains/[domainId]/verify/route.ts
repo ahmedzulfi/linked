@@ -8,7 +8,7 @@ const resolveA = promisify(dns.resolve4);
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string; domainId: string } }
+  { params }: { params: Promise<{ id: string; domainId: string }> }
 ) {
   try {
     const user = await getAuthenticatedUser();
@@ -16,7 +16,8 @@ export async function POST(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const website = await getWebsiteById(params.id);
+    const { id, domainId } = await params;
+    const website = await getWebsiteById(id);
     if (!website) {
       return NextResponse.json({ error: "Website not found" }, { status: 404 });
     }
@@ -25,7 +26,7 @@ export async function POST(
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    const domainIndex = website.customDomains.findIndex((d) => d.id === params.domainId);
+    const domainIndex = website.customDomains.findIndex((d) => d.id === domainId);
     if (domainIndex === -1) {
       return NextResponse.json({ error: "Domain connection not found" }, { status: 404 });
     }
@@ -51,7 +52,7 @@ export async function POST(
         ...domain,
         status: "active",
       };
-      await updateWebsite(params.id, { customDomains: nextDomains });
+      await updateWebsite(id, { customDomains: nextDomains });
     }
 
     return NextResponse.json({ success: true, verified });
