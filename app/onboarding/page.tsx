@@ -407,7 +407,7 @@ function OnboardingInner() {
               </motion.div>
             )}
 
-            {/* ── Step 2 — Chat-style loading ── */}
+            {/* ── Step 2 — Timeline-style loading ── */}
             {step === "loading" && (
               <motion.div
                 key="loading"
@@ -415,42 +415,167 @@ function OnboardingInner() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -8 }}
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden flex flex-col"
+                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg overflow-hidden flex flex-col p-8"
               >
-                {/* Header */}
-                <div className="flex items-center gap-3 px-5 py-4 border-b border-[#F3F3F5]">
-                  <AIAvatar size="md" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-semibold text-black">Webild AI</p>
-                    <p className="text-[11px] text-[#888] font-medium">Building your page</p>
+                <div className="cn-card-header group/card-header @container/card-header grid auto-rows-min items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] mb-6">
+                  <div className="cn-card-title cn-font-heading leading-none font-semibold text-lg text-black">
+                    Generating your portfolio
                   </div>
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#3b82f6]">
-                    <motion.div
-                      className="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                    {progress}%
+                  <div className="cn-card-description text-sm text-gray-500 mt-1">
+                    Building your professional website from LinkedIn
                   </div>
                 </div>
 
-                {/* Chat messages area */}
-                <div className="px-4 py-4 flex flex-col gap-3 min-h-[200px] max-h-[260px] overflow-y-auto scrollbar-hide">
-                  {chatMessages.map((msg, i) => (
-                    <ChatBubble key={msg.id} message={msg} index={i} />
-                  ))}
-                  <div ref={chatEndRef} />
-                </div>
+                <div className="cn-card-content space-y-4 text-sm">
+                  <ul className="grid [&>li]:grid-cols-[0_min-content_1fr]">
+                    {[
+                      {
+                        title: "Reading LinkedIn Profile",
+                        description: "Connecting to LinkedIn and fetching public details",
+                      },
+                      {
+                        title: "Parsing experience & skills",
+                        description: "Analyzing job roles, descriptions, and projects",
+                      },
+                      {
+                        title: "Finalizing theme & style",
+                        description: "Selecting layout templates, color schemes, and typography",
+                      },
+                      {
+                        title: "Building page layout",
+                        description: "Assembling live components and completing setup",
+                      },
+                    ].map((s, idx, arr) => {
+                      const getStepStatus = (index: number) => {
+                        if (websiteId) return "done";
+                        const msg = chatMessages[index];
+                        if (!msg) return "upcoming";
+                        if (msg.state === "done") return "done";
+                        if (msg.state === "typing") return "loading";
+                        return "upcoming";
+                      };
 
-                {/* Progress bar */}
-                <div className="px-5 pb-5 pt-2">
-                  <div className="w-full h-[3px] bg-[#F3F3F3] rounded-full overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-[#3b82f6] to-[#8DB8FF] rounded-full"
-                      style={{ width: `${progress}%` }}
-                      transition={{ duration: 0.3, ease: "linear" }}
-                    />
-                  </div>
+                      const status = getStepStatus(idx);
+                      const showSeparator = idx < arr.length - 1;
+
+                      return (
+                        <li key={idx} className="grid items-center text-primary mt-1 gap-x-0">
+                          <div
+                            className="timeline-dot col-start-2 col-end-3 row-start-1 row-end-1 flex items-center justify-center rounded-full border-none mb-1.25"
+                            role="status"
+                          >
+                            {status === "done" && (
+                              <svg
+                                className="lucide lucide-circle-check text-[#369762] size-5"
+                                height="20"
+                                width="20"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="m9 12 2 2 4-4" />
+                              </svg>
+                            )}
+                            {status === "loading" && (
+                              <svg
+                                className="lucide lucide-loader text-primary size-5 animate-spin"
+                                height="20"
+                                width="20"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path d="M12 2v4" />
+                                <path d="m16.2 7.8 2.9-2.9" />
+                                <path d="M18 12h4" />
+                                <path d="m16.2 16.2 2.9 2.9" />
+                                <path d="M12 18v4" />
+                                <path d="m4.9 19.1 2.9-2.9" />
+                                <path d="M2 12h4" />
+                                <path d="m4.9 4.9 2.9 2.9" />
+                              </svg>
+                            )}
+                            {status === "upcoming" && (
+                              <svg
+                                className="lucide lucide-circle text-gray-300 size-4 mt-0.5"
+                                height="16"
+                                width="16"
+                                aria-hidden="true"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                              </svg>
+                            )}
+                          </div>
+
+                          {showSeparator && (
+                            <hr
+                              className={`col-start-2 col-end-3 row-start-2 row-end-2 mx-auto flex h-full w-0.5 justify-center rounded-full min-h-10 border-none ${
+                                status === "loading"
+                                  ? "bg-[repeating-linear-gradient(0deg,#E6E6E6,#E6E6E6_5px,#FFFFFF_6px,#FFFFFF_10px)]"
+                                  : status === "done"
+                                  ? "bg-[#369762]"
+                                  : "bg-[#E6E6E6]"
+                              }`}
+                              aria-orientation="vertical"
+                              role="separator"
+                            />
+                          )}
+
+                          <p
+                            className="row-start-1 row-end-1 line-clamp-1 max-w-full truncate col-start-3 col-end-4 mr-auto text-left text-base font-medium ml-4 flex items-center gap-1.5"
+                            aria-level={3}
+                            role="heading"
+                          >
+                            <span className={status === "upcoming" ? "text-gray-400" : "text-black"}>
+                              {s.title}
+                            </span>
+                            {status === "loading" && (
+                              <>
+                                <svg
+                                  className="lucide lucide-dot text-[#8DB8FF] size-3 animate-ping"
+                                  height="12"
+                                  width="12"
+                                  aria-hidden="true"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <circle cx="12" cy="12" r="6" />
+                                </svg>
+                                <span className="text-gray-400 text-xs font-normal">
+                                  Running...
+                                </span>
+                              </>
+                            )}
+                          </p>
+
+                          <div className="text-card-foreground row-start-2 row-end-2 pb-8 col-start-3 col-end-4 mr-auto text-left ml-4">
+                            <span className="text-gray-400 text-sm">
+                              {s.description}
+                            </span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               </motion.div>
             )}
