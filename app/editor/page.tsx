@@ -17,6 +17,8 @@ import {
   Loader2,
   Smartphone,
   Monitor,
+  Mic,
+  ArrowUp,
 } from "lucide-react";
 import ProfilePreview from "./components/ProfilePreview";
 import WizardAnimations from "@/components/WizardAnimations";
@@ -72,6 +74,13 @@ const navItems: NavItem[] = [
   },
 ];
 
+const SUGGESTIONS = [
+  "Make my headline more impactful",
+  "Shorten my summary",
+  "Switch to Julian Mercer style",
+  "Add a new project named Finance App",
+];
+
 function EditorInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -94,7 +103,7 @@ function EditorInner() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
-  // Onboarding wizard steps (2 to 8)
+  // Onboarding wizard steps (2 to 7, then 9 for free-form editor mode)
   const [currentStep, setCurrentStep] = useState<number>(2);
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
   const [publishing, setPublishing] = useState(false);
@@ -115,6 +124,11 @@ function EditorInner() {
   const [newProjLink, setNewProjLink] = useState("");
   const [showAddProject, setShowAddProject] = useState(false);
   const [newSkill, setNewSkill] = useState("");
+
+  // Free-form editor mode states (Step 9)
+  const [customMessages, setCustomMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -199,7 +213,7 @@ function EditorInner() {
   // Auto-scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [currentStep, showAddProject]);
+  }, [currentStep, showAddProject, customMessages, isThinking]);
 
   // Step 6: AI Optimization
   useEffect(() => {
@@ -356,6 +370,64 @@ function EditorInner() {
 
   const removeExperienceItem = (idx: number) => {
     setExperience(experience.filter((_, i) => i !== idx));
+  };
+
+  // Dispatch free-form messages to backend AI route
+  const sendChatMessage = async (text?: string) => {
+    const msg = text ?? chatInput.trim();
+    if (!msg) return;
+    if (!text) setChatInput("");
+
+    // Append user message bubble to timeline
+    const userMsg = { id: Date.now().toString(), role: "user" as const, content: msg };
+    setCustomMessages(prev => [...prev, userMsg]);
+
+    if (!websiteId) {
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: "No active site loaded. Please select a website from the dashboard first." }
+      ]);
+      return;
+    }
+
+    setIsThinking(true);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, websiteId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to get AI reply");
+      }
+
+      // Append assistant text answer
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 2).toString(), role: "assistant" as const, content: data.reply }
+      ]);
+
+      if (data.template) {
+        selectTemplate(data.template);
+      }
+
+      if (data.profileUpdates) {
+        for (const [k, v] of Object.entries(data.profileUpdates)) {
+          updateField(k as any, v as any);
+        }
+      }
+
+      // Reload website details to sync latest changes to local context and preview
+      await loadWebsite(websiteId);
+    } catch (err: any) {
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 3).toString(), role: "assistant" as const, content: `Error: ${err.message || "Failed to parse AI response."}` }
+      ]);
+    } finally {
+      setIsThinking(false);
+    }
   };
 
   // Preview click handler to map sections to wizard steps
@@ -668,17 +740,72 @@ function EditorInner() {
               </div>
             )}
 
-            {/* Step 8 (Publish configuration) */}
-            {currentStep >= 8 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+            {/* Free-form chat transition separator & timeline (Step 9) */}
+            {currentStep === 9 && (
+              <>
+                <div className="flex items-center gap-2 py-4 select-none">
+                  <div className="h-px bg-neutral-100 flex-1" />
+                  <span className="text-[10.5px] font-bold text-neutral-400 uppercase tracking-widest font-mono">Free-Form Chat Editor</span>
+                  <div className="h-px bg-neutral-100 flex-1" />
                 </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Almost complete! Let's choose your custom subdomain link slug to publish your site live.
+
+                {/* Setup complete assistant message */}
+                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2 select-none">
+                    <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                    <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                  </div>
+                  <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
+                    Setup complete! Your website is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or swap templates. What would you like to adjust?
+                  </div>
                 </div>
-              </div>
+
+                {/* Custom chat history messages */}
+                {customMessages.map((msg) => (
+                  <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                    {msg.role === "user" ? (
+                      <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                        <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                          <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                            {msg.content}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                        <div className="flex items-center gap-2 select-none">
+                          <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                          <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                        </div>
+                        <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal whitespace-pre-wrap">
+                          {msg.content}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {/* Thinking / Dots loader */}
+                {isThinking && (
+                  <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
+                    <div className="flex items-center gap-2 select-none">
+                      <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                      <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                    </div>
+                    <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
+                      <div className="flex items-center gap-[3px] px-1 py-0.5">
+                        {[0, 1, 2].map((i) => (
+                          <div
+                            key={i}
+                            className="w-[5px] h-[5px] rounded-full bg-[#2A2A2F]/40 animate-bounce"
+                            style={{ animationDelay: `${i * 0.18}s` }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
             )}
 
             {/* DYNAMIC FORMS */}
@@ -916,63 +1043,14 @@ function EditorInner() {
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
-                      onClick={handleNextStep}
+                      onClick={() => {
+                        // Confirm theme and transition straight to free-form chat (step 9)
+                        setCurrentStep(9);
+                        toast.success("Theme confirmed and setup complete!");
+                      }}
                       className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
                     >
-                      Confirm Theme <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 8 Form: Subdomain configurations */}
-              {currentStep === 8 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Slug Address</span>
-                  
-                  <div className="flex items-center w-full bg-white border border-neutral-200 rounded-xl px-2.5 py-1.5 focus-within:border-blue-400">
-                    <input
-                      type="text"
-                      value={subdomain}
-                      onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
-                      className="flex-1 text-xs bg-transparent outline-none font-medium font-mono text-neutral-800"
-                      placeholder="name"
-                    />
-                    <span className="text-xs text-neutral-400 font-mono font-medium ml-1">.linkedpage.io</span>
-                  </div>
-
-                  <div className="min-h-4 text-right">
-                    {checkingSubdomain ? (
-                      <span className="text-[9px] text-neutral-400 font-mono">Checking availability...</span>
-                    ) : isSubdomainAvailable === true ? (
-                      <span className="text-[9px] text-emerald-600 font-bold flex items-center justify-end gap-0.5 font-mono">
-                        <Check className="w-3 h-3" /> Available!
-                      </span>
-                    ) : isSubdomainAvailable === false ? (
-                      <span className="text-[9px] text-red-500 font-bold flex items-center justify-end gap-0.5 font-mono">
-                        <AlertCircle className="w-3 h-3" /> Taken!
-                      </span>
-                    ) : null}
-                  </div>
-
-                  <div className="flex justify-between items-center pt-2">
-                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </button>
-                    <button
-                      onClick={handlePublish}
-                      disabled={publishing || isSubdomainAvailable !== true}
-                      className="h-8 px-5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1.5 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {publishing ? (
-                        <>
-                          <Loader2 className="w-3 h-3 animate-spin" /> Publishing...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-3.5 h-3.5" /> Publish Live Page
-                        </>
-                      )}
+                      Confirm Theme & Finish Setup <Check className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -985,34 +1063,59 @@ function EditorInner() {
 
           {/* Bottom input composer area */}
           <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
+            {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
+            {currentStep === 9 && (
+              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => sendChatMessage(s)}
+                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-black transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Text input composer */}
-            <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] opacity-60">
+            <div className={`bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 ${currentStep === 9 ? "opacity-100" : "opacity-60"}`}>
               <textarea
-                disabled
-                className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-450 placeholder:text-neutral-400 h-16 outline-none font-inter cursor-not-allowed"
-                placeholder="Complete wizard steps above to proceed..."
+                disabled={currentStep !== 9}
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey && currentStep === 9) {
+                    e.preventDefault();
+                    sendChatMessage();
+                  }
+                }}
+                className={`w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter ${currentStep === 9 ? "text-neutral-800 placeholder:text-neutral-400 cursor-text" : "text-neutral-400 placeholder:text-neutral-400 cursor-not-allowed"}`}
+                placeholder={currentStep === 9 ? "Ask Webild to adjust copy, headline, template style..." : "Complete wizard steps above to proceed..."}
+                rows={2}
               />
               <div className="flex items-center justify-between px-1">
                 <button
-                  disabled
-                  className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center cursor-not-allowed border-none"
+                  disabled={currentStep !== 9}
+                  onClick={() => toast.info("Attachments coming soon!")}
+                  className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
                 >
                   <Plus className="w-[18px] h-[18px]" />
                 </button>
                 <div className="flex items-center gap-2">
                   <button
-                    disabled
-                    className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center cursor-not-allowed border-none"
+                    disabled={currentStep !== 9}
+                    onClick={() => toast.info("Voice input coming soon!")}
+                    className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
                   >
-                    <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                      <path d="M12 1v10m0-10a3 3 0 0 1 3 3v4a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3zm7 9v1a7 7 0 0 1-14 0v-1m14 0h-2m-12 0H5" />
-                    </svg>
+                    <Mic className="w-[18px] h-[18px]" />
                   </button>
                   <button
-                    disabled
-                    className="w-9 h-9 rounded-full bg-neutral-200 text-neutral-400 flex items-center justify-center cursor-not-allowed border-none"
+                    disabled={currentStep !== 9}
+                    onClick={() => sendChatMessage()}
+                    className={`w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none ${currentStep === 9 ? "bg-[#8DB8FF] hover:bg-[#7ca8f0] cursor-pointer active:scale-[0.93]" : "bg-neutral-200 cursor-not-allowed"}`}
                   >
-                    <ArrowRight className="w-[18px] h-[18px]" />
+                    <ArrowUp className="w-[18px] h-[18px]" />
                   </button>
                 </div>
               </div>
