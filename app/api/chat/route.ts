@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
-import { getWebsiteById, updateWebsite } from "@/lib/db";
+import { getWebsiteById, updateWebsite, getChatHistory, saveChatMessage } from "@/lib/db";
 import { ProfileData } from "@/shared/types";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -108,6 +108,36 @@ Remember:
 - Maintain professional, clean formatting for all profile edits.`;
 }
 
+export async function GET(request: Request) {
+  try {
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const websiteId = searchParams.get("websiteId");
+
+    if (!websiteId) {
+      return NextResponse.json({ error: "websiteId is required" }, { status: 400 });
+    }
+
+    const website = await getWebsiteById(websiteId);
+    if (!website) {
+      return NextResponse.json({ error: "Website not found" }, { status: 404 });
+    }
+
+    if (website.userId !== user.id) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
+    const history = await getChatHistory(websiteId);
+    return NextResponse.json({ success: true, history });
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message || "Failed to load chat history" }, { status: 500 });
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const user = await getAuthenticatedUser();
@@ -138,11 +168,19 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
+    // 1. Fetch previous chat history
+    const history = await getChatHistory(websiteId);
+
+    // 2. Save the user's message to the database
+    await saveChatMessage(websiteId, "user", message);
+
     const openrouterApiKey = process.env.OPENROUTER_API_KEY;
     if (!openrouterApiKey || openrouterApiKey === "your_key_here") {
+      const fallbackReply = "Please set your actual `OPENROUTER_API_KEY` in the `.env` file to enable AI page edits.";
+      await saveChatMessage(websiteId, "assistant", fallbackReply);
       return NextResponse.json({
         success: true,
-        reply: "Please set your actual `OPENROUTER_API_KEY` in the `.env` file to enable AI page edits.",
+        reply: fallbackReply,
         profileUpdates: {},
         template: null
       });
@@ -163,6 +201,15 @@ export async function POST(request: Request) {
     let lastErrorDetails = "";
     let chosenModel = "";
 
+    // Build the system prompt
+    const systemPromptContent = buildSystemPrompt(website.profile as ProfileData, website.templateId || "minimal-card");
+
+    // Format chat messages history for OpenRouter
+    const chatMessagesContext = history.map((msg) => ({
+      role: msg.role as "user" | "assistant",
+      content: msg.content,
+    }));
+
     for (const model of uniqueModels) {
       try {
         console.log(`[Chat API] Attempting OpenRouter call with model: ${model}`);
@@ -177,7 +224,8 @@ export async function POST(request: Request) {
           body: JSON.stringify({
             model: model,
             messages: [
-              { role: "system", content: buildSystemPrompt(website.profile as ProfileData, website.templateId || "minimal-card") },
+              { role: "system", content: systemPromptContent },
+              ...chatMessagesContext,
               { role: "user", content: message }
             ],
             temperature: 0.7,
@@ -202,9 +250,11 @@ export async function POST(request: Request) {
 
     if (!response) {
       console.error("[Chat API] All OpenRouter models failed. Last error details:", lastErrorDetails);
+      const errReply = "I'm having trouble connecting right now. Try again in a moment.";
+      // We do not save connection errors to chat history to keep history clean
       return NextResponse.json({
         success: true,
-        reply: "I'm having trouble connecting right now. Try again in a moment.",
+        reply: errReply,
         profileUpdates: {},
         template: null
       });
@@ -249,6 +299,9 @@ export async function POST(request: Request) {
         updates: { profile: {}, template: null }
       };
     }
+
+    // 3. Save assistant response to DB
+    await saveChatMessage(websiteId, "assistant", parsed.reply);
 
     // Apply updates to DB if any exist
     const hasProfileUpdates = Object.keys(parsed.updates?.profile || {}).length > 0;

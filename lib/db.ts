@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import * as schema from "./schema";
 import { ProfileData, TemplateId, MOCK_PROFILE } from "@/shared/types";
 
@@ -171,4 +171,50 @@ export async function updateWebsite(id: string, updates: Partial<Omit<Website, "
 export async function deleteWebsite(id: string): Promise<boolean> {
   await db.delete(schema.website).where(eq(schema.website.id, id));
   return true;
+}
+
+export interface ChatMessage {
+  id: string;
+  websiteId: string;
+  role: string;
+  content: string;
+  createdAt: string;
+}
+
+export async function getChatHistory(websiteId: string): Promise<ChatMessage[]> {
+  const rows = await db
+    .select()
+    .from(schema.chatMessage)
+    .where(eq(schema.chatMessage.websiteId, websiteId))
+    .orderBy(asc(schema.chatMessage.createdAt));
+
+  return rows.map((row) => ({
+    id: row.id,
+    websiteId: row.websiteId,
+    role: row.role,
+    content: row.content,
+    createdAt: row.createdAt.toISOString(),
+  }));
+}
+
+export async function saveChatMessage(
+  websiteId: string,
+  role: "user" | "assistant",
+  content: string
+): Promise<ChatMessage> {
+  const id = "msg_" + Math.random().toString(36).substring(2, 11);
+  const newMessage = {
+    id,
+    websiteId,
+    role,
+    content,
+    createdAt: new Date(),
+  };
+
+  await db.insert(schema.chatMessage).values(newMessage);
+
+  return {
+    ...newMessage,
+    createdAt: newMessage.createdAt.toISOString(),
+  };
 }

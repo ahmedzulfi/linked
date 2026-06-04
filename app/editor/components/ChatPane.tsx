@@ -85,6 +85,39 @@ export default function ChatPane({
   const [isThinking, setIsThinking] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Load chat history from backend on mount or when websiteId changes
+  useEffect(() => {
+    if (!websiteId) {
+      setMessages(initialMessages);
+      return;
+    }
+
+    const fetchHistory = async () => {
+      try {
+        const res = await fetch(`/api/chat?websiteId=${websiteId}`);
+        if (!res.ok) throw new Error("Failed to load chat history");
+        const data = await res.json();
+        if (data.success && data.history && data.history.length > 0) {
+          // Format messages for frontend
+          const formatted = data.history.map((msg: any) => ({
+            id: msg.id,
+            role: msg.role,
+            content: msg.content,
+            time: "",
+          }));
+          setMessages(formatted);
+        } else {
+          setMessages(initialMessages);
+        }
+      } catch (err) {
+        console.error("Error loading chat history:", err);
+        setMessages(initialMessages);
+      }
+    };
+
+    fetchHistory();
+  }, [websiteId]);
+
   const sendMessage = async (text?: string) => {
     const msg = text ?? input.trim();
     if (!msg) return;
