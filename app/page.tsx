@@ -274,7 +274,7 @@ function HeroSection() {
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center text-center gap-6 px-6 sm:px-8 mt-6"
+        className="relative z-10 max-w-5xl mt-20 w-full mx-auto flex flex-col items-center text-center gap-6 px-6 sm:px-8"
       >
         {/* Heading Title */}
         <motion.h1
@@ -319,7 +319,7 @@ function HeroSection() {
       {/* Floating Product Showcase Visual - 80% width, pushed down by 20% */}
       <motion.div
         variants={heroItemVariants}
-        className="w-[80%] flex justify-center z-10 mt-auto transform translate-y-[20%]"
+        className="w-[80%] flex justify-center z-10 mt-auto transform translate-y-[10%]"
       >
         <HabitlineProductShowcase />
       </motion.div>
@@ -363,7 +363,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
   };
 
   return (
-    <section id="templates" className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden mt-10">
+    <section id="templates" className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden lg:pt-32">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
