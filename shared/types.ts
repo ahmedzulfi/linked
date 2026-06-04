@@ -24,6 +24,13 @@ export interface ProfileLink {
   icon?: "linkedin" | "twitter" | "github" | "website" | "email" | "other";
 }
 
+export interface CustomBlock {
+  id: string;
+  type: string;
+  title: string;
+  html: string;
+}
+
 export interface ProfileData {
   name: string;
   headline: string;
@@ -38,9 +45,11 @@ export interface ProfileData {
   links: ProfileLink[];
   // raw LinkedIn URL that was scraped
   linkedinUrl: string;
+  // AI-generated dynamic blocks
+  blocks?: CustomBlock[];
 }
 
-export type TemplateId = "minimal-card" | "bento-grid" | "full-scroll" | "dark";
+export type TemplateId = "minimal-card" | "bento-grid" | "full-scroll" | "dark" | "ai-custom";
 
 export interface TemplateMeta {
   id: TemplateId;
@@ -83,6 +92,14 @@ export const TEMPLATES: TemplateMeta[] = [
     previewBg: "#131316",
     accent: "#8DB8FF",
     dark: true,
+  },
+  {
+    id: "ai-custom",
+    name: "AI Custom Page",
+    description: "Fully custom dynamic website composed of AI-generated Tailwind blocks.",
+    previewBg: "#FBFBFB",
+    accent: "#8DB8FF",
+    dark: false,
   },
 ];
 

@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getChatHistory, saveChatMessage } from "@/lib/db";
-import { ProfileData, TemplateId } from "@/shared/types";
+import { ProfileData, TemplateId, CustomBlock } from "@/shared/types";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { generateText, tool, stepCountIs } from "ai";
+import { generateText, tool } from "ai";
 import { z } from "zod";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -23,26 +23,155 @@ function checkRateLimit(userId: string): boolean {
   return true;
 }
 
-function buildSystemPrompt(profile: ProfileData, currentTemplate: string): string {
-  return `You are an expert AI website generator and editor assistant for "LinkedPage" (a platform that transforms LinkedIn profiles into personal websites).
-Your task is to conversationally interact with the user and execute their requested updates to their personal page.
+function createDefaultBlocks(profile: ProfileData): CustomBlock[] {
+  const blocks: CustomBlock[] = [];
+  
+  // 1. Hero Block
+  blocks.push({
+    id: "hero_" + Math.random().toString(36).substring(2, 9),
+    type: "hero",
+    title: "Hero Section",
+    html: `<div class="bg-white border border-neutral-200/85 rounded-2xl p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] w-full">
+  <img src="${profile.avatarUrl || 'https://i.pravatar.cc/300?img=47'}" class="w-24 h-24 rounded-full object-cover border border-neutral-100 flex-shrink-0" />
+  <div class="text-center md:text-left flex-1">
+    <h1 class="text-2xl font-bold text-neutral-900 font-['Inter_Tight']">${profile.name}</h1>
+    <p class="text-sm text-neutral-500 mt-1 leading-snug">${profile.headline}</p>
+    ${profile.location ? `<p class="text-xs text-neutral-400 mt-1.5">${profile.location}</p>` : ""}
+  </div>
+</div>`
+  });
 
-To update the website, you MUST use the appropriate tools provided to you:
-- To update text fields like name, headline, summary, location, avatarUrl, bannerUrl, use 'update_profile_field'.
-- To replace or add experience items, use 'update_experience'.
-- To replace or add skills, use 'update_skills'.
-- To replace or add social/portfolio links, use 'update_links'.
-- To switch the website layout template, use 'switch_template' (available templates: "minimal-card", "bento-grid", "full-scroll", "dark").
+  // 2. About Block
+  blocks.push({
+    id: "about_" + Math.random().toString(36).substring(2, 9),
+    type: "about",
+    title: "About Me",
+    html: `<div class="bg-white border border-neutral-200/85 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] w-full">
+  <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2 font-['Inter_Tight']">About</h2>
+  <p class="text-sm text-neutral-700 leading-relaxed">${profile.summary}</p>
+</div>`
+  });
+
+  // 3. Skills Block
+  if (profile.skills && profile.skills.length > 0) {
+    const skillChips = profile.skills.map(s => `<span class="text-xs font-medium px-3 py-1 rounded-full bg-blue-50 text-blue-600 border border-blue-100 font-['Inter_Tight']">${s.name}</span>`).join("\n    ");
+    blocks.push({
+      id: "skills_" + Math.random().toString(36).substring(2, 9),
+      type: "skills",
+      title: "Core Skills",
+      html: `<div class="bg-white border border-neutral-200/85 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] w-full">
+  <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-3 font-['Inter_Tight']">Skills</h2>
+  <div class="flex flex-wrap gap-2">
+    ${skillChips}
+  </div>
+</div>`
+    });
+  }
+
+  // 4. Experience Block
+  if (profile.experience && profile.experience.length > 0) {
+    const expItems = profile.experience.map(exp => `
+    <div class="flex gap-4">
+      <div class="w-1 bg-neutral-100 rounded-full flex-shrink-0 mt-1"></div>
+      <div>
+        <h3 class="text-sm font-semibold text-neutral-950 font-['Inter_Tight']">${exp.title}</h3>
+        <p class="text-xs text-neutral-500 font-medium">${exp.company} · ${exp.duration}</p>
+        ${exp.description ? `<p class="text-xs text-neutral-400 mt-1 leading-relaxed">${exp.description}</p>` : ""}
+      </div>
+    </div>`).join("\n");
+    blocks.push({
+      id: "experience_" + Math.random().toString(36).substring(2, 9),
+      type: "experience",
+      title: "Work Experience",
+      html: `<div class="bg-white border border-neutral-200/85 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] w-full">
+  <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-4 font-['Inter_Tight']">Experience</h2>
+  <div class="flex flex-col gap-6">
+    ${expItems}
+  </div>
+</div>`
+    });
+  }
+
+  // 5. Education Block
+  if (profile.education && profile.education.length > 0) {
+    const eduItems = profile.education.map(edu => `
+    <div class="border-l-2 border-blue-100 pl-4 py-1">
+      <h3 class="text-sm font-semibold text-neutral-950 font-['Inter_Tight']">${edu.degree}</h3>
+      <p class="text-xs text-neutral-500">${edu.school} · ${edu.year}</p>
+    </div>`).join("\n");
+    blocks.push({
+      id: "education_" + Math.random().toString(36).substring(2, 9),
+      type: "education",
+      title: "Education",
+      html: `<div class="bg-white border border-neutral-200/85 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] w-full">
+  <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-4 font-['Inter_Tight']">Education</h2>
+  <div class="flex flex-col gap-4">
+    ${eduItems}
+  </div>
+</div>`
+    });
+  }
+
+  // 6. Links Block
+  if (profile.links && profile.links.length > 0) {
+    const linkItems = profile.links.map(link => `
+    <a href="${link.url}" target="_blank" class="flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-xl bg-neutral-50 border border-neutral-200 hover:bg-neutral-100 transition-colors text-neutral-800 font-['Inter_Tight']">
+      ${link.label}
+    </a>`).join("\n    ");
+    blocks.push({
+      id: "links_" + Math.random().toString(36).substring(2, 9),
+      type: "links",
+      title: "Contact & Links",
+      html: `<div class="bg-white border border-neutral-200/85 rounded-2xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.04)] w-full">
+  <h2 class="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-3 font-['Inter_Tight']">Links</h2>
+  <div class="flex flex-wrap gap-2">
+    ${linkItems}
+  </div>
+</div>`
+    });
+  }
+
+  return blocks;
+}
+
+function buildSystemPrompt(profile: ProfileData, currentTemplate: string): string {
+  const currentBlocksList = (profile.blocks || []).map(b => `- ID: "${b.id}" (Type: "${b.type}", Title: "${b.title}")`).join("\n");
+  
+  return `You are an expert AI website generator and editor assistant for "LinkedPage" (a platform that transforms LinkedIn profiles into personal websites).
+Your task is to conversationally interact with the user and execute their requested updates.
+
+### 🌟 DYNAMIC WEBPAGE LAYOUT (ai-custom)
+When the active template is "ai-custom", the website is composed of dynamic, fully customizable HTML/Tailwind CSS blocks. This allows you to generate, style, and add any custom sections (like a custom Education box, FAQ, projects showcase, custom text cards, styling grids, etc.) directly using raw Tailwind CSS v3 classes!
+
+The page automatically loads Tailwind CDN, so you can write *any* standard Tailwind v3 class (colors, margins, padding, flexbox, grid, shadows, borders, text size, etc.) and it will compile in real-time.
+
+To manage custom blocks on "ai-custom":
+1. Use 'initialize_custom_blocks' to populate default HTML blocks (Hero, About, Experience, Skills, Education, Links) based on the user's current profile data, and automatically switch the active template to "ai-custom".
+2. Use 'add_custom_block' to create and insert a completely new box/section anywhere in the layout.
+3. Use 'update_block_html' to rewrite the structure, design, text, colors, or classes of any block.
+4. Use 'delete_block' to remove any block.
+5. Use 'reorder_blocks' to rearrange the layout block structure.
 
 Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
 - Profile Data JSON:
-${JSON.stringify(profile, null, 2)}
+${JSON.stringify({ ...profile, blocks: undefined }, null, 2)}
 
-Instructions:
-1. Explain friendly and conversationally what updates you are making in your response.
-2. Only update fields the user asked to change. Keep updates minimal.
-3. Be helpful, professional, and maintain high-quality writing when updating fields.`;
+${currentTemplate === "ai-custom" ? `- CURRENT BLOCKS INSTALLED:\n${currentBlocksList}` : "- Dynamic blocks: Not initialized on this template. Call 'initialize_custom_blocks' to convert this template to block-based editing."}
+
+### 🛠️ STANDARD PROFILE TOOLS
+You also have standard tools to update structured profile fields:
+- To update text fields like name, headline, summary, location, avatarUrl, bannerUrl, use 'update_profile_field'.
+- To replace experience items, use 'update_experience'.
+- To replace education items, use 'update_education'.
+- To replace skills, use 'update_skills'.
+- To replace links, use 'update_links'.
+- To switch the template style, use 'switch_template' (available: "minimal-card", "bento-grid", "full-scroll", "dark", "ai-custom").
+
+### 📋 INSTRUCTIONS
+1. If the user wants to add an education section or a new section that isn't showing up (or if they ask to make edits to elements, add custom boxes, or change element colors/sizes), first switch template to "ai-custom" or call "initialize_custom_blocks", then edit the block's HTML code using 'update_block_html' or inject a custom block with 'add_custom_block'.
+2. Explain friendly and conversationally what updates you are making in your response.
+3. Keep updates clean, beautiful, premium, and highly responsive.`;
 }
 
 export async function GET(request: Request) {
@@ -146,7 +275,6 @@ export async function POST(request: Request) {
     // Call generateText with tools
     const result = await generateText({
       model,
-      stopWhen: stepCountIs(5),
       messages: [
         { role: "system", content: systemPromptContent },
         ...chatMessagesContext,
@@ -254,16 +382,189 @@ export async function POST(request: Request) {
             }
           }
         }),
+        update_education: tool({
+          description: "Replaces the entire education array with a new array. Always provide the complete updated list of education items.",
+          inputSchema: z.object({
+            education: z.array(z.object({
+              degree: z.string().describe("Degree name, e.g. 'Bachelor of Science'"),
+              school: z.string().describe("School name"),
+              year: z.string().describe("Graduation year"),
+            })).describe("The complete new education list"),
+          }),
+          execute: async ({ education }) => {
+            try {
+              profileUpdates.education = education;
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  education
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "education", count: education.length };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
         switch_template: tool({
           description: "Changes the website layout template to a different template style.",
           inputSchema: z.object({
-            templateId: z.enum(["minimal-card", "bento-grid", "full-scroll", "dark"]).describe("The ID of the template style to switch to"),
+            templateId: z.enum(["minimal-card", "bento-grid", "full-scroll", "dark", "ai-custom"]).describe("The ID of the template style to switch to"),
           }),
           execute: async ({ templateId }) => {
             try {
               templateUpdate = templateId as TemplateId;
               await updateWebsite(websiteId, { templateId: templateId as TemplateId });
               return { success: true, updated: "templateId", value: templateId };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        initialize_custom_blocks: tool({
+          description: "Initializes the website layout with dynamic HTML/Tailwind blocks based on current profile data, and automatically switches the active template to 'ai-custom'.",
+          inputSchema: z.object({}),
+          execute: async () => {
+            try {
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const blocks = createDefaultBlocks(current.profile);
+                const newProfile = {
+                  ...current.profile,
+                  blocks
+                };
+                profileUpdates.blocks = blocks;
+                templateUpdate = "ai-custom";
+                await updateWebsite(websiteId, { profile: newProfile, templateId: "ai-custom" });
+                return { success: true, blocksCount: blocks.length };
+              }
+              return { success: false, error: "Website not found" };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        add_custom_block: tool({
+          description: "Adds a new custom HTML/Tailwind block to the layout at a specified position.",
+          inputSchema: z.object({
+            type: z.string().describe("Type of block, e.g. 'custom', 'hero', 'education', 'gallery'"),
+            title: z.string().describe("Title for the block, e.g. 'My Portfolio Projects'"),
+            html: z.string().describe("The full HTML string with Tailwind CSS styles"),
+            index: z.number().optional().describe("The index to insert the block at (default adds to the end)"),
+          }),
+          execute: async ({ type, title, html, index }) => {
+            try {
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const blocks = [...(current.profile.blocks || [])];
+                const newBlock = {
+                  id: "block_custom_" + Math.random().toString(36).substring(2, 9),
+                  type,
+                  title,
+                  html
+                };
+                if (typeof index === "number") {
+                  blocks.splice(index, 0, newBlock);
+                } else {
+                  blocks.push(newBlock);
+                }
+                const newProfile = {
+                  ...current.profile,
+                  blocks
+                };
+                profileUpdates.blocks = blocks;
+                await updateWebsite(websiteId, { profile: newProfile });
+                return { success: true, addedBlockId: newBlock.id };
+              }
+              return { success: false, error: "Website not found" };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        update_block_html: tool({
+          description: "Updates the HTML/Tailwind code of an existing block in the layout.",
+          inputSchema: z.object({
+            id: z.string().describe("The unique ID of the block to update"),
+            html: z.string().describe("The new HTML/Tailwind code to set for the block"),
+          }),
+          execute: async ({ id, html }) => {
+            try {
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const blocks = (current.profile.blocks || []).map(b => {
+                  if (b.id === id || id.startsWith(`block-${b.id}`)) {
+                    return { ...b, html };
+                  }
+                  return b;
+                });
+                const newProfile = {
+                  ...current.profile,
+                  blocks
+                };
+                profileUpdates.blocks = blocks;
+                await updateWebsite(websiteId, { profile: newProfile });
+                return { success: true, updatedBlockId: id };
+              }
+              return { success: false, error: "Website not found" };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        delete_block: tool({
+          description: "Deletes a block from the custom layout by its ID.",
+          inputSchema: z.object({
+            id: z.string().describe("The ID of the block to delete"),
+          }),
+          execute: async ({ id }) => {
+            try {
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const blocks = (current.profile.blocks || []).filter(b => b.id !== id && !id.startsWith(`block-${b.id}`));
+                const newProfile = {
+                  ...current.profile,
+                  blocks
+                };
+                profileUpdates.blocks = blocks;
+                await updateWebsite(websiteId, { profile: newProfile });
+                return { success: true, deletedBlockId: id };
+              }
+              return { success: false, error: "Website not found" };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        reorder_blocks: tool({
+          description: "Reorders the list of blocks by providing the ordered list of block IDs.",
+          inputSchema: z.object({
+            ids: z.array(z.string()).describe("The ordered list of block IDs"),
+          }),
+          execute: async ({ ids }) => {
+            try {
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const currentBlocks = current.profile.blocks || [];
+                const reordered = ids.map(id => currentBlocks.find(b => b.id === id || id.startsWith(`block-${b.id}`))).filter(Boolean) as any[];
+                
+                // Add any missing blocks back at the end
+                for (const b of currentBlocks) {
+                  if (!reordered.some(r => r.id === b.id)) {
+                    reordered.push(b);
+                  }
+                }
+                const newProfile = {
+                  ...current.profile,
+                  blocks: reordered
+                };
+                profileUpdates.blocks = reordered;
+                await updateWebsite(websiteId, { profile: newProfile });
+                return { success: true };
+              }
+              return { success: false, error: "Website not found" };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }

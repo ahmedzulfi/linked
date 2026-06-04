@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { ProfileData, TemplateId } from "@/shared/types";
 
 interface ProfilePreviewProps {
@@ -411,6 +412,46 @@ function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onField
   );
 }
 
+function AiCustomTemplate({
+  profile,
+  onFieldClick,
+}: {
+  profile: ProfileData;
+  onFieldClick?: (fieldName: string) => void;
+}) {
+  useEffect(() => {
+    // Add tailwind CDN script if not present
+    if (!document.getElementById("tailwind-cdn")) {
+      const script = document.createElement("script");
+      script.id = "tailwind-cdn";
+      script.src = "https://cdn.tailwindcss.com";
+      document.head.appendChild(script);
+    }
+  }, []);
+
+  const blocks = profile.blocks || [];
+
+  return (
+    <div className="min-h-screen bg-[#F9F9FB] p-6 font-inter flex flex-col gap-6 max-w-2xl mx-auto pb-16">
+      {blocks.map((block) => (
+        <EditableWrapper
+          key={block.id}
+          fieldName={`block-${block.id}-${block.title}`}
+          onFieldClick={onFieldClick}
+          className="w-full"
+        >
+          <div dangerouslySetInnerHTML={{ __html: block.html }} />
+        </EditableWrapper>
+      ))}
+      {blocks.length === 0 && (
+        <div className="text-center py-20 bg-white border border-[#E6E6E6] rounded-2xl p-8 text-neutral-400">
+          No custom blocks found. Ask the AI assistant to generate some elements!
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Main exported component ───────────────────────────────────────────────────
 export default function ProfilePreview({ profile, template, scale = 1, onFieldClick, fluid = false }: ProfilePreviewProps) {
   if (fluid) {
@@ -420,6 +461,7 @@ export default function ProfilePreview({ profile, template, scale = 1, onFieldCl
         {template === "bento-grid" && <BentoGrid profile={profile} onFieldClick={onFieldClick} />}
         {template === "full-scroll" && <FullScroll profile={profile} onFieldClick={onFieldClick} />}
         {template === "dark" && <DarkTemplate profile={profile} onFieldClick={onFieldClick} />}
+        {template === "ai-custom" && <AiCustomTemplate profile={profile} onFieldClick={onFieldClick} />}
       </div>
     );
   }
@@ -448,6 +490,7 @@ export default function ProfilePreview({ profile, template, scale = 1, onFieldCl
         {template === "bento-grid" && <BentoGrid profile={profile} onFieldClick={onFieldClick} />}
         {template === "full-scroll" && <FullScroll profile={profile} onFieldClick={onFieldClick} />}
         {template === "dark" && <DarkTemplate profile={profile} onFieldClick={onFieldClick} />}
+        {template === "ai-custom" && <AiCustomTemplate profile={profile} onFieldClick={onFieldClick} />}
       </div>
     </div>
   );
