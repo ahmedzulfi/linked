@@ -210,7 +210,7 @@ function HabitlineProductShowcase() {
   };
 
   return (
-    <div className="relative w-full max-w-5xl mt-12 px-4 select-none pointer-events-none">
+    <div className="relative w-full select-none pointer-events-none">
       {/* Background ambient glows */}
       <div className="absolute top-1/4 left-1/4 w-44 h-44 bg-[#8DB8FF]/10 rounded-full blur-[60px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-44 h-44 bg-[#8DFFB3]/10 rounded-full blur-[60px] pointer-events-none" />
@@ -220,15 +220,13 @@ function HabitlineProductShowcase() {
         variants={itemVariants}
         initial="hidden"
         animate="visible"
-        className="relative w-full overflow-hidden rounded-t-2xl border border-gray-200/80 border-b-0 shadow-[0_-12px_30px_-5px_rgba(0,0,0,0.03),0_20px_40px_-15px_rgba(0,0,0,0.08)] h-[240px] sm:h-[340px] md:h-[440px] lg:h-[480px]"
+        className="relative w-full overflow-hidden rounded-t-2xl border border-gray-200/80 border-b-0 shadow-[0_-12px_30px_-5px_rgba(0,0,0,0.03),0_20px_40px_-15px_rgba(0,0,0,0.08)]"
       >
         <img
           src="/heroimage.png"
           alt="Website Preview"
           className="w-full h-auto object-cover object-top select-none pointer-events-none"
         />
-        {/* White gradient overlay coming from bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-white via-white/95 to-transparent z-10 pointer-events-none" />
       </motion.div>
     </div>
   );
@@ -260,7 +258,7 @@ function HeroSection() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-28 pb-20">
+    <section className="relative w-full h-[100vh] flex flex-col items-center justify-between overflow-hidden bg-white pt-24 pb-0">
       {/* Background image + overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
         <img
@@ -276,22 +274,8 @@ function HeroSection() {
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center text-center gap-6 px-6 sm:px-8"
+        className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center text-center gap-6 px-6 sm:px-8 mt-6"
       >
-        {/* Badge */}
-        <motion.div
-          variants={heroItemVariants}
-          onClick={() => router.push("/onboarding")}
-          className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-black/5 bg-white/40 backdrop-blur-md shadow-[0_4px_12px_rgba(0,0,0,0.03)] cursor-pointer hover:bg-white/60 transition-transform active:scale-[0.98] scale-95"
-        >
-          <span className="bg-[#2A2A2F] text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider leading-none font-inter">
-            New
-          </span>
-          <span className="text-[12px] font-medium text-black leading-none pr-1 font-inter">
-            LinkedIn to website in 60s
-          </span>
-        </motion.div>
-
         {/* Heading Title */}
         <motion.h1
           variants={heroItemVariants}
@@ -330,15 +314,18 @@ function HeroSection() {
             Skip & Try Mock Data
           </button>
         </motion.div>
-
-        {/* Floating Product Showcase Visual */}
-        <motion.div
-          variants={heroItemVariants}
-          className="w-full flex justify-center"
-        >
-          <HabitlineProductShowcase />
-        </motion.div>
       </motion.div>
+
+      {/* Floating Product Showcase Visual - 80% width, pushed down by 40% */}
+      <motion.div
+        variants={heroItemVariants}
+        className="w-[80%] flex justify-center z-10 mt-auto transform translate-y-[40%]"
+      >
+        <HabitlineProductShowcase />
+      </motion.div>
+
+      {/* White gradient overlay absolute at the bottom of the hero section */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-white via-white/80 to-transparent z-20 pointer-events-none" />
     </section>
   );
 }
