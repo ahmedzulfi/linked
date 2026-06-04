@@ -196,7 +196,7 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Hosts navigation items: Home (dashboard redirect), Design (active workspace), Domains (custom domain panel), and Site Settings (site details).
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
 - **Left Column Panels (Navigation Switcher):**
-  - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with inline widgets for Projects, Interests, Skills, and Experience forms.
+  - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with inline widgets for Projects, Interests, Skills, and Experience forms (Steps 2-5). Step 6 triggers automatic AI copy refinement. Step 7 features the template picker to select theme styles. After confirming a theme style, the wizard moves directly to **Step 9 (Free-form Chat Editor Mode)**, which activates the bottom text composer with a row of quick suggestion pills on top, letting the user converse freely with the assistant to update copy/styles in real-time.
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
 - **Top Navbar:**
@@ -204,7 +204,7 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Hosts Share (link copier) and Publish actions alongside the User profile menu dropdown.
 - **Main Canvas Workspace:**
   - **Canvas Header:** Customize/page dropdowns, subdomain availability ticker, and device size switches (Desktop vs. Mobile).
-  - **Preview Area:** Renders step-specific `WizardAnimations` (steps <= 6) in the Design tab, and transitions to the live scalable `ProfilePreview` once the user reaches step >= 7 or switches to the Domains/Settings panels.
+  - **Preview Area:** Renders step-specific `WizardAnimations` (steps <= 6) in the Design tab, and transitions to the live scalable `ProfilePreview` once the user reaches step >= 7 (where template selection and free-form chat modifications occur) or switches to the Domains/Settings panels.
 
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
