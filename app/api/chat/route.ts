@@ -3,7 +3,7 @@ import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getChatHistory, saveChatMessage } from "@/lib/db";
 import { ProfileData, TemplateId } from "@/shared/types";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
-import { generateText, tool } from "ai";
+import { generateText, tool, stepCountIs } from "ai";
 import { z } from "zod";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -146,6 +146,7 @@ export async function POST(request: Request) {
     // Call generateText with tools
     const result = await generateText({
       model,
+      stopWhen: stepCountIs(5),
       messages: [
         { role: "system", content: systemPromptContent },
         ...chatMessagesContext,
