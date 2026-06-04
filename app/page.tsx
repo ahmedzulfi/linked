@@ -6,13 +6,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { 
-  Home, 
-  Layout as LayoutIcon, 
-  Folder, 
-  CreditCard, 
-  BookOpen, 
-  Settings, 
+import {
+  Home,
+  Layout as LayoutIcon,
+  Folder,
+  CreditCard,
+  BookOpen,
+  Settings,
   LogOut,
   User,
   Shield,
@@ -202,8 +202,8 @@ const COLOR_PALETTES = [
 function HabitlineProductShowcase() {
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as const }
     }
@@ -303,7 +303,7 @@ function HeroSection() {
           >
             Build Your Website
           </button>
-          
+
           <button
             onClick={() => router.push("/editor")}
             className="h-11 px-7 bg-white/40 hover:bg-white/70 text-black text-[13px] font-semibold rounded-full transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-2 shadow-[0px_4px_10px_rgba(0,0,0,0.03)] cursor-pointer border border-[#E6E6E6] backdrop-blur-sm"
@@ -316,10 +316,10 @@ function HeroSection() {
         </motion.div>
       </motion.div>
 
-      {/* Floating Product Showcase Visual - 80% width, pushed down by 40% */}
+      {/* Floating Product Showcase Visual - 80% width, pushed down by 20% */}
       <motion.div
         variants={heroItemVariants}
-        className="w-[80%] flex justify-center z-10 mt-auto transform translate-y-[40%]"
+        className="w-[80%] flex justify-center z-10 mt-auto transform translate-y-[20%]"
       >
         <HabitlineProductShowcase />
       </motion.div>
@@ -363,7 +363,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
   };
 
   return (
-    <section id="templates" className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden border-t border-[#E6E6E6]">
+    <section id="templates" className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden mt-10">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -900,7 +900,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen font-inter bg-[#FBFBFB] text-black antialiased relative overflow-x-hidden">
-      
+
       {/* ── Original Floating Navbar ── */}
       <Navbar />
 
@@ -938,14 +938,14 @@ export default function Index() {
               transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
               className="fixed left-5 top-28 bottom-5 w-[260px] border border-[#E6E6E6] bg-white/95 backdrop-blur-md px-6 py-6 flex flex-col justify-between z-50 select-none rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
             >
-              
+
               {/* Top navigation items */}
               <div className="flex flex-col gap-6">
-                
+
                 {/* Header with Close button */}
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-black/40 uppercase tracking-wider">Navigation</span>
-                  <button 
+                  <button
                     onClick={() => setIsSidebarOpen(false)}
                     className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-black/5 text-[#171717]/60 hover:text-black transition-colors"
                   >
@@ -956,7 +956,7 @@ export default function Index() {
                 </div>
 
                 {/* New Website Button */}
-                <button 
+                <button
                   onClick={() => {
                     setIsSidebarOpen(false);
                     router.push("/onboarding");
@@ -972,7 +972,7 @@ export default function Index() {
 
                 {/* Menu Items (Home Active) */}
                 <div className="flex flex-col gap-1.5">
-                  <button 
+                  <button
                     className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all text-left"
                     style={{ boxShadow: "0 6px 10px -6px #00000016" }}
                   >
@@ -980,7 +980,7 @@ export default function Index() {
                     Home
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/editor");
@@ -991,7 +991,7 @@ export default function Index() {
                     Templates
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/dashboard");
@@ -1006,8 +1006,8 @@ export default function Index() {
                 {/* Recent Websites Section */}
                 <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
                   <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
-                  
-                  <div 
+
+                  <div
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/dashboard");
@@ -1025,10 +1025,10 @@ export default function Index() {
 
               {/* Bottom navigation & pricing items */}
               <div className="flex flex-col gap-6">
-                
+
                 {/* Pricing, Documentation, Settings */}
                 <div className="flex flex-col gap-1">
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/pricing");
@@ -1039,7 +1039,7 @@ export default function Index() {
                     Pricing
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/docs");
@@ -1050,7 +1050,7 @@ export default function Index() {
                     Documentation
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/settings");
