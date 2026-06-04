@@ -17,11 +17,11 @@ import {
   User,
   Shield,
   Upload,
-  ArrowRight
+  ArrowRight,
+  Sparkles
 } from "lucide-react";
 import { UserMenu } from "@/components/UserMenu";
 import { useEditor } from "@/context/EditorContext";
-import { AnimatedUploadIllustration } from "@/components/AnimatedSVGs";
 
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
@@ -195,58 +195,167 @@ const COLOR_PALETTES = [
   { name: "Botanical", gradient: "conic-gradient(rgb(246, 247, 244) 0%, rgb(246, 247, 244) 25%, rgb(14, 58, 41) 25%, rgb(14, 58, 41) 50%, rgb(53, 193, 139) 50%, rgb(53, 193, 139) 75%, rgb(198, 239, 198) 75%, rgb(198, 239, 198) 100%)" },
   { name: "Desert", gradient: "conic-gradient(rgb(252, 246, 236) 0%, rgb(252, 246, 236) 25%, rgb(46, 37, 33) 25%, rgb(46, 37, 33) 50%, rgb(178, 162, 139) 50%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 100%)" },
   { name: "Rosewood", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(184, 43, 64) 25%, rgb(184, 43, 64) 50%, rgb(185, 9, 65) 50%, rgb(185, 9, 65) 75%, rgb(232, 168, 182) 75%, rgb(232, 168, 182) 100%)" },
-  { name: "Terra Cotta", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(143, 56, 56) 50%, rgb(143, 56, 56) 75%, rgb(201, 114, 92) 75%, rgb(201, 114, 92) 100%)" }
 ];
 
-// ─── Hero Section ─────────────────────────────────────────────────────────────
+function ProductShowcaseMockup() {
+  return (
+    <div className="relative w-full max-w-[480px] h-[320px] flex items-center justify-center select-none">
+      {/* Ambient background glows */}
+      <div className="absolute top-1/4 left-1/4 w-36 h-36 bg-[#8DB8FF]/15 rounded-full blur-[50px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#8DFFB3]/15 rounded-full blur-[50px] pointer-events-none" />
+
+      {/* Visual content stack */}
+      <div className="relative w-full h-full flex items-center justify-between gap-3 z-10">
+        
+        {/* Left Card: Styled LinkedIn Mockup */}
+        <motion.div
+          initial={{ opacity: 0, x: -20, y: 5 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
+          whileHover={{ y: -4, transition: { duration: 0.15 } }}
+          className="w-[185px] rounded-[18px] bg-white border border-[#E6E6E6] shadow-[0px_6px_16px_-6px_rgba(0,0,0,0.06)] overflow-hidden flex-shrink-0"
+        >
+          {/* Header Banner */}
+          <div className="h-9 bg-gradient-to-r from-[#0a66c2] to-[#1283ef] relative">
+            <span className="absolute right-2.5 top-2 text-white/80 font-bold text-[8px] font-sans tracking-wide">
+              in
+            </span>
+          </div>
+
+          {/* Profile Details */}
+          <div className="p-3.5 pt-0 flex flex-col items-center text-center -mt-5">
+            {/* Avatar Placeholder */}
+            <div className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm flex items-center justify-center text-gray-400 font-bold text-xs select-none">
+              RH
+            </div>
+            
+            {/* Name */}
+            <h4 className="mt-1.5 text-[12px] font-bold text-[#2A2A2F] leading-tight font-inter">
+              Reid Hoffman
+            </h4>
+            
+            {/* Headline */}
+            <p className="mt-0.5 text-[8.5px] text-gray-400 leading-normal font-medium max-w-[150px] font-inter">
+              Co-founder, LinkedIn • Partner, Greylock
+            </p>
+
+            {/* Divider line */}
+            <div className="w-full h-[1px] bg-[#E6E6E6] my-2" />
+
+            {/* Summary lines representing LinkedIn sections */}
+            <div className="w-full space-y-1.5 text-left">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded bg-blue-50 text-[#0a66c2] text-[6px] font-bold flex items-center justify-center">W</span>
+                <div className="h-1.5 w-20 bg-gray-100 rounded" />
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded bg-blue-50 text-[#0a66c2] text-[6px] font-bold flex items-center justify-center">E</span>
+                <div className="h-1.5 w-14 bg-gray-100 rounded" />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Center: Animating Flow line */}
+        <div className="flex-1 flex flex-col items-center justify-center min-w-[50px] relative">
+          <svg className="w-full h-8" viewBox="0 0 80 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M 5,10 C 25,10 55,10 75,10"
+              stroke="url(#dataStreamGrad)"
+              strokeWidth="2.5"
+              strokeDasharray="5 5"
+              strokeLinecap="round"
+            >
+              <animate
+                attributeName="stroke-dashoffset"
+                values="30;0"
+                dur="1.5s"
+                repeatCount="indefinite"
+              />
+            </path>
+            <defs>
+              <linearGradient id="dataStreamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#0a66c2" />
+                <stop offset="50%" stopColor="#8DB8FF" />
+                <stop offset="100%" stopColor="#369762" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <motion.div
+            animate={{ scale: [0.94, 1.06, 0.94], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-3 px-1.5 py-0.5 rounded-full bg-[#8DFFB3]/20 border border-[#8DFFB3]/35 text-[#369762] text-[7.5px] font-bold leading-none scale-90"
+          >
+            AI Morph
+          </motion.div>
+        </div>
+
+        {/* Right Card: Generated Website layout mockup */}
+        <motion.div
+          initial={{ opacity: 0, x: 20, y: -5 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
+          whileHover={{ y: -4, transition: { duration: 0.15 } }}
+          className="w-[210px] rounded-[22px] bg-white/80 backdrop-blur-md border border-[#E6E6E6]/60 shadow-[0px_8px_24px_-6px_rgba(0,0,0,0.07)] p-3 flex flex-col gap-2.5 flex-shrink-0"
+        >
+          {/* Header Bar */}
+          <div className="flex items-center justify-between border-b border-[#F3F3F3] pb-1.5">
+            <div className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E45A5A]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#E9C46A]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#369762]" />
+            </div>
+            <span className="text-[7.5px] font-bold text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/30 px-1.5 py-0.5 rounded-full leading-none scale-90 select-none">
+              Live website
+            </span>
+          </div>
+
+          {/* User Profile */}
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#8DB8FF] p-[1.5px] shadow-sm flex-shrink-0">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-[#2A2A2F] font-bold text-[9px]">
+                RH
+              </div>
+            </div>
+            <div className="flex flex-col text-left">
+              <h5 className="text-[10px] font-bold text-[#2A2A2F] leading-none">Reid Hoffman</h5>
+              <span className="text-[7px] text-gray-400 mt-0.5 font-medium leading-none">reidhoffman.me</span>
+            </div>
+          </div>
+
+          {/* Bento layout mockup */}
+          <div className="grid grid-cols-2 gap-1.5">
+            {/* Bento block 1: Work */}
+            <div className="col-span-2 rounded-[10px] bg-[#FBFBFB] border border-[#E6E6E6] p-2 text-left flex flex-col gap-0.5">
+              <span className="text-[6px] font-bold text-[#369762] uppercase tracking-wider">Experience</span>
+              <p className="text-[8px] font-bold text-[#2A2A2F] leading-tight">Partner, Greylock</p>
+              <p className="text-[6px] text-gray-400 leading-none">2009 - Present</p>
+            </div>
+            
+            {/* Bento block 2: Education */}
+            <div className="rounded-[10px] bg-[#FBFBFB] border border-[#E6E6E6] p-2 text-left flex flex-col gap-0.5">
+              <span className="text-[6px] font-bold text-[#8DB8FF] uppercase tracking-wider">Education</span>
+              <p className="text-[7.5px] font-bold text-[#2A2A2F] leading-tight truncate">Stanford Univ.</p>
+              <p className="text-[6px] text-gray-400 leading-none">BS Cogn. Sci.</p>
+            </div>
+
+            {/* Bento block 3: Skills */}
+            <div className="rounded-[10px] bg-[#8DFFB3]/10 border border-[#8DFFB3]/35 p-2 text-left flex flex-col gap-1">
+              <span className="text-[6px] font-bold text-[#369762] uppercase tracking-wider">Skills</span>
+              <div className="flex flex-wrap gap-0.5">
+                <span className="px-1 py-0.2 rounded-full bg-white border border-[#E6E6E6]/60 text-[#369762] text-[4.5px] font-bold">Venture</span>
+                <span className="px-1 py-0.2 rounded-full bg-white border border-[#E6E6E6]/60 text-[#369762] text-[4.5px] font-bold">Scaling</span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+}
 
 function HeroSection() {
   const router = useRouter();
-  const { setPendingZip } = useEditor();
-  const [isDragActive, setIsDragActive] = useState(false);
-
-  const handleZipFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      if (file.size > 20 * 1024 * 1024) {
-        toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
-        e.target.value = "";
-        return;
-      }
-      setPendingZip(file);
-      router.push("/onboarding");
-    }
-  };
-
-  const handleDrag = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setIsDragActive(true);
-    } else if (e.type === "dragleave") {
-      setIsDragActive(false);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragActive(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const file = e.dataTransfer.files[0];
-      if (!file.name.endsWith(".zip")) {
-        toast.error("Please drop a valid .zip file export.");
-        return;
-      }
-      if (file.size > 20 * 1024 * 1024) {
-        toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
-        return;
-      }
-      setPendingZip(file);
-      router.push("/onboarding");
-    }
-  };
 
   const heroContainerVariants = {
     hidden: {},
@@ -264,14 +373,14 @@ function HeroSection() {
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.4,
+        duration: 0.45,
         ease: [0.23, 1, 0.32, 1] as const
       }
     }
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-24 pb-16">
+    <section className="relative w-full min-h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-white pt-24 lg:pt-16 pb-16">
       {/* Background image + overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
         <img
@@ -282,95 +391,78 @@ function HeroSection() {
         <div className="absolute inset-0 hero-overlay" />
       </div>
 
-      {/* Content */}
+      {/* Grid Content Container */}
       <motion.div
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 w-full pt-0 -translate-y-14 max-w-[1536px] mx-auto flex flex-col items-center gap-6 px-6 sm:px-8 lg:px-20 text-center"
+        className="relative z-10 max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 px-6 sm:px-8 items-center text-left"
       >
-        {/* Badge */}
-        <motion.div
-          variants={heroItemVariants}
-          onClick={() => router.push("/onboarding")}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-all"
-        >
-          <span className="gradient-text-rainbow text-[13px] font-medium leading-[18px]">
-            Create in under 60 seconds
-          </span>
-          <span className="flex items-center justify-center w-7 h-7 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </motion.div>
-
-        {/* Heading */}
-        <motion.h1
-          variants={heroItemVariants}
-          className="text-black text-[38px] sm:text-[51px] leading-[1.1] font-medium tracking-tight max-w-4xl font-inter-tight"
-        >
-          LinkedIn to personal micro-site
-        </motion.h1>
-
-        {/* ZIP Upload Card */}
-        <motion.div
-          variants={heroItemVariants}
-          className="w-full max-w-[540px] rounded-[28px] bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 p-6 sm:p-8 flex flex-col gap-6 mt-4 shadow-[0_20px_50px_rgba(0,0,0,0.03)]"
-        >
-          <div className="text-center select-none">
-            <h2 className="text-lg font-semibold text-[#2A2A2F] mb-1 font-inter">
-              Upload your LinkedIn export ZIP
-            </h2>
-            <p className="text-[13.5px] text-gray-500 leading-relaxed max-w-md mx-auto font-inter">
-              Build your professional website instantly using your LinkedIn archive.
-            </p>
-          </div>
-
-          <label
-            htmlFor="hero-zip-upload"
-            onDragEnter={handleDrag}
-            onDragOver={handleDrag}
-            onDragLeave={handleDrag}
-            onDrop={handleDrop}
-            className={`w-full flex flex-col items-center justify-center border-2 border-dashed rounded-2xl p-6 sm:p-8 bg-[#FBFBFB]/50 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 relative text-center group active:scale-[0.98] ${
-              isDragActive
-                ? "border-[#8DB8FF] bg-[#8DB8FF]/5 shadow-[0_0_20px_rgba(141,184,255,0.12)]"
-                : "border-[#E6E6E6] hover:border-[#8DB8FF] hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] hover:bg-[#8DB8FF]/5"
-            }`}
+        {/* Left Column: Heading and description */}
+        <div className="lg:col-span-7 flex flex-col items-start gap-5">
+          {/* Badge */}
+          <motion.div
+            variants={heroItemVariants}
+            onClick={() => router.push("/onboarding")}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-transform"
           >
-            <input
-              id="hero-zip-upload"
-              type="file"
-              accept=".zip"
-              onChange={handleZipFileChange}
-              className="hidden"
-            />
-            <AnimatedUploadIllustration />
-            <span className="text-[13.5px] font-semibold text-[#2A2A2F] mb-0.5 font-inter">
-              Select LinkedIn ZIP file
+            <span className="gradient-text-rainbow text-[13px] font-semibold leading-[18px]">
+              Create in under 60 seconds
             </span>
-            <span className="text-[11px] text-gray-400 font-medium font-inter">
-              Click to browse or drag & drop ZIP archive here
+            <span className="flex items-center justify-center w-6 h-6 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-transform">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </span>
-          </label>
+          </motion.div>
 
-          <div className="flex flex-col items-center gap-3">
+          {/* Heading Title */}
+          <motion.h1
+            variants={heroItemVariants}
+            className="text-black text-[42px] sm:text-[54px] lg:text-[62px] leading-[1.05] font-semibold tracking-tight font-inter-tight"
+          >
+            LinkedIn to personal Website.
+          </motion.h1>
+
+          {/* Subheading description */}
+          <motion.p
+            variants={heroItemVariants}
+            className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-xl font-inter-tight"
+          >
+            Instantly turn your LinkedIn public data export ZIP into a fully structured personal website. Edit layout templates, add custom domains, and go live.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            variants={heroItemVariants}
+            className="flex flex-wrap items-center gap-4 mt-2 w-full sm:w-auto"
+          >
             <button
               onClick={() => router.push("/onboarding")}
-              className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
+              className="h-11 px-6 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
             >
-              Get Started with Onboarding <ArrowRight className="w-4 h-4" />
+              Build Your Website <ArrowRight className="w-4.5 h-4.5" />
             </button>
+            
             <button
               onClick={() => router.push("/editor")}
-              className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
+              className="h-11 px-6 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer border border-[#E6E6E6]"
             >
-              Skip & try with default template data →
+              Skip & Try Mock Data →
             </button>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Right Column: Visual Product Showcase Mockup */}
+        <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
+          <motion.div
+            variants={heroItemVariants}
+            className="w-full flex justify-center lg:justify-end"
+          >
+            <ProductShowcaseMockup />
+          </motion.div>
+        </div>
       </motion.div>
     </section>
   );
