@@ -111,11 +111,12 @@ export const accountRelations = relations(account, ({ one }) => ({
   }),
 }));
 
-export const websiteRelations = relations(website, ({ one }) => ({
+export const websiteRelations = relations(website, ({ one, many }) => ({
   user: one(user, {
     fields: [website.userId],
     references: [user.id],
   }),
+  chatMessages: many(chatMessage),
 }));
 
 // Bug reports submitted via /report-bug page
@@ -137,5 +138,23 @@ export const upgradeRequest = pgTable("upgrade_request", {
   plan: text("plan").notNull().default("pro"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
+
+// Saved AI Chat history messages
+export const chatMessage = pgTable("chat_message", {
+  id: text("id").primaryKey(),
+  websiteId: text("website_id")
+    .notNull()
+    .references(() => website.id, { onDelete: "cascade" }),
+  role: text("role").notNull(), // 'user' or 'assistant'
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const chatMessageRelations = relations(chatMessage, ({ one }) => ({
+  website: one(website, {
+    fields: [chatMessage.websiteId],
+    references: [website.id],
+  }),
+}));
 
 
