@@ -210,118 +210,26 @@ function HabitlineProductShowcase() {
   };
 
   return (
-    <div className="relative w-full max-w-5xl h-[420px] mt-12 flex justify-center items-end overflow-hidden pb-[1px] px-6 select-none pointer-events-none">
+    <div className="relative w-full max-w-5xl mt-12 px-4 select-none pointer-events-none">
       {/* Background ambient glows */}
       <div className="absolute top-1/4 left-1/4 w-44 h-44 bg-[#8DB8FF]/10 rounded-full blur-[60px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-44 h-44 bg-[#8DFFB3]/10 rounded-full blur-[60px] pointer-events-none" />
 
-      {/* Left Card: Import Success (7-day streak styled glassmorphic box) */}
+      {/* Clipped image container */}
       <motion.div
         variants={itemVariants}
         initial="hidden"
         animate="visible"
-        transition={{ delay: 0.2 }}
-        whileHover={{ y: -6 }}
-        className="absolute left-[2%] lg:left-[10%] bottom-[12%] w-[210px] rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-5 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.05)] text-left flex flex-col gap-3.5 z-20 hidden md:flex"
+        className="relative w-full overflow-hidden rounded-t-2xl border border-gray-200/80 border-b-0 shadow-[0_-12px_30px_-5px_rgba(0,0,0,0.03),0_20px_40px_-15px_rgba(0,0,0,0.08)] h-[240px] sm:h-[340px] md:h-[440px] lg:h-[480px]"
       >
-        {/* Achievement Icon Badge */}
-        <div className="w-10 h-10 rounded-full bg-[#E6FFE6] border border-[#8DFFB3]/40 flex items-center justify-center shadow-sm shrink-0">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#369762] flex items-center justify-center text-white">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="20 6 9 17 4 12" />
-            </svg>
-          </div>
-        </div>
-        <div>
-          <h4 className="text-[13px] font-bold text-black leading-tight font-inter">ZIP Parse Successful</h4>
-          <p className="text-[10px] text-gray-500 mt-1 leading-normal font-medium font-inter">
-            Parsed 8 experience records, 14 skills, and education history.
-          </p>
-        </div>
+        <img
+          src="/heroimage.png"
+          alt="Website Preview"
+          className="w-full h-auto object-cover object-top select-none pointer-events-none"
+        />
+        {/* White gradient overlay coming from bottom */}
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-white via-white/95 to-transparent z-10 pointer-events-none" />
       </motion.div>
-
-      {/* Center: iPhone Mockup Container */}
-      <motion.div
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.1 }}
-        className="w-[280px] h-[390px] border-[6px] border-[#2A2A2F] border-b-0 rounded-t-[40px] bg-[#F7F7F7] shadow-2xl relative overflow-hidden flex flex-col p-4 pt-7 gap-3.5 shrink-0 z-10 translate-y-4"
-      >
-        {/* Dynamic Island / Notch */}
-        <div className="absolute top-2.5 left-1/2 -translate-x-1/2 w-20 h-4 bg-[#2A2A2F] rounded-full z-20" />
-        
-        {/* Phone Content Screen */}
-        <div className="flex-1 flex flex-col gap-3 text-left overflow-hidden">
-          
-          {/* Micro-site Profile Header */}
-          <div className="flex items-center gap-2.5 pb-2.5 border-b border-[#E6E6E6]">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#8DB8FF] p-[1.5px] shadow-sm flex-shrink-0">
-              <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
-                <img
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"
-                  alt="Reid Hoffman"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <h5 className="text-[11px] font-bold text-[#2A2A2F] leading-none font-inter">Reid Hoffman</h5>
-              <span className="text-[8px] text-gray-400 mt-0.5 leading-none font-inter">Co-founder, LinkedIn</span>
-            </div>
-          </div>
-
-          {/* Bento Item 1: Experience */}
-          <div className="rounded-xl bg-white border border-[#E6E6E6] p-2.5 flex flex-col gap-1 shadow-sm">
-            <span className="text-[7px] font-bold text-[#369762] uppercase tracking-wider font-inter">Featured Experience</span>
-            <div className="flex items-start gap-2 mt-0.5">
-              <div className="w-6 h-6 rounded bg-[#F3F3F3] border border-[#E6E6E6] flex items-center justify-center text-[#2A2A2F] text-[8px] font-bold font-mono">
-                GL
-              </div>
-              <div>
-                <p className="text-[9px] font-bold text-black leading-tight font-inter">Partner</p>
-                <p className="text-[7.5px] text-gray-400 font-inter">Greylock • 2009 - Present</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Bento Item 2: Projects */}
-          <div className="rounded-xl bg-white border border-[#E6E6E6] p-2.5 flex flex-col gap-1 shadow-sm">
-            <span className="text-[7px] font-bold text-[#8DB8FF] uppercase tracking-wider font-inter">Key Focus</span>
-            <p className="text-[9px] font-bold text-black leading-tight font-inter">Venture Capital & Scaling</p>
-            <p className="text-[7.5px] text-gray-400 leading-normal font-inter">
-              Invested in Airbnb, Facebook, Dropbox. Specialized in scaling networks and market strategy.
-            </p>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Right Card: Instant domain (Today's goal styled glassmorphic box) */}
-      <motion.div
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        transition={{ delay: 0.3 }}
-        whileHover={{ y: -6 }}
-        className="absolute right-[2%] lg:right-[10%] bottom-[16%] w-[190px] rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-5 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.05)] text-left flex flex-col gap-3 z-20 hidden md:flex"
-      >
-        <div className="flex flex-col gap-1">
-          <h4 className="text-[12px] font-bold text-black leading-tight font-inter">Live publishing</h4>
-          <p className="text-[9.5px] text-gray-500 leading-normal font-medium font-inter">
-            Your professional page is active on our global edge network.
-          </p>
-        </div>
-        
-        <div className="border-t border-[#F3F3F3] pt-2.5 flex items-center justify-between">
-          <span className="text-[9.5px] text-gray-400 font-semibold font-inter">Domain</span>
-          <span className="text-[10px] font-bold text-[#1B5E20] bg-[#E6FFE6] border border-[#8DFFB3]/40 px-2 py-0.5 rounded-full leading-none font-inter">
-            reid.linked.me
-          </span>
-        </div>
-      </motion.div>
-
-      {/* Bottom blend gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-white via-white/80 to-transparent z-30 pointer-events-none" />
     </div>
   );
 }
