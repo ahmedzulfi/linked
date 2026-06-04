@@ -197,117 +197,161 @@ const COLOR_PALETTES = [
   { name: "Rosewood", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(184, 43, 64) 25%, rgb(184, 43, 64) 50%, rgb(185, 9, 65) 50%, rgb(185, 9, 65) 75%, rgb(232, 168, 182) 75%, rgb(232, 168, 182) 100%)" },
 ];
 
-function FloatingBentoMockup() {
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as const }
-    }
-  };
-
+function LinkedInMobileMockup() {
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={{
-        visible: {
-          transition: { staggerChildren: 0.1 }
-        }
-      }}
-      className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-12 px-4 relative"
-    >
-      {/* Profile Card */}
-      <motion.div
-        variants={itemVariants}
-        whileHover={{ y: -6, transition: { duration: 0.2 } }}
-        className="md:col-span-1 rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-6 flex flex-col gap-4 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] text-left"
-      >
-        <div className="flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#8DB8FF] p-[2px] shadow-sm">
-            <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
-              <img
-                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"
-                alt="Reid Hoffman"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-          <div>
-            <h3 className="text-[17px] font-bold text-black font-inter-tight leading-tight">Reid Hoffman</h3>
-            <p className="text-[12px] text-gray-400 font-inter-tight">Co-founder, LinkedIn</p>
-          </div>
-        </div>
-        <p className="text-[13px] text-[#171717]/70 leading-relaxed font-inter-tight">
-          Entrepreneur, VC, and executive. Passionate about building networks and scaling platforms that transform global industries.
-        </p>
-        <div className="flex gap-2 mt-1">
-          <span className="text-[11px] font-semibold text-gray-500 bg-[#F3F3F3] border border-neutral-200/50 px-2.5 py-1 rounded-full leading-none">
-            Silicon Valley
-          </span>
-          <span className="text-[11px] font-semibold text-[#1B5E20] bg-[#E6FFE6] border border-[#8DFFB3]/40 px-2.5 py-1 rounded-full leading-none">
-            VC & Angel
-          </span>
-        </div>
-      </motion.div>
+    <div className="w-[190px] h-[340px] rounded-[36px] border-[5px] border-gray-900 bg-white shadow-xl overflow-hidden flex flex-col relative text-left select-none shrink-0 border-double">
+      {/* Top Notch Camera */}
+      <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-14 h-3.5 rounded-full bg-gray-900 z-30 flex items-center justify-center">
+        <div className="w-1.5 h-1.5 rounded-full bg-gray-800" />
+      </div>
 
-      {/* Experience Card */}
-      <motion.div
-        variants={itemVariants}
-        whileHover={{ y: -6, transition: { duration: 0.2 } }}
-        className="md:col-span-1 rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-6 flex flex-col gap-4 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] text-left"
-      >
-        <h4 className="text-[12px] font-bold text-[#369762] uppercase tracking-wider font-inter-tight">
-          Featured Experience
-        </h4>
-        <div className="flex flex-col gap-3.5">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0a66c2] text-xs font-bold shrink-0">
+      {/* Screen Status Bar */}
+      <div className="h-6 pt-1 px-4 flex items-center justify-between text-black/80 text-[7px] font-bold font-mono z-20 bg-white shrink-0">
+        <span>9:41</span>
+        <div className="flex items-center gap-1">
+          <svg className="w-2 h-2" viewBox="0 0 10 10" fill="currentColor">
+            <path d="M1 9h8V1H1v8z M2 8V2h6v6H2z" />
+          </svg>
+          <svg className="w-2.5 h-2" viewBox="0 0 10 10" fill="currentColor">
+            <path d="M1 5a4 4 0 0 1 8 0H1z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Scrollable Screen Content */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide text-[#171717]">
+        {/* Cover Photo */}
+        <div className="h-12 bg-gradient-to-r from-[#0077b5] to-[#00a0dc] relative">
+          <span className="absolute right-3 top-2 text-white/95 font-bold text-[9px] font-sans tracking-wide">
+            in
+          </span>
+        </div>
+
+        {/* Profile Picture (overlapping banner) */}
+        <div className="px-3.5 relative -mt-6 z-10">
+          <div className="w-13 h-13 rounded-full border-[2.5px] border-white bg-gray-100 overflow-hidden shadow-sm flex items-center justify-center shrink-0">
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"
+              alt="Reid Hoffman"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Profile Info */}
+        <div className="px-3.5 pt-1.5 flex flex-col">
+          <h4 className="text-[12px] font-extrabold text-black leading-tight">Reid Hoffman</h4>
+          <p className="text-[8px] text-gray-500 font-medium leading-normal mt-0.5">
+            Co-founder, LinkedIn | Partner, Greylock
+          </p>
+          <span className="text-[7.5px] text-gray-400 font-medium mt-0.5">San Francisco Bay Area</span>
+          
+          <div className="flex items-center gap-1.5 mt-2.5">
+            <button className="h-[21px] flex-1 rounded-full bg-[#0a66c2] text-white text-[8px] font-bold hover:bg-[#004b87] transition-colors flex items-center justify-center cursor-pointer">
+              Connect
+            </button>
+            <button className="h-[21px] flex-1 rounded-full border border-gray-400 text-gray-700 text-[8px] font-bold hover:bg-gray-50 transition-colors flex items-center justify-center cursor-pointer">
+              Message
+            </button>
+          </div>
+        </div>
+
+        {/* Experience Section */}
+        <div className="px-3.5 pt-4 pb-3 flex flex-col gap-2 border-t border-gray-100 mt-3.5">
+          <h5 className="text-[9.5px] font-extrabold text-black uppercase tracking-wide">Experience</h5>
+          
+          <div className="flex gap-2 items-start mt-1">
+            <div className="w-6 h-6 rounded bg-[#0a66c2] text-white flex items-center justify-center font-bold text-[10px] shrink-0 font-sans">
               in
             </div>
-            <div>
-              <p className="text-[13.5px] font-bold text-black leading-tight">Co-Founder & CEO</p>
-              <p className="text-[11.5px] text-gray-500">LinkedIn • 2002 - 2009</p>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold text-black leading-tight">Co-Founder & CEO</span>
+              <span className="text-[7px] text-gray-400 leading-none mt-0.5">LinkedIn • 2002 - 2009</span>
             </div>
           </div>
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#2A2A2F]/5 border border-[#2A2A2F]/10 flex items-center justify-center text-[#2A2A2F] text-[10px] font-bold shrink-0">
+
+          <div className="flex gap-2 items-start mt-1">
+            <div className="w-6 h-6 rounded bg-[#2A2A2F]/5 border border-black/10 text-[#2A2A2F] flex items-center justify-center font-bold text-[8px] shrink-0">
               GL
             </div>
-            <div>
-              <p className="text-[13.5px] font-bold text-black leading-tight">Partner</p>
-              <p className="text-[11.5px] text-gray-500">Greylock • 2009 - Present</p>
+            <div className="flex flex-col">
+              <span className="text-[9px] font-bold text-black leading-tight">Partner</span>
+              <span className="text-[7px] text-gray-400 leading-none mt-0.5">Greylock • 2009 - Present</span>
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
+    </div>
+  );
+}
 
-      {/* Skills Card */}
-      <motion.div
-        variants={itemVariants}
-        whileHover={{ y: -6, transition: { duration: 0.2 } }}
-        className="md:col-span-1 rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-6 flex flex-col justify-between gap-4 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] text-left"
-      >
-        <div className="flex flex-col gap-3">
-          <h4 className="text-[12px] font-bold text-[#8DB8FF] uppercase tracking-wider font-inter-tight">
-            Expertise & Focus
-          </h4>
-          <div className="flex flex-wrap gap-1.5">
-            {["Venture Capital", "Scaling", "Product Strategy", "Network Effects", "AI Ethics"].map((skill) => (
-              <span key={skill} className="text-[11px] font-medium text-[#2A2A2F] bg-white border border-[#E6E6E6] px-2.5 py-1 rounded-lg">
-                {skill}
-              </span>
-            ))}
+function WebsiteMobileMockup() {
+  return (
+    <div className="w-[190px] h-[340px] rounded-[36px] border-[5px] border-gray-900 bg-[#FBFBFB] shadow-xl overflow-hidden flex flex-col relative text-left select-none shrink-0 border-double">
+      {/* Top Notch Camera */}
+      <div className="absolute top-1.5 left-1/2 -translate-x-1/2 w-14 h-3.5 rounded-full bg-gray-900 z-30 flex items-center justify-center">
+        <div className="w-1.5 h-1.5 rounded-full bg-gray-800" />
+      </div>
+
+      {/* Screen Status Bar */}
+      <div className="h-6 pt-1 px-4 flex items-center justify-between text-black/85 text-[7px] font-bold font-mono z-20 bg-white/60 backdrop-blur-md shrink-0 border-b border-gray-100">
+        <span>9:41</span>
+        <div className="flex items-center gap-1">
+          <svg className="w-2.5 h-2" viewBox="0 0 10 10" fill="currentColor">
+            <path d="M1 5a4 4 0 0 1 8 0H1z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Scrollable Screen Content */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide p-2.5 flex flex-col gap-2 bg-[#F7F7F7]">
+        {/* Profile Card Block */}
+        <div className="rounded-2xl bg-white border border-[#E6E6E6] p-3 flex flex-col gap-2.5 shadow-[0_6px_14px_-6px_rgba(0,0,0,0.03)] shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#8DB8FF] p-[1.5px] shadow-sm shrink-0">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"
+                  alt="Reid Hoffman"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col text-left">
+              <h5 className="text-[10px] font-bold text-[#2A2A2F] leading-none">Reid Hoffman</h5>
+              <span className="text-[6.5px] text-gray-400 mt-0.5 leading-none">Co-founder LinkedIn</span>
+            </div>
+          </div>
+          <p className="text-[8.5px] text-gray-500 leading-normal font-medium">
+            Entrepreneur and VC. Passionate about building global scaling platforms.
+          </p>
+        </div>
+
+        {/* Experience Bento Item */}
+        <div className="rounded-2xl bg-white border border-[#E6E6E6] p-3 flex flex-col gap-2 shadow-[0_6px_14px_-6px_rgba(0,0,0,0.03)] shrink-0">
+          <span className="text-[6.5px] font-bold text-[#369762] uppercase tracking-wider">Experience</span>
+          <div className="flex flex-col gap-2 mt-0.5">
+            <div className="flex justify-between items-center">
+              <span className="text-[8.5px] font-bold text-[#2A2A2F]">Partner, Greylock</span>
+              <span className="text-[6px] text-gray-400">2009-Pres</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span className="text-[8.5px] font-bold text-[#2A2A2F]">CEO, LinkedIn</span>
+              <span className="text-[6px] text-gray-400">2002-2009</span>
+            </div>
           </div>
         </div>
 
-        <div className="border-t border-[#F3F3F3] pt-3 flex items-center justify-between">
-          <span className="text-[11.5px] font-semibold text-gray-400">Education</span>
-          <span className="text-[12.5px] font-bold text-[#2A2A2F] font-inter-tight">Stanford University</span>
+        {/* Focus / Skills Bento Item */}
+        <div className="rounded-2xl bg-[#E6FFE6] border border-[#8DFFB3]/40 p-3 flex flex-col gap-1.5 shadow-[0_6px_14px_-6px_rgba(0,0,0,0.03)] shrink-0">
+          <span className="text-[6.5px] font-bold text-[#1B5E20] uppercase tracking-wider">Focus</span>
+          <div className="flex flex-wrap gap-1 mt-0.5">
+            <span className="px-1.5 py-0.5 rounded bg-white text-[#369762] text-[5px] font-bold border border-[#8DFFB3]/30">Venture</span>
+            <span className="px-1.5 py-0.5 rounded bg-white text-[#369762] text-[5px] font-bold border border-[#8DFFB3]/30">Network Scaling</span>
+          </div>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 }
 
@@ -337,7 +381,7 @@ function HeroSection() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-28 pb-20">
+    <section className="relative w-full min-h-screen flex items-center justify-center overflow-hidden bg-white pt-24 pb-16">
       {/* Background image + overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
         <img
@@ -348,73 +392,97 @@ function HeroSection() {
         <div className="absolute inset-0 hero-overlay" />
       </div>
 
-      {/* Centered Content Container */}
+      {/* Symmetrical 3-Column Grid Container */}
       <motion.div
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center text-center gap-6 px-6 sm:px-8"
+        className="relative z-10 max-w-[1300px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 px-6 sm:px-8 items-center text-center justify-center"
       >
-        {/* Badge */}
-        <motion.div
-          variants={heroItemVariants}
-          onClick={() => router.push("/onboarding")}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-transform"
-        >
-          <span className="gradient-text-rainbow text-[13px] font-semibold leading-[18px]">
-            Create in under 60 seconds
-          </span>
-          <span className="flex items-center justify-center w-6 h-6 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-transform">
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </motion.div>
+        {/* Left Column: LinkedIn Mobile Mockup (hidden on mobile, visible on desktop) */}
+        <div className="lg:col-span-3 hidden lg:flex justify-center xl:justify-start">
+          <motion.div
+            variants={heroItemVariants}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+          >
+            <LinkedInMobileMockup />
+          </motion.div>
+        </div>
 
-        {/* Heading Title */}
-        <motion.h1
-          variants={heroItemVariants}
-          className="text-black text-[42px] sm:text-[56px] lg:text-[68px] leading-[1.05] font-semibold tracking-tight font-inter-tight max-w-4xl"
-        >
-          LinkedIn to personal Website.
-        </motion.h1>
-
-        {/* Subheading description */}
-        <motion.p
-          variants={heroItemVariants}
-          className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-2xl font-inter-tight"
-        >
-          Instantly turn your LinkedIn public data export ZIP into a fully structured personal website. Edit layout templates, add custom domains, and go live.
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          variants={heroItemVariants}
-          className="flex flex-wrap items-center justify-center gap-4 mt-2"
-        >
-          <button
+        {/* Center Column: Heading and description */}
+        <div className="lg:col-span-6 flex flex-col items-center gap-5 justify-center">
+          {/* Badge */}
+          <motion.div
+            variants={heroItemVariants}
             onClick={() => router.push("/onboarding")}
-            className="h-11 px-6 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-transform"
           >
-            Build Your Website <ArrowRight className="w-4.5 h-4.5" />
-          </button>
-          
-          <button
-            onClick={() => router.push("/editor")}
-            className="h-11 px-6 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer border border-[#E6E6E6]"
-          >
-            Skip & Try Mock Data →
-          </button>
-        </motion.div>
+            <span className="gradient-text-rainbow text-[13px] font-semibold leading-[18px]">
+              Create in under 60 seconds
+            </span>
+            <span className="flex items-center justify-center w-6 h-6 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-transform">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+          </motion.div>
 
-        {/* Floating Bento Mockup Below */}
-        <motion.div
-          variants={heroItemVariants}
-          className="w-full flex justify-center mt-6"
-        >
-          <FloatingBentoMockup />
-        </motion.div>
+          {/* Heading Title */}
+          <motion.h1
+            variants={heroItemVariants}
+            className="text-black text-[42px] sm:text-[54px] lg:text-[62px] leading-[1.05] font-semibold tracking-tight font-inter-tight max-w-2xl"
+          >
+            LinkedIn to personal Website.
+          </motion.h1>
+
+          {/* Subheading description */}
+          <motion.p
+            variants={heroItemVariants}
+            className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-xl font-inter-tight"
+          >
+            Instantly turn your LinkedIn public data export ZIP into a fully structured personal website. Edit layout templates, add custom domains, and go live.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            variants={heroItemVariants}
+            className="flex flex-wrap items-center justify-center gap-4 mt-2"
+          >
+            <button
+              onClick={() => router.push("/onboarding")}
+              className="h-11 px-6 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
+            >
+              Build Your Website <ArrowRight className="w-4.5 h-4.5" />
+            </button>
+            
+            <button
+              onClick={() => router.push("/editor")}
+              className="h-11 px-6 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer border border-[#E6E6E6]"
+            >
+              Skip & Try Mock Data →
+            </button>
+          </motion.div>
+
+          {/* Symmetrical Dual Mockups side-by-side (Visible only on mobile/tablet screens below the stack) */}
+          <motion.div
+            variants={heroItemVariants}
+            className="flex lg:hidden flex-row justify-center gap-5 mt-8 w-full overflow-x-auto pb-4 scrollbar-hide"
+          >
+            <LinkedInMobileMockup />
+            <WebsiteMobileMockup />
+          </motion.div>
+        </div>
+
+        {/* Right Column: Generated Website Mobile Mockup (hidden on mobile, visible on desktop) */}
+        <div className="lg:col-span-3 hidden lg:flex justify-center xl:justify-end">
+          <motion.div
+            variants={heroItemVariants}
+            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+          >
+            <WebsiteMobileMockup />
+          </motion.div>
+        </div>
       </motion.div>
     </section>
   );
