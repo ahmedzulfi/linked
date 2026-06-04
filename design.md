@@ -189,18 +189,24 @@ Buttons are the most expressive component family. `button-primary` uses the char
 
 Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action
 
-### Onboarding UI (Linear Wizard Flow)
-The application flow is simplified into a linear wizard containing 8 stages:
-- **Card Container:** Structured inside a clean, rounded card panel (`bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-xl`).
-- **Steps:**
-  1. **ZIP Upload:** File drop zone with a dashed border (`border-2 border-dashed border-neutral-200 hover:border-blue-400 rounded-2xl p-8 bg-neutral-50/50 cursor-pointer`).
-  2. **Projects:** Form to add and list portfolio items (title, description, links, image preview).
-  3. **Interests:** Spacious textarea to collect passions and aspirations.
-  4. **Skills Tag Manager:** Pre-filled from ZIP, rendered as rounded white chip tags with remove tags functionality, alongside a tag adder field.
-  5. **Experience timeline:** Form elements for role title, company, duration, and bullet points.
-  6. **Background AI loading:** Uses `AnimatedGeneratingIllustration` and status indicators during LLM optimization.
-  7. **Template selector:** Grid layout displaying the 4 templates with live scaled previews (`scale-[0.45]`) using user data.
-  8. **Publish & slug input:** Input form with suffix `.linkedpage.io` verifying subdomain availability in real-time.
+### Onboarding & Editor UI (Conversational Split-Screen Dashboard)
+Once the user uploads their LinkedIn ZIP archive on `/onboarding`, they are redirected to a premium split-screen interface on `/editor`.
+- **Left Column (Conversational AI Wizard):**
+  - Designed as a chat-like panel featuring message feeds from the assistant.
+  - Renders inline, interactive form elements as step-specific assistant widgets:
+    1. **Projects:** Form inputs to add/manage project titles, descriptions, and links.
+    2. **Interests:** Input interface to record passions, hobbies, and career goals.
+    3. **Skills:** Tag manager rendering interactive, rounded white chip tags with remove toggles and an inline tag adder.
+    4. **Experience:** Interactive fields for job titles, companies, dates, and bulleted achievements.
+    5. **Template Selector:** Direct template selection showing preview cards of the four styles.
+    6. **Publishing:** Domain availability checking and publishing configuration.
+- **Right Column (Contextual Animations & Live Preview):**
+  - **Dynamic CSS-Animated SVGs:** Renders custom CSS animations corresponding to the active step in the wizard:
+    - *Experience Step:* A dynamic timeline builder.
+    - *Projects Step:* Flying material/block animations.
+    - *Interests Step:* A pulsing, glowing lightbulb concept.
+    - *Skills Step:* Floating chip/tag orbits.
+  - **Live Sandbox Preview:** Automatically transitions to a live iframe workspace rendering the generated portfolio with desktop/mobile width toggles once the user reaches the template selection stage.
 
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
