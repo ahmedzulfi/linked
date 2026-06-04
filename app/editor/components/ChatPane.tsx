@@ -1,16 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { MessageSquare, LayoutGrid, Edit2, Plus, Mic, ArrowUp } from "lucide-react";
+import { MessageSquare, LayoutGrid, Plus, Mic, ArrowUp } from "lucide-react";
 import { toast } from "sonner";
 import { useEditor } from "@/context/EditorContext";
 import { ProfileData, TemplateId } from "@/shared/types";
 import TemplatePicker from "./TemplatePicker";
-import InlineEditor from "./InlineEditor";
 import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedThinkingIllustration } from "@/components/AnimatedSVGs";
 
-export type ChatTab = "chat" | "theme" | "grid";
+export type ChatTab = "chat" | "grid";
 
 interface ChatPaneProps {
   onCommand: (cmd: string) => void;
@@ -21,8 +20,8 @@ interface ChatPaneProps {
   onChangeField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
   activeTab: ChatTab;
   setActiveTab: (tab: ChatTab) => void;
-  editorTab?: "profile" | "experience" | "links";
-  setEditorTab?: (tab: "profile" | "experience" | "links") => void;
+  prefill: string;
+  onClearPrefill: () => void;
 }
 
 interface ChatMessage {
@@ -77,14 +76,22 @@ export default function ChatPane({
   onChangeField,
   activeTab,
   setActiveTab,
-  editorTab,
-  setEditorTab,
+  prefill,
+  onClearPrefill,
 }: ChatPaneProps) {
   const { websiteId } = useEditor();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  // Prefill prompt when triggered
+  useEffect(() => {
+    if (prefill) {
+      setInput(prefill);
+      onClearPrefill();
+    }
+  }, [prefill, onClearPrefill]);
 
   // Load chat history from backend on mount or when websiteId changes
   useEffect(() => {
@@ -175,27 +182,6 @@ export default function ChatPane({
       const lower = msg.toLowerCase();
       if (lower.includes("change template") || lower.includes("switch template") || lower.includes("switch to")) {
         setActiveTab("grid");
-      } else if (
-        lower.includes("edit bio") ||
-        lower.includes("add links") ||
-        lower.includes("refine hero") ||
-        lower.includes("about description") ||
-        lower.includes("skills") ||
-        lower.includes("social links") ||
-        lower.includes("headline") ||
-        lower.includes("summary") ||
-        lower.includes("location")
-      ) {
-        setActiveTab("theme");
-        if (setEditorTab) {
-          if (lower.includes("social links") || lower.includes("add links") || lower.includes("link")) {
-            setEditorTab("links");
-          } else if (lower.includes("skills")) {
-            setEditorTab("experience");
-          } else {
-            setEditorTab("profile");
-          }
-        }
       }
 
       onCommand(msg);
@@ -234,13 +220,6 @@ export default function ChatPane({
         <LayoutGrid className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
       ),
       label: "Templates",
-    },
-    {
-      id: "theme" as ChatTab,
-      icon: (isActive: boolean) => (
-        <Edit2 className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
-      ),
-      label: "Edit",
     },
   ];
 
@@ -447,17 +426,6 @@ export default function ChatPane({
         {activeTab === "grid" && (
           <div className="flex-1 overflow-y-auto pb-6" style={{ scrollbarWidth: "none" }}>
             <TemplatePicker selected={selectedTemplate} onSelect={onSelectTemplate} />
-          </div>
-        )}
-
-        {activeTab === "theme" && profile && (
-          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
-            <InlineEditor
-              profile={profile}
-              onChange={onChangeField}
-              activeTab={editorTab}
-              setActiveTab={setEditorTab}
-            />
           </div>
         )}
       </div>

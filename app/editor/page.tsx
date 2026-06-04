@@ -73,6 +73,7 @@ function EditorInner() {
   const [publishing, setPublishing] = useState(false);
   const [activeTab, setActiveTab] = useState<ChatTab>("chat");
   const [editorTab, setEditorTab] = useState<"profile" | "experience" | "links">("profile");
+  const [chatPrefill, setChatPrefill] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -257,25 +258,28 @@ function EditorInner() {
   };
 
   const handleFieldClick = (fieldName: string) => {
-    setActiveTab("theme");
+    setActiveTab("chat");
+    let prefill = "";
     if (fieldName === "experience") {
-      setEditorTab("experience");
+      prefill = "I want to update my work experience: ";
     } else if (fieldName === "links") {
-      setEditorTab("links");
+      prefill = "I want to update my social links: ";
+    } else if (fieldName === "skills") {
+      prefill = "I want to add some skills: ";
+    } else if (fieldName === "headline") {
+      prefill = "I want to change my headline: ";
+    } else if (fieldName === "summary") {
+      prefill = "I want to shorten/rewrite my summary: ";
     } else {
-      setEditorTab("profile");
+      prefill = `I want to update my ${fieldName}: `;
     }
+    setChatPrefill(prefill);
     
     setTimeout(() => {
-      const el = document.getElementById(`editor-field-${fieldName}`);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "center" });
-        const inputEl = el.querySelector("input, textarea");
-        if (inputEl) {
-          (inputEl as HTMLElement).focus();
-        } else {
-          (el as HTMLElement).focus();
-        }
+      const textarea = document.querySelector("textarea[placeholder='Ask Webild...']") as HTMLTextAreaElement;
+      if (textarea) {
+        textarea.focus();
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
       }
     }, 150);
   };
@@ -408,8 +412,8 @@ function EditorInner() {
           onChangeField={updateField}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
-          editorTab={editorTab}
-          setEditorTab={setEditorTab}
+          prefill={chatPrefill}
+          onClearPrefill={() => setChatPrefill("")}
         />
       )}
       {activeNav === 2 && (

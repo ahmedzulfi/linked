@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getChatHistory, saveChatMessage } from "@/lib/db";
-import { ProfileData } from "@/shared/types";
+import { ProfileData, TemplateId } from "@/shared/types";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
+import { generateText, tool } from "ai";
+import { z } from "zod";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -21,91 +24,25 @@ function checkRateLimit(userId: string): boolean {
 }
 
 function buildSystemPrompt(profile: ProfileData, currentTemplate: string): string {
-  // Extract simple skills context for the few-shot examples
-  const currentSkills = profile.skills || [];
-  const exampleSkills = [...currentSkills, { name: "Python" }];
-
   return `You are an expert AI website generator and editor assistant for "LinkedPage" (a platform that transforms LinkedIn profiles into personal websites).
 Your task is to conversationally interact with the user and execute their requested updates to their personal page.
 
-Here is the CURRENT website state:
+To update the website, you MUST use the appropriate tools provided to you:
+- To update text fields like name, headline, summary, location, avatarUrl, bannerUrl, use 'update_profile_field'.
+- To replace or add experience items, use 'update_experience'.
+- To replace or add skills, use 'update_skills'.
+- To replace or add social/portfolio links, use 'update_links'.
+- To switch the website layout template, use 'switch_template' (available templates: "minimal-card", "bento-grid", "full-scroll", "dark").
+
+Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
 - Profile Data JSON:
 ${JSON.stringify(profile, null, 2)}
 
-You can modify ANY field in the Profile Data (including name, headline, summary, location, avatarUrl, bannerUrl, experience, education, skills, links).
-You can also change the template to one of the following available templates:
-- "minimal-card" (Clean white card layout, Notion-style)
-- "bento-grid" (Modular bento grid layout with skill chips and experience tiles)
-- "full-scroll" (Long-form scroll with rich sections for experience)
-- "dark" (Sleek dark-themed personal page with subtle glow accents)
-
-YOUR RESPONSE FORMAT:
-You MUST reply with a single JSON object. Do not output any conversational text or markdown explanation before or after the JSON.
-The JSON must match the following structure exactly:
-{
-  "reply": "Your brief, friendly conversational message back to the user explaining what you updated.",
-  "updates": {
-    "profile": {
-      // ONLY include fields that need to change. Do NOT include fields that are unchanged.
-      // If updating an array (like experience, skills, education, or links), you MUST provide the FULL updated array.
-      // Example to edit summary: { "summary": "New shortened bio text..." }
-      // Example to edit headline: { "headline": "New headline text..." }
-    },
-    "template": "template-id-here" // or null if not changing
-  }
-}
-
-EXAMPLES:
-
-1. User says: "shorten my summary"
-Response:
-{
-  "reply": "I've shortened your summary to be more concise and highlight your core expertise.",
-  "updates": {
-    "profile": {
-      "summary": "Shortened, high-impact version of their summary here..."
-    },
-    "template": null
-  }
-}
-
-2. User says: "change the theme to dark mode"
-Response:
-{
-  "reply": "I've switched your page template to the sleek Dark Mode theme.",
-  "updates": {
-    "profile": {},
-    "template": "dark"
-  }
-}
-
-3. User says: "add python to my skills"
-Response:
-{
-  "reply": "I have added Python to your skills list.",
-  "updates": {
-    "profile": {
-      "skills": ${JSON.stringify(exampleSkills)}
-    },
-    "template": null
-  }
-}
-
-4. User says: "hi, how are you?"
-Response:
-{
-  "reply": "Hello! I'm here to help you customize and edit your website. Let me know what you'd like to change!",
-  "updates": {
-    "profile": {},
-    "template": null
-  }
-}
-
-Remember:
-- Only update fields the user asked to change. Keep updates minimal.
-- When updating arrays (skills, experience, links, education), you MUST return the COMPLETE array with the additions or removals applied.
-- Maintain professional, clean formatting for all profile edits.`;
+Instructions:
+1. Explain friendly and conversationally what updates you are making in your response.
+2. Only update fields the user asked to change. Keep updates minimal.
+3. Be helpful, professional, and maintain high-quality writing when updating fields.`;
 }
 
 export async function GET(request: Request) {
@@ -186,151 +123,167 @@ export async function POST(request: Request) {
       });
     }
 
-    const modelsToTry = [
-      process.env.OPENROUTER_MODEL || "openrouter/free",
-      "google/gemma-2-9b-it:free",
-      "meta-llama/llama-3.1-8b-instruct:free",
-      "qwen/qwen-2.5-72b-instruct:free",
-      "qwen/qwen-2-7b-instruct:free",
-      "meta-llama/llama-3.3-70b-instruct:free",
-      "meta-llama/llama-3.2-3b-instruct:free"
-    ];
+    // Initialize the OpenRouter client
+    const openrouter = createOpenRouter({
+      apiKey: openrouterApiKey,
+    });
 
-    const uniqueModels = Array.from(new Set(modelsToTry));
-    let response: Response | null = null;
-    let lastErrorDetails = "";
-    let chosenModel = "";
+    const modelName = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+    const model = openrouter(modelName);
 
-    // Build the system prompt
+    // Local accumulation of updates performed by tools
+    const profileUpdates: Partial<ProfileData> = {};
+    let templateUpdate: TemplateId | null = null;
+
     const systemPromptContent = buildSystemPrompt(website.profile as ProfileData, website.templateId || "minimal-card");
 
-    // Format chat messages history for OpenRouter
+    // Format chat messages history for Vercel AI SDK
     const chatMessagesContext = history.map((msg) => ({
       role: msg.role as "user" | "assistant",
       content: msg.content,
     }));
 
-    for (const model of uniqueModels) {
-      try {
-        console.log(`[Chat API] Attempting OpenRouter call with model: ${model}`);
-        const res = await fetch(`${process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"}/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${openrouterApiKey}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-            "X-Title": "LinkedPage Editor",
-          },
-          body: JSON.stringify({
-            model: model,
-            messages: [
-              { role: "system", content: systemPromptContent },
-              ...chatMessagesContext,
-              { role: "user", content: message }
-            ],
-            temperature: 0.7,
-            max_tokens: 800,
+    // Call generateText with tools
+    const result = await generateText({
+      model,
+      messages: [
+        { role: "system", content: systemPromptContent },
+        ...chatMessagesContext,
+        { role: "user", content: message }
+      ],
+      tools: {
+        update_profile_field: tool({
+          description: "Updates a single string/text field in the user's profile (name, headline, summary, location, avatarUrl, bannerUrl). Only call this for text fields.",
+          inputSchema: z.object({
+            key: z.enum(["name", "headline", "summary", "location", "avatarUrl", "bannerUrl"]).describe("The field name to update"),
+            value: z.string().describe("The new value for the field"),
           }),
-        });
-
-        if (res.ok) {
-          response = res;
-          chosenModel = model;
-          break;
-        } else {
-          const errText = await res.text();
-          console.warn(`[Chat API] OpenRouter model ${model} failed with status ${res.status}:`, errText);
-          lastErrorDetails = `Model ${model} failed (${res.status}): ${errText}`;
-        }
-      } catch (err: any) {
-        console.error(`[Chat API] Error requesting model ${model}:`, err);
-        lastErrorDetails = `Model ${model} network error: ${err.message || err}`;
+          execute: async ({ key, value }) => {
+            try {
+              profileUpdates[key] = value;
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  [key]: value
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: key, value };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        update_experience: tool({
+          description: "Replaces the entire experience array with a new array. Always provide the complete updated list of experience items.",
+          inputSchema: z.object({
+            experience: z.array(z.object({
+              title: z.string().describe("Job title"),
+              company: z.string().describe("Company name"),
+              duration: z.string().describe("Time period, e.g. '2020 - Present'"),
+              description: z.string().describe("Description of responsibilities and achievements"),
+              logo: z.string().optional().describe("URL or placeholder for company logo"),
+            })).describe("The complete new experience list"),
+          }),
+          execute: async ({ experience }) => {
+            try {
+              profileUpdates.experience = experience;
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  experience
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "experience", count: experience.length };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        update_skills: tool({
+          description: "Replaces the entire skills array with a new array of skills. Always provide the complete updated list of skills.",
+          inputSchema: z.object({
+            skills: z.array(z.object({
+              name: z.string().describe("Skill name, e.g. 'React'"),
+            })).describe("The complete new skills list"),
+          }),
+          execute: async ({ skills }) => {
+            try {
+              profileUpdates.skills = skills;
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  skills
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "skills", count: skills.length };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        update_links: tool({
+          description: "Replaces the entire links array with a new array of social/portfolio links. Always provide the complete updated list of links.",
+          inputSchema: z.object({
+            links: z.array(z.object({
+              label: z.string().describe("Link label, e.g. 'GitHub', 'LinkedIn'"),
+              url: z.string().describe("URL for the link"),
+              icon: z.enum(["linkedin", "twitter", "github", "website", "email", "other"]).optional().describe("Icon category"),
+            })).describe("The complete new links list"),
+          }),
+          execute: async ({ links }) => {
+            try {
+              profileUpdates.links = links;
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  links
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "links", count: links.length };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        }),
+        switch_template: tool({
+          description: "Changes the website layout template to a different template style.",
+          inputSchema: z.object({
+            templateId: z.enum(["minimal-card", "bento-grid", "full-scroll", "dark"]).describe("The ID of the template style to switch to"),
+          }),
+          execute: async ({ templateId }) => {
+            try {
+              templateUpdate = templateId as TemplateId;
+              await updateWebsite(websiteId, { templateId: templateId as TemplateId });
+              return { success: true, updated: "templateId", value: templateId };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          }
+        })
       }
-    }
+    });
 
-    if (!response) {
-      console.error("[Chat API] All OpenRouter models failed. Last error details:", lastErrorDetails);
-      const errReply = "I'm having trouble connecting right now. Try again in a moment.";
-      // We do not save connection errors to chat history to keep history clean
-      return NextResponse.json({
-        success: true,
-        reply: errReply,
-        profileUpdates: {},
-        template: null
-      });
-    }
-
-    console.log(`[Chat API] OpenRouter call succeeded using model: ${chosenModel}`);
-    const aiData = await response.json();
-    const rawContent = aiData.choices?.[0]?.message?.content || "";
-
-    let parsed: { reply: string; updates: { profile: Partial<ProfileData>; template: string | null } };
-
-    try {
-      let cleaned = rawContent.trim();
-      
-      // Find first occurrence of '{' and last occurrence of '}' to extract JSON
-      const firstBrace = cleaned.indexOf("{");
-      const lastBrace = cleaned.lastIndexOf("}");
-      
-      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
-      }
-      
-      // Strip any accidental markdown code fences
-      cleaned = cleaned.replace(/```json|```/g, "").trim();
-      
-      // Clean up common JSON issues: comments, trailing commas
-      cleaned = cleaned.replace(/\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm, '$1');
-      cleaned = cleaned.replace(/,\s*}/g, "}").replace(/,\s*]/g, "]");
-
-      parsed = JSON.parse(cleaned);
-      if (!parsed.reply) {
-        parsed.reply = "I've updated your website settings.";
-      }
-      if (!parsed.updates) {
-        parsed.updates = { profile: {}, template: null };
-      }
-    } catch (parseErr) {
-      console.warn("[Chat API] JSON parsing failed. Raw content was:", rawContent, "Error details:", parseErr);
-      // If JSON parsing fails, treat the whole response as a plain reply with no updates
-      parsed = {
-        reply: rawContent || "I had trouble understanding that. Could you rephrase?",
-        updates: { profile: {}, template: null }
-      };
-    }
+    const replyText = result.text || "I have updated your page successfully.";
 
     // 3. Save assistant response to DB
-    await saveChatMessage(websiteId, "assistant", parsed.reply);
-
-    // Apply updates to DB if any exist
-    const hasProfileUpdates = Object.keys(parsed.updates?.profile || {}).length > 0;
-    const hasTemplateUpdate = parsed.updates?.template && parsed.updates.template !== website.templateId;
-
-    if (hasProfileUpdates || hasTemplateUpdate) {
-      const dbUpdates: any = {};
-      
-      if (hasProfileUpdates) {
-        dbUpdates.profile = {
-          ...website.profile,
-          ...parsed.updates.profile,
-        };
-      }
-      
-      if (hasTemplateUpdate) {
-        dbUpdates.templateId = parsed.updates.template;
-      }
-      
-      await updateWebsite(websiteId, dbUpdates);
-    }
+    await saveChatMessage(websiteId, "assistant", replyText);
 
     return NextResponse.json({
       success: true,
-      reply: parsed.reply,
-      profileUpdates: parsed.updates?.profile || {},
-      template: parsed.updates?.template || null,
+      reply: replyText,
+      profileUpdates,
+      template: templateUpdate,
     });
   } catch (e: any) {
+    console.error("[Chat API] Error processing request:", e);
     return NextResponse.json({ error: e.message || "Failed to process chat query" }, { status: 500 });
   }
 }

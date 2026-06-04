@@ -384,11 +384,11 @@ export default function DashboardPage() {
           </div>
 
           {/* Websites Grid */}
-          <div className="w-full flex justify-center px-4">
+          <div className="w-full flex justify-start pl-2">
             {loadingWebsites ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex flex-col gap-3 p-[11px] rounded-[13px] bg-[#FBFBFB] border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-pulse">
+                  <div key={i} className="flex flex-col gap-3 p-3 rounded-[12px] bg-white border border-[#EBEBEB] animate-pulse">
                     <div className="w-full bg-gray-100 rounded-[10px] aspect-video" />
                     <div className="flex flex-col gap-2 mt-1">
                       <div className="h-4 bg-gray-200 rounded w-1/2" />
@@ -396,20 +396,6 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 ))}
-              </div>
-            ) : websites.length === 0 ? (
-              <div className="w-full flex flex-col items-center text-center py-16 px-8 bg-[#FBFBFB] border border-[#E6E6E6] rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg mx-auto">
-                <AnimatedDashboardEmptyIllustration />
-                <h3 className="text-lg font-bold text-black mb-1">No websites found</h3>
-                <p className="text-sm text-gray-500 max-w-sm mb-6 leading-relaxed">
-                  Import your LinkedIn profile or start with template data to create your first personal portfolio website.
-                </p>
-                <button
-                  onClick={() => router.push("/onboarding")}
-                  className="px-5 py-2.5 bg-[#2A2A2F] text-white text-xs font-bold rounded-xl hover:bg-[#3A3A42] transition-all active:scale-[0.97] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-                >
-                  Create your first website
-                </button>
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
@@ -427,10 +413,10 @@ export default function DashboardPage() {
                     return (
                       <div
                         key={web.id}
-                        className="relative flex flex-col gap-3 p-[11px] cursor-pointer rounded-[13px] bg-[#FBFBFB] border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0px_10px_20px_-10px_rgba(0,0,0,0.12)] hover:scale-[1.01] transition-all duration-300 group"
+                        className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                       >
                         <div onClick={() => router.push(`/editor?id=${web.id}`)}>
-                          <div className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#E6E6E6] flex items-center justify-center">
+                          <div className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center">
                             <div className="relative w-full p-1 rounded-sm flex items-center justify-center">
                               <div className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none">
                                 <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
@@ -470,7 +456,7 @@ export default function DashboardPage() {
                                 navigator.clipboard.writeText(`https://${sub}`);
                                 toast.success("Site link copied to clipboard!");
                               }}
-                              className="inline-flex h-8 px-3 text-xs font-semibold cursor-pointer items-center justify-center rounded-[13px] bg-[#F3F3F3] border border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#EAEAEA] active:scale-[0.97] transition-all"
+                              className="inline-flex h-8 px-2.5 text-xs font-semibold cursor-pointer items-center justify-center rounded-lg bg-white border border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
                             >
                               Share
                             </button>
@@ -479,7 +465,7 @@ export default function DashboardPage() {
                                 e.stopPropagation();
                                 setActiveDropdownId(isDropdownOpen ? null : web.id);
                               }}
-                              className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-[#F3F3F3]/60 hover:bg-[#F3F3F3] active:scale-[0.95] transition-all my-auto text-[#171717]/80 hover:text-black"
+                              className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
                             >
                               <svg
                                 className="lucide lucide-ellipsis w-full"
@@ -502,7 +488,7 @@ export default function DashboardPage() {
                             {isDropdownOpen && (
                               <>
                                 <div className="fixed inset-0 z-10" onClick={() => setActiveDropdownId(null)} />
-                                <div className="absolute right-0 bottom-10 z-20 w-44 bg-white/95 backdrop-blur-md border border-[#E6E6E6] rounded-[16px] py-1.5 flex flex-col shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09),0_10px_20px_-10px_rgba(0,0,0,0.1)]">
+                                <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-lg">
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
@@ -511,7 +497,7 @@ export default function DashboardPage() {
                                       toast.success("Site link copied to clipboard!");
                                       setActiveDropdownId(null);
                                     }}
-                                    className="px-4 py-2 text-left text-[13px] font-semibold text-[#171717] hover:bg-[#F3F3F3] flex items-center gap-2 transition-colors"
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
                                   >
                                     <Share2 className="w-4 h-4 text-gray-500" />
                                     Share Link
@@ -521,7 +507,7 @@ export default function DashboardPage() {
                                       setActiveDropdownId(null);
                                       router.push(`/editor?id=${web.id}`);
                                     }}
-                                    className="px-4 py-2 text-left text-[13px] font-semibold text-[#171717] hover:bg-[#F3F3F3] flex items-center gap-2 transition-colors"
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
                                   >
                                     <Edit2 className="w-4 h-4 text-gray-500" />
                                     Edit in Builder
@@ -531,7 +517,7 @@ export default function DashboardPage() {
                                       setActiveDropdownId(null);
                                       router.push(`/preview?id=${web.id}`);
                                     }}
-                                    className="px-4 py-2 text-left text-[13px] font-semibold text-[#171717] hover:bg-[#F3F3F3] flex items-center gap-2 transition-colors"
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
                                   >
                                     <Globe className="w-4 h-4 text-gray-500" />
                                     View Live Preview
@@ -541,7 +527,7 @@ export default function DashboardPage() {
                                       setActiveDropdownId(null);
                                       handleDeleteSite(web.id);
                                     }}
-                                    className="px-4 py-2 text-left text-[13px] font-semibold text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#E6E6E6]/60 mt-1 transition-colors"
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
                                   >
                                     <Trash2 className="w-4 h-4" />
                                     Delete site
