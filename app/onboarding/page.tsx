@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
+import { AnimatedUploadIllustration, AnimatedGeneratingIllustration } from "@/components/AnimatedSVGs";
 
 
 
@@ -423,9 +424,7 @@ function OnboardingInner() {
                       className="hidden"
                       disabled={isImporting}
                     />
-                    <svg className="w-8 h-8 text-gray-400 mb-2 transition-transform duration-200 group-hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
-                    </svg>
+                    <AnimatedUploadIllustration />
                     {zipFile ? (
                       <div className="flex flex-col items-center gap-1">
                         <span className="text-[13px] font-semibold text-[#2A2A2F] truncate max-w-[280px]">
@@ -559,6 +558,7 @@ function OnboardingInner() {
                 transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
                 className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg overflow-hidden flex flex-col p-8 select-none"
               >
+                <AnimatedGeneratingIllustration />
                 <div className="cn-card-header group/card-header @container/card-header grid auto-rows-min items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] mb-6">
                   <div className="cn-card-title cn-font-heading leading-none font-semibold text-lg text-black font-inter">
                     Generating your portfolio

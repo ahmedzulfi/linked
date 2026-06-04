@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { UserMenu } from "@/components/UserMenu";
 import { useEditor } from "@/context/EditorContext";
+import { AnimatedUploadIllustration } from "@/components/AnimatedSVGs";
 
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
@@ -346,9 +347,7 @@ function HeroSection() {
               onChange={handleZipFileChange}
               className="hidden"
             />
-            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] shadow-sm mb-3 transition-transform duration-200 group-hover:scale-105">
-              <Upload className="w-5 h-5 text-gray-500" />
-            </div>
+            <AnimatedUploadIllustration />
             <span className="text-[13.5px] font-semibold text-[#2A2A2F] mb-0.5 font-inter">
               Select LinkedIn ZIP file
             </span>
