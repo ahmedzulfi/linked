@@ -411,7 +411,7 @@ export async function POST(request: Request) {
         switch_template: tool({
           description: "Changes the website layout template to a different template style.",
           inputSchema: z.object({
-            templateId: z.enum(["minimal-card", "bento-grid", "full-scroll", "dark", "ai-custom"]).describe("The ID of the template style to switch to"),
+            templateId: z.enum(["daniel-cross", "julian-mercer", "link-hunt", "biobricks"]).describe("The ID of the template style to switch to"),
           }),
           execute: async ({ templateId }) => {
             try {
@@ -424,7 +424,7 @@ export async function POST(request: Request) {
           }
         }),
         initialize_custom_blocks: tool({
-          description: "Initializes the website layout with dynamic HTML/Tailwind blocks based on current profile data, and automatically switches the active template to 'ai-custom'.",
+          description: "Initializes the website layout with dynamic HTML/Tailwind blocks based on current profile data, and automatically switches the active template to 'daniel-cross'.",
           inputSchema: z.object({}),
           execute: async () => {
             try {
@@ -436,8 +436,8 @@ export async function POST(request: Request) {
                   blocks
                 };
                 profileUpdates.blocks = blocks;
-                templateUpdate = "ai-custom";
-                await updateWebsite(websiteId, { profile: newProfile, templateId: "ai-custom" });
+                templateUpdate = "daniel-cross";
+                await updateWebsite(websiteId, { profile: newProfile, templateId: "daniel-cross" });
                 return { success: true, blocksCount: blocks.length };
               }
               return { success: false, error: "Website not found" };

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    let templateId: TemplateId = "minimal-card";
+    let templateId: TemplateId = "daniel-cross";
     try {
       const body = await request.json();
       if (body.templateId) {

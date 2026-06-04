@@ -12,7 +12,7 @@ interface TemplatePickerProps {
 }
 
 function TemplatePreview({ template }: { template: TemplateMeta }) {
-  if (template.id === "minimal-card") {
+  if (template.id === "daniel-cross") {
     return (
       <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
         <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
@@ -37,7 +37,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
     );
   }
 
-  if (template.id === "bento-grid") {
+  if (template.id === "julian-mercer") {
     return (
       <div className="w-full h-full p-3 grid grid-cols-2 grid-rows-3 gap-1.5" style={{ backgroundColor: template.previewBg }}>
         <div className="col-span-2 bg-white rounded-[6px] border border-[#E6E6E6] p-2 flex items-center gap-2">
@@ -65,7 +65,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
     );
   }
 
-  if (template.id === "full-scroll") {
+  if (template.id === "link-hunt") {
     return (
       <div className="w-full h-full flex flex-col" style={{ backgroundColor: template.previewBg }}>
         <div className="h-12 bg-[#2A2A2F] flex items-end px-3 pb-2">

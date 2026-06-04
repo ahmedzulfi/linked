@@ -31,6 +31,13 @@ export interface CustomBlock {
   html: string;
 }
 
+export interface ProfileProject {
+  title: string;
+  description: string;
+  link?: string;
+  image?: string;
+}
+
 export interface ProfileData {
   name: string;
   headline: string;
@@ -43,13 +50,15 @@ export interface ProfileData {
   education: ProfileEducation[];
   skills: ProfileSkill[];
   links: ProfileLink[];
+  projects?: ProfileProject[];
+  interests?: string;
   // raw LinkedIn URL that was scraped
   linkedinUrl: string;
   // AI-generated dynamic blocks
   blocks?: CustomBlock[];
 }
 
-export type TemplateId = "minimal-card" | "bento-grid" | "full-scroll" | "dark" | "ai-custom";
+export type TemplateId = "daniel-cross" | "julian-mercer" | "link-hunt" | "biobricks";
 
 export interface TemplateMeta {
   id: TemplateId;
@@ -62,43 +71,35 @@ export interface TemplateMeta {
 
 export const TEMPLATES: TemplateMeta[] = [
   {
-    id: "minimal-card",
-    name: "Minimal Card",
-    description: "Clean, single-card profile. Notion-inspired whitespace.",
+    id: "daniel-cross",
+    name: "Daniel Cross",
+    description: "Clean typography, high-contrast, bold editorial layout.",
     previewBg: "#FFFFFF",
-    accent: "#8DB8FF",
+    accent: "#000000",
     dark: false,
   },
   {
-    id: "bento-grid",
-    name: "Bento Grid",
-    description: "Modular bento layout with skill chips and experience tiles.",
-    previewBg: "#FBFBFB",
-    accent: "#8DFFB3",
+    id: "julian-mercer",
+    name: "Julian Mercer",
+    description: "Elegant serif typography, warm tones, mono details.",
+    previewBg: "#FAF8F5",
+    accent: "#6B5A43",
     dark: false,
   },
   {
-    id: "full-scroll",
-    name: "Full Scroll",
-    description: "Long-form scroll with rich sections for experience & work.",
-    previewBg: "#F3F3F3",
-    accent: "#8DB8FF",
+    id: "link-hunt",
+    name: "Link Hunt",
+    description: "Creator links-in-bio style with central profile elements.",
+    previewBg: "#F3F4F6",
+    accent: "#3b82f6",
     dark: false,
   },
   {
-    id: "dark",
-    name: "Dark Mode",
-    description: "Sleek dark-themed personal page with subtle glow accents.",
-    previewBg: "#131316",
-    accent: "#8DB8FF",
-    dark: true,
-  },
-  {
-    id: "ai-custom",
-    name: "AI Custom Page",
-    description: "Fully custom dynamic website composed of AI-generated Tailwind blocks.",
-    previewBg: "#FBFBFB",
-    accent: "#8DB8FF",
+    id: "biobricks",
+    name: "Biobricks",
+    description: "Clean grid modular bento card layout.",
+    previewBg: "#FAFAFA",
+    accent: "#10b981",
     dark: false,
   },
 ];
