@@ -191,15 +191,7 @@ function OnboardingInner() {
                   </div>
                 </div>
 
-                <div className="h-[1px] bg-[#E6E6E6]/60 w-full mb-5" />
 
-                {/* Instant Skip / Demo Data */}
-                <button
-                  onClick={handleManualImport}
-                  className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] self-center transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
-                >
-                  Skip & try with default template data →
-                </button>
               </motion.div>
             )}
 
