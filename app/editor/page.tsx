@@ -260,7 +260,11 @@ function EditorInner() {
   const handleFieldClick = (fieldName: string) => {
     setActiveTab("chat");
     let prefill = "";
-    if (fieldName === "experience") {
+    if (fieldName.startsWith("block-")) {
+      const parts = fieldName.split("-");
+      const title = parts.slice(2).join(" ") || "custom section";
+      prefill = `I want to edit the ${title}: `;
+    } else if (fieldName === "experience") {
       prefill = "I want to update my work experience: ";
     } else if (fieldName === "links") {
       prefill = "I want to update my social links: ";
