@@ -6,21 +6,23 @@ import { useEditor } from "@/context/EditorContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
-  Home,
-  Layout,
-  Folder,
-  CreditCard,
-  BookOpen,
-  Settings,
   Check,
   AlertCircle,
   ArrowLeft,
   ArrowRight,
   Sparkles,
+  Plus,
+  Trash2,
+  Briefcase,
+  Layers,
+  Heart,
+  FileText,
+  FileCode,
+  Globe,
+  Loader2,
 } from "lucide-react";
 import { AnimatedUploadIllustration, AnimatedGeneratingIllustration } from "@/components/AnimatedSVGs";
-
-
+import ProfilePreview from "../editor/components/ProfilePreview";
 
 // ── Typing dots indicator ────────────────────────────────────────────────────
 function TypingDots() {
@@ -43,84 +45,10 @@ function TypingDots() {
   );
 }
 
-// ── AI avatar for chat bubbles ───────────────────────────────────────────────
-function AIAvatar({ size = "sm" }: { size?: "sm" | "md" }) {
-  const dim = size === "md" ? "w-8 h-8" : "w-7 h-7";
-  return (
-    <div
-      className={`${dim} rounded-full bg-gradient-to-br from-[#2A2A2F] to-[#4A4A55] flex items-center justify-center flex-shrink-0 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`}
-    >
-      <Sparkles className="w-3.5 h-3.5 text-white/90" />
-    </div>
-  );
-}
-
-type ChatMessageState = "pending" | "typing" | "done";
-
-interface ChatMessage {
-  id: number;
-  text: string;
-  state: ChatMessageState;
-  tag?: string; // small status tag shown inside bubble
-}
-
-// ── Single chat message bubble ───────────────────────────────────────────────
-function ChatBubble({
-  message,
-  index,
-}: {
-  message: ChatMessage;
-  index: number;
-}) {
-  if (message.state === "pending") return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{
-        duration: 0.28,
-        ease: [0.23, 1, 0.32, 1],
-        delay: 0,
-      }}
-      className="flex items-end gap-2.5 select-none"
-    >
-      <AIAvatar />
-      <div className="flex flex-col gap-1 max-w-[calc(100%-36px)]">
-        {message.state === "typing" ? (
-          <div className="bg-white border border-[#E6E6E6] rounded-[14px] rounded-bl-[4px] px-3 py-2.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-            <TypingDots />
-          </div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, filter: "blur(2px)" }}
-            animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="bg-white border border-[#E6E6E6] rounded-[14px] rounded-bl-[4px] px-3.5 py-2.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-          >
-            <div className="flex items-center gap-2">
-              {message.tag && (
-                <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 px-1.5 py-0.5 rounded-full leading-none flex-shrink-0">
-                  <Check className="w-2.5 h-2.5 stroke-[3px]" />
-                  {message.tag}
-                </span>
-              )}
-              <p className="text-[13px] font-medium text-[#171717] leading-[1.45]">
-                {message.text}
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
 function OnboardingInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const {
-    startScrape,
     startScrapeManual,
     isLoading,
     scrapeError,
@@ -131,36 +59,110 @@ function OnboardingInner() {
     setScrapeError,
     pendingZip,
     setPendingZip,
+    selectedTemplate,
+    selectTemplate,
+    loadWebsite,
+    updateField,
   } = useEditor();
 
-  const [step, setStep] = useState<"input" | "loading" | "fallback">("input");
-  const [url, setUrl] = useState("");
+  // Wizard step state (1 to 8)
+  const [wizardStep, setWizardStep] = useState<number>(1);
   const [zipFile, setZipFile] = useState<File | null>(null);
   const [isImporting, setIsImporting] = useState(false);
-  const [showUrlOption, setShowUrlOption] = useState(false);
   const [progress, setProgress] = useState(0);
-  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Form states
+  const [projects, setProjects] = useState<{ title: string; description: string; link?: string; image?: string }[]>([]);
+  const [interests, setInterests] = useState("");
+  const [skills, setSkills] = useState<{ name: string }[]>([]);
+  const [experience, setExperience] = useState<{ title: string; company: string; duration: string; description: string }[]>([]);
+  const [subdomain, setSubdomain] = useState("");
+  const [checkingSubdomain, setCheckingSubdomain] = useState(false);
+  const [isSubdomainAvailable, setIsSubdomainAvailable] = useState<boolean | null>(null);
+  const [publishing, setPublishing] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
+
+  // New Project Form State
+  const [newProjTitle, setNewProjTitle] = useState("");
+  const [newProjDesc, setNewProjDesc] = useState("");
+  const [newProjLink, setNewProjLink] = useState("");
+  const [showAddProject, setShowAddProject] = useState(false);
+
+  // New Skill Tag State
+  const [newSkill, setNewSkill] = useState("");
+
+  // Sync editedProfile from context to local wizard form state
+  useEffect(() => {
+    if (editedProfile) {
+      if (projects.length === 0 && editedProfile.projects) {
+        setProjects(editedProfile.projects);
+      }
+      if (!interests && editedProfile.interests) {
+        setInterests(editedProfile.interests);
+      }
+      if (skills.length === 0 && editedProfile.skills) {
+        setSkills(editedProfile.skills);
+      }
+      if (experience.length === 0 && editedProfile.experience) {
+        setExperience(editedProfile.experience.map(exp => ({
+          title: exp.title,
+          company: exp.company,
+          duration: exp.duration,
+          description: exp.description || ""
+        })));
+      }
+      if (!subdomain && editedProfile.name) {
+        const slug = editedProfile.name.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9]/g, "");
+        setSubdomain(slug);
+      }
+    }
+  }, [editedProfile]);
+
+  // Check subdomain availability
+  useEffect(() => {
+    if (subdomain.length < 3) {
+      setIsSubdomainAvailable(null);
+      return;
+    }
+    setCheckingSubdomain(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/websites/subdomain/check?slug=${subdomain}${websiteId ? `&websiteId=${websiteId}` : ""}`);
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setIsSubdomainAvailable(data.available);
+        } else {
+          setIsSubdomainAvailable(null);
+        }
+      } catch {
+        setIsSubdomainAvailable(null);
+      } finally {
+        setCheckingSubdomain(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [subdomain, websiteId]);
 
   const handleUploadZipWithFile = async (file: File) => {
     if (file.size > 20 * 1024 * 1024) {
-      toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
+      toast.error("Files larger than 20MB are not allowed.");
       return;
     }
-    setStep("loading");
     setIsImporting(true);
-    const toastId = toast.loading("Processing and parsing ZIP archive...");
+    const toastId = toast.loading("Uploading and parsing ZIP archive...");
     try {
       const success = await startScrapeManual(file);
-      if (!success) {
-        setIsImporting(false);
-        setStep("input");
-      }
       toast.dismiss(toastId);
+      if (success) {
+        toast.success("LinkedIn profile parsed successfully!");
+        setWizardStep(2);
+      }
+      setIsImporting(false);
     } catch (e: any) {
       toast.dismiss(toastId);
       toast.error(e.message || "Failed to process ZIP archive.");
       setIsImporting(false);
-      setStep("input");
     }
   };
 
@@ -174,673 +176,783 @@ function OnboardingInner() {
     }
   }, [pendingZip, setPendingZip]);
 
-  // Chat messages for the loading state — sequentially revealed based on time
-  const CHAT_STEPS = [
-    {
-      text: "Reading your LinkedIn profile and extracting all public data.",
-      tag: "Fetching data",
-      delay: 0,
-      typingDuration: 1200,
-    },
-    {
-      text: "Parsing your experience, skills and accomplishments into structured sections.",
-      tag: "Thinking",
-      delay: 4000,
-      typingDuration: 1400,
-    },
-    {
-      text: "Choosing a color palette and typography that matches your professional identity.",
-      tag: "Finalizing colours",
-      delay: 8000,
-      typingDuration: 1600,
-    },
-    {
-      text: "Assembling your personalised page layout — almost done.",
-      tag: "Building layout",
-      delay: 12000,
-      typingDuration: 900,
-    },
-    {
-      text: "LinkedIn is taking longer than usual, still working...",
-      tag: "Still working",
-      delay: 16000,
-      typingDuration: 1200,
-    },
-  ];
-
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>(
-    CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" }))
-  );
-
-  // If there's an initial URL query param, auto-start scraping (Strict Mode safe)
-  useEffect(() => {
-    const initialUrl = searchParams.get("url") || "";
-    if (initialUrl && step === "input") {
-      setUrl(initialUrl);
-      handleStartScrape(initialUrl);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, step]);
-
-  const handleStartScrape = async (targetUrl: string) => {
-    const trimmed = targetUrl.trim();
-    if (!trimmed.includes("linkedin.com/in/")) {
-      toast.error("Please paste a valid LinkedIn profile URL (e.g. linkedin.com/in/username)");
-      return;
-    }
-    // Remove query parameters from history/URL so back/retry doesn't re-trigger
-    router.replace("/onboarding");
-    
-    setStep("loading");
-    setProgress(0);
-    setChatMessages(CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" })));
-    startScrape(trimmed);
-  };
-
-  // Progress animation (0 → 98). Cancel interval immediately if websiteId is set.
-  useEffect(() => {
-    if (step !== "loading" || websiteId) return;
-
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + 1;
-        if (next >= 98) {
-          clearInterval(interval);
-          return 98;
-        }
-        return next;
-      });
-    }, 25);
-
-    return () => clearInterval(interval);
-  }, [step, websiteId]);
-
-  // Drive chat message reveals based on time elapsed
-  useEffect(() => {
-    if (step !== "loading") return;
-
-    setChatMessages(
-      CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" }))
-    );
-
-    const timers: NodeJS.Timeout[] = [];
-
-    CHAT_STEPS.forEach((stepItem, index) => {
-      const typeTimer = setTimeout(() => {
-        setChatMessages((prev) => {
-          const updated = [...prev];
-          if (updated[index]) {
-            updated[index] = { ...updated[index], state: "typing" };
-          }
-          return updated;
-        });
-
-        const doneTimer = setTimeout(() => {
-          setChatMessages((prev) => {
-            const updated = [...prev];
-            if (updated[index]) {
-              updated[index] = { ...updated[index], state: "done" };
-            }
-            return updated;
-          });
-        }, stepItem.typingDuration);
-
-        timers.push(doneTimer);
-      }, stepItem.delay);
-
-      timers.push(typeTimer);
-    });
-
-    return () => {
-      timers.forEach((t) => clearTimeout(t));
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step]);
-
-  // Client-side timeout handling: if scraping hangs for 45s, redirect to fallback
-  useEffect(() => {
-    if (step !== "loading") return;
-    const timeout = setTimeout(() => {
-      if (isLoading) {
-        setScrapeError("Request timed out after 45 seconds.");
-        setStep("fallback");
-      }
-    }, 45000);
-    return () => clearTimeout(timeout);
-  }, [step, isLoading, setScrapeError]);
-
-  // Scroll to bottom as new messages appear
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chatMessages]);
-
-  // Handle scrape success or failure transitions
-  useEffect(() => {
-    if (step === "loading" && !isLoading) {
-      if (scrapeError) {
-        setStep("fallback");
-      }
-    }
-  }, [isLoading, scrapeError, step]);
-
-  // Redirect on website creation success
-  useEffect(() => {
-    if (websiteId && (step === "loading" || isImporting)) {
-      setProgress(100);
-      const t = setTimeout(() => {
-        router.push(`/editor?id=${websiteId}&onboarding=true`);
-      }, 400);
-      return () => clearTimeout(t);
-    }
-  }, [websiteId, step, isImporting, router]);
-
   const handleZipFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      if (file.size > 20 * 1024 * 1024) {
-        toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
-        e.target.value = "";
-        setZipFile(null);
-        return;
-      }
       setZipFile(file);
+      handleUploadZipWithFile(file);
     }
-  };
-
-  const handleUploadZip = async () => {
-    if (!zipFile) {
-      toast.error("Please select a LinkedIn export ZIP file first.");
-      return;
-    }
-    await handleUploadZipWithFile(zipFile);
   };
 
   const handleManualImport = async () => {
-    const toastId = toast.loading("Loading default workspace settings...");
+    const toastId = toast.loading("Loading default template settings...");
     await useMockProfile();
     toast.dismiss(toastId);
-    toast.success("Proceeding with template data customization.");
+    toast.success("Loaded skip mock profile!");
+    setWizardStep(2);
   };
 
-  const handleBackToInput = () => {
-    const lastUrl = url;
-    router.replace("/onboarding");
-    clearProfile();
-    setUrl(lastUrl);
-    setStep("input");
+  // Step 6: AI Optimization
+  useEffect(() => {
+    if (wizardStep === 6) {
+      const runAiOptimization = async () => {
+        setOptimizing(true);
+        try {
+          const res = await fetch("/api/onboarding/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              websiteId,
+              projects,
+              interests,
+              skills,
+              experience,
+            }),
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            toast.success("AI optimization complete! Page copy refined.");
+            // Refresh editor context state with optimized data
+            if (websiteId) {
+              await loadWebsite(websiteId);
+            }
+          } else {
+            console.warn("AI optimization failed: ", data.error);
+          }
+        } catch (err) {
+          console.error("AI optimization API error:", err);
+        } finally {
+          setOptimizing(false);
+          setWizardStep(7);
+        }
+      };
+      runAiOptimization();
+    }
+  }, [wizardStep]);
+
+  // Handle final publish
+  const handlePublish = async () => {
+    if (!websiteId) return;
+    setPublishing(true);
+    const toastId = toast.loading("Publishing your professional portfolio page...");
+    try {
+      // 1. Update slug & template preference in DB
+      const saveRes = await fetch(`/api/websites/${websiteId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subdomainSlug: subdomain,
+          templateId: selectedTemplate,
+          profile: editedProfile,
+        }),
+      });
+
+      if (!saveRes.ok) {
+        throw new Error("Failed to save subdomain slug settings.");
+      }
+
+      // 2. Call publish API
+      const response = await fetch(`/api/websites/${websiteId}/publish`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      toast.dismiss(toastId);
+      setPublishing(false);
+      if (!response.ok) {
+        toast.error(data.error || "Failed to publish website");
+        return;
+      }
+      toast.success("Your page is live! 🎉");
+      router.push(`/publish?slug=${data.slug}`);
+    } catch (err: any) {
+      toast.dismiss(toastId);
+      setPublishing(false);
+      toast.error(err.message || "Network error. Failed to publish website.");
+    }
   };
 
-  // Check if scrapeError is an authwall or privacy error to display a friendly message
-  const isAuthwallError =
-    scrapeError &&
-    (scrapeError.toLowerCase().includes("authwall") ||
-      scrapeError.toLowerCase().includes("privacy") ||
-      scrapeError.toLowerCase().includes("login"));
+  const addProject = () => {
+    if (!newProjTitle.trim()) {
+      toast.error("Project title is required");
+      return;
+    }
+    setProjects([
+      ...projects,
+      {
+        title: newProjTitle.trim(),
+        description: newProjDesc.trim(),
+        link: newProjLink.trim() || undefined,
+        image: `https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60`, // default clean layout asset
+      },
+    ]);
+    setNewProjTitle("");
+    setNewProjDesc("");
+    setNewProjLink("");
+    setShowAddProject(false);
+  };
+
+  const removeProject = (index: number) => {
+    setProjects(projects.filter((_, i) => i !== index));
+  };
+
+  const addSkill = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newSkill.trim()) return;
+    if (skills.some((s) => s.name.toLowerCase() === newSkill.trim().toLowerCase())) {
+      setNewSkill("");
+      return;
+    }
+    setSkills([...skills, { name: newSkill.trim() }]);
+    setNewSkill("");
+  };
+
+  const removeSkill = (name: string) => {
+    setSkills(skills.filter((s) => s.name !== name));
+  };
+
+  const removeExperience = (index: number) => {
+    setExperience(experience.filter((_, i) => i !== index));
+  };
+
+  const updateExperienceItem = (index: number, key: string, value: string) => {
+    const updated = [...experience];
+    updated[index] = { ...updated[index], [key]: value };
+    setExperience(updated);
+  };
+
+  const addExperienceItem = () => {
+    setExperience([
+      ...experience,
+      {
+        title: "New Role",
+        company: "Company Name",
+        duration: "Jan 2026 - Present",
+        description: "",
+      },
+    ]);
+  };
+
+  // Helper to step backward
+  const stepBack = () => {
+    if (wizardStep > 1) {
+      if (wizardStep === 7) {
+        setWizardStep(5); // skip AI loading step on go-back
+      } else {
+        setWizardStep(wizardStep - 1);
+      }
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-white font-inter flex flex-col items-center justify-center text-black antialiased relative overflow-hidden">
-      {/* Background image + overlay */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
-        <img
-          src="/bg.png"
-          alt=""
-          className="w-full h-full object-cover object-top"
-        />
-        <div className="absolute inset-0 hero-overlay" />
+    <div className="min-h-screen bg-[#FAFAFA] text-black antialiased relative overflow-hidden flex flex-col justify-between py-12 px-6">
+      {/* Mesh decorative background */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-60">
+        <div className="absolute top-[-20%] left-[-20%] w-[80%] h-[80%] rounded-full bg-gradient-to-tr from-blue-200/40 to-transparent blur-[120px]" />
+        <div className="absolute bottom-[-20%] right-[-20%] w-[80%] h-[80%] rounded-full bg-gradient-to-bl from-emerald-100/30 to-transparent blur-[120px]" />
       </div>
 
-      {/* ── Content View Area ── */}
-      <main className="w-full flex items-center justify-center px-6 relative z-10">
-        <div className="w-full max-w-[480px]">
-          <AnimatePresence mode="wait">
-            {/* ── Step 1 — Upload ZIP or Scrape ── */}
-            {step === "input" && (
-              <motion.div
-                key="input"
-                initial={{ opacity: 0, scale: 0.95, y: 8 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 flex flex-col w-full max-w-[480px] select-none"
-              >
-                <h1 className="text-2xl font-semibold tracking-tight text-[#2A2A2F] text-center mb-2 font-inter">
-                  Import your LinkedIn Profile
-                </h1>
-                <p className="text-[14px] text-gray-500 text-center mb-6 leading-relaxed font-inter">
-                  Upload your LinkedIn data export ZIP to build a fully structured website instantly.
+      {/* Top Header */}
+      <header className="w-full max-w-4xl mx-auto flex items-center justify-between z-10 shrink-0">
+        <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")}>
+          <img src="/logoicon.png" alt="Logo" className="w-8 h-8 object-contain" />
+          <span className="font-semibold text-lg text-neutral-800 tracking-tight">LinkedPage</span>
+        </div>
+        {wizardStep > 1 && (
+          <div className="flex items-center gap-1.5 text-xs text-neutral-400 font-mono">
+            <span>Step {wizardStep > 5 ? wizardStep - 1 : wizardStep} of 7</span>
+            <div className="flex gap-1 ml-2">
+              {[1, 2, 3, 4, 5, 7, 8].map((s, idx) => (
+                <div
+                  key={s}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    wizardStep === s
+                      ? "bg-blue-500 scale-125"
+                      : wizardStep > s || (wizardStep === 6 && s < 6)
+                      ? "bg-neutral-300"
+                      : "bg-neutral-200"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Main Wizard Container */}
+      <main className="w-full max-w-4xl mx-auto flex-1 flex items-center justify-center z-10 py-10">
+        <AnimatePresence mode="wait">
+          {/* STEP 1: Upload LinkedIn ZIP */}
+          {wizardStep === 1 && (
+            <motion.div
+              key="step1"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-lg space-y-6"
+            >
+              <div className="text-center space-y-2">
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-900">Upload LinkedIn Profile</h1>
+                <p className="text-sm text-neutral-500 max-w-sm mx-auto">
+                  Export your LinkedIn data ZIP and upload it here to auto-populate your premium site instantly.
                 </p>
+              </div>
 
-                {/* ZIP Upload Section */}
-                <div className="flex flex-col gap-3 w-full mb-5">
-                  <label
-                    htmlFor="zip-upload-primary"
-                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] active:scale-[0.98] relative text-center group"
-                  >
-                    <input
-                      id="zip-upload-primary"
-                      type="file"
-                      accept=".zip"
-                      onChange={handleZipFileChange}
-                      className="hidden"
-                      disabled={isImporting}
-                    />
-                    <AnimatedUploadIllustration />
-                    {zipFile ? (
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-[13px] font-semibold text-[#2A2A2F] truncate max-w-[280px]">
-                          {zipFile.name}
-                        </span>
-                        <span className="text-[11px] text-gray-500 font-medium">
-                          {(zipFile.size / (1024 * 1024)).toFixed(2)} MB
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-[13.5px] font-semibold text-[#2A2A2F]">
-                          Upload LinkedIn data ZIP
-                        </span>
-                        <span className="text-[11px] text-gray-400 font-medium">
-                          Click to select or drag and drop archive
-                        </span>
-                      </div>
-                    )}
-                  </label>
-
-                  {zipFile && (
-                    <button
-                      onClick={handleUploadZip}
-                      disabled={isImporting}
-                      className="h-10 w-full bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] disabled:opacity-50 cursor-pointer"
-                    >
-                      {isImporting ? (
-                        <span className="flex items-center gap-2">
-                          <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                          Importing Data...
-                        </span>
-                      ) : (
-                        <>Import Profile ZIP <ArrowRight className="w-4 h-4" /></>
-                      )}
-                    </button>
-                  )}
+              {/* Upload box */}
+              <label
+                htmlFor="zip-upload-wizard"
+                className="w-full flex flex-col items-center justify-center border-2 border-dashed border-neutral-200 hover:border-blue-400 rounded-2xl p-8 bg-neutral-50/50 hover:bg-blue-50/10 cursor-pointer transition-all hover:shadow-[0_0_20px_rgba(59,130,246,0.05)] active:scale-[0.99] text-center group"
+              >
+                <input
+                  id="zip-upload-wizard"
+                  type="file"
+                  accept=".zip"
+                  onChange={handleZipFileChange}
+                  className="hidden"
+                  disabled={isImporting}
+                />
+                <AnimatedUploadIllustration />
+                <div className="space-y-1 mt-3">
+                  <span className="text-sm font-semibold text-neutral-800 block">
+                    Drop your LinkedIn ZIP archive
+                  </span>
+                  <span className="text-xs text-neutral-400 block font-medium">
+                    Click to browse files (contains Profile.csv)
+                  </span>
                 </div>
+              </label>
 
-                {/* Step-by-Step Instructions */}
-                <div className="bg-[#FBFBFB]/40 border border-[#E6E6E6]/60 rounded-2xl p-5 mb-6 text-left">
-                  <h3 className="text-[11px] font-bold text-[#2A2A2F] uppercase tracking-wider mb-3.5">
-                    How to export your profile (takes 5m)
-                  </h3>
-                  <div className="space-y-3">
-                    {[
-                      { num: 1, text: <>Open LinkedIn's <a href="https://www.linkedin.com/psettings/member-data" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] font-semibold hover:underline">Data Settings</a>.</> },
-                      { num: 2, text: <>Select <strong>"Something in particular"</strong> and check the <strong>"Profile"</strong> box.</> },
-                      { num: 3, text: <>Click <strong>"Request archive"</strong> and enter password.</> },
-                      { num: 4, text: <>Download the ZIP from email and upload it above.</> }
-                    ].map((item) => (
-                      <div key={item.num} className="flex gap-3 text-[12.5px] text-gray-500">
-                        <span className="w-5 h-5 rounded-full bg-[#8DB8FF]/15 text-[#3b82f6] text-[10px] font-bold flex items-center justify-center shrink-0 select-none">
-                          {item.num}
-                        </span>
-                        <span className="leading-normal">{item.text}</span>
-                      </div>
-                    ))}
+              {/* Instructions */}
+              <div className="bg-neutral-50 border border-neutral-200/60 rounded-xl p-4 space-y-2.5">
+                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Quick Export Guide (Takes 2 min)</span>
+                <div className="space-y-2 text-xs text-neutral-500">
+                  <div className="flex gap-2">
+                    <span className="w-4 h-4 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center shrink-0">1</span>
+                    <span>Go to LinkedIn's Member Data export page.</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="w-4 h-4 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center shrink-0">2</span>
+                    <span>Select "Profile" data only and request archive.</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="w-4 h-4 rounded-full bg-blue-50 text-blue-600 font-bold flex items-center justify-center shrink-0">3</span>
+                    <span>Download ZIP from email and drag it here.</span>
                   </div>
                 </div>
+              </div>
 
-                <div className="h-[1px] bg-[#E6E6E6]/60 w-full mb-5" />
-
-                {/* Experimental URL Scraper Toggle */}
-                <div className="flex flex-col w-full mb-3">
-                  <button
-                    onClick={() => setShowUrlOption(!showUrlOption)}
-                    className="text-xs font-medium text-gray-400 hover:text-[#2A2A2F] flex items-center justify-center gap-1.5 transition-[color,transform] duration-150 active:scale-[0.95] self-center bg-transparent border-none cursor-pointer select-none"
-                  >
-                    <span>{showUrlOption ? "Hide experimental options" : "Use experimental URL scraper"}</span>
-                    <svg
-                      className={`w-3.5 h-3.5 transition-transform duration-200 ${showUrlOption ? "rotate-180" : ""}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-
-                  <AnimatePresence>
-                    {showUrlOption && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden mt-4 flex flex-col gap-3.5"
-                      >
-                        <div className="flex flex-col gap-2.5">
-                          <input
-                            type="text"
-                            placeholder="linkedin.com/in/username"
-                            value={url}
-                            onChange={(e) => setUrl(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && handleStartScrape(url)}
-                            className="ds-input"
-                          />
-                          <button
-                            onClick={() => handleStartScrape(url)}
-                            className="h-10 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[12px] font-medium rounded-[13px] border border-[#E6E6E6] transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer"
-                          >
-                            Scrape Profile URL
-                          </button>
-                        </div>
-                        <p className="text-[11px] text-gray-400 leading-relaxed text-center font-inter">
-                          ⚠️ LinkedIn's security blocking is highly aggressive. URL scraping frequently encounters security checkpoints (authwalls). ZIP upload is recommended.
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Instant Skip / Demo Data */}
+              <div className="flex flex-col gap-2 items-center justify-center pt-2">
                 <button
                   onClick={handleManualImport}
-                  className="mt-2 text-xs font-medium text-gray-400 hover:text-[#2A2A2F] self-center transition-[color,transform] duration-150 active:scale-[0.95] bg-transparent border-none cursor-pointer"
+                  className="text-xs text-neutral-400 hover:text-neutral-700 underline font-medium transition-colors"
                 >
-                  Skip & try with default template data →
+                  Skip & start with sample data →
                 </button>
-              </motion.div>
-            )}
+              </div>
+            </motion.div>
+          )}
 
-            {/* ── Step 2 — Timeline-style loading ── */}
-            {step === "loading" && (
-              <motion.div
-                key="loading"
-                initial={{ opacity: 0, scale: 0.95, y: 8 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg overflow-hidden flex flex-col p-8 select-none"
-              >
-                <AnimatedGeneratingIllustration />
-                <div className="cn-card-header group/card-header @container/card-header grid auto-rows-min items-start has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] mb-6">
-                  <div className="cn-card-title cn-font-heading leading-none font-semibold text-lg text-black font-inter">
-                    Generating your portfolio
-                  </div>
-                  <div className="cn-card-description text-sm text-gray-500 mt-1 font-inter">
-                    Building your professional website from LinkedIn
-                  </div>
-                </div>
+          {/* STEP 2: Portfolio Projects */}
+          {wizardStep === 2 && (
+            <motion.div
+              key="step2"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-xl space-y-6"
+            >
+              <div className="space-y-1">
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-900 flex items-center gap-2">
+                  <FileCode className="w-6 h-6 text-blue-500" /> Showcase Your Projects
+                </h1>
+                <p className="text-sm text-neutral-500">
+                  Add projects, case studies, or github sites to present on your profile.
+                </p>
+              </div>
 
-                <div className="cn-card-content space-y-4 text-sm">
-                  <ul className="grid [&>li]:grid-cols-[0_min-content_1fr]">
-                    {[
-                      {
-                        title: "Reading LinkedIn Profile",
-                        description: "Connecting to LinkedIn and fetching public details",
-                      },
-                      {
-                        title: "Parsing experience & skills",
-                        description: "Analyzing job roles, descriptions, and projects",
-                      },
-                      {
-                        title: "Finalizing theme & style",
-                        description: "Selecting layout templates, color schemes, and typography",
-                      },
-                      {
-                        title: "Building page layout",
-                        description: "Assembling live components and completing setup",
-                      },
-                    ].map((s, idx, arr) => {
-                      const getStepStatus = (index: number) => {
-                        if (websiteId) return "done";
-                        const msg = chatMessages[index];
-                        if (!msg) return "upcoming";
-                        if (msg.state === "done") return "done";
-                        if (msg.state === "typing") return "loading";
-                        return "upcoming";
-                      };
-
-                      const status = getStepStatus(idx);
-                      const showSeparator = idx < arr.length - 1;
-
-                      return (
-                        <li key={idx} className="grid items-center text-[#2A2A2F] mt-1 gap-x-0">
-                          <div
-                            className="timeline-dot col-start-2 col-end-3 row-start-1 row-end-1 flex items-center justify-center rounded-full border-none mb-1.25"
-                            role="status"
-                          >
-                            {status === "done" && (
-                              <svg
-                                className="lucide lucide-circle-check text-[#369762] size-5"
-                                height="20"
-                                width="20"
-                                aria-hidden="true"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="m9 12 2 2 4-4" />
-                              </svg>
-                            )}
-                            {status === "loading" && (
-                              <svg
-                                className="lucide lucide-loader text-[#2A2A2F] size-5 animate-spin"
-                                height="20"
-                                width="20"
-                                aria-hidden="true"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path d="M12 2v4" />
-                                <path d="m16.2 7.8 2.9-2.9" />
-                                <path d="M18 12h4" />
-                                <path d="m16.2 16.2 2.9 2.9" />
-                                <path d="M12 18v4" />
-                                <path d="m4.9 19.1 2.9-2.9" />
-                                <path d="M2 12h4" />
-                                <path d="m4.9 4.9 2.9 2.9" />
-                              </svg>
-                            )}
-                            {status === "upcoming" && (
-                              <svg
-                                className="lucide lucide-circle text-gray-300 size-4 mt-0.5"
-                                height="16"
-                                width="16"
-                                aria-hidden="true"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <circle cx="12" cy="12" r="10" />
-                              </svg>
-                            )}
-                          </div>
-
-                          {showSeparator && (
-                            <hr
-                              className={`col-start-2 col-end-3 row-start-2 row-end-2 mx-auto flex h-full w-0.5 justify-center rounded-full min-h-10 border-none ${
-                                status === "loading"
-                                  ? "bg-[repeating-linear-gradient(0deg,#E6E6E6,#E6E6E6_5px,#FFFFFF_6px,#FFFFFF_10px)]"
-                                  : status === "done"
-                                  ? "bg-[#369762]"
-                                  : "bg-[#E6E6E6]"
-                              }`}
-                              aria-orientation="vertical"
-                              role="separator"
-                            />
-                          )}
-
-                          <p
-                            className="row-start-1 row-end-1 line-clamp-1 max-w-full truncate col-start-3 col-end-4 mr-auto text-left text-base ml-4 flex items-center gap-1.5"
-                            aria-level={3}
-                            role="heading"
-                          >
-                            <span className={`font-medium ${status === "upcoming" ? "text-gray-400" : "text-[#2A2A2F] font-semibold font-inter"}`}>
-                              {s.title}
-                            </span>
-                            {status === "loading" && (
-                              <>
-                                <svg
-                                  className="lucide lucide-dot text-[#8DB8FF] size-3 animate-ping"
-                                  height="12"
-                                  width="12"
-                                  aria-hidden="true"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <circle cx="12" cy="12" r="6" />
-                                </svg>
-                                <span className="text-gray-400 text-xs font-normal font-inter">
-                                  Running...
-                                </span>
-                              </>
-                            )}
-                          </p>
-
-                          <div className="text-card-foreground row-start-2 row-end-2 pb-8 col-start-3 col-end-4 mr-auto text-left ml-4">
-                            <span className="text-gray-400 text-sm font-inter">
-                              {s.description}
-                            </span>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ── Step 3 — Scraper failure fallback ── */}
-            {step === "fallback" && (
-              <motion.div
-                key="fallback"
-                initial={{ opacity: 0, scale: 0.95, y: 8 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}
-                className="bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 flex flex-col w-full max-w-[480px] select-none"
-              >
-                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center mb-5 shadow-sm border border-[#E6E6E6]/40">
-                  <AlertCircle className="w-5 h-5 text-[#E45A5A]" />
-                </div>
-
-                <h2 className="text-xl font-semibold text-[#2A2A2F] mb-2 font-inter">Could not fetch public profile</h2>
-                <div className="text-[13.5px] text-gray-500 leading-relaxed mb-6 font-inter">
-                  {isAuthwallError ? (
-                    <span>
-                      LinkedIn couldn't be read publicly. This is normal — upload your data export instead. You can download it from{" "}
-                      <a
-                        href="https://www.linkedin.com/psettings/member-data"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#3b82f6] font-semibold hover:underline inline-flex items-center gap-0.5"
-                      >
-                        LinkedIn's Settings page
-                      </a>.
-                    </span>
-                  ) : (
-                    <span>
-                      {scrapeError || "LinkedIn's privacy restriction is blocking direct access."}{" "}
-                      Please download your settings archive from{" "}
-                      <a
-                        href="https://www.linkedin.com/psettings/member-data"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#3b82f6] font-semibold hover:underline inline-flex items-center gap-0.5"
-                      >
-                        LinkedIn's Settings page
-                      </a>{" "}
-                      and import it below.
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex flex-col items-center gap-3 w-full mb-6">
-                  <label
-                    htmlFor="zip-upload"
-                    className="w-full flex flex-col items-center justify-center border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer transition-[border-color,background-color,box-shadow,transform] duration-150 hover:shadow-[0_0_20px_rgba(141,184,255,0.12)] active:scale-[0.98] relative text-center group"
+              {/* Added projects list */}
+              <div className="space-y-3">
+                {projects.map((proj, idx) => (
+                  <div
+                    key={idx}
+                    className="flex justify-between items-center p-3.5 bg-neutral-50 border border-neutral-200/80 rounded-xl"
                   >
-                    <input
-                      id="zip-upload"
-                      type="file"
-                      accept=".zip"
-                      onChange={handleZipFileChange}
-                      className="hidden"
-                      disabled={isImporting}
-                    />
-                    <svg className="w-8 h-8 text-gray-400 mb-2 transition-transform duration-200 group-hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
-                    </svg>
-                    {zipFile ? (
-                      <div className="flex flex-col items-center gap-1">
-                        <span className="text-[13px] font-semibold text-[#2A2A2F] truncate max-w-[280px]">
-                          {zipFile.name}
-                        </span>
-                        <span className="text-[11px] text-gray-500 font-medium">
-                          {(zipFile.size / (1024 * 1024)).toFixed(2)} MB
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col items-center gap-0.5">
-                        <span className="text-[13.5px] font-semibold text-[#2A2A2F]">
-                          Upload LinkedIn data export ZIP
-                        </span>
-                        <span className="text-[11px] text-gray-400 font-medium">
-                          Should contain Profile.csv and Positions.csv
-                        </span>
-                      </div>
-                    )}
-                  </label>
-
-                  {zipFile && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-neutral-800">{proj.title}</h4>
+                      <p className="text-xs text-neutral-500 line-clamp-1">{proj.description}</p>
+                    </div>
                     <button
-                      onClick={handleUploadZip}
-                      disabled={isImporting}
-                      className="w-full h-10 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[12px] font-medium rounded-[13px] transition-[background-color,box-shadow,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] disabled:opacity-50 cursor-pointer"
+                      onClick={() => removeProject(idx)}
+                      className="text-neutral-400 hover:text-red-500 p-1.5 transition-colors"
                     >
-                      {isImporting ? (
-                        <span className="flex items-center gap-2">
-                          <span className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                          Processing...
-                        </span>
-                      ) : (
-                        "Import Profile ZIP"
-                      )}
+                      <Trash2 className="w-4 h-4" />
                     </button>
-                  )}
+                  </div>
+                ))}
+
+                {projects.length === 0 && !showAddProject && (
+                  <div className="text-center py-8 border-2 border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
+                    <p className="text-xs text-neutral-400 font-medium">No projects added yet.</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Inline project adder */}
+              {showAddProject ? (
+                <div className="p-4 border border-neutral-200 rounded-xl space-y-3 bg-neutral-50/20">
+                  <input
+                    type="text"
+                    placeholder="Project Title (e.g. Stripe Radar Redesign)"
+                    value={newProjTitle}
+                    onChange={(e) => setNewProjTitle(e.target.value)}
+                    className="w-full text-sm p-2.5 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                  />
+                  <textarea
+                    placeholder="Project description or impact..."
+                    value={newProjDesc}
+                    onChange={(e) => setNewProjDesc(e.target.value)}
+                    rows={2}
+                    className="w-full text-sm p-2.5 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400 resize-none"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Project Link (optional)"
+                    value={newProjLink}
+                    onChange={(e) => setNewProjLink(e.target.value)}
+                    className="w-full text-sm p-2.5 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                  />
+                  <div className="flex gap-2 justify-end pt-1">
+                    <button
+                      onClick={() => setShowAddProject(false)}
+                      className="px-3.5 py-1.5 text-xs font-semibold text-neutral-500 hover:bg-neutral-100 rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={addProject}
+                      className="px-3.5 py-1.5 text-xs font-semibold bg-blue-500 text-white hover:bg-blue-600 rounded-lg"
+                    >
+                      Add Project
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowAddProject(true)}
+                  className="w-full h-10 border border-dashed border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50 transition-colors"
+                >
+                  <Plus className="w-4 h-4" /> Add custom project card
+                </button>
+              )}
+
+              {/* Bottom buttons */}
+              <div className="flex justify-between items-center pt-4 border-t border-neutral-100">
+                <button onClick={stepBack} className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  onClick={() => setWizardStep(3)}
+                  className="px-5 h-9 bg-blue-500 text-white text-xs font-semibold rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1"
+                >
+                  Next step <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 3: Interests & Goals */}
+          {wizardStep === 3 && (
+            <motion.div
+              key="step3"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-xl space-y-6"
+            >
+              <div className="space-y-1">
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-900 flex items-center gap-2">
+                  <Heart className="w-6 h-6 text-emerald-500" /> Interests & Focus Areas
+                </h1>
+                <p className="text-sm text-neutral-500">
+                  Tell us what topics, technologies, or challenges you're interested in exploring.
+                </p>
+              </div>
+
+              <textarea
+                placeholder="e.g. I am passionate about developer tooling, design engineering, and fintech scalability. I love building open source libraries and tutoring junior engineers in my free time."
+                value={interests}
+                onChange={(e) => setInterests(e.target.value)}
+                rows={5}
+                className="w-full text-sm p-3 bg-neutral-50/50 border border-neutral-200 rounded-xl outline-none focus:border-blue-400 resize-none leading-relaxed"
+              />
+
+              {/* Bottom buttons */}
+              <div className="flex justify-between items-center pt-4 border-t border-neutral-100">
+                <button onClick={stepBack} className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  onClick={() => setWizardStep(4)}
+                  className="px-5 h-9 bg-blue-500 text-white text-xs font-semibold rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1"
+                >
+                  Next step <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 4: Skills tag editor */}
+          {wizardStep === 4 && (
+            <motion.div
+              key="step4"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-xl space-y-6"
+            >
+              <div className="space-y-1">
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-900 flex items-center gap-2">
+                  <Layers className="w-6 h-6 text-indigo-500" /> Your Skills & Expertise
+                </h1>
+                <p className="text-sm text-neutral-500">
+                  Add tags representing your core capabilities.
+                </p>
+              </div>
+
+              {/* Skill tag list */}
+              <div className="flex flex-wrap gap-2 max-h-56 overflow-y-auto p-1.5 border border-neutral-100 rounded-xl bg-neutral-50/30">
+                {skills.map((skill, idx) => (
+                  <span
+                    key={idx}
+                    className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1 bg-white border border-neutral-200 rounded-full text-neutral-700"
+                  >
+                    {skill.name}
+                    <button
+                      onClick={() => removeSkill(skill.name)}
+                      className="text-neutral-400 hover:text-red-500 font-bold ml-0.5"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                {skills.length === 0 && (
+                  <span className="text-xs text-neutral-400 p-2">No skills tags added yet.</span>
+                )}
+              </div>
+
+              {/* Add tag form */}
+              <form onSubmit={addSkill} className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Add new skill (e.g. Next.js, Product Design)"
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  className="flex-1 text-sm px-3 py-2 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                />
+                <button
+                  type="submit"
+                  className="px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add
+                </button>
+              </form>
+
+              {/* Bottom buttons */}
+              <div className="flex justify-between items-center pt-4 border-t border-neutral-100">
+                <button onClick={stepBack} className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  onClick={() => setWizardStep(5)}
+                  className="px-5 h-9 bg-blue-500 text-white text-xs font-semibold rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1"
+                >
+                  Next step <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 5: Work Experience */}
+          {wizardStep === 5 && (
+            <motion.div
+              key="step5"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-2xl space-y-6"
+            >
+              <div className="space-y-1">
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-900 flex items-center gap-2">
+                  <Briefcase className="w-6 h-6 text-amber-500" /> Work Experience
+                </h1>
+                <p className="text-sm text-neutral-500">
+                  Verify or edit your recent career timeline items.
+                </p>
+              </div>
+
+              {/* Experience list with inline forms */}
+              <div className="space-y-6 max-h-[350px] overflow-y-auto pr-2">
+                {experience.map((exp, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 border border-neutral-200 rounded-xl bg-neutral-50/20 space-y-3 relative group"
+                  >
+                    <button
+                      onClick={() => removeExperience(idx)}
+                      className="absolute top-3 right-3 text-neutral-400 hover:text-red-500 p-1.5 transition-colors"
+                      title="Remove Role"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">Role Title</label>
+                        <input
+                          type="text"
+                          value={exp.title}
+                          onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
+                          className="w-full text-xs p-2 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">Company</label>
+                        <input
+                          type="text"
+                          value={exp.company}
+                          onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
+                          className="w-full text-xs p-2 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">Duration</label>
+                        <input
+                          type="text"
+                          value={exp.duration}
+                          onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
+                          className="w-full text-xs p-2 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">Role Description</label>
+                      <textarea
+                        value={exp.description}
+                        onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
+                        rows={2}
+                        className="w-full text-xs p-2 bg-white border border-neutral-200 rounded-lg outline-none focus:border-blue-400 resize-none leading-relaxed"
+                      />
+                    </div>
+                  </div>
+                ))}
+
+                {experience.length === 0 && (
+                  <div className="text-center py-8 border-2 border-dashed border-neutral-200 rounded-xl bg-neutral-50/50">
+                    <p className="text-xs text-neutral-400 font-medium">No experience items added yet.</p>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={addExperienceItem}
+                className="w-full h-10 border border-dashed border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50 transition-colors"
+              >
+                <Plus className="w-4 h-4" /> Add work experience card
+              </button>
+
+              {/* Bottom buttons */}
+              <div className="flex justify-between items-center pt-4 border-t border-neutral-100">
+                <button onClick={stepBack} className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  onClick={() => setWizardStep(6)}
+                  className="px-5 h-9 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 transition-colors flex items-center gap-1"
+                >
+                  Refine with AI <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 6: Background AI Optimization Loading Screen */}
+          {wizardStep === 6 && (
+            <motion.div
+              key="step6"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-md text-center space-y-6"
+            >
+              <AnimatedGeneratingIllustration />
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold tracking-tight text-neutral-900 flex items-center justify-center gap-2">
+                  <Sparkles className="w-5 h-5 text-blue-500 animate-pulse" /> Optimizing Page Details
+                </h2>
+                <p className="text-xs text-neutral-400 font-mono">
+                  Using OpenRouter LLM to polish and format copy...
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center gap-3">
+                <Loader2 className="w-6 h-6 text-neutral-800 animate-spin" />
+                <span className="text-[11px] font-semibold text-neutral-500">Formatting headline, summary & projects...</span>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 7: Template Selection Grid */}
+          {wizardStep === 7 && (
+            <motion.div
+              key="step7"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="w-full max-w-4xl space-y-6"
+            >
+              <div className="text-center space-y-1 mb-2">
+                <h1 className="text-3xl font-bold tracking-tight text-neutral-950">Select Portfolio Layout</h1>
+                <p className="text-sm text-neutral-500">
+                  Pick one of the 4 Framer-inspired template designs loaded with your details.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                  const isSelected = selectedTemplate === id;
+                  const name = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                  const desc = id === "daniel-cross" ? "High-contrast, bold editorial layout" : id === "julian-mercer" ? "Elegant serif typography with warm tones" : id === "link-hunt" ? "Clean creator links-in-bio stack" : "Clean grid modular bento cards";
+
+                  return (
+                    <div
+                      key={id}
+                      onClick={() => selectTemplate(id as any)}
+                      className={`bg-white border rounded-[20px] p-4 flex flex-col justify-between cursor-pointer transition-all hover:translate-y-[-2px] hover:shadow-md ${
+                        isSelected
+                          ? "border-blue-500 ring-2 ring-blue-500/20"
+                          : "border-neutral-200/80 hover:border-neutral-300"
+                      }`}
+                    >
+                      <div className="space-y-1 mb-3">
+                        <div className="flex justify-between items-center">
+                          <h3 className="text-sm font-bold text-neutral-900">{name}</h3>
+                          {isSelected && (
+                            <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-blue-600 bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded-full uppercase">
+                              <Check className="w-2.5 h-2.5" /> Selected
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[11px] text-neutral-400 font-medium">{desc}</p>
+                      </div>
+
+                      {/* Mini Scaled Preview Container */}
+                      <div className="w-full aspect-[4/3] rounded-lg border border-neutral-100 overflow-hidden relative bg-[#F9F9F9] flex items-center justify-center p-2">
+                        <div className="origin-top scale-[0.45] w-[1024px] h-[768px] absolute top-2 left-2 pointer-events-none select-none overflow-hidden rounded-lg shadow-sm border border-neutral-200">
+                          <ProfilePreview profile={editedProfile || {} as any} template={id as any} fluid={true} />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Bottom buttons */}
+              <div className="flex justify-between items-center pt-6 border-t border-neutral-200 bg-white/40 p-4 rounded-xl">
+                <button onClick={stepBack} className="flex items-center gap-1 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <ArrowLeft className="w-4 h-4" /> Back
+                </button>
+                <button
+                  onClick={() => setWizardStep(8)}
+                  className="px-6 h-10 bg-blue-500 text-white text-sm font-semibold rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-1.5 shadow-sm"
+                >
+                  Proceed to Publish <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 8: Domain & Publish */}
+          {wizardStep === 8 && (
+            <motion.div
+              key="step8"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-md space-y-6"
+            >
+              <div className="text-center space-y-2">
+                <h1 className="text-2xl font-bold tracking-tight text-neutral-900">Configure Page Link</h1>
+                <p className="text-sm text-neutral-500 max-w-xs mx-auto">
+                  Choose a unique link name to publish your professional portfolio online.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Subdomain Link Address</label>
+                <div className="flex items-center w-full bg-neutral-50 border border-neutral-200 rounded-xl px-3 py-2.5 focus-within:border-blue-400 focus-within:bg-white transition-colors">
+                  <Globe className="w-4 h-4 text-neutral-400 mr-2 shrink-0" />
+                  <input
+                    type="text"
+                    value={subdomain}
+                    onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                    className="flex-1 text-sm bg-transparent outline-none font-medium font-mono text-neutral-800"
+                    placeholder="yourname"
+                  />
+                  <span className="text-xs text-neutral-400 font-mono font-medium ml-1 shrink-0">.linkedpage.io</span>
                 </div>
 
-                <div className="flex gap-3 w-full">
-                  <button
-                    onClick={handleBackToInput}
-                    className="flex-1 h-10 bg-white border border-[#E6E6E6] hover:bg-[#FBFBFB] text-black text-[12px] font-medium rounded-[13px] transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    <ArrowLeft className="w-3.5 h-3.5" /> Try again
-                  </button>
-                  <button
-                    onClick={handleManualImport}
-                    className="flex-1 h-10 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[12px] font-medium rounded-[13px] border border-[#E6E6E6]/60 transition-[background-color,border-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 cursor-pointer"
-                  >
-                    Load Default Data <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                <div className="min-h-5 text-right">
+                  {checkingSubdomain ? (
+                    <span className="text-[10px] text-neutral-400 font-mono">Checking availability...</span>
+                  ) : isSubdomainAvailable === true ? (
+                    <span className="text-[10px] text-emerald-600 font-semibold flex items-center justify-end gap-1 font-mono">
+                      <Check className="w-3.5 h-3.5" /> Subdomain is available!
+                    </span>
+                  ) : isSubdomainAvailable === false ? (
+                    <span className="text-[10px] text-red-500 font-semibold flex items-center justify-end gap-1 font-mono">
+                      <AlertCircle className="w-3.5 h-3.5" /> Subdomain is already taken!
+                    </span>
+                  ) : null}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+              </div>
+
+              <button
+                onClick={handlePublish}
+                disabled={publishing || isSubdomainAvailable !== true}
+                className="w-full h-11 bg-blue-500 text-white text-sm font-semibold rounded-xl hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {publishing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Publishing...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" /> Publish Live Portfolio
+                  </>
+                )}
+              </button>
+
+              {/* Back to template selector */}
+              <div className="flex justify-center items-center pt-2">
+                <button
+                  onClick={() => setWizardStep(7)}
+                  className="text-xs text-neutral-400 hover:text-neutral-600 font-medium transition-colors"
+                >
+                  ← Go back to templates
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
+
+      {/* Footer copyright */}
+      <footer className="w-full text-center text-[10px] text-neutral-400 font-mono shrink-0">
+        © {new Date().getFullYear()} LinkedPage. Simple. Fast. Professional.
+      </footer>
     </div>
   );
 }
@@ -849,8 +961,8 @@ export default function OnboardingPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center font-inter select-none">
-          <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+        <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
+          <Loader2 className="w-6 h-6 text-neutral-800 animate-spin" />
         </div>
       }
     >

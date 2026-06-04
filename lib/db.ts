@@ -111,7 +111,7 @@ export async function getWebsiteByDomain(domainName: string): Promise<Website | 
   };
 }
 
-export async function createWebsite(userId: string, templateId: TemplateId = "minimal-card"): Promise<Website> {
+export async function createWebsite(userId: string, templateId: TemplateId = "daniel-cross"): Promise<Website> {
   const uRows = await db.select().from(schema.user).where(eq(schema.user.id, userId)).limit(1);
   const user = uRows[0];
   const name = user ? user.name : "Alex Morgan";

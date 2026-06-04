@@ -187,62 +187,27 @@ The shape language is soft and rounded, with a notable 13px corner radius on maj
 ## Components
 Buttons are the most expressive component family. `button-primary` uses the charcoal `#2A2A2F` background with white text, medium label typography, 14px vertical padding, and a 40px minimum height for a confident CTA. `button-secondary` uses `#F3F3F3` with black text and the same sizing, making it ideal for less dominant actions like “Decline” or “Log in.” `button-tertiary` is text-only and should remain visually quiet for low-emphasis navigation or inline actions.
 
-Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action buttons.
+Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action
 
-### Floating Overlay Sidebar
-The sidebar layout for floating navigation overlays uses a custom panel:
-- **Structure:** Absolute or fixed container with a left gap (`left-5`), top gap (`top-28`), and bottom gap (`bottom-5`).
-- **Width:** `260px` to maintain narrow, crisp spacing.
-- **Backdrop:** Light dark backdrop overlay (`bg-black/15`) with a subtle blur effect (`backdrop-blur-[2px]`).
-- **Surface & Shadows:** High-fidelity frosted glass effect (`bg-white/95 backdrop-blur-md`) with soft border division (`border border-[#E6E6E6]`) and atmospheric shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
-- **Corner Radius:** Approachable rounded corners (`rounded-[16px]`).
-- **Trigger:** Sleek, floating pill or circle trigger button (`w-10 h-10 rounded-full`) featuring a minimalist chevron icon, offset in alignment to open/close panels cleanly.
+### Onboarding UI (Linear Wizard Flow)
+The application flow is simplified into a linear wizard containing 8 stages:
+- **Card Container:** Structured inside a clean, rounded card panel (`bg-white border border-neutral-200/80 rounded-[24px] shadow-sm p-8 w-full max-w-xl`).
+- **Steps:**
+  1. **ZIP Upload:** File drop zone with a dashed border (`border-2 border-dashed border-neutral-200 hover:border-blue-400 rounded-2xl p-8 bg-neutral-50/50 cursor-pointer`).
+  2. **Projects:** Form to add and list portfolio items (title, description, links, image preview).
+  3. **Interests:** Spacious textarea to collect passions and aspirations.
+  4. **Skills Tag Manager:** Pre-filled from ZIP, rendered as rounded white chip tags with remove tags functionality, alongside a tag adder field.
+  5. **Experience timeline:** Form elements for role title, company, duration, and bullet points.
+  6. **Background AI loading:** Uses `AnimatedGeneratingIllustration` and status indicators during LLM optimization.
+  7. **Template selector:** Grid layout displaying the 4 templates with live scaled previews (`scale-[0.45]`) using user data.
+  8. **Publish & slug input:** Input form with suffix `.linkedpage.io` verifying subdomain availability in real-time.
 
-### User Menu (Profile Menu)
-- **Structure:** Absolute container positioned relative to the top right of the navigation header (`right-0 top-10`).
-- **Width:** `280px` (w-72) to accommodate user details and quick actions cleanly.
-- **Surface & Shadows:** Frosted glass panel (`bg-white/70 backdrop-blur-xl`) with a thin border (`border border-black/5` or `border-[#E6E6E6]`) and unified shadows (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
-- **Corner Radius:** Approvingly rounded corners (`rounded-2xl`).
-- **Details:** Includes user avatar, name, email, quick links, and a log-out action button utilizing the brand's secondary/tertiary colors.
-
-### Template Picker Panel
-The sidebar editor layout picker for layout presets and AI generation uses:
-- **Dimensions:** Width `486.25px`, height `831.45px`, with content region of `434.09px` centered using `26.08px` horizontal margins.
-- **Card Elements:** Width `208.61px`, height `156.45px` with a `13px` corner radius, an underlying gradient mask, and action overlays on hover.
-- **Controls:** A simple header "Template Library" and a magnifying glass search field. The previous tab-selector buttons ("Presets" and "Generate AI") have been removed to display the template library directly.
-
-### Media Picker Panel
-The media asset manager and uploader uses:
-- **Dimensions:** Identical structural specifications as the layout picker, maintaining width `486.25px`, height `831.45px`, and content boundaries of `434.09px`.
-- **Card Elements:** Two-column grid of image cards, each sized `w-[208.61px]` by `h-[156.45px]` with a `13px` corner radius, bottom gradient backdrop overlay, category text labels, and click/explore hover states.
-- **Controls & Tabs:** Interactive "Your Uploads" button of width `206.5px` and "Generate Images" button of width `210.52px` with absolute positioning for the glowing multicolor shadow. Includes a standard magnifying glass search field.
-
-### Chat Panel UI
-The interactive chat composer and conversation view serves as the primary edit vehicle (with manual direct edit inputs completely removed):
-- **Conversational Edit Mode:** The edit interface is fully conversational, governed by the AI agent executing tools behind the scenes.
-- **Field Click Pre-fill:** Clicking any editable element in the live website preview triggers a smooth redirect to the Chat tab and populates the composer with a context-rich prompt prefix (e.g., "I want to change my headline: ").
-- **User Message Bubbles:** Styled with a pure white background, light gray border (`border-neutral-200/60`), unified card shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`), and rounded corners (`rounded-[18px]`) aligned to the right.
-- **Webild AI Responses:** Rendered bubble-less directly on the panel. Includes a header with a 3D-glossy blue gradient sphere logo and bold text "Webild" in black.
-- **Interactive Suggestions:** Dynamic pill buttons rendered horizontally. Each pill has a light border, white background, black text, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
-- **Input Composer:** A floating white panel with `rounded-[20px]`, `border-neutral-200/80`, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`) containing a multi-line textarea, a circular left-aligned plus icon button, and right-aligned microphone and blue send buttons.
-
-### Onboarding UI
-The onboarding interface uses a multi-stage flow to guide users through importing their profile data:
-- **Frosted Glass Container:** Styled as a frosted glass panel (`bg-white/70 backdrop-blur-xl border border-[#E6E6E6]/60 rounded-[28px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] p-8 w-full max-w-[480px]`).
-- **Data Export Instructions:** Structured rows with circular number badges using a soft accent background (`bg-[#8DB8FF]/15 text-[#3b82f6] text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shrink-0`).
-- **ZIP Upload Zones:** Uses dashed border (`border-2 border-dashed border-[#E6E6E6] hover:border-[#8DB8FF] rounded-2xl p-6 bg-[#FBFBFB]/50 hover:bg-[#8DB8FF]/5 cursor-pointer text-center`), supporting hover shadow glow (`hover:shadow-[0_0_20px_rgba(141,184,255,0.12)]`) and active tactile scale feedback (`active:scale-[0.98]`). This ZIP drop card is also showcased in the landing page hero section.
-- **Tactile Click Scale Transition:** Major actions use `active:scale-[0.97]` and minor elements/zones use `active:scale-[0.98]`, with transitions specifically targeted to the `transform` property (`transition-transform duration-100`).
-
-### Workspace Setup Loading Timeline
-The step-by-step loading state of profile page generation uses:
-- **Card Container:** Styled with `bg-white/80`, `backdrop-blur-md`, a soft border (`border-[#E6E6E6]`), `rounded-[24px]` corners, and unified card shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
-- **Header:** Features a bold display title in black and secondary description in gray (`text-gray-500`) explaining the background operations.
-- **Timeline Dots:** Uses a dynamic state system mapping scraping progress stages:
-  - **Completed Stage:** Highlighted with a green check circle (`text-[#369762]`) and solid green connector line.
-  - **Active Stage:** Highlighted with a spinning loader (`lucide-loader text-primary animate-spin`), a pinging active dot (`text-[#8DB8FF]`), and a repeating linear gradient dashed line to represent running progress.
-  - **Upcoming Stage:** Represented with a faint gray empty circle (`text-gray-300`) and a faded connector line.
-- **Labels:** Main titles are styled in bold medium text (dimmed to `text-gray-400` when upcoming) and descriptions in `text-gray-400`.
-
+### Template Style System (4 Premium Framer-Inspired Layouts)
+The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
+- **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
+- **Julian Mercer:** elegant, warm paper style. Uses a warm background `#FAF8F5`, italic serif typography (`font-serif font-light italic`), monospace metadata tags, and soft dividers.
+- **Link Hunt:** links-in-bio style. Features a centered layout (`max-w-md mx-auto text-center`), large avatar, pill buttons for social accounts with icons, and card containers.
+- **Biobricks:** grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
 
 ## Motion & Animation Guidelines
 

@@ -54,7 +54,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [linkedinUrl, setLinkedinUrlState] = useState("");
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [editedProfile, setEditedProfile] = useState<ProfileData | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("minimal-card");
+  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("daniel-cross");
   const [isLoading, setIsLoading] = useState(false);
   const [scrapeError, setScrapeError] = useState<string | null>(null);
   const [pendingZip, setPendingZip] = useState<File | null>(null);
