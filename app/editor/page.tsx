@@ -15,7 +15,6 @@ import {
   Trash2,
   Globe,
   Loader2,
-  CornerDownLeft,
   Smartphone,
   Monitor,
 } from "lucide-react";
@@ -24,15 +23,6 @@ import WizardAnimations from "@/components/WizardAnimations";
 import DomainsPane from "./components/DomainsPane";
 import SettingsPane from "./components/SettingsPane";
 import { UserMenu } from "@/components/UserMenu";
-
-// AI avatar component for the chat bubbles
-function AIAvatar() {
-  return (
-    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center shrink-0 shadow-sm">
-      <Sparkles className="w-4 h-4 text-white" />
-    </div>
-  );
-}
 
 // User avatar placeholder
 function UserAvatar() {
@@ -514,33 +504,41 @@ function EditorInner() {
 
       {/* ── Left Column Panel Switcher based on activeNav ── */}
       
-      {/* 1. Design / AI Onboarding Wizard Panel (420px to 480px width) */}
+      {/* 1. Design / AI Onboarding Wizard Panel (510px width) */}
       {activeNav === 1 && (
-        <aside className="w-[420px] md:w-[480px] shrink-0 h-full bg-white border-r border-[#E6E6E6]/60 flex flex-col justify-between shadow-xs relative z-20">
-          {/* Chat Header */}
-          <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between shrink-0 bg-white/50 backdrop-blur-md">
+        <aside className="w-[510px] shrink-0 h-full bg-white border-r border-[#E6E6E6]/60 flex flex-col justify-between shadow-xs relative z-20 font-inter">
+          {/* Title Header */}
+          <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0 bg-white">
             <div className="flex items-center gap-2">
-              <AIAvatar />
-              <div>
-                <span className="font-semibold text-sm text-neutral-800 block leading-tight">LinkedPage Assistant</span>
-                <span className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider block mt-0.5 animate-pulse">Onboarding Workspace</span>
-              </div>
+              <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
+              <div className="w-px h-3 bg-black/10" />
+              <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
+                {profileName}
+              </span>
             </div>
-            <button
-              onClick={() => router.push("/onboarding")}
-              className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-neutral-200 px-2 py-1 rounded-lg"
-            >
-              Restart
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => router.push("/onboarding")}
+                className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1 rounded-lg"
+              >
+                Restart
+              </button>
+              <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
+                Editor Mode
+              </span>
+            </div>
           </div>
 
           {/* Scrollable Wizard History */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-6" style={{ scrollbarWidth: "none" }}>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" style={{ scrollbarWidth: "none" }}>
             
             {/* Step 2 Intro */}
-            <div className="flex items-start gap-3">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+            <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
+              <div className="flex items-center gap-2 select-none">
+                <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                <span className="font-semibold text-[13.5px] text-black">Webild</span>
+              </div>
+              <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                 Hello! Welcome to your profile dashboard. I've initialized your LinkedIn information in the database.
                 <br/><br/>
                 Let's refine your portfolio contents. First, let's review your <strong>Projects & Portfolio Highlights</strong>.
@@ -549,19 +547,23 @@ function EditorInner() {
 
             {/* User confirmation Step 2 */}
             {currentStep > 2 && (
-              <div className="flex justify-end items-start gap-3">
-                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                  I've updated my projects and portfolio details.
+              <div className="w-full flex justify-end items-start font-inter">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    I've updated my projects and portfolio details.
+                  </p>
                 </div>
-                <UserAvatar />
               </div>
             )}
 
             {/* Step 3 (Interests) */}
             {currentStep >= 3 && (
-              <div className="flex items-start gap-3 animate-in fade-in duration-200">
-                <AIAvatar />
-                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                   Got it. Next, let's document your <strong>Core Interests and Career Goals</strong> to personalize your profile bio.
                 </div>
               </div>
@@ -569,19 +571,23 @@ function EditorInner() {
 
             {/* User confirmation Step 3 */}
             {currentStep > 3 && (
-              <div className="flex justify-end items-start gap-3">
-                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                  Interests and aspirations submitted successfully.
+              <div className="w-full flex justify-end items-start font-inter">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    Interests and aspirations submitted successfully.
+                  </p>
                 </div>
-                <UserAvatar />
               </div>
             )}
 
             {/* Step 4 (Skills) */}
             {currentStep >= 4 && (
-              <div className="flex items-start gap-3 animate-in fade-in duration-200">
-                <AIAvatar />
-                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                   Excellent. Let's adjust your <strong>Core Skills & Tools</strong> tags.
                 </div>
               </div>
@@ -589,19 +595,23 @@ function EditorInner() {
 
             {/* User confirmation Step 4 */}
             {currentStep > 4 && (
-              <div className="flex justify-end items-start gap-3">
-                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                  Skills tags confirmed.
+              <div className="w-full flex justify-end items-start font-inter">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    Skills tags confirmed.
+                  </p>
                 </div>
-                <UserAvatar />
               </div>
             )}
 
             {/* Step 5 (Experience) */}
             {currentStep >= 5 && (
-              <div className="flex items-start gap-3 animate-in fade-in duration-200">
-                <AIAvatar />
-                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                   Perfect. Finally, let's verify your <strong>Work Experience timeline</strong>.
                 </div>
               </div>
@@ -609,19 +619,23 @@ function EditorInner() {
 
             {/* User confirmation Step 5 */}
             {currentStep > 5 && (
-              <div className="flex justify-end items-start gap-3">
-                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                  Work experience details refined.
+              <div className="w-full flex justify-end items-start font-inter">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    Work experience details refined.
+                  </p>
                 </div>
-                <UserAvatar />
               </div>
             )}
 
             {/* Step 6 (AI Refinement Processing) */}
             {currentStep === 6 && (
-              <div className="flex items-start gap-3 animate-in fade-in duration-200">
-                <AIAvatar />
-                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed flex items-center gap-2">
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain animate-pulse" />
+                  <span className="font-semibold text-[13.5px] text-black animate-pulse">Webild</span>
+                </div>
+                <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center gap-2 text-xs font-semibold text-neutral-750">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
                   Refinement engine running in the background...
                 </div>
@@ -630,9 +644,12 @@ function EditorInner() {
 
             {/* Step 7 (Template Picker) */}
             {currentStep >= 7 && (
-              <div className="flex items-start gap-3 animate-in fade-in duration-200">
-                <AIAvatar />
-                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                   AI optimization finished! I've polished your text copy.
                   <br/><br/>
                   Now, please **select one of the 4 Framer-inspired template styles** below to apply your design theme.
@@ -642,19 +659,23 @@ function EditorInner() {
 
             {/* User confirmation Step 7 */}
             {currentStep > 7 && (
-              <div className="flex justify-end items-start gap-3">
-                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                  Template design style chosen.
+              <div className="w-full flex justify-end items-start font-inter">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    Template design style chosen.
+                  </p>
                 </div>
-                <UserAvatar />
               </div>
             )}
 
             {/* Step 8 (Publish configuration) */}
             {currentStep >= 8 && (
-              <div className="flex items-start gap-3 animate-in fade-in duration-200">
-                <AIAvatar />
-                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                   Almost complete! Let's choose your custom subdomain link slug to publish your site live.
                 </div>
               </div>
@@ -665,7 +686,7 @@ function EditorInner() {
               
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
-                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Portfolio Projects ({projects.length})</span>
                   
                   <div className="space-y-2">
@@ -735,7 +756,7 @@ function EditorInner() {
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Interests & Direction</span>
                   <textarea
                     placeholder="Describe your primary interests..."
@@ -760,7 +781,7 @@ function EditorInner() {
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Skills tags manager</span>
                   
                   <div className="flex flex-wrap gap-1.5 p-2 bg-white border border-neutral-100 rounded-xl max-h-36 overflow-y-auto">
@@ -799,7 +820,7 @@ function EditorInner() {
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Work timeline items</span>
                   
                   <div className="space-y-4 max-h-60 overflow-y-auto pr-1">
@@ -866,7 +887,7 @@ function EditorInner() {
 
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Theme Style</span>
                   
                   <div className="grid grid-cols-2 gap-2">
@@ -906,7 +927,7 @@ function EditorInner() {
 
               {/* Step 8 Form: Subdomain configurations */}
               {currentStep === 8 && (
-                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
                   <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Slug Address</span>
                   
                   <div className="flex items-center w-full bg-white border border-neutral-200 rounded-xl px-2.5 py-1.5 focus-within:border-blue-400">
@@ -962,20 +983,40 @@ function EditorInner() {
             <div ref={chatEndRef} />
           </div>
 
-          {/* Cosmetic Footer Composer Block */}
-          <div className="p-4 border-t border-neutral-100 shrink-0 bg-neutral-50/50 flex gap-2">
-            <input
-              type="text"
-              disabled
-              placeholder="Complete wizard forms above to proceed..."
-              className="flex-1 bg-neutral-100 border border-neutral-200 rounded-xl px-3 py-2 text-xs text-neutral-400 cursor-not-allowed"
-            />
-            <button
-              disabled
-              className="w-8 h-8 rounded-xl bg-neutral-200 text-neutral-400 flex items-center justify-center shrink-0 cursor-not-allowed"
-            >
-              <CornerDownLeft className="w-4 h-4" />
-            </button>
+          {/* Bottom input composer area */}
+          <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
+            {/* Text input composer */}
+            <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] opacity-60">
+              <textarea
+                disabled
+                className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-450 placeholder:text-neutral-400 h-16 outline-none font-inter cursor-not-allowed"
+                placeholder="Complete wizard steps above to proceed..."
+              />
+              <div className="flex items-center justify-between px-1">
+                <button
+                  disabled
+                  className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center cursor-not-allowed border-none"
+                >
+                  <Plus className="w-[18px] h-[18px]" />
+                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    disabled
+                    className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-400 flex items-center justify-center cursor-not-allowed border-none"
+                  >
+                    <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="M12 1v10m0-10a3 3 0 0 1 3 3v4a3 3 0 0 1-6 0V4a3 3 0 0 1 3-3zm7 9v1a7 7 0 0 1-14 0v-1m14 0h-2m-12 0H5" />
+                    </svg>
+                  </button>
+                  <button
+                    disabled
+                    className="w-9 h-9 rounded-full bg-neutral-200 text-neutral-400 flex items-center justify-center cursor-not-allowed border-none"
+                  >
+                    <ArrowRight className="w-[18px] h-[18px]" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </aside>
       )}
