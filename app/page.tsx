@@ -197,160 +197,117 @@ const COLOR_PALETTES = [
   { name: "Rosewood", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(184, 43, 64) 25%, rgb(184, 43, 64) 50%, rgb(185, 9, 65) 50%, rgb(185, 9, 65) 75%, rgb(232, 168, 182) 75%, rgb(232, 168, 182) 100%)" },
 ];
 
-function ProductShowcaseMockup() {
+function FloatingBentoMockup() {
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] as const }
+    }
+  };
+
   return (
-    <div className="relative w-full max-w-[480px] h-[320px] flex items-center justify-center select-none">
-      {/* Ambient background glows */}
-      <div className="absolute top-1/4 left-1/4 w-36 h-36 bg-[#8DB8FF]/15 rounded-full blur-[50px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-36 h-36 bg-[#8DFFB3]/15 rounded-full blur-[50px] pointer-events-none" />
-
-      {/* Visual content stack */}
-      <div className="relative w-full h-full flex items-center justify-between gap-3 z-10">
-        
-        {/* Left Card: Styled LinkedIn Mockup */}
-        <motion.div
-          initial={{ opacity: 0, x: -20, y: 5 }}
-          animate={{ opacity: 1, x: 0, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: [0.23, 1, 0.32, 1] }}
-          whileHover={{ y: -4, transition: { duration: 0.15 } }}
-          className="w-[185px] rounded-[18px] bg-white border border-[#E6E6E6] shadow-[0px_6px_16px_-6px_rgba(0,0,0,0.06)] overflow-hidden flex-shrink-0"
-        >
-          {/* Header Banner */}
-          <div className="h-9 bg-gradient-to-r from-[#0a66c2] to-[#1283ef] relative">
-            <span className="absolute right-2.5 top-2 text-white/80 font-bold text-[8px] font-sans tracking-wide">
-              in
-            </span>
-          </div>
-
-          {/* Profile Details */}
-          <div className="p-3.5 pt-0 flex flex-col items-center text-center -mt-5">
-            {/* Avatar Placeholder */}
-            <div className="w-11 h-11 rounded-full border-2 border-white bg-gray-200 overflow-hidden shadow-sm flex items-center justify-center text-gray-400 font-bold text-xs select-none">
-              RH
-            </div>
-            
-            {/* Name */}
-            <h4 className="mt-1.5 text-[12px] font-bold text-[#2A2A2F] leading-tight font-inter">
-              Reid Hoffman
-            </h4>
-            
-            {/* Headline */}
-            <p className="mt-0.5 text-[8.5px] text-gray-400 leading-normal font-medium max-w-[150px] font-inter">
-              Co-founder, LinkedIn • Partner, Greylock
-            </p>
-
-            {/* Divider line */}
-            <div className="w-full h-[1px] bg-[#E6E6E6] my-2" />
-
-            {/* Summary lines representing LinkedIn sections */}
-            <div className="w-full space-y-1.5 text-left">
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded bg-blue-50 text-[#0a66c2] text-[6px] font-bold flex items-center justify-center">W</span>
-                <div className="h-1.5 w-20 bg-gray-100 rounded" />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded bg-blue-50 text-[#0a66c2] text-[6px] font-bold flex items-center justify-center">E</span>
-                <div className="h-1.5 w-14 bg-gray-100 rounded" />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Center: Animating Flow line */}
-        <div className="flex-1 flex flex-col items-center justify-center min-w-[50px] relative">
-          <svg className="w-full h-8" viewBox="0 0 80 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M 5,10 C 25,10 55,10 75,10"
-              stroke="url(#dataStreamGrad)"
-              strokeWidth="2.5"
-              strokeDasharray="5 5"
-              strokeLinecap="round"
-            >
-              <animate
-                attributeName="stroke-dashoffset"
-                values="30;0"
-                dur="1.5s"
-                repeatCount="indefinite"
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        visible: {
+          transition: { staggerChildren: 0.1 }
+        }
+      }}
+      className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl mt-12 px-4 relative"
+    >
+      {/* Profile Card */}
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ y: -6, transition: { duration: 0.2 } }}
+        className="md:col-span-1 rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-6 flex flex-col gap-4 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] text-left"
+      >
+        <div className="flex items-center gap-3.5">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#8DB8FF] p-[2px] shadow-sm">
+            <div className="w-full h-full rounded-full bg-white overflow-hidden flex items-center justify-center">
+              <img
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"
+                alt="Reid Hoffman"
+                className="w-full h-full object-cover"
               />
-            </path>
-            <defs>
-              <linearGradient id="dataStreamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0a66c2" />
-                <stop offset="50%" stopColor="#8DB8FF" />
-                <stop offset="100%" stopColor="#369762" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <motion.div
-            animate={{ scale: [0.94, 1.06, 0.94], opacity: [0.8, 1, 0.8] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-3 px-1.5 py-0.5 rounded-full bg-[#8DFFB3]/20 border border-[#8DFFB3]/35 text-[#369762] text-[7.5px] font-bold leading-none scale-90"
-          >
-            AI Morph
-          </motion.div>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-[17px] font-bold text-black font-inter-tight leading-tight">Reid Hoffman</h3>
+            <p className="text-[12px] text-gray-400 font-inter-tight">Co-founder, LinkedIn</p>
+          </div>
+        </div>
+        <p className="text-[13px] text-[#171717]/70 leading-relaxed font-inter-tight">
+          Entrepreneur, VC, and executive. Passionate about building networks and scaling platforms that transform global industries.
+        </p>
+        <div className="flex gap-2 mt-1">
+          <span className="text-[11px] font-semibold text-gray-500 bg-[#F3F3F3] border border-neutral-200/50 px-2.5 py-1 rounded-full leading-none">
+            Silicon Valley
+          </span>
+          <span className="text-[11px] font-semibold text-[#1B5E20] bg-[#E6FFE6] border border-[#8DFFB3]/40 px-2.5 py-1 rounded-full leading-none">
+            VC & Angel
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Experience Card */}
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ y: -6, transition: { duration: 0.2 } }}
+        className="md:col-span-1 rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-6 flex flex-col gap-4 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] text-left"
+      >
+        <h4 className="text-[12px] font-bold text-[#369762] uppercase tracking-wider font-inter-tight">
+          Featured Experience
+        </h4>
+        <div className="flex flex-col gap-3.5">
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-[#0a66c2] text-xs font-bold shrink-0">
+              in
+            </div>
+            <div>
+              <p className="text-[13.5px] font-bold text-black leading-tight">Co-Founder & CEO</p>
+              <p className="text-[11.5px] text-gray-500">LinkedIn • 2002 - 2009</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-[#2A2A2F]/5 border border-[#2A2A2F]/10 flex items-center justify-center text-[#2A2A2F] text-[10px] font-bold shrink-0">
+              GL
+            </div>
+            <div>
+              <p className="text-[13.5px] font-bold text-black leading-tight">Partner</p>
+              <p className="text-[11.5px] text-gray-500">Greylock • 2009 - Present</p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Skills Card */}
+      <motion.div
+        variants={itemVariants}
+        whileHover={{ y: -6, transition: { duration: 0.2 } }}
+        className="md:col-span-1 rounded-[24px] bg-white/70 backdrop-blur-xl border border-white/60 p-6 flex flex-col justify-between gap-4 shadow-[0_15px_35px_-10px_rgba(0,0,0,0.03)] text-left"
+      >
+        <div className="flex flex-col gap-3">
+          <h4 className="text-[12px] font-bold text-[#8DB8FF] uppercase tracking-wider font-inter-tight">
+            Expertise & Focus
+          </h4>
+          <div className="flex flex-wrap gap-1.5">
+            {["Venture Capital", "Scaling", "Product Strategy", "Network Effects", "AI Ethics"].map((skill) => (
+              <span key={skill} className="text-[11px] font-medium text-[#2A2A2F] bg-white border border-[#E6E6E6] px-2.5 py-1 rounded-lg">
+                {skill}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Right Card: Generated Website layout mockup */}
-        <motion.div
-          initial={{ opacity: 0, x: 20, y: -5 }}
-          animate={{ opacity: 1, x: 0, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-          whileHover={{ y: -4, transition: { duration: 0.15 } }}
-          className="w-[210px] rounded-[22px] bg-white/80 backdrop-blur-md border border-[#E6E6E6]/60 shadow-[0px_8px_24px_-6px_rgba(0,0,0,0.07)] p-3 flex flex-col gap-2.5 flex-shrink-0"
-        >
-          {/* Header Bar */}
-          <div className="flex items-center justify-between border-b border-[#F3F3F3] pb-1.5">
-            <div className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E45A5A]" />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#E9C46A]" />
-              <span className="w-1.5 h-1.5 rounded-full bg-[#369762]" />
-            </div>
-            <span className="text-[7.5px] font-bold text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/30 px-1.5 py-0.5 rounded-full leading-none scale-90 select-none">
-              Live website
-            </span>
-          </div>
-
-          {/* User Profile */}
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#8DFFB3] to-[#8DB8FF] p-[1.5px] shadow-sm flex-shrink-0">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-[#2A2A2F] font-bold text-[9px]">
-                RH
-              </div>
-            </div>
-            <div className="flex flex-col text-left">
-              <h5 className="text-[10px] font-bold text-[#2A2A2F] leading-none">Reid Hoffman</h5>
-              <span className="text-[7px] text-gray-400 mt-0.5 font-medium leading-none">reidhoffman.me</span>
-            </div>
-          </div>
-
-          {/* Bento layout mockup */}
-          <div className="grid grid-cols-2 gap-1.5">
-            {/* Bento block 1: Work */}
-            <div className="col-span-2 rounded-[10px] bg-[#FBFBFB] border border-[#E6E6E6] p-2 text-left flex flex-col gap-0.5">
-              <span className="text-[6px] font-bold text-[#369762] uppercase tracking-wider">Experience</span>
-              <p className="text-[8px] font-bold text-[#2A2A2F] leading-tight">Partner, Greylock</p>
-              <p className="text-[6px] text-gray-400 leading-none">2009 - Present</p>
-            </div>
-            
-            {/* Bento block 2: Education */}
-            <div className="rounded-[10px] bg-[#FBFBFB] border border-[#E6E6E6] p-2 text-left flex flex-col gap-0.5">
-              <span className="text-[6px] font-bold text-[#8DB8FF] uppercase tracking-wider">Education</span>
-              <p className="text-[7.5px] font-bold text-[#2A2A2F] leading-tight truncate">Stanford Univ.</p>
-              <p className="text-[6px] text-gray-400 leading-none">BS Cogn. Sci.</p>
-            </div>
-
-            {/* Bento block 3: Skills */}
-            <div className="rounded-[10px] bg-[#8DFFB3]/10 border border-[#8DFFB3]/35 p-2 text-left flex flex-col gap-1">
-              <span className="text-[6px] font-bold text-[#369762] uppercase tracking-wider">Skills</span>
-              <div className="flex flex-wrap gap-0.5">
-                <span className="px-1 py-0.2 rounded-full bg-white border border-[#E6E6E6]/60 text-[#369762] text-[4.5px] font-bold">Venture</span>
-                <span className="px-1 py-0.2 rounded-full bg-white border border-[#E6E6E6]/60 text-[#369762] text-[4.5px] font-bold">Scaling</span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </div>
+        <div className="border-t border-[#F3F3F3] pt-3 flex items-center justify-between">
+          <span className="text-[11.5px] font-semibold text-gray-400">Education</span>
+          <span className="text-[12.5px] font-bold text-[#2A2A2F] font-inter-tight">Stanford University</span>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -380,7 +337,7 @@ function HeroSection() {
   };
 
   return (
-    <section className="relative w-full min-h-[calc(100vh-3.5rem)] flex items-center justify-center overflow-hidden bg-white pt-24 lg:pt-16 pb-16">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white pt-28 pb-20">
       {/* Background image + overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
         <img
@@ -391,78 +348,73 @@ function HeroSection() {
         <div className="absolute inset-0 hero-overlay" />
       </div>
 
-      {/* Grid Content Container */}
+      {/* Centered Content Container */}
       <motion.div
         variants={heroContainerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 px-6 sm:px-8 items-center text-left"
+        className="relative z-10 max-w-5xl w-full mx-auto flex flex-col items-center text-center gap-6 px-6 sm:px-8"
       >
-        {/* Left Column: Heading and description */}
-        <div className="lg:col-span-7 flex flex-col items-start gap-5">
-          {/* Badge */}
-          <motion.div
-            variants={heroItemVariants}
+        {/* Badge */}
+        <motion.div
+          variants={heroItemVariants}
+          onClick={() => router.push("/onboarding")}
+          className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-transform"
+        >
+          <span className="gradient-text-rainbow text-[13px] font-semibold leading-[18px]">
+            Create in under 60 seconds
+          </span>
+          <span className="flex items-center justify-center w-6 h-6 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-transform">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </motion.div>
+
+        {/* Heading Title */}
+        <motion.h1
+          variants={heroItemVariants}
+          className="text-black text-[42px] sm:text-[56px] lg:text-[68px] leading-[1.05] font-semibold tracking-tight font-inter-tight max-w-4xl"
+        >
+          LinkedIn to personal Website.
+        </motion.h1>
+
+        {/* Subheading description */}
+        <motion.p
+          variants={heroItemVariants}
+          className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-2xl font-inter-tight"
+        >
+          Instantly turn your LinkedIn public data export ZIP into a fully structured personal website. Edit layout templates, add custom domains, and go live.
+        </motion.p>
+
+        {/* CTA Buttons */}
+        <motion.div
+          variants={heroItemVariants}
+          className="flex flex-wrap items-center justify-center gap-4 mt-2"
+        >
+          <button
             onClick={() => router.push("/onboarding")}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[#E6E6E6] bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer hover:bg-gray-50 active:scale-97 transition-transform"
+            className="h-11 px-6 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
           >
-            <span className="gradient-text-rainbow text-[13px] font-semibold leading-[18px]">
-              Create in under 60 seconds
-            </span>
-            <span className="flex items-center justify-center w-6 h-6 rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-transform">
-              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-                <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </span>
-          </motion.div>
+            Build Your Website <ArrowRight className="w-4.5 h-4.5" />
+          </button>
+          
+          <button
+            onClick={() => router.push("/editor")}
+            className="h-11 px-6 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer border border-[#E6E6E6]"
+          >
+            Skip & Try Mock Data →
+          </button>
+        </motion.div>
 
-          {/* Heading Title */}
-          <motion.h1
-            variants={heroItemVariants}
-            className="text-black text-[42px] sm:text-[54px] lg:text-[62px] leading-[1.05] font-semibold tracking-tight font-inter-tight"
-          >
-            LinkedIn to personal Website.
-          </motion.h1>
-
-          {/* Subheading description */}
-          <motion.p
-            variants={heroItemVariants}
-            className="text-gray-500 text-base sm:text-lg leading-relaxed max-w-xl font-inter-tight"
-          >
-            Instantly turn your LinkedIn public data export ZIP into a fully structured personal website. Edit layout templates, add custom domains, and go live.
-          </motion.p>
-
-          {/* CTA Buttons */}
-          <motion.div
-            variants={heroItemVariants}
-            className="flex flex-wrap items-center gap-4 mt-2 w-full sm:w-auto"
-          >
-            <button
-              onClick={() => router.push("/onboarding")}
-              className="h-11 px-6 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer"
-            >
-              Build Your Website <ArrowRight className="w-4.5 h-4.5" />
-            </button>
-            
-            <button
-              onClick={() => router.push("/editor")}
-              className="h-11 px-6 bg-[#F3F3F3] hover:bg-[#EAEAEA] text-black text-[13px] font-semibold rounded-[13px] transition-[background-color,transform] duration-100 active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer border border-[#E6E6E6]"
-            >
-              Skip & Try Mock Data →
-            </button>
-          </motion.div>
-        </div>
-
-        {/* Right Column: Visual Product Showcase Mockup */}
-        <div className="lg:col-span-5 w-full flex justify-center lg:justify-end">
-          <motion.div
-            variants={heroItemVariants}
-            className="w-full flex justify-center lg:justify-end"
-          >
-            <ProductShowcaseMockup />
-          </motion.div>
-        </div>
+        {/* Floating Bento Mockup Below */}
+        <motion.div
+          variants={heroItemVariants}
+          className="w-full flex justify-center mt-6"
+        >
+          <FloatingBentoMockup />
+        </motion.div>
       </motion.div>
     </section>
   );
