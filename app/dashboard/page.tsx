@@ -22,6 +22,7 @@ import { UserMenu } from "@/components/UserMenu";
 import { useEditor } from "@/context/EditorContext";
 import ProfilePreview from "@/app/editor/components/ProfilePreview";
 import { MOCK_PROFILE } from "@/shared/types";
+import { AnimatedDashboardEmptyIllustration } from "@/components/AnimatedSVGs";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -398,9 +399,7 @@ export default function DashboardPage() {
               </div>
             ) : websites.length === 0 ? (
               <div className="w-full flex flex-col items-center text-center py-20 px-6 bg-white border border-[#E6E6E6] rounded-[20px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] w-full max-w-lg mx-auto">
-                <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-4 border border-[#E6E6E6]">
-                  <Folder className="w-6 h-6 text-[#2A2A2F]/50" />
-                </div>
+                <AnimatedDashboardEmptyIllustration />
                 <h3 className="text-lg font-bold text-black mb-1">No websites found</h3>
                 <p className="text-sm text-gray-500 max-w-sm mb-6 leading-relaxed">
                   Import your LinkedIn profile or start with template data to create your first personal portfolio website.

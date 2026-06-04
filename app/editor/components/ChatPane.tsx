@@ -8,6 +8,7 @@ import { ProfileData, TemplateId } from "@/shared/types";
 import TemplatePicker from "./TemplatePicker";
 import InlineEditor from "./InlineEditor";
 import { motion, AnimatePresence } from "framer-motion";
+import { AnimatedThinkingIllustration } from "@/components/AnimatedSVGs";
 
 export type ChatTab = "chat" | "theme" | "grid";
 
@@ -373,7 +374,7 @@ export default function ChatPane({
                         <span className="font-semibold text-[13.5px] text-black animate-pulse">Webild</span>
                       </div>
                       <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
-                        <TypingDots />
+                        <AnimatedThinkingIllustration />
                       </div>
                     </motion.div>
                   )}
