@@ -21,6 +21,9 @@ import {
 } from "lucide-react";
 import ProfilePreview from "./components/ProfilePreview";
 import WizardAnimations from "@/components/WizardAnimations";
+import DomainsPane from "./components/DomainsPane";
+import SettingsPane from "./components/SettingsPane";
+import { UserMenu } from "@/components/UserMenu";
 
 // AI avatar component for the chat bubbles
 function AIAvatar() {
@@ -40,6 +43,45 @@ function UserAvatar() {
   );
 }
 
+// Left Sidebar Icons type
+type NavItem = { icon: React.ReactNode; label: string; active?: boolean };
+
+const navItems: NavItem[] = [
+  {
+    label: "Home",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Design",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Domains",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Site Settings",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+];
+
 function EditorInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,7 +94,15 @@ function EditorInner() {
     selectTemplate,
     loadWebsite,
     updateField,
+    isDirty,
+    resetEdits,
   } = useEditor();
+
+  // Navigation Panel tab state (1: Design/Wizard, 2: Domains, 3: Site Settings)
+  const [activeNav, setActiveNav] = useState(1);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
 
   // Onboarding wizard steps (2 to 8)
   const [currentStep, setCurrentStep] = useState<number>(2);
@@ -78,14 +128,30 @@ function EditorInner() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Load website data on mount
+  // Load website data on mount & Check Auth
   useEffect(() => {
-    if (id) {
-      loadWebsite(id);
-    } else {
-      router.push("/onboarding");
-    }
-  }, [id, loadWebsite]);
+    const checkUserAndLoad = async () => {
+      try {
+        const authRes = await fetch("/api/auth/me");
+        const authData = await authRes.json();
+        if (!authRes.ok) {
+          router.push("/login");
+          return;
+        }
+        setUserName(`${authData.user.firstName} ${authData.user.lastName}`);
+        setUserEmail(authData.user.email);
+
+        if (id) {
+          await loadWebsite(id);
+        } else {
+          router.push("/onboarding");
+        }
+      } catch {
+        router.push("/login");
+      }
+    };
+    checkUserAndLoad();
+  }, [id, loadWebsite, router]);
 
   // Sync profile data to forms
   useEffect(() => {
@@ -302,557 +368,872 @@ function EditorInner() {
     setExperience(experience.filter((_, i) => i !== idx));
   };
 
-  const desktopScale = 0.52;
-  const mobileScale = 0.42;
+  // Preview click handler to map sections to wizard steps
+  const handleFieldClick = (fieldName: string) => {
+    setActiveNav(1); // Switch back to Design/Wizard tab
+    if (fieldName === "projects" || fieldName.startsWith("block-")) {
+      setCurrentStep(2);
+    } else if (fieldName === "interests" || fieldName === "summary") {
+      setCurrentStep(3);
+    } else if (fieldName === "skills") {
+      setCurrentStep(4);
+    } else if (fieldName === "experience") {
+      setCurrentStep(5);
+    } else {
+      toast.info(`Select the options in the chat flow to modify your ${fieldName}.`);
+    }
+  };
+
+  const profileName = editedProfile?.name ?? "Your Profile";
+  const desktopScale = 0.54;
+  const mobileScale = 0.44;
 
   return (
-    <div className="h-screen w-full flex bg-[#F9FAFB] font-sans overflow-hidden">
+    <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
       
-      {/* ── Left Column: Chat-like interactive wizard (40% width) ── */}
-      <aside className="w-[420px] md:w-[480px] shrink-0 h-full bg-white border-r border-neutral-100 flex flex-col justify-between shadow-xs relative z-20">
-        
-        {/* Chat Header */}
-        <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between shrink-0 bg-white/50 backdrop-blur-md">
-          <div className="flex items-center gap-2">
-            <AIAvatar />
-            <div>
-              <span className="font-semibold text-sm text-neutral-800 block leading-tight">LinkedPage Assistant</span>
-              <span className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider block mt-0.5 animate-pulse">Onboarding Workspace</span>
-            </div>
-          </div>
-          <button
-            onClick={() => router.push("/onboarding")}
-            className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-neutral-200 px-2 py-1 rounded-lg"
-          >
-            Restart
-          </button>
-        </div>
-
-        {/* Scrollable Conversation History */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6" style={{ scrollbarWidth: "none" }}>
-          
-          {/* Step 2 Introduction (Always visible since it's the start) */}
-          <div className="flex items-start gap-3">
-            <AIAvatar />
-            <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
-              Hello! Welcome to your profile dashboard. I've initialized your LinkedIn information in the database.
-              <br/><br/>
-              Let's refine your portfolio contents. First, let's review your <strong>Projects & Portfolio Highlights</strong>.
-            </div>
-          </div>
-
-          {/* Static User Response for Step 2 */}
-          {currentStep > 2 && (
-            <div className="flex justify-end items-start gap-3">
-              <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                I've updated my projects and portfolio details.
+      {/* ── Left Sidebar (Collapsible hover style) ── */}
+      <div className="w-[60px] h-full shrink-0 relative z-[60]">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_32px_#ffff] py-4">
+          <div className="flex flex-col items-start w-full">
+            {/* Project/Brand logo icon */}
+            <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
+              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10 overflow-hidden p-1.5">
+                <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
               </div>
-              <UserAvatar />
-            </div>
-          )}
-
-          {/* Step 3 Chat History */}
-          {currentStep >= 3 && (
-            <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
-                Got it. Next, let's document your <strong>Core Interests and Career Goals</strong> to personalize your profile bio.
+              <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
+                <span className="font-medium text-[#2A2A2F] text-[15px] truncate">{profileName}</span>
+                <svg className="w-5 h-5 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
               </div>
             </div>
-          )}
 
-          {currentStep > 3 && (
-            <div className="flex justify-end items-start gap-3">
-              <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                Interests and aspirations submitted successfully.
-              </div>
-              <UserAvatar />
+            <div className="w-full px-4 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="h-px w-full bg-[#E6E6E6]/60" />
             </div>
-          )}
 
-          {/* Step 4 Chat History */}
-          {currentStep >= 4 && (
-            <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
-                Excellent. Let's adjust your <strong>Core Skills & Tools</strong> tags.
-              </div>
-            </div>
-          )}
-
-          {currentStep > 4 && (
-            <div className="flex justify-end items-start gap-3">
-              <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                Skills tags confirmed.
-              </div>
-              <UserAvatar />
-            </div>
-          )}
-
-          {/* Step 5 Chat History */}
-          {currentStep >= 5 && (
-            <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
-                Perfect. Finally, let's verify your <strong>Work Experience timeline</strong>.
-              </div>
-            </div>
-          )}
-
-          {currentStep > 5 && (
-            <div className="flex justify-end items-start gap-3">
-              <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                Work experience details refined.
-              </div>
-              <UserAvatar />
-            </div>
-          )}
-
-          {/* Step 6 Chat History (AI Loading) */}
-          {currentStep === 6 && (
-            <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                Refinement engine running in the background...
-              </div>
-            </div>
-          )}
-
-          {/* Step 7 Chat History */}
-          {currentStep >= 7 && (
-            <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
-                AI optimization finished! I've polished your text copy.
-                <br/><br/>
-                Now, please **select one of the 4 Framer-inspired template styles** below to apply your design theme.
-              </div>
-            </div>
-          )}
-
-          {currentStep > 7 && (
-            <div className="flex justify-end items-start gap-3">
-              <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
-                Template design style chosen.
-              </div>
-              <UserAvatar />
-            </div>
-          )}
-
-          {/* Step 8 Chat History */}
-          {currentStep >= 8 && (
-            <div className="flex items-start gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
-              <AIAvatar />
-              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
-                Almost complete! Let's choose your custom subdomain link slug to publish your site live.
-              </div>
-            </div>
-          )}
-
-          {/* DYNAMIC FORMS RENDER (Rendered inline inside chat feed) */}
-          <div className="pt-2">
-            
-            {/* Step 2 Form (Projects) */}
-            {currentStep === 2 && (
-              <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Portfolio Projects ({projects.length})</span>
-                
-                <div className="space-y-2">
-                  {projects.map((proj, idx) => (
-                    <div key={idx} className="flex justify-between items-center bg-white p-2.5 rounded-xl border border-neutral-100 shadow-2xs">
-                      <div className="truncate pr-4">
-                        <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
-                        <span className="text-[10px] text-neutral-400 block truncate">{proj.description}</span>
-                      </div>
-                      <button onClick={() => removeProject(idx)} className="text-neutral-400 hover:text-red-500 p-1.5 transition-colors">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                  {projects.length === 0 && !showAddProject && (
-                    <p className="text-[11px] text-neutral-400 italic text-center py-4 bg-white border border-neutral-100 rounded-xl">No projects added yet.</p>
-                  )}
-                </div>
-
-                {showAddProject ? (
-                  <div className="bg-white border border-neutral-200 rounded-xl p-3.5 space-y-2.5 shadow-2xs">
-                    <input
-                      type="text"
-                      placeholder="Project Title (e.g. Finance Hub)"
-                      value={newProjTitle}
-                      onChange={(e) => setNewProjTitle(e.target.value)}
-                      className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
-                    />
-                    <textarea
-                      placeholder="Short description..."
-                      value={newProjDesc}
-                      onChange={(e) => setNewProjDesc(e.target.value)}
-                      rows={2}
-                      className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400 resize-none"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Project URL Link (optional)"
-                      value={newProjLink}
-                      onChange={(e) => setNewProjLink(e.target.value)}
-                      className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
-                    />
-                    <div className="flex gap-2 justify-end">
-                      <button onClick={() => setShowAddProject(false)} className="px-2.5 py-1 text-[10px] font-bold text-neutral-500 hover:bg-neutral-100 rounded">Cancel</button>
-                      <button onClick={addProject} className="px-2.5 py-1 text-[10px] font-bold bg-blue-600 text-white hover:bg-blue-700 rounded shadow-xs">Add</button>
-                    </div>
+            {/* Navigation links */}
+            <nav className="flex flex-col gap-[2px] w-full px-2">
+              {navItems.map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    if (i === 0) {
+                      router.push("/dashboard");
+                    } else {
+                      setActiveNav(i);
+                    }
+                  }}
+                  title={item.label}
+                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${
+                    activeNav === i
+                      ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                      : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
+                  }`}
+                >
+                  <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                    {item.icon}
                   </div>
-                ) : (
-                  <button
-                    onClick={() => setShowAddProject(true)}
-                    className="w-full h-8 border border-dashed border-neutral-300 rounded-xl text-[11px] font-semibold text-neutral-600 flex items-center justify-center gap-1 hover:bg-neutral-50 transition-colors"
-                  >
-                    <Plus className="w-3.5 h-3.5" /> Add Project Card
-                  </button>
-                )}
+                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
 
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={handleNextStep}
-                    className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
-                  >
-                    Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+          <div className="flex flex-col items-center w-full mt-auto">
+            {/* Upgrade Plan Promo Card */}
+            <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
+              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden text-left mt-2">
+                <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
+                  ONLY {process.env.NEXT_PUBLIC_UPGRADE_PRICE || "$16"} to<br />unlock Premium<br />Features
+                </p>
+                <button
+                  onClick={() => toast.info("Premium plans unlocking soon!")}
+                  className="w-full py-1.5 bg-[#4b93ff] text-white rounded-lg text-[13px] font-medium hover:bg-[#3b82f6] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                >
+                  Upgrade Now
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom links */}
+            <div className="flex flex-col gap-1 w-full px-2">
+              <button
+                onClick={() => setActiveNav(3)}
+                className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
+              >
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Settings
+                </span>
+              </button>
+              <button
+                onClick={() => toast.info("Check back later for help articles.")}
+                className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
+              >
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Help
+                </span>
+              </button>
+            </div>
+
+            <div className="w-full px-4 my-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="h-px w-full bg-[#E6E6E6]/60" />
+            </div>
+
+            <div className="px-2 w-full">
+              <button
+                onClick={() => router.push("/onboarding")}
+                className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/80 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
+              >
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Add new website
+                </span>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* ── Left Column Panel Switcher based on activeNav ── */}
+      
+      {/* 1. Design / AI Onboarding Wizard Panel (420px to 480px width) */}
+      {activeNav === 1 && (
+        <aside className="w-[420px] md:w-[480px] shrink-0 h-full bg-white border-r border-[#E6E6E6]/60 flex flex-col justify-between shadow-xs relative z-20">
+          {/* Chat Header */}
+          <div className="px-6 py-4 border-b border-neutral-100 flex items-center justify-between shrink-0 bg-white/50 backdrop-blur-md">
+            <div className="flex items-center gap-2">
+              <AIAvatar />
+              <div>
+                <span className="font-semibold text-sm text-neutral-800 block leading-tight">LinkedPage Assistant</span>
+                <span className="text-[10px] text-emerald-600 font-semibold uppercase tracking-wider block mt-0.5 animate-pulse">Onboarding Workspace</span>
+              </div>
+            </div>
+            <button
+              onClick={() => router.push("/onboarding")}
+              className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-neutral-200 px-2 py-1 rounded-lg"
+            >
+              Restart
+            </button>
+          </div>
+
+          {/* Scrollable Wizard History */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6" style={{ scrollbarWidth: "none" }}>
+            
+            {/* Step 2 Intro */}
+            <div className="flex items-start gap-3">
+              <AIAvatar />
+              <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+                Hello! Welcome to your profile dashboard. I've initialized your LinkedIn information in the database.
+                <br/><br/>
+                Let's refine your portfolio contents. First, let's review your <strong>Projects & Portfolio Highlights</strong>.
+              </div>
+            </div>
+
+            {/* User confirmation Step 2 */}
+            {currentStep > 2 && (
+              <div className="flex justify-end items-start gap-3">
+                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
+                  I've updated my projects and portfolio details.
+                </div>
+                <UserAvatar />
+              </div>
+            )}
+
+            {/* Step 3 (Interests) */}
+            {currentStep >= 3 && (
+              <div className="flex items-start gap-3 animate-in fade-in duration-200">
+                <AIAvatar />
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+                  Got it. Next, let's document your <strong>Core Interests and Career Goals</strong> to personalize your profile bio.
                 </div>
               </div>
             )}
 
-            {/* Step 3 Form (Interests) */}
-            {currentStep === 3 && (
-              <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Interests & Direction</span>
-                <textarea
-                  placeholder="Describe your primary interests or directions (e.g. AI systems, UX typography, crypto security)..."
-                  value={interests}
-                  onChange={(e) => setInterests(e.target.value)}
-                  rows={4}
-                  className="w-full text-xs p-3 border border-neutral-200 bg-white rounded-xl outline-none focus:border-blue-400 resize-none leading-relaxed"
-                />
-                <div className="flex justify-between items-center pt-2">
-                  <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
-                    <ArrowLeft className="w-3.5 h-3.5" /> Back
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
-                  >
-                    Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+            {/* User confirmation Step 3 */}
+            {currentStep > 3 && (
+              <div className="flex justify-end items-start gap-3">
+                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
+                  Interests and aspirations submitted successfully.
+                </div>
+                <UserAvatar />
+              </div>
+            )}
+
+            {/* Step 4 (Skills) */}
+            {currentStep >= 4 && (
+              <div className="flex items-start gap-3 animate-in fade-in duration-200">
+                <AIAvatar />
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+                  Excellent. Let's adjust your <strong>Core Skills & Tools</strong> tags.
                 </div>
               </div>
             )}
 
-            {/* Step 4 Form (Skills) */}
-            {currentStep === 4 && (
-              <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Skills tags manager</span>
-                
-                <div className="flex flex-wrap gap-1.5 p-2 bg-white border border-neutral-100 rounded-xl max-h-36 overflow-y-auto">
-                  {skills.map((skill, idx) => (
-                    <span key={idx} className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-2 py-0.5 bg-neutral-100 rounded-full border border-neutral-200 text-neutral-700">
-                      {skill.name}
-                      <button onClick={() => removeSkillTag(skill.name)} className="text-neutral-400 hover:text-red-500 font-bold ml-1">×</button>
-                    </span>
-                  ))}
+            {/* User confirmation Step 4 */}
+            {currentStep > 4 && (
+              <div className="flex justify-end items-start gap-3">
+                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
+                  Skills tags confirmed.
                 </div>
+                <UserAvatar />
+              </div>
+            )}
 
-                <form onSubmit={addSkillTag} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Type skill & press Enter"
-                    value={newSkill}
-                    onChange={(e) => setNewSkill(e.target.value)}
-                    className="flex-1 text-xs px-2.5 py-1.5 border border-neutral-200 bg-white rounded-lg outline-none focus:border-blue-400"
-                  />
-                  <button type="submit" className="px-3 bg-neutral-950 text-white text-[10px] font-bold rounded-lg hover:bg-neutral-800">Add</button>
-                </form>
-
-                <div className="flex justify-between items-center pt-2">
-                  <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
-                    <ArrowLeft className="w-3.5 h-3.5" /> Back
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
-                  >
-                    Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+            {/* Step 5 (Experience) */}
+            {currentStep >= 5 && (
+              <div className="flex items-start gap-3 animate-in fade-in duration-200">
+                <AIAvatar />
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+                  Perfect. Finally, let's verify your <strong>Work Experience timeline</strong>.
                 </div>
               </div>
             )}
 
-            {/* Step 5 Form (Experience) */}
-            {currentStep === 5 && (
-              <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Work timeline items</span>
-                
-                <div className="space-y-4 max-h-60 overflow-y-auto pr-1">
-                  {experience.map((exp, idx) => (
-                    <div key={idx} className="bg-white border border-neutral-200 rounded-xl p-3.5 space-y-2.5 shadow-2xs relative">
-                      <button onClick={() => removeExperienceItem(idx)} className="absolute top-2.5 right-2.5 text-neutral-400 hover:text-red-500">
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+            {/* User confirmation Step 5 */}
+            {currentStep > 5 && (
+              <div className="flex justify-end items-start gap-3">
+                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
+                  Work experience details refined.
+                </div>
+                <UserAvatar />
+              </div>
+            )}
 
-                      <div className="grid grid-cols-2 gap-2">
-                        <input
-                          type="text"
-                          value={exp.title}
-                          placeholder="Role"
-                          onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                          className="text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
-                        />
-                        <input
-                          type="text"
-                          value={exp.company}
-                          placeholder="Company"
-                          onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                          className="text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
-                        />
+            {/* Step 6 (AI Refinement Processing) */}
+            {currentStep === 6 && (
+              <div className="flex items-start gap-3 animate-in fade-in duration-200">
+                <AIAvatar />
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                  Refinement engine running in the background...
+                </div>
+              </div>
+            )}
+
+            {/* Step 7 (Template Picker) */}
+            {currentStep >= 7 && (
+              <div className="flex items-start gap-3 animate-in fade-in duration-200">
+                <AIAvatar />
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+                  AI optimization finished! I've polished your text copy.
+                  <br/><br/>
+                  Now, please **select one of the 4 Framer-inspired template styles** below to apply your design theme.
+                </div>
+              </div>
+            )}
+
+            {/* User confirmation Step 7 */}
+            {currentStep > 7 && (
+              <div className="flex justify-end items-start gap-3">
+                <div className="bg-blue-600 text-white rounded-2xl rounded-tr-sm px-4 py-3 shadow-xs max-w-[85%] text-xs leading-relaxed font-medium">
+                  Template design style chosen.
+                </div>
+                <UserAvatar />
+              </div>
+            )}
+
+            {/* Step 8 (Publish configuration) */}
+            {currentStep >= 8 && (
+              <div className="flex items-start gap-3 animate-in fade-in duration-200">
+                <AIAvatar />
+                <div className="bg-neutral-50 border border-neutral-200/60 rounded-2xl rounded-tl-sm px-4 py-3 shadow-xs max-w-[85%] text-xs text-neutral-700 leading-relaxed">
+                  Almost complete! Let's choose your custom subdomain link slug to publish your site live.
+                </div>
+              </div>
+            )}
+
+            {/* DYNAMIC FORMS */}
+            <div className="pt-2">
+              
+              {/* Step 2 Form: Projects */}
+              {currentStep === 2 && (
+                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Portfolio Projects ({projects.length})</span>
+                  
+                  <div className="space-y-2">
+                    {projects.map((proj, idx) => (
+                      <div key={idx} className="flex justify-between items-center bg-white p-2.5 rounded-xl border border-neutral-100 shadow-2xs">
+                        <div className="truncate pr-4">
+                          <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
+                          <span className="text-[10px] text-neutral-400 block truncate">{proj.description}</span>
+                        </div>
+                        <button onClick={() => removeProject(idx)} className="text-neutral-400 hover:text-red-500 p-1.5 transition-colors">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       </div>
+                    ))}
+                    {projects.length === 0 && !showAddProject && (
+                      <p className="text-[11px] text-neutral-400 italic text-center py-4 bg-white border border-neutral-100 rounded-xl">No projects added yet.</p>
+                    )}
+                  </div>
+
+                  {showAddProject ? (
+                    <div className="bg-white border border-neutral-200 rounded-xl p-3.5 space-y-2.5 shadow-2xs">
                       <input
                         type="text"
-                        value={exp.duration}
-                        placeholder="Duration (e.g. 2024 - Present)"
-                        onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                        className="w-full text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
+                        placeholder="Project Title"
+                        value={newProjTitle}
+                        onChange={(e) => setNewProjTitle(e.target.value)}
+                        className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
                       />
                       <textarea
-                        value={exp.description}
-                        placeholder="Responsibilities..."
+                        placeholder="Short description..."
+                        value={newProjDesc}
+                        onChange={(e) => setNewProjDesc(e.target.value)}
                         rows={2}
-                        onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                        className="w-full text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400 resize-none leading-relaxed"
+                        className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400 resize-none"
                       />
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  onClick={addExperienceItem}
-                  className="w-full h-8 border border-dashed border-neutral-300 rounded-xl text-[11px] font-semibold text-neutral-600 flex items-center justify-center gap-1 hover:bg-neutral-50 transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5" /> Add Experience Card
-                </button>
-
-                <div className="flex justify-between items-center pt-2">
-                  <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
-                    <ArrowLeft className="w-3.5 h-3.5" /> Back
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
-                  >
-                    Refine with AI <Sparkles className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 7 Form (Select Template) */}
-            {currentStep === 7 && (
-              <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Theme Style</span>
-                
-                <div className="grid grid-cols-2 gap-2">
-                  {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                    const isSelected = selectedTemplate === id;
-                    const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                    return (
-                      <div
-                        key={id}
-                        onClick={() => selectTemplate(id as any)}
-                        className={`bg-white border p-3 rounded-xl cursor-pointer text-center transition-all ${
-                          isSelected
-                            ? "border-blue-500 bg-blue-50/10 ring-1 ring-blue-500/30"
-                            : "border-neutral-200 hover:border-neutral-300"
-                        }`}
-                      >
-                        <span className="text-xs font-bold text-neutral-800 block">{labelName}</span>
-                        {isSelected && <span className="text-[9px] font-bold text-blue-500 block mt-1">Applied</span>}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="flex justify-between items-center pt-2">
-                  <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
-                    <ArrowLeft className="w-3.5 h-3.5" /> Back
-                  </button>
-                  <button
-                    onClick={handleNextStep}
-                    className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
-                  >
-                    Confirm Theme <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Step 8 Form (Publish slug configuration) */}
-            {currentStep === 8 && (
-              <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
-                <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Slug Address</span>
-                
-                <div className="flex items-center w-full bg-white border border-neutral-200 rounded-xl px-2.5 py-1.5 focus-within:border-blue-400">
-                  <input
-                    type="text"
-                    value={subdomain}
-                    onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
-                    className="flex-1 text-xs bg-transparent outline-none font-medium font-mono text-neutral-800"
-                    placeholder="name"
-                  />
-                  <span className="text-xs text-neutral-400 font-mono font-medium ml-1">.linkedpage.io</span>
-                </div>
-
-                <div className="min-h-4 text-right">
-                  {checkingSubdomain ? (
-                    <span className="text-[9px] text-neutral-400 font-mono">Checking availability...</span>
-                  ) : isSubdomainAvailable === true ? (
-                    <span className="text-[9px] text-emerald-600 font-bold flex items-center justify-end gap-0.5 font-mono">
-                      <Check className="w-3 h-3" /> Available!
-                    </span>
-                  ) : isSubdomainAvailable === false ? (
-                    <span className="text-[9px] text-red-500 font-bold flex items-center justify-end gap-0.5 font-mono">
-                      <AlertCircle className="w-3 h-3" /> Taken!
-                    </span>
-                  ) : null}
-                </div>
-
-                <div className="flex justify-between items-center pt-2">
-                  <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
-                    <ArrowLeft className="w-3.5 h-3.5" /> Back
-                  </button>
-                  <button
-                    onClick={handlePublish}
-                    disabled={publishing || isSubdomainAvailable !== true}
-                    className="h-8 px-5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1.5 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {publishing ? (
-                      <>
-                        <Loader2 className="w-3 h-3 animate-spin" /> Publishing...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-3.5 h-3.5" /> Publish Live Page
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            )}
-
-          </div>
-
-          <div ref={chatEndRef} />
-        </div>
-
-        {/* Input bar footer block (Generic cosmetic layout only) */}
-        <div className="p-4 border-t border-neutral-100 shrink-0 bg-neutral-50/50 flex gap-2">
-          <input
-            type="text"
-            disabled
-            placeholder="Complete wizard forms above to proceed..."
-            className="flex-1 bg-neutral-100 border border-neutral-200 rounded-xl px-3 py-2 text-xs text-neutral-400 cursor-not-allowed"
-          />
-          <button
-            disabled
-            className="w-8 h-8 rounded-xl bg-neutral-200 text-neutral-400 flex items-center justify-center shrink-0 cursor-not-allowed"
-          >
-            <CornerDownLeft className="w-4 h-4" />
-          </button>
-        </div>
-
-      </aside>
-
-      {/* ── Right Column: SVG Animation or Live Template Preview (60% width) ── */}
-      <main className="flex-1 h-full flex flex-col overflow-hidden bg-[#FAFAFA] relative">
-        
-        {/* Right Canvas Toolbar (Visible during template selection & publish step) */}
-        {currentStep >= 7 && (
-          <div className="absolute top-4 right-4 z-30 flex items-center bg-white border border-neutral-200/80 rounded-xl p-1 shadow-xs gap-1">
-            <button
-              onClick={() => setPreviewMode("desktop")}
-              className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
-                previewMode === "desktop" ? "bg-blue-50 text-blue-600" : "text-neutral-400 hover:text-neutral-600"
-              }`}
-              title="Desktop preview"
-            >
-              <Monitor className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => setPreviewMode("mobile")}
-              className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
-                previewMode === "mobile" ? "bg-blue-50 text-blue-600" : "text-neutral-400 hover:text-neutral-600"
-              }`}
-              title="Mobile preview"
-            >
-              <Smartphone className="w-4 h-4" />
-            </button>
-          </div>
-        )}
-
-        <div className="flex-1 flex items-center justify-center p-8 overflow-hidden">
-          <AnimatePresence mode="wait">
-            
-            {/* Steps 2-6: Step-specific SVG animations */}
-            {currentStep <= 6 && (
-              <motion.div
-                key={`anim-${currentStep}`}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: "easeOut" }}
-                className="w-full flex items-center justify-center"
-              >
-                <WizardAnimations step={currentStep} />
-              </motion.div>
-            )}
-
-            {/* Steps 7-8: Live Profile Preview Canvas */}
-            {currentStep >= 7 && (
-              <motion.div
-                key={`preview-${selectedTemplate}-${previewMode}`}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="w-full h-full flex items-center justify-center"
-              >
-                {editedProfile ? (
-                  previewMode === "desktop" ? (
-                    <div
-                      className="rounded-2xl overflow-hidden border border-neutral-200 bg-white shadow-md relative"
-                      style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
-                    >
-                      <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto" }}>
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} />
+                      <input
+                        type="text"
+                        placeholder="Project URL Link (optional)"
+                        value={newProjLink}
+                        onChange={(e) => setNewProjLink(e.target.value)}
+                        className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <button onClick={() => setShowAddProject(false)} className="px-2.5 py-1 text-[10px] font-bold text-neutral-500 hover:bg-neutral-100 rounded">Cancel</button>
+                        <button onClick={addProject} className="px-2.5 py-1 text-[10px] font-bold bg-blue-600 text-white hover:bg-blue-700 rounded shadow-xs">Add</button>
                       </div>
                     </div>
                   ) : (
-                    <div
-                      className="rounded-3xl overflow-hidden border-[6px] border-neutral-800 bg-white shadow-md relative"
-                      style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
+                    <button
+                      onClick={() => setShowAddProject(true)}
+                      className="w-full h-8 border border-dashed border-neutral-300 rounded-xl text-[11px] font-semibold text-neutral-600 flex items-center justify-center gap-1 hover:bg-neutral-50 transition-colors"
                     >
-                      <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto" }}>
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} />
-                      </div>
-                    </div>
-                  )
-                ) : (
-                  <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
-                )}
-              </motion.div>
-            )}
+                      <Plus className="w-3.5 h-3.5" /> Add Project Card
+                    </button>
+                  )}
 
-          </AnimatePresence>
+                  <div className="flex justify-end pt-2">
+                    <button
+                      onClick={handleNextStep}
+                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors animate-pulse"
+                    >
+                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3 Form: Interests */}
+              {currentStep === 3 && (
+                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Interests & Direction</span>
+                  <textarea
+                    placeholder="Describe your primary interests..."
+                    value={interests}
+                    onChange={(e) => setInterests(e.target.value)}
+                    rows={4}
+                    className="w-full text-xs p-3 border border-neutral-200 bg-white rounded-xl outline-none focus:border-blue-400 resize-none leading-relaxed"
+                  />
+                  <div className="flex justify-between items-center pt-2">
+                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      onClick={handleNextStep}
+                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                    >
+                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4 Form: Skills */}
+              {currentStep === 4 && (
+                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Skills tags manager</span>
+                  
+                  <div className="flex flex-wrap gap-1.5 p-2 bg-white border border-neutral-100 rounded-xl max-h-36 overflow-y-auto">
+                    {skills.map((skill, idx) => (
+                      <span key={idx} className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-2 py-0.5 bg-neutral-100 rounded-full border border-neutral-200 text-neutral-700">
+                        {skill.name}
+                        <button onClick={() => removeSkillTag(skill.name)} className="text-neutral-400 hover:text-red-500 font-bold ml-1">×</button>
+                      </span>
+                    ))}
+                  </div>
+
+                  <form onSubmit={addSkillTag} className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder="Type skill & press Enter"
+                      value={newSkill}
+                      onChange={(e) => setNewSkill(e.target.value)}
+                      className="flex-1 text-xs px-2.5 py-1.5 border border-neutral-200 bg-white rounded-lg outline-none focus:border-blue-400"
+                    />
+                    <button type="submit" className="px-3 bg-neutral-950 text-white text-[10px] font-bold rounded-lg hover:bg-neutral-800">Add</button>
+                  </form>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      onClick={handleNextStep}
+                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                    >
+                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 5 Form: Experience */}
+              {currentStep === 5 && (
+                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Work timeline items</span>
+                  
+                  <div className="space-y-4 max-h-60 overflow-y-auto pr-1">
+                    {experience.map((exp, idx) => (
+                      <div key={idx} className="bg-white border border-neutral-200 rounded-xl p-3.5 space-y-2.5 shadow-2xs relative">
+                        <button onClick={() => removeExperienceItem(idx)} className="absolute top-2.5 right-2.5 text-neutral-400 hover:text-red-500">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+
+                        <div className="grid grid-cols-2 gap-2">
+                          <input
+                            type="text"
+                            value={exp.title}
+                            placeholder="Role"
+                            onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
+                            className="text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
+                          />
+                          <input
+                            type="text"
+                            value={exp.company}
+                            placeholder="Company"
+                            onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
+                            className="text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
+                          />
+                        </div>
+                        <input
+                          type="text"
+                          value={exp.duration}
+                          placeholder="Duration"
+                          onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
+                          className="w-full text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
+                        />
+                        <textarea
+                          value={exp.description}
+                          placeholder="Responsibilities..."
+                          rows={2}
+                          onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
+                          className="w-full text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400 resize-none leading-relaxed"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={addExperienceItem}
+                    className="w-full h-8 border border-dashed border-neutral-300 rounded-xl text-[11px] font-semibold text-neutral-600 flex items-center justify-center gap-1 hover:bg-neutral-50 transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Add Experience Card
+                  </button>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      onClick={handleNextStep}
+                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                    >
+                      Refine with AI <Sparkles className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 7 Form: Select Template */}
+              {currentStep === 7 && (
+                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Theme Style</span>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                      const isSelected = selectedTemplate === id;
+                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                      return (
+                        <div
+                          key={id}
+                          onClick={() => selectTemplate(id as any)}
+                          className={`bg-white border p-3 rounded-xl cursor-pointer text-center transition-all ${
+                            isSelected
+                              ? "border-blue-500 bg-blue-50/10 ring-1 ring-blue-500/30"
+                              : "border-neutral-200 hover:border-neutral-300"
+                          }`}
+                        >
+                          <span className="text-xs font-bold text-neutral-800 block">{labelName}</span>
+                          {isSelected && <span className="text-[9px] font-bold text-blue-500 block mt-1">Applied</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      onClick={handleNextStep}
+                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                    >
+                      Confirm Theme <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 8 Form: Subdomain configurations */}
+              {currentStep === 8 && (
+                <div className="border border-neutral-200 rounded-2xl p-4 bg-neutral-50/30 space-y-4 animate-in fade-in duration-300">
+                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Slug Address</span>
+                  
+                  <div className="flex items-center w-full bg-white border border-neutral-200 rounded-xl px-2.5 py-1.5 focus-within:border-blue-400">
+                    <input
+                      type="text"
+                      value={subdomain}
+                      onChange={(e) => setSubdomain(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+                      className="flex-1 text-xs bg-transparent outline-none font-medium font-mono text-neutral-800"
+                      placeholder="name"
+                    />
+                    <span className="text-xs text-neutral-400 font-mono font-medium ml-1">.linkedpage.io</span>
+                  </div>
+
+                  <div className="min-h-4 text-right">
+                    {checkingSubdomain ? (
+                      <span className="text-[9px] text-neutral-400 font-mono">Checking availability...</span>
+                    ) : isSubdomainAvailable === true ? (
+                      <span className="text-[9px] text-emerald-600 font-bold flex items-center justify-end gap-0.5 font-mono">
+                        <Check className="w-3 h-3" /> Available!
+                      </span>
+                    ) : isSubdomainAvailable === false ? (
+                      <span className="text-[9px] text-red-500 font-bold flex items-center justify-end gap-0.5 font-mono">
+                        <AlertCircle className="w-3 h-3" /> Taken!
+                      </span>
+                    ) : null}
+                  </div>
+
+                  <div className="flex justify-between items-center pt-2">
+                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      onClick={handlePublish}
+                      disabled={publishing || isSubdomainAvailable !== true}
+                      className="h-8 px-5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-1.5 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {publishing ? (
+                        <>
+                          <Loader2 className="w-3 h-3 animate-spin" /> Publishing...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3.5 h-3.5" /> Publish Live Page
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Cosmetic Footer Composer Block */}
+          <div className="p-4 border-t border-neutral-100 shrink-0 bg-neutral-50/50 flex gap-2">
+            <input
+              type="text"
+              disabled
+              placeholder="Complete wizard forms above to proceed..."
+              className="flex-1 bg-neutral-100 border border-neutral-200 rounded-xl px-3 py-2 text-xs text-neutral-400 cursor-not-allowed"
+            />
+            <button
+              disabled
+              className="w-8 h-8 rounded-xl bg-neutral-200 text-neutral-400 flex items-center justify-center shrink-0 cursor-not-allowed"
+            >
+              <CornerDownLeft className="w-4 h-4" />
+            </button>
+          </div>
+        </aside>
+      )}
+
+      {/* 2. Domains Panel */}
+      {activeNav === 2 && <DomainsPane />}
+
+      {/* 3. Settings Panel */}
+      {activeNav === 3 && <SettingsPane profileName={profileName} router={router} />}
+
+      {/* ── Main Canvas Workspace ── */}
+      <main className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3">
+        
+        {/* Top Navbar */}
+        <div className="flex items-center justify-between shrink-0 h-9 bg-white">
+          
+          {/* Left Side: Collapse Button + Saving Indicator */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => toast.info("Upgrade to Pro to link custom domains & unlock premium features!")}
+              className="flex items-center gap-2 h-10 px-2 text-sm font-medium bg-white border border-[#E6E6E6] rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+              style={{ boxShadow: "0 1px 4px #fff" }}
+            >
+              <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h7" />
+              </svg>
+            </button>
+
+            {/* Saved Indicators */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500">
+              {isDirty ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span>Unsaved edits</span>
+                  <button 
+                    onClick={resetEdits}
+                    className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
+                  >
+                    Reset
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>All changes saved</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Right Side: Share + Publish + Avatar menu */}
+          <div className="flex items-center gap-2 relative">
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`);
+                toast.success("Share link copied to clipboard!");
+              }}
+              className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+            >
+              Share
+            </button>
+            <button
+              id="onboarding-publish-btn"
+              onClick={handlePublish}
+              disabled={publishing}
+              className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+            >
+              {publishing && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+              Publish
+            </button>
+            
+            {/* Profile Avatar Button */}
+            <button
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
+            >
+              <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+            </button>
+
+            {/* Profile User Menu Dropdown */}
+            <AnimatePresence>
+              {isUserMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute right-0 top-10 z-50"
+                >
+                  <UserMenu 
+                    name={userName} 
+                    email={userEmail} 
+                    onClose={() => setIsUserMenuOpen(false)} 
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
         </div>
 
+        {/* Elevated Canvas Card Frame */}
+        <div className="relative flex-1 bg-white/75 backdrop-blur-xl rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_rgba(255,255,255,0.6)_inset]">
+          
+          {/* Canvas Toolbar */}
+          <div className="relative z-30 flex items-center gap-3 w-full h-[54px] border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md px-4">
+            
+            {/* Left: Customize + Page switcher */}
+            <div className="flex items-center gap-2">
+              <div className="relative group">
+                <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                  <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
+                    <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
+                    <path d="M7.2 2.2 8 5.1" />
+                    <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
+                  </svg>
+                  Customize
+                </button>
+              </div>
+
+              <div className="relative group">
+                <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                  <span className="text-sm leading-tight">Home</span>
+                  <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Center: Subdomain Address Status */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg">
+                <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
+                  <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
+                  <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
+                    {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                  </span>
+                  {checkingSubdomain ? (
+                    <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
+                  ) : isSubdomainAvailable === true ? (
+                    <span className="hidden lg:inline text-[#369762] font-semibold text-xs">available!</span>
+                  ) : isSubdomainAvailable === false ? (
+                    <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">taken!</span>
+                  ) : null}
+                </span>
+              </div>
+            </div>
+
+            {/* Right: Device scale switches */}
+            <div className="flex items-center gap-1.5">
+              {/* Undo/Redo/History Placeholders */}
+              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+                </svg>
+              </button>
+              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+                </svg>
+              </button>
+
+              <div className="w-px h-4 bg-[#E6E6E6] mx-0.5" />
+
+              {/* Responsive Toggles */}
+              <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5">
+                <button
+                  onClick={() => setPreviewMode("desktop")}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "desktop"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Desktop preview"
+                >
+                  <Monitor className="w-[14px] h-[14px]" />
+                </button>
+                <button
+                  onClick={() => setPreviewMode("mobile")}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "mobile"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Mobile preview"
+                >
+                  <Smartphone className="w-[14px] h-[14px]" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Canvas Main content area */}
+          <div className="flex-1 flex items-center justify-center overflow-hidden bg-[#F9F9F9] relative p-8">
+            <AnimatePresence mode="wait">
+              
+              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 6 */}
+              {activeNav === 1 && currentStep <= 6 ? (
+                <motion.div
+                  key={`anim-${currentStep}`}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="w-full flex items-center justify-center"
+                >
+                  <WizardAnimations step={currentStep} />
+                </motion.div>
+              ) : (
+                /* Show scalable Live Preview for template choosing/publishing or other tabs */
+                <motion.div
+                  key={`preview-${selectedTemplate}-${previewMode}`}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="w-full h-full flex items-center justify-center"
+                >
+                  {editedProfile ? (
+                    previewMode === "desktop" ? (
+                      /* Desktop view */
+                      <div
+                        className="rounded-2xl overflow-hidden border border-neutral-200 bg-white shadow-md relative"
+                        style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
+                      >
+                        <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto" }}>
+                          <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
+                        </div>
+                      </div>
+                    ) : (
+                      /* Mobile view */
+                      <div
+                        className="rounded-3xl overflow-hidden border-[6px] border-neutral-800 bg-white shadow-md relative"
+                        style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
+                      >
+                        <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto" }}>
+                          <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
+                        </div>
+                      </div>
+                    )
+                  ) : (
+                    <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
+                  )}
+                </motion.div>
+              )}
+
+            </AnimatePresence>
+          </div>
+
+        </div>
       </main>
 
     </div>

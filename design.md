@@ -189,24 +189,22 @@ Buttons are the most expressive component family. `button-primary` uses the char
 
 Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action
 
-### Onboarding & Editor UI (Conversational Split-Screen Dashboard)
-Once the user uploads their LinkedIn ZIP archive on `/onboarding`, they are redirected to a premium split-screen interface on `/editor`.
-- **Left Column (Conversational AI Wizard):**
-  - Designed as a chat-like panel featuring message feeds from the assistant.
-  - Renders inline, interactive form elements as step-specific assistant widgets:
-    1. **Projects:** Form inputs to add/manage project titles, descriptions, and links.
-    2. **Interests:** Input interface to record passions, hobbies, and career goals.
-    3. **Skills:** Tag manager rendering interactive, rounded white chip tags with remove toggles and an inline tag adder.
-    4. **Experience:** Interactive fields for job titles, companies, dates, and bulleted achievements.
-    5. **Template Selector:** Direct template selection showing preview cards of the four styles.
-    6. **Publishing:** Domain availability checking and publishing configuration.
-- **Right Column (Contextual Animations & Live Preview):**
-  - **Dynamic CSS-Animated SVGs:** Renders custom CSS animations corresponding to the active step in the wizard:
-    - *Experience Step:* A dynamic timeline builder.
-    - *Projects Step:* Flying material/block animations.
-    - *Interests Step:* A pulsing, glowing lightbulb concept.
-    - *Skills Step:* Floating chip/tag orbits.
-  - **Live Sandbox Preview:** Automatically transitions to a live iframe workspace rendering the generated portfolio with desktop/mobile width toggles once the user reaches the template selection stage.
+### Editor Dashboard Layout & Wizard Integration
+The editor `/editor` displays the full dashboard layout shell integrated with the conversational wizard and sub-panels:
+- **Left Sidebar (Collapsible Drawer):**
+  - Hovering expands the panel from `60px` to `250px`.
+  - Hosts navigation items: Home (dashboard redirect), Design (active workspace), Domains (custom domain panel), and Site Settings (site details).
+  - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
+- **Left Column Panels (Navigation Switcher):**
+  - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with inline widgets for Projects, Interests, Skills, and Experience forms.
+  - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
+  - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
+- **Top Navbar:**
+  - Renders saving indicators ("Unsaved edits" / "All changes saved") with a Reset trigger.
+  - Hosts Share (link copier) and Publish actions alongside the User profile menu dropdown.
+- **Main Canvas Workspace:**
+  - **Canvas Header:** Customize/page dropdowns, subdomain availability ticker, and device size switches (Desktop vs. Mobile).
+  - **Preview Area:** Renders step-specific `WizardAnimations` (steps <= 6) in the Design tab, and transitions to the live scalable `ProfilePreview` once the user reaches step >= 7 or switches to the Domains/Settings panels.
 
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
