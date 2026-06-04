@@ -16,6 +16,7 @@ import {
   Copy,
   Sparkles,
 } from "lucide-react";
+import { AnimatedSuccessIllustration } from "@/components/AnimatedSVGs";
 
 function PublishInner() {
   const params = useSearchParams();
@@ -65,17 +66,7 @@ function PublishInner() {
       <div className="flex flex-col items-center gap-10 max-w-md w-full text-center">
 
         {/* Success ring */}
-        <motion.div
-          initial={{ scale: 0.7, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 340, damping: 28, delay: 0.05 }}
-          className="relative w-24 h-24"
-        >
-          <div className="absolute inset-0   rounded-lg bg-[#8DFFB3]/30 blur-xl" />
-          <div className="absolute inset-0   rounded-lg bg-[#8DFFB3] flex items-center justify-center border border-[#369762]/20">
-            <Check className="w-10 h-10 text-[#1a5c3a]" strokeWidth={2.5} />
-          </div>
-        </motion.div>
+        <AnimatedSuccessIllustration />
 
         {/* Headline */}
         <motion.div
