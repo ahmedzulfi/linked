@@ -1527,10 +1527,12 @@ function EditorInner() {
           </div>
 
           {/* Canvas Main content area */}
-          <div className={`flex-1 flex items-center justify-center overflow-hidden relative p-8 transition-all duration-500 ${
+          <div className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
             activeNav === 1 && currentStep <= 6 
-              ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px]" 
-              : "bg-[#F9F9F9]"
+              ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
+              : previewMode === "desktop"
+              ? "bg-white p-0"
+              : "bg-[#F9F9F9] p-8"
           }`}>
             <AnimatePresence mode="wait">
               
@@ -1558,14 +1560,9 @@ function EditorInner() {
                 >
                   {editedProfile ? (
                     previewMode === "desktop" ? (
-                      /* Desktop view */
-                      <div
-                        className="rounded-2xl overflow-hidden border border-neutral-200 bg-white shadow-md relative"
-                        style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
-                      >
-                        <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto" }}>
-                          <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
-                        </div>
+                      /* Desktop view - FULL SCREEN */
+                      <div className="w-full h-full overflow-auto bg-white relative">
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
                       </div>
                     ) : (
                       /* Mobile view */
