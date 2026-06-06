@@ -182,6 +182,26 @@ function EditorInner() {
     checkUserAndLoad();
   }, [id, loadWebsite, router]);
 
+  // Load saved onboarding step from sessionStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedStep = sessionStorage.getItem("webild_onboarding_step");
+      if (savedStep) {
+        const parsed = parseInt(savedStep, 10);
+        if (!isNaN(parsed) && parsed >= 2 && parsed <= 9) {
+          setCurrentStep(parsed);
+        }
+      }
+    }
+  }, []);
+
+  // Save currentStep to sessionStorage on changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("webild_onboarding_step", currentStep.toString());
+    }
+  }, [currentStep]);
+
   // Sync profile data to forms
   useEffect(() => {
     if (editedProfile) {
@@ -341,7 +361,7 @@ function EditorInner() {
       toast.error("Project title is required");
       return;
     }
-    setProjects([
+    const updated = [
       ...projects,
       {
         title: newProjTitle.trim(),
@@ -349,7 +369,9 @@ function EditorInner() {
         link: newProjLink.trim() || undefined,
         image: `https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60`,
       },
-    ]);
+    ];
+    setProjects(updated);
+    updateField("projects", updated);
     setNewProjTitle("");
     setNewProjDesc("");
     setNewProjLink("");
@@ -357,7 +379,9 @@ function EditorInner() {
   };
 
   const removeProject = (idx: number) => {
-    setProjects(projects.filter((_, i) => i !== idx));
+    const updated = projects.filter((_, i) => i !== idx);
+    setProjects(updated);
+    updateField("projects", updated);
   };
 
   const addSkillTag = (e: React.FormEvent) => {
@@ -367,16 +391,20 @@ function EditorInner() {
       setNewSkill("");
       return;
     }
-    setSkills([...skills, { name: newSkill.trim() }]);
+    const updated = [...skills, { name: newSkill.trim() }];
+    setSkills(updated);
+    updateField("skills", updated);
     setNewSkill("");
   };
 
   const removeSkillTag = (name: string) => {
-    setSkills(skills.filter(s => s.name !== name));
+    const updated = skills.filter(s => s.name !== name);
+    setSkills(updated);
+    updateField("skills", updated);
   };
 
   const addExperienceItem = () => {
-    setExperience([
+    const updated = [
       ...experience,
       {
         title: "New Role",
@@ -384,17 +412,22 @@ function EditorInner() {
         duration: "Jan 2026 - Present",
         description: "",
       },
-    ]);
+    ];
+    setExperience(updated);
+    updateField("experience", updated);
   };
 
   const updateExperienceItem = (index: number, key: string, value: string) => {
     const updated = [...experience];
     updated[index] = { ...updated[index], [key]: value };
     setExperience(updated);
+    updateField("experience", updated);
   };
 
   const removeExperienceItem = (idx: number) => {
-    setExperience(experience.filter((_, i) => i !== idx));
+    const updated = experience.filter((_, i) => i !== idx);
+    setExperience(updated);
+    updateField("experience", updated);
   };
 
   // Dispatch free-form messages to backend AI route
@@ -962,7 +995,10 @@ function EditorInner() {
                   <textarea
                     placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
                     value={interests}
-                    onChange={(e) => setInterests(e.target.value)}
+                    onChange={(e) => {
+                      setInterests(e.target.value);
+                      updateField("interests", e.target.value);
+                    }}
                     rows={5}
                     className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
                   />
