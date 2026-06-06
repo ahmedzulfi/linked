@@ -1527,7 +1527,11 @@ function EditorInner() {
           </div>
 
           {/* Canvas Main content area */}
-          <div className="flex-1 flex items-center justify-center overflow-hidden bg-[#F9F9F9] relative p-8">
+          <div className={`flex-1 flex items-center justify-center overflow-hidden relative p-8 transition-all duration-500 ${
+            activeNav === 1 && currentStep <= 6 
+              ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px]" 
+              : "bg-[#F9F9F9]"
+          }`}>
             <AnimatePresence mode="wait">
               
               {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 6 */}
