@@ -19,6 +19,12 @@ import {
   Monitor,
   Mic,
   ArrowUp,
+  Folder,
+  Briefcase,
+  Wrench,
+  Palette,
+  Inbox,
+  FileText,
 } from "lucide-react";
 import ProfilePreview from "./components/ProfilePreview";
 import WizardAnimations from "@/components/WizardAnimations";
@@ -83,14 +89,14 @@ const SUGGESTIONS = [
 
 const getNotionTagClasses = (name: string) => {
   const colors = [
-    "bg-neutral-50 text-neutral-650 border-neutral-200",
-    "bg-orange-50 text-orange-750 border-orange-200/60",
+    "bg-neutral-50 text-neutral-700 border-neutral-200",
+    "bg-orange-50 text-orange-700 border-orange-200/60",
     "bg-amber-50/70 text-amber-800 border-amber-200/60",
-    "bg-emerald-50/80 text-emerald-750 border-emerald-200/60",
-    "bg-blue-50 text-blue-750 border-blue-200/60",
-    "bg-indigo-50 text-indigo-750 border-indigo-200/60",
-    "bg-pink-50 text-pink-750 border-pink-200/60",
-    "bg-rose-55/40 text-rose-800 border-rose-200/60"
+    "bg-emerald-50/80 text-emerald-700 border-emerald-200/60",
+    "bg-blue-50 text-blue-700 border-blue-200/60",
+    "bg-indigo-50 text-indigo-700 border-indigo-200/60",
+    "bg-pink-50 text-pink-700 border-pink-200/60",
+    "bg-rose-50 text-rose-800 border-rose-200/60"
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -829,17 +835,16 @@ function EditorInner() {
 
             {/* DYNAMIC FORMS */}
             <div className="pt-2">
-              
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
-                      📄
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Folder className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-semibold text-neutral-800">Projects & Highlights</h3>
-                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Showcase your best apps, portfolios, or articles.</p>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Showcase your best apps, portfolios, or articles.</p>
                     </div>
                   </div>
                   
@@ -847,75 +852,76 @@ function EditorInner() {
                     {projects.map((proj, idx) => (
                       <div 
                         key={idx} 
-                        className="group flex items-start justify-between p-2.5 rounded-lg hover:bg-neutral-50/80 transition-colors duration-150 relative border border-transparent hover:border-neutral-200/40"
+                        className="group flex items-start justify-between p-2.5 rounded-xl hover:bg-neutral-50/80 transition-colors duration-150 relative border border-transparent hover:border-neutral-200/40"
                       >
                         <div className="flex items-start gap-2.5 min-w-0 flex-1">
-                          <span className="text-neutral-450 text-sm mt-0.5 select-none">📄</span>
+                          <FileText className="w-4 h-4 text-neutral-550 shrink-0 mt-0.5" />
                           <div className="truncate pr-4 flex-1">
-                            <span className="text-xs font-medium text-neutral-850 block truncate">{proj.title}</span>
+                            <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
                             {proj.description && (
-                              <span className="text-[11px] text-neutral-400 block truncate mt-0.5 leading-relaxed">{proj.description}</span>
+                              <span className="text-[11px] text-neutral-500 block truncate mt-0.5 leading-relaxed">{proj.description}</span>
                             )}
                           </div>
                         </div>
                         <button 
                           onClick={() => removeProject(idx)} 
-                          className="opacity-0 group-hover:opacity-100 text-neutral-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded transition-all duration-150 absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs"
+                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
+                          title="Remove project"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ))}
                     {projects.length === 0 && !showAddProject && (
-                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center">
-                        <span className="text-lg">📁</span>
-                        <span className="text-[11px] font-medium mt-1">No projects added yet</span>
+                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
+                        <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
+                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No projects added yet</span>
                       </div>
                     )}
                   </div>
 
                   {showAddProject ? (
-                    <div className="border border-neutral-200/80 bg-neutral-50/30 rounded-xl p-4 space-y-3 shadow-xs">
+                    <div className="border border-neutral-200/80 bg-neutral-50/30 rounded-xl p-4 space-y-3.5 shadow-xs">
                       <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-neutral-450 uppercase tracking-wider block">Project Title</label>
+                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Financial Dashboard App"
                           value={newProjTitle}
                           onChange={(e) => setNewProjTitle(e.target.value)}
-                          className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 transition-colors"
+                          className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-neutral-455 uppercase tracking-wider block">Short Description</label>
+                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Short Description</label>
                         <textarea
                           placeholder="What did you build? What technologies did you use?"
                           value={newProjDesc}
                           onChange={(e) => setNewProjDesc(e.target.value)}
                           rows={2}
-                          className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 resize-none leading-relaxed transition-colors"
+                          className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-semibold text-neutral-455 uppercase tracking-wider block">Project URL (Optional)</label>
+                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project URL (Optional)</label>
                         <input
                           type="text"
                           placeholder="https://github.com/username/project"
                           value={newProjLink}
                           onChange={(e) => setNewProjLink(e.target.value)}
-                          className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 transition-colors"
+                          className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                         />
                       </div>
                       <div className="flex gap-2 justify-end pt-1">
                         <button 
                           onClick={() => setShowAddProject(false)} 
-                          className="px-3 py-1.5 text-xs font-medium text-neutral-500 hover:bg-neutral-100 rounded-lg border border-neutral-200/50 bg-white transition-colors"
+                          className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                         >
                           Cancel
                         </button>
                         <button 
                           onClick={addProject} 
-                          className="px-3.5 py-1.5 text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg transition-colors shadow-xs"
+                          className="h-10 px-4 text-xs font-bold bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                         >
                           Add Project
                         </button>
@@ -924,16 +930,16 @@ function EditorInner() {
                   ) : (
                     <button
                       onClick={() => setShowAddProject(true)}
-                      className="w-full h-9 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-medium text-neutral-500 flex items-center justify-center gap-1.5 hover:bg-neutral-50/60 transition-all hover:text-neutral-700 active:scale-[0.98]"
+                      className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
-                      <Plus className="w-3.5 h-3.5" /> Add Project
+                      <Plus className="w-4 h-4 text-neutral-500" /> Add Project
                     </button>
                   )}
 
                   <div className="flex justify-end pt-2 border-t border-neutral-100">
                     <button
                       onClick={handleNextStep}
-                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                     >
                       Save & Next <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -945,12 +951,12 @@ function EditorInner() {
               {currentStep === 3 && (
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
-                      ✨
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Sparkles className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-semibold text-neutral-800">Interests & Aspirations</h3>
-                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Share your career goals, research fields, or passions.</p>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Share your career goals, research fields, or passions.</p>
                     </div>
                   </div>
                   <textarea
@@ -958,18 +964,18 @@ function EditorInner() {
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
                     rows={5}
-                    className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 resize-none leading-relaxed transition-colors"
+                    className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
                   />
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
                     <button 
                       onClick={handleBackStep} 
-                      className="flex items-center gap-1 text-xs font-medium text-neutral-450 hover:text-neutral-700 transition-colors"
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                     >
                       Save & Next <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -981,12 +987,12 @@ function EditorInner() {
               {currentStep === 4 && (
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
-                      🛠️
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Wrench className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-semibold text-neutral-800">Core Skills & Tools</h3>
-                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Highlight your technical skills, methodologies, or design software.</p>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Highlight your technical skills, methodologies, or design software.</p>
                     </div>
                   </div>
                   
@@ -996,12 +1002,12 @@ function EditorInner() {
                       return (
                         <span 
                           key={idx} 
-                          className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md border ${tagColor} transition-[transform,opacity] duration-150 active:scale-95`}
+                          className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor} transition-transform duration-105 active:scale-[0.95]`}
                         >
                           {skill.name}
                           <button 
                             onClick={() => removeSkillTag(skill.name)} 
-                            className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-450 hover:text-neutral-700 font-bold ml-0.5 transition-colors line-none flex items-center justify-center"
+                            className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-900 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
                             style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
                           >
                             ×
@@ -1010,7 +1016,7 @@ function EditorInner() {
                       );
                     })}
                     {skills.length === 0 && (
-                      <span className="text-[11px] text-neutral-400 italic self-center mx-auto select-none">No skills added yet. Add some below.</span>
+                      <span className="text-[11px] text-neutral-500 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
                     )}
                   </div>
 
@@ -1020,11 +1026,11 @@ function EditorInner() {
                       placeholder="e.g. TypeScript, UI Design, Next.js"
                       value={newSkill}
                       onChange={(e) => setNewSkill(e.target.value)}
-                      className="flex-1 text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 transition-colors"
+                      className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                     />
                     <button 
                       type="submit" 
-                      className="px-3.5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-xs"
+                      className="px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm"
                     >
                       Add
                     </button>
@@ -1033,13 +1039,13 @@ function EditorInner() {
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
                     <button 
                       onClick={handleBackStep} 
-                      className="flex items-center gap-1 text-xs font-medium text-neutral-450 hover:text-neutral-700 transition-colors"
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                     >
                       Save & Next <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -1051,12 +1057,12 @@ function EditorInner() {
               {currentStep === 5 && (
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
-                      💼
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Briefcase className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-semibold text-neutral-800">Work Experience</h3>
-                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Refine your work timeline, companies, and achievements.</p>
+                      <p className="text-xs text-neutral-550 mt-1 leading-normal font-medium">Refine your work timeline, companies, and achievements.</p>
                     </div>
                   </div>
                   
@@ -1068,82 +1074,83 @@ function EditorInner() {
                       >
                         <button 
                           onClick={() => removeExperienceItem(idx)} 
-                          className="opacity-0 group-hover:opacity-100 text-neutral-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded transition-all duration-150 absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs"
+                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
+                          title="Remove experience"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
-
-                        <div className="grid grid-cols-2 gap-2">
-                          <div className="space-y-0.5">
-                            <label className="text-[9px] font-semibold text-neutral-450 uppercase tracking-wider block">Job Title</label>
+ 
+                        <div className="grid grid-cols-2 gap-2.5">
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
                             <input
                               type="text"
                               value={exp.title}
                               placeholder="e.g. Lead Engineer"
                               onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 transition-colors"
+                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
-                          <div className="space-y-0.5">
-                            <label className="text-[9px] font-semibold text-neutral-450 uppercase tracking-wider block">Company</label>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Company</label>
                             <input
                               type="text"
                               value={exp.company}
                               placeholder="e.g. Acme Corp"
                               onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 transition-colors"
+                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
-                          <div className="space-y-0.5">
-                            <label className="text-[9px] font-semibold text-neutral-455 uppercase tracking-wider block">Duration</label>
+                          <div className="space-y-1">
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Duration</label>
                             <input
                               type="text"
                               value={exp.duration}
                               placeholder="e.g. Jan 2024 - Present"
                               onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 transition-colors"
+                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                         </div>
-                        <div className="space-y-0.5">
-                          <label className="text-[9px] font-semibold text-neutral-455 uppercase tracking-wider block">Key Responsibilities / Impact</label>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Key Responsibilities / Impact</label>
                           <textarea
                             value={exp.description}
                             placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
                             rows={2}
                             onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 resize-none leading-relaxed transition-colors"
+                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
                           />
                         </div>
                       </div>
                     ))}
                     {experience.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center">
-                        <span className="text-lg">💼</span>
-                        <span className="text-[11px] font-medium mt-1">No work history items added yet</span>
+                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
+                        <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
+                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No work history items added yet</span>
                       </div>
                     )}
                   </div>
-
+ 
                   <button
                     onClick={addExperienceItem}
-                    className="w-full h-9 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-medium text-neutral-500 flex items-center justify-center gap-1.5 hover:bg-neutral-50/60 transition-all hover:text-neutral-700 active:scale-[0.98]"
+                    className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
                   >
-                    <Plus className="w-3.5 h-3.5" /> Add Work Experience
+                    <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
                   </button>
-
+ 
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
                     <button 
                       onClick={handleBackStep} 
-                      className="flex items-center gap-1 text-xs font-medium text-neutral-455 hover:text-neutral-700 transition-colors"
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                     >
                       Refine with AI <Sparkles className="w-3.5 h-3.5" />
                     </button>
@@ -1155,12 +1162,12 @@ function EditorInner() {
               {currentStep === 7 && (
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
-                      🎨
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Palette className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-semibold text-neutral-800">Theme Styles</h3>
-                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Choose one of the 4 Framer-inspired template styles.</p>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Choose one of the 4 Framer-inspired template styles.</p>
                     </div>
                   </div>
                   
@@ -1179,15 +1186,15 @@ function EditorInner() {
                         <div
                           key={id}
                           onClick={() => selectTemplate(id as any)}
-                          className={`group bg-white border p-3 rounded-xl cursor-pointer text-left transition-all duration-150 flex flex-col justify-between h-[85px] relative ${
+                          className={`group bg-white border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[90px] relative active:scale-[0.97] transition-transform duration-100 ease-out ${
                             isSelected
-                              ? "border-neutral-900 ring-[1px] ring-neutral-900 bg-neutral-50/10"
-                              : "border-neutral-200 hover:border-neutral-350 hover:bg-neutral-50/20"
+                              ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30"
+                              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/20"
                           }`}
                         >
                           <div className="pr-5">
-                            <span className="text-xs font-semibold text-neutral-850 block">{labelName}</span>
-                            <span className="text-[9.5px] text-neutral-400 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                            <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
+                            <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
                           </div>
                           {isSelected && (
                             <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-neutral-900 flex items-center justify-center">
@@ -1202,7 +1209,7 @@ function EditorInner() {
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
                     <button 
                       onClick={handleBackStep} 
-                      className="flex items-center gap-1 text-xs font-medium text-neutral-450 hover:text-neutral-700 transition-colors"
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
@@ -1212,14 +1219,13 @@ function EditorInner() {
                         setCurrentStep(9);
                         toast.success("Theme confirmed and setup complete!");
                       }}
-                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                     >
                       Confirm & Finish <Check className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
               )}
-
             </div>
 
             <div ref={chatEndRef} />
