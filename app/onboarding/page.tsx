@@ -169,6 +169,19 @@ function OnboardingInner() {
                   </label>
                 </div>
 
+                <div className="flex items-center gap-2 mb-4 select-none">
+                  <div className="h-px bg-[#E6E6E6] flex-1" />
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-mono">Or</span>
+                  <div className="h-px bg-[#E6E6E6] flex-1" />
+                </div>
+
+                <button
+                  onClick={handleManualImport}
+                  className="w-full h-11 border border-neutral-200 hover:border-neutral-350 hover:bg-neutral-50 rounded-2xl text-xs font-semibold text-neutral-700 flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out mb-6"
+                >
+                  Start from Scratch (Empty Canvas)
+                </button>
+
                 {/* Step-by-Step Instructions */}
                 <div className="bg-[#FBFBFB]/40 border border-[#E6E6E6]/60 rounded-2xl p-5 mb-6 text-left">
                   <h3 className="text-[11px] font-bold text-[#2A2A2F] uppercase tracking-wider mb-3.5">
@@ -282,6 +295,19 @@ function OnboardingInner() {
                     )}
                   </label>
                 </div>
+
+                <div className="flex items-center gap-2 mb-4 select-none">
+                  <div className="h-px bg-[#E6E6E6] flex-1" />
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-mono">Or</span>
+                  <div className="h-px bg-[#E6E6E6] flex-1" />
+                </div>
+
+                <button
+                  onClick={handleManualImport}
+                  className="w-full h-11 border border-neutral-200 hover:border-neutral-350 hover:bg-neutral-50 rounded-2xl text-xs font-semibold text-neutral-700 flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out mb-6"
+                >
+                  Start from Scratch (Empty Canvas)
+                </button>
 
                 <button
                   onClick={handleBackToInput}
