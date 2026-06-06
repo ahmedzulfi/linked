@@ -128,8 +128,10 @@ function EditorInner() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
-  // Onboarding wizard steps (2 to 7, then 9 for free-form editor mode)
-  const [currentStep, setCurrentStep] = useState<number>(2);
+  // Onboarding wizard steps (1 to 7, then 9 for free-form editor mode)
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [originalHeadline, setOriginalHeadline] = useState("");
+  const [originalBio, setOriginalBio] = useState("");
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
   const [publishing, setPublishing] = useState(false);
   const [optimizing, setOptimizing] = useState(false);
@@ -188,7 +190,7 @@ function EditorInner() {
       const savedStep = sessionStorage.getItem("webild_onboarding_step");
       if (savedStep) {
         const parsed = parseInt(savedStep, 10);
-        if (!isNaN(parsed) && parsed >= 2 && parsed <= 9) {
+        if (!isNaN(parsed) && parsed >= 1 && parsed <= 9) {
           setCurrentStep(parsed);
         }
       }
@@ -263,6 +265,10 @@ function EditorInner() {
   // Step 6: AI Optimization
   useEffect(() => {
     if (currentStep === 6) {
+      if (editedProfile) {
+        setOriginalHeadline(editedProfile.headline || "");
+        setOriginalBio(editedProfile.summary || "");
+      }
       const runAiRefinement = async () => {
         setOptimizing(true);
         try {
@@ -286,9 +292,9 @@ function EditorInner() {
           }
         } catch (err) {
           console.error("AI refinement failed:", err);
+          setCurrentStep(7);
         } finally {
           setOptimizing(false);
-          setCurrentStep(7);
         }
       };
       runAiRefinement();
@@ -347,9 +353,9 @@ function EditorInner() {
   };
 
   const handleBackStep = () => {
-    if (currentStep > 2) {
+    if (currentStep > 1) {
       if (currentStep === 7) {
-        setCurrentStep(5); // skip Step 6 optimization loading screen
+        setCurrentStep(6); // Go back to AI comparison view
       } else {
         setCurrentStep(currentStep - 1);
       }
@@ -662,18 +668,44 @@ function EditorInner() {
           {/* Scrollable Wizard History */}
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" style={{ scrollbarWidth: "none" }}>
             
+            {/* Step 1 Welcome Chat Bubble */}
+            {currentStep >= 1 && (
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
+                  Hello{editedProfile?.name ? `, ${editedProfile.name}` : ""}! Welcome to Webild. I've successfully initialized your profile details using your LinkedIn profile.
+                  <br/><br/>
+                  Let's review and customize your portfolio details step-by-step.
+                </div>
+              </div>
+            )}
+
+            {/* User confirmation Step 1 */}
+            {currentStep > 1 && (
+              <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    Let's get started!
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Step 2 Intro */}
-            <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
-              <div className="flex items-center gap-2 select-none">
-                <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                <span className="font-semibold text-[13.5px] text-black">Webild</span>
+            {currentStep >= 2 && (
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
+                  First, let's review your <strong>Projects & Portfolio Highlights</strong>. Showcase your best apps, portfolios, or articles.
+                </div>
               </div>
-              <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                Hello! Welcome to your profile dashboard. I've initialized your LinkedIn information in the database.
-                <br/><br/>
-                Let's refine your portfolio contents. First, let's review your <strong>Projects & Portfolio Highlights</strong>.
-              </div>
-            </div>
+            )}
 
             {/* User confirmation Step 2 */}
             {currentStep > 2 && (
@@ -758,8 +790,8 @@ function EditorInner() {
               </div>
             )}
 
-            {/* Step 6 (AI Refinement Processing) */}
-            {currentStep === 6 && (
+            {/* Step 6 (AI Refinement Processing or Review) */}
+            {currentStep === 6 && optimizing && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
                   <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain animate-pulse" />
@@ -768,6 +800,31 @@ function EditorInner() {
                 <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center gap-2 text-xs font-semibold text-neutral-750">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
                   Refinement engine running in the background...
+                </div>
+              </div>
+            )}
+
+            {currentStep >= 6 && !optimizing && (
+              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                <div className="flex items-center gap-2 select-none">
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                </div>
+                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
+                  I've run my AI copy refinement engine on your bio and headline to make them more impactful and professional.
+                  <br/><br/>
+                  Please review the changes below and adjust them to your liking.
+                </div>
+              </div>
+            )}
+
+            {/* User confirmation Step 6 */}
+            {currentStep > 6 && (
+              <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                    AI copy refinement modifications approved.
+                  </p>
                 </div>
               </div>
             )}
@@ -789,7 +846,7 @@ function EditorInner() {
 
             {/* User confirmation Step 7 */}
             {currentStep > 7 && (
-              <div className="w-full flex justify-end items-start font-inter">
+              <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
                 <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                   <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
                     Template design style chosen.
@@ -868,6 +925,54 @@ function EditorInner() {
 
             {/* DYNAMIC FORMS */}
             <div className="pt-2">
+              {/* Step 1 Welcome / Kickoff Form */}
+              {currentStep === 1 && (
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-center gap-4 border-b border-neutral-100 pb-4">
+                    <div className="w-12 h-12 rounded-full overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center">
+                      <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
+                      <p className="text-xs text-neutral-500 truncate max-w-[200px] mt-0.5">{editedProfile?.headline || "Professional Headline"}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-3.5">
+                    <h4 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Your Customization Steps</h4>
+                    <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
+                        <span>📂 Review Projects & Highlights</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
+                        <span>🎯 Refine Interests & Aspirations</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
+                        <span>🛠 Select Core Skills & Tools</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">4</span>
+                        <span>💼 Verify Work Experience Timeline</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">5</span>
+                        <span>🎨 Choose Layout Template & Edit Live</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentStep(2)}
+                    className="w-full h-11 bg-neutral-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-transform duration-100 shadow-sm cursor-pointer hover:bg-neutral-800"
+                  >
+                    Get Started <ArrowRight className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
@@ -969,7 +1074,13 @@ function EditorInner() {
                     </button>
                   )}
 
-                  <div className="flex justify-end pt-2 border-t border-neutral-100">
+                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                    <button 
+                      onClick={handleBackStep} 
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
                     <button
                       onClick={handleNextStep}
                       className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
@@ -1191,6 +1302,96 @@ function EditorInner() {
                       Refine with AI <Sparkles className="w-3.5 h-3.5" />
                     </button>
                   </div>
+                </div>
+              )}
+
+              {/* Step 6 Form: AI Copy Refinement Compare */}
+              {currentStep === 6 && (
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Sparkles className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-neutral-800">AI Copy Optimization</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Review and tweak the AI-optimized details of your profile.</p>
+                    </div>
+                  </div>
+
+                  {optimizing ? (
+                    /* AI Refinement Loading Screen */
+                    <div className="py-10 flex flex-col items-center justify-center gap-3">
+                      <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                      <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">Refining your portfolio details...</p>
+                    </div>
+                  ) : (
+                    /* Comparison Screen */
+                    <div className="space-y-4">
+                      {/* Headline Compare */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
+                          <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                        </div>
+                        
+                        {/* Before (original) */}
+                        {originalHeadline && originalHeadline !== editedProfile?.headline && (
+                          <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70">
+                            {originalHeadline}
+                          </div>
+                        )}
+                        
+                        {/* After (interactive input) */}
+                        <input
+                          type="text"
+                          value={editedProfile?.headline || ""}
+                          onChange={(e) => updateField("headline", e.target.value)}
+                          className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all"
+                          placeholder="Your professional headline"
+                        />
+                      </div>
+
+                      {/* Bio Compare */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
+                          <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                        </div>
+                        
+                        {/* Before (original) */}
+                        {originalBio && originalBio !== editedProfile?.summary && (
+                          <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70 max-h-24 overflow-y-auto">
+                            {originalBio}
+                          </div>
+                        )}
+                        
+                        {/* After (interactive textarea) */}
+                        <textarea
+                          rows={4}
+                          value={editedProfile?.summary || ""}
+                          onChange={(e) => updateField("summary", e.target.value)}
+                          className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all resize-none"
+                          placeholder="Your professional bio summary"
+                        />
+                      </div>
+
+                      {/* Action Button */}
+                      <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                        <button 
+                          onClick={handleBackStep} 
+                          className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                        >
+                          <ArrowLeft className="w-3.5 h-3.5" /> Back
+                        </button>
+                        <button
+                          onClick={() => setCurrentStep(7)}
+                          className="h-11 px-5 bg-neutral-950 hover:bg-neutral-900 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                        >
+                          Apply & Next <ArrowRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1546,7 +1747,14 @@ function EditorInner() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className="w-full flex items-center justify-center"
                 >
-                  <WizardAnimations step={currentStep} />
+                  <WizardAnimations 
+                    step={currentStep} 
+                    profile={editedProfile}
+                    projects={projects}
+                    interests={interests}
+                    skills={skills}
+                    experience={experience}
+                  />
                 </motion.div>
               ) : (
                 /* Show scalable Live Preview for template choosing/publishing or other tabs */
