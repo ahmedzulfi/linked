@@ -401,7 +401,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
                 key={i}
                 className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
               >
-                <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
+                <div className="relative aspect-square      rounded-lg   overflow-hidden p-0 bg-[#FBFBFB] border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                   <img src={t.img} alt={t.name} className="w-full h-full object-cover     rounded-lg " />
                   {/* Bottom gradient overlay inside padding */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
@@ -1073,9 +1073,6 @@ export default function Index() {
       <div className="relative z-10 w-full min-h-screen">
         <main className="w-full relative">
           <HeroSection />
-          <TemplatesSection onSelectTemplate={handleSelectTemplate} />
-          <BusinessSection />
-          <FeaturesSection onStartTrial={handleTrial} />
           <FAQSection />
           <Footer />
         </main>

@@ -81,6 +81,25 @@ const SUGGESTIONS = [
   "Add a new project named Finance App",
 ];
 
+const getNotionTagClasses = (name: string) => {
+  const colors = [
+    "bg-neutral-50 text-neutral-650 border-neutral-200",
+    "bg-orange-50 text-orange-750 border-orange-200/60",
+    "bg-amber-50/70 text-amber-800 border-amber-200/60",
+    "bg-emerald-50/80 text-emerald-750 border-emerald-200/60",
+    "bg-blue-50 text-blue-750 border-blue-200/60",
+    "bg-indigo-50 text-indigo-750 border-indigo-200/60",
+    "bg-pink-50 text-pink-750 border-pink-200/60",
+    "bg-rose-55/40 text-rose-800 border-rose-200/60"
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+};
+
 function EditorInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -813,67 +832,108 @@ function EditorInner() {
               
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Portfolio Projects ({projects.length})</span>
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
+                      📄
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-neutral-800">Projects & Highlights</h3>
+                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Showcase your best apps, portfolios, or articles.</p>
+                    </div>
+                  </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {projects.map((proj, idx) => (
-                      <div key={idx} className="flex justify-between items-center bg-white p-2.5 rounded-xl border border-neutral-100 shadow-2xs">
-                        <div className="truncate pr-4">
-                          <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
-                          <span className="text-[10px] text-neutral-400 block truncate">{proj.description}</span>
+                      <div 
+                        key={idx} 
+                        className="group flex items-start justify-between p-2.5 rounded-lg hover:bg-neutral-50/80 transition-colors duration-150 relative border border-transparent hover:border-neutral-200/40"
+                      >
+                        <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                          <span className="text-neutral-450 text-sm mt-0.5 select-none">📄</span>
+                          <div className="truncate pr-4 flex-1">
+                            <span className="text-xs font-medium text-neutral-850 block truncate">{proj.title}</span>
+                            {proj.description && (
+                              <span className="text-[11px] text-neutral-400 block truncate mt-0.5 leading-relaxed">{proj.description}</span>
+                            )}
+                          </div>
                         </div>
-                        <button onClick={() => removeProject(idx)} className="text-neutral-400 hover:text-red-500 p-1.5 transition-colors">
+                        <button 
+                          onClick={() => removeProject(idx)} 
+                          className="opacity-0 group-hover:opacity-100 text-neutral-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded transition-all duration-150 absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs"
+                        >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     ))}
                     {projects.length === 0 && !showAddProject && (
-                      <p className="text-[11px] text-neutral-400 italic text-center py-4 bg-white border border-neutral-100 rounded-xl">No projects added yet.</p>
+                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center">
+                        <span className="text-lg">📁</span>
+                        <span className="text-[11px] font-medium mt-1">No projects added yet</span>
+                      </div>
                     )}
                   </div>
 
                   {showAddProject ? (
-                    <div className="bg-white border border-neutral-200 rounded-xl p-3.5 space-y-2.5 shadow-2xs">
-                      <input
-                        type="text"
-                        placeholder="Project Title"
-                        value={newProjTitle}
-                        onChange={(e) => setNewProjTitle(e.target.value)}
-                        className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
-                      />
-                      <textarea
-                        placeholder="Short description..."
-                        value={newProjDesc}
-                        onChange={(e) => setNewProjDesc(e.target.value)}
-                        rows={2}
-                        className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400 resize-none"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Project URL Link (optional)"
-                        value={newProjLink}
-                        onChange={(e) => setNewProjLink(e.target.value)}
-                        className="w-full text-xs p-2.5 border border-neutral-200 rounded-lg outline-none focus:border-blue-400"
-                      />
-                      <div className="flex gap-2 justify-end">
-                        <button onClick={() => setShowAddProject(false)} className="px-2.5 py-1 text-[10px] font-bold text-neutral-500 hover:bg-neutral-100 rounded">Cancel</button>
-                        <button onClick={addProject} className="px-2.5 py-1 text-[10px] font-bold bg-blue-600 text-white hover:bg-blue-700 rounded shadow-xs">Add</button>
+                    <div className="border border-neutral-200/80 bg-neutral-50/30 rounded-xl p-4 space-y-3 shadow-xs">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-neutral-450 uppercase tracking-wider block">Project Title</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Financial Dashboard App"
+                          value={newProjTitle}
+                          onChange={(e) => setNewProjTitle(e.target.value)}
+                          className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 transition-colors"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-neutral-455 uppercase tracking-wider block">Short Description</label>
+                        <textarea
+                          placeholder="What did you build? What technologies did you use?"
+                          value={newProjDesc}
+                          onChange={(e) => setNewProjDesc(e.target.value)}
+                          rows={2}
+                          className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 resize-none leading-relaxed transition-colors"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-semibold text-neutral-455 uppercase tracking-wider block">Project URL (Optional)</label>
+                        <input
+                          type="text"
+                          placeholder="https://github.com/username/project"
+                          value={newProjLink}
+                          onChange={(e) => setNewProjLink(e.target.value)}
+                          className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 transition-colors"
+                        />
+                      </div>
+                      <div className="flex gap-2 justify-end pt-1">
+                        <button 
+                          onClick={() => setShowAddProject(false)} 
+                          className="px-3 py-1.5 text-xs font-medium text-neutral-500 hover:bg-neutral-100 rounded-lg border border-neutral-200/50 bg-white transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          onClick={addProject} 
+                          className="px-3.5 py-1.5 text-xs font-semibold bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg transition-colors shadow-xs"
+                        >
+                          Add Project
+                        </button>
                       </div>
                     </div>
                   ) : (
                     <button
                       onClick={() => setShowAddProject(true)}
-                      className="w-full h-8 border border-dashed border-neutral-300 rounded-xl text-[11px] font-semibold text-neutral-600 flex items-center justify-center gap-1 hover:bg-neutral-50 transition-colors"
+                      className="w-full h-9 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-medium text-neutral-500 flex items-center justify-center gap-1.5 hover:bg-neutral-50/60 transition-all hover:text-neutral-700 active:scale-[0.98]"
                     >
-                      <Plus className="w-3.5 h-3.5" /> Add Project Card
+                      <Plus className="w-3.5 h-3.5" /> Add Project
                     </button>
                   )}
 
-                  <div className="flex justify-end pt-2">
+                  <div className="flex justify-end pt-2 border-t border-neutral-100">
                     <button
                       onClick={handleNextStep}
-                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors animate-pulse"
+                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
                     >
                       Save & Next <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -883,22 +943,33 @@ function EditorInner() {
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Interests & Direction</span>
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
+                      ✨
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-neutral-800">Interests & Aspirations</h3>
+                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Share your career goals, research fields, or passions.</p>
+                    </div>
+                  </div>
                   <textarea
-                    placeholder="Describe your primary interests..."
+                    placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
                     value={interests}
                     onChange={(e) => setInterests(e.target.value)}
-                    rows={4}
-                    className="w-full text-xs p-3 border border-neutral-200 bg-white rounded-xl outline-none focus:border-blue-400 resize-none leading-relaxed"
+                    rows={5}
+                    className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 resize-none leading-relaxed transition-colors"
                   />
-                  <div className="flex justify-between items-center pt-2">
-                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                    <button 
+                      onClick={handleBackStep} 
+                      className="flex items-center gap-1 text-xs font-medium text-neutral-450 hover:text-neutral-700 transition-colors"
+                    >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
                     >
                       Save & Next <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -908,36 +979,67 @@ function EditorInner() {
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Skills tags manager</span>
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
+                      🛠️
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-neutral-800">Core Skills & Tools</h3>
+                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Highlight your technical skills, methodologies, or design software.</p>
+                    </div>
+                  </div>
                   
-                  <div className="flex flex-wrap gap-1.5 p-2 bg-white border border-neutral-100 rounded-xl max-h-36 overflow-y-auto">
-                    {skills.map((skill, idx) => (
-                      <span key={idx} className="inline-flex items-center gap-0.5 text-[10px] font-semibold px-2 py-0.5 bg-neutral-100 rounded-full border border-neutral-200 text-neutral-700">
-                        {skill.name}
-                        <button onClick={() => removeSkillTag(skill.name)} className="text-neutral-400 hover:text-red-500 font-bold ml-1">×</button>
-                      </span>
-                    ))}
+                  <div className="flex flex-wrap gap-1.5 p-3.5 bg-neutral-50/30 border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+                    {skills.map((skill, idx) => {
+                      const tagColor = getNotionTagClasses(skill.name);
+                      return (
+                        <span 
+                          key={idx} 
+                          className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-md border ${tagColor} transition-[transform,opacity] duration-150 active:scale-95`}
+                        >
+                          {skill.name}
+                          <button 
+                            onClick={() => removeSkillTag(skill.name)} 
+                            className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-450 hover:text-neutral-700 font-bold ml-0.5 transition-colors line-none flex items-center justify-center"
+                            style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
+                          >
+                            ×
+                          </button>
+                        </span>
+                      );
+                    })}
+                    {skills.length === 0 && (
+                      <span className="text-[11px] text-neutral-400 italic self-center mx-auto select-none">No skills added yet. Add some below.</span>
+                    )}
                   </div>
 
                   <form onSubmit={addSkillTag} className="flex gap-2">
                     <input
                       type="text"
-                      placeholder="Type skill & press Enter"
+                      placeholder="e.g. TypeScript, UI Design, Next.js"
                       value={newSkill}
                       onChange={(e) => setNewSkill(e.target.value)}
-                      className="flex-1 text-xs px-2.5 py-1.5 border border-neutral-200 bg-white rounded-lg outline-none focus:border-blue-400"
+                      className="flex-1 text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white placeholder-neutral-300 transition-colors"
                     />
-                    <button type="submit" className="px-3 bg-neutral-950 text-white text-[10px] font-bold rounded-lg hover:bg-neutral-800">Add</button>
+                    <button 
+                      type="submit" 
+                      className="px-3.5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg transition-colors shadow-xs"
+                    >
+                      Add
+                    </button>
                   </form>
 
-                  <div className="flex justify-between items-center pt-2">
-                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                    <button 
+                      onClick={handleBackStep} 
+                      className="flex items-center gap-1 text-xs font-medium text-neutral-450 hover:text-neutral-700 transition-colors"
+                    >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
                     >
                       Save & Next <ArrowRight className="w-3.5 h-3.5" />
                     </button>
@@ -947,64 +1049,101 @@ function EditorInner() {
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Work timeline items</span>
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
+                      💼
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-neutral-800">Work Experience</h3>
+                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Refine your work timeline, companies, and achievements.</p>
+                    </div>
+                  </div>
                   
-                  <div className="space-y-4 max-h-60 overflow-y-auto pr-1">
+                  <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
                     {experience.map((exp, idx) => (
-                      <div key={idx} className="bg-white border border-neutral-200 rounded-xl p-3.5 space-y-2.5 shadow-2xs relative">
-                        <button onClick={() => removeExperienceItem(idx)} className="absolute top-2.5 right-2.5 text-neutral-400 hover:text-red-500">
+                      <div 
+                        key={idx} 
+                        className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
+                      >
+                        <button 
+                          onClick={() => removeExperienceItem(idx)} 
+                          className="opacity-0 group-hover:opacity-100 text-neutral-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded transition-all duration-150 absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs"
+                        >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
 
                         <div className="grid grid-cols-2 gap-2">
-                          <input
-                            type="text"
-                            value={exp.title}
-                            placeholder="Role"
-                            onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                            className="text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
-                          />
-                          <input
-                            type="text"
-                            value={exp.company}
-                            placeholder="Company"
-                            onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                            className="text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
+                          <div className="space-y-0.5">
+                            <label className="text-[9px] font-semibold text-neutral-450 uppercase tracking-wider block">Job Title</label>
+                            <input
+                              type="text"
+                              value={exp.title}
+                              placeholder="e.g. Lead Engineer"
+                              onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
+                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 transition-colors"
+                            />
+                          </div>
+                          <div className="space-y-0.5">
+                            <label className="text-[9px] font-semibold text-neutral-450 uppercase tracking-wider block">Company</label>
+                            <input
+                              type="text"
+                              value={exp.company}
+                              placeholder="e.g. Acme Corp"
+                              onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
+                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 transition-colors"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 gap-2">
+                          <div className="space-y-0.5">
+                            <label className="text-[9px] font-semibold text-neutral-455 uppercase tracking-wider block">Duration</label>
+                            <input
+                              type="text"
+                              value={exp.duration}
+                              placeholder="e.g. Jan 2024 - Present"
+                              onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
+                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 transition-colors"
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-0.5">
+                          <label className="text-[9px] font-semibold text-neutral-455 uppercase tracking-wider block">Key Responsibilities / Impact</label>
+                          <textarea
+                            value={exp.description}
+                            placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
+                            rows={2}
+                            onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
+                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-lg outline-none focus:border-neutral-455 bg-white placeholder-neutral-300 resize-none leading-relaxed transition-colors"
                           />
                         </div>
-                        <input
-                          type="text"
-                          value={exp.duration}
-                          placeholder="Duration"
-                          onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                          className="w-full text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400"
-                        />
-                        <textarea
-                          value={exp.description}
-                          placeholder="Responsibilities..."
-                          rows={2}
-                          onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                          className="w-full text-[11px] p-1.5 border border-neutral-200 rounded outline-none focus:border-blue-400 resize-none leading-relaxed"
-                        />
                       </div>
                     ))}
+                    {experience.length === 0 && (
+                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center">
+                        <span className="text-lg">💼</span>
+                        <span className="text-[11px] font-medium mt-1">No work history items added yet</span>
+                      </div>
+                    )}
                   </div>
 
                   <button
                     onClick={addExperienceItem}
-                    className="w-full h-8 border border-dashed border-neutral-300 rounded-xl text-[11px] font-semibold text-neutral-600 flex items-center justify-center gap-1 hover:bg-neutral-50 transition-colors"
+                    className="w-full h-9 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-medium text-neutral-500 flex items-center justify-center gap-1.5 hover:bg-neutral-50/60 transition-all hover:text-neutral-700 active:scale-[0.98]"
                   >
-                    <Plus className="w-3.5 h-3.5" /> Add Experience Card
+                    <Plus className="w-3.5 h-3.5" /> Add Work Experience
                   </button>
 
-                  <div className="flex justify-between items-center pt-2">
-                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                    <button 
+                      onClick={handleBackStep} 
+                      className="flex items-center gap-1 text-xs font-medium text-neutral-455 hover:text-neutral-700 transition-colors"
+                    >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
                     >
                       Refine with AI <Sparkles className="w-3.5 h-3.5" />
                     </button>
@@ -1014,32 +1153,57 @@ function EditorInner() {
 
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] p-5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] space-y-4 animate-in fade-in duration-300">
-                  <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest block">Choose Theme Style</span>
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm">
+                      🎨
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-semibold text-neutral-800">Theme Styles</h3>
+                      <p className="text-xs text-neutral-400 mt-0.5 leading-normal">Choose one of the 4 Framer-inspired template styles.</p>
+                    </div>
+                  </div>
                   
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2.5">
                     {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
                       const isSelected = selectedTemplate === id;
                       const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                      
+                      let descText = "";
+                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                      if (id === "biobricks") descText = "Grid-based bento block structure";
+
                       return (
                         <div
                           key={id}
                           onClick={() => selectTemplate(id as any)}
-                          className={`bg-white border p-3 rounded-xl cursor-pointer text-center transition-all ${
+                          className={`group bg-white border p-3 rounded-xl cursor-pointer text-left transition-all duration-150 flex flex-col justify-between h-[85px] relative ${
                             isSelected
-                              ? "border-blue-500 bg-blue-50/10 ring-1 ring-blue-500/30"
-                              : "border-neutral-200 hover:border-neutral-300"
+                              ? "border-neutral-900 ring-[1px] ring-neutral-900 bg-neutral-50/10"
+                              : "border-neutral-200 hover:border-neutral-350 hover:bg-neutral-50/20"
                           }`}
                         >
-                          <span className="text-xs font-bold text-neutral-800 block">{labelName}</span>
-                          {isSelected && <span className="text-[9px] font-bold text-blue-500 block mt-1">Applied</span>}
+                          <div className="pr-5">
+                            <span className="text-xs font-semibold text-neutral-850 block">{labelName}</span>
+                            <span className="text-[9.5px] text-neutral-400 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-neutral-900 flex items-center justify-center">
+                              <Check className="w-2.5 h-2.5 text-white" />
+                            </div>
+                          )}
                         </div>
                       );
                     })}
                   </div>
 
-                  <div className="flex justify-between items-center pt-2">
-                    <button onClick={handleBackStep} className="flex items-center gap-0.5 text-xs font-semibold text-neutral-400 hover:text-neutral-700">
+                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                    <button 
+                      onClick={handleBackStep} 
+                      className="flex items-center gap-1 text-xs font-medium text-neutral-450 hover:text-neutral-700 transition-colors"
+                    >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
@@ -1048,9 +1212,9 @@ function EditorInner() {
                         setCurrentStep(9);
                         toast.success("Theme confirmed and setup complete!");
                       }}
-                      className="h-8 px-4 bg-neutral-900 text-white text-xs font-semibold rounded-lg hover:bg-neutral-800 flex items-center gap-1 transition-colors"
+                      className="h-9 px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
                     >
-                      Confirm Theme & Finish Setup <Check className="w-3.5 h-3.5" />
+                      Confirm & Finish <Check className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
