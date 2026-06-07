@@ -73,9 +73,9 @@ export const TEMPLATES: TemplateMeta[] = [
   {
     id: "daniel-cross",
     name: "Daniel Cross",
-    description: "Premium typography, double-column layout, and elegant details.",
+    description: "Premium personal portfolio Framer layout with sidebar, bento grid showcase, testimonials, and contact cards.",
     previewBg: "#E9E6E2",
-    accent: "#4A3429",
+    accent: "#4a3429",
     dark: false,
   },
 ];

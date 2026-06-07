@@ -213,9 +213,13 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - **Preview Area:** Renders step-specific `WizardAnimations` (steps <= 6) in the Design tab directly on an immersive Figma-like dot-grid canvas workspace background, and transitions to the live scalable `ProfilePreview` once the user reaches step >= 7 (where template selection and free-form chat modifications occur) or switches to the Domains/Settings panels. The animations are built as self-contained, resolution-independent pure SVG objects sitting transparently on top of the dot-grid, utilizing custom `<defs>` gradients (blue, mint, purple), filter drop-shadow offsets, and glowing overlays. They feature physical motion curves (floating oscillations, squash-and-stretch landing impacts, timeline particles) centering around the Webild logo icon (`/logoicon.png`).
   - **Dynamic Real-Time Data Binding:** The SVG animations dynamically map real state variables from the editor (such as active avatar/name on Step 1, projects list on Step 2, confirmed skills on Step 3/4, and job experience nodes on Step 5) to draw the user's actual entered data in real-time.
 
-### Template Style System (Exclusive High-Fidelity Framer Layout)
-The SaaS platform now exclusively integrates a high-fidelity Framer-based portfolio template:
-- **Daniel Cross:** A stark, high-contrast, professional Framer editorial layout. It features a sticky sidebar panel with the user's name, profile photo, and social links, alongside a scrollable main canvas displaying the bio summary, selected work/projects, experience timeline, and core skills. Dynamic regex-based compiler substitution binds user data in real-time. Other basic mock templates have been removed.
+### Template Style System (Exclusive Premium Framer Layout)
+The SaaS exclusively uses the **Daniel Cross** premium template, reverse-engineered from the saved Framer portfolio webpage:
+- **Left Fixed Sidebar:** Pins name, avatar, subtitle, interactive vertical navigation anchors, mock video, and follow links.
+- **Right Column Layout:** Bento grid cards, available-for-work tag status, process sequence blueprint steps, testimonials carousel, and footer contact cards.
+- **Unified Style:** Standardizes on Inter font family, warm off-white background canvas (`#E9E6E2` / `rgb(233, 230, 226)`), bento card boundaries (`border border-[#E6E6E6] rounded-2xl`), and tactile button scales (`active:scale-[0.97]`).
+- **Dynamic Loops:** Loop compilation structures are mapped for projects, timeline experiences, skills, and links.
+
 
 ## Motion & Animation Guidelines
 
