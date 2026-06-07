@@ -1,248 +1,189 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Check, Sparkles } from "lucide-react";
-import { TemplateMeta, TEMPLATES, TemplateId } from "@/shared/types";
-import { toast } from "sonner";
+import { Check } from "lucide-react";
+import { TEMPLATES, TemplateId } from "@/shared/types";
 
 interface TemplatePickerProps {
   selected: TemplateId;
   onSelect: (id: TemplateId) => void;
 }
 
-function TemplatePreview({ template }: { template: TemplateMeta }) {
-  if (template.id === "daniel-cross") {
-    return (
-      <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
-        <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-7 h-7 rounded-lg bg-[#E6E6E6]" />
-            <div className="flex flex-col gap-1">
-              <div className="h-1.5 w-14 bg-[#2A2A2F] rounded-lg" />
-              <div className="h-1 w-10 bg-[#E6E6E6] rounded-lg" />
-            </div>
-          </div>
-          <div className="h-1 w-full bg-[#F3F3F3] rounded mb-1" />
-          <div className="h-1 w-4/5 bg-[#F3F3F3] rounded mb-2" />
-          <div className="flex gap-1">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-3 px-2 rounded-lg bg-[#DCEAFF] flex items-center">
-                <div className="h-0.5 w-5 bg-[#8DB8FF] rounded" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (template.id === "julian-mercer") {
-    return (
-      <div className="w-full h-full p-3 grid grid-cols-2 grid-rows-3 gap-1.5" style={{ backgroundColor: template.previewBg }}>
-        <div className="col-span-2 bg-white rounded-[6px] border border-[#E6E6E6] p-2 flex items-center gap-2">
-          <div className="w-5 h-5 rounded-lg bg-[#E6E6E6] flex-shrink-0" />
-          <div className="h-1.5 w-16 bg-[#2A2A2F] rounded-lg" />
-        </div>
-        <div className="bg-white rounded-[6px] border border-[#E6E6E6] p-2">
-          <div className="h-1.5 w-8 bg-[#8DFFB3] rounded mb-1" />
-          <div className="h-1 w-full bg-[#F3F3F3] rounded" />
-          <div className="h-1 w-3/4 bg-[#F3F3F3] rounded mt-1" />
-        </div>
-        <div className="bg-white rounded-[6px] border border-[#E6E6E6] p-2">
-          <div className="h-1.5 w-8 bg-[#8DB8FF] rounded mb-1" />
-          <div className="h-1 w-full bg-[#F3F3F3] rounded" />
-          <div className="h-1 w-2/3 bg-[#F3F3F3] rounded mt-1" />
-        </div>
-        <div className="col-span-2 bg-white rounded-[6px] border border-[#E6E6E6] p-2 flex gap-1">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-2 px-1.5 rounded-lg bg-[#F3F3F3] flex-shrink-0">
-              <div className="h-full w-4 bg-[#E6E6E6] rounded" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (template.id === "link-hunt") {
-    return (
-      <div className="w-full h-full flex flex-col" style={{ backgroundColor: template.previewBg }}>
-        <div className="h-12 bg-[#2A2A2F] flex items-end px-3 pb-2">
-          <div className="w-8 h-8 rounded-lg bg-[#E6E6E6] border-2 border-white -mb-4" />
-        </div>
-        <div className="flex-1 bg-white px-3 pt-5 flex flex-col gap-2">
-          <div className="h-2 w-20 bg-[#2A2A2F] rounded" />
-          <div className="h-1 w-16 bg-[#E6E6E6] rounded" />
-          <div className="h-px w-full bg-[#E6E6E6] my-1" />
-          {[1, 2].map(i => (
-            <div key={i} className="flex gap-2 items-start">
-              <div className="w-3 h-3 rounded-lg bg-[#8DB8FF] mt-0.5 flex-shrink-0" />
-              <div className="flex-1 flex flex-col gap-1">
-                <div className="h-1.5 w-14 bg-[#2A2A2F] rounded" />
-                <div className="h-1 w-10 bg-[#E6E6E6] rounded" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
+function DanielCrossPreview() {
   return (
-    <div className="w-full h-full p-3 flex flex-col gap-2" style={{ backgroundColor: template.previewBg }}>
-      <div className="flex items-center gap-2">
-        <div className="w-7 h-7 rounded-lg bg-[#2A2A2F] border border-[#333]" />
-        <div className="flex flex-col gap-1">
-          <div className="h-1.5 w-14 bg-white/80 rounded-lg" />
-          <div className="h-1 w-10 bg-white/30 rounded-lg" />
+    <div className="w-full h-full" style={{ backgroundColor: "#e9e6e2", overflow: "hidden", position: "relative" }}>
+      {/* Sidebar mock */}
+      <div style={{
+        position: "absolute", left: 0, top: 0, bottom: 0, width: "30%",
+        backgroundColor: "#edeae7", padding: "12px", display: "flex", flexDirection: "column", gap: "8px"
+      }}>
+        {/* Logo / name */}
+        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "4px" }}>
+          <div style={{ width: "24px", height: "24px", borderRadius: "6px", background: "#d5d0cb" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <div style={{ height: "6px", width: "50px", background: "#4a3429", borderRadius: "3px" }} />
+            <div style={{ height: "4px", width: "36px", background: "#aaa8a5", borderRadius: "2px" }} />
+          </div>
         </div>
-      </div>
-      <div className="h-1 w-full bg-white/10 rounded" />
-      <div className="h-1 w-4/5 bg-white/10 rounded" />
-      <div className="flex gap-1 mt-1">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="h-3 px-2 rounded-lg bg-[#8DB8FF]/20 flex items-center">
-            <div className="h-0.5 w-4 bg-[#8DB8FF] rounded" />
+        {/* Nav items */}
+        {["Home", "About", "Work", "Contact"].map((n, i) => (
+          <div key={i} style={{
+            height: "22px", borderRadius: "5px", background: i === 0 ? "#f5f2f0" : "transparent",
+            display: "flex", alignItems: "center", paddingLeft: "6px"
+          }}>
+            <div style={{ height: "4px", width: i === 0 ? "28px" : `${20 + i * 6}px`, background: "#8a8782", borderRadius: "2px" }} />
           </div>
         ))}
+        {/* Social links */}
+        <div style={{ marginTop: "auto" }}>
+          <div style={{ height: "4px", width: "40px", background: "#b0aca8", borderRadius: "2px", marginBottom: "5px" }} />
+          {["Instagram", "Twitter-X", "LinkedIn"].map((s, i) => (
+            <div key={i} style={{ height: "14px", display: "flex", alignItems: "center", gap: "4px", marginBottom: "2px" }}>
+              <div style={{ height: "3px", width: "40px", background: "#c0bdb9", borderRadius: "2px" }} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Main content area */}
+      <div style={{ marginLeft: "30%", padding: "12px", display: "flex", flexDirection: "column", gap: "8px" }}>
+        {/* Hero section */}
+        <div style={{ background: "#f5f2f0", borderRadius: "8px", padding: "10px 12px", marginBottom: "4px" }}>
+          {/* Status tags */}
+          <div style={{ display: "flex", gap: "4px", marginBottom: "6px" }}>
+            <div style={{ height: "12px", borderRadius: "6px", background: "#edeae7", padding: "0 6px", display: "flex", alignItems: "center" }}>
+              <div style={{ height: "4px", width: "40px", background: "#4a3429", borderRadius: "2px" }} />
+            </div>
+          </div>
+          {/* Big name */}
+          <div style={{ height: "22px", width: "65%", background: "#2a2520", borderRadius: "4px", marginBottom: "4px" }} />
+          {/* Subtitle */}
+          <div style={{ height: "10px", width: "80%", background: "#c0bdb9", borderRadius: "3px", marginBottom: "6px" }} />
+          {/* Bio paragraph */}
+          {[100, 95, 88].map((w, i) => (
+            <div key={i} style={{ height: "4px", width: `${w}%`, background: "#d8d5d1", borderRadius: "2px", marginBottom: "3px" }} />
+          ))}
+        </div>
+
+        {/* Projects grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
+          {[1, 2].map((i) => (
+            <div key={i} style={{ borderRadius: "8px", overflow: "hidden", position: "relative", height: "60px", background: "#d5d0cb" }}>
+              <div style={{
+                position: "absolute", bottom: 0, left: 0, right: 0, height: "50%",
+                background: "linear-gradient(transparent, rgba(0,0,0,0.7))", display: "flex", alignItems: "flex-end", padding: "4px 6px"
+              }}>
+                <div style={{ height: "5px", width: "40px", background: "#fff", borderRadius: "2px" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Footer */}
+        <div style={{ background: "#e5e2de", borderRadius: "6px", padding: "6px 8px", display: "flex", gap: "8px" }}>
+          {["Email", "Phone", "Location"].map((f, i) => (
+            <div key={i} style={{ height: "4px", width: `${30 + i * 6}px`, background: "#b0aba7", borderRadius: "2px" }} />
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export default function TemplatePicker({ selected, onSelect }: TemplatePickerProps) {
-  const [activePickerTab, setActivePickerTab] = useState<"presets" | "ai">("presets");
-  const [search, setSearch] = useState("");
-
-  const filteredTemplates = TEMPLATES.filter(
-    (t) =>
-      t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.description.toLowerCase().includes(search.toLowerCase())
-  );
+  const template = TEMPLATES[0]; // Only Daniel Cross
 
   return (
     <div className="flex flex-col self-stretch grow">
-      <div className="flex justify-center self-stretch pt-[21.07979965209961px]">
-        <div className="flex flex-col justify-center self-stretch grow bg-[#fbfbfb] rounded-[13px] outline-1 outline-t-1 outline-l-1 outline-r-1 outline-b-1 outline outline-[#f3f3f3] relative overflow-hidden min-h-[832px]">
-          {/* Background white sheet layer */}
-          <div className="w-[486.25px] h-[831.4500122070312px] bg-white absolute left-0 top-0 rounded-[13px] pointer-events-none"></div>
+      <div className="flex justify-center self-stretch pt-[21px]">
+        <div className="flex flex-col justify-center self-stretch grow bg-[#fbfbfb] rounded-[13px] outline outline-1 outline-[#f3f3f3] relative overflow-hidden min-h-[832px]">
+          {/* Background layer */}
+          <div className="w-full bg-white absolute left-0 top-0 bottom-0 rounded-[13px] pointer-events-none" />
 
-          <div className="self-stretch grow relative z-10 flex flex-col items-center py-[21.08px]">
-            {/* Background mask layer (hidden/opacity-0 to avoid obscuring light theme details) */}
-            <div className="w-[486.25px] h-[831.4500122070312px] bg-gradient-to-b from-black via-black to-black absolute left-0 top-0 pointer-events-none opacity-0"></div>
-
-            <div className="w-[434.0899963378906px] flex flex-col gap-[12.640000343322754px]">
+          <div className="self-stretch grow relative z-10 flex flex-col items-center py-[21px]">
+            <div className="w-[434px] flex flex-col gap-[12px]">
+              {/* Header */}
               <div className="flex justify-between items-center self-stretch">
-                <div className="w-[83.16px] h-[27.34000015258789px] flex items-center">
-                  <span className="font-medium text-[17.899999618530273px] leading-[27.360000610351562px] text-neutral-900">Templates</span>
-                </div>
-
-                <div className="flex flex-col relative group/info">
-                  <div className="w-[18.229999542236328px] h-[18.229999542236328px] flex items-center justify-center cursor-pointer">
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[15.191665649414062px] h-[15.191665649414062px]">
-                      <g clipPath="url(#clip0_5_88)">
-                        <path d="M9.11488 16.7108C13.3099 16.7108 16.7107 13.3101 16.7107 9.115C16.7107 4.91994 13.3099 1.51917 9.11488 1.51917C4.91981 1.51917 1.51904 4.91994 1.51904 9.115C1.51904 13.3101 4.91981 16.7108 9.11488 16.7108Z" stroke="#171717" strokeWidth="1.51917" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M9.11523 12.1541V9.11499" stroke="#171717" strokeWidth="1.51917" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M9.11523 6.07666H9.12283" stroke="#171717" strokeWidth="1.51917" stroke-linecap="round" stroke-linejoin="round" />
+                <span className="font-medium text-[17px] leading-[27px] text-neutral-900">
+                  Templates
+                </span>
+                <div className="relative group/info">
+                  <div className="w-[18px] h-[18px] flex items-center justify-center cursor-pointer">
+                    <svg width="16" height="16" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clipPath="url(#info-clip)">
+                        <path d="M9.11488 16.7108C13.3099 16.7108 16.7107 13.3101 16.7107 9.115C16.7107 4.91994 13.3099 1.51917 9.11488 1.51917C4.91981 1.51917 1.51904 4.91994 1.51904 9.115C1.51904 13.3101 4.91981 16.7108 9.11488 16.7108Z" stroke="#171717" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M9.11523 12.1541V9.11499" stroke="#171717" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M9.11523 6.07666H9.12283" stroke="#171717" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                       </g>
                       <defs>
-                        <clipPath id="clip0_5_88">
+                        <clipPath id="info-clip">
                           <rect width="18.23" height="18.23" fill="white" />
                         </clipPath>
                       </defs>
                     </svg>
                   </div>
-
-                  {/* Hover tooltip explanation */}
-                  <div className="h-[66.62999725341797px] flex flex-col opacity-0 group-hover/info:opacity-100 transition-opacity duration-150 absolute right-0 top-[22px] z-50 pointer-events-none">
-                    <div className="w-80 flex flex-col bg-gradient-to-b from-[#2a2a2f] to-[#3a3a42] px-[12.647899627685547px] pt-[3.109999895095825px] pb-[4.519999980926514px] rounded-lg shadow-md">
-                      <span className="font-normal text-[13.300000190734863px] leading-[19.40999984741211px] text-white">
-                        Manage your site's templates. Select a layout, search presets, or generate customized structures using AI.
+                  <div className="opacity-0 group-hover/info:opacity-100 transition-opacity duration-150 absolute right-0 top-[22px] z-50 pointer-events-none">
+                    <div className="w-72 bg-gradient-to-b from-[#2a2a2f] to-[#3a3a42] px-3 py-2 rounded-lg shadow-md">
+                      <span className="text-[13px] leading-[19px] text-white font-normal">
+                        Your portfolio is built on the Daniel Cross Framer template — a premium, clean design with modern typography and sleek aesthetics.
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="h-0.5 border-t border-black/5"></div>
+              <div className="h-0.5 border-t border-black/5" />
             </div>
 
-            <div className="flex flex-col gap-3 mt-4">
-              {/* Library Header */}
-
-
-              {/* Search Input Bar Container */}
-              <div className="w-[434.0899963378906px] h-10 flex items-center gap-[4.199999809265137px] bg-[#f3f3f3] px-[12.647899627685547px] rounded-[13px] border border-black/5 relative">
-                <div className="relative shrink-0 w-[22.440000534057617px] h-[16.158000946044922px] flex items-center justify-center">
-                  <svg width="23" height="17" viewBox="0 0 23 17" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[18px] h-[14px]">
-                    <path d="M17.279 14.1379L14.3574 11.2163" stroke="black" strokeWidth="1.3465" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10.5466 12.7918C13.5212 12.7918 15.9326 10.3804 15.9326 7.40578C15.9326 4.43117 13.5212 2.01978 10.5466 2.01978C7.57204 2.01978 5.16064 4.43117 5.16064 7.40578C5.16064 10.3804 7.57204 12.7918 10.5466 12.7918Z" stroke="black" strokeWidth="1.3465" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+            {/* Single Template Card */}
+            <div className="w-[434px] mt-4">
+              <div
+                onClick={() => onSelect(template.id)}
+                className={`w-full h-[200px] bg-[#f3f3f3] rounded-[13px] relative overflow-hidden cursor-pointer border transition-all ${
+                  selected === template.id
+                    ? "border-blue-500 ring-1 ring-blue-500"
+                    : "border-black/5 hover:border-zinc-300"
+                }`}
+              >
+                {/* Template Preview */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <DanielCrossPreview />
                 </div>
-                <input
-                  type="text"
-                  placeholder="Search templates..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="flex-1 bg-transparent border-none text-[14.600000381469727px] text-black placeholder:text-zinc-400 focus:outline-none focus:ring-0 p-0 font-normal ml-1"
-                />
-              </div>
 
-              {/* Template preset cards grid list */}
-              <div className="grid grid-cols-2 gap-x-[15px] gap-y-[16px] w-[434.0899963378906px]  overflow-y-auto mt-1 pb-4" style={{ scrollbarWidth: "none" }}>
-                {filteredTemplates.length > 0 ? (
-                  filteredTemplates.map((template) => {
-                    const isSelected = selected === template.id;
-                    return (
-                      <div
-                        key={template.id}
-                        onClick={() => onSelect(template.id)}
-                        className={`w-[208.61000061035156px] h-[156.4499969482422px] bg-[#f3f3f3] rounded-[13px] relative overflow-hidden cursor-pointer group border transition-all ${isSelected ? "border-blue-500 ring-1 ring-blue-500" : "border-black/5 hover:border-zinc-300"
-                          }`}
-                      >
-                        {/* Template Virtual Preview */}
-                        <div className="w-[208.61000061035156px] h-[156.4499969482422px] absolute inset-0 select-none pointer-events-none opacity-85">
-                          <TemplatePreview template={template} />
-                        </div>
+                {/* Bottom gradient */}
+                <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-b from-black/0 to-white/80 pointer-events-none" />
 
-                        {/* Bottom Gradient overlay */}
-                        <div className="w-[208.61000061035156px] h-[78.22116088867188px] absolute bottom-0 left-0 pointer-events-none">
-                          <div className="w-[208.61000061035156px] h-[78.22116088867188px] bg-gradient-to-b from-black/0 to-white/80 absolute inset-0"></div>
-                        </div>
+                {/* Template Name */}
+                <div className="absolute bottom-3 left-3 z-10">
+                  <span className="font-medium text-[15px] text-black/80">{template.name}</span>
+                  <p className="text-[11px] text-black/40 mt-0.5">{template.description}</p>
+                </div>
 
-                        {/* Template Name tag */}
-                        <div className="flex flex-col absolute bottom-3 left-3 z-10 pointer-events-none">
-                          <div className="h-[23.079999923706055px] flex items-center">
-                            <span className="font-medium text-[15.199999809265137px] leading-[23px] capitalize text-black/80 truncate max-w-[180px]">
-                              {template.name}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Selected Badge Indicator */}
-                        {isSelected && (
-                          <div className="absolute top-2 right-2 w-5 h-5 rounded-lg bg-blue-500 flex items-center justify-center shadow-sm z-20">
-                            <Check className="w-3 h-3 text-white" strokeWidth={2.5} />
-                          </div>
-                        )}
-
-                        {/* Action Hover overlay */}
-                        <div className="w-[208.61000061035156px] h-[156.4499969482422px] flex justify-center items-center bg-white/20 backdrop-blur-[1px] absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-                          <div className="h-10 flex flex-col justify-center items-center bg-[#f3f3f3] px-[25.295799255371094px] py-[8px] rounded-[13px] shadow-sm">
-                            <span className="font-medium text-[15.300000190734863px] leading-[23px] text-center text-black">
-                              {isSelected ? "Active" : "Select Layout"}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="py-8 text-center text-xs text-zinc-400 w-full">
-                    No templates match your search.
+                {/* Selected badge */}
+                {selected === template.id && (
+                  <div className="absolute top-2 right-2 w-5 h-5 rounded-lg bg-blue-500 flex items-center justify-center shadow-sm z-20">
+                    <Check className="w-3 h-3 text-white" strokeWidth={2.5} />
                   </div>
                 )}
+
+                {/* Hover overlay */}
+                <div className="absolute inset-0 flex justify-center items-center bg-white/20 backdrop-blur-[1px] opacity-0 hover:opacity-100 transition-opacity duration-200 z-10">
+                  <div className="h-10 flex items-center bg-[#f3f3f3] px-6 rounded-[13px] shadow-sm">
+                    <span className="font-medium text-[15px] text-black">
+                      {selected === template.id ? "Active" : "Use This Layout"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Premium badge row */}
+              <div className="mt-3 flex items-center gap-2">
+                <div className="flex items-center gap-1.5 bg-[#edeae7] border border-[#d5d0cb] rounded-full px-3 py-1.5">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M6 1L7.5 4.5H11L8 7L9.5 10.5L6 8.5L2.5 10.5L4 7L1 4.5H4.5L6 1Z" fill="#4a3429"/>
+                  </svg>
+                  <span className="text-[11px] font-medium text-[#4a3429]">Premium Framer Template</span>
+                </div>
+                <span className="text-[11px] text-neutral-400">Daniel Cross by Muddasir Hussain</span>
               </div>
             </div>
           </div>
