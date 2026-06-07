@@ -1403,16 +1403,21 @@ function EditorInner() {
                       <Palette className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800 font-sans">Theme Style</h3>
-                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium font-sans">Confirm your premium portfolio template style.</p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Theme Styles</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Choose one of the 4 Framer-inspired template styles.</p>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 gap-2.5">
-                    {["daniel-cross"].map((id) => {
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
                       const isSelected = selectedTemplate === id;
-                      const labelName = "Daniel Cross";
-                      const descText = "Premium Framer-inspired bento grid and sidebar portfolio template";
+                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                      
+                      let descText = "";
+                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                      if (id === "biobricks") descText = "Grid-based bento block structure";
 
                       return (
                         <div
