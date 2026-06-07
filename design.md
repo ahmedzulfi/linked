@@ -213,12 +213,9 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - **Preview Area:** Renders step-specific `WizardAnimations` (steps <= 6) in the Design tab directly on an immersive Figma-like dot-grid canvas workspace background, and transitions to the live scalable `ProfilePreview` once the user reaches step >= 7 (where template selection and free-form chat modifications occur) or switches to the Domains/Settings panels. The animations are built as self-contained, resolution-independent pure SVG objects sitting transparently on top of the dot-grid, utilizing custom `<defs>` gradients (blue, mint, purple), filter drop-shadow offsets, and glowing overlays. They feature physical motion curves (floating oscillations, squash-and-stretch landing impacts, timeline particles) centering around the Webild logo icon (`/logoicon.png`).
   - **Dynamic Real-Time Data Binding:** The SVG animations dynamically map real state variables from the editor (such as active avatar/name on Step 1, projects list on Step 2, confirmed skills on Step 3/4, and job experience nodes on Step 5) to draw the user's actual entered data in real-time.
 
-### Template Style System (4 Premium Framer-Inspired Layouts)
-The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
-- **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
-- **Julian Mercer:** elegant, warm paper style. Uses a warm background `#FAF8F5`, italic serif typography (`font-serif font-light italic`), monospace metadata tags, and soft dividers.
-- **Link Hunt:** links-in-bio style. Features a centered layout (`max-w-md mx-auto text-center`), large avatar, pill buttons for social accounts with icons, and card containers.
-- **Biobricks:** grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
+### Template Style System (Exclusive High-Fidelity Framer Layout)
+The SaaS platform now exclusively integrates a high-fidelity Framer-based portfolio template:
+- **Daniel Cross:** A stark, high-contrast, professional Framer editorial layout. It features a sticky sidebar panel with the user's name, profile photo, and social links, alongside a scrollable main canvas displaying the bio summary, selected work/projects, experience timeline, and core skills. Dynamic regex-based compiler substitution binds user data in real-time. Other basic mock templates have been removed.
 
 ## Motion & Animation Guidelines
 

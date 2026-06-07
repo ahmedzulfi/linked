@@ -58,7 +58,7 @@ export interface ProfileData {
   blocks?: CustomBlock[];
 }
 
-export type TemplateId = "daniel-cross" | "julian-mercer" | "link-hunt" | "biobricks";
+export type TemplateId = "daniel-cross";
 
 export interface TemplateMeta {
   id: TemplateId;
@@ -73,33 +73,9 @@ export const TEMPLATES: TemplateMeta[] = [
   {
     id: "daniel-cross",
     name: "Daniel Cross",
-    description: "Clean typography, high-contrast, bold editorial layout.",
-    previewBg: "#FFFFFF",
-    accent: "#000000",
-    dark: false,
-  },
-  {
-    id: "julian-mercer",
-    name: "Julian Mercer",
-    description: "Elegant serif typography, warm tones, mono details.",
-    previewBg: "#FAF8F5",
-    accent: "#6B5A43",
-    dark: false,
-  },
-  {
-    id: "link-hunt",
-    name: "Link Hunt",
-    description: "Creator links-in-bio style with central profile elements.",
-    previewBg: "#F3F4F6",
-    accent: "#3b82f6",
-    dark: false,
-  },
-  {
-    id: "biobricks",
-    name: "Biobricks",
-    description: "Clean grid modular bento card layout.",
-    previewBg: "#FAFAFA",
-    accent: "#10b981",
+    description: "Premium typography, double-column layout, and elegant details.",
+    previewBg: "#E9E6E2",
+    accent: "#4A3429",
     dark: false,
   },
 ];

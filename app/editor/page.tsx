@@ -31,6 +31,7 @@ import WizardAnimations from "@/components/WizardAnimations";
 import DomainsPane from "./components/DomainsPane";
 import SettingsPane from "./components/SettingsPane";
 import { UserMenu } from "@/components/UserMenu";
+import { TEMPLATES } from "@/shared/types";
 
 // User avatar placeholder
 function UserAvatar() {
@@ -1409,15 +1410,11 @@ function EditorInner() {
                   </div>
                   
                   <div className="grid grid-cols-2 gap-2.5">
-                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                      const isSelected = selectedTemplate === id;
-                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                      
-                      let descText = "";
-                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                      if (id === "biobricks") descText = "Grid-based bento block structure";
+                    {TEMPLATES.map((t) => {
+                      const isSelected = selectedTemplate === t.id;
+                      const labelName = t.name;
+                      const descText = t.description;
+                      const id = t.id;
 
                       return (
                         <div
