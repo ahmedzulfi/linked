@@ -411,7 +411,7 @@ export async function POST(request: Request) {
         switch_template: tool({
           description: "Changes the website layout template to a different template style.",
           inputSchema: z.object({
-            templateId: z.enum(["daniel-cross"]).describe("The ID of the template style to switch to"),
+            templateId: z.enum(["daniel-cross", "julian-mercer", "link-hunt", "biobricks"]).describe("The ID of the template style to switch to"),
           }),
           execute: async ({ templateId }) => {
             try {
