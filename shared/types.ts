@@ -42,6 +42,7 @@ export interface ProfileData {
   name: string;
   headline: string;
   location?: string;
+  phone?: string;
   summary: string;
   avatarUrl: string;
   bannerUrl?: string;

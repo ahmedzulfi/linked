@@ -1408,39 +1408,36 @@ function EditorInner() {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                      const isSelected = selectedTemplate === id;
-                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                      
-                      let descText = "";
-                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                      if (id === "biobricks") descText = "Grid-based bento block structure";
-
-                      return (
-                        <div
-                          key={id}
-                          onClick={() => selectTemplate(id as any)}
-                          className={`group bg-white border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[90px] relative active:scale-[0.97] transition-transform duration-100 ease-out ${
-                            isSelected
-                              ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30"
-                              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/20"
-                          }`}
-                        >
-                          <div className="pr-5">
-                            <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
-                            <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                          </div>
-                          {isSelected && (
-                            <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-neutral-900 flex items-center justify-center">
-                              <Check className="w-2.5 h-2.5 text-white" />
-                            </div>
-                          )}
+                  {/* Single Daniel Cross premium card */}
+                  <div
+                    onClick={() => selectTemplate("daniel-cross")}
+                    className="group bg-white border border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30 p-4 rounded-xl cursor-pointer text-left flex flex-col gap-2 relative active:scale-[0.97] transition-transform duration-100 ease-out"
+                  >
+                    {/* Wireframe mini-preview */}
+                    <div className="w-full h-20 bg-[#e9e6e2] rounded-lg overflow-hidden relative flex">
+                      <div className="w-[28%] h-full bg-[#edeae7] flex flex-col gap-1 p-1.5">
+                        <div className="w-full h-2 rounded bg-[#4a3429]/20" />
+                        {[100,80,90,70].map((w,i) => <div key={i} className="h-1.5 rounded bg-[#4a3429]/10" style={{width:`${w}%`}} />)}
+                      </div>
+                      <div className="flex-1 p-1.5 flex flex-col gap-1">
+                        <div className="h-6 w-3/4 rounded bg-[#4a3429]/20" />
+                        <div className="h-1.5 w-full rounded bg-black/10" />
+                        <div className="h-1.5 w-5/6 rounded bg-black/10" />
+                        <div className="grid grid-cols-2 gap-1 mt-1">
+                          <div className="h-6 rounded-md bg-[#4a3429]/15" />
+                          <div className="h-6 rounded-md bg-[#4a3429]/15" />
                         </div>
-                      );
-                    })}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-xs font-semibold text-neutral-800 block">Daniel Cross</span>
+                        <span className="text-[9.5px] text-neutral-500 block mt-0.5">Premium Framer portfolio with sidebar nav</span>
+                      </div>
+                      <div className="w-4 h-4 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
+                        <Check className="w-2.5 h-2.5 text-white" />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
@@ -1464,6 +1461,111 @@ function EditorInner() {
                 </div>
               )}
             </div>
+
+            {/* ── Contact Details quick-edit (shown in step 9 free-form editor) ── */}
+            {currentStep === 9 && editedProfile && (
+              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-4 animate-in fade-in duration-300 text-left mt-2">
+                <div className="flex items-start gap-3 border-b border-neutral-100 pb-3">
+                  <div className="w-8 h-8 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center shrink-0">
+                    <Globe className="w-4 h-4 text-neutral-600 stroke-[1.75]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-neutral-800">Contact & Social Links</h3>
+                    <p className="text-xs text-neutral-500 mt-0.5 font-medium">Shown in the Contact section of your portfolio.</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Email</label>
+                    <input
+                      type="email"
+                      placeholder="hello@example.com"
+                      value={editedProfile.links.find(l => l.icon === 'email')?.url.replace('mailto:', '') || ''}
+                      onChange={(e) => {
+                        const next = editedProfile.links.filter(l => l.icon !== 'email');
+                        if (e.target.value) next.push({ label: 'Email', url: `mailto:${e.target.value}`, icon: 'email' });
+                        updateField('links', next);
+                      }}
+                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Phone</label>
+                    <input
+                      type="tel"
+                      placeholder="+1 555 000 0000"
+                      value={editedProfile.phone || ''}
+                      onChange={(e) => updateField('phone', e.target.value)}
+                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Location</label>
+                    <input
+                      type="text"
+                      placeholder="New York, USA"
+                      value={editedProfile.location || ''}
+                      onChange={(e) => updateField('location', e.target.value)}
+                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">LinkedIn URL</label>
+                    <input
+                      type="url"
+                      placeholder="https://linkedin.com/in/..."
+                      value={editedProfile.links.find(l => l.icon === 'linkedin')?.url || ''}
+                      onChange={(e) => {
+                        const next = editedProfile.links.filter(l => l.icon !== 'linkedin');
+                        if (e.target.value) next.push({ label: 'LinkedIn', url: e.target.value, icon: 'linkedin' });
+                        updateField('links', next);
+                      }}
+                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Twitter / X URL</label>
+                    <input
+                      type="url"
+                      placeholder="https://x.com/..."
+                      value={editedProfile.links.find(l => l.icon === 'twitter')?.url || ''}
+                      onChange={(e) => {
+                        const next = editedProfile.links.filter(l => l.icon !== 'twitter');
+                        if (e.target.value) next.push({ label: 'Twitter', url: e.target.value, icon: 'twitter' });
+                        updateField('links', next);
+                      }}
+                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">GitHub URL</label>
+                    <input
+                      type="url"
+                      placeholder="https://github.com/..."
+                      value={editedProfile.links.find(l => l.icon === 'github')?.url || ''}
+                      onChange={(e) => {
+                        const next = editedProfile.links.filter(l => l.icon !== 'github');
+                        if (e.target.value) next.push({ label: 'GitHub', url: e.target.value, icon: 'github' });
+                        updateField('links', next);
+                      }}
+                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Profile Photo URL</label>
+                  <input
+                    type="url"
+                    placeholder="https://example.com/photo.jpg"
+                    value={editedProfile.avatarUrl || ''}
+                    onChange={(e) => updateField('avatarUrl', e.target.value)}
+                    className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                  />
+                </div>
+              </div>
+            )}
 
             <div ref={chatEndRef} />
           </div>
