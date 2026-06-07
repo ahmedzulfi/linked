@@ -12,23 +12,50 @@ interface TemplatePickerProps {
 }
 
 function TemplatePreview({ template }: { template: TemplateMeta }) {
-  return (
-    <div className="w-full h-full p-4 flex flex-col gap-2.5" style={{ backgroundColor: template.previewBg }}>
-      <div className="flex gap-2">
-        <div className="w-12 h-16 bg-[#EDEAE7] rounded-md border border-black/5 flex flex-col items-center justify-center">
-          <div className="w-5 h-5 rounded-full bg-neutral-300 mb-1" />
-          <div className="h-1 w-8 bg-neutral-800 rounded" />
-        </div>
-        <div className="flex-1 flex flex-col gap-1.5 justify-center">
-          <div className="h-2.5 w-24 bg-neutral-900 rounded" />
-          <div className="h-1.5 w-16 bg-neutral-400 rounded" />
+  if (template.id === "daniel-cross") {
+    return (
+      <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
+        <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-7 h-7 rounded-lg bg-[#E6E6E6]" />
+            <div className="flex flex-col gap-1">
+              <div className="h-1.5 w-14 bg-[#2A2A2F] rounded-lg" />
+              <div className="h-1 w-10 bg-[#E6E6E6] rounded-lg" />
+            </div>
+          </div>
+          <div className="h-1 w-full bg-[#F3F3F3] rounded mb-1" />
+          <div className="h-1 w-4/5 bg-[#F3F3F3] rounded mb-2" />
+          <div className="flex gap-1">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-3 px-2 rounded-lg bg-[#DCEAFF] flex items-center">
+                <div className="h-0.5 w-5 bg-[#8DB8FF] rounded" />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="h-1.5 w-full bg-neutral-300 rounded" />
-      <div className="h-1.5 w-4/5 bg-neutral-300 rounded" />
-      <div className="grid grid-cols-2 gap-1.5 mt-1">
-        <div className="h-8 rounded bg-white border border-black/5" />
-        <div className="h-8 rounded bg-white border border-black/5" />
+    );
+  }
+
+  return (
+    <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
+      <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-7 h-7 rounded-lg bg-[#E6E6E6]" />
+          <div className="flex flex-col gap-1">
+            <div className="h-1.5 w-14 bg-[#2A2A2F] rounded-lg" />
+            <div className="h-1 w-10 bg-[#E6E6E6] rounded-lg" />
+          </div>
+        </div>
+        <div className="h-1 w-full bg-[#F3F3F3] rounded mb-1" />
+        <div className="h-1 w-4/5 bg-[#F3F3F3] rounded mb-2" />
+        <div className="flex gap-1">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="h-3 px-2 rounded-lg bg-[#DCEAFF] flex items-center">
+              <div className="h-0.5 w-5 bg-[#8DB8FF] rounded" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
