@@ -33,19 +33,33 @@ function buildProjectCard(
 ): string {
   const resolvedImg = imageUrl || "/templates/daniel-cross/NZiJk1LCTBcGzs2MNANRaoxI2IA.png";
   return `
-<div class="project-card-item" style="position:relative;border-radius:12px;overflow:hidden;background:#fff;border:1px solid #E6E6E6;cursor:pointer;flex:0 0 calc(50% - 12px);display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:transform 0.2s ease,box-shadow 0.2s ease;">
-  <a href="${esc(link)}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;height:100%;display:flex;flex-direction:column;">
-    <div style="position:relative;height:200px;overflow:hidden;background:#f5f5f5;">
-      <img src="${esc(resolvedImg)}" alt="${esc(title)}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s ease;">
-    </div>
-    <div style="padding:20px;flex-grow:1;display:flex;flex-direction:column;gap:8px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:12px;">
-        <h4 style="font-family:'Inter Display',sans-serif;font-size:18px;font-weight:600;color:#000;margin:0;">${esc(title)}</h4>
-        <span style="font-family:'Inter Display',sans-serif;font-size:12px;font-weight:500;color:#666;background:#f3f3f3;padding:2px 8px;border-radius:12px;white-space:nowrap;">${esc(category)}</span>
+<div class="ssr-variant">
+  <div class="framer-1kys2js-container" data-framer-name="Work card" name="Work card" style="will-change: transform; opacity: 1; transform: none;">
+    <!--$--><a name="Work card" class="framer-cOcSQ framer-x2WlA framer-5K3Le framer-ryc3c framer-v-ryc3c framer-j0rmx6" data-framer-name="Work card" href="${esc(link)}" style="background-color: var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)); width: 100%; border-radius: 12px; opacity: 1;">
+      <div class="framer-z31oie" data-framer-name="Cover image" style="transform: none; opacity: 1;">
+        <div style="position:absolute;border-radius:inherit;corner-shape:inherit;top:0;right:0;bottom:0;left:0" data-framer-background-image-wrapper="true">
+          <img decoding="auto" src="${esc(resolvedImg)}" alt="" style="display:block;width:100%;height:100%;border-radius:inherit;corner-shape:inherit;object-position:center;object-fit:cover">
+        </div>
       </div>
-      <p style="font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:#666;margin:4px 0 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${esc(description)}</p>
-    </div>
-  </a>
+      <div class="framer-fh6ndj" data-framer-name="Linear" style="background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, var(--token-5b7978f2-455d-4675-a18c-26d9c3d422ca, rgb(0, 0, 0)) 100%); opacity: 1;"></div>
+      <div class="framer-1s2w6if" data-framer-name="Text wrapper" style="opacity: 1;">
+        <div class="framer-1k4j78w" data-framer-component-type="RichTextContainer" style="--framer-link-text-color: rgb(0, 153, 255); --framer-link-text-decoration: underline; transform: none; opacity: 1;">
+          <h4 class="framer-text framer-styles-preset-qumrh3" data-styles-preset="FLDbgL1a7">${esc(title)}</h4>
+        </div>
+        <div class="framer-1orth6j" data-framer-name="details" style="opacity:0.8">
+          <div class="framer-1wxz9c2" data-framer-component-type="RichTextContainer" style="--extracted-r6o4lv: var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)); --framer-link-text-color: rgb(0, 153, 255); --framer-link-text-decoration: underline; transform: none; opacity: 1;">
+            <p class="framer-text framer-styles-preset-zy5y8s" data-styles-preset="XkMlNAnh0" style="--framer-text-color:var(--extracted-r6o4lv, var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)))">${esc(category)}</p>
+          </div>
+          <div class="framer-1prjt4a" data-framer-component-type="RichTextContainer" style="--extracted-r6o4lv: var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)); --framer-link-text-color: rgb(0, 153, 255); --framer-link-text-decoration: underline; transform: none; opacity: 1;">
+            <p class="framer-text framer-styles-preset-zy5y8s" data-styles-preset="XkMlNAnh0" style="--framer-text-color:var(--extracted-r6o4lv, var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)))">/</p>
+          </div>
+          <div class="framer-5hs0bj" data-framer-component-type="RichTextContainer" style="--extracted-r6o4lv: var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)); --framer-link-text-color: rgb(0, 153, 255); --framer-link-text-decoration: underline; transform: none; opacity: 1;">
+            <p class="framer-text framer-styles-preset-zy5y8s" data-styles-preset="XkMlNAnh0" style="--framer-text-color:var(--extracted-r6o4lv, var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)))">${esc(year)}</p>
+          </div>
+        </div>
+      </div>
+    </a><!--/$-->
+  </div>
 </div>`;
 }
 
@@ -70,10 +84,7 @@ function buildProjectsSection(profile: ProfileData): string {
     )
     .join("\n");
 
-  return `
-<div class="projects-grid-container" style="display:flex;flex-wrap:wrap;gap:24px;width:100%;padding:0 25px;">
-  ${cards}
-</div>`;
+  return `<!--$--><!--$-->${cards}<!--/$--><!--/$-->`;
 }
 
 function replaceWorkWrapperContent(html: string, projectsHtml: string): string {
@@ -352,7 +363,6 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
     .framer-cOcSQ.framer-ryc3c {
       width: 100% !important;
       max-width: 100% !important;
-      height: auto !important;
     }
     
     .framer-euNV9.framer-mfpv4s {
@@ -383,120 +393,6 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
 
     .framer-DKwHu .framer-1bh76c {
       padding: 40px 16px !important;
-    }
-
-    /* Stack project cards vertically on mobile */
-    .project-card-item {
-      flex: 0 0 100% !important;
-    }
-    
-    .projects-grid-container {
-      padding: 0 16px !important;
-      gap: 16px !important;
-    }
-  }
-
-  /* --- Testimonials (Reviews) Slideshow Grid Restructuring --- */
-  .framer-9ivh3c-container, 
-  .framer-9ivh3c-container section, 
-  .framer-9ivh3c-container div, 
-  .framer-9ivh3c-container ul {
-    position: relative !important;
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    max-height: none !important;
-    transform: none !important;
-    gap: 24px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
-  }
-
-  .framer-NYla7 .framer-9ivh3c-container {
-    height: auto !important;
-  }
-
-  /* Hide broken next/prev slider navigation controls */
-  .framer--slideshow-controls, 
-  .framer-9ivh3c-container fieldset {
-    display: none !important;
-  }
-
-  /* Set equal spacing & auto heights for cards */
-  .framer-esrupl-container, 
-  .framer-1x1fbg7-container, 
-  .framer-16lsjul-container {
-    position: relative !important;
-    width: calc(33.3333% - 16px) !important;
-    height: auto !important;
-    flex-shrink: 0 !important;
-    flex-grow: 1 !important;
-    max-width: 100% !important;
-    transform: none !important;
-    visibility: visible !important;
-    display: flex !important;
-  }
-
-  /* Premium testimonial card styling */
-  .framer-KjIJu {
-    width: 100% !important;
-    height: auto !important;
-    padding: 24px !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    gap: 24px !important;
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
-  }
-
-  /* Testimonial card hover transition */
-  .framer-KjIJu:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-  }
-
-  .framer-17i8f2v {
-    margin-top: auto !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 12px !important;
-  }
-
-  /* Project card hover effects */
-  .project-card-item:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.08) !important;
-  }
-  .project-card-item:hover img {
-    transform: scale(1.03) !important;
-  }
-
-  /* Responsive breakpoints for testimonials */
-  @media (max-width: 991px) {
-    .framer-esrupl-container, 
-    .framer-1x1fbg7-container, 
-    .framer-16lsjul-container {
-      width: calc(50% - 12px) !important;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .framer-9ivh3c-container ul {
-      flex-direction: column !important;
-      gap: 16px !important;
-    }
-    .framer-esrupl-container, 
-    .framer-1x1fbg7-container, 
-    .framer-16lsjul-container {
-      width: 100% !important;
     }
   }
 </style>
