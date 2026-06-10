@@ -116,3 +116,12 @@ The preview page does not compile react components inside the iframe. Instead, i
 - **Julian Mercer**: Elegance. Warm background (`#FAF8F5`), lightweight serif fonts, muted dividers, clean tabular details.
 - **Link Hunt**: Bio links. Centered portrait, large profile icons, clean cards, minimal background colors.
 - **Biobricks**: Bento grid. Organizes sections (about, work, links) inside clean white rounded cards layout.
+
+---
+
+## 7. Local Development
+To launch the Next.js development server locally, run the standard CLI script in the terminal:
+```bash
+npm run dev
+# Launches Next.js dev server (with Turbopack) on http://localhost:3000
+```
