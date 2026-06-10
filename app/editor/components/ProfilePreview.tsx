@@ -253,10 +253,7 @@ function buildPreviewHtml(raw: string, profile: ProfileData): string {
   );
 
   // Fix nav links → hash anchors
-  html = ra(html, "https://danielcross.framer.website/about", "#about");
-  html = ra(html, "https://danielcross.framer.website/work", "#work");
-  html = ra(html, "https://danielcross.framer.website/contact", "#contact");
-  html = ra(html, "https://danielcross.framer.website/", "#home");
+  // Links left unmodified so they are caught by intercept script and open in a new tab
 
   // Inject link-intercept script into <head>
   html = html.replace("</head>", LINK_INTERCEPT + "\n</head>");
@@ -335,11 +332,7 @@ function buildPreviewHtml(raw: string, profile: ProfileData): string {
   html = html.replace(/<div id="__framer-badge-container"[\s\S]*?<\/div>/g, "");
 
   // Append About, Work, Contact sections
-  const aboutSec = buildAboutSection(profile);
-  const workSec = buildWorkSection(profile);
-  const contactSec = buildContactSection(profile);
-
-  html = html.replace("</body>", aboutSec + workSec + contactSec + "\n</body>");
+  // Removed to preserve original template layout exactly
 
   return html;
 }
