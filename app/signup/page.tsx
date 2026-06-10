@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
@@ -16,6 +16,7 @@ export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordStep, setShowPasswordStep] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
   const isFirstNameValid = firstName.trim().length >= 1;
   const isLastNameValid = lastName.trim().length >= 1;
@@ -38,6 +39,7 @@ export default function SignupPage() {
 
     if (!showPasswordStep) {
       setShowPasswordStep(true);
+      setTimeout(() => passwordInputRef.current?.focus(), 100);
       return;
     }
 
@@ -231,6 +233,7 @@ export default function SignupPage() {
                       </div>
                       <div className="relative w-full rounded-extra-sm transition-[outline] duration-300 card">
                         <input
+                          ref={passwordInputRef}
                           className="p-3 w-full text-sm text-black placeholder:text-black/75 focus:outline-none focus:border-none pr-10 bg-transparent"
                           type={showPassword ? "text" : "password"}
                           placeholder="At least 8 characters and at least 1 special symbol or number"
@@ -267,21 +270,20 @@ export default function SignupPage() {
                 <button
                   className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
                     isSubmitting ||
-                    (showPasswordStep ? !canSubmit : !canContinue)
-                      ? "opacity-50 select-none pointer-events-none"
+                    (showPasswordStep ? !isPasswordValid : !canContinue)
+                      ? "opacity-50"
                       : ""
                   }`}
                   type="submit"
-                  disabled={
-                    isSubmitting ||
-                    (showPasswordStep ? !canSubmit : !canContinue)
-                  }
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <span className="w-5 h-5   rounded-lg border-2 border-white border-t-transparent animate-spin" />
                       Creating account...
                     </span>
+                  ) : showPasswordStep ? (
+                    "Sign up"
                   ) : (
                     "Continue"
                   )}
