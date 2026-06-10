@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, jsonb, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  jsonb,
+  index,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -76,7 +83,9 @@ export const verification = pgTable(
 // App data website configuration table
 export const website = pgTable("website", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   brandName: text("brand_name").notNull(),
   subdomainSlug: text("subdomain_slug").notNull().unique(),
   templateId: text("template_id").notNull(),
@@ -156,5 +165,3 @@ export const chatMessageRelations = relations(chatMessage, ({ one }) => ({
     references: [website.id],
   }),
 }));
-
-

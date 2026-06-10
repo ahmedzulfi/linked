@@ -9,16 +9,16 @@ Generate high-quality SVG graphics using Python scripts. All scripts output vali
 
 ## Available Scripts
 
-| Script | Purpose | Key Options |
-|--------|---------|-------------|
-| `generate_grid.py` | Grid patterns | `--cols`, `--rows`, `--shape`, `--vary-*` |
-| `generate_radial.py` | Radial/spiral/sunburst | `--spiral`, `--concentric`, `--sunburst` |
-| `generate_fractal.py` | Fractals (tree, koch, sierpinski) | `--tree`, `--koch`, `--sierpinski`, `--depth` |
-| `generate_wave.py` | Waves and audio viz | `--layers`, `--noise`, `--bars` |
-| `generate_particles.py` | Scatter/cluster/constellation | `--cluster`, `--gradient`, `--constellation` |
-| `generate_chart.py` | Data visualization | `--bar`, `--line`, `--pie`, `--donut` |
-| `generate_icon.py` | Common UI icons | `--icon NAME`, `--list`, `--filled` |
-| `optimize_svg.py` | Minify/optimize SVG | `--aggressive`, `--stats` |
+| Script                  | Purpose                           | Key Options                                   |
+| ----------------------- | --------------------------------- | --------------------------------------------- |
+| `generate_grid.py`      | Grid patterns                     | `--cols`, `--rows`, `--shape`, `--vary-*`     |
+| `generate_radial.py`    | Radial/spiral/sunburst            | `--spiral`, `--concentric`, `--sunburst`      |
+| `generate_fractal.py`   | Fractals (tree, koch, sierpinski) | `--tree`, `--koch`, `--sierpinski`, `--depth` |
+| `generate_wave.py`      | Waves and audio viz               | `--layers`, `--noise`, `--bars`               |
+| `generate_particles.py` | Scatter/cluster/constellation     | `--cluster`, `--gradient`, `--constellation`  |
+| `generate_chart.py`     | Data visualization                | `--bar`, `--line`, `--pie`, `--donut`         |
+| `generate_icon.py`      | Common UI icons                   | `--icon NAME`, `--list`, `--filled`           |
+| `optimize_svg.py`       | Minify/optimize SVG               | `--aggressive`, `--stats`                     |
 
 ## Quick Examples
 
@@ -51,6 +51,7 @@ python scripts/optimize_svg.py input.svg --aggressive -o output.svg
 ## Script Usage Patterns
 
 ### Grid Patterns
+
 ```bash
 python scripts/generate_grid.py \
   -c 8 -r 8           # columns and rows
@@ -63,6 +64,7 @@ python scripts/generate_grid.py \
 ```
 
 ### Radial Patterns
+
 ```bash
 # Concentric rings
 python scripts/generate_radial.py --concentric --rings 5 --vary-hue
@@ -72,6 +74,7 @@ python scripts/generate_radial.py --sunburst -n 24 --vary-length
 ```
 
 ### Fractals
+
 ```bash
 # Koch snowflake
 python scripts/generate_fractal.py --koch --depth 4 --fill "#3B82F6"
@@ -81,6 +84,7 @@ python scripts/generate_fractal.py --sierpinski --depth 5
 ```
 
 ### Charts
+
 ```bash
 # Line chart with points
 python scripts/generate_chart.py --line --data "10,30,20,50" --show-points --smooth
@@ -90,6 +94,7 @@ python scripts/generate_chart.py --donut --data "40,30,20,10" --labels "A,B,C,D"
 ```
 
 ### Icons
+
 ```bash
 # List all available icons
 python scripts/generate_icon.py --list
@@ -109,6 +114,7 @@ python scripts/generate_icon.py --list
 ## Piping and Composition
 
 Scripts can be piped together:
+
 ```bash
 # Generate and optimize
 python scripts/generate_grid.py -c 10 -r 10 | python scripts/optimize_svg.py --aggressive
@@ -120,6 +126,7 @@ python scripts/generate_fractal.py --tree --depth 10 | python scripts/optimize_s
 ## SVG Fundamentals Reference
 
 See [references/svg-fundamentals.md](references/svg-fundamentals.md) for:
+
 - Core SVG structure and viewBox
 - Element types (rect, circle, path, etc.)
 - Path command syntax

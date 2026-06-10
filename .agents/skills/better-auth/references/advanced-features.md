@@ -28,6 +28,7 @@ export const auth = betterAuth({
 ### Client Usage
 
 **Enable 2FA**:
+
 ```typescript
 // Generate QR code for authenticator app
 const { data, error } = await authClient.twoFactor.enable({
@@ -42,6 +43,7 @@ if (data) {
 ```
 
 **Verify Setup Code**:
+
 ```typescript
 // User enters code from authenticator app
 await authClient.twoFactor.verifySetup({
@@ -50,6 +52,7 @@ await authClient.twoFactor.verifySetup({
 ```
 
 **Sign In with 2FA**:
+
 ```typescript
 // Step 1: Sign in with email/password
 const { data: session, error } = await authClient.signIn.email({
@@ -66,6 +69,7 @@ if (session?.user.twoFactorEnabled) {
 ```
 
 **Disable 2FA**:
+
 ```typescript
 await authClient.twoFactor.disable({
   password: "user-password", // Confirm with password
@@ -119,6 +123,7 @@ export const auth = betterAuth({
 ### Client Usage
 
 **Create Organization**:
+
 ```typescript
 await authClient.organization.create({
   name: "Acme Corp",
@@ -131,6 +136,7 @@ await authClient.organization.create({
 ```
 
 **List User Organizations**:
+
 ```typescript
 const { data: orgs } = await authClient.organization.list();
 
@@ -138,6 +144,7 @@ const { data: orgs } = await authClient.organization.list();
 ```
 
 **Switch Active Organization**:
+
 ```typescript
 await authClient.organization.setActive({
   organizationId: "org_123",
@@ -145,6 +152,7 @@ await authClient.organization.setActive({
 ```
 
 **Invite Member**:
+
 ```typescript
 await authClient.organization.inviteMember({
   organizationId: "org_123",
@@ -154,6 +162,7 @@ await authClient.organization.inviteMember({
 ```
 
 **Update Member Role**:
+
 ```typescript
 await authClient.organization.updateMemberRole({
   organizationId: "org_123",
@@ -163,6 +172,7 @@ await authClient.organization.updateMemberRole({
 ```
 
 **Remove Member**:
+
 ```typescript
 await authClient.organization.removeMember({
   organizationId: "org_123",
@@ -171,6 +181,7 @@ await authClient.organization.removeMember({
 ```
 
 **Check Permissions**:
+
 ```typescript
 const canDelete = await authClient.organization.hasPermission({
   organizationId: "org_123",
@@ -183,6 +194,7 @@ if (canDelete) {
 ```
 
 **Accept Invitation**:
+
 ```typescript
 await authClient.organization.acceptInvitation({
   invitationId: "inv_789",
@@ -317,6 +329,7 @@ export const auth = betterAuth({
 ### Client Usage
 
 **Register Passkey**:
+
 ```typescript
 // User must be authenticated first
 const { data, error } = await authClient.passkey.register({
@@ -329,6 +342,7 @@ if (data) {
 ```
 
 **Sign In with Passkey**:
+
 ```typescript
 const { data: session, error } = await authClient.passkey.signIn();
 
@@ -338,6 +352,7 @@ if (session) {
 ```
 
 **List User's Passkeys**:
+
 ```typescript
 const { data: passkeys } = await authClient.passkey.list();
 
@@ -345,6 +360,7 @@ const { data: passkeys } = await authClient.passkey.list();
 ```
 
 **Remove Passkey**:
+
 ```typescript
 await authClient.passkey.remove({
   passkeyId: "pk_123",
@@ -450,6 +466,7 @@ await authClient.session.revokeOthers();
 ### From Clerk
 
 **Key differences**:
+
 - Clerk: Third-party service → better-auth: Self-hosted
 - Clerk: Proprietary → better-auth: Open source
 - Clerk: Monthly cost → better-auth: Free
@@ -458,6 +475,7 @@ await authClient.session.revokeOthers();
 
 1. **Export user data** from Clerk (CSV or API)
 2. **Import into better-auth database**:
+
    ```typescript
    // migration script
    const clerkUsers = await fetchClerkUsers();
@@ -472,7 +490,9 @@ await authClient.session.revokeOthers();
      });
    }
    ```
+
 3. **Replace Clerk SDK** with better-auth client:
+
    ```typescript
    // Before (Clerk)
    import { useUser } from "@clerk/nextjs";
@@ -483,6 +503,7 @@ await authClient.session.revokeOthers();
    const { data: session } = authClient.useSession();
    const user = session?.user;
    ```
+
 4. **Update middleware** for session verification
 5. **Configure social providers** (same OAuth apps, different config)
 
@@ -491,6 +512,7 @@ await authClient.session.revokeOthers();
 ### From Auth.js (NextAuth)
 
 **Key differences**:
+
 - Auth.js: Limited features → better-auth: Comprehensive (2FA, orgs, etc.)
 - Auth.js: Callbacks-heavy → better-auth: Plugin-based
 - Auth.js: Session handling varies → better-auth: Consistent
@@ -499,13 +521,18 @@ await authClient.session.revokeOthers();
 
 1. **Database schema**: Auth.js and better-auth use similar schemas, but column names differ
 2. **Replace configuration**:
+
    ```typescript
    // Before (Auth.js)
    import NextAuth from "next-auth";
    import GoogleProvider from "next-auth/providers/google";
 
    export default NextAuth({
-     providers: [GoogleProvider({ /* ... */ })],
+     providers: [
+       GoogleProvider({
+         /* ... */
+       }),
+     ],
    });
 
    // After (better-auth)
@@ -513,11 +540,15 @@ await authClient.session.revokeOthers();
 
    export const auth = betterAuth({
      socialProviders: {
-       google: { /* ... */ },
+       google: {
+         /* ... */
+       },
      },
    });
    ```
+
 3. **Update client hooks**:
+
    ```typescript
    // Before
    import { useSession } from "next-auth/react";
@@ -535,6 +566,7 @@ For detailed Auth0 migration instructions:
 https://better-auth.com/docs/guides/migrations/auth0
 
 **Key points**:
+
 - Export users via Auth0 Management API
 - Map Auth0 user metadata to better-auth fields
 - Recreate social connections as better-auth providers
@@ -548,6 +580,7 @@ For detailed Supabase Auth migration instructions:
 https://better-auth.com/docs/guides/migrations/supabase
 
 **Key points**:
+
 - Export users from Supabase auth.users table
 - Migrate to better-auth schema (user, session, account)
 - Update client from @supabase/auth-helpers to better-auth client
@@ -561,6 +594,7 @@ For detailed WorkOS migration instructions:
 https://better-auth.com/docs/guides/migrations/workos
 
 **Key points**:
+
 - Export organization and user data
 - Map WorkOS organizations to better-auth organizations plugin
 - Recreate SSO connections as better-auth SSO providers
@@ -574,9 +608,10 @@ https://better-auth.com/docs/guides/migrations/workos
 
 ```typescript
 const auth = betterAuth({
-  baseURL: process.env.NODE_ENV === "production"
-    ? "https://yourdomain.com"
-    : "http://localhost:3000",
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "https://yourdomain.com"
+      : "http://localhost:3000",
   // ...
 });
 ```
@@ -698,6 +733,7 @@ ngrok http 3000
 ---
 
 **Official Resources**:
+
 - 2FA Plugin: https://better-auth.com/docs/plugins/two-factor
 - Organizations: https://better-auth.com/docs/plugins/organization
 - Passkeys: https://better-auth.com/docs/plugins/passkey

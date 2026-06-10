@@ -9,7 +9,9 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
-  secret: process.env.BETTER_AUTH_SECRET || "linkedpage_local_secret_key_123456_better",
+  secret:
+    process.env.BETTER_AUTH_SECRET ||
+    "linkedpage_local_secret_key_123456_better",
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   emailAndPassword: {
     enabled: true,
@@ -34,7 +36,9 @@ export async function getAuthenticatedUser(): Promise<User | null> {
       lastName,
       email: session.user.email,
       passwordHash: "",
-      createdAt: session.user.createdAt ? new Date(session.user.createdAt).toISOString() : new Date().toISOString(),
+      createdAt: session.user.createdAt
+        ? new Date(session.user.createdAt).toISOString()
+        : new Date().toISOString(),
     };
   } catch (e) {
     console.error("Error in getAuthenticatedUser:", e);

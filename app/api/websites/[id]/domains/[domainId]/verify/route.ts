@@ -8,7 +8,7 @@ const resolveA = promisify(dns.resolve4);
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ id: string; domainId: string }> }
+  { params }: { params: Promise<{ id: string; domainId: string }> },
 ) {
   try {
     const user = await getAuthenticatedUser();
@@ -26,9 +26,14 @@ export async function POST(
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    const domainIndex = website.customDomains.findIndex((d) => d.id === domainId);
+    const domainIndex = website.customDomains.findIndex(
+      (d) => d.id === domainId,
+    );
     if (domainIndex === -1) {
-      return NextResponse.json({ error: "Domain connection not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Domain connection not found" },
+        { status: 404 },
+      );
     }
 
     const domain = website.customDomains[domainIndex];
@@ -57,6 +62,9 @@ export async function POST(
 
     return NextResponse.json({ success: true, verified });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Domain verification failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Domain verification failed" },
+      { status: 500 },
+    );
   }
 }

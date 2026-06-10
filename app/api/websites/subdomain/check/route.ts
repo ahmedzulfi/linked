@@ -14,7 +14,10 @@ export async function GET(request: Request) {
     const websiteId = searchParams.get("websiteId");
 
     if (!slug) {
-      return NextResponse.json({ error: "Subdomain slug is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Subdomain slug is required" },
+        { status: 400 },
+      );
     }
 
     if (!/^[a-z0-9-]{3,30}$/.test(slug)) {
@@ -26,6 +29,9 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ success: true, available: isAvailable });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Subdomain verification failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Subdomain verification failed" },
+      { status: 500 },
+    );
   }
 }

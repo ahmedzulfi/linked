@@ -26,7 +26,8 @@ export default function NotFound() {
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl font-medium text-black">404</h1>
             <p className="text-base text-[#6B6B6B] leading-relaxed">
-              This page doesn't exist. Maybe it was moved, deleted, or you typed the URL incorrectly.
+              This page doesn't exist. Maybe it was moved, deleted, or you typed
+              the URL incorrectly.
             </p>
           </div>
 

@@ -14,10 +14,10 @@ function parseCSV(csvText: string): Record<string, string>[] {
     if (char === '"') {
       insideQuotes = !insideQuotes;
       currentLine += char;
-    } else if (char === '\n' && !insideQuotes) {
+    } else if (char === "\n" && !insideQuotes) {
       lines.push(currentLine);
       currentLine = "";
-    } else if (char === '\r') {
+    } else if (char === "\r") {
       // ignore
     } else {
       currentLine += char;
@@ -37,7 +37,7 @@ function parseCSV(csvText: string): Record<string, string>[] {
       const char = line[i];
       if (char === '"') {
         inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
+      } else if (char === "," && !inQuotes) {
         cells.push(currentCell.trim().replace(/^"|"$/g, "").trim());
         currentCell = "";
       } else {
@@ -73,7 +73,10 @@ export async function POST(request: Request) {
     const file = formData.get("file") as File | null;
 
     if (!file) {
-      return NextResponse.json({ error: "ZIP file is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "ZIP file is required" },
+        { status: 400 },
+      );
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -81,7 +84,10 @@ export async function POST(request: Request) {
     try {
       zip = new AdmZip(buffer);
     } catch {
-      return NextResponse.json({ error: "Invalid ZIP file format" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid ZIP file format" },
+        { status: 400 },
+      );
     }
 
     const entries = zip.getEntries();
@@ -106,7 +112,7 @@ export async function POST(request: Request) {
     if (!profileContent) {
       return NextResponse.json(
         { error: "Could not find Profile.csv inside the ZIP archive." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -117,7 +123,10 @@ export async function POST(request: Request) {
     const rawEducation = educationContent ? parseCSV(educationContent) : [];
 
     if (profiles.length === 0) {
-      return NextResponse.json({ error: "Profile.csv is empty" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Profile.csv is empty" },
+        { status: 400 },
+      );
     }
 
     const pRow = profiles[0];
@@ -125,7 +134,8 @@ export async function POST(request: Request) {
     const lastName = pRow["Last Name"] || user?.lastName || "User";
     const fullName = `${firstName} ${lastName}`;
     const headline = pRow["Headline"] || "Professional Expert";
-    const summary = pRow["Summary"] || `I'm ${fullName}. Welcome to my micro-site.`;
+    const summary =
+      pRow["Summary"] || `I'm ${fullName}. Welcome to my micro-site.`;
     const location = pRow["Address"] || "San Francisco, CA";
 
     // Map experience
@@ -178,7 +188,7 @@ export async function POST(request: Request) {
   } catch (e: any) {
     return NextResponse.json(
       { error: e.message || "Failed to process the LinkedIn ZIP data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

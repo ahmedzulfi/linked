@@ -8,6 +8,7 @@
 ## When to Use This Template
 
 Use this template when:
+
 - Teaching readers how to build, configure, or implement something specific
 - The outcome is a working piece of code, a configured tool, or a completed setup
 - The audience needs to follow along step by step
@@ -15,6 +16,7 @@ Use this template when:
 - You have hands-on experience with the tool/technology and can share optimization tips
 
 Do NOT use this template for:
+
 - High-level strategy or opinion pieces (use news-analysis or data-research)
 - Reference/FAQ content (use faq-knowledge)
 - Content without concrete, reproducible steps
@@ -28,11 +30,13 @@ Do NOT use this template for:
 ```
 
 **Examples:**
+
 - "Claude Code Tutorial: Building a Blog Automation Pipeline in 2026"
 - "Next.js 15 Tutorial: Server Components API Route in 2026"
 - "Docker Compose Tutorial: Multi-Container Dev Environment in 2026"
 
 **Title Rules:**
+
 - Include the primary tool/technology name
 - State the specific outcome the reader will achieve
 - Include the current year for freshness signals
@@ -63,6 +67,7 @@ Do NOT use this template for:
 [ANSWER-FIRST] State exactly what the reader needs before starting. Be specific about versions.
 
 **Include:**
+
 - Required tools with exact version numbers
 - Operating system compatibility notes
 - Prior knowledge level (beginner/intermediate/advanced)
@@ -71,6 +76,7 @@ Do NOT use this template for:
 
 ```markdown
 **You'll need:**
+
 - [Tool 1] v[X.X] or later ([install link])
 - [Tool 2] v[X.X] or later ([install link])
 - [Account/API key] ([signup link])
@@ -94,6 +100,7 @@ Here's what the finished [project] looks like:
 [IMAGE: screenshot or demo of the completed project]
 
 **What it does:**
+
 - [Capability 1]
 - [Capability 2]
 - [Capability 3]
@@ -111,6 +118,7 @@ Here's what the finished [project] looks like:
 [ANSWER-FIRST] State what the setup accomplishes and how long it takes.
 
 **Structure:**
+
 1. Environment setup (directory structure, project initialization)
 2. Installation of dependencies
 3. Configuration files
@@ -126,7 +134,9 @@ Here's what the finished [project] looks like:
 [Brief explanation of what this does and why]
 
 \`\`\`bash
+
 # [Descriptive comment]
+
 [command 1]
 [command 2]
 \`\`\`
@@ -134,7 +144,9 @@ Here's what the finished [project] looks like:
 ### Step 2: [Install Dependencies]
 
 \`\`\`bash
+
 # [Descriptive comment]
+
 [command]
 \`\`\`
 
@@ -143,7 +155,7 @@ Here's what the finished [project] looks like:
 \`\`\`[language]
 // [config filename]
 {
-  [configuration with inline comments]
+[configuration with inline comments]
 }
 \`\`\`
 
@@ -163,8 +175,8 @@ Expected output:
 
 **Common setup errors:**
 
-| Error | Cause | Fix |
-|-------|-------|-----|
+| Error           | Cause            | Fix          |
+| --------------- | ---------------- | ------------ |
 | [Error message] | [Why it happens] | [How to fix] |
 | [Error message] | [Why it happens] | [How to fix] |
 
@@ -207,6 +219,7 @@ Each step is an H2 heading. Follow this structure for every step:
 ```
 
 **Rules for step sections:**
+
 - Each step should produce a visible, testable result
 - Code blocks must be complete and copy-pasteable (no ellipsis or "..." shortcuts)
 - Include the filename where code should be placed
@@ -264,8 +277,8 @@ Expected result:
 
 [ANSWER-FIRST] Here are the [N] most common issues and how to fix them.
 
-| Problem | Symptom | Solution |
-|---------|---------|----------|
+| Problem   | Symptom        | Solution                 |
+| --------- | -------------- | ------------------------ |
 | [Issue 1] | [What you see] | [Exact fix with command] |
 | [Issue 2] | [What you see] | [Exact fix with command] |
 | [Issue 3] | [What you see] | [Exact fix with command] |
@@ -291,16 +304,19 @@ Expected result:
 [ANSWER-FIRST] Now that you have a working [project], here's how to take it further.
 
 **Extend this project:**
+
 - [Enhancement 1]: [Brief description] - [INTERNAL-LINK to related tutorial]
 - [Enhancement 2]: [Brief description] - [INTERNAL-LINK to related tutorial]
 - [Enhancement 3]: [Brief description]
 
 **Related tutorials:**
+
 - [INTERNAL-LINK: prerequisite or foundational tutorial]
 - [INTERNAL-LINK: advanced tutorial building on this one]
 - [INTERNAL-LINK: alternative approach or complementary tool]
 
 **Official resources:**
+
 - [Link to official documentation]
 - [Link to GitHub repo or examples]
 ```
@@ -332,6 +348,7 @@ Expected result:
 ```
 
 **FAQ Rules:**
+
 - Phrase questions exactly as users would type them into a search engine
 - Answer in the first sentence - no throat-clearing
 - Include code snippets in answers when relevant

@@ -6,7 +6,10 @@ import { useEditor } from "@/context/EditorContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { AlertCircle, ArrowRight } from "lucide-react";
-import { AnimatedUploadIllustration, AnimatedGeneratingIllustration } from "@/components/AnimatedSVGs";
+import {
+  AnimatedUploadIllustration,
+  AnimatedGeneratingIllustration,
+} from "@/components/AnimatedSVGs";
 
 function OnboardingInner() {
   const router = useRouter();
@@ -28,7 +31,9 @@ function OnboardingInner() {
 
   const handleUploadZipWithFile = async (file: File) => {
     if (file.size > 20 * 1024 * 1024) {
-      toast.error("LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.");
+      toast.error(
+        "LinkedIn exports are typically under 5MB. Files larger than 20MB are not allowed.",
+      );
       return;
     }
     setStep("loading");
@@ -129,7 +134,8 @@ function OnboardingInner() {
                   Import your LinkedIn Profile
                 </h1>
                 <p className="text-[14px] text-gray-500 text-center mb-6 leading-relaxed font-inter">
-                  Upload your LinkedIn data export ZIP to build a fully structured website instantly.
+                  Upload your LinkedIn data export ZIP to build a fully
+                  structured website instantly.
                 </p>
 
                 {/* ZIP Upload Section */}
@@ -171,7 +177,9 @@ function OnboardingInner() {
 
                 <div className="flex items-center gap-2 mb-4 select-none">
                   <div className="h-px bg-[#E6E6E6] flex-1" />
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-mono">Or</span>
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-mono">
+                    Or
+                  </span>
                   <div className="h-px bg-[#E6E6E6] flex-1" />
                 </div>
 
@@ -189,12 +197,52 @@ function OnboardingInner() {
                   </h3>
                   <div className="space-y-3">
                     {[
-                      { num: 1, text: <>Open LinkedIn's <a href="https://www.linkedin.com/psettings/member-data" target="_blank" rel="noopener noreferrer" className="text-[#3b82f6] font-semibold hover:underline">Data Settings</a>.</> },
-                      { num: 2, text: <>Select <strong>"Something in particular"</strong> and check the <strong>"Profile"</strong> box.</> },
-                      { num: 3, text: <>Click <strong>"Request archive"</strong> and enter password.</> },
-                      { num: 4, text: <>Download the ZIP from email and upload it above.</> }
+                      {
+                        num: 1,
+                        text: (
+                          <>
+                            Open LinkedIn's{" "}
+                            <a
+                              href="https://www.linkedin.com/psettings/member-data"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#3b82f6] font-semibold hover:underline"
+                            >
+                              Data Settings
+                            </a>
+                            .
+                          </>
+                        ),
+                      },
+                      {
+                        num: 2,
+                        text: (
+                          <>
+                            Select <strong>"Something in particular"</strong>{" "}
+                            and check the <strong>"Profile"</strong> box.
+                          </>
+                        ),
+                      },
+                      {
+                        num: 3,
+                        text: (
+                          <>
+                            Click <strong>"Request archive"</strong> and enter
+                            password.
+                          </>
+                        ),
+                      },
+                      {
+                        num: 4,
+                        text: (
+                          <>Download the ZIP from email and upload it above.</>
+                        ),
+                      },
                     ].map((item) => (
-                      <div key={item.num} className="flex gap-3 text-[12.5px] text-gray-500">
+                      <div
+                        key={item.num}
+                        className="flex gap-3 text-[12.5px] text-gray-500"
+                      >
                         <span className="w-5 h-5 rounded-full bg-[#8DB8FF]/15 text-[#3b82f6] text-[10px] font-bold flex items-center justify-center shrink-0 select-none">
                           {item.num}
                         </span>
@@ -203,8 +251,6 @@ function OnboardingInner() {
                     ))}
                   </div>
                 </div>
-
-
               </motion.div>
             )}
 
@@ -228,7 +274,10 @@ function OnboardingInner() {
                   </div>
                 </div>
                 <div className="w-full bg-gray-100 h-1.5 rounded-full overflow-hidden mt-6">
-                  <div className="bg-blue-500 h-full transition-all duration-300" style={{ width: `${progress}%` }} />
+                  <div
+                    className="bg-blue-500 h-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
                 </div>
               </motion.div>
             )}
@@ -247,9 +296,12 @@ function OnboardingInner() {
                   <AlertCircle className="w-5 h-5 text-[#E45A5A]" />
                 </div>
 
-                <h2 className="text-xl font-semibold text-[#2A2A2F] mb-2 font-inter">Could not fetch public profile</h2>
+                <h2 className="text-xl font-semibold text-[#2A2A2F] mb-2 font-inter">
+                  Could not fetch public profile
+                </h2>
                 <div className="text-[13.5px] text-gray-500 leading-relaxed mb-6 font-inter">
-                  LinkedIn couldn't be read publicly. Please download your settings archive from{" "}
+                  LinkedIn couldn't be read publicly. Please download your
+                  settings archive from{" "}
                   <a
                     href="https://www.linkedin.com/psettings/member-data"
                     target="_blank"
@@ -274,8 +326,18 @@ function OnboardingInner() {
                       className="hidden"
                       disabled={isImporting}
                     />
-                    <svg className="w-8 h-8 text-gray-400 mb-2 transition-transform duration-200 group-hover:scale-105" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                    <svg
+                      className="w-8 h-8 text-gray-400 mb-2 transition-transform duration-200 group-hover:scale-105"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z"
+                      />
                     </svg>
                     {zipFile ? (
                       <div className="flex flex-col items-center gap-1">
@@ -298,7 +360,9 @@ function OnboardingInner() {
 
                 <div className="flex items-center gap-2 mb-4 select-none">
                   <div className="h-px bg-[#E6E6E6] flex-1" />
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-mono">Or</span>
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest font-mono">
+                    Or
+                  </span>
                   <div className="h-px bg-[#E6E6E6] flex-1" />
                 </div>
 

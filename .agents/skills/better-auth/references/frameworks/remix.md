@@ -17,6 +17,7 @@ bun add better-auth drizzle-orm postgres
 ### 1. Create Auth Configuration
 
 **`app/lib/auth.server.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -46,6 +47,7 @@ export type Session = typeof auth.$Infer.Session;
 ### 2. Create API Route Handler
 
 **`app/routes/api.auth.$.tsx`**:
+
 ```typescript
 import { auth } from "~/lib/auth.server";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
@@ -64,6 +66,7 @@ export async function action({ request }: ActionFunctionArgs) {
 ## Client Setup
 
 **`app/lib/auth.client.ts`**:
+
 ```typescript
 import { createAuthClient } from "better-auth/react";
 
@@ -81,6 +84,7 @@ export const { signIn, signUp, signOut, useSession } = authClient;
 ### Protected Loader
 
 **`app/routes/dashboard.tsx`**:
+
 ```typescript
 import { auth } from "~/lib/auth.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";
@@ -114,6 +118,7 @@ export default function Dashboard() {
 ### Login Action
 
 **`app/routes/login.tsx`**:
+
 ```typescript
 import { auth } from "~/lib/auth.server";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
@@ -176,6 +181,7 @@ export default function Login() {
 ### Root Loader with Session
 
 **`app/root.tsx`**:
+
 ```typescript
 import { auth } from "~/lib/auth.server";
 import type { LoaderFunctionArgs } from "@remix-run/node";

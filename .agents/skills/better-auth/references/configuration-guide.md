@@ -41,7 +41,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 
 // ❌ WRONG (CommonJS - no longer works)
-const { betterAuth } = require('better-auth');
+const { betterAuth } = require("better-auth");
 ```
 
 ---
@@ -202,11 +202,14 @@ import { cors } from "hono/cors";
 
 const app = new Hono<{ Bindings: Env }>();
 
-app.use("/api/auth/*", cors({
-  origin: ["https://yourdomain.com", "http://localhost:3000"],
-  credentials: true, // CRITICAL: Required for sessions
-  allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-}));
+app.use(
+  "/api/auth/*",
+  cors({
+    origin: ["https://yourdomain.com", "http://localhost:3000"],
+    credentials: true, // CRITICAL: Required for sessions
+    allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  }),
+);
 
 app.all("/api/auth/*", async (c) => {
   const auth = createAuth(c.env);
@@ -307,16 +310,16 @@ Allowlist-based multi-domain support for Vercel previews, reverse proxies, multi
 
 ```typescript
 export const auth = betterAuth({
-    baseURL: {
-        allowedHosts: [
-            "myapp.com",
-            "*.vercel.app",
-            "preview-*.myapp.com",
-            "localhost:3000",
-        ],
-        fallback: "https://myapp.com",
-        protocol: "auto",
-    },
+  baseURL: {
+    allowedHosts: [
+      "myapp.com",
+      "*.vercel.app",
+      "preview-*.myapp.com",
+      "localhost:3000",
+    ],
+    fallback: "https://myapp.com",
+    protocol: "auto",
+  },
 });
 ```
 
@@ -330,10 +333,10 @@ Non-destructive rotation without invalidating existing sessions.
 
 ```typescript
 export const auth = betterAuth({
-    secrets: [
-        { version: 2, value: "new-secret-key-at-least-32-chars" },
-        { version: 1, value: "old-secret-key-still-used-to-decrypt" },
-    ],
+  secrets: [
+    { version: 2, value: "new-secret-key-at-least-32-chars" },
+    { version: 1, value: "old-secret-key-still-used-to-decrypt" },
+  ],
 });
 ```
 
@@ -347,9 +350,9 @@ For read-replica database setups. GET becomes read-only, returns `needsRefresh: 
 
 ```typescript
 export const auth = betterAuth({
-    session: {
-        deferSessionRefresh: true,
-    },
+  session: {
+    deferSessionRefresh: true,
+  },
 });
 ```
 
@@ -361,11 +364,13 @@ Store verification tokens in Redis instead of the database.
 
 ```typescript
 export const auth = betterAuth({
-    secondaryStorage: { /* Redis config */ },
-    verification: {
-        storeIdentifier: "hashed",
-        storeInDatabase: false,
-    },
+  secondaryStorage: {
+    /* Redis config */
+  },
+  verification: {
+    storeIdentifier: "hashed",
+    storeInDatabase: false,
+  },
 });
 ```
 
@@ -380,7 +385,7 @@ import { drizzleAdapter } from "@better-auth/drizzle-adapter";
 import { betterAuth } from "better-auth/minimal";
 
 export const auth = betterAuth({
-    database: drizzleAdapter(db, { provider: "pg" }),
+  database: drizzleAdapter(db, { provider: "pg" }),
 });
 ```
 
@@ -394,12 +399,12 @@ Pass D1 binding directly without Drizzle/Kysely:
 import { betterAuth } from "better-auth";
 
 export default {
-    async fetch(request, env) {
-        const auth = betterAuth({
-            database: env.DB,
-        });
-        return auth.handler(request);
-    },
+  async fetch(request, env) {
+    const auth = betterAuth({
+      database: env.DB,
+    });
+    return auth.handler(request);
+  },
 } satisfies ExportedHandler<{ DB: D1Database }>;
 ```
 
@@ -408,6 +413,7 @@ export default {
 ## Migration from v1.3.x
 
 If upgrading from better-auth v1.3.x, see `migration-guide-1.4.0.md` for:
+
 - ESM migration steps
 - API rename changes
 - Callback signature updates
@@ -431,6 +437,7 @@ If upgrading from better-auth v1.3.x, see `migration-guide-1.4.0.md` for:
 
 **Cause**: Cookie domain mismatch or missing CORS credentials
 **Fix**:
+
 1. Verify `baseURL` matches deployed domain
 2. Ensure CORS `credentials: true`
 3. Check cookie `SameSite` and `Secure` settings
@@ -439,6 +446,7 @@ If upgrading from better-auth v1.3.x, see `migration-guide-1.4.0.md` for:
 
 **Cause**: Callback URL doesn't match provider settings
 **Fix**: Ensure exact match in provider settings:
+
 - ✅ `https://yourdomain.com/api/auth/callback/google`
 - ❌ `https://yourdomain.com/api/auth/callback/google/` (trailing slash)
 - ❌ `http://yourdomain.com/api/auth/callback/google` (http vs https)

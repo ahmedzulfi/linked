@@ -22,6 +22,7 @@ competitive analysis.
 ### Step 1: Topic & Intent
 
 Gather from the user:
+
 1. **Topic or target keyword** (required)
 2. **Target keyword** - the exact phrase to rank for (if different from topic)
 3. **Search intent** - Informational, commercial, or transactional
@@ -107,6 +108,7 @@ Create a structured outline with the following format:
 ```
 
 Guidelines for heading generation:
+
 - 60-70% of H2 headings should be in question format
 - Each H2 should have a clear answer-first paragraph prompt
 - Include H3 subsections only where the topic genuinely warrants subdivision
@@ -117,6 +119,7 @@ Guidelines for heading generation:
 ### Step 4: Content Gaps
 
 After generating the outline, add a dedicated content gaps analysis:
+
 1. List 3-5 topics or angles that all top-ranking competitors miss
 2. Identify opportunities for original data, case studies, or perspectives
 3. Note format advantages this post can have (more visuals, better structure,

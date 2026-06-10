@@ -18,6 +18,7 @@ bun add better-auth
 ### Create Auth Client
 
 **`lib/auth-client.ts`**:
+
 ```typescript
 import { createAuthClient } from "better-auth/react";
 import * as SecureStore from "expo-secure-store";
@@ -62,6 +63,7 @@ export const { signIn, signUp, signOut, useSession } = authClient;
 ### Login Screen
 
 **`app/(auth)/login.tsx`**:
+
 ```typescript
 import { useState } from "react";
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
@@ -140,6 +142,7 @@ const styles = StyleSheet.create({
 ### Using expo-auth-session
 
 **`lib/oauth.ts`**:
+
 ```typescript
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from "expo-auth-session";
@@ -165,6 +168,7 @@ export async function signInWithGoogle() {
 ### OAuth Button Component
 
 **`components/GoogleSignIn.tsx`**:
+
 ```typescript
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 import { signInWithGoogle } from "@/lib/oauth";
@@ -193,6 +197,7 @@ const styles = StyleSheet.create({
 ### Deep Linking Setup
 
 **`app.json`**:
+
 ```json
 {
   "expo": {
@@ -216,6 +221,7 @@ const styles = StyleSheet.create({
 ### Auth Context
 
 **`context/AuthContext.tsx`**:
+
 ```typescript
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSession, signOut as authSignOut } from "@/lib/auth-client";
@@ -268,6 +274,7 @@ export function useAuth() {
 ### Root Layout
 
 **`app/_layout.tsx`**:
+
 ```typescript
 import { Slot } from "expo-router";
 import { AuthProvider } from "@/context/AuthContext";
@@ -286,6 +293,7 @@ export default function RootLayout() {
 ## Protected Screens
 
 **`app/(app)/home.tsx`**:
+
 ```typescript
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useAuth } from "@/context/AuthContext";
@@ -322,12 +330,15 @@ const styles = StyleSheet.create({
 import { authClient } from "@/lib/auth-client";
 
 async function fetchProtectedData() {
-  const response = await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/protected`, {
-    headers: {
-      // Get session token from auth client
-      ...authClient.getHeaders(),
+  const response = await fetch(
+    `${process.env.EXPO_PUBLIC_API_URL}/api/protected`,
+    {
+      headers: {
+        // Get session token from auth client
+        ...authClient.getHeaders(),
+      },
     },
-  });
+  );
 
   return response.json();
 }
@@ -358,6 +369,7 @@ console.log(session?.user.lastLoginMethod); // "email" | "google" | etc.
 ## Environment Variables
 
 **`.env`**:
+
 ```env
 EXPO_PUBLIC_API_URL=http://localhost:3000
 ```
@@ -375,6 +387,7 @@ SecureStore keys must be under 2048 bytes. The auth client handles this automati
 ### OAuth Redirect Issues
 
 Ensure your deep link scheme is configured:
+
 1. Add scheme to `app.json`
 2. Register the scheme with OAuth provider
 3. Handle the callback in your app
@@ -382,8 +395,9 @@ Ensure your deep link scheme is configured:
 ### Network Errors on iOS Simulator
 
 Use your machine's IP instead of localhost:
+
 ```typescript
-baseURL: "http://192.168.1.xxx:3000"
+baseURL: "http://192.168.1.xxx:3000";
 ```
 
 ---

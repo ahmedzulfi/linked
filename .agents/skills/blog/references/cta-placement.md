@@ -10,18 +10,18 @@
 
 ## Placement Rules by Content Type
 
-| Content Type | CTA Position | Rationale |
-|-------------|-------------|-----------|
-| How-to guide | After first completed step sequence | Value already demonstrated |
-| Listicle | After item #3-4 (mid-list) | Reader engaged but not finished |
-| Comparison | After recommendation section | Decision point reached |
-| Case study | After results section | Proof delivered |
-| Pillar page | End of each major section | Natural pause points |
-| Tutorial | After first working example | Success moment |
-| Product review | After verdict/rating | Purchase intent peaks |
-| Thought leadership | At natural conclusion | Reflection complete |
-| Data research | After key finding visualization | Impact moment |
-| FAQ | After the 3rd answer | Pattern established |
+| Content Type       | CTA Position                        | Rationale                       |
+| ------------------ | ----------------------------------- | ------------------------------- |
+| How-to guide       | After first completed step sequence | Value already demonstrated      |
+| Listicle           | After item #3-4 (mid-list)          | Reader engaged but not finished |
+| Comparison         | After recommendation section        | Decision point reached          |
+| Case study         | After results section               | Proof delivered                 |
+| Pillar page        | End of each major section           | Natural pause points            |
+| Tutorial           | After first working example         | Success moment                  |
+| Product review     | After verdict/rating                | Purchase intent peaks           |
+| Thought leadership | At natural conclusion               | Reflection complete             |
+| Data research      | After key finding visualization     | Impact moment                   |
+| FAQ                | After the 3rd answer                | Pattern established             |
 
 ## CTA Design Principles
 

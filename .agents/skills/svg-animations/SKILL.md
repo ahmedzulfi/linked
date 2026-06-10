@@ -8,6 +8,7 @@ This skill guides creation of handcrafted SVG animations — from simple animate
 ## SVG Fundamentals
 
 ### Coordinate System
+
 SVGs use a coordinate system defined by `viewBox="minX minY width height"`. The viewBox is your canvas — all coordinates are relative to it, making SVGs resolution-independent.
 
 ```svg
@@ -31,18 +32,18 @@ SVGs use a coordinate system defined by `viewBox="minX minY width height"`. The 
 
 The `d` attribute defines a path using commands. Uppercase = absolute, lowercase = relative.
 
-| Command | Purpose | Syntax |
-|---------|---------|--------|
-| M/m | Move to | `M x y` |
-| L/l | Line to | `L x y` |
-| H/h | Horizontal line | `H x` |
-| V/v | Vertical line | `V y` |
-| C/c | Cubic bézier | `C x1 y1, x2 y2, x y` |
-| S/s | Smooth cubic bézier | `S x2 y2, x y` |
-| Q/q | Quadratic bézier | `Q x1 y1, x y` |
-| T/t | Smooth quadratic | `T x y` |
-| A/a | Elliptical arc | `A rx ry rotation large-arc sweep x y` |
-| Z/z | Close path | `Z` |
+| Command | Purpose             | Syntax                                 |
+| ------- | ------------------- | -------------------------------------- |
+| M/m     | Move to             | `M x y`                                |
+| L/l     | Line to             | `L x y`                                |
+| H/h     | Horizontal line     | `H x`                                  |
+| V/v     | Vertical line       | `V y`                                  |
+| C/c     | Cubic bézier        | `C x1 y1, x2 y2, x y`                  |
+| S/s     | Smooth cubic bézier | `S x2 y2, x y`                         |
+| Q/q     | Quadratic bézier    | `Q x1 y1, x y`                         |
+| T/t     | Smooth quadratic    | `T x y`                                |
+| A/a     | Elliptical arc      | `A rx ry rotation large-arc sweep x y` |
+| Z/z     | Close path          | `Z`                                    |
 
 **Cubic Bézier** (`C`): Two control points define the curve. The first control point sets the departure angle, the second sets the arrival angle.
 
@@ -57,6 +58,7 @@ The `d` attribute defines a path using commands. Uppercase = absolute, lowercase
 ```
 
 **Arc** (`A`): `rx ry x-rotation large-arc-flag sweep-flag x y`
+
 - `large-arc-flag`: 0 = small arc, 1 = large arc (>180°)
 - `sweep-flag`: 0 = counterclockwise, 1 = clockwise
 
@@ -123,8 +125,15 @@ Many SVG attributes are valid CSS properties: `fill`, `stroke`, `opacity`, `tran
   transform-origin: center;
 }
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.15); opacity: 0.7; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
 }
 ```
 
@@ -133,6 +142,7 @@ Many SVG attributes are valid CSS properties: `fill`, `stroke`, `opacity`, `tran
 The most iconic SVG animation. Uses `stroke-dasharray` and `stroke-dashoffset` to make a path appear to draw itself.
 
 **How it works:**
+
 1. Set `stroke-dasharray` to the path's total length (one giant dash + one giant gap)
 2. Set `stroke-dashoffset` to the same length (shifts the dash off-screen)
 3. Animate `stroke-dashoffset` to 0 (slides the dash into view)
@@ -156,8 +166,9 @@ The most iconic SVG animation. Uses `stroke-dasharray` and `stroke-dashoffset` t
 ```
 
 **Getting exact path length in JS:**
+
 ```js
-const path = document.querySelector('.draw');
+const path = document.querySelector(".draw");
 const length = path.getTotalLength();
 path.style.strokeDasharray = length;
 path.style.strokeDashoffset = length;
@@ -166,9 +177,15 @@ path.style.strokeDashoffset = length;
 ### Staggered Multi-Path Drawing
 
 ```css
-.line-1 { animation-delay: 0s; }
-.line-2 { animation-delay: 0.3s; }
-.line-3 { animation-delay: 0.6s; }
+.line-1 {
+  animation-delay: 0s;
+}
+.line-2 {
+  animation-delay: 0.3s;
+}
+.line-3 {
+  animation-delay: 0.6s;
+}
 ```
 
 ### CSS `d` Property Animation
@@ -177,11 +194,15 @@ Modern browsers support animating the `d` attribute directly in CSS:
 
 ```css
 path {
-  d: path("M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z");
+  d: path(
+    "M 10,30 A 20,20 0,0,1 50,30 A 20,20 0,0,1 90,30 Q 90,60 50,90 Q 10,60 10,30 z"
+  );
   transition: d 0.5s ease;
 }
 path:hover {
-  d: path("M 10,50 A 20,20 0,0,1 50,10 A 20,20 0,0,1 90,50 Q 90,80 50,100 Q 10,80 10,50 z");
+  d: path(
+    "M 10,50 A 20,20 0,0,1 50,10 A 20,20 0,0,1 90,50 Q 90,80 50,100 Q 10,80 10,50 z"
+  );
 }
 ```
 
@@ -203,6 +224,7 @@ SMIL animations are declared directly inside SVG markup. They work even when SVG
 ```
 
 With keyframes:
+
 ```svg
 <animate attributeName="cx"
          values="50; 150; 100; 50"
@@ -253,6 +275,7 @@ Types: `translate`, `scale`, `rotate`, `skewX`, `skewY`
 ```
 
 Trigger values:
+
 - `begin="click"` — on click
 - `begin="2s"` — after 2 seconds
 - `begin="other.end"` — when another animation ends
@@ -269,6 +292,7 @@ Trigger values:
 `calcMode` options: `linear` (default), `discrete`, `paced`, `spline`
 
 `keySplines` takes cubic-bezier control points (x1 y1 x2 y2) per interval. Common easings:
+
 - Ease-in-out: `0.42 0 0.58 1`
 - Ease-out: `0 0 0.58 1`
 - Bounce-ish: `0.34 1.56 0.64 1`

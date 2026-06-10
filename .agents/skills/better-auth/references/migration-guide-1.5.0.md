@@ -20,18 +20,18 @@ Review all changes below before deploying.
 
 All previously `@deprecated` APIs have been removed:
 
-| Removed | Replacement |
-|---------|-------------|
-| `Adapter` | `DBAdapter` |
-| `TransactionAdapter` | `DBTransactionAdapter` |
-| `Store` (client) | `ClientStore` |
-| `AtomListener` (client) | `ClientAtomListener` |
-| `ClientOptions` | `BetterAuthClientOptions` |
-| `LiteralUnion`, `DeepPartial` | Import from `@better-auth/core` |
-| `onEmailVerification` | `afterEmailVerification` |
-| `sendChangeEmailVerification` | `sendChangeEmailConfirmation` |
+| Removed                         | Replacement                              |
+| ------------------------------- | ---------------------------------------- |
+| `Adapter`                       | `DBAdapter`                              |
+| `TransactionAdapter`            | `DBTransactionAdapter`                   |
+| `Store` (client)                | `ClientStore`                            |
+| `AtomListener` (client)         | `ClientAtomListener`                     |
+| `ClientOptions`                 | `BetterAuthClientOptions`                |
+| `LiteralUnion`, `DeepPartial`   | Import from `@better-auth/core`          |
+| `onEmailVerification`           | `afterEmailVerification`                 |
+| `sendChangeEmailVerification`   | `sendChangeEmailConfirmation`            |
 | `advanced.database.useNumberId` | `advanced.database.generateId: "serial"` |
-| Organization `permission` field | `permissions` (plural) |
+| Organization `permission` field | `permissions` (plural)                   |
 
 ### 2. `/forget-password/email-otp` Removed
 
@@ -167,8 +167,8 @@ throw APIError.from("BAD_REQUEST", MY_ERROR_CODES.MY_ERROR);
 
 ```typescript
 type PluginContext<Options extends BetterAuthOptions> = {
-    getPlugin: <ID extends string>(pluginId: ID) => /* inferred */ | null;
-    hasPlugin: <ID extends string>(pluginId: ID) => boolean;
+  getPlugin: <ID extends string>(pluginId: ID) => /* inferred */ null;
+  hasPlugin: <ID extends string>(pluginId: ID) => boolean;
 };
 ```
 
@@ -176,9 +176,9 @@ Register via module augmentation:
 
 ```typescript
 declare module "@better-auth/core" {
-    interface BetterAuthPluginRegistry<AuthOptions, Options> {
-        "my-plugin": { creator: typeof myPlugin };
-    }
+  interface BetterAuthPluginRegistry<AuthOptions, Options> {
+    "my-plugin": { creator: typeof myPlugin };
+  }
 }
 ```
 
@@ -199,9 +199,9 @@ The context passed to `init()` is the same reference used throughout the auth li
 ```typescript
 // Session freshness is now based on createdAt, not updatedAt
 export const auth = betterAuth({
-    session: {
-        freshAge: 60 * 5, // 5 minutes from session CREATION
-    },
+  session: {
+    freshAge: 60 * 5, // 5 minutes from session CREATION
+  },
 });
 ```
 
@@ -214,9 +214,9 @@ import { sso } from "@better-auth/sso";
 
 // To opt out:
 sso({
-    saml: {
-        enableInResponseToValidation: false,
-    },
+  saml: {
+    enableInResponseToValidation: false,
+  },
 });
 ```
 

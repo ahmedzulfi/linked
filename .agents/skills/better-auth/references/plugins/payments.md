@@ -118,13 +118,13 @@ app.post("/api/stripe/webhook", async (req, res) => {
 
 better-auth automatically handles:
 
-| Event | Action |
-|-------|--------|
-| `customer.subscription.created` | Creates subscription record |
-| `customer.subscription.updated` | Updates subscription status |
+| Event                           | Action                         |
+| ------------------------------- | ------------------------------ |
+| `customer.subscription.created` | Creates subscription record    |
+| `customer.subscription.updated` | Updates subscription status    |
 | `customer.subscription.deleted` | Marks subscription as canceled |
-| `invoice.payment_succeeded` | Updates payment status |
-| `invoice.payment_failed` | Marks payment as failed |
+| `invoice.payment_succeeded`     | Updates payment status         |
+| `invoice.payment_failed`        | Marks payment as failed        |
 
 ### Access Control by Plan
 
@@ -239,7 +239,7 @@ app.post("/api/polar/webhook", async (req, res) => {
 ### Stripe Metered Billing
 
 ```typescript
-stripe({
+(stripe({
   stripeClient,
   subscriptionConfig: {
     plans: [
@@ -251,13 +251,12 @@ stripe({
     ],
   },
 }),
-
-// Report usage
-await auth.api.stripe.reportUsage({
-  userId: session.user.id,
-  quantity: 100,  // API calls used
-  timestamp: Date.now(),
-});
+  // Report usage
+  await auth.api.stripe.reportUsage({
+    userId: session.user.id,
+    quantity: 100, // API calls used
+    timestamp: Date.now(),
+  }));
 ```
 
 ### Usage Tracking
@@ -320,7 +319,12 @@ if (subscription?.status === "trialing") {
 export const PLAN_FEATURES = {
   free: ["basic-feature"],
   pro: ["basic-feature", "advanced-feature", "priority-support"],
-  enterprise: ["basic-feature", "advanced-feature", "priority-support", "custom-integrations"],
+  enterprise: [
+    "basic-feature",
+    "advanced-feature",
+    "priority-support",
+    "custom-integrations",
+  ],
 };
 
 // Usage
@@ -357,19 +361,23 @@ function FeatureGate({ feature, children }) {
 ## Common Issues
 
 ### Stripe: "Webhook signature verification failed"
+
 - Ensure raw body is passed (not parsed JSON)
 - Verify webhook secret matches Dashboard setting
 - Check webhook URL is accessible
 
 ### Stripe: "Customer not found"
+
 - Enable `syncUserToCustomer: true`
 - Verify user signed up after plugin was configured
 
 ### Polar: "Invalid organization"
+
 - Check `organizationId` is correct
 - Verify API token has organization access
 
 ### General: "Subscription not updating"
+
 - Check webhook endpoint is registered
 - Verify webhook events are enabled
 - Check server logs for webhook errors

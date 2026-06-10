@@ -18,6 +18,9 @@ export async function GET() {
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Session check failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Session check failed" },
+      { status: 500 },
+    );
   }
 }

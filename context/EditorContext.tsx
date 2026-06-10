@@ -8,7 +8,12 @@ import React, {
   useEffect,
   type ReactNode,
 } from "react";
-import { ProfileData, TemplateId, MOCK_PROFILE, BLANK_PROFILE } from "@/shared/types";
+import {
+  ProfileData,
+  TemplateId,
+  MOCK_PROFILE,
+  BLANK_PROFILE,
+} from "@/shared/types";
 import { toast } from "sonner";
 
 // ─── State Shape ───────────────────────────────────────────────────────────────
@@ -31,13 +36,17 @@ interface EditorActions {
   setLinkedinUrl: (url: string) => void;
   startScrape: (url: string) => Promise<void>;
   startScrapeManual: (file: File) => Promise<boolean>;
-  updateField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  updateField: <K extends keyof ProfileData>(
+    key: K,
+    value: ProfileData[K],
+  ) => void;
   selectTemplate: (id: TemplateId) => void;
   resetEdits: () => void;
   clearProfile: () => void;
   useMockProfile: () => void;
   setScrapeError: (err: string | null) => void;
   setPendingZip: (file: File | null) => void;
+  createWebsiteWithProfile: (profileData: ProfileData) => Promise<string>;
 }
 
 type EditorContextValue = EditorState & EditorActions;
@@ -54,7 +63,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [linkedinUrl, setLinkedinUrlState] = useState("");
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [editedProfile, setEditedProfile] = useState<ProfileData | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("daniel-cross");
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<TemplateId>("daniel-cross");
   const [isLoading, setIsLoading] = useState(false);
   const [scrapeError, setScrapeError] = useState<string | null>(null);
   const [pendingZip, setPendingZip] = useState<File | null>(null);
@@ -63,7 +73,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const storedProfile = sessionStorage.getItem(SESSION_KEY);
-      const storedTemplate = sessionStorage.getItem(TEMPLATE_KEY) as TemplateId | null;
+      const storedTemplate = sessionStorage.getItem(
+        TEMPLATE_KEY,
+      ) as TemplateId | null;
       const storedUrl = sessionStorage.getItem(URL_KEY);
       if (storedProfile && !websiteId) {
         const p = JSON.parse(storedProfile) as ProfileData;
@@ -87,45 +99,53 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Helper to create a website in the backend and assign it the profile data
-  const createWebsiteWithProfile = useCallback(async (profileData: ProfileData): Promise<string> => {
-    const createRes = await fetch("/api/websites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ templateId: selectedTemplate }),
-    });
-    
-    if (createRes.status === 401) {
-      // User is not logged in. Redirect to signup to save their progress
-      window.location.href = "/signup?intent=save_scrape";
-      // We return a dummy promise that never resolves so the rest of the code doesn't crash before redirect
-      await new Promise(() => {});
-    }
-    
-    const createData = await createRes.json();
-    if (!createRes.ok || !createData.website) {
-      throw new Error(createData.error || "Failed to create website draft");
-    }
-    const newId = createData.website.id;
+  const createWebsiteWithProfile = useCallback(
+    async (profileData: ProfileData): Promise<string> => {
+      const createRes = await fetch("/api/websites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ templateId: selectedTemplate }),
+      });
 
-    // 2. Save profile data to the website
-    const updateRes = await fetch(`/api/websites/${newId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        brandName: profileData.name,
-        profile: profileData,
-      }),
-    });
-    const updateData = await updateRes.json();
-    if (!updateRes.ok) {
-      throw new Error(updateData.error || "Failed to save profile data to website draft");
-    }
+      if (createRes.status === 401) {
+        // User is not logged in. Redirect to signup to save their progress
+        window.location.href = "/signup?intent=save_scrape";
+        // We return a dummy promise that never resolves so the rest of the code doesn't crash before redirect
+        await new Promise(() => {});
+      }
 
-    setWebsiteId(newId);
-    sessionStorage.setItem("linkedpage_brand_name", profileData.name);
-    sessionStorage.setItem("linkedpage_subdomain", `${createData.website.subdomainSlug}.linkedpage.io`);
-    return newId;
-  }, [selectedTemplate]);
+      const createData = await createRes.json();
+      if (!createRes.ok || !createData.website) {
+        throw new Error(createData.error || "Failed to create website draft");
+      }
+      const newId = createData.website.id;
+
+      // 2. Save profile data to the website
+      const updateRes = await fetch(`/api/websites/${newId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          brandName: profileData.name,
+          profile: profileData,
+        }),
+      });
+      const updateData = await updateRes.json();
+      if (!updateRes.ok) {
+        throw new Error(
+          updateData.error || "Failed to save profile data to website draft",
+        );
+      }
+
+      setWebsiteId(newId);
+      sessionStorage.setItem("linkedpage_brand_name", profileData.name);
+      sessionStorage.setItem(
+        "linkedpage_subdomain",
+        `${createData.website.subdomainSlug}.linkedpage.io`,
+      );
+      return newId;
+    },
+    [selectedTemplate],
+  );
 
   // Load website from API
   const loadWebsite = useCallback(async (id: string) => {
@@ -144,9 +164,12 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       if (web.profile.linkedinUrl) {
         setLinkedinUrlState(web.profile.linkedinUrl);
       }
-      
+
       sessionStorage.setItem("linkedpage_brand_name", web.brandName);
-      sessionStorage.setItem("linkedpage_subdomain", `${web.subdomainSlug}.linkedpage.io`);
+      sessionStorage.setItem(
+        "linkedpage_subdomain",
+        `${web.subdomainSlug}.linkedpage.io`,
+      );
     } catch (e: any) {
       toast.error(e.message || "Failed to load website.");
     } finally {
@@ -202,70 +225,82 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, [websiteId, editedProfile, selectedTemplate]);
 
   // Scraping logic using the backend URL scraper
-  const startScrape = useCallback(async (url: string) => {
-    setIsLoading(true);
-    setScrapeError(null);
-    setLinkedinUrlState(url);
-    sessionStorage.setItem(URL_KEY, url);
+  const startScrape = useCallback(
+    async (url: string) => {
+      setIsLoading(true);
+      setScrapeError(null);
+      setLinkedinUrlState(url);
+      sessionStorage.setItem(URL_KEY, url);
 
-    try {
-      const response = await fetch("/api/scrape", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch LinkedIn profile.");
+      try {
+        const response = await fetch("/api/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch LinkedIn profile.");
+        }
+
+        const profileData = data.data;
+        setProfile(profileData);
+        setEditedProfile(profileData);
+        persistProfile(profileData);
+
+        // Create site draft in backend
+        await createWebsiteWithProfile(profileData);
+      } catch (e: any) {
+        setScrapeError(
+          e.message ||
+            "Failed to fetch LinkedIn profile. Please check the URL and try again.",
+        );
+      } finally {
+        setIsLoading(false);
       }
-
-      const profileData = data.data;
-      setProfile(profileData);
-      setEditedProfile(profileData);
-      persistProfile(profileData);
-
-      // Create site draft in backend
-      await createWebsiteWithProfile(profileData);
-    } catch (e: any) {
-      setScrapeError(e.message || "Failed to fetch LinkedIn profile. Please check the URL and try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persistProfile, createWebsiteWithProfile]);
+    },
+    [persistProfile, createWebsiteWithProfile],
+  );
 
   // Manual scraping logic via uploaded ZIP file
-  const startScrapeManual = useCallback(async (file: File): Promise<boolean> => {
-    setIsLoading(true);
-    setScrapeError(null);
+  const startScrapeManual = useCallback(
+    async (file: File): Promise<boolean> => {
+      setIsLoading(true);
+      setScrapeError(null);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const response = await fetch("/api/scrape/manual", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to parse ZIP archive.");
+        const response = await fetch("/api/scrape/manual", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to parse ZIP archive.");
+        }
+
+        const profileData = data.data;
+        setProfile(profileData);
+        setEditedProfile(profileData);
+        persistProfile(profileData);
+
+        // Create site draft in backend
+        await createWebsiteWithProfile(profileData);
+        return true;
+      } catch (e: any) {
+        setScrapeError(
+          e.message ||
+            "Failed to process ZIP archive. Make sure it contains Profile.csv.",
+        );
+        return false;
+      } finally {
+        setIsLoading(false);
       }
-
-      const profileData = data.data;
-      setProfile(profileData);
-      setEditedProfile(profileData);
-      persistProfile(profileData);
-
-      // Create site draft in backend
-      await createWebsiteWithProfile(profileData);
-      return true;
-    } catch (e: any) {
-      setScrapeError(e.message || "Failed to process ZIP archive. Make sure it contains Profile.csv.");
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persistProfile, createWebsiteWithProfile]);
+    },
+    [persistProfile, createWebsiteWithProfile],
+  );
 
   const updateField = useCallback(
     <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => {
@@ -276,7 +311,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         return next;
       });
     },
-    [persistProfile]
+    [persistProfile],
   );
 
   const selectTemplate = useCallback((id: TemplateId) => {
@@ -306,7 +341,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     setProfile(BLANK_PROFILE);
     setEditedProfile(BLANK_PROFILE);
     persistProfile(BLANK_PROFILE);
-    
+
     // Create website draft in backend
     try {
       await createWebsiteWithProfile(BLANK_PROFILE);
@@ -345,6 +380,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         useMockProfile,
         setScrapeError,
         setPendingZip,
+        createWebsiteWithProfile,
       }}
     >
       {children}

@@ -14,6 +14,7 @@ wrangler d1 create my-app-db
 ```
 
 **Add to `wrangler.toml`**:
+
 ```toml
 name = "my-app"
 compatibility_date = "2024-11-01"
@@ -144,6 +145,7 @@ export default {
 ```
 
 **Create `.env` file** (for migrations):
+
 ```env
 CLOUDFLARE_ACCOUNT_ID=your-account-id
 CLOUDFLARE_DATABASE_ID=your-database-id
@@ -279,7 +281,7 @@ app.use(
     credentials: true,
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
 // Auth routes - handle all better-auth endpoints
@@ -397,6 +399,7 @@ If your Drizzle schema uses `snake_case` column names (e.g., `email_verified`), 
 ---
 
 **Official Documentation**:
+
 - better-auth Setup: https://better-auth.com/docs/installation
 - Drizzle + D1: https://orm.drizzle.team/docs/get-started-sqlite#cloudflare-d1
 - Kysely + D1: https://github.com/noxharmonium/kysely-d1

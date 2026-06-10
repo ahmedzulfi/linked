@@ -26,11 +26,13 @@ metadata:
 ### Installation
 
 **Option 1: Drizzle ORM (Recommended)**
+
 ```bash
 bun add better-auth drizzle-orm drizzle-kit
 ```
 
 **Option 2: Kysely**
+
 ```bash
 bun add better-auth kysely @noxharmonium/kysely-d1
 ```
@@ -40,6 +42,7 @@ bun add better-auth kysely @noxharmonium/kysely-d1
 better-auth v1.4.0+ is **ESM-only**. Ensure:
 
 **package.json**:
+
 ```json
 {
   "type": "module"
@@ -58,34 +61,37 @@ better-auth v1.4.0+ is **ESM-only**. Ensure:
 import { betterAuth } from "better-auth";
 
 const auth = betterAuth({
-    database: env.DB, // D1 binding, auto-detected
+  database: env.DB, // D1 binding, auto-detected
 });
 ```
 
 For complex schemas, use Drizzle ORM:
+
 ```typescript
 // ✅ RECOMMENDED for complex schemas - Drizzle
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/d1";
 
 const auth = betterAuth({
-    database: drizzleAdapter(drizzle(env.DB, { schema }), { provider: "sqlite" }),
+  database: drizzleAdapter(drizzle(env.DB, { schema }), { provider: "sqlite" }),
 });
 ```
 
 ```typescript
 // ❌ WRONG - This doesn't exist
-import { d1Adapter } from 'better-auth/adapters/d1'
+import { d1Adapter } from "better-auth/adapters/d1";
 ```
 
 ### Minimal Setup (Cloudflare Workers + Drizzle)
 
 **1. Create D1 Database:**
+
 ```bash
 wrangler d1 create my-app-db
 ```
 
 **2. Define Schema** (`src/db/schema.ts`):
+
 ```typescript
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
@@ -99,7 +105,9 @@ export const user = sqliteTable("user", {
 
 export const session = sqliteTable("session", {
   id: text().primaryKey(),
-  userId: text().notNull().references(() => user.id, { onDelete: "cascade" }),
+  userId: text()
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   token: text().notNull(),
   expiresAt: integer({ mode: "timestamp" }).notNull(),
 });
@@ -108,13 +116,17 @@ export const session = sqliteTable("session", {
 ```
 
 **3. Initialize Auth** (`src/auth.ts`):
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "./db/schema";
 
-export function createAuth(env: { DB: D1Database; BETTER_AUTH_SECRET: string }) {
+export function createAuth(env: {
+  DB: D1Database;
+  BETTER_AUTH_SECRET: string;
+}) {
   const db = drizzle(env.DB, { schema });
 
   return betterAuth({
@@ -127,6 +139,7 @@ export function createAuth(env: { DB: D1Database; BETTER_AUTH_SECRET: string }) 
 ```
 
 **4. Create Worker** (`src/index.ts`):
+
 ```typescript
 import { Hono } from "hono";
 import { createAuth } from "./auth";
@@ -142,6 +155,7 @@ export default app;
 ```
 
 **5. Deploy:**
+
 ```bash
 bunx drizzle-kit generate
 wrangler d1 migrations apply my-app-db --remote
@@ -205,10 +219,12 @@ Is this a new/empty project?
 ### ⚠️ v1.5.0 Breaking Changes
 
 **API Key Plugin Moved**:
+
 ```typescript
 - import { apiKey } from "better-auth/plugins";
 + import { apiKey } from "@better-auth/api-key";
 ```
+
 Schema: `userId` → `referenceId`, new `configId` field.
 
 **After Hooks**: Database after-hooks now run post-transaction (not inside it).
@@ -255,54 +271,55 @@ Schema: `userId` → `referenceId`, new `configId` field.
 
 ### Environment Variables
 
-| Variable | Purpose | Example |
-|----------|---------|---------|
-| `BETTER_AUTH_SECRET` | Encryption secret (min 32 chars) | Generate: `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Base URL | `https://example.com` or `http://localhost:8787` |
-| `DATABASE_URL` | Database connection (optional for D1) | PostgreSQL/MySQL connection string |
+| Variable             | Purpose                               | Example                                          |
+| -------------------- | ------------------------------------- | ------------------------------------------------ |
+| `BETTER_AUTH_SECRET` | Encryption secret (min 32 chars)      | Generate: `openssl rand -base64 32`              |
+| `BETTER_AUTH_URL`    | Base URL                              | `https://example.com` or `http://localhost:8787` |
+| `DATABASE_URL`       | Database connection (optional for D1) | PostgreSQL/MySQL connection string               |
 
 **Note**: Only define `baseURL`/`secret` in config if env vars are NOT set.
 
 ### CLI Commands (v1.5+)
 
-| Command | Purpose |
-|---------|---------|
-| `npx auth init` | Interactive project scaffolding |
-| `npx auth migrate` | Run database migrations |
-| `npx auth generate` | Generate auth schema |
-| `npx auth generate --adapter drizzle` | Adapter-specific schema |
-| `npx auth upgrade` | Upgrade to latest version |
-| `bunx drizzle-kit generate` | **D1: Use this** to generate Drizzle migrations |
-| `wrangler d1 migrations apply DB_NAME` | **D1: Use this** to apply migrations |
+| Command                                | Purpose                                         |
+| -------------------------------------- | ----------------------------------------------- |
+| `npx auth init`                        | Interactive project scaffolding                 |
+| `npx auth migrate`                     | Run database migrations                         |
+| `npx auth generate`                    | Generate auth schema                            |
+| `npx auth generate --adapter drizzle`  | Adapter-specific schema                         |
+| `npx auth upgrade`                     | Upgrade to latest version                       |
+| `bunx drizzle-kit generate`            | **D1: Use this** to generate Drizzle migrations |
+| `wrangler d1 migrations apply DB_NAME` | **D1: Use this** to apply migrations            |
 
 **Re-run after adding/changing plugins.**
 
 ### Core Config Options
 
-| Option | Notes |
-|--------|-------|
-| `appName` | Optional display name |
-| `baseURL` | Only if `BETTER_AUTH_URL` not set |
-| `basePath` | Default `/api/auth`. Set `/` for root. |
-| `secret` | Only if `BETTER_AUTH_SECRET` not set (min 32 chars) |
-| `database` | **Required** for most features. Use `drizzleAdapter()` or Kysely for D1 |
-| `secondaryStorage` | Redis/KV for sessions & rate limits |
-| `emailAndPassword` | `{ enabled: true }` to activate |
-| `socialProviders` | `{ google: { clientId, clientSecret }, ... }` |
-| `plugins` | Array of plugins (import from dedicated paths) |
-| `trustedOrigins` | CSRF whitelist for cross-origin requests |
+| Option             | Notes                                                                   |
+| ------------------ | ----------------------------------------------------------------------- |
+| `appName`          | Optional display name                                                   |
+| `baseURL`          | Only if `BETTER_AUTH_URL` not set                                       |
+| `basePath`         | Default `/api/auth`. Set `/` for root.                                  |
+| `secret`           | Only if `BETTER_AUTH_SECRET` not set (min 32 chars)                     |
+| `database`         | **Required** for most features. Use `drizzleAdapter()` or Kysely for D1 |
+| `secondaryStorage` | Redis/KV for sessions & rate limits                                     |
+| `emailAndPassword` | `{ enabled: true }` to activate                                         |
+| `socialProviders`  | `{ google: { clientId, clientSecret }, ... }`                           |
+| `plugins`          | Array of plugins (import from dedicated paths)                          |
+| `trustedOrigins`   | CSRF whitelist for cross-origin requests                                |
 
 ### Common Plugins
 
 Import from **dedicated packages** (extracted in v1.5+):
+
 ```typescript
-import { twoFactor } from "better-auth/plugins/two-factor"
-import { organization } from "better-auth/plugins/organization"
-import { passkey } from "@better-auth/passkey"          // Separate package
-import { apiKey } from "@better-auth/api-key"            // Separate package (v1.5+)
-import { sso } from "@better-auth/sso"                   // Separate package (v1.5+)
-import { i18n } from "@better-auth/i18n"                 // Separate package (v1.5+)
-import { oauthProvider } from "@better-auth/oauth-provider" // Separate package (v1.5+)
+import { twoFactor } from "better-auth/plugins/two-factor";
+import { organization } from "better-auth/plugins/organization";
+import { passkey } from "@better-auth/passkey"; // Separate package
+import { apiKey } from "@better-auth/api-key"; // Separate package (v1.5+)
+import { sso } from "@better-auth/sso"; // Separate package (v1.5+)
+import { i18n } from "@better-auth/i18n"; // Separate package (v1.5+)
+import { oauthProvider } from "@better-auth/oauth-provider"; // Separate package (v1.5+)
 ```
 
 Core plugins (still in `better-auth/plugins`): `twoFactor`, `organization`, `admin`, `anonymous`, `emailOTP`, `magicLink`, `phone-number`, `multi-session`, `custom-session`.
@@ -312,22 +329,27 @@ Core plugins (still in `better-auth/plugins`): `twoFactor`, `organization`, `adm
 ## Top 5 Errors (See references/error-catalog.md for all 15)
 
 ### Error #1: "d1Adapter is not exported"
+
 **Problem**: Trying to use non-existent `d1Adapter`
 **Solution**: Use `drizzleAdapter` or Kysely instead (see Quick Start above)
 
 ### Error #2: Schema Generation Fails
+
 **Problem**: `better-auth migrate` doesn't work with D1
 **Solution**: Use `bunx drizzle-kit generate` then `wrangler d1 migrations apply`
 
 ### Error #3: CamelCase vs snake_case Mismatch
+
 **Problem**: Database uses `email_verified` but better-auth expects `emailVerified`
 **Solution**: Use camelCase in schema or add `CamelCasePlugin` to Kysely
 
 ### Error #4: CORS Errors
+
 **Problem**: `Access-Control-Allow-Origin` errors, cookies not sent
 **Solution**: Configure CORS with `credentials: true` and correct origins
 
 ### Error #5: OAuth Redirect URI Mismatch
+
 **Problem**: Social sign-in fails with "redirect_uri_mismatch"
 **Solution**: Ensure exact match: `https://yourdomain.com/api/auth/callback/google`
 
@@ -338,8 +360,10 @@ Core plugins (still in `better-auth/plugins`): `twoFactor`, `organization`, `adm
 ## Common Use Cases
 
 ### Use Case 1: Email/Password Authentication
+
 **When**: Basic authentication without social providers
 **Quick Pattern**:
+
 ```typescript
 // Client
 await authClient.signIn.email({
@@ -353,12 +377,15 @@ emailAndPassword: {
   requireEmailVerification: true,
 }
 ```
+
 **Load**: `references/setup-guide.md` → Step 5
 
 ### Use Case 2: Social Authentication (45+ Providers)
+
 **When**: Allow users to sign in with social accounts
 **Supported**: Google, GitHub, Microsoft, Apple, Discord, TikTok, Twitch, Spotify, LinkedIn, Slack, Reddit, Facebook, Twitter/X, Patreon, Vercel, Kick, and 30+ more.
 **Quick Pattern**:
+
 ```typescript
 // Client
 await authClient.signIn.social({
@@ -375,11 +402,14 @@ socialProviders: {
   },
 }
 ```
+
 **Load**: `references/setup-guide.md` → Step 5
 
 ### Use Case 3: Protected API Routes
+
 **When**: Need to verify user is authenticated
 **Quick Pattern**:
+
 ```typescript
 app.get("/api/protected", async (c) => {
   const auth = createAuth(c.env);
@@ -394,13 +424,16 @@ app.get("/api/protected", async (c) => {
   return c.json({ data: "protected", user: session.user });
 });
 ```
+
 **Load**: `references/cloudflare-worker-drizzle.ts`
 
 ### Use Case 4: Multi-Tenant with Organizations
+
 **When**: Building SaaS with teams/organizations
 **Load**: `references/advanced-features.md` → Organizations & Teams
 
 ### Use Case 5: Two-Factor Authentication
+
 **When**: Need extra security with 2FA/TOTP
 **Load**: `references/advanced-features.md` → Two-Factor Authentication
 
@@ -409,18 +442,21 @@ app.get("/api/protected", async (c) => {
 ## When to Load References
 
 **Load `references/setup-guide.md` when**:
+
 - User needs complete 8-step setup walkthrough
 - User asks about Kysely adapter alternative
 - User needs help with migrations or deployment
 - User asks about wrangler.toml configuration
 
 **Load `references/error-catalog.md` when**:
+
 - Encountering any of the 15 documented errors
 - User reports D1 adapter, schema, CORS, or OAuth issues
 - User asks about troubleshooting or debugging
 - User needs prevention checklist
 
 **Load `references/advanced-features.md` when**:
+
 - User asks about 2FA, passkeys, or magic links
 - User needs organizations, teams, or RBAC
 - User asks about rate limiting or session management
@@ -428,6 +464,7 @@ app.get("/api/protected", async (c) => {
 - User needs security best practices or performance optimization
 
 **Load `references/v1.5-features.md` when**:
+
 - User asks about the new CLI, MCP auth, OAuth 2.1 Provider
 - User needs Electron desktop auth or i18n error translations
 - User asks about dynamic base URL or secret key rotation
@@ -436,6 +473,7 @@ app.get("/api/protected", async (c) => {
 - User needs Cloudflare D1 native support configuration
 
 **Load `references/v1.6-features.md` when**:
+
 - User asks about OpenTelemetry or distributed tracing
 - User needs passkey pre-auth registration (before session)
 - User asks about case-insensitive database queries
@@ -443,6 +481,7 @@ app.get("/api/protected", async (c) => {
 - User asks about SAML InResponseTo validation
 
 **Load `references/migration-guide-1.5.0.md` when**:
+
 - User upgrading from better-auth <1.5.0 to 1.5.0+
 - User encounters API Key import errors (`userId` → `referenceId`)
 - User asks about after hooks running post-transaction
@@ -450,6 +489,7 @@ app.get("/api/protected", async (c) => {
 - User needs to update `@better-auth/core/utils` imports
 
 **Load `references/plugins/sso.md` when**:
+
 - User needs production SSO with OIDC, OAuth2, or SAML 2.0
 - User asks about OIDC discovery, SAML SLO, or domain verification
 - User needs organization provisioning via SSO
@@ -457,37 +497,44 @@ app.get("/api/protected", async (c) => {
 - User encounters SSO discovery errors
 
 **Load `references/plugins/test-utils.md` when**:
+
 - User writing integration or E2E tests with Better Auth
 - User needs test factories (createUser, createOrganization)
 - User needs authenticated test sessions (login, getAuthHeaders, getCookies)
 - User needs OTP capture for verification tests
 
 **Load `references/integrations/electron.md` when**:
+
 - User building Electron desktop app with Better Auth
 - User needs system browser OAuth flow for desktop
 - User asks about deep links, custom protocol schemes
 - User needs IPC bridges or manual token exchange
 
 **Load `references/cloudflare-worker-drizzle.ts` when**:
+
 - User needs complete Worker implementation example
 - User asks for production-ready code
 - User wants to see full auth flow with protected routes
 
 **Load `references/cloudflare-worker-kysely.ts` when**:
+
 - User prefers Kysely over Drizzle
 - User asks for Kysely-specific implementation
 
 **Load `references/database-schema.ts` when**:
+
 - User needs complete better-auth schema with all tables
 - User asks about custom tables or schema extension
 - User needs TypeScript types for database
 
 **Load `references/react-client-hooks.tsx` when**:
+
 - User building React/Next.js frontend
 - User needs login forms, session hooks, or protected routes
 - User asks about client-side implementation
 
 **Load `references/configuration-guide.md` when**:
+
 - User asks about production configuration
 - User needs environment variable setup or wrangler.toml
 - User asks about dynamic base URL, secret rotation, or D1 native
@@ -495,27 +542,32 @@ app.get("/api/protected", async (c) => {
 - User asks about session configuration (deferSessionRefresh, verification on secondary storage)
 
 **Load `references/framework-comparison.md` when**:
+
 - User asks "better-auth vs Clerk" or "vs Auth.js"
 - User needs help choosing auth framework
 - User wants feature comparison, migration advice, or cost analysis
 
 **Load `references/migration-guide-1.4.0.md` when**:
+
 - User upgrading from better-auth <1.4.0 to 1.4.0+
 - User encounters `forgetPassword` errors or ESM issues
 - User asks about breaking changes or migration steps
 
 **Load `references/v1.4-features.md` when**:
+
 - User asks about background tasks or deferred email sending
 - User needs Patreon, Vercel, or Kick OAuth provider setup
 - User asks about the better-auth CLI tool
 - User needs admin role permissions configuration
 
 **Load `references/nextjs/README.md` when**:
+
 - User building Next.js app with PostgreSQL (not Cloudflare D1)
 - User needs organizations and 2FA example
 - User asks about Next.js-specific implementation
 
 **Load `references/nextjs/postgres-example.ts` when**:
+
 - User needs complete Next.js API route implementation
 - User wants to see organizations + 2FA in practice
 - User asks for PostgreSQL setup with Drizzle
@@ -523,73 +575,89 @@ app.get("/api/protected", async (c) => {
 ### Framework-Specific Setup
 
 **Load `references/frameworks/nextjs.md` when**:
+
 - User building with Next.js (App Router or Pages Router)
 - User needs middleware, Server Components, or API routes
 
 **Load `references/frameworks/nuxt.md` when**:
+
 - User building with Nuxt 3
 - User needs H3 handlers, composables, or server routes
 
 **Load `references/frameworks/remix.md` when**:
+
 - User building with Remix
 - User needs loader/action patterns or session handling
 
 **Load `references/frameworks/sveltekit.md` when**:
+
 - User building with SvelteKit
 - User needs hooks, load functions, or stores
 
 **Load `references/frameworks/api-frameworks.md` when**:
+
 - User building with Express, Fastify, NestJS, or Hono (non-Cloudflare)
 - User needs middleware or route configuration
 
 **Load `references/frameworks/expo-mobile.md` when**:
+
 - User building React Native or Expo app
 - User needs SecureStore, deep linking, or mobile auth
 
 ### Database Adapters
 
 **Load `references/databases/postgresql.md` when**:
+
 - User using PostgreSQL with Drizzle or Prisma
 - User needs Neon, Supabase, or connection pooling setup
 
 **Load `references/databases/mongodb.md` when**:
+
 - User using MongoDB
 - User needs Atlas setup or indexes
 
 **Load `references/databases/mysql.md` when**:
+
 - User using MySQL or PlanetScale
 - User needs Vitess compatibility guidance
 
 ### Plugin Guides
 
 **Load `references/plugins/authentication.md` when**:
+
 - User needs 2FA, passkeys (incl. pre-auth), magic links, email OTP, or anonymous users
 - User asks about enhanced authentication methods
 
 **Load `references/plugins/enterprise.md` when**:
+
 - User needs organizations, SSO/SAML, SCIM, or admin dashboard
 - User building multi-tenant or enterprise application
 
 **Load `references/plugins/api-tokens.md` when**:
+
 - User needs API keys (incl. org-owned, multi-config), bearer tokens, JWT
 - User building API authentication for third parties
 
 **Load `references/plugins/payments.md` when**:
+
 - User needs Stripe (incl. seat-based billing) or Polar integration
 - User building subscription or payment features
 
 **Load `references/plugins/sso.md` when**:
+
 - User needs production SSO with OIDC, OAuth2, or SAML 2.0
 - User asks about OIDC discovery, SAML SLO, domain verification
 - User needs organization provisioning via SSO
 
 **Load `references/plugins/test-utils.md` when**:
+
 - User writing integration or E2E tests
 - User needs test factories, OTP capture, or authenticated sessions
 
 ### Integration Guides
 
 **Load `references/integrations/electron.md` when**:
+
 - User building Electron desktop app with Better Auth
 - User needs system browser OAuth, deep links, IPC bridges
 
@@ -598,6 +666,7 @@ app.get("/api/protected", async (c) => {
 ## Configuration Reference
 
 **Quick Config** (ESM-only in v1.4.0+):
+
 ```typescript
 export const auth = betterAuth({
   baseURL: env.BETTER_AUTH_URL,
@@ -607,6 +676,7 @@ export const auth = betterAuth({
 ```
 
 **Load `references/configuration-guide.md` for**:
+
 - Production configuration with email/password and social providers
 - wrangler.toml setup and environment variables
 - Session configuration, CORS setup, and ESM requirements
@@ -634,6 +704,7 @@ export const auth = betterAuth({
 - **react-client-hooks.tsx** - React components with auth hooks
 
 ### Framework References (references/frameworks/)
+
 - **nextjs.md** - Next.js App/Pages Router integration
 - **nuxt.md** - Nuxt 3 with H3 and composables
 - **remix.md** - Remix loaders, actions, sessions
@@ -642,11 +713,13 @@ export const auth = betterAuth({
 - **expo-mobile.md** - React Native and Expo
 
 ### Database References (references/databases/)
+
 - **postgresql.md** - PostgreSQL with Drizzle/Prisma, Neon/Supabase
 - **mongodb.md** - MongoDB adapter and Atlas
 - **mysql.md** - MySQL and PlanetScale
 
 ### Plugin References (references/plugins/)
+
 - **authentication.md** - 2FA, passkeys (incl. pre-auth), magic links, email OTP, anonymous
 - **enterprise.md** - Organizations, SSO, SCIM, admin
 - **api-tokens.md** - API keys (incl. org-owned, multi-config), bearer tokens, JWT
@@ -655,15 +728,18 @@ export const auth = betterAuth({
 - **test-utils.md** - Testing helpers: factories, OTP capture, login, Vitest/Playwright
 
 ### Integration References (references/integrations/)
+
 - **electron.md** - Electron desktop auth: system browser OAuth, IPC bridges, deep links
 
 ### Next.js Examples (references/nextjs/)
+
 - **README.md** - Next.js + PostgreSQL setup guide (not D1)
 - **postgres-example.ts** - Complete API route with organizations, 2FA, email verification
 
 ### Client Integration
 
 **Create auth client** (`src/lib/auth-client.ts`):
+
 ```typescript
 import { createAuthClient } from "better-auth/client";
 
@@ -673,6 +749,7 @@ export const authClient = createAuthClient({
 ```
 
 **Use in React**:
+
 ```typescript
 import { authClient } from "@/lib/auth-client";
 
@@ -696,14 +773,17 @@ export function UserProfile() {
 ## Dependencies
 
 **Required**:
+
 - `better-auth@^1.6.0` - Core authentication framework (ESM-only)
 
 **Choose ONE adapter** (optional with D1 native in v1.5+):
+
 - `drizzle-orm@^0.44.7` + `drizzle-kit@^0.31.7` (recommended for complex schemas)
 - `kysely@^0.28.8` + `@noxharmonium/kysely-d1@^0.4.0` (alternative)
 - `@better-auth/drizzle-adapter` + `better-auth/minimal` (smallest bundle, v1.5+)
 
 **Optional**:
+
 - `@cloudflare/workers-types` - TypeScript types for Workers
 - `hono@^4.0.0` - Web framework for routing
 - `@better-auth/passkey` - Passkey/WebAuthn plugin
@@ -743,6 +823,7 @@ This skill focuses on **Cloudflare Workers + D1**. better-auth also supports:
 ## Framework Comparison
 
 **Load `references/framework-comparison.md` for**:
+
 - Complete feature comparison: better-auth vs Clerk vs Auth.js
 - v1.4.0+ new features (database joins, stateless sessions, API keys)
 - Migration paths, cost analysis, and performance benchmarks
@@ -785,7 +866,7 @@ Load the `dependency-upgrade` skill for full security configuration including So
 - [ ] Enabled authentication methods (emailAndPassword, socialProviders)
 - [ ] Configured CORS with credentials: true
 - [ ] Set OAuth callback URLs in provider settings
-- [ ] Tested auth routes (/api/auth/*)
+- [ ] Tested auth routes (/api/auth/\*)
 - [ ] Tested sign-in, sign-up, session verification
 - [ ] Using requestPasswordReset (not forgetPassword) - v1.4.0+ API
 - [ ] Using `npx auth` CLI (not `@better-auth/cli`) - v1.5.0+

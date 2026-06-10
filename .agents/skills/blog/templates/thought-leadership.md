@@ -29,11 +29,13 @@
 **Format:** "Why [Conventional Wisdom] Is Wrong (And What to Do Instead)"
 
 **Alternative formats:**
+
 - "Stop [Common Practice]: [Reason] (Here's What Works Better)"
 - "The [Topic] Advice Everyone Gives Is [Problem]. Here's the Data."
 - "[Number] Reasons [Popular Belief] Is Holding You Back"
 
 **Guidelines:**
+
 - The title must clearly signal a contrarian position - ambiguity kills click-through
 - Include the conventional wisdom being challenged so the reader knows the stakes
 - Parenthetical or colon structure works well to deliver both the problem and the promise
@@ -52,6 +54,7 @@
 [ANSWER-FIRST] Open with your bold contrarian statement in the very first sentence. Do not build up to it - lead with the punch. The reader should know exactly what you are arguing within 10 seconds.
 
 **Structure:**
+
 1. **Bold contrarian statement** (1-2 sentences): State your position clearly and without hedging. Be specific about what you disagree with.
    - [STAT: data point that supports your opening claim]
 2. **Stakes** (1-2 sentences): Why does this matter? What is the cost of following the conventional wisdom?
@@ -67,6 +70,7 @@
 [ANSWER-FIRST] Fairly and accurately summarize the mainstream position in the first two sentences. Do not strawman - the stronger you present the opposing view, the more credible your critique will be.
 
 **Structure:**
+
 1. **The mainstream position** (2-3 sentences): State what most experts, articles, or practitioners recommend. Cite specific sources if possible.
    - [STAT: data or source supporting the conventional view]
 2. **Why it is popular** (2-3 sentences): Explain the logic behind the conventional wisdom - there are usually good historical reasons it became dominant
@@ -84,6 +88,7 @@
 [ANSWER-FIRST] State the core problem with the conventional view in the first sentence. Then systematically dismantle it with 2-3 specific, evidence-based arguments.
 
 **Structure:**
+
 1. **Core problem statement** (1-2 sentences): The fundamental flaw in the conventional view
 2. **Problem 1** (75-100 words):
    - **Claim** (1 sentence): State the specific problem
@@ -109,6 +114,7 @@
 [ANSWER-FIRST] Present your alternative interpretation of the evidence in the first two sentences. Show the reader what changes when you look at the data differently.
 
 **Structure:**
+
 1. **Reframed data** (2-3 sentences): Present the same (or better) data with your alternative interpretation
 2. **Counter-examples** (100-150 words): 2-3 specific examples where the conventional approach failed or the alternative approach succeeded
    - [INFO-GAIN: unique analysis] Include at least one example from your own experience or original research
@@ -117,6 +123,7 @@
    - [STAT: original or underreported statistic]
 
 [VISUAL: chart-type] This is the most important visual in the piece. Include a chart, graph, or diagram that makes your case visually compelling. Options:
+
 - A chart showing data that contradicts the conventional view
 - A side-by-side comparison of outcomes using conventional vs. alternative approaches
 - A framework diagram illustrating your proposed mental model
@@ -130,6 +137,7 @@
 [ANSWER-FIRST] Name your alternative approach in the first sentence and state the core principle that makes it different.
 
 **Structure:**
+
 1. **The alternative** (1-2 sentences): Clear statement of what to do instead - be prescriptive, not vague
 2. **Core principles** (3-5 bullet points): The key tenets of your approach, each in 1-2 sentences
 3. **Why it works** (2-3 sentences): Connect the principles back to the evidence presented in the previous section
@@ -147,6 +155,7 @@
 [ANSWER-FIRST] Give the reader their first action step in the opening sentence. Transition from theory to practice immediately.
 
 **Structure:**
+
 1. **Immediate action** (1-2 sentences): What can the reader do today to start applying this thinking?
 2. **Step-by-step implementation** (numbered list, 3-5 steps):
    - Each step should be specific and actionable (not "think differently about X")
@@ -166,12 +175,14 @@
 [ANSWER-FIRST] Acknowledge the most significant limitation of your argument in the first sentence. Intellectual honesty strengthens, not weakens, your position.
 
 **Structure:**
+
 1. **Primary caveat** (1-2 sentences): The biggest exception or limitation to your argument
 2. **Context-dependency** (1-2 sentences): Situations where the conventional view may actually be correct
 3. **What you might be wrong about** (1-2 sentences): The weakest part of your argument, honestly stated
 4. **Nuance** (1 sentence): A bridging statement that acknowledges complexity without abandoning your core position
 
 **Guidelines:**
+
 - Do not hedge so much that your entire argument collapses - this section should be honest but bounded
 - Readers respect intellectual honesty more than false certainty
 - This section differentiates genuine thought leadership from clickbait hot takes
@@ -183,6 +194,7 @@
 [FAQ] Focus on the most likely objections and follow-up questions a skeptical reader would have.
 
 **Guidelines:**
+
 - Frame questions as pushback: "But doesn't [counter-argument]?"
 - Answers should be 40-80 words, direct, and evidence-based
 - This is your chance to address objections you did not cover in the main body
@@ -210,6 +222,7 @@
 [ANSWER-FIRST] Restate your core argument in one sentence, then look forward.
 
 **Structure:**
+
 1. **Core argument restated** (1 sentence): The single most important takeaway, stated with conviction
 2. **What needs to change** (2-3 sentences): The broader shift you are calling for - not just individual behavior but industry or community norms
 3. **Vision of the future** (1-2 sentences): What does the world look like if your approach gains adoption?

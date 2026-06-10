@@ -15,6 +15,7 @@ bun add better-auth drizzle-orm postgres drizzle-kit
 ### Database Connection
 
 **`src/db/index.ts`**:
+
 ```typescript
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
@@ -34,6 +35,7 @@ export const db = drizzle(client, { schema });
 ### Schema Definition
 
 **`src/db/schema.ts`**:
+
 ```typescript
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
@@ -91,6 +93,7 @@ export const verification = pgTable("verification", {
 ### Auth Configuration
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -107,6 +110,7 @@ export const auth = betterAuth({
 ### Migrations
 
 **`drizzle.config.ts`**:
+
 ```typescript
 import { defineConfig } from "drizzle-kit";
 
@@ -139,6 +143,7 @@ bun add -D prisma
 ### Schema Definition
 
 **`prisma/schema.prisma`**:
+
 ```prisma
 generator client {
   provider = "prisma-client-js"
@@ -206,6 +211,7 @@ model Verification {
 ### Auth Configuration
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -239,6 +245,7 @@ bun add @neondatabase/serverless
 ```
 
 **`src/db/index.ts`**:
+
 ```typescript
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
@@ -263,6 +270,7 @@ export const db = drizzle(client, { schema });
 ```
 
 **Connection String Format**:
+
 ```
 postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres?pgbouncer=true
 ```
@@ -277,10 +285,10 @@ postgresql://postgres.[project-ref]:[password]@aws-0-[region].pooler.supabase.co
 import postgres from "postgres";
 
 const client = postgres(process.env.DATABASE_URL!, {
-  max: 20,                    // Maximum connections
-  idle_timeout: 30,           // Close idle connections after 30s
-  connect_timeout: 10,        // Connection timeout
-  prepare: false,             // Disable prepared statements for poolers
+  max: 20, // Maximum connections
+  idle_timeout: 30, // Close idle connections after 30s
+  connect_timeout: 10, // Connection timeout
+  prepare: false, // Disable prepared statements for poolers
 });
 ```
 
@@ -288,7 +296,7 @@ const client = postgres(process.env.DATABASE_URL!, {
 
 ```typescript
 const client = postgres(process.env.DATABASE_URL!, {
-  prepare: false,  // Required for PgBouncer transaction mode
+  prepare: false, // Required for PgBouncer transaction mode
 });
 ```
 
@@ -302,18 +310,29 @@ Add these indexes for faster queries:
 // In your schema
 import { index } from "drizzle-orm/pg-core";
 
-export const session = pgTable("session", {
-  // ... columns
-}, (table) => ({
-  userIdIdx: index("session_user_id_idx").on(table.userId),
-  tokenIdx: index("session_token_idx").on(table.token),
-}));
+export const session = pgTable(
+  "session",
+  {
+    // ... columns
+  },
+  (table) => ({
+    userIdIdx: index("session_user_id_idx").on(table.userId),
+    tokenIdx: index("session_token_idx").on(table.token),
+  }),
+);
 
-export const account = pgTable("account", {
-  // ... columns
-}, (table) => ({
-  providerIdx: index("account_provider_idx").on(table.providerId, table.accountId),
-}));
+export const account = pgTable(
+  "account",
+  {
+    // ... columns
+  },
+  (table) => ({
+    providerIdx: index("account_provider_idx").on(
+      table.providerId,
+      table.accountId,
+    ),
+  }),
+);
 ```
 
 ---

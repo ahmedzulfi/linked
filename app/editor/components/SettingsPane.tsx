@@ -9,11 +9,18 @@ interface SettingsPaneProps {
   router: any;
 }
 
-export default function SettingsPane({ profileName, router }: SettingsPaneProps) {
+export default function SettingsPane({
+  profileName,
+  router,
+}: SettingsPaneProps) {
   const { websiteId } = useEditor();
   const [siteName, setSiteName] = useState(profileName);
-  const [seoTitle, setSeoTitle] = useState(`${profileName} - Professional Micro-site`);
-  const [seoDesc, setSeoDesc] = useState("Explore my professional experience, projects, education, and social networks.");
+  const [seoTitle, setSeoTitle] = useState(
+    `${profileName} - Professional Micro-site`,
+  );
+  const [seoDesc, setSeoDesc] = useState(
+    "Explore my professional experience, projects, education, and social networks.",
+  );
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -66,7 +73,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
   const handleDeleteSite = async () => {
     if (!websiteId) return;
-    const confirmDel = window.confirm("Are you absolutely sure you want to delete this website? This action is permanent!");
+    const confirmDel = window.confirm(
+      "Are you absolutely sure you want to delete this website? This action is permanent!",
+    );
     if (!confirmDel) return;
     const toastId = toast.loading("Deleting website...");
     try {
@@ -92,7 +101,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
   if (!websiteId) {
     return (
       <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full items-center justify-center p-6 text-center">
-        <p className="text-sm text-gray-400 font-medium font-['Inter_Tight']">No website loaded. Go back to the dashboard and open a site.</p>
+        <p className="text-sm text-gray-400 font-medium font-['Inter_Tight']">
+          No website loaded. Go back to the dashboard and open a site.
+        </p>
       </section>
     );
   }
@@ -101,14 +112,21 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
     <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
       {/* Title Header */}
       <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
-        <span className="font-semibold text-[15px] text-black">Site Settings</span>
+        <span className="font-semibold text-[15px] text-black">
+          Site Settings
+        </span>
       </div>
 
       {/* Content container */}
-      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5" style={{ scrollbarWidth: "none" }}>
+      <div
+        className="flex-1 overflow-y-auto p-5 flex flex-col gap-5"
+        style={{ scrollbarWidth: "none" }}
+      >
         {/* Branding */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Brand Name</label>
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            Brand Name
+          </label>
           <input
             type="text"
             value={siteName}
@@ -119,7 +137,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
         {/* SEO Title */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">SEO Title Tag</label>
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            SEO Title Tag
+          </label>
           <input
             type="text"
             value={seoTitle}
@@ -130,7 +150,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
         {/* SEO Description */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Meta Description</label>
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            Meta Description
+          </label>
           <textarea
             value={seoDesc}
             onChange={(e) => setSeoDesc(e.target.value)}
@@ -145,7 +167,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
           disabled={saving}
           className="w-full h-10 rounded-lg bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-sm"
         >
-          {saving && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+          {saving && (
+            <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />
+          )}
           Save Configuration
         </button>
 
@@ -153,9 +177,12 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
         {/* Danger Zone */}
         <div className="p-4 border border-red-200 bg-red-50/40 rounded-xl flex flex-col gap-3">
-          <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">Danger Zone</span>
+          <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">
+            Danger Zone
+          </span>
           <p className="text-xs text-red-700/80 leading-relaxed">
-            Deleting your site will permanently wipe all pages, files, and domains. This cannot be undone.
+            Deleting your site will permanently wipe all pages, files, and
+            domains. This cannot be undone.
           </p>
           <button
             onClick={handleDeleteSite}

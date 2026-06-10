@@ -42,7 +42,9 @@ export default function SignupPage() {
     }
 
     if (!isPasswordValid) {
-      toast.error("Password must be at least 8 characters with a number or symbol!");
+      toast.error(
+        "Password must be at least 8 characters with a number or symbol!",
+      );
       return;
     }
 
@@ -71,12 +73,12 @@ export default function SignupPage() {
             firstName,
             lastName,
             email: data.user.email,
-          })
+          }),
         );
       }
 
       toast.success("Account created! Welcome to Webild 🎉");
-      
+
       const params = new URLSearchParams(window.location.search);
       if (params.get("intent") === "save_scrape") {
         router.push("/editor?onboarding=true");
@@ -94,7 +96,7 @@ export default function SignupPage() {
     toast.loading("Connecting Google authorization provider...");
     setTimeout(() => {
       toast.success("Successfully signed up with Google!");
-      
+
       const params = new URLSearchParams(window.location.search);
       if (params.get("intent") === "save_scrape") {
         router.push("/editor?onboarding=true");
@@ -109,13 +111,11 @@ export default function SignupPage() {
       <Navbar />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto max-w-[1536px]">
-
         {/* ── Left: Signup Form (exact reference UI) ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Outer card — button-secondary + rounded + p-8 as in reference */}
-          <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md" >
+          <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md">
             <div className="flex flex-col gap-5">
-
               {/* Header */}
               <div className="flex flex-col gap-1 text-center items-center">
                 <h1 className="text-2xl font-medium text-black w-fit leading-tight">
@@ -154,7 +154,6 @@ export default function SignupPage() {
 
               {/* Form */}
               <form className="flex flex-col gap-4" onSubmit={handleContinue}>
-
                 {/* First name + Last name */}
                 <div className="grid grid-cols-2 gap-3">
                   {/* First name */}
@@ -245,36 +244,47 @@ export default function SignupPage() {
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword
-                            ? <EyeOff className="w-5 h-5" />
-                            : <Eye className="w-5 h-5" />}
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                       {/* Password strength hint */}
-                      {showPasswordStep && password.length > 0 && !isPasswordValid && (
-                        <p className="mt-1.5 text-xs text-[#E45A5A]">
-                          Min 8 characters with at least 1 number or symbol
-                        </p>
-                      )}
+                      {showPasswordStep &&
+                        password.length > 0 &&
+                        !isPasswordValid && (
+                          <p className="mt-1.5 text-xs text-[#E45A5A]">
+                            Min 8 characters with at least 1 number or symbol
+                          </p>
+                        )}
                     </div>
                   </div>
                 </div>
 
                 {/* Submit */}
                 <button
-                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)
-                    ? "opacity-50 select-none pointer-events-none"
-                    : ""
-                    }`}
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
+                    isSubmitting ||
+                    (showPasswordStep ? !canSubmit : !canContinue)
+                      ? "opacity-50 select-none pointer-events-none"
+                      : ""
+                  }`}
                   type="submit"
-                  disabled={isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)}
+                  disabled={
+                    isSubmitting ||
+                    (showPasswordStep ? !canSubmit : !canContinue)
+                  }
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <span className="w-5 h-5   rounded-lg border-2 border-white border-t-transparent animate-spin" />
                       Creating account...
                     </span>
-                  ) : "Continue"}
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </form>
 
@@ -288,7 +298,6 @@ export default function SignupPage() {
                   Sign in
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -307,7 +316,6 @@ export default function SignupPage() {
             src="https://www.webild.io/images/input.svg"
           />
         </div>
-
       </div>
     </div>
   );

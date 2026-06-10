@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
 import { getWebsiteBySubdomain, getWebsiteByDomain } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   try {
     const { slug } = await params;
     let website = await getWebsiteBySubdomain(slug);
@@ -12,7 +15,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     }
 
     if (!website || !website.isPublished) {
-      return NextResponse.json({ error: "Published page not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Published page not found" },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({
@@ -21,6 +27,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       template: website.publishedTemplate || website.templateId,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to load page content" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to load page content" },
+      { status: 500 },
+    );
   }
 }

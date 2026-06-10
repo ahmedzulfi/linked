@@ -12,7 +12,10 @@ export async function POST(request: Request) {
     const { websiteId, projects, interests, skills, experience } = body;
 
     if (!websiteId) {
-      return NextResponse.json({ error: "websiteId is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "websiteId is required" },
+        { status: 400 },
+      );
     }
 
     const website = await getWebsiteById(websiteId);
@@ -33,7 +36,9 @@ export async function POST(request: Request) {
     const openrouterApiKey = process.env.OPENROUTER_API_KEY;
     if (!openrouterApiKey || openrouterApiKey === "your_key_here") {
       // Return merged profile immediately if AI key is missing
-      console.warn("[Onboarding API] OPENROUTER_API_KEY is not set. Skipping AI refinement.");
+      console.warn(
+        "[Onboarding API] OPENROUTER_API_KEY is not set. Skipping AI refinement.",
+      );
       await updateWebsite(websiteId, { profile: mergedProfile });
       return NextResponse.json({
         success: true,
@@ -45,7 +50,8 @@ export async function POST(request: Request) {
     const openrouter = createOpenRouter({
       apiKey: openrouterApiKey,
     });
-    const modelName = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+    const modelName =
+      process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
     const model = openrouter(modelName);
 
     const prompt = `
@@ -106,7 +112,10 @@ JSON Output Structure:
         prompt,
       });
 
-      const cleanText = response.text.trim().replace(/^```json|```$/g, "").trim();
+      const cleanText = response.text
+        .trim()
+        .replace(/^```json|```$/g, "")
+        .trim();
       const parsedData = JSON.parse(cleanText);
 
       // Construct refined profile
@@ -114,9 +123,18 @@ JSON Output Structure:
         ...mergedProfile,
         headline: parsedData.headline || mergedProfile.headline,
         summary: parsedData.summary || mergedProfile.summary,
-        experience: parsedData.experience && parsedData.experience.length > 0 ? parsedData.experience : mergedProfile.experience,
-        projects: parsedData.projects && parsedData.projects.length > 0 ? parsedData.projects : mergedProfile.projects,
-        skills: parsedData.skills && parsedData.skills.length > 0 ? parsedData.skills : mergedProfile.skills,
+        experience:
+          parsedData.experience && parsedData.experience.length > 0
+            ? parsedData.experience
+            : mergedProfile.experience,
+        projects:
+          parsedData.projects && parsedData.projects.length > 0
+            ? parsedData.projects
+            : mergedProfile.projects,
+        skills:
+          parsedData.skills && parsedData.skills.length > 0
+            ? parsedData.skills
+            : mergedProfile.skills,
       };
 
       // Save refined profile to the website draft
@@ -128,18 +146,25 @@ JSON Output Structure:
         aiOptimized: true,
       });
     } catch (err: any) {
-      console.error("[Onboarding API] LLM execution or JSON parsing failed:", err);
+      console.error(
+        "[Onboarding API] LLM execution or JSON parsing failed:",
+        err,
+      );
       // Fallback: save merged data directly so user doesn't lose anything
       await updateWebsite(websiteId, { profile: mergedProfile });
       return NextResponse.json({
         success: true,
         data: mergedProfile,
         aiOptimized: false,
-        warning: "AI optimization encountered an issue. Reverted to raw merged data.",
+        warning:
+          "AI optimization encountered an issue. Reverted to raw merged data.",
       });
     }
   } catch (e: any) {
     console.error("[Onboarding API] Request processing error:", e);
-    return NextResponse.json({ error: e.message || "Failed to process request" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to process request" },
+      { status: 500 },
+    );
   }
 }

@@ -17,6 +17,7 @@ bun add better-auth drizzle-orm postgres
 ### 1. Create Auth Configuration
 
 **`src/lib/server/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -47,6 +48,7 @@ export type Session = typeof auth.$Infer.Session;
 ### 2. Create API Route Handler
 
 **`src/routes/api/auth/[...all]/+server.ts`**:
+
 ```typescript
 import { auth } from "$lib/server/auth";
 import type { RequestHandler } from "./$types";
@@ -65,6 +67,7 @@ export const POST: RequestHandler = async ({ request }) => {
 ## Client Setup
 
 **`src/lib/auth-client.ts`**:
+
 ```typescript
 import { createAuthClient } from "better-auth/svelte";
 import { env } from "$env/dynamic/public";
@@ -81,6 +84,7 @@ export const authClient = createAuthClient({
 ### Server Hook for Session
 
 **`src/hooks.server.ts`**:
+
 ```typescript
 import { auth } from "$lib/server/auth";
 import type { Handle } from "@sveltejs/kit";
@@ -99,6 +103,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 ### Type Definitions
 
 **`src/app.d.ts`**:
+
 ```typescript
 import type { Session } from "$lib/server/auth";
 
@@ -120,6 +125,7 @@ export {};
 ### Protected Route
 
 **`src/routes/dashboard/+page.server.ts`**:
+
 ```typescript
 import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
@@ -136,6 +142,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 ```
 
 **`src/routes/dashboard/+page.svelte`**:
+
 ```svelte
 <script lang="ts">
   import type { PageData } from "./$types";
@@ -150,6 +157,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 ### Layout with Session
 
 **`src/routes/+layout.server.ts`**:
+
 ```typescript
 import type { LayoutServerLoad } from "./$types";
 
@@ -167,6 +175,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 ### Login Form
 
 **`src/routes/login/+page.svelte`**:
+
 ```svelte
 <script lang="ts">
   import { authClient } from "$lib/auth-client";
@@ -224,6 +233,7 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 ### User Menu Store
 
 **`src/lib/stores/session.ts`**:
+
 ```typescript
 import { authClient } from "$lib/auth-client";
 import { writable, derived } from "svelte/store";
@@ -241,6 +251,7 @@ export const isLoading = derived(session, ($session) => $session.isPending);
 ### User Menu Component
 
 **`src/lib/components/UserMenu.svelte`**:
+
 ```svelte
 <script lang="ts">
   import { session, user, isLoading } from "$lib/stores/session";
@@ -270,6 +281,7 @@ export const isLoading = derived(session, ($session) => $session.isPending);
 ### Server-Side Sign In
 
 **`src/routes/login/+page.server.ts`**:
+
 ```typescript
 import { auth } from "$lib/server/auth";
 import { fail, redirect } from "@sveltejs/kit";

@@ -37,7 +37,9 @@ export interface Website {
   updatedAt: string;
 }
 
-const connectionString = process.env.DATABASE_URL || "postgresql://postgres:imblue-12345@localhost:4000/linked";
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgresql://postgres:imblue-12345@localhost:4000/linked";
 
 const pool = new Pool({
   connectionString,
@@ -46,21 +48,32 @@ const pool = new Pool({
 export const db = drizzle(pool, { schema });
 
 export async function getUserWebsites(userId: string): Promise<Website[]> {
-  const rows = await db.select().from(schema.website).where(eq(schema.website.userId, userId));
+  const rows = await db
+    .select()
+    .from(schema.website)
+    .where(eq(schema.website.userId, userId));
   return rows.map((w) => ({
     ...w,
     templateId: w.templateId as TemplateId,
     customDomains: (w.customDomains || []) as CustomDomain[],
     profile: w.profile as ProfileData,
-    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (w.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
   }));
 }
 
 export async function getWebsiteById(id: string): Promise<Website | undefined> {
-  const rows = await db.select().from(schema.website).where(eq(schema.website.id, id)).limit(1);
+  const rows = await db
+    .select()
+    .from(schema.website)
+    .where(eq(schema.website.id, id))
+    .limit(1);
   const w = rows[0];
   if (!w) return undefined;
   return {
@@ -68,15 +81,25 @@ export async function getWebsiteById(id: string): Promise<Website | undefined> {
     templateId: w.templateId as TemplateId,
     customDomains: (w.customDomains || []) as CustomDomain[],
     profile: w.profile as ProfileData,
-    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (w.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
   };
 }
 
-export async function getWebsiteBySubdomain(subdomainSlug: string): Promise<Website | undefined> {
-  const rows = await db.select().from(schema.website).where(eq(schema.website.subdomainSlug, subdomainSlug.toLowerCase())).limit(1);
+export async function getWebsiteBySubdomain(
+  subdomainSlug: string,
+): Promise<Website | undefined> {
+  const rows = await db
+    .select()
+    .from(schema.website)
+    .where(eq(schema.website.subdomainSlug, subdomainSlug.toLowerCase()))
+    .limit(1);
   const w = rows[0];
   if (!w) return undefined;
   return {
@@ -84,19 +107,25 @@ export async function getWebsiteBySubdomain(subdomainSlug: string): Promise<Webs
     templateId: w.templateId as TemplateId,
     customDomains: (w.customDomains || []) as CustomDomain[],
     profile: w.profile as ProfileData,
-    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (w.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
   };
 }
 
-export async function getWebsiteByDomain(domainName: string): Promise<Website | undefined> {
+export async function getWebsiteByDomain(
+  domainName: string,
+): Promise<Website | undefined> {
   const rows = await db.select().from(schema.website);
   const match = rows.find((w) =>
     ((w.customDomains || []) as CustomDomain[]).some(
-      (d) => d.name.toLowerCase() === domainName.toLowerCase()
-    )
+      (d) => d.name.toLowerCase() === domainName.toLowerCase(),
+    ),
   );
   if (!match) return undefined;
   return {
@@ -104,18 +133,35 @@ export async function getWebsiteByDomain(domainName: string): Promise<Website | 
     templateId: match.templateId as TemplateId,
     customDomains: (match.customDomains || []) as CustomDomain[],
     profile: match.profile as ProfileData,
-    publishedProfile: (match.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (match.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (match.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (match.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: match.createdAt.toISOString(),
     updatedAt: match.updatedAt.toISOString(),
   };
 }
 
-export async function createWebsite(userId: string, templateId: TemplateId = "daniel-cross"): Promise<Website> {
-  const uRows = await db.select().from(schema.user).where(eq(schema.user.id, userId)).limit(1);
+export async function createWebsite(
+  userId: string,
+  templateId: TemplateId = "daniel-cross",
+): Promise<Website> {
+  const uRows = await db
+    .select()
+    .from(schema.user)
+    .where(eq(schema.user.id, userId))
+    .limit(1);
   const user = uRows[0];
   const name = user ? user.name : "Alex Morgan";
-  const slug = name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") + "-" + Math.floor(1000 + Math.random() * 9000);
+  const slug =
+    name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "") +
+    "-" +
+    Math.floor(1000 + Math.random() * 9000);
   const id = "web_" + Math.random().toString(36).substring(2, 11);
 
   const newWebsite = {
@@ -125,7 +171,8 @@ export async function createWebsite(userId: string, templateId: TemplateId = "da
     subdomainSlug: slug,
     templateId: templateId as string,
     seoTitle: `${name} - Professional Micro-site`,
-    seoDesc: "Explore my professional experience, projects, education, and social networks.",
+    seoDesc:
+      "Explore my professional experience, projects, education, and social networks.",
     customDomains: [] as any,
     profile: {
       ...MOCK_PROFILE,
@@ -158,13 +205,19 @@ export async function createWebsite(userId: string, templateId: TemplateId = "da
   };
 }
 
-export async function updateWebsite(id: string, updates: Partial<Omit<Website, "id" | "userId" | "createdAt">>): Promise<Website | undefined> {
+export async function updateWebsite(
+  id: string,
+  updates: Partial<Omit<Website, "id" | "userId" | "createdAt">>,
+): Promise<Website | undefined> {
   const formattedUpdates: any = {
     ...updates,
     updatedAt: new Date(),
   };
-  
-  await db.update(schema.website).set(formattedUpdates).where(eq(schema.website.id, id));
+
+  await db
+    .update(schema.website)
+    .set(formattedUpdates)
+    .where(eq(schema.website.id, id));
   return getWebsiteById(id);
 }
 
@@ -181,7 +234,9 @@ export interface ChatMessage {
   createdAt: string;
 }
 
-export async function getChatHistory(websiteId: string): Promise<ChatMessage[]> {
+export async function getChatHistory(
+  websiteId: string,
+): Promise<ChatMessage[]> {
   const rows = await db
     .select()
     .from(schema.chatMessage)
@@ -200,7 +255,7 @@ export async function getChatHistory(websiteId: string): Promise<ChatMessage[]> 
 export async function saveChatMessage(
   websiteId: string,
   role: "user" | "assistant",
-  content: string
+  content: string,
 ): Promise<ChatMessage> {
   const id = "msg_" + Math.random().toString(36).substring(2, 11);
   const newMessage = {

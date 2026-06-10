@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getWebsiteBySubdomain } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -32,7 +35,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       const cleanSlug = slug.toLowerCase().trim();
       const existing = await getWebsiteBySubdomain(cleanSlug);
       if (existing && existing.id !== id) {
-        return NextResponse.json({ error: "Subdomain is already in use by another website" }, { status: 409 });
+        return NextResponse.json(
+          { error: "Subdomain is already in use by another website" },
+          { status: 409 },
+        );
       }
       updates.subdomainSlug = cleanSlug;
     }
@@ -48,6 +54,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       slug: updated.subdomainSlug,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to publish page" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to publish page" },
+      { status: 500 },
+    );
   }
 }

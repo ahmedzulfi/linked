@@ -9,7 +9,12 @@ interface WizardAnimationsProps {
   projects?: { title: string; description: string; link?: string }[];
   interests?: string;
   skills?: { name: string }[];
-  experience?: { title: string; company: string; duration: string; description: string }[];
+  experience?: {
+    title: string;
+    company: string;
+    duration: string;
+    description: string;
+  }[];
 }
 
 // ─── Welcome / Kickoff Animation (Step 1) ──────────────────────────────────────
@@ -43,10 +48,29 @@ export function WelcomeAnimation({ profile }: { profile?: any }) {
         }
       `}</style>
 
-      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full max-h-[380px] welcome-float">
+      <svg
+        width="400"
+        height="400"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full max-h-[380px] welcome-float"
+      >
         <defs>
-          <filter id="shadowWelcome" x="-15%" y="-15%" width="130%" height="130%">
-            <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#000000" floodOpacity="0.08" />
+          <filter
+            id="shadowWelcome"
+            x="-15%"
+            y="-15%"
+            width="130%"
+            height="130%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="8"
+              stdDeviation="12"
+              floodColor="#000000"
+              floodOpacity="0.08"
+            />
           </filter>
           <clipPath id="circleAvatar">
             <circle cx="200" cy="140" r="36" />
@@ -58,30 +82,92 @@ export function WelcomeAnimation({ profile }: { profile?: any }) {
         </defs>
 
         {/* Pulse Ring in background */}
-        <circle cx="200" cy="140" r="54" fill="url(#welcomeGrad)" className="welcome-pulse" />
+        <circle
+          cx="200"
+          cy="140"
+          r="54"
+          fill="url(#welcomeGrad)"
+          className="welcome-pulse"
+        />
 
         {/* Main Welcome Card */}
-        <rect x="40" y="60" width="320" height="260" rx="24" fill="white" stroke="#E6E6E6" strokeWidth="2" filter="url(#shadowWelcome)" />
+        <rect
+          x="40"
+          y="60"
+          width="320"
+          height="260"
+          rx="24"
+          fill="white"
+          stroke="#E6E6E6"
+          strokeWidth="2"
+          filter="url(#shadowWelcome)"
+        />
 
         {/* Avatar Container */}
-        <circle cx="200" cy="140" r="38" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
-        <image href={avatarUrl} x="164" y="104" width="72" height="72" clipPath="url(#circleAvatar)" />
+        <circle
+          cx="200"
+          cy="140"
+          r="38"
+          fill="white"
+          stroke="#E6E6E6"
+          strokeWidth="1.5"
+        />
+        <image
+          href={avatarUrl}
+          x="164"
+          y="104"
+          width="72"
+          height="72"
+          clipPath="url(#circleAvatar)"
+        />
 
         {/* Profile Details */}
-        <text x="200" y="210" fill="#2A2A2F" fontSize="16" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
+        <text
+          x="200"
+          y="210"
+          fill="#2A2A2F"
+          fontSize="16"
+          fontWeight="bold"
+          fontFamily="sans-serif"
+          textAnchor="middle"
+        >
           {name}
         </text>
-        
-        <text x="200" y="232" fill="#888888" fontSize="11" fontWeight="600" fontFamily="sans-serif" textAnchor="middle">
+
+        <text
+          x="200"
+          y="232"
+          fill="#888888"
+          fontSize="11"
+          fontWeight="600"
+          fontFamily="sans-serif"
+          textAnchor="middle"
+        >
           {headline.length > 42 ? headline.slice(0, 42) + "..." : headline}
         </text>
 
         {/* Divider */}
-        <line x1="70" y1="255" x2="330" y2="255" stroke="#F0F0F0" strokeWidth="1.5" />
+        <line
+          x1="70"
+          y1="255"
+          x2="330"
+          y2="255"
+          stroke="#F0F0F0"
+          strokeWidth="1.5"
+        />
 
         {/* Action Badge */}
         <rect x="90" y="270" width="220" height="32" rx="10" fill="#2A2A2F" />
-        <text x="200" y="290" fill="white" fontSize="10" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle" letterSpacing="0.8">
+        <text
+          x="200"
+          y="290"
+          fill="white"
+          fontSize="10"
+          fontWeight="bold"
+          fontFamily="sans-serif"
+          textAnchor="middle"
+          letterSpacing="0.8"
+        >
           PORTFOLIO INITIALIZED ✨
         </text>
       </svg>
@@ -94,20 +180,34 @@ export function WelcomeAnimation({ profile }: { profile?: any }) {
 }
 
 // ─── Projects Animation (Step 2) ────────────────────────────────────────────────
-export function ProjectsAnimation({ projects }: { projects?: { title: string; description: string }[] }) {
+export function ProjectsAnimation({
+  projects,
+}: {
+  projects?: { title: string; description: string }[];
+}) {
   const defaultProjects = [
-    { title: "Financial Dashboard App", description: "Modern Web UI using React & Tailwind" },
-    { title: "SaaS Analytics Platform", description: "Node.js and PostgreSQL backend" },
-    { title: "E-Commerce Mobile Client", description: "React Native application" }
+    {
+      title: "Financial Dashboard App",
+      description: "Modern Web UI using React & Tailwind",
+    },
+    {
+      title: "SaaS Analytics Platform",
+      description: "Node.js and PostgreSQL backend",
+    },
+    {
+      title: "E-Commerce Mobile Client",
+      description: "React Native application",
+    },
   ];
 
-  const displayProjects = projects && projects.length > 0 ? projects.slice(0, 3) : defaultProjects;
-  
+  const displayProjects =
+    projects && projects.length > 0 ? projects.slice(0, 3) : defaultProjects;
+
   // Backfill up to 3 placeholders if they have deleted projects
   while (displayProjects.length < 3) {
     displayProjects.push({
       title: "Add New Project",
-      description: "Customize details in the editor form..."
+      description: "Customize details in the editor form...",
     });
   }
 
@@ -169,10 +269,29 @@ export function ProjectsAnimation({ projects }: { projects?: { title: string; de
         }
       `}</style>
 
-      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full max-h-[380px] anim-browser">
+      <svg
+        width="400"
+        height="400"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full max-h-[380px] anim-browser"
+      >
         <defs>
-          <filter id="shadowFilter" x="-15%" y="-15%" width="130%" height="130%">
-            <feDropShadow dx="0" dy="6" stdDeviation="8" floodColor="#000000" floodOpacity="0.06" />
+          <filter
+            id="shadowFilter"
+            x="-15%"
+            y="-15%"
+            width="130%"
+            height="130%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="6"
+              stdDeviation="8"
+              floodColor="#000000"
+              floodOpacity="0.06"
+            />
           </filter>
           <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#8DB8FF" />
@@ -186,48 +305,143 @@ export function ProjectsAnimation({ projects }: { projects?: { title: string; de
             <stop offset="0%" stop-color="#DCEAFF" />
             <stop offset="100%" stop-color="#9d8dfa" />
           </linearGradient>
-          <pattern id="innerGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+          <pattern
+            id="innerGrid"
+            width="20"
+            height="20"
+            patternUnits="userSpaceOnUse"
+          >
             <circle cx="2" cy="2" r="1" fill="#EAEAEA" />
           </pattern>
         </defs>
 
         {/* Browser Window */}
-        <rect x="20" y="30" width="360" height="320" rx="20" fill="white" stroke="#E6E6E6" strokeWidth="2" filter="url(#shadowFilter)" />
-        
+        <rect
+          x="20"
+          y="30"
+          width="360"
+          height="320"
+          rx="20"
+          fill="white"
+          stroke="#E6E6E6"
+          strokeWidth="2"
+          filter="url(#shadowFilter)"
+        />
+
         {/* Controls */}
         <g>
           <circle cx="45" cy="52" r="6" fill="#E45A5A" opacity="0.8" />
           <circle cx="61" cy="52" r="6" fill="#BFE7A9" opacity="0.8" />
           <circle cx="77" cy="52" r="6" fill="#8DB8FF" opacity="0.8" />
-          
+
           <rect x="110" y="40" width="180" height="24" rx="12" fill="#F3F3F3" />
           <image href="/logoicon.png" x="120" y="44" width="16" height="16" />
-          <text x="142" y="56" fill="#888888" fontFamily="monospace" fontSize="9" fontWeight="bold">webild.com/projects</text>
+          <text
+            x="142"
+            y="56"
+            fill="#888888"
+            fontFamily="monospace"
+            fontSize="9"
+            fontWeight="bold"
+          >
+            webild.com/projects
+          </text>
         </g>
-        
-        <line x1="20" y1="76" x2="380" y2="76" stroke="#E6E6E6" strokeWidth="1.5" />
-        <rect x="21" y="77" width="358" height="272" fill="url(#innerGrid)" rx="19" />
 
-        <image href="/logoicon.png" x="140" y="130" width="120" height="120" className="anim-bg-logo" />
+        <line
+          x1="20"
+          y1="76"
+          x2="380"
+          y2="76"
+          stroke="#E6E6E6"
+          strokeWidth="1.5"
+        />
+        <rect
+          x="21"
+          y="77"
+          width="358"
+          height="272"
+          fill="url(#innerGrid)"
+          rx="19"
+        />
+
+        <image
+          href="/logoicon.png"
+          x="140"
+          y="130"
+          width="120"
+          height="120"
+          className="anim-bg-logo"
+        />
 
         {/* Dynamic Project Cards */}
         {displayProjects.map((proj, idx) => {
           const yPos = 100 + idx * 80;
           const animClass = `anim-card-${idx + 1}`;
-          const gradColor = idx === 0 ? "url(#blueGrad)" : idx === 1 ? "url(#greenGrad)" : "url(#purpleGrad)";
-          const initialLetter = proj.title ? proj.title.charAt(0).toUpperCase() : "P";
-          
+          const gradColor =
+            idx === 0
+              ? "url(#blueGrad)"
+              : idx === 1
+                ? "url(#greenGrad)"
+                : "url(#purpleGrad)";
+          const initialLetter = proj.title
+            ? proj.title.charAt(0).toUpperCase()
+            : "P";
+
           return (
             <g key={idx} className={animClass} filter="url(#shadowFilter)">
-              <rect x="48" y={yPos} width="304" height="64" rx="14" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
-              <rect x="60" y={yPos + 12} width="40" height="40" rx="10" fill={gradColor} />
-              <text x="80" y={yPos + 37} fill="white" fontSize="16" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">{initialLetter}</text>
-              
-              <text x="114" y={yPos + 28} fill="#2A2A2F" fontSize="12" fontWeight="bold" fontFamily="sans-serif">
-                {proj.title.length > 24 ? proj.title.slice(0, 24) + "..." : proj.title}
+              <rect
+                x="48"
+                y={yPos}
+                width="304"
+                height="64"
+                rx="14"
+                fill="white"
+                stroke="#E6E6E6"
+                strokeWidth="1.5"
+              />
+              <rect
+                x="60"
+                y={yPos + 12}
+                width="40"
+                height="40"
+                rx="10"
+                fill={gradColor}
+              />
+              <text
+                x="80"
+                y={yPos + 37}
+                fill="white"
+                fontSize="16"
+                fontWeight="bold"
+                fontFamily="sans-serif"
+                textAnchor="middle"
+              >
+                {initialLetter}
               </text>
-              <text x="114" y={yPos + 44} fill="#A3A3A3" fontSize="10" fontFamily="sans-serif">
-                {proj.description.length > 34 ? proj.description.slice(0, 34) + "..." : proj.description}
+
+              <text
+                x="114"
+                y={yPos + 28}
+                fill="#2A2A2F"
+                fontSize="12"
+                fontWeight="bold"
+                fontFamily="sans-serif"
+              >
+                {proj.title.length > 24
+                  ? proj.title.slice(0, 24) + "..."
+                  : proj.title}
+              </text>
+              <text
+                x="114"
+                y={yPos + 44}
+                fill="#A3A3A3"
+                fontSize="10"
+                fontFamily="sans-serif"
+              >
+                {proj.description.length > 34
+                  ? proj.description.slice(0, 34) + "..."
+                  : proj.description}
               </text>
             </g>
           );
@@ -243,14 +457,25 @@ export function ProjectsAnimation({ projects }: { projects?: { title: string; de
 
 // ─── Interests Animation (Step 3) ───────────────────────────────────────────────
 export function InterestsAnimation({ interests }: { interests?: string }) {
-  const defaultInterests = ["Product Design", "AI Development", "Creative Writing", "Startup Growth"];
+  const defaultInterests = [
+    "Product Design",
+    "AI Development",
+    "Creative Writing",
+    "Startup Growth",
+  ];
   const parsed = interests
-    ? interests.split(/[,;\n]/).map(s => s.trim()).filter(s => s.length > 2)
+    ? interests
+        .split(/[,;\n]/)
+        .map((s) => s.trim())
+        .filter((s) => s.length > 2)
     : [];
-  const displayInterests = parsed.length > 0 ? parsed.slice(0, 4) : defaultInterests;
-  
+  const displayInterests =
+    parsed.length > 0 ? parsed.slice(0, 4) : defaultInterests;
+
   while (displayInterests.length < 4) {
-    displayInterests.push(defaultInterests[displayInterests.length % defaultInterests.length]);
+    displayInterests.push(
+      defaultInterests[displayInterests.length % defaultInterests.length],
+    );
   }
 
   return (
@@ -301,10 +526,29 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
         }
       `}</style>
 
-      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full max-h-[380px]">
+      <svg
+        width="400"
+        height="400"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full max-h-[380px]"
+      >
         <defs>
-          <filter id="shadowFilter2" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000000" floodOpacity="0.05" />
+          <filter
+            id="shadowFilter2"
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="4"
+              stdDeviation="6"
+              floodColor="#000000"
+              floodOpacity="0.05"
+            />
           </filter>
           <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#8DB8FF" />
@@ -317,10 +561,34 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
         </defs>
 
         {/* Neural pathway curves */}
-        <path d="M 200 200 Q 130 130, 70 88" stroke="url(#gradient1)" strokeWidth="3" className="pathway" strokeLinecap="round" />
-        <path d="M 200 200 Q 260 130, 310 98" stroke="url(#gradient2)" strokeWidth="3" className="pathway" strokeLinecap="round" />
-        <path d="M 200 200 Q 130 260, 80 302" stroke="url(#gradient1)" strokeWidth="3" className="pathway" strokeLinecap="round" />
-        <path d="M 200 200 Q 270 260, 310 292" stroke="#BFE7A9" strokeWidth="3" className="pathway" strokeLinecap="round" />
+        <path
+          d="M 200 200 Q 130 130, 70 88"
+          stroke="url(#gradient1)"
+          strokeWidth="3"
+          className="pathway"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 200 200 Q 260 130, 310 98"
+          stroke="url(#gradient2)"
+          strokeWidth="3"
+          className="pathway"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 200 200 Q 130 260, 80 302"
+          stroke="url(#gradient1)"
+          strokeWidth="3"
+          className="pathway"
+          strokeLinecap="round"
+        />
+        <path
+          d="M 200 200 Q 270 260, 310 292"
+          stroke="#BFE7A9"
+          strokeWidth="3"
+          className="pathway"
+          strokeLinecap="round"
+        />
 
         <circle cx="70" cy="88" r="4" fill="#8DB8FF" />
         <circle cx="310" cy="98" r="4" fill="#8DFFB3" />
@@ -329,41 +597,129 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
 
         {/* Center Orb */}
         <g className="center-orb">
-          <circle cx="200" cy="200" r="40" fill="white" stroke="#E6E6E6" strokeWidth="2.5" filter="url(#shadowFilter2)" />
+          <circle
+            cx="200"
+            cy="200"
+            r="40"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="2.5"
+            filter="url(#shadowFilter2)"
+          />
           <image href="/logoicon.png" x="176" y="176" width="48" height="48" />
-          <circle cx="200" cy="200" r="48" stroke="#8DB8FF" strokeWidth="1.5" strokeDasharray="3 6" opacity="0.5" />
+          <circle
+            cx="200"
+            cy="200"
+            r="48"
+            stroke="#8DB8FF"
+            strokeWidth="1.5"
+            strokeDasharray="3 6"
+            opacity="0.5"
+          />
         </g>
 
         {/* Dynamic Interest Pills */}
         <g className="pill-1" filter="url(#shadowFilter2)">
-          <rect x="-70" y="-18" width="140" height="36" rx="18" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
+          <rect
+            x="-70"
+            y="-18"
+            width="140"
+            height="36"
+            rx="18"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
           <circle cx="-50" cy="0" r="6" fill="#E45A5A" opacity="0.8" />
-          <text x="-36" y="4" fill="#2A2A2F" fontSize="10" fontFamily="sans-serif" fontWeight="600">
-            {displayInterests[0].length > 16 ? displayInterests[0].slice(0, 16) + "..." : displayInterests[0]}
+          <text
+            x="-36"
+            y="4"
+            fill="#2A2A2F"
+            fontSize="10"
+            fontFamily="sans-serif"
+            fontWeight="600"
+          >
+            {displayInterests[0].length > 16
+              ? displayInterests[0].slice(0, 16) + "..."
+              : displayInterests[0]}
           </text>
         </g>
 
         <g className="pill-2" filter="url(#shadowFilter2)">
-          <rect x="-70" y="-18" width="140" height="36" rx="18" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
+          <rect
+            x="-70"
+            y="-18"
+            width="140"
+            height="36"
+            rx="18"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
           <circle cx="-50" cy="0" r="6" fill="#8DFFB3" />
-          <text x="-36" y="4" fill="#2A2A2F" fontSize="10" fontFamily="sans-serif" fontWeight="600">
-            {displayInterests[1].length > 16 ? displayInterests[1].slice(0, 16) + "..." : displayInterests[1]}
+          <text
+            x="-36"
+            y="4"
+            fill="#2A2A2F"
+            fontSize="10"
+            fontFamily="sans-serif"
+            fontWeight="600"
+          >
+            {displayInterests[1].length > 16
+              ? displayInterests[1].slice(0, 16) + "..."
+              : displayInterests[1]}
           </text>
         </g>
 
         <g className="pill-3" filter="url(#shadowFilter2)">
-          <rect x="-70" y="-18" width="140" height="36" rx="18" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
+          <rect
+            x="-70"
+            y="-18"
+            width="140"
+            height="36"
+            rx="18"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
           <circle cx="-50" cy="0" r="6" fill="#8DB8FF" />
-          <text x="-36" y="4" fill="#2A2A2F" fontSize="10" fontFamily="sans-serif" fontWeight="600">
-            {displayInterests[2].length > 16 ? displayInterests[2].slice(0, 16) + "..." : displayInterests[2]}
+          <text
+            x="-36"
+            y="4"
+            fill="#2A2A2F"
+            fontSize="10"
+            fontFamily="sans-serif"
+            fontWeight="600"
+          >
+            {displayInterests[2].length > 16
+              ? displayInterests[2].slice(0, 16) + "..."
+              : displayInterests[2]}
           </text>
         </g>
 
         <g className="pill-4" filter="url(#shadowFilter2)">
-          <rect x="-70" y="-18" width="140" height="36" rx="18" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
+          <rect
+            x="-70"
+            y="-18"
+            width="140"
+            height="36"
+            rx="18"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
           <circle cx="-50" cy="0" r="6" fill="#BFE7A9" />
-          <text x="-36" y="4" fill="#2A2A2F" fontSize="10" fontFamily="sans-serif" fontWeight="600">
-            {displayInterests[3].length > 16 ? displayInterests[3].slice(0, 16) + "..." : displayInterests[3]}
+          <text
+            x="-36"
+            y="4"
+            fill="#2A2A2F"
+            fontSize="10"
+            fontFamily="sans-serif"
+            fontWeight="600"
+          >
+            {displayInterests[3].length > 16
+              ? displayInterests[3].slice(0, 16) + "..."
+              : displayInterests[3]}
           </text>
         </g>
       </svg>
@@ -378,11 +734,14 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
 // ─── Skills Animation (Step 4) ──────────────────────────────────────────────────
 export function SkillsAnimation({ skills }: { skills?: { name: string }[] }) {
   const defaultSkills = ["React", "Tailwind", "TypeScript", "Next.js"];
-  const parsed = skills && skills.length > 0 ? skills.map(s => s.name) : defaultSkills;
+  const parsed =
+    skills && skills.length > 0 ? skills.map((s) => s.name) : defaultSkills;
   const displaySkills = [...parsed];
 
   while (displaySkills.length < 3) {
-    displaySkills.push(defaultSkills[displaySkills.length % defaultSkills.length]);
+    displaySkills.push(
+      defaultSkills[displaySkills.length % defaultSkills.length],
+    );
   }
 
   return (
@@ -439,58 +798,222 @@ export function SkillsAnimation({ skills }: { skills?: { name: string }[] }) {
         }
       `}</style>
 
-      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full max-h-[380px]">
+      <svg
+        width="400"
+        height="400"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full max-h-[380px]"
+      >
         <defs>
-          <filter id="shadowFilter3" x="-15%" y="-15%" width="130%" height="130%">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000000" floodOpacity="0.04" />
+          <filter
+            id="shadowFilter3"
+            x="-15%"
+            y="-15%"
+            width="130%"
+            height="130%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="4"
+              stdDeviation="6"
+              floodColor="#000000"
+              floodOpacity="0.04"
+            />
           </filter>
         </defs>
 
-        <rect x="50" y="50" width="300" height="300" rx="28" fill="rgba(250, 250, 250, 0.4)" stroke="#E6E6E6" strokeWidth="2.5" strokeDasharray="6 6" className="anim-bento-container" />
+        <rect
+          x="50"
+          y="50"
+          width="300"
+          height="300"
+          rx="28"
+          fill="rgba(250, 250, 250, 0.4)"
+          stroke="#E6E6E6"
+          strokeWidth="2.5"
+          strokeDasharray="6 6"
+          className="anim-bento-container"
+        />
 
-        <line x1="200" y1="30" x2="200" y2="370" stroke="#8DB8FF" strokeWidth="1.5" opacity="0.4" className="laser-line" />
-        <line x1="30" y1="200" x2="370" y2="200" stroke="#8DB8FF" strokeWidth="1.5" opacity="0.4" className="laser-line" />
+        <line
+          x1="200"
+          y1="30"
+          x2="200"
+          y2="370"
+          stroke="#8DB8FF"
+          strokeWidth="1.5"
+          opacity="0.4"
+          className="laser-line"
+        />
+        <line
+          x1="30"
+          y1="200"
+          x2="370"
+          y2="200"
+          stroke="#8DB8FF"
+          strokeWidth="1.5"
+          opacity="0.4"
+          className="laser-line"
+        />
 
         {/* Bento Cell 1: Webild Anchor */}
         <g className="bento-card-1" filter="url(#shadowFilter3)">
-          <rect x="65" y="65" width="130" height="130" rx="20" fill="#2A2A2F" stroke="#171717" strokeWidth="2" />
+          <rect
+            x="65"
+            y="65"
+            width="130"
+            height="130"
+            rx="20"
+            fill="#2A2A2F"
+            stroke="#171717"
+            strokeWidth="2"
+          />
           <image href="/logoicon.png" x="100" y="90" width="60" height="60" />
-          <text x="130" y="172" fill="#E6E6E6" fontSize="11" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle" letterSpacing="0.5">ANCHOR</text>
+          <text
+            x="130"
+            y="172"
+            fill="#E6E6E6"
+            fontSize="11"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+            textAnchor="middle"
+            letterSpacing="0.5"
+          >
+            ANCHOR
+          </text>
         </g>
 
         {/* Bento Cell 2: Skill Node 1 */}
         <g className="bento-card-2" filter="url(#shadowFilter3)">
-          <rect x="205" y="65" width="130" height="130" rx="20" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
+          <rect
+            x="205"
+            y="65"
+            width="130"
+            height="130"
+            rx="20"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
           <circle cx="270" cy="115" r="18" fill="#8DB8FF" opacity="0.1" />
           <circle cx="270" cy="115" r="5" fill="#8DB8FF" />
-          <ellipse cx="270" cy="115" rx="16" ry="6" stroke="#8DB8FF" strokeWidth="1.5" transform="rotate(30, 270, 115)" />
-          <ellipse cx="270" cy="115" rx="16" ry="6" stroke="#8DB8FF" strokeWidth="1.5" transform="rotate(150, 270, 115)" />
-          
-          <text x="270" y="165" fill="#2A2A2F" fontSize="11" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
-            {displaySkills[0].length > 14 ? displaySkills[0].slice(0, 14) + "..." : displaySkills[0]}
+          <ellipse
+            cx="270"
+            cy="115"
+            rx="16"
+            ry="6"
+            stroke="#8DB8FF"
+            strokeWidth="1.5"
+            transform="rotate(30, 270, 115)"
+          />
+          <ellipse
+            cx="270"
+            cy="115"
+            rx="16"
+            ry="6"
+            stroke="#8DB8FF"
+            strokeWidth="1.5"
+            transform="rotate(150, 270, 115)"
+          />
+
+          <text
+            x="270"
+            y="165"
+            fill="#2A2A2F"
+            fontSize="11"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+            textAnchor="middle"
+          >
+            {displaySkills[0].length > 14
+              ? displaySkills[0].slice(0, 14) + "..."
+              : displaySkills[0]}
           </text>
         </g>
 
         {/* Bento Cell 3: Skill Node 2 */}
         <g className="bento-card-3" filter="url(#shadowFilter3)">
-          <rect x="65" y="205" width="130" height="130" rx="20" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
+          <rect
+            x="65"
+            y="205"
+            width="130"
+            height="130"
+            rx="20"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
           <circle cx="130" cy="255" r="18" fill="#8DFFB3" opacity="0.1" />
-          <path d="M 120 255 Q 130 240, 140 255 Q 130 270, 120 255 Z" stroke="#369762" strokeWidth="2" fill="none" />
+          <path
+            d="M 120 255 Q 130 240, 140 255 Q 130 270, 120 255 Z"
+            stroke="#369762"
+            strokeWidth="2"
+            fill="none"
+          />
           <circle cx="130" cy="255" r="4" fill="#369762" />
-          
-          <text x="130" y="305" fill="#2A2A2F" fontSize="11" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
-            {displaySkills[1].length > 14 ? displaySkills[1].slice(0, 14) + "..." : displaySkills[1]}
+
+          <text
+            x="130"
+            y="305"
+            fill="#2A2A2F"
+            fontSize="11"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+            textAnchor="middle"
+          >
+            {displaySkills[1].length > 14
+              ? displaySkills[1].slice(0, 14) + "..."
+              : displaySkills[1]}
           </text>
         </g>
 
         {/* Bento Cell 4: Skill Node 3 */}
         <g className="bento-card-4" filter="url(#shadowFilter3)">
-          <rect x="205" y="205" width="130" height="130" rx="20" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
-          <rect x="252" y="235" width="36" height="36" rx="6" fill="#8DB8FF" opacity="0.1" />
-          <text x="270" y="260" fill="#2A2A2F" fontSize="16" fontWeight="950" fontFamily="sans-serif" textAnchor="middle">TS</text>
-          
-          <text x="270" y="305" fill="#2A2A2F" fontSize="11" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
-            {displaySkills[2].length > 14 ? displaySkills[2].slice(0, 14) + "..." : displaySkills[2]}
+          <rect
+            x="205"
+            y="205"
+            width="130"
+            height="130"
+            rx="20"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
+          <rect
+            x="252"
+            y="235"
+            width="36"
+            height="36"
+            rx="6"
+            fill="#8DB8FF"
+            opacity="0.1"
+          />
+          <text
+            x="270"
+            y="260"
+            fill="#2A2A2F"
+            fontSize="16"
+            fontWeight="950"
+            fontFamily="sans-serif"
+            textAnchor="middle"
+          >
+            TS
+          </text>
+
+          <text
+            x="270"
+            y="305"
+            fill="#2A2A2F"
+            fontSize="11"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+            textAnchor="middle"
+          >
+            {displaySkills[2].length > 14
+              ? displaySkills[2].slice(0, 14) + "..."
+              : displaySkills[2]}
           </text>
         </g>
       </svg>
@@ -503,17 +1026,31 @@ export function SkillsAnimation({ skills }: { skills?: { name: string }[] }) {
 }
 
 // ─── Experience Animation (Step 5) ──────────────────────────────────────────────
-export function ExperienceAnimation({ experience }: { experience?: { title: string; company: string; duration: string }[] }) {
+export function ExperienceAnimation({
+  experience,
+}: {
+  experience?: { title: string; company: string; duration: string }[];
+}) {
   const defaultExp = [
     { title: "Freelancer", company: "Product Dev", duration: "2022 - 2024" },
-    { title: "Senior Engineer", company: "Webild Cloud", duration: "2024 - PRESENT" }
+    {
+      title: "Senior Engineer",
+      company: "Webild Cloud",
+      duration: "2024 - PRESENT",
+    },
   ];
 
-  const displayExp = experience && experience.length > 0 ? experience.slice(0, 2) : defaultExp;
-  
+  const displayExp =
+    experience && experience.length > 0 ? experience.slice(0, 2) : defaultExp;
+
   // Stagger left and right cards
   const leftCard = displayExp.length === 2 ? displayExp[0] : defaultExp[0];
-  const rightCard = displayExp.length === 2 ? displayExp[1] : (displayExp.length === 1 ? displayExp[0] : defaultExp[1]);
+  const rightCard =
+    displayExp.length === 2
+      ? displayExp[1]
+      : displayExp.length === 1
+        ? displayExp[0]
+        : defaultExp[1];
 
   return (
     <div className="w-full max-w-[480px] aspect-square flex flex-col items-center justify-center relative">
@@ -554,63 +1091,209 @@ export function ExperienceAnimation({ experience }: { experience?: { title: stri
         .particle-beam { animation: particleFlow 4s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
       `}</style>
 
-      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full max-h-[380px]">
+      <svg
+        width="400"
+        height="400"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full max-h-[380px]"
+      >
         <defs>
-          <filter id="shadowFilter4" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="4" stdDeviation="6" floodColor="#000000" floodOpacity="0.04" />
+          <filter
+            id="shadowFilter4"
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="4"
+              stdDeviation="6"
+              floodColor="#000000"
+              floodOpacity="0.04"
+            />
           </filter>
         </defs>
 
-        <line x1="200" y1="80" x2="200" y2="350" stroke="#E6E6E6" strokeWidth="4" strokeLinecap="round" className="axis-trunk" />
-        <path d="M 200 80 L 200 350" stroke="#8DB8FF" strokeWidth="4" strokeLinecap="round" className="axis-trunk" opacity="0.6" />
+        <line
+          x1="200"
+          y1="80"
+          x2="200"
+          y2="350"
+          stroke="#E6E6E6"
+          strokeWidth="4"
+          strokeLinecap="round"
+          className="axis-trunk"
+        />
+        <path
+          d="M 200 80 L 200 350"
+          stroke="#8DB8FF"
+          strokeWidth="4"
+          strokeLinecap="round"
+          className="axis-trunk"
+          opacity="0.6"
+        />
 
         {/* Top Node */}
         <g>
-          <circle cx="200" cy="55" r="24" fill="white" stroke="#E6E6E6" strokeWidth="2.5" filter="url(#shadowFilter4)" />
+          <circle
+            cx="200"
+            cy="55"
+            r="24"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="2.5"
+            filter="url(#shadowFilter4)"
+          />
           <image href="/logoicon.png" x="184" y="39" width="32" height="32" />
         </g>
 
         {/* Node 1 */}
         <g className="anim-node-exp1">
-          <path d="M 200 190 Q 150 190, 110 205" stroke="#8DB8FF" strokeWidth="3.5" strokeLinecap="round" />
-          <circle cx="200" cy="190" r="8" fill="white" stroke="#8DB8FF" strokeWidth="3" />
+          <path
+            d="M 200 190 Q 150 190, 110 205"
+            stroke="#8DB8FF"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
+          <circle
+            cx="200"
+            cy="190"
+            r="8"
+            fill="white"
+            stroke="#8DB8FF"
+            strokeWidth="3"
+          />
         </g>
 
         {/* Left Card */}
-        <g className="exp-card-l" transform="translate(20, 150)" filter="url(#shadowFilter4)">
-          <rect width="130" height="80" rx="14" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
-          <text x="12" y="24" fill="#A3A3A3" fontSize="8" fontWeight="bold" fontFamily="monospace">
-            {leftCard.company.length > 20 ? leftCard.company.slice(0, 20) + "..." : leftCard.company}
+        <g
+          className="exp-card-l"
+          transform="translate(20, 150)"
+          filter="url(#shadowFilter4)"
+        >
+          <rect
+            width="130"
+            height="80"
+            rx="14"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
+          <text
+            x="12"
+            y="24"
+            fill="#A3A3A3"
+            fontSize="8"
+            fontWeight="bold"
+            fontFamily="monospace"
+          >
+            {leftCard.company.length > 20
+              ? leftCard.company.slice(0, 20) + "..."
+              : leftCard.company}
           </text>
-          <text x="12" y="44" fill="#2A2A2F" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
-            {leftCard.title.length > 18 ? leftCard.title.slice(0, 18) + "..." : leftCard.title}
+          <text
+            x="12"
+            y="44"
+            fill="#2A2A2F"
+            fontSize="11"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+          >
+            {leftCard.title.length > 18
+              ? leftCard.title.slice(0, 18) + "..."
+              : leftCard.title}
           </text>
-          <text x="12" y="66" fill="#8DB8FF" fontSize="9" fontWeight="900" fontFamily="sans-serif" letterSpacing="0.5">
+          <text
+            x="12"
+            y="66"
+            fill="#8DB8FF"
+            fontSize="9"
+            fontWeight="900"
+            fontFamily="sans-serif"
+            letterSpacing="0.5"
+          >
             {leftCard.duration}
           </text>
         </g>
 
         {/* Node 2 */}
         <g className="anim-node-exp2">
-          <path d="M 200 290 Q 250 290, 290 305" stroke="#8DFFB3" strokeWidth="3.5" strokeLinecap="round" />
-          <circle cx="200" cy="290" r="8" fill="white" stroke="#8DFFB3" strokeWidth="3" />
+          <path
+            d="M 200 290 Q 250 290, 290 305"
+            stroke="#8DFFB3"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+          />
+          <circle
+            cx="200"
+            cy="290"
+            r="8"
+            fill="white"
+            stroke="#8DFFB3"
+            strokeWidth="3"
+          />
         </g>
 
         {/* Right Card */}
-        <g className="exp-card-r" transform="translate(250, 250)" filter="url(#shadowFilter4)">
-          <rect width="130" height="80" rx="14" fill="white" stroke="#E6E6E6" strokeWidth="1.5" />
-          <text x="12" y="24" fill="#A3A3A3" fontSize="8" fontWeight="bold" fontFamily="monospace">
-            {rightCard.company.length > 20 ? rightCard.company.slice(0, 20) + "..." : rightCard.company}
+        <g
+          className="exp-card-r"
+          transform="translate(250, 250)"
+          filter="url(#shadowFilter4)"
+        >
+          <rect
+            width="130"
+            height="80"
+            rx="14"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="1.5"
+          />
+          <text
+            x="12"
+            y="24"
+            fill="#A3A3A3"
+            fontSize="8"
+            fontWeight="bold"
+            fontFamily="monospace"
+          >
+            {rightCard.company.length > 20
+              ? rightCard.company.slice(0, 20) + "..."
+              : rightCard.company}
           </text>
-          <text x="12" y="44" fill="#2A2A2F" fontSize="11" fontWeight="bold" fontFamily="sans-serif">
-            {rightCard.title.length > 18 ? rightCard.title.slice(0, 18) + "..." : rightCard.title}
+          <text
+            x="12"
+            y="44"
+            fill="#2A2A2F"
+            fontSize="11"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+          >
+            {rightCard.title.length > 18
+              ? rightCard.title.slice(0, 18) + "..."
+              : rightCard.title}
           </text>
-          <text x="12" y="66" fill="#369762" fontSize="9" fontWeight="900" fontFamily="sans-serif" letterSpacing="0.5">
+          <text
+            x="12"
+            y="66"
+            fill="#369762"
+            fontSize="9"
+            fontWeight="900"
+            fontFamily="sans-serif"
+            letterSpacing="0.5"
+          >
             {rightCard.duration}
           </text>
         </g>
 
-        <circle r="4" fill="#8DB8FF" className="particle-beam" filter="url(#shadowFilter4)" />
+        <circle
+          r="4"
+          fill="#8DB8FF"
+          className="particle-beam"
+          filter="url(#shadowFilter4)"
+        />
       </svg>
 
       <div className="absolute bottom-1.5 flex items-center gap-2 text-xs font-semibold text-neutral-500 font-mono tracking-wide">
@@ -662,10 +1345,29 @@ export function GeneratingAnimation() {
         }
       `}</style>
 
-      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full max-h-[380px]">
+      <svg
+        width="400"
+        height="400"
+        viewBox="0 0 400 400"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full h-full max-h-[380px]"
+      >
         <defs>
-          <filter id="shadowFilter5" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="8" stdDeviation="10" floodColor="#000000" floodOpacity="0.06" />
+          <filter
+            id="shadowFilter5"
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="8"
+              stdDeviation="10"
+              floodColor="#000000"
+              floodOpacity="0.06"
+            />
           </filter>
           <radialGradient id="meshRadial" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stop-color="#8DB8FF" stop-opacity="0.25" />
@@ -676,7 +1378,14 @@ export function GeneratingAnimation() {
         <circle cx="200" cy="200" r="150" fill="url(#meshRadial)" />
 
         <g className="spin-mesh-outer">
-          <circle cx="200" cy="200" r="130" stroke="#E6E6E6" strokeWidth="2" strokeDasharray="8 16" />
+          <circle
+            cx="200"
+            cy="200"
+            r="130"
+            stroke="#E6E6E6"
+            strokeWidth="2"
+            strokeDasharray="8 16"
+          />
           <circle cx="200" cy="70" r="5" fill="#8DFFB3" />
           <circle cx="200" cy="330" r="5" fill="#8DB8FF" />
           <circle cx="70" cy="200" r="5" fill="#BFE7A9" />
@@ -684,23 +1393,67 @@ export function GeneratingAnimation() {
         </g>
 
         <g className="spin-mesh-inner">
-          <circle cx="200" cy="200" r="95" stroke="#8DB8FF" strokeWidth="1.5" strokeDasharray="16 8" opacity="0.7" />
-          <line x1="200" y1="200" x2="267" y2="133" stroke="#8DB8FF" strokeWidth="1.5" opacity="0.6" />
-          <line x1="200" y1="200" x2="133" y2="267" stroke="#8DB8FF" strokeWidth="1.5" opacity="0.6" />
+          <circle
+            cx="200"
+            cy="200"
+            r="95"
+            stroke="#8DB8FF"
+            strokeWidth="1.5"
+            strokeDasharray="16 8"
+            opacity="0.7"
+          />
+          <line
+            x1="200"
+            y1="200"
+            x2="267"
+            y2="133"
+            stroke="#8DB8FF"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
+          <line
+            x1="200"
+            y1="200"
+            x2="133"
+            y2="267"
+            stroke="#8DB8FF"
+            strokeWidth="1.5"
+            opacity="0.6"
+          />
           <circle cx="267" cy="133" r="4" fill="#8DB8FF" />
           <circle cx="133" cy="267" r="4" fill="#8DB8FF" />
         </g>
 
-        <circle cx="200" cy="200" r="65" stroke="#8DFFB3" strokeWidth="3.5" opacity="0.6" className="breath-mesh" />
+        <circle
+          cx="200"
+          cy="200"
+          r="65"
+          stroke="#8DFFB3"
+          strokeWidth="3.5"
+          opacity="0.6"
+          className="breath-mesh"
+        />
 
         <g className="pulse-logo-glow">
-          <circle cx="200" cy="200" r="38" fill="white" stroke="#E6E6E6" strokeWidth="2.5" filter="url(#shadowFilter5)" />
+          <circle
+            cx="200"
+            cy="200"
+            r="38"
+            fill="white"
+            stroke="#E6E6E6"
+            strokeWidth="2.5"
+            filter="url(#shadowFilter5)"
+          />
           <image href="/logoicon.png" x="178" y="178" width="44" height="44" />
         </g>
       </svg>
 
       <div className="absolute bottom-1.5 flex items-center gap-2 text-xs font-semibold text-neutral-500 font-mono tracking-wide">
-        <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: "4s" }} /> AI Refinement
+        <Sparkles
+          className="w-4 h-4 text-amber-500 animate-spin"
+          style={{ animationDuration: "4s" }}
+        />{" "}
+        AI Refinement
       </div>
     </div>
   );

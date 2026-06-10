@@ -15,6 +15,7 @@ bun add better-auth drizzle-orm mysql2 drizzle-kit
 ### Database Connection
 
 **`src/db/index.ts`**:
+
 ```typescript
 import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
@@ -33,8 +34,15 @@ export const db = drizzle(connection, { schema, mode: "default" });
 ### Schema Definition
 
 **`src/db/schema.ts`**:
+
 ```typescript
-import { mysqlTable, varchar, boolean, datetime, text } from "drizzle-orm/mysql-core";
+import {
+  mysqlTable,
+  varchar,
+  boolean,
+  datetime,
+  text,
+} from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable("user", {
   id: varchar("id", { length: 36 }).primaryKey(),
@@ -90,6 +98,7 @@ export const verification = mysqlTable("verification", {
 ### Auth Configuration
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -118,6 +127,7 @@ bun add better-auth drizzle-orm @planetscale/database drizzle-kit
 ### Connection
 
 **`src/db/index.ts`**:
+
 ```typescript
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { connect } from "@planetscale/database";
@@ -166,6 +176,7 @@ export const auth = betterAuth({
 ## Drizzle Kit Configuration
 
 **`drizzle.config.ts`**:
+
 ```typescript
 import { defineConfig } from "drizzle-kit";
 
@@ -192,7 +203,7 @@ export default defineConfig({
     url: process.env.DATABASE_URL!,
   },
   // PlanetScale specific
-  tablesFilter: ["!_vt*"],  // Exclude Vitess tables
+  tablesFilter: ["!_vt*"], // Exclude Vitess tables
 });
 ```
 
@@ -215,6 +226,7 @@ bunx drizzle-kit push --force  # PlanetScale requires force for some operations
 ```
 
 Or use PlanetScale's branching workflow:
+
 1. Create a development branch
 2. Push migrations to development branch
 3. Create a deploy request

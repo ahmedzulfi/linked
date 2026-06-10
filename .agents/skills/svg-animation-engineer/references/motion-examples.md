@@ -16,11 +16,13 @@ To give objects weight and elasticity, use `transform-origin` with precise `tran
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     /* Airborne: Stretched vertically, thinned horizontally */
     transform: translateY(-150px) scale(0.9, 1.1);
   }
-  45%, 55% {
+  45%,
+  55% {
     /* Impact with ground: Normal shape just before/after squishing */
     transform: translateY(0) scale(1, 1);
   }
@@ -52,7 +54,7 @@ Characters running or objects blowing in the wind should have trailing parts (ha
     transform-origin: top center;
     animation: sway 1s ease-in-out infinite alternate;
   }
-  
+
   @keyframes sway {
     0%   { transform: rotate(-15deg); }
     100% { transform: rotate(15deg); }
@@ -90,8 +92,12 @@ Background elements should move at different speeds (slower for distant clouds, 
 @keyframes slideLeft {
   /* For seamless SVG loops, clone the grouped elements so they span 2x the width */
   /* If elements take up 1200px (width), shift them rigidly by -1200px */
-  from { transform: translateX(0); }
-  to   { transform: translateX(-1200px); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-1200px);
+  }
   /* Ensure easing is always 'linear' to avoid jerky restarts */
 }
 ```

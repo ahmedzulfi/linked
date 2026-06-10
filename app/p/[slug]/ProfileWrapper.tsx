@@ -9,6 +9,10 @@ interface ProfileWrapperProps {
   fluid?: boolean;
 }
 
-export default function ProfileWrapper({ profile, template, fluid = true }: ProfileWrapperProps) {
+export default function ProfileWrapper({
+  profile,
+  template,
+  fluid = true,
+}: ProfileWrapperProps) {
   return <ProfilePreview profile={profile} template={template} fluid={fluid} />;
 }

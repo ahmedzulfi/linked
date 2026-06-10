@@ -34,7 +34,10 @@ function PublishPanel({
   const { editedProfile } = useEditor();
 
   const suggestedSlug = editedProfile
-    ? editedProfile.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
+    ? editedProfile.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "")
     : "yourname";
 
   const [slug, setSlug] = useState(suggestedSlug);
@@ -52,7 +55,9 @@ function PublishPanel({
     setChecking(true);
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/websites/subdomain/check?slug=${encodeURIComponent(slug)}`);
+        const res = await fetch(
+          `/api/websites/subdomain/check?slug=${encodeURIComponent(slug)}`,
+        );
         const data = await res.json();
         if (res.ok) {
           setIsAvailable(data.available);
@@ -72,7 +77,9 @@ function PublishPanel({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h3 className="text-sm font-medium text-black mb-1">Choose your subdomain</h3>
+        <h3 className="text-sm font-medium text-black mb-1">
+          Choose your subdomain
+        </h3>
         <p className="text-xs text-[#9CA3AF]">Your free URL on LinkedPage</p>
       </div>
 
@@ -83,7 +90,9 @@ function PublishPanel({
         <input
           className="flex-1 px-3 py-2.5 text-sm text-black bg-transparent outline-none min-w-0"
           value={slug}
-          onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+          onChange={(e) =>
+            setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
+          }
           placeholder="yourname"
           maxLength={30}
         />
@@ -99,7 +108,8 @@ function PublishPanel({
         <div className="text-xs">
           {checking ? (
             <span className="text-[#9CA3AF] flex items-center gap-1">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking availability...
+              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking
+              availability...
             </span>
           ) : isAvailable ? (
             <p className="text-xs text-[#369762] flex items-center gap-1">
@@ -117,8 +127,11 @@ function PublishPanel({
       <button
         onClick={() => isValid && isAvailable && onPublish(slug)}
         disabled={!isValid || !isAvailable || publishing || checking}
-        className={`button button-primary w-full justify-center gap-2 ${!isValid || !isAvailable || publishing || checking ? "opacity-50 pointer-events-none" : ""
-          }`}
+        className={`button button-primary w-full justify-center gap-2 ${
+          !isValid || !isAvailable || publishing || checking
+            ? "opacity-50 pointer-events-none"
+            : ""
+        }`}
       >
         {publishing ? (
           <Loader2 className="w-5 h-5 animate-spin" />
@@ -159,7 +172,9 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
         onClick={copy}
       >
         <Globe className="w-5 h-5 text-[#9CA3AF] flex-shrink-0" />
-        <p className="text-sm text-black flex-1 truncate font-medium">linkedpage.io/{slug}</p>
+        <p className="text-sm text-black flex-1 truncate font-medium">
+          linkedpage.io/{slug}
+        </p>
         {copied ? (
           <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
         ) : (
@@ -184,7 +199,13 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
 function PreviewInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { editedProfile, selectedTemplate, useMockProfile, loadWebsite, websiteId } = useEditor();
+  const {
+    editedProfile,
+    selectedTemplate,
+    useMockProfile,
+    loadWebsite,
+    websiteId,
+  } = useEditor();
 
   const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
   const [publishStep, setPublishStep] = useState<PublishStep>("idle");
@@ -282,18 +303,20 @@ function PreviewInner() {
   const mobileH = 812;
 
   // Calculate scale to fit within available space
-  const previewContainerW = typeof window !== "undefined" ? window.innerWidth - 340 : 700;
-  const previewContainerH = typeof window !== "undefined" ? window.innerHeight - 200 : 600;
+  const previewContainerW =
+    typeof window !== "undefined" ? window.innerWidth - 340 : 700;
+  const previewContainerH =
+    typeof window !== "undefined" ? window.innerHeight - 200 : 600;
 
   const desktopScale = Math.min(
     (previewContainerW - 40) / desktopW,
     (previewContainerH - 60) / desktopH,
-    0.85
+    0.85,
   );
   const mobileScale = Math.min(
     200 / mobileW,
     (previewContainerH - 60) / mobileH,
-    0.65
+    0.65,
   );
 
   return (
@@ -305,7 +328,9 @@ function PreviewInner() {
         <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md rounded-lg border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
           {/* Left: back */}
           <button
-            onClick={() => router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")}
+            onClick={() =>
+              router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")
+            }
             className="flex items-center gap-1.5 text-[11px] font-medium text-[#6B6B6B] hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -316,16 +341,22 @@ function PreviewInner() {
           <div className="flex items-center gap-1 p-1 bg-[#F3F3F5] rounded-[10px]">
             <button
               onClick={() => setPreviewMode("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" : "text-[#6B6B6B] hover:text-black"
-                }`}
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${
+                previewMode === "desktop"
+                  ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                  : "text-[#6B6B6B] hover:text-black"
+              }`}
             >
               <Monitor className="w-5 h-5" />
               Desktop
             </button>
             <button
               onClick={() => setPreviewMode("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" : "text-[#6B6B6B] hover:text-black"
-                }`}
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${
+                previewMode === "mobile"
+                  ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                  : "text-[#6B6B6B] hover:text-black"
+              }`}
             >
               <Smartphone className="w-5 h-5" />
               Mobile
@@ -334,7 +365,9 @@ function PreviewInner() {
 
           {/* Right: edit CTA */}
           <button
-            onClick={() => router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")}
+            onClick={() =>
+              router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")
+            }
             className="button button-secondary !py-1.5 !px-3 !text-[11px] flex items-center gap-1.5"
           >
             <Pencil className="w-5 h-5" />
@@ -345,7 +378,6 @@ function PreviewInner() {
 
       {/* ── Layout: canvas + right panel ── */}
       <div className="flex flex-col lg:flex-row pt-[148px] pb-8 px-5 gap-4 max-w-[1536px] mx-auto">
-
         {/* ── Canvas ── */}
         <div className="flex-1 flex items-start justify-center min-w-0">
           <AnimatePresence mode="wait">
@@ -362,7 +394,8 @@ function PreviewInner() {
                   style={{
                     width: desktopW * desktopScale,
                     height: desktopH * desktopScale,
-                    boxShadow: "0 8px 30px -8px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.05)",
+                    boxShadow:
+                      "0 8px 30px -8px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.05)",
                   }}
                 >
                   <div
@@ -375,7 +408,10 @@ function PreviewInner() {
                       pointerEvents: "none",
                     }}
                   >
-                    <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                    <ProfilePreview
+                      profile={editedProfile}
+                      template={selectedTemplate}
+                    />
                   </div>
                 </div>
               ) : (
@@ -397,7 +433,10 @@ function PreviewInner() {
                       pointerEvents: "none",
                     }}
                   >
-                    <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                    <ProfilePreview
+                      profile={editedProfile}
+                      template={selectedTemplate}
+                    />
                   </div>
                 </div>
               )}
@@ -407,9 +446,14 @@ function PreviewInner() {
 
         {/* ── Right publish panel ── */}
         <div className="w-full lg:w-[280px] flex-shrink-0 flex flex-col gap-4">
-
           {/* Publish card */}
-          <div className="bg-white border border-[#E6E6E6] rounded-[16px] p-5" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)" }}>
+          <div
+            className="bg-white border border-[#E6E6E6] rounded-[16px] p-5"
+            style={{
+              boxShadow:
+                "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)",
+            }}
+          >
             <AnimatePresence mode="wait">
               {publishStep === "done" ? (
                 <motion.div
@@ -419,7 +463,11 @@ function PreviewInner() {
                   transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                 >
                   <PublishedPanel
-                    url={publishedSlug ? `https://${publishedSlug}.linkedpage.io` : `https://linkedpage.io/${publishedSlug}`}
+                    url={
+                      publishedSlug
+                        ? `https://${publishedSlug}.linkedpage.io`
+                        : `https://linkedpage.io/${publishedSlug}`
+                    }
                     slug={publishedSlug}
                   />
                 </motion.div>
@@ -431,17 +479,27 @@ function PreviewInner() {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                 >
-                  <PublishPanel onPublish={handlePublish} publishing={publishing} />
+                  <PublishPanel
+                    onPublish={handlePublish}
+                    publishing={publishing}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
           {/* Export card */}
-          <div className="bg-white border border-[#E6E6E6] rounded-[16px] p-5" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)" }}>
+          <div
+            className="bg-white border border-[#E6E6E6] rounded-[16px] p-5"
+            style={{
+              boxShadow:
+                "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)",
+            }}
+          >
             <h3 className="text-sm font-medium text-black mb-1">Export code</h3>
             <p className="text-xs text-[#9CA3AF] mb-4 leading-relaxed">
-              Download your page as a self-contained HTML + CSS file. Host it anywhere.
+              Download your page as a self-contained HTML + CSS file. Host it
+              anywhere.
             </p>
             <button
               onClick={handleExport}
@@ -459,7 +517,9 @@ function PreviewInner() {
 
           {/* What's included */}
           <div className="bg-[#FBFBFB] border border-[#E6E6E6] rounded-[16px] p-5">
-            <h3 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Free plan includes</h3>
+            <h3 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">
+              Free plan includes
+            </h3>
             <ul className="flex flex-col gap-2">
               {[
                 "Custom subdomain (linkedpage.io/…)",
@@ -467,16 +527,21 @@ function PreviewInner() {
                 "Code export",
                 "Always up-to-date with LinkedIn",
               ].map((item, i) => (
-                <li key={i} className="flex items-center gap-2 text-xs text-[#171717]">
+                <li
+                  key={i}
+                  className="flex items-center gap-2 text-xs text-[#171717]"
+                >
                   <div className="w-5 h-5 rounded-lg bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
-                    <Check className="w-2.5 h-2.5 text-[#1a5c3a]" strokeWidth={2.5} />
+                    <Check
+                      className="w-2.5 h-2.5 text-[#1a5c3a]"
+                      strokeWidth={2.5}
+                    />
                   </div>
                   {item}
                 </li>
               ))}
             </ul>
           </div>
-
         </div>
       </div>
     </div>
@@ -487,11 +552,13 @@ export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-white font-inter flex flex-col">
       <Navbar />
-      <Suspense fallback={
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
-        </main>
-      }>
+      <Suspense
+        fallback={
+          <main className="flex-1 flex items-center justify-center">
+            <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          </main>
+        }
+      >
         <PreviewInner />
       </Suspense>
     </div>

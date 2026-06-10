@@ -28,6 +28,7 @@
 **Format:** "[Product Name] Review ([Year]): [Key Verdict]"
 
 **Guidelines:**
+
 - Lead with the exact product name (match how people search)
 - Year in parentheses signals freshness
 - Key verdict is a concise, opinionated summary (e.g., "Still the Best for Teams," "Great Value, Some Tradeoffs," "Not Worth the Hype")
@@ -66,6 +67,7 @@
 [ANSWER-FIRST] State what the product does and your overall impression in the first two sentences. Do not start with the company's history.
 
 **Structure:**
+
 1. **What the product does** (1-2 sentences): Clear, plain-language explanation of the product's core function
 2. **Why you are reviewing it** (1 sentence): What prompted the review - a common question, reader request, or personal need?
 3. **Testing context** (2-3 sentences): How long you used it, in what environment, and for what purpose
@@ -92,6 +94,7 @@ A quick-scan visual reference before the reader dives into details. This section
 ```
 
 **Guidelines:**
+
 - Be specific: "Loads dashboards in under 2 seconds" beats "Fast performance"
 - Be honest: Include meaningful cons, not just nitpicks
 - Limit to 4-5 items per column for readability
@@ -103,6 +106,7 @@ A quick-scan visual reference before the reader dives into details. This section
 [ANSWER-FIRST] State the testing duration and core methodology in the first sentence so the reader can immediately gauge the review's depth.
 
 **Structure:**
+
 1. **Testing duration** (1 sentence): How long you used the product (e.g., "I used [Product] daily for 6 weeks")
 2. **Testing environment** (1-2 sentences): Your setup - device, OS, team size, workflow context
 3. **What you tested** (2-3 sentences): Which features you focused on and why
@@ -125,6 +129,7 @@ Each feature gets its own H2 section, framed as a question the reader is likely 
 [ANSWER-FIRST] Open with a 1-sentence verdict on this specific feature before elaborating.
 
 **Structure per section:**
+
 1. **Feature verdict** (1 sentence): Is this feature good, great, mediocre, or lacking?
 2. **What it does** (1-2 sentences): Brief explanation for readers who may not know the feature
 3. **First-hand observation** (3-5 sentences): Your specific experience using this feature - what worked, what did not, what surprised you
@@ -146,6 +151,7 @@ Each feature gets its own H2 section, framed as a question the reader is likely 
 [ANSWER-FIRST] State whether the product is good value for money in the first sentence, then break down the details.
 
 **Structure:**
+
 1. **Value verdict** (1 sentence): Is it worth the price?
 2. **Plan breakdown** (table or list):
 
@@ -200,6 +206,7 @@ List 2-3 alternatives, each with:
 [ANSWER-FIRST] Restate the overall score and verdict in the opening sentence. Do not make the reader work to find your recommendation.
 
 **Structure:**
+
 1. **Score and one-line verdict** (1 sentence): Repeat the verdict from the TL;DR box for readers who scrolled to the end
 2. **Strengths summary** (1-2 sentences): The 1-2 things this product does exceptionally well
 3. **Weaknesses summary** (1-2 sentences): The 1-2 most significant shortcomings
@@ -214,6 +221,7 @@ List 2-3 alternatives, each with:
 [FAQ] Source questions from People Also Ask results, product forums, Reddit threads, and common pre-purchase questions.
 
 **Guidelines:**
+
 - Focus on purchase-decision questions (not general category questions - save those for the pillar page)
 - Each answer should be 40-80 words and lead with a direct answer
 - Include at least one pricing question and one comparison question

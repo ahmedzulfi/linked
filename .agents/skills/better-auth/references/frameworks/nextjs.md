@@ -17,6 +17,7 @@ bun add better-auth @prisma/client
 ### 2. Create Auth Configuration
 
 **`lib/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -46,6 +47,7 @@ export type Session = typeof auth.$Infer.Session;
 ### 3. Create API Route Handler
 
 **`app/api/auth/[...all]/route.ts`**:
+
 ```typescript
 import { auth } from "@/lib/auth";
 import { toNextJsHandler } from "better-auth/next-js";
@@ -56,6 +58,7 @@ export const { GET, POST } = toNextJsHandler(auth);
 ### 4. Create Auth Client
 
 **`lib/auth-client.ts`**:
+
 ```typescript
 import { createAuthClient } from "better-auth/react";
 
@@ -69,6 +72,7 @@ export const { signIn, signUp, signOut, useSession } = authClient;
 ### 5. Middleware for Protected Routes
 
 **`middleware.ts`**:
+
 ```typescript
 import { auth } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -86,8 +90,10 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect authenticated users from auth pages
-  if (request.nextUrl.pathname.startsWith("/login") ||
-      request.nextUrl.pathname.startsWith("/register")) {
+  if (
+    request.nextUrl.pathname.startsWith("/login") ||
+    request.nextUrl.pathname.startsWith("/register")
+  ) {
     if (session) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
@@ -104,6 +110,7 @@ export const config = {
 ### 6. Server Components with Auth
 
 **`app/dashboard/page.tsx`**:
+
 ```typescript
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -130,6 +137,7 @@ export default async function DashboardPage() {
 ### 7. Client Components with useSession
 
 **`components/user-menu.tsx`**:
+
 ```typescript
 "use client";
 
@@ -157,6 +165,7 @@ export function UserMenu() {
 ### API Route Handler
 
 **`pages/api/auth/[...all].ts`**:
+
 ```typescript
 import { auth } from "@/lib/auth";
 import { toNextJsHandler } from "better-auth/next-js";
@@ -167,6 +176,7 @@ export default toNextJsHandler(auth);
 ### getServerSideProps with Auth
 
 **`pages/dashboard.tsx`**:
+
 ```typescript
 import { auth } from "@/lib/auth";
 import { GetServerSideProps } from "next";
@@ -222,6 +232,7 @@ const session = await auth.api.getSession({
 **Problem**: Redirect URI mismatch.
 
 **Solution**: Ensure exact match in Google Console:
+
 ```
 http://localhost:3000/api/auth/callback/google
 https://yourdomain.com/api/auth/callback/google

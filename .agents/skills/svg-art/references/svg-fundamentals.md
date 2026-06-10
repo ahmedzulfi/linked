@@ -19,32 +19,32 @@ Quick reference for SVG structure, elements, and best practices.
 
 ## Elements
 
-| Element | Attributes | Example |
-|---------|------------|---------|
-| `<rect>` | x, y, width, height, rx, ry | `<rect x="10" y="10" width="80" height="40" rx="5"/>` |
-| `<circle>` | cx, cy, r | `<circle cx="50" cy="50" r="25"/>` |
-| `<ellipse>` | cx, cy, rx, ry | `<ellipse cx="50" cy="50" rx="40" ry="20"/>` |
-| `<line>` | x1, y1, x2, y2 | `<line x1="0" y1="0" x2="100" y2="100"/>` |
-| `<polyline>` | points | `<polyline points="10,10 50,50 90,10"/>` |
-| `<polygon>` | points | `<polygon points="50,10 90,90 10,90"/>` |
-| `<path>` | d | `<path d="M10 10 L90 90"/>` |
-| `<text>` | x, y, font-* | `<text x="50" y="50">Hello</text>` |
-| `<g>` | transform, id | `<g transform="translate(10,10)">...</g>` |
+| Element      | Attributes                  | Example                                               |
+| ------------ | --------------------------- | ----------------------------------------------------- |
+| `<rect>`     | x, y, width, height, rx, ry | `<rect x="10" y="10" width="80" height="40" rx="5"/>` |
+| `<circle>`   | cx, cy, r                   | `<circle cx="50" cy="50" r="25"/>`                    |
+| `<ellipse>`  | cx, cy, rx, ry              | `<ellipse cx="50" cy="50" rx="40" ry="20"/>`          |
+| `<line>`     | x1, y1, x2, y2              | `<line x1="0" y1="0" x2="100" y2="100"/>`             |
+| `<polyline>` | points                      | `<polyline points="10,10 50,50 90,10"/>`              |
+| `<polygon>`  | points                      | `<polygon points="50,10 90,90 10,90"/>`               |
+| `<path>`     | d                           | `<path d="M10 10 L90 90"/>`                           |
+| `<text>`     | x, y, font-\*               | `<text x="50" y="50">Hello</text>`                    |
+| `<g>`        | transform, id               | `<g transform="translate(10,10)">...</g>`             |
 
 ## Path Commands
 
-| Cmd | Name | Parameters | Example |
-|-----|------|------------|---------|
-| M/m | Move | x y | `M10 10` |
-| L/l | Line | x y | `L90 90` |
-| H/h | Horizontal | x | `H90` |
-| V/v | Vertical | y | `V90` |
-| C/c | Cubic Bézier | x1 y1 x2 y2 x y | `C20 20 80 20 90 90` |
-| S/s | Smooth cubic | x2 y2 x y | `S80 80 90 90` |
-| Q/q | Quadratic | x1 y1 x y | `Q50 0 90 90` |
-| T/t | Smooth quad | x y | `T90 90` |
-| A/a | Arc | rx ry rot large sweep x y | `A25 25 0 0 1 90 90` |
-| Z/z | Close | — | `Z` |
+| Cmd | Name         | Parameters                | Example              |
+| --- | ------------ | ------------------------- | -------------------- |
+| M/m | Move         | x y                       | `M10 10`             |
+| L/l | Line         | x y                       | `L90 90`             |
+| H/h | Horizontal   | x                         | `H90`                |
+| V/v | Vertical     | y                         | `V90`                |
+| C/c | Cubic Bézier | x1 y1 x2 y2 x y           | `C20 20 80 20 90 90` |
+| S/s | Smooth cubic | x2 y2 x y                 | `S80 80 90 90`       |
+| Q/q | Quadratic    | x1 y1 x y                 | `Q50 0 90 90`        |
+| T/t | Smooth quad  | x y                       | `T90 90`             |
+| A/a | Arc          | rx ry rot large sweep x y | `A25 25 0 0 1 90 90` |
+| Z/z | Close        | —                         | `Z`                  |
 
 **Uppercase = absolute, lowercase = relative**
 
@@ -71,12 +71,12 @@ Quick reference for SVG structure, elements, and best practices.
 </g>
 ```
 
-| Transform | Syntax |
-|-----------|--------|
-| Translate | `translate(x, y)` |
-| Rotate | `rotate(angle)` or `rotate(angle, cx, cy)` |
-| Scale | `scale(s)` or `scale(sx, sy)` |
-| Skew | `skewX(angle)`, `skewY(angle)` |
+| Transform | Syntax                                     |
+| --------- | ------------------------------------------ |
+| Translate | `translate(x, y)`                          |
+| Rotate    | `rotate(angle)` or `rotate(angle, cx, cy)` |
+| Scale     | `scale(s)` or `scale(sx, sy)`              |
+| Skew      | `skewX(angle)`, `skewY(angle)`             |
 
 ## Gradients
 

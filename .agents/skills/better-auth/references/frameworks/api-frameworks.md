@@ -16,6 +16,7 @@ bun add -D @types/express
 ### Setup
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -35,6 +36,7 @@ export const auth = betterAuth({
 ```
 
 **`src/index.ts`**:
+
 ```typescript
 import express from "express";
 import { auth } from "./auth";
@@ -69,7 +71,11 @@ app.listen(3000, () => {
 import type { Request, Response, NextFunction } from "express";
 import { auth } from "./auth";
 
-export async function requireAuth(req: Request, res: Response, next: NextFunction) {
+export async function requireAuth(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const session = await auth.api.getSession({
     headers: req.headers as any,
   });
@@ -101,6 +107,7 @@ bun add better-auth fastify drizzle-orm postgres
 ### Setup
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -120,6 +127,7 @@ export const auth = betterAuth({
 ```
 
 **`src/index.ts`**:
+
 ```typescript
 import Fastify from "fastify";
 import { auth } from "./auth";
@@ -193,6 +201,7 @@ bun add better-auth @nestjs/common @nestjs/core drizzle-orm postgres
 ### Auth Module
 
 **`src/auth/auth.module.ts`**:
+
 ```typescript
 import { Module, Global } from "@nestjs/common";
 import { AuthService } from "./auth.service";
@@ -208,6 +217,7 @@ export class AuthModule {}
 ```
 
 **`src/auth/auth.service.ts`**:
+
 ```typescript
 import { Injectable } from "@nestjs/common";
 import { betterAuth } from "better-auth";
@@ -239,6 +249,7 @@ export class AuthService {
 ```
 
 **`src/auth/auth.controller.ts`**:
+
 ```typescript
 import { All, Controller, Req, Res } from "@nestjs/common";
 import { Request, Response } from "express";
@@ -260,8 +271,14 @@ export class AuthController {
 ### Auth Guard
 
 **`src/auth/auth.guard.ts`**:
+
 ```typescript
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 
 @Injectable()
@@ -319,6 +336,7 @@ bun add better-auth hono drizzle-orm postgres
 ### Setup
 
 **`src/index.ts`**:
+
 ```typescript
 import { Hono } from "hono";
 import { betterAuth } from "better-auth";
@@ -392,10 +410,12 @@ All frameworks need CORS for frontend integration:
 ```typescript
 // Express
 import cors from "cors";
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 
 // Fastify
 fastify.register(require("@fastify/cors"), {
@@ -405,10 +425,12 @@ fastify.register(require("@fastify/cors"), {
 
 // Hono
 import { cors } from "hono/cors";
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
 ```
 
 ---

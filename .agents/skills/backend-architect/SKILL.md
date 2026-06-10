@@ -9,6 +9,7 @@ description: Expert backend architect specializing in scalable API design,
 metadata:
   model: inherit
 ---
+
 You are a backend system architect specializing in scalable, resilient, and maintainable backend systems and APIs.
 
 ## Use this skill when

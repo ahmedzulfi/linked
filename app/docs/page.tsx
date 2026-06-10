@@ -43,18 +43,25 @@ export default function DocsPage() {
       content: (
         <div className="space-y-4 text-[14.5px] leading-relaxed text-gray-600">
           <p>
-            Welcome to <strong>Webild LinkedPage</strong>! We build premium, responsive personal micro-sites directly from your LinkedIn profile.
+            Welcome to <strong>Webild LinkedPage</strong>! We build premium,
+            responsive personal micro-sites directly from your LinkedIn profile.
           </p>
-          <h3 className="text-lg font-bold text-black mt-6 font-inter-tight">The 3-Step Flow</h3>
+          <h3 className="text-lg font-bold text-black mt-6 font-inter-tight">
+            The 3-Step Flow
+          </h3>
           <ol className="list-decimal pl-5 space-y-2">
             <li>
-              <strong>Paste Profile URL</strong>: Paste your public LinkedIn link. Our system reads the data.
+              <strong>Paste Profile URL</strong>: Paste your public LinkedIn
+              link. Our system reads the data.
             </li>
             <li>
-              <strong>Select & Modify Template</strong>: Choose from Bento, Scroll, or Minimal layout presets and edit fields inside the editor canvas.
+              <strong>Select & Modify Template</strong>: Choose from Bento,
+              Scroll, or Minimal layout presets and edit fields inside the
+              editor canvas.
             </li>
             <li>
-              <strong>Publish Site</strong>: Hit publish to get your free site live on a subdomain, or link a custom domain.
+              <strong>Publish Site</strong>: Hit publish to get your free site
+              live on a subdomain, or link a custom domain.
             </li>
           </ol>
         </div>
@@ -66,13 +73,33 @@ export default function DocsPage() {
       content: (
         <div className="space-y-4 text-[14.5px] leading-relaxed text-gray-600">
           <p>
-            LinkedIn employs security headers and rate limits. If the public scraper is blocked by LinkedIn’s login firewall, you can use our <strong>ZIP manual import</strong>:
+            LinkedIn employs security headers and rate limits. If the public
+            scraper is blocked by LinkedIn’s login firewall, you can use our{" "}
+            <strong>ZIP manual import</strong>:
           </p>
-          <h3 className="text-lg font-bold text-black mt-6 font-inter-tight">How to download your archive</h3>
+          <h3 className="text-lg font-bold text-black mt-6 font-inter-tight">
+            How to download your archive
+          </h3>
           <ul className="list-disc pl-5 space-y-2">
-            <li>Go to settings and request your data export: <a href="https://www.linkedin.com/psettings/member-data" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">LinkedIn Data Export</a></li>
-            <li>Select the <strong>"Profile"</strong> checkbox (the fast export takes ~10 minutes).</li>
-            <li>Once you receive the ZIP download, drag and drop the file directly into our fallback screen.</li>
+            <li>
+              Go to settings and request your data export:{" "}
+              <a
+                href="https://www.linkedin.com/psettings/member-data"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                LinkedIn Data Export
+              </a>
+            </li>
+            <li>
+              Select the <strong>"Profile"</strong> checkbox (the fast export
+              takes ~10 minutes).
+            </li>
+            <li>
+              Once you receive the ZIP download, drag and drop the file directly
+              into our fallback screen.
+            </li>
           </ul>
         </div>
       ),
@@ -83,15 +110,26 @@ export default function DocsPage() {
       content: (
         <div className="space-y-4 text-[14.5px] leading-relaxed text-gray-600">
           <p>
-            LinkedPage offers modern templates configured to match professional brands.
+            LinkedPage offers modern templates configured to match professional
+            brands.
           </p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>Bento Grid</strong>: A bento-style visual portfolio demonstrating recent projects, experience milestones, and links.</li>
-            <li><strong>Minimal Card</strong>: High-key focused layout suitable for brief bio links.</li>
-            <li><strong>Full-Page Scroll</strong>: Narrative linear timeline presenting education, roles, and skills.</li>
+            <li>
+              <strong>Bento Grid</strong>: A bento-style visual portfolio
+              demonstrating recent projects, experience milestones, and links.
+            </li>
+            <li>
+              <strong>Minimal Card</strong>: High-key focused layout suitable
+              for brief bio links.
+            </li>
+            <li>
+              <strong>Full-Page Scroll</strong>: Narrative linear timeline
+              presenting education, roles, and skills.
+            </li>
           </ul>
           <p className="mt-4">
-            Changes inside the canvas save automatically every few seconds. Look for the "Saved" tick in the top-bar header.
+            Changes inside the canvas save automatically every few seconds. Look
+            for the "Saved" tick in the top-bar header.
           </p>
         </div>
       ),
@@ -102,10 +140,17 @@ export default function DocsPage() {
       content: (
         <div className="space-y-4 text-[14.5px] leading-relaxed text-gray-600">
           <p>
-            Pro plans allow you to host your micro-site on custom domains (e.g. <code>yoursite.com</code>).
+            Pro plans allow you to host your micro-site on custom domains (e.g.{" "}
+            <code>yoursite.com</code>).
           </p>
-          <h3 className="text-lg font-bold text-black mt-6 font-inter-tight">DNS Configuration</h3>
-          <p>To connect a domain, go to your site editor → <strong>Site Settings</strong> → <strong>Domains</strong> and configure the following DNS records with your registrar:</p>
+          <h3 className="text-lg font-bold text-black mt-6 font-inter-tight">
+            DNS Configuration
+          </h3>
+          <p>
+            To connect a domain, go to your site editor →{" "}
+            <strong>Site Settings</strong> → <strong>Domains</strong> and
+            configure the following DNS records with your registrar:
+          </p>
           <table className="w-full text-left border border-gray-200 mt-4 text-[13px] rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
@@ -118,12 +163,16 @@ export default function DocsPage() {
               <tr className="border-b border-gray-200">
                 <td className="p-3">A Record</td>
                 <td className="p-3">@ (Root)</td>
-                <td className="p-3"><code>76.76.21.21</code> (Anycast IP)</td>
+                <td className="p-3">
+                  <code>76.76.21.21</code> (Anycast IP)
+                </td>
               </tr>
               <tr>
                 <td className="p-3">CNAME</td>
                 <td className="p-3">www</td>
-                <td className="p-3"><code>cname.linkedpage.io</code></td>
+                <td className="p-3">
+                  <code>cname.linkedpage.io</code>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -136,12 +185,22 @@ export default function DocsPage() {
       content: (
         <div className="space-y-4 text-[14.5px] leading-relaxed text-gray-600">
           <div className="space-y-3">
-            <h4 className="font-bold text-black">Q: Can I edit details manually?</h4>
-            <p>A: Yes! Click on any block inside the Editor panel to overwrite text, change headings, toggle visible cards, or upload custom profile avatars.</p>
+            <h4 className="font-bold text-black">
+              Q: Can I edit details manually?
+            </h4>
+            <p>
+              A: Yes! Click on any block inside the Editor panel to overwrite
+              text, change headings, toggle visible cards, or upload custom
+              profile avatars.
+            </p>
           </div>
           <div className="space-y-3 pt-3 border-t border-gray-100">
             <h4 className="font-bold text-black">Q: Is my data safe?</h4>
-            <p>A: Absolutely. We only fetch public details. Your credentials are never handled, and files uploaded during manual import are processed on the server without storage.</p>
+            <p>
+              A: Absolutely. We only fetch public details. Your credentials are
+              never handled, and files uploaded during manual import are
+              processed on the server without storage.
+            </p>
           </div>
         </div>
       ),
@@ -150,7 +209,6 @@ export default function DocsPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
-      
       {/* ── Background Graphic (Polished Light Mesh Gradient) ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden bg-[#FBFBFB]">
         <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-[#8DB8FF]/10 to-[#E0EBFF]/5 blur-[120px] opacity-70" />
@@ -168,7 +226,9 @@ export default function DocsPage() {
             onClick={() => router.push("/")}
           />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate">Documentation</span>
+          <span className="text-sm font-medium text-[#171717]/60 truncate">
+            Documentation
+          </span>
         </div>
 
         <div className="flex items-center gap-2 relative">
@@ -206,12 +266,13 @@ export default function DocsPage() {
 
       {/* ── Dashboard Layout Body ── */}
       <div className="flex flex-1 relative z-10">
-        
         {/* Sidebar */}
         <aside className="w-64 border-r border-[#E6E6E6] bg-white/50 backdrop-blur-md p-6 flex flex-col justify-between select-none shrink-0 min-h-[calc(100vh-3.5rem)] mt-14 relative z-20">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1 uppercase tracking-wider">Navigation</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1 uppercase tracking-wider">
+                Navigation
+              </span>
 
               <button
                 onClick={() => router.push(userName ? "/dashboard" : "/")}
@@ -223,7 +284,9 @@ export default function DocsPage() {
             </div>
 
             <div className="flex flex-col gap-1.5 pt-2 border-t border-[#F5F5F7]">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1">Topics</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1">
+                Topics
+              </span>
               {Object.keys(docSections).map((key) => (
                 <button
                   key={key}
@@ -272,8 +335,12 @@ export default function DocsPage() {
         {/* ── Main Content ── */}
         <main className="flex-1 px-8 md:px-16 py-12 mt-14 max-w-4xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight text-black font-inter-tight">Help & Documentation</h1>
-            <p className="text-[14px] text-gray-500 mt-1">Read tutorials and guides to launch your premium micro-site.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-black font-inter-tight">
+              Help & Documentation
+            </h1>
+            <p className="text-[14px] text-gray-500 mt-1">
+              Read tutorials and guides to launch your premium micro-site.
+            </p>
           </div>
 
           <AnimatePresence mode="wait">
@@ -296,9 +363,7 @@ export default function DocsPage() {
             </motion.div>
           </AnimatePresence>
         </main>
-
       </div>
-
     </div>
   );
 }
