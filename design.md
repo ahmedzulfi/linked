@@ -222,7 +222,14 @@ The templates utilize generic system font stacks (sans-serif, serif, mono) for s
 - **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
 - **Julian Mercer:** elegant, warm paper style. Uses a warm background `#FAF8F5`, italic serif typography (`font-serif font-light italic`), monospace metadata tags, and soft dividers.
 - **Link Hunt:** links-in-bio style. Features a centered layout (`max-w-md mx-auto text-center`), large avatar, pill buttons for social accounts with icons, and card containers.
-- **Biobricks:** grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
+- **Biobricks**: grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
+
+### Dashboard Layout & Redesign (Anti-Slop Guidelines)
+- **Top Header**: Thin, transparent white header (`bg-white/70 backdrop-blur-xl border-b border-neutral-200/55`) styled for grid alignment with clean, high-contrast actions.
+- **Sidebar**: Frosted-glass look (`bg-neutral-50/20 backdrop-blur-xl border-r border-neutral-200/50`). Custom rounded-lg navigational links, with text and icon hover states shifting colors seamlessly. Primary "New Website" button styled as a bold charcoal CTA button (`bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg transition-transform`).
+- **Search Component**: Clean border input field, pill-shaped (`rounded-xl border border-neutral-200/80 bg-white shadow-xs`), with focus outlines and zero inline style slop.
+- **Website Cards**: Styled as floating elements (`bg-white border border-neutral-200/80 rounded-xl p-3.5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300`). They embed the compiled live previews inside macOS-style browser mock bezels with traffic control dots, and feature clean status indicators.
+
 
 ## Motion & Animation Guidelines
 
