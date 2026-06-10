@@ -341,14 +341,7 @@ export function compileStaticHtml(
   );
 
   // ─── 2. Fix internal navigation links → hash anchors ───────────
-  html = replaceAll(html, "https://danielcross.framer.website/about", "#about");
-  html = replaceAll(html, "https://danielcross.framer.website/work", "#work");
-  html = replaceAll(
-    html,
-    "https://danielcross.framer.website/contact",
-    "#contact",
-  );
-  html = replaceAll(html, "https://danielcross.framer.website/", "#home");
+  // Links left unmodified so they are caught by intercept script and open in a new tab
 
   // ─── 3. Inject link-intercept script into <head> ───────────────
   html = html.replace("</head>", LINK_INTERCEPT_SCRIPT + "\n</head>");
@@ -449,14 +442,7 @@ export function compileStaticHtml(
   html = html.replace(/<div id="__framer-badge-container"[\s\S]*?<\/div>/g, "");
 
   // ─── 14. Append About, Work, Contact sections before </body> ────
-  const aboutSection = buildAboutSection(profile);
-  const workSection = buildWorkSection(profile);
-  const contactSection = buildContactSection(profile);
-
-  html = html.replace(
-    "</body>",
-    aboutSection + workSection + contactSection + "\n</body>",
-  );
+  // Removed to preserve original template layout exactly
 
   return html;
 }
