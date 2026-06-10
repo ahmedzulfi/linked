@@ -233,6 +233,9 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Remove Framer badge
   html = html.replace(/<div id="__framer-badge-container"[\s\S]*?<\/div>/g, "");
 
+  // Reset reviews slider starting translation to 0px so testimonials are visible by default
+  html = replaceAll(html, "transform: translateX(-1214px);", "transform: translateX(0px);");
+
   // Add custom responsive stylesheet overrides to prevent absolute width overflows and correctly display hidden variants
   const responsiveStyles = `
 <style data-custom-responsive="true">
@@ -241,10 +244,18 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
     .hidden-18pvjnd {
       display: none !important;
     }
+    /* Ensure testimonials slideshow variant remains visible */
+    .framer-9ivh3c-container .hidden-18pvjnd {
+      display: block !important;
+    }
   }
   @media (min-width: 810px) and (max-width: 1199.98px) {
     .hidden-1bkts62 {
       display: none !important;
+    }
+    /* Ensure testimonials slideshow variant remains visible */
+    .framer-9ivh3c-container .hidden-1bkts62 {
+      display: block !important;
     }
   }
 
