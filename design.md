@@ -220,6 +220,10 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
 - **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
+  - **Mobile & Tablet Responsiveness Overrides**: To enable complete responsive support on smaller viewports (max-width: 1199.98px) without altering the desktop layout, the system injects a custom style override block:
+    - **Fluid Viewport Containers**: Converts absolute width layouts (e.g. `.framer-nqzx6h`'s default `1200px` / `810px` / `390px`, `.framer-ha6joy`'s `950px` / `390px`) to `100%` width with fluid spacing boundaries (`max-width: 100vw !important`).
+    - **Breakpoint Hiding Helpers**: Defines `.hidden-18pvjnd` (hides elements when screen width <= 809.98px) and `.hidden-1bkts62` (hides elements when screen width is between 810px and 1199.98px) as media-query specific `display: none !important` rules to override Framer's absolute breakpoint containers.
+    - **Adaptive Projects Grid**: Introduces `.project-card-item` and `.projects-grid-container` handles to switch the project portfolio lists from side-by-side cards (`flex: 0 0 calc(50% - 12px)`) to stacked cards (`flex: 0 0 100% !important`) on mobile viewports.
 - **Julian Mercer:** elegant, warm paper style. Uses a warm background `#FAF8F5`, italic serif typography (`font-serif font-light italic`), monospace metadata tags, and soft dividers.
 - **Link Hunt:** links-in-bio style. Features a centered layout (`max-w-md mx-auto text-center`), large avatar, pill buttons for social accounts with icons, and card containers.
 - **Biobricks:** grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
