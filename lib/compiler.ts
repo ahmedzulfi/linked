@@ -2,27 +2,8 @@ import { ProfileData, TemplateId } from "@/shared/types";
 import * as fs from "fs";
 import * as path from "path";
 
-// ═══════════════════════════════════════════════════════════════════
-// Design tokens extracted from Daniel Cross Framer template
-// ═══════════════════════════════════════════════════════════════════
-const DC = {
-  brown: "#4a3429", // --token-09c1722d (accent / logo)
-  black: "#000", // --token-5b7978f2 (primary text)
-  divider: "#0000001a", // --token-d14b4603 (borders)
-  muted: "#757575", // --token-13ef338a (secondary text)
-  white: "#fff", // --token-594aa502
-  card2: "#e5e2de", // --token-af0bccb2
-  bg: "#e9e6e2", // --token-d469a4a3 (main bg)
-  sidebar: "#edeae7", // --token-1f466c1a (sidebar bg)
-  card: "#f5f2f0", // --token-1d129b27 (card bg)
-  font: "'Inter', sans-serif",
-  radius: "12px",
-  radiusSm: "8px",
-};
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
-// ═══════════════════════════════════════════════════════════════════
-// Helpers
-// ═══════════════════════════════════════════════════════════════════
 function esc(str: string): string {
   return str
     .replace(/&/g, "&amp;")
@@ -31,418 +12,288 @@ function esc(str: string): string {
     .replace(/"/g, "&quot;");
 }
 
+/**
+ * Replace ALL occurrences of `search` with `replacement` in `text`.
+ */
 function replaceAll(text: string, search: string, replacement: string): string {
   return text.split(search).join(replacement);
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// Link-intercept script injected into the <head>
-// Fixes: clicking links inside the iframe loading the Next.js app
-// ═══════════════════════════════════════════════════════════════════
-const LINK_INTERCEPT_SCRIPT = `
-<script>
-(function() {
-  function interceptLinks() {
-    document.addEventListener('click', function(e) {
-      var a = e.target.closest('a[href]');
-      if (!a) return;
-      var href = a.getAttribute('href');
-      if (!href || href === '' || href === 'javascript:void(0)') return;
-      // Hash-only links → smooth scroll within this document
-      if (href.startsWith('#')) {
-        e.preventDefault();
-        var id = href.slice(1);
-        var el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        return;
-      }
-      // All other links → prevent iframe navigation, open in parent/new tab
-      e.preventDefault();
-      try { window.top.open(href, '_blank'); } catch(err) { window.open(href, '_blank'); }
-    }, true);
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', interceptLinks);
-  } else {
-    interceptLinks();
-  }
-})();
-</script>`;
-
-// ═══════════════════════════════════════════════════════════════════
-// Section builders — match Daniel Cross aesthetic exactly
-// ═══════════════════════════════════════════════════════════════════
-
-function buildAboutSection(profile: ProfileData): string {
-  const skills = (profile.skills || [])
-    .map(
-      (s) =>
-        `<span style="display:inline-block;padding:6px 14px;background:${DC.card};border-radius:20px;font-family:${DC.font};font-size:13px;font-weight:500;color:${DC.black};letter-spacing:-0.02em;margin:4px 4px 4px 0;">${esc(s.name)}</span>`,
-    )
-    .join("");
-
-  const experience = (profile.experience || [])
-    .map(
-      (exp, i) => `
-    <div style="display:flex;gap:20px;padding:20px 0;${i > 0 ? `border-top:1px solid ${DC.divider};` : ""}">
-      <div style="flex-shrink:0;width:40px;height:40px;border-radius:10px;background:${DC.card2};display:flex;align-items:center;justify-content:center;font-family:${DC.font};font-size:13px;font-weight:700;color:${DC.brown};">
-        ${esc(exp.company.charAt(0))}
-      </div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-family:${DC.font};font-size:15px;font-weight:600;color:${DC.black};letter-spacing:-0.03em;margin-bottom:2px;">${esc(exp.title)}</div>
-        <div style="font-family:${DC.font};font-size:13px;font-weight:500;color:${DC.muted};letter-spacing:-0.02em;margin-bottom:4px;">${esc(exp.company)} · ${esc(exp.duration)}</div>
-        <div style="font-family:${DC.font};font-size:13px;color:${DC.muted};line-height:1.6;">${esc(exp.description)}</div>
-      </div>
-    </div>
-  `,
-    )
-    .join("");
-
-  const education = (profile.education || [])
-    .map(
-      (edu, i) => `
-    <div style="display:flex;gap:20px;padding:20px 0;${i > 0 ? `border-top:1px solid ${DC.divider};` : ""}">
-      <div style="flex-shrink:0;width:40px;height:40px;border-radius:10px;background:${DC.card2};display:flex;align-items:center;justify-content:center;font-family:${DC.font};font-size:13px;font-weight:700;color:${DC.brown};">
-        ${esc(edu.school.charAt(0))}
-      </div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-family:${DC.font};font-size:15px;font-weight:600;color:${DC.black};letter-spacing:-0.03em;margin-bottom:2px;">${esc(edu.degree)}</div>
-        <div style="font-family:${DC.font};font-size:13px;color:${DC.muted};letter-spacing:-0.02em;">${esc(edu.school)} · ${esc(edu.year)}</div>
-      </div>
-    </div>
-  `,
-    )
-    .join("");
-
-  const avatarSrc =
-    profile.avatarUrl ||
-    `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.name)}`;
-
+/**
+ * Generate the HTML for a single project card in the Daniel Cross style.
+ * This mimics the Framer "Work card" structure.
+ */
+function buildProjectCard(
+  title: string,
+  description: string,
+  link: string,
+  imageUrl: string,
+  category: string,
+  year: string
+): string {
+  const resolvedImg = imageUrl || "/templates/daniel-cross/NZiJk1LCTBcGzs2MNANRaoxI2IA.png";
   return `
-<section id="about" style="min-height:100vh;background:${DC.bg};padding:60px 48px 80px 48px;box-sizing:border-box;">
-  <!-- Section header -->
-  <div style="margin-bottom:48px;">
-    <span style="font-family:${DC.font};font-size:11px;font-weight:600;color:${DC.brown};text-transform:uppercase;letter-spacing:0.1em;">About</span>
-    <h2 style="font-family:${DC.font};font-size:40px;font-weight:700;color:${DC.black};letter-spacing:-0.04em;margin-top:8px;line-height:1.1;">Get to know me</h2>
-  </div>
-
-  <!-- Hero card -->
-  <div style="background:${DC.card};border-radius:${DC.radius};padding:32px;display:flex;gap:32px;align-items:flex-start;margin-bottom:32px;flex-wrap:wrap;">
-    <img src="${esc(avatarSrc)}" alt="${esc(profile.name)}" 
-      style="width:120px;height:120px;border-radius:60px;object-fit:cover;flex-shrink:0;background:${DC.card2};"
-      onerror="this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.name)}'">
-    <div style="flex:1;min-width:200px;">
-      <h3 style="font-family:${DC.font};font-size:24px;font-weight:700;color:${DC.black};letter-spacing:-0.04em;margin-bottom:6px;">${esc(profile.name)}</h3>
-      <p style="font-family:${DC.font};font-size:14px;font-weight:500;color:${DC.muted};margin-bottom:16px;letter-spacing:-0.02em;">${esc(profile.headline)}</p>
-      <p style="font-family:${DC.font};font-size:14px;color:${DC.black};line-height:1.7;opacity:0.8;max-width:560px;">${esc(profile.summary)}</p>
-    </div>
-  </div>
-
-  <!-- Skills -->
-  ${
-    skills
-      ? `
-  <div style="background:${DC.card};border-radius:${DC.radius};padding:28px;margin-bottom:28px;">
-    <h4 style="font-family:${DC.font};font-size:13px;font-weight:600;color:${DC.muted};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">Skills</h4>
-    <div style="display:flex;flex-wrap:wrap;gap:0;">${skills}</div>
-  </div>`
-      : ""
-  }
-
-  <!-- Experience -->
-  ${
-    experience
-      ? `
-  <div style="background:${DC.card};border-radius:${DC.radius};padding:28px 28px 8px 28px;margin-bottom:28px;">
-    <h4 style="font-family:${DC.font};font-size:13px;font-weight:600;color:${DC.muted};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Experience</h4>
-    ${experience}
-  </div>`
-      : ""
-  }
-
-  <!-- Education -->
-  ${
-    education
-      ? `
-  <div style="background:${DC.card};border-radius:${DC.radius};padding:28px 28px 8px 28px;">
-    <h4 style="font-family:${DC.font};font-size:13px;font-weight:600;color:${DC.muted};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;">Education</h4>
-    ${education}
-  </div>`
-      : ""
-  }
-</section>`;
-}
-
-function buildWorkSection(profile: ProfileData): string {
-  const projects = profile.projects || [];
-
-  const cards =
-    projects.length > 0
-      ? projects
-          .map((p) => {
-            const img =
-              p.image ||
-              `/templates/daniel-cross/NZiJk1LCTBcGzs2MNANRaoxI2IA.png`;
-            const href = p.link || "#";
-            const year = new Date().getFullYear().toString();
-            return `
-    <a href="${esc(href)}" style="display:block;border-radius:${DC.radius};overflow:hidden;text-decoration:none;background:${DC.white};position:relative;aspect-ratio:4/3;">
-      <img src="${esc(img)}" alt="${esc(p.title)}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.4s ease;"
-        onerror="this.style.background='${DC.card2}';this.style.display='block';">
-      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,0.85) 100%);"></div>
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:20px 24px;">
-        <h3 style="font-family:${DC.font};font-size:20px;font-weight:700;color:#fff;letter-spacing:-0.03em;margin-bottom:6px;">${esc(p.title)}</h3>
-        <div style="display:flex;gap:8px;align-items:center;">
-          <span style="font-family:${DC.font};font-size:13px;color:rgba(255,255,255,0.75);">${esc(p.description.substring(0, 60))}${p.description.length > 60 ? "…" : ""}</span>
-          <span style="color:rgba(255,255,255,0.4);">·</span>
-          <span style="font-family:${DC.font};font-size:13px;color:rgba(255,255,255,0.75);">${year}</span>
+<div style="position:relative;border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;flex:0 0 calc(50% - 12px)">
+  <a href="${esc(link)}" target="_blank" rel="noopener" style="display:block;position:relative;border-radius:12px;overflow:hidden;text-decoration:none;">
+    <div style="position:relative;height:320px;overflow:hidden;">
+      <img src="${esc(resolvedImg)}" alt="${esc(title)}" style="width:100%;height:100%;object-fit:cover;display:block;">
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);"></div>
+      <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:2;">
+        <h4 style="font-family:'Inter Display',sans-serif;font-size:20px;font-weight:600;color:#fff;margin:0 0 6px 0;">${esc(title)}</h4>
+        <div style="display:flex;gap:8px;align-items:center;opacity:0.8;">
+          <span style="font-family:'Inter Display',sans-serif;font-size:13px;color:#fff;">${esc(category)}</span>
+          <span style="font-family:'Inter Display',sans-serif;font-size:13px;color:#fff;">/</span>
+          <span style="font-family:'Inter Display',sans-serif;font-size:13px;color:#fff;">${esc(year)}</span>
         </div>
       </div>
-    </a>`;
-          })
-          .join("")
-      : `
-  <div style="grid-column:1/-1;padding:60px;text-align:center;background:${DC.card};border-radius:${DC.radius};">
-    <p style="font-family:${DC.font};font-size:16px;color:${DC.muted};">No projects added yet. Add some in the editor!</p>
-  </div>`;
-
-  return `
-<section id="work" style="min-height:100vh;background:${DC.bg};padding:60px 48px 80px 48px;box-sizing:border-box;">
-  <!-- Section header -->
-  <div style="margin-bottom:48px;">
-    <span style="font-family:${DC.font};font-size:11px;font-weight:600;color:${DC.brown};text-transform:uppercase;letter-spacing:0.1em;">Work</span>
-    <h2 style="font-family:${DC.font};font-size:40px;font-weight:700;color:${DC.black};letter-spacing:-0.04em;margin-top:8px;line-height:1.1;">Selected projects</h2>
-  </div>
-
-  <!-- Projects grid -->
-  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px;">
-    ${cards}
-  </div>
-</section>`;
+    </div>
+  </a>
+</div>`;
 }
 
-function buildContactSection(profile: ProfileData): string {
-  const emailLink = profile.links.find((l) => l.icon === "email");
-  const email = emailLink ? emailLink.url.replace("mailto:", "") : "";
-  const phone = profile.phone || "";
-  const location = profile.location || "";
+/**
+ * Generate the "work wrapper" HTML from the user's projects.
+ * Replaces the entire framer-3ruzuo section content.
+ */
+function buildProjectsSection(profile: ProfileData): string {
+  const projects = profile.projects || [];
+  if (projects.length === 0) return "";
 
-  const linksByIcon: Record<string, string> = {};
+  const cards = projects
+    .map((p) =>
+      buildProjectCard(
+        p.title,
+        p.description,
+        p.link || "#",
+        p.image || "",
+        "Design",
+        new Date().getFullYear().toString()
+      )
+    )
+    .join("\n");
+
+  return `
+<div style="display:flex;flex-wrap:wrap;gap:24px;width:100%;padding:0 25px;">
+  ${cards}
+</div>`;
+}
+
+/**
+ * Build the experience ticker (companies) for the "Worked with Global Brands" section.
+ */
+function buildBrandsTicker(profile: ProfileData): string {
+  const companies = profile.experience.map((e) => e.company).filter(Boolean);
+  if (companies.length === 0) return "";
+
+  const items = companies
+    .concat(companies) // duplicate for seamless scroll
+    .map(
+      (c) =>
+        `<li aria-hidden="true" style="flex-shrink:0;display:inline-flex;align-items:center;padding:0 18px;white-space:nowrap;font-family:'Inter Display',sans-serif;font-size:16px;font-weight:500;color:#333;">${esc(c)}</li>`
+    )
+    .join("");
+
+  return `
+<section style="display:flex;width:100%;place-items:center;mask-image:linear-gradient(to right,rgba(0,0,0,0) 0%,rgb(0,0,0) 12.5%,rgb(0,0,0) 87.5%,rgba(0,0,0,0) 100%);overflow:hidden;">
+  <ul style="display:flex;width:100%;place-items:center;margin:0;padding:0;list-style:none;gap:18px;animation:tickerScroll 20s linear infinite;">
+    ${items}
+  </ul>
+</section>
+<style>
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+</style>`;
+}
+
+/**
+ * Build the about me paragraph.
+ */
+function buildAboutMe(profile: ProfileData): string {
+  return esc(
+    `${profile.summary} ${profile.interests ? `Interests: ${profile.interests}` : ""}`.trim()
+  );
+}
+
+/**
+ * Build the hero "I'm a [headline]..." text.
+ */
+function buildHeroBio(profile: ProfileData): string {
+  return esc(profile.summary);
+}
+
+/**
+ * Build social links HTML for the sidebar.
+ */
+function buildSocialLinks(profile: ProfileData): string {
+  const linkMap: Record<string, string> = {};
   for (const l of profile.links) {
-    if (l.icon) linksByIcon[l.icon] = l.url;
+    const icon = l.icon || "website";
+    linkMap[icon] = l.url;
   }
 
-  const contactItems = [
-    {
-      icon: "✉",
-      label: "Email",
-      value: email,
-      href: email ? `mailto:${email}` : null,
-    },
-    {
-      icon: "📞",
-      label: "Phone",
-      value: phone,
-      href: phone ? `tel:${phone}` : null,
-    },
-    {
-      icon: "📍",
-      label: "Location",
-      value: location,
-      href: location
-        ? `https://maps.google.com?q=${encodeURIComponent(location)}`
-        : null,
-    },
-  ].filter((item) => item.value);
-
-  const socialItems = [
-    { name: "LinkedIn", url: linksByIcon.linkedin || profile.linkedinUrl },
-    { name: "Twitter / X", url: linksByIcon.twitter },
-    { name: "GitHub", url: linksByIcon.github },
-    { name: "Website", url: linksByIcon.website },
-  ].filter((item) => item.url && item.url !== "#");
-
-  const contactCards = contactItems
+  return [
+    { name: "LinkedIn", icon: "linkedin", url: linkMap.linkedin || profile.linkedinUrl || "#" },
+    { name: "Twitter-X", icon: "twitter", url: linkMap.twitter || "#" },
+    { name: "GitHub", icon: "github", url: linkMap.github || "#" },
+    { name: "Website", icon: "website", url: linkMap.website || "#" },
+  ]
+    .filter((l) => l.url !== "#" || l.name === "LinkedIn")
     .map(
-      (item) => `
-    <a href="${esc(item.href!)}" style="display:flex;align-items:center;gap:16px;background:${DC.card};border-radius:${DC.radius};padding:20px 24px;text-decoration:none;transition:background 0.2s;">
-      <span style="font-size:20px;line-height:1;">${item.icon}</span>
-      <div>
-        <div style="font-family:${DC.font};font-size:11px;font-weight:600;color:${DC.muted};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">${item.label}</div>
-        <div style="font-family:${DC.font};font-size:15px;font-weight:500;color:${DC.black};letter-spacing:-0.02em;">${esc(item.value)}</div>
-      </div>
-    </a>
-  `,
+      (l) =>
+        `<div style="padding:4px 0;"><a href="${esc(l.url)}" target="_blank" rel="noopener" style="font-family:'Inter Display',sans-serif;font-size:13px;font-weight:500;color:#333;text-decoration:none;letter-spacing:-0.04em;">${esc(l.name)}</a></div>`
     )
     .join("");
-
-  const socialLinks = socialItems
-    .map(
-      (item) => `
-    <a href="${esc(item.url)}" target="_blank" rel="noopener"
-      style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:${DC.card};border-radius:${DC.radiusSm};text-decoration:none;">
-      <span style="font-family:${DC.font};font-size:14px;font-weight:500;color:${DC.black};letter-spacing:-0.02em;">${item.name}</span>
-      <span style="font-family:${DC.font};font-size:18px;color:${DC.muted};">↗</span>
-    </a>
-  `,
-    )
-    .join("");
-
-  return `
-<section id="contact" style="min-height:80vh;background:${DC.sidebar};padding:60px 48px 80px 48px;box-sizing:border-box;">
-  <!-- Section header -->
-  <div style="margin-bottom:48px;">
-    <span style="font-family:${DC.font};font-size:11px;font-weight:600;color:${DC.brown};text-transform:uppercase;letter-spacing:0.1em;">Contact</span>
-    <h2 style="font-family:${DC.font};font-size:40px;font-weight:700;color:${DC.black};letter-spacing:-0.04em;margin-top:8px;line-height:1.1;">Let's work together</h2>
-    <p style="font-family:${DC.font};font-size:16px;color:${DC.muted};margin-top:12px;line-height:1.6;max-width:480px;">Have a project in mind or want to collaborate? I'd love to hear from you.</p>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:800px;">
-    <!-- Contact details -->
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <h3 style="font-family:${DC.font};font-size:13px;font-weight:600;color:${DC.muted};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">Get in Touch</h3>
-      ${contactCards || `<p style="font-family:${DC.font};font-size:14px;color:${DC.muted};">No contact details added yet.</p>`}
-    </div>
-    
-    <!-- Social links -->
-    ${
-      socialLinks
-        ? `
-    <div>
-      <h3 style="font-family:${DC.font};font-size:13px;font-weight:600;color:${DC.muted};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">Follow Me</h3>
-      <div style="display:flex;flex-direction:column;gap:8px;">${socialLinks}</div>
-    </div>`
-        : ""
-    }
-  </div>
-</section>`;
 }
 
-// ═══════════════════════════════════════════════════════════════════
-// Main compiler
-// ═══════════════════════════════════════════════════════════════════
-export function compileStaticHtml(
-  profile: ProfileData,
-  _templateId: TemplateId,
-): string {
-  const templatePath = path.join(
-    process.cwd(),
-    "public",
-    "templates",
-    "daniel-cross.html",
-  );
+// ── Main compiler ────────────────────────────────────────────────────────────
+
+export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId): string {
+  // Read the original Framer template HTML
+  const templatePath = path.join(process.cwd(), "public", "templates", "daniel-cross.html");
   let html = fs.readFileSync(templatePath, "utf-8");
 
-  // ─── 1. Fix asset URLs ──────────────────────────────────────────
+  // ─── 1. Fix all asset URLs ─────────────────────────────────────────────
+  // The template uses relative paths to a local _files folder.
+  // We remap them to our /templates/daniel-cross/ public URL.
   html = replaceAll(
     html,
     "./Danielcross - Personal Portfolio Framer Template_files/",
-    "/templates/daniel-cross/",
+    "/templates/daniel-cross/"
   );
 
-  // ─── 2. Fix internal navigation links → hash anchors ───────────
-  // Links left unmodified so they are caught by intercept script and open in a new tab
+  // ─── 2. Fix all internal framer website links ─────────────────────────
+  // Replace internal Framer navigation links with # to avoid broken nav
+  html = replaceAll(html, "https://danielcross.framer.website/", "#");
+  html = replaceAll(html, "https://danielcross.framer.website/about", "#about");
+  html = replaceAll(html, "https://danielcross.framer.website/work", "#work");
+  html = replaceAll(html, "https://danielcross.framer.website/contact", "#contact");
 
-  // ─── 3. Inject link-intercept script into <head> ───────────────
-  html = html.replace("</head>", LINK_INTERCEPT_SCRIPT + "\n</head>");
-
-  // ─── 4. SEO / page title ───────────────────────────────────────
+  // ─── 3. Update page title & SEO meta ──────────────────────────────────
   const pageTitle = `${profile.name} - Portfolio`;
   html = replaceAll(
     html,
     "Danielcross - Personal Portfolio Framer Template",
-    esc(pageTitle),
+    esc(pageTitle)
   );
-
-  // Fix canonical
   html = replaceAll(
     html,
-    'href="https://danielcross.framer.website/"',
-    'href="#"',
+    "Daniel Cross is a modern portfolio template for Framer, crafted for UI/UX designers and creatives. Sleek, professional, and fully customizable — ideal for showcas",
+    esc(profile.summary.substring(0, 150))
   );
 
-  // ─── 5. Sidebar name ────────────────────────────────────────────
+  // ─── 4. Sidebar name (logo link text) ─────────────────────────────────
+  // "Daniel Cross" in sidebar logo area
   html = replaceAll(html, ">Daniel Cross<", `>${esc(profile.name)}<`);
 
-  // ─── 6. Sidebar role ────────────────────────────────────────────
+  // ─── 5. Sidebar role ──────────────────────────────────────────────────
   html = replaceAll(html, ">ui/ux designer<", `>${esc(profile.headline)}<`);
 
-  // ─── 7. Hero first name ─────────────────────────────────────────
+  // ─── 6. Hero headline (first name on h1) ──────────────────────────────
+  // The template has "Hey,\ndaniel\nhere" split across multiple h1 elements
   const firstName = profile.name.split(" ")[0].toLowerCase();
   html = replaceAll(html, ">daniel<", `>${esc(firstName)}<`);
 
-  // ─── 8. About bio paragraph ─────────────────────────────────────
+  // ─── 7. Hero bio paragraph ────────────────────────────────────────────
   html = replaceAll(
     html,
     "I'm Daniel Cross, a passionate UI/UX Designer dedicated to crafting digital experiences that truly connect with people. With a focus on simplicity, usability, and creativity, I design products that not only look beautiful but also solve real problems. My approach blends strategy, design, and technology to transform ideas into meaningful solutions. Whether it's designing intuitive interfaces, building websites, or shaping brand identities, I bring every project to life with precision and purpose.",
-    esc(profile.summary),
+    esc(profile.summary)
   );
 
-  // ─── 9. Location ────────────────────────────────────────────────
+  // ─── 8. Location (sidebar & footer) ───────────────────────────────────
   const location = profile.location || "Remote";
-  html = replaceAll(
-    html,
-    ">Based in London-UK<",
-    `>Based in ${esc(location)}<`,
-  );
+  html = replaceAll(html, ">Based in London-UK<", `>Based in ${esc(location)}<`);
   html = replaceAll(html, ">London-UK<", `>${esc(location)}<`);
+
+  // Fix footer location map href
   html = replaceAll(
     html,
     'href="https://www.google.com/maps/place/45+Westwood+Ave,+Ellenville,+NY+12428,+USA/@41.7197902,-74.4073192,17z/data=!3m1!4b1!4m6!3m5!1s0x89dcdcab387f0725:0xa47e5e118528587f!8m2!3d41.7197862!4d-74.4047443!16s%2Fg%2F11c4w_9k9y?entry=ttu&amp;g_ep=EgoyMDI1MDUxMS4wIKXMDSoJLDEwMjExNDU1SAFQAw%3D%3D"',
-    `href="https://maps.google.com?q=${encodeURIComponent(location)}"`,
+    `href="https://maps.google.com?q=${encodeURIComponent(location)}"`
   );
 
-  // ─── 10. Email ──────────────────────────────────────────────────
+  // ─── 9. Footer contact details ────────────────────────────────────────
+  // Email
   const emailLink = profile.links.find((l) => l.icon === "email");
-  const email = emailLink ? emailLink.url.replace("mailto:", "") : "";
-  if (email) {
-    html = replaceAll(
-      html,
-      'href="mailto:hello@gmail.com"',
-      `href="mailto:${esc(email)}"`,
-    );
-    html = replaceAll(html, ">hello@gmail.com<", `>${esc(email)}<`);
+  const email = emailLink ? emailLink.url.replace("mailto:", "") : "hello@example.com";
+  html = replaceAll(html, 'href="mailto:hello@gmail.com"', `href="mailto:${esc(email)}"`);
+  html = replaceAll(html, ">hello@gmail.com<", `>${esc(email)}<`);
+
+  // Phone — remove or replace
+  const phoneLinkIdx = html.indexOf('href="tel:+44 7700 900123"');
+  if (phoneLinkIdx !== -1) {
+    html = replaceAll(html, 'href="tel:+44 7700 900123"', 'href="#"');
+    html = replaceAll(html, ">+44 7700 900123<", `>${esc(location)}<`);
   }
 
-  // Phone
-  const phone = profile.phone || "";
-  html = replaceAll(
-    html,
-    'href="tel:+44 7700 900123"',
-    phone ? `href="tel:${esc(phone)}"` : 'href="#"',
-  );
-  html = replaceAll(
-    html,
-    ">+44 7700 900123<",
-    phone ? `>${esc(phone)}<` : `>${esc(location)}<`,
-  );
+  // ─── 10. Projects / Work cards section ────────────────────────────────
+  // Replace the entire work wrapper content with user's projects
+  const workWrapperStart = 'data-framer-name="work wrapper">';
+  const workWrapperEnd = '</section>';
+  const wIdx = html.indexOf(workWrapperStart);
+  
+  if (wIdx !== -1 && (profile.projects || []).length > 0) {
+    // Find the range: from after work wrapper open tag to the Explore All button section
+    const contentStart = wIdx + workWrapperStart.length;
+    // Find the section close tag that ends the projects section
+    const projectsSection = html.indexOf('data-framer-name="Projects"');
+    if (projectsSection !== -1) {
+      // Replace the projects/work section
+      const projectsHtml = buildProjectsSection(profile);
+      const EXPLORE_MARKER = '<!--$--></div></div><!-/$--></div></section>';
+      const exploreIdx = html.indexOf('data-framer-name="Text wraooer"'); // typo in Framer
+      if (exploreIdx !== -1) {
+        const sectionEndClose = html.lastIndexOf('</section>', exploreIdx);
+        if (sectionEndClose !== -1) {
+          // We'll inject a marker and do a targeted replace
+          const OLD_WORK_WRAPPER_SECTION = html.substring(wIdx, wIdx + workWrapperStart.length);
+          // Just append our HTML after the wrapper open tag marker
+          html = html.substring(0, contentStart) + projectsHtml + html.substring(contentStart);
+        }
+      }
+    }
+  }
 
-  // ─── 11. Social link hrefs ──────────────────────────────────────
+  // ─── 11. Brands ticker section ─────────────────────────────────────────
+  const tickerMarker = 'data-framer-name="Ticker logos"';
+  const tickerIdx = html.indexOf(tickerMarker);
+  if (tickerIdx !== -1 && profile.experience.length > 0) {
+    const tickerOpenEnd = html.indexOf(">", tickerIdx) + 1;
+    const tickerClose = html.indexOf("<!--/$-->", tickerOpenEnd);
+    if (tickerClose !== -1) {
+      const tickerHtml = buildBrandsTicker(profile);
+      html = html.substring(0, tickerOpenEnd) + tickerHtml + html.substring(tickerClose);
+    }
+  }
+
+  // ─── 12. Social links in sidebar (hrefs) ──────────────────────────────
   const linksByIcon: Record<string, string> = {};
   for (const l of profile.links) {
     if (l.icon) linksByIcon[l.icon] = l.url;
   }
-  if (linksByIcon.linkedin)
-    html = replaceAll(
-      html,
-      'href="https://www.linkedin.com/"',
-      `href="${esc(linksByIcon.linkedin)}"`,
-    );
-  if (linksByIcon.twitter)
-    html = replaceAll(
-      html,
-      'href="https://x.com/"',
-      `href="${esc(linksByIcon.twitter)}"`,
-    );
+  if (linksByIcon.linkedin) {
+    html = replaceAll(html, 'href="https://www.linkedin.com/"', `href="${esc(linksByIcon.linkedin)}"`);
+  }
+  if (linksByIcon.twitter) {
+    html = replaceAll(html, 'href="https://x.com/"', `href="${esc(linksByIcon.twitter)}"`);
+  }
+  if (linksByIcon.github) {
+    html = replaceAll(html, 'href="https://www.instagram.com/"', `href="${esc(linksByIcon.github)}"`);
+  }
 
-  // ─── 12. Add id="home" to the root wrapper ──────────────────────
-  html = html.replace('<main class="', '<main id="home" class="');
-
-  // ─── 13. Remove Framer badge ────────────────────────────────────
+  // ─── 13. Remove Framer badge ──────────────────────────────────────────
   html = html.replace(/<div id="__framer-badge-container"[\s\S]*?<\/div>/g, "");
 
-  // ─── 14. Append About, Work, Contact sections before </body> ────
-  // Removed to preserve original template layout exactly
+  // ─── 14. Replace avatars and banners ──────────────────────────────────
+  if (profile.avatarUrl) {
+    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl));
+  }
+  const heroPhoto = profile.bannerUrl || profile.avatarUrl;
+  if (heroPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto));
+  }
 
   return html;
 }
