@@ -16,7 +16,9 @@ import {
   Globe,
   Loader2,
   Smartphone,
+  Tablet,
   Monitor,
+  MoveHorizontal,
   Mic,
   ArrowUp,
   Folder,
@@ -133,7 +135,10 @@ function EditorInner() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
-  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
+  const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile" | "resizable">("desktop");
+  const [resizableWidth, setResizableWidth] = useState<number>(800);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [actualWidth, setActualWidth] = useState<number>(1200);
   const [publishing, setPublishing] = useState(false);
   const [optimizing, setOptimizing] = useState(false);
 
@@ -160,6 +165,7 @@ function EditorInner() {
   const [designSubTab, setDesignSubTab] = useState<"chat" | "manual">("chat");
 
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
 
   // Load website data on mount & Check Auth
   useEffect(() => {
@@ -304,6 +310,53 @@ function EditorInner() {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentStep, showAddProject, customMessages, isThinking]);
+
+  // Listen for mouse dragging events to resize preview canvas
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!previewContainerRef.current) return;
+      const rect = previewContainerRef.current.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      const distance = Math.abs(e.clientX - center);
+      const calculatedWidth = Math.round(distance * 2);
+      const maxWidth = Math.min(1600, rect.width - 40); // 20px padding on each side
+      setResizableWidth(Math.max(320, Math.min(maxWidth, calculatedWidth)));
+      setPreviewMode("resizable");
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
+
+  // Keep actualWidth state in sync with rendered preview frame width
+  useEffect(() => {
+    const updateWidth = () => {
+      if (previewContainerRef.current) {
+        let width = previewContainerRef.current.getBoundingClientRect().width - 48; // -48 for p-6 padding
+        if (previewMode === "tablet") {
+          width = Math.min(width, 768);
+        } else if (previewMode === "mobile") {
+          width = Math.min(width, 375);
+        } else if (previewMode === "resizable") {
+          width = Math.min(width, resizableWidth);
+        }
+        setActualWidth(Math.round(width));
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, [previewMode, resizableWidth]);
 
   // Step 6: AI Optimization
   useEffect(() => {
@@ -1787,6 +1840,20 @@ function EditorInner() {
                   <Monitor className="w-[14px] h-[14px]" />
                 </button>
                 <button
+                  onClick={() => setPreviewMode("tablet")}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "tablet"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Tablet preview"
+                >
+                  <Tablet className="w-[14px] h-[14px]" />
+                </button>
+                <button
                   onClick={() => setPreviewMode("mobile")}
                   disabled={activeNav === 1 && currentStep <= 6}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
@@ -1800,19 +1867,40 @@ function EditorInner() {
                 >
                   <Smartphone className="w-[14px] h-[14px]" />
                 </button>
+                <button
+                  onClick={() => {
+                    setPreviewMode("resizable");
+                    // Reset to a sensible width if it's default
+                    if (resizableWidth === 800) {
+                      setResizableWidth(800);
+                    }
+                  }}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "resizable"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Drag-to-resize preview"
+                >
+                  <MoveHorizontal className="w-[14px] h-[14px]" />
+                </button>
               </div>
             </div>
 
           </div>
 
           {/* Canvas Main content area */}
-          <div className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
-            activeNav === 1 && currentStep <= 6 
-              ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
-              : previewMode === "desktop"
-              ? "bg-white p-0"
-              : "bg-[#F9F9F9] p-8"
-          }`}>
+          <div 
+            ref={previewContainerRef}
+            className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
+              activeNav === 1 && currentStep <= 6 
+                ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
+                : "bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
+            }`}
+          >
             <AnimatePresence mode="wait">
               
               {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 6 */}
@@ -1835,32 +1923,101 @@ function EditorInner() {
                   />
                 </motion.div>
               ) : (
-                /* Show scalable Live Preview for template choosing/publishing or other tabs */
+                /* Show resizable Live Preview for template choosing/publishing or other tabs */
                 <motion.div
-                  key={`preview-${selectedTemplate}-${previewMode}`}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
+                  key={`preview-wrapper-${selectedTemplate}`}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.35, ease: "easeOut" }}
                   className="w-full h-full flex items-center justify-center"
                 >
                   {editedProfile ? (
-                    previewMode === "desktop" ? (
-                      /* Desktop view - FULL SCREEN */
-                      <div className="w-full h-full overflow-auto bg-white relative">
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
-                      </div>
-                    ) : (
-                      /* Mobile view */
-                      <div
-                        className="rounded-3xl overflow-hidden border-[6px] border-neutral-800 bg-white shadow-md relative"
-                        style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
-                      >
-                        <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto" }}>
-                          <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
+                    <motion.div
+                      animate={{ 
+                        width: 
+                          previewMode === "desktop" ? "100%" : 
+                          previewMode === "tablet" ? 768 : 
+                          previewMode === "mobile" ? 375 : 
+                          resizableWidth 
+                      }}
+                      transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+                      className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                    >
+                      {/* Browser Header Bezel */}
+                      <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
+                        {/* 3 macOS dots */}
+                        <div className="flex items-center gap-1.5 w-16">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
+                        </div>
+                        
+                        {/* Address Bar */}
+                        <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
+                          <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          <span className="truncate text-neutral-650 font-mono">
+                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                          </span>
+                          <span className="text-neutral-300 mx-1">|</span>
+                          <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
+                            {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
+                             previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
+                             previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
+                             `Custom • ${actualWidth}px`}
+                          </span>
+                        </div>
+
+                        {/* Right side status indicator */}
+                        <div className="w-16 flex justify-end">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
+                            {previewMode}
+                          </span>
                         </div>
                       </div>
-                    )
+
+                      {/* Iframe Viewport Container */}
+                      <div className="flex-1 w-full bg-white relative overflow-hidden">
+                        {/* Drag Overlay to prevent iframe event interception */}
+                        {isDragging && (
+                          <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
+                        )}
+                        
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
+                      </div>
+
+                      {/* Left Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+
+                      {/* Right Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+                    </motion.div>
                   ) : (
                     <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
                   )}

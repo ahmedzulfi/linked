@@ -231,12 +231,12 @@ export default function ProfilePreview({
 
   if (fluid) {
     return (
-      <div className="w-full min-h-screen">
+      <div className="w-full h-full">
         <iframe
           ref={iframeRef}
           srcDoc={compiledHtml || "<html><body style='display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#888;font-size:14px'>Loading preview…</body></html>"}
-          className="w-full min-h-screen border-0"
-          style={{ height: "100vh" }}
+          className="w-full h-full border-0"
+          style={{ height: "100%" }}
           sandbox="allow-same-origin allow-scripts"
           title="Profile Preview"
         />
