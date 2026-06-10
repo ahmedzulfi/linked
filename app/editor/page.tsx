@@ -233,18 +233,27 @@ function EditorInner() {
     fetchChatHistory();
   }, [websiteId]);
 
-  // Load saved onboarding step from sessionStorage on mount
+  // Load saved onboarding step from sessionStorage or url parameters on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
+      const isOnboardingFlow = searchParams.get("onboarding") === "true";
+      if (!isOnboardingFlow) {
+        // If not in the onboarding flow, default straight to free-form editor (Step 9)
+        setCurrentStep(9);
+        return;
+      }
+
       const savedStep = sessionStorage.getItem("webild_onboarding_step");
       if (savedStep) {
         const parsed = parseInt(savedStep, 10);
         if (!isNaN(parsed) && parsed >= 1 && parsed <= 9) {
           setCurrentStep(parsed);
         }
+      } else {
+        setCurrentStep(1);
       }
     }
-  }, []);
+  }, [searchParams]);
 
   // Save currentStep to sessionStorage on changes
   useEffect(() => {

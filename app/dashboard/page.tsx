@@ -12,11 +12,9 @@ import {
   Settings,
   Trash2,
   Edit2,
+  ExternalLink,
   Globe,
   Share2,
-  Search,
-  Plus,
-  MoreHorizontal,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,7 +26,8 @@ import { AnimatedDashboardEmptyIllustration } from "@/components/AnimatedSVGs";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { editedProfile } = useEditor();
+  const { editedProfile, selectedTemplate } = useEditor();
+  const activeProfile = editedProfile || MOCK_PROFILE;
 
   const [websites, setWebsites] = useState<any[]>([]);
   const [loadingWebsites, setLoadingWebsites] = useState(true);
@@ -108,54 +107,36 @@ export default function DashboardPage() {
     }
   };
 
-  const filteredWebsites = websites.filter((web) => {
-    const term = searchQuery.toLowerCase();
-    return (
-      !term ||
-      web.brandName.toLowerCase().includes(term) ||
-      web.subdomainSlug.toLowerCase().includes(term)
-    );
-  });
-
-  const userAvatarUrl = websites[0]?.profile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47";
-
   return (
-    <div className="min-h-screen bg-[#F5F5F7] font-sans flex flex-col text-neutral-800 antialiased relative overflow-x-hidden">
-      
-      {/* ── Background Grid & Ambient Glows ── */}
-      <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden">
-        {/* Soft dot grid */}
-        <div className="absolute inset-0 bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px]" />
-        
-        {/* Ambient mesh glows */}
-        <div 
-          className="absolute -top-[20%] -left-[10%] w-[60%] aspect-square rounded-full bg-blue-100/30 blur-[120px] mix-blend-multiply" 
-          style={{ transform: "translate3d(0, 0, 0)" }}
+    <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
+      {/* ── Background Graphic ── */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
+        <img
+          src="/bg.png"
+          alt=""
+          className="w-full h-full object-cover object-top"
         />
-        <div 
-          className="absolute top-[10%] -right-[10%] w-[50%] aspect-square rounded-full bg-purple-100/20 blur-[100px] mix-blend-multiply" 
-          style={{ transform: "translate3d(0, 0, 0)" }}
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
       </div>
 
-      {/* ── Glassmorphic Top Header ── */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white/70 backdrop-blur-md border-b border-neutral-200/60 px-6 z-50 flex items-center justify-between select-none shadow-none">
+      {/* ── Editor Style Navbar/Top-bar (Removed shadow) ── */}
+      <header className="fixed top-0 left-0 right-0 h-14 bg-white/80 backdrop-blur-md border-b border-[#E6E6E6] px-6 z-50 flex items-center justify-between select-none shadow-none">
         {/* Left Logo Side */}
         <div className="flex items-center gap-3">
           <img
             src="/logo.png"
             alt="Webild"
-            className="h-6 w-auto object-contain cursor-pointer active:scale-95 transition-transform"
+            className="h-7 w-auto object-contain cursor-pointer"
             onClick={() => router.push("/")}
           />
-          <div className="w-px h-4 bg-neutral-200" />
-          <span className="text-xs font-semibold text-neutral-500 truncate max-w-[150px]">
+          <div className="w-px h-4 bg-[#2A2A2F]/15" />
+          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">
             {websites[0]?.brandName || "My Dashboard"}
           </span>
         </div>
 
         {/* Right Action Side */}
-        <div className="flex items-center gap-2.5 relative">
+        <div className="flex items-center gap-2 relative">
           <button
             onClick={() => {
               const sub = websites[0]
@@ -164,7 +145,7 @@ export default function DashboardPage() {
               navigator.clipboard.writeText(`https://${sub}`);
               toast.success("Site link copied to clipboard!");
             }}
-            className="h-8 px-4 text-xs font-bold bg-white border border-neutral-200 hover:bg-neutral-50 rounded-lg text-neutral-700 transition-all active:scale-95 shadow-xs cursor-pointer"
+            className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
           >
             Share
           </button>
@@ -177,7 +158,7 @@ export default function DashboardPage() {
                 toast.success("Your site updates are live!");
               }, 1000);
             }}
-            className="h-8 px-5 text-xs font-bold bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg transition-all active:scale-[0.97] shadow-sm cursor-pointer"
+            className="h-8 px-5 text-xs font-semibold bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-all active:scale-[0.97]"
           >
             Publish
           </button>
@@ -185,10 +166,10 @@ export default function DashboardPage() {
           {/* User Menu Avatar Trigger */}
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="w-8 h-8 rounded-lg overflow-hidden border border-neutral-200 hover:scale-105 active:scale-95 transition-transform ml-1 bg-white"
+            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
           >
             <img
-              src={userAvatarUrl}
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
               alt="Avatar"
               className="w-full h-full object-cover"
             />
@@ -209,328 +190,398 @@ export default function DashboardPage() {
 
       {/* ── Main Container (Sidebar + Content) ── */}
       <div className="flex-1 flex pt-14 min-h-screen relative z-10">
-        
         {/* ── Sidebar (Sticky Left) ── */}
-        <aside className="w-[260px] border-r border-neutral-200/50 bg-white/40 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none z-20">
-          
-          {/* Top part navigation */}
+        <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
+          {/* Top navigation items */}
           <div className="flex flex-col gap-6">
             {/* New Website Button */}
             <button
               onClick={() => router.push("/onboarding")}
-              className="w-full h-10 bg-neutral-900 hover:bg-neutral-800 active:scale-[0.97] transition-all rounded-lg flex items-center justify-center gap-2 text-xs font-semibold text-white shadow-sm cursor-pointer"
+              className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
             >
-              <Plus className="w-4 h-4 text-white" />
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-black"
+              >
+                <rect width="18" height="18" x="3" y="3" rx="2" />
+                <path d="M9 12h6M12 9v6" />
+              </svg>
               New Website
             </button>
 
-            {/* Menu Tabs */}
-            <div className="flex flex-col gap-1">
+            {/* Menu Items */}
+            <div className="flex flex-col gap-1.5">
               <button
                 onClick={() => router.push("/")}
-                className="w-full h-9 px-3 rounded-lg hover:bg-white/60 flex items-center gap-2.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
-                <Home className="w-4 h-4 text-neutral-500" />
+                <Home className="w-[18px] h-[18px] text-black" />
                 Home
               </button>
 
               <button
                 onClick={() => router.push("/editor")}
-                className="w-full h-9 px-3 rounded-lg hover:bg-white/60 flex items-center gap-2.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 transition-all active:scale-[0.98] cursor-pointer"
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
               >
-                <Layout className="w-4 h-4 text-neutral-500" />
+                <Layout className="w-[18px] h-[18px] text-black" />
                 Templates
               </button>
 
               {/* Active Tab */}
-              <button className="w-full h-9 px-3 rounded-lg bg-blue-50/60 border border-blue-200/30 flex items-center gap-2.5 text-xs font-bold text-blue-600 transition-all">
-                <Folder className="w-4 h-4 text-blue-500" />
+              <button className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all">
+                <Folder className="w-[18px] h-[18px] text-[#1A68FF]" />
                 All Websites
               </button>
             </div>
 
             {/* Recent Websites Section */}
-            <div className="flex flex-col gap-2 pt-4 border-t border-neutral-200/50">
-              <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider px-3">
+            <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
+              <span className="text-[12px] font-semibold text-[#88888E] px-3">
                 Recent websites
               </span>
 
-              {websites.length > 0 ? (
-                <div
-                  onClick={() => router.push(`/editor?id=${websites[0].id}`)}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/60 cursor-pointer transition-all bg-white/25 border border-transparent hover:border-neutral-200/30 active:scale-[0.98]"
-                >
-                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-neutral-200 overflow-hidden p-0.5 shrink-0">
-                    <img
-                      src="/logoicon.png"
-                      alt="Logo"
-                      className="w-full h-full object-contain"
-                    />
-                  </div>
-                  <span className="text-[11px] font-semibold text-neutral-700 truncate">
-                    {websites[0].brandName}
-                  </span>
+              <div
+                onClick={() =>
+                  websites[0] && router.push(`/editor?id=${websites[0].id}`)
+                }
+                className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
+              >
+                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
+                  <img
+                    src="/logoicon.png"
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-              ) : (
-                <span className="text-[11px] italic text-neutral-400 px-3">
-                  No recent sites
+                <span className="text-[13px] font-semibold text-[#171717] truncate">
+                  {websites[0]?.brandName || "No recent sites"}
                 </span>
-              )}
+              </div>
             </div>
           </div>
 
-          {/* Bottom Settings navigation */}
-          <div className="flex flex-col gap-1">
-            <button
-              onClick={() => router.push("/pricing")}
-              className="w-full h-9 px-3 rounded-lg hover:bg-white/60 flex items-center gap-2.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 transition-all active:scale-[0.98] cursor-pointer"
-            >
-              <CreditCard className="w-4 h-4 text-neutral-500" />
-              Pricing
-            </button>
+          {/* Bottom navigation & pricing items */}
+          <div className="flex flex-col gap-6">
+            {/* Pricing, Documentation, Settings */}
+            <div className="flex flex-col gap-1">
+              <button
+                onClick={() => router.push("/pricing")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <CreditCard className="w-[18px] h-[18px] text-black" />
+                Pricing
+              </button>
 
-            <button
-              onClick={() => router.push("/docs")}
-              className="w-full h-9 px-3 rounded-lg hover:bg-white/60 flex items-center gap-2.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 transition-all active:scale-[0.98] cursor-pointer"
-            >
-              <BookOpen className="w-4 h-4 text-neutral-500" />
-              Documentation
-            </button>
+              <button
+                onClick={() => router.push("/docs")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <BookOpen className="w-[18px] h-[18px] text-black" />
+                Documentation
+              </button>
 
-            <button
-              onClick={() => router.push("/settings")}
-              className="w-full h-9 px-3 rounded-lg hover:bg-white/60 flex items-center gap-2.5 text-xs font-medium text-neutral-600 hover:text-neutral-900 transition-all active:scale-[0.98] cursor-pointer"
-            >
-              <Settings className="w-4 h-4 text-neutral-500" />
-              Settings
-            </button>
+              <button
+                onClick={() => router.push("/settings")}
+                className="w-full h-10 px-3 rounded-[8px] hover:bg-white/60 flex items-center gap-3 text-[14px] font-medium text-black transition-all"
+              >
+                <Settings className="w-[18px] h-[18px] text-black" />
+                Settings
+              </button>
+            </div>
           </div>
         </aside>
 
         {/* ── Main Content Area ── */}
-        <main className="flex-1 flex flex-col items-center px-6 md:px-12 py-10 z-10 w-full max-w-7xl mx-auto overflow-hidden">
-          
-          {/* Cinematic Wide Display Hero Section */}
-          <div className="flex flex-col gap-4 items-center text-center w-full max-w-4xl mb-12 mt-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight text-neutral-900 leading-none max-w-3xl flex items-center justify-center gap-1.5 flex-wrap">
-              Manage your 
-              <span 
-                className="inline-block w-14 h-7 rounded-full align-middle bg-cover bg-center border border-neutral-200/30 shadow-xs mx-1" 
-                style={{ backgroundImage: 'url(/logoicon.png)', transform: 'translateY(-2px)' }} 
-              />
-              websites
-            </h1>
-            <p className="text-sm md:text-base text-neutral-500 max-w-md">
-              Create, manage, and edit your professional portfolio websites in one unified workspace.
+        <main className="flex-1 flex flex-col items-center px-8 md:px-12 py-10">
+          {/* User Provided Search and Title Container */}
+          <div
+            className="flex flex-col gap-4 items-center text-center w-full max-w-[420px] mb-12"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+            }}
+          >
+            <h2
+              className="text-5xl font-medium leading-[1.15] text-black flex items-center justify-center gap-1 flex-wrap"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <span
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                All
+              </span>{" "}
+              <img
+                className="h-[1.1em] w-auto object-contain align-middle mx-1.5 shrink-0"
+                height={55}
+                width={55}
+                src="/logoicon.png"
+                alt="Logo"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              />{" "}
+              <span
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                Websites
+              </span>
+            </h2>
+            <p
+              className="text-balance text-base md:text-xl leading-tight text-black"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              Manage and access all your websites websites in one place.
             </p>
-            
-            {/* Search Capsule */}
-            <div className="relative flex items-center gap-2.5 px-4 h-11 rounded-full bg-white border border-neutral-200/80 shadow-xs focus-within:border-neutral-450 focus-within:ring-2 focus-within:ring-neutral-400/5 max-w-xs w-full transition-all mt-4">
-              <Search className="w-4 h-4 text-neutral-400 shrink-0" />
+            <div
+              className="relative flex items-center gap-1 px-3 py-3 rounded-sm button-secondary w-full md:w-80 h-fit text-base md:text-lg mt-2"
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+              }}
+            >
+              <svg
+                className="lucide lucide-search h-[1em] text-black"
+                height="24"
+                width="24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
+              >
+                <path
+                  d="m21 21-4.34-4.34"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  }}
+                />
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                  }}
+                />
+              </svg>
               <input
+                className="w-full placeholder:text-black focus:outline-none text-base md:text-lg bg-transparent border-none p-0 focus:ring-0"
                 type="text"
                 placeholder="Search websites..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full placeholder:text-neutral-400 focus:outline-none text-xs bg-transparent border-none p-0 focus:ring-0 text-neutral-800"
+                style={{
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
+                }}
               />
             </div>
           </div>
 
-          {/* Websites Layout Grid */}
-          <div className="w-full flex justify-center">
+          {/* Websites Grid */}
+          <div className="w-full flex justify-start pl-2">
             {loadingWebsites ? (
-              /* Loading Skeletons */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className="flex flex-col gap-3.5 p-3 rounded-xl bg-white border border-neutral-200/60 animate-pulse"
+                    className="flex flex-col gap-3 p-3 rounded-[12px] bg-white border border-[#EBEBEB] animate-pulse"
                   >
-                    <div className="w-full bg-neutral-100 rounded-lg aspect-video" />
-                    <div className="flex flex-col gap-2 mt-1 px-1">
-                      <div className="h-4 bg-neutral-200 rounded w-1/2" />
-                      <div className="h-3 bg-neutral-100 rounded w-3/4" />
+                    <div className="w-full bg-gray-100 rounded-[10px] aspect-video" />
+                    <div className="flex flex-col gap-2 mt-1">
+                      <div className="h-4 bg-gray-200 rounded w-1/2" />
+                      <div className="h-3 bg-gray-100 rounded w-3/4" />
                     </div>
                   </div>
                 ))}
               </div>
-            ) : filteredWebsites.length === 0 ? (
-              /* Empty State view */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="w-full max-w-md bg-white rounded-2xl border border-neutral-200/80 shadow-md p-8 flex flex-col items-center text-center mt-6"
-              >
-                <AnimatedDashboardEmptyIllustration />
-                <h3 className="text-base font-semibold text-neutral-800 mt-2">No portfolio websites found</h3>
-                <p className="text-xs text-neutral-400 max-w-xs mt-1 leading-normal">
-                  {searchQuery ? "No drafts match your search terms. Try refining your keywords." : "You haven't initialized any portfolio drafts yet. Let's create one!"}
-                </p>
-                {!searchQuery && (
-                  <button
-                    onClick={() => router.push("/onboarding")}
-                    className="h-10 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-semibold rounded-lg mt-5 transition-all active:scale-95 shadow-sm cursor-pointer"
-                  >
-                    Create Portfolio Draft
-                  </button>
-                )}
-              </motion.div>
             ) : (
-              /* Bento Website Card Grid */
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
-                {filteredWebsites.map((web, idx) => {
-                  const isDropdownOpen = activeDropdownId === web.id;
-                  return (
-                    <motion.div
-                      key={web.id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: idx * 0.05, ease: "easeOut" }}
-                      className="relative flex flex-col gap-3.5 p-3 cursor-pointer rounded-xl bg-white border border-neutral-200/80 hover:shadow-[0_15px_30px_rgba(0,0,0,0.04)] hover:border-neutral-350 transition-all duration-300 group active:scale-[0.99]"
-                    >
-                      {/* Browser bezel mockup preview frame */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
+                {websites
+                  .filter((web) => {
+                    const term = searchQuery.toLowerCase();
+                    return (
+                      !term ||
+                      web.brandName.toLowerCase().includes(term) ||
+                      web.subdomainSlug.toLowerCase().includes(term)
+                    );
+                  })
+                  .map((web) => {
+                    const isDropdownOpen = activeDropdownId === web.id;
+                    return (
                       <div
-                        onClick={() => router.push(`/editor?id=${web.id}`)}
-                        className="relative w-full aspect-video rounded-lg overflow-hidden border border-neutral-200/60 bg-neutral-50/50 flex flex-col"
+                        key={web.id}
+                        className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                       >
-                        {/* Mini Browser Bezel Header */}
-                        <div className="h-6 shrink-0 bg-neutral-100/80 border-b border-neutral-250/30 px-2 flex items-center gap-1 select-none pointer-events-none">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#E45A5A]/85" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#FFBD2E]/85" />
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#369762]/85" />
-                          <div className="flex-1 mx-4 h-3.5 bg-white border border-neutral-200/40 rounded flex items-center justify-center text-[8.5px] font-mono text-neutral-400">
-                            {web.subdomainSlug}.linkedpage.io
-                          </div>
-                        </div>
-                        
-                        {/* Scaled Preview Frame */}
-                        <div className="flex-1 w-full relative overflow-hidden flex items-center justify-center bg-neutral-50/10">
-                          <div className="absolute w-[1200px] h-[900px] scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center pointer-events-none transition-transform duration-500 group-hover:scale-[0.285] ease-out">
-                            <ProfilePreview
-                              profile={web.profile}
-                              template={web.templateId}
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Card Footer details */}
-                      <div className="flex items-start justify-between relative min-w-0 px-1">
-                        <div className="min-w-0 max-w-[75%] flex flex-col gap-0.5">
-                          <h3 className="text-xs font-bold leading-tight truncate text-neutral-800">
-                            {web.brandName}
-                          </h3>
-                          <p className="text-[10px] leading-tight truncate text-neutral-450">
-                            {web.isPublished ? (
-                              <span className="text-[#369762] font-semibold flex items-center gap-1">
-                                <span className="relative flex h-1.5 w-1.5">
-                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#369762] opacity-75"></span>
-                                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#369762]"></span>
-                                </span>
-                                Live: {web.subdomainSlug}.linkedpage.io
-                              </span>
-                            ) : (
-                              <span className="text-neutral-400 font-medium flex items-center gap-1">
-                                <span className="w-1.5 h-1.5 rounded-full bg-neutral-200" />
-                                Draft (Unpublished)
-                              </span>
-                            )}
-                          </p>
-                        </div>
-
-                        {/* Card Options Button & Dropdown */}
-                        <div className="flex items-center gap-1.5 relative flex-shrink-0">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              const sub = web.subdomainSlug
-                                ? `${web.subdomainSlug}.linkedpage.io`
-                                : "linkedpage.io";
-                              navigator.clipboard.writeText(`https://${sub}`);
-                              toast.success("Site link copied to clipboard!");
-                            }}
-                            className="inline-flex h-7 px-2.5 text-[10.5px] font-bold cursor-pointer items-center justify-center rounded-lg bg-neutral-50 hover:bg-neutral-100 border border-neutral-200 text-neutral-700 transition-all active:scale-95 shadow-xs"
-                          >
-                            Share
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveDropdownId(
-                                isDropdownOpen ? null : web.id,
-                              );
-                            }}
-                            className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-full hover:bg-neutral-100 transition-all my-auto text-neutral-400 hover:text-neutral-600"
-                          >
-                            <MoreHorizontal className="w-4.5 h-4.5" />
-                          </button>
-
-                          {/* Dropdown Options */}
-                          {isDropdownOpen && (
-                            <>
-                              <div
-                                className="fixed inset-0 z-10"
-                                onClick={() => setActiveDropdownId(null)}
-                              />
-                              <div className="absolute right-0 bottom-8 z-20 w-44 bg-white/95 backdrop-blur-md border border-neutral-200/80 rounded-xl py-1 flex flex-col shadow-lg">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    const sub = web.subdomainSlug
-                                      ? `${web.subdomainSlug}.linkedpage.io`
-                                      : "linkedpage.io";
-                                    navigator.clipboard.writeText(
-                                      `https://${sub}`,
-                                    );
-                                    toast.success(
-                                      "Site link copied to clipboard!",
-                                    );
-                                    setActiveDropdownId(null);
-                                  }}
-                                  className="px-3.5 py-2 text-left text-[11px] font-semibold text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
-                                >
-                                  <Share2 className="w-3.5 h-3.5 text-neutral-400" />
-                                  Share Link
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setActiveDropdownId(null);
-                                    router.push(`/editor?id=${web.id}`);
-                                  }}
-                                  className="px-3.5 py-2 text-left text-[11px] font-semibold text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
-                                >
-                                  <Edit2 className="w-3.5 h-3.5 text-neutral-400" />
-                                  Edit in Builder
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setActiveDropdownId(null);
-                                    router.push(`/preview?id=${web.id}`);
-                                  }}
-                                  className="px-3.5 py-2 text-left text-[11px] font-semibold text-neutral-700 hover:bg-neutral-50 flex items-center gap-2"
-                                >
-                                  <Globe className="w-3.5 h-3.5 text-neutral-400" />
-                                  View Live Preview
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    setActiveDropdownId(null);
-                                    handleDeleteSite(web.id);
-                                  }}
-                                  className="px-3.5 py-2 text-left text-[11px] font-bold text-[#E45A5A] hover:bg-red-50/50 flex items-center gap-2 border-t border-neutral-200/50 mt-1"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                  Delete site
-                                </button>
+                        <div
+                          onClick={() => router.push(`/editor?id=${web.id}`)}
+                        >
+                          <div className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center">
+                            <div className="relative w-full p-1 rounded-sm flex items-center justify-center">
+                              <div className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none">
+                                <div className="scale-[0.27] origin-center flex-shrink-0 flex items-center justify-center">
+                                  <ProfilePreview
+                                    profile={web.profile}
+                                    template={web.templateId}
+                                  />
+                                </div>
                               </div>
-                            </>
-                          )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Card Footer details */}
+                        <div className="flex items-start justify-between relative min-w-0">
+                          <div className="min-w-0 max-w-[80%] flex flex-col">
+                            <h3 className="text-sm font-semibold leading-tight truncate text-black">
+                              {web.brandName}
+                            </h3>
+                            <p className="text-xs leading-tight truncate text-gray-500 mt-1">
+                              {web.isPublished ? (
+                                <span className="text-[#369762] font-semibold flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#369762]" />
+                                  Live: {web.subdomainSlug}.linkedpage.io
+                                </span>
+                              ) : (
+                                <span>Draft (Unpublished)</span>
+                              )}
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 relative flex-shrink-0">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                const sub = web.subdomainSlug
+                                  ? `${web.subdomainSlug}.linkedpage.io`
+                                  : "linkedpage.io";
+                                navigator.clipboard.writeText(`https://${sub}`);
+                                toast.success("Site link copied to clipboard!");
+                              }}
+                              className="inline-flex h-8 px-2.5 text-xs font-semibold cursor-pointer items-center justify-center rounded-lg bg-white border border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
+                            >
+                              Share
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveDropdownId(
+                                  isDropdownOpen ? null : web.id,
+                                );
+                              }}
+                              className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
+                            >
+                              <svg
+                                className="lucide lucide-ellipsis w-full"
+                                height="24"
+                                width="24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                viewBox="0 0 24 24"
+                              >
+                                <circle cx="12" cy="12" r="1" />
+                                <circle cx="19" cy="12" r="1" />
+                                <circle cx="5" cy="12" r="1" />
+                              </svg>
+                            </button>
+
+                            {/* Dropdown Options */}
+                            {isDropdownOpen && (
+                              <>
+                                <div
+                                  className="fixed inset-0 z-10"
+                                  onClick={() => setActiveDropdownId(null)}
+                                />
+                                <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-lg">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const sub = web.subdomainSlug
+                                        ? `${web.subdomainSlug}.linkedpage.io`
+                                        : "linkedpage.io";
+                                      navigator.clipboard.writeText(
+                                        `https://${sub}`,
+                                      );
+                                      toast.success(
+                                        "Site link copied to clipboard!",
+                                      );
+                                      setActiveDropdownId(null);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                  >
+                                    <Share2 className="w-4 h-4 text-gray-500" />
+                                    Share Link
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setActiveDropdownId(null);
+                                      router.push(`/editor?id=${web.id}`);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                  >
+                                    <Edit2 className="w-4 h-4 text-gray-500" />
+                                    Edit in Builder
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setActiveDropdownId(null);
+                                      router.push(`/preview?id=${web.id}`);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
+                                  >
+                                    <Globe className="w-4 h-4 text-gray-500" />
+                                    View Live Preview
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      setActiveDropdownId(null);
+                                      handleDeleteSite(web.id);
+                                    }}
+                                    className="px-4 py-2 text-left text-[13px] font-medium text-[#E45A5A] hover:bg-red-50 flex items-center gap-2 border-t border-[#F5F5F7] mt-1"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                    Delete site
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </motion.div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             )}
           </div>
@@ -549,12 +600,12 @@ export default function DashboardPage() {
             body {
               scrollbar-width: thin;
               scrollbar-color: rgba(0, 0, 0, 0.05) transparent;
-              background: #F5F5F7;
+              background: #fff;
               overscroll-behavior: none;
               color: #171717;
               min-height: 100vh;
               position: relative;
-              font-family: "Inter Tight", "Inter Tight Fallback", sans-serif;
+              font-family: "Inter Tight", "Inter Tight Fallback";
               font-style: normal;
             }
           `,
