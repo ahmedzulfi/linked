@@ -217,18 +217,6 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - **Dynamic Real-Time Data Binding:** The SVG animations dynamically map real state variables from the editor (such as active avatar/name on Step 1, projects list on Step 2, confirmed skills on Step 3/4, and job experience nodes on Step 5) to draw the user's actual entered data in real-time.
   - **Customizable Avatar & Portrait Images:** Substitutes the template placeholders with the user's `avatarUrl` (sidebar and layout avatar) and `bannerUrl` / `avatarUrl` (large hero portrait) in both the published page compiler and client-side editor preview.
 
-### User Dashboard Layout (/dashboard)
-The `/dashboard` view presents the portfolio draft manager:
-- **Background Workspace**: Uses a soft-gray background (#F5F5F7) overlaid with a 24px dot-grid pattern and blended ambient mesh blurs (light blue & violet).
-- **Navigation & Sidebar**: Styled as glassmorphic panels. The active state highlights using a spring-physic soft-blue container style with active-press scaling.
-- **Cinematic Hero**: Centered max-width H1 title featuring Satoshi/Geist typography and an inline logo image icon (no more than 2 lines).
-- **Capsule Search**: Rounded search bar with soft focus shadow outlines.
-- **Bento Website Cards Grid**:
-  - Cards arrange in a gapless, responsive grid layout.
-  - Hover states animate: cards translate vertically (-4px) and preview frame content scales up (105%) under smooth easing.
-  - Live indicator: A green pulsating dot (ping + state dot) represents active published subdomains, while drafts display a neutral status dot.
-  - Skeletons: Layout-matched loading cards are shown before data binds.
-
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
 - **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
