@@ -19,6 +19,7 @@ bun add better-auth @prisma/client
 ### 1. Create Auth Configuration
 
 **`server/utils/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -48,6 +49,7 @@ export type Session = typeof auth.$Infer.Session;
 ### 2. Create API Route Handler
 
 **`server/api/auth/[...all].ts`**:
+
 ```typescript
 import { auth } from "~/server/utils/auth";
 import { toH3Handler } from "better-auth/h3";
@@ -62,6 +64,7 @@ export default toH3Handler(auth);
 ### 1. Create Auth Client Plugin
 
 **`plugins/auth-client.ts`**:
+
 ```typescript
 import { createAuthClient } from "better-auth/vue";
 
@@ -83,6 +86,7 @@ export default defineNuxtPlugin(() => {
 ### 2. Create Composable
 
 **`composables/useAuth.ts`**:
+
 ```typescript
 export function useAuth() {
   const { $auth } = useNuxtApp();
@@ -102,6 +106,7 @@ export function useSession() {
 ### Auth Middleware
 
 **`middleware/auth.ts`**:
+
 ```typescript
 export default defineNuxtRouteMiddleware(async (to) => {
   const { data: session } = useSession();
@@ -121,6 +126,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
 ### Server Middleware for SSR
 
 **`server/middleware/auth.ts`**:
+
 ```typescript
 import { auth } from "~/server/utils/auth";
 
@@ -141,6 +147,7 @@ export default defineEventHandler(async (event) => {
 ### Login Page
 
 **`pages/login.vue`**:
+
 ```vue
 <script setup lang="ts">
 const auth = useAuth();
@@ -182,14 +189,17 @@ async function signInWithGoogle() {
 <template>
   <form @submit.prevent="handleSubmit">
     <input v-model="form.email" type="email" placeholder="Email" required />
-    <input v-model="form.password" type="password" placeholder="Password" required />
+    <input
+      v-model="form.password"
+      type="password"
+      placeholder="Password"
+      required
+    />
     <p v-if="error" class="error">{{ error }}</p>
     <button type="submit" :disabled="loading">
       {{ loading ? "Signing in..." : "Sign In" }}
     </button>
-    <button type="button" @click="signInWithGoogle">
-      Sign in with Google
-    </button>
+    <button type="button" @click="signInWithGoogle">Sign in with Google</button>
   </form>
 </template>
 ```
@@ -197,6 +207,7 @@ async function signInWithGoogle() {
 ### Dashboard Page
 
 **`pages/dashboard.vue`**:
+
 ```vue
 <script setup lang="ts">
 definePageMeta({
@@ -229,6 +240,7 @@ async function handleSignOut() {
 ### In API Routes
 
 **`server/api/protected.ts`**:
+
 ```typescript
 import { auth } from "~/server/utils/auth";
 

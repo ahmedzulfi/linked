@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, deleteWebsite } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -21,11 +24,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true, website });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch website detail" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to fetch website detail" },
+      { status: 500 },
+    );
   }
 }
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -55,11 +64,17 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const updatedWebsite = await updateWebsite(id, updates);
     return NextResponse.json({ success: true, website: updatedWebsite });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to save website updates" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to save website updates" },
+      { status: 500 },
+    );
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -77,8 +92,14 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     }
 
     await deleteWebsite(id);
-    return NextResponse.json({ success: true, message: "Website deleted successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Website deleted successfully",
+    });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to delete website" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to delete website" },
+      { status: 500 },
+    );
   }
 }

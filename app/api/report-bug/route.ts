@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     if (!subject?.trim() || !description?.trim()) {
       return NextResponse.json(
         { error: "Subject and description are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     console.error("Failed to save bug report:", e);
     return NextResponse.json(
       { error: e.message || "Failed to save bug report" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

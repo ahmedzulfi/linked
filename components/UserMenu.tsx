@@ -10,11 +10,11 @@ interface UserMenuProps {
   onClose?: () => void;
 }
 
-export function UserMenu({ 
-  name, 
-  email, 
+export function UserMenu({
+  name,
+  email,
   avatarUrl = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  onClose
+  onClose,
 }: UserMenuProps) {
   const router = useRouter();
 
@@ -37,41 +37,77 @@ export function UserMenu({
             />
           </div>
           <div className="truncate">
-            <p className="text-sm font-semibold text-[#2A2A2F] truncate">{name || "User"}</p>
-            <p className="text-xs text-[#171717]/60 truncate">{email || "user@example.com"}</p>
+            <p className="text-sm font-semibold text-[#2A2A2F] truncate">
+              {name || "User"}
+            </p>
+            <p className="text-xs text-[#171717]/60 truncate">
+              {email || "user@example.com"}
+            </p>
           </div>
         </div>
-
 
         {/* Links */}
         <div className="flex flex-col gap-1">
           <button
-            onClick={() => { router.push("/settings"); onClose?.(); }}
+            onClick={() => {
+              router.push("/settings");
+              onClose?.();
+            }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 0 3.319-1.915" />
               <circle cx="12" cy="12" r="3" />
             </svg>
             Settings
           </button>
           <button
-            onClick={() => { router.push("/report-bug"); onClose?.(); }}
+            onClick={() => {
+              router.push("/report-bug");
+              onClose?.();
+            }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
             </svg>
             Report a bug
           </button>
           <button
-            onClick={() => { router.push("/docs"); onClose?.(); }}
+            onClick={() => {
+              router.push("/docs");
+              onClose?.();
+            }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M12 7v14" />
               <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
             </svg>
@@ -91,7 +127,15 @@ export function UserMenu({
           className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-red-50 text-[#E45A5A] w-full"
           type="button"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
             <path d="M21 12H9" />
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
           </svg>

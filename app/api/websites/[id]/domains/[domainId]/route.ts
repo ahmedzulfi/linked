@@ -4,7 +4,7 @@ import { getWebsiteById, updateWebsite } from "@/lib/db";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string; domainId: string }> }
+  { params }: { params: Promise<{ id: string; domainId: string }> },
 ) {
   try {
     const user = await getAuthenticatedUser();
@@ -24,12 +24,21 @@ export async function DELETE(
 
     const nextDomains = website.customDomains.filter((d) => d.id !== domainId);
     if (nextDomains.length === website.customDomains.length) {
-      return NextResponse.json({ error: "Domain connection not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Domain connection not found" },
+        { status: 404 },
+      );
     }
 
     await updateWebsite(id, { customDomains: nextDomains });
-    return NextResponse.json({ success: true, message: "Domain disconnected successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Domain disconnected successfully",
+    });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to disconnect domain" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to disconnect domain" },
+      { status: 500 },
+    );
   }
 }

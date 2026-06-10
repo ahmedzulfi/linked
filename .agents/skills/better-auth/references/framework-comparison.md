@@ -13,23 +13,23 @@ This guide compares better-auth with popular authentication alternatives to help
 
 ## Feature Comparison Matrix
 
-| Feature | better-auth 1.4+ | Clerk | Auth.js |
-|---------|------------------|-------|---------|
-| **Hosting** | Self-hosted | Third-party | Self-hosted |
-| **Cost** | Free (OSS) | $25/mo+ | Free (OSS) |
-| **License** | MIT | Proprietary | ISC |
-| **Cloudflare D1** | ✅ Drizzle/Kysely | ❌ No | ✅ Adapter |
-| **Social Auth** | ✅ 10+ providers | ✅ Many | ✅ Many |
-| **2FA/Passkeys** | ✅ Plugin | ✅ Built-in | ⚠️ Limited |
-| **Organizations** | ✅ Plugin | ✅ Built-in | ❌ No |
-| **RBAC** | ✅ Plugin | ✅ Built-in | ⚠️ Manual |
-| **Vendor Lock-in** | ✅ None | ❌ High | ✅ None |
-| **Stateless Sessions** | ✅ v1.4.0+ | ✅ | ⚠️ Limited |
-| **Database Joins** | ✅ v1.4.0+ (2-3x faster) | N/A | ❌ |
-| **API Keys** | ✅ v1.4.0+ | ✅ | ❌ |
-| **SCIM Provisioning** | ✅ v1.4.0+ | ✅ | ❌ |
-| **ESM-only** | ✅ v1.4.0+ | ❌ CJS + ESM | ❌ CJS + ESM |
-| **Migration Required** | ⚠️ v1.3 → v1.4 | N/A (managed) | Varies |
+| Feature                | better-auth 1.4+         | Clerk         | Auth.js      |
+| ---------------------- | ------------------------ | ------------- | ------------ |
+| **Hosting**            | Self-hosted              | Third-party   | Self-hosted  |
+| **Cost**               | Free (OSS)               | $25/mo+       | Free (OSS)   |
+| **License**            | MIT                      | Proprietary   | ISC          |
+| **Cloudflare D1**      | ✅ Drizzle/Kysely        | ❌ No         | ✅ Adapter   |
+| **Social Auth**        | ✅ 10+ providers         | ✅ Many       | ✅ Many      |
+| **2FA/Passkeys**       | ✅ Plugin                | ✅ Built-in   | ⚠️ Limited   |
+| **Organizations**      | ✅ Plugin                | ✅ Built-in   | ❌ No        |
+| **RBAC**               | ✅ Plugin                | ✅ Built-in   | ⚠️ Manual    |
+| **Vendor Lock-in**     | ✅ None                  | ❌ High       | ✅ None      |
+| **Stateless Sessions** | ✅ v1.4.0+               | ✅            | ⚠️ Limited   |
+| **Database Joins**     | ✅ v1.4.0+ (2-3x faster) | N/A           | ❌           |
+| **API Keys**           | ✅ v1.4.0+               | ✅            | ❌           |
+| **SCIM Provisioning**  | ✅ v1.4.0+               | ✅            | ❌           |
+| **ESM-only**           | ✅ v1.4.0+               | ❌ CJS + ESM  | ❌ CJS + ESM |
+| **Migration Required** | ⚠️ v1.3 → v1.4           | N/A (managed) | Varies       |
 
 ---
 
@@ -38,6 +38,7 @@ This guide compares better-auth with popular authentication alternatives to help
 ### better-auth (v1.4.3)
 
 **Strengths**:
+
 - ✅ Self-hosted with full control over data
 - ✅ Modern ESM-first architecture (v1.4.0+)
 - ✅ Native Cloudflare D1 support via Drizzle/Kysely
@@ -49,12 +50,14 @@ This guide compares better-auth with popular authentication alternatives to help
 - ✅ TypeScript-first with excellent type safety
 
 **Weaknesses**:
+
 - ⚠️ Self-hosted means you manage infrastructure
 - ⚠️ Smaller community vs Auth.js/Clerk
 - ⚠️ v1.4.0 introduced breaking changes (ESM-only)
 - ⚠️ Requires Drizzle or Kysely for D1 (no direct adapter)
 
 **Best For**:
+
 - Cloudflare Workers/D1 projects
 - Teams wanting full control and no vendor lock-in
 - Projects requiring modern ESM architecture
@@ -62,6 +65,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - Startups avoiding recurring SaaS costs
 
 **v1.4.0+ New Features**:
+
 - Database joins for 2-3x faster queries
 - Stateless sessions with JWT
 - API key authentication plugin
@@ -75,6 +79,7 @@ This guide compares better-auth with popular authentication alternatives to help
 ### Clerk
 
 **Strengths**:
+
 - ✅ Fully managed service (zero infrastructure work)
 - ✅ Beautiful pre-built UI components
 - ✅ Excellent developer experience
@@ -84,6 +89,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - ✅ Multi-tenancy out of the box
 
 **Weaknesses**:
+
 - ❌ Proprietary/closed source
 - ❌ High cost ($25/mo minimum, scales with users)
 - ❌ Vendor lock-in (migration difficult)
@@ -92,6 +98,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - ❌ Limited customization vs self-hosted
 
 **Best For**:
+
 - Rapid prototyping and MVPs
 - Teams prioritizing speed over cost
 - Projects needing managed service
@@ -103,6 +110,7 @@ This guide compares better-auth with popular authentication alternatives to help
 ### Auth.js (formerly NextAuth.js)
 
 **Strengths**:
+
 - ✅ Self-hosted and open source (ISC license)
 - ✅ Large community and ecosystem
 - ✅ Many adapters (PostgreSQL, MySQL, MongoDB, etc.)
@@ -111,6 +119,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - ✅ Free and no vendor lock-in
 
 **Weaknesses**:
+
 - ⚠️ Primarily designed for Next.js (less ideal elsewhere)
 - ❌ No native organizations or RBAC
 - ❌ No stateless sessions (database required)
@@ -119,6 +128,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - ⚠️ Cloudflare D1 adapter exists but less optimized
 
 **Best For**:
+
 - Next.js applications
 - Teams already familiar with Auth.js
 - Projects needing basic authentication only
@@ -129,6 +139,7 @@ This guide compares better-auth with popular authentication alternatives to help
 ## Recommendations by Use Case
 
 ### Use better-auth if:
+
 - ✅ Building on **Cloudflare Workers + D1**
 - ✅ Want **full control** over auth logic and data
 - ✅ Need **modern ESM architecture**
@@ -139,6 +150,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - ✅ Want **plugin-based extensibility**
 
 ### Use Clerk if:
+
 - ✅ Need **fastest time to market**
 - ✅ Want **fully managed service** (zero infra work)
 - ✅ Budget allows for **SaaS pricing**
@@ -148,6 +160,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - ✅ Prioritize **developer experience** over cost
 
 ### Use Auth.js if:
+
 - ✅ Already using **Next.js**
 - ✅ Need **basic authentication** only
 - ✅ Familiar with Auth.js ecosystem
@@ -163,6 +176,7 @@ This guide compares better-auth with popular authentication alternatives to help
 
 **Effort**: High (3-5 days)
 **Considerations**:
+
 - Export user data from Clerk
 - Re-implement auth UI (Clerk's is pre-built)
 - Migrate to self-hosted infrastructure
@@ -170,6 +184,7 @@ This guide compares better-auth with popular authentication alternatives to help
 - **Benefit**: Eliminate $25+/mo cost, gain full control
 
 **Steps**:
+
 1. Export users from Clerk dashboard
 2. Set up better-auth with D1 + Drizzle
 3. Migrate user data to D1 (hash passwords if needed)
@@ -183,12 +198,14 @@ This guide compares better-auth with popular authentication alternatives to help
 
 **Effort**: Medium (2-3 days)
 **Considerations**:
+
 - Both are self-hosted (infrastructure similar)
 - Database migration required
 - API calls change but patterns familiar
 - **Benefit**: Better Cloudflare D1 support, database joins, stateless sessions
 
 **Steps**:
+
 1. Set up better-auth alongside Auth.js (parallel)
 2. Migrate database schema to Drizzle/Kysely
 3. Export/import user data
@@ -210,11 +227,11 @@ This guide compares better-auth with popular authentication alternatives to help
 
 ### Scenario: 10,000 active users
 
-| Solution | Year 1 | Year 5 | Total (5yr) | Notes |
-|----------|--------|--------|-------------|-------|
-| **better-auth** | $0-500 | $0-500 | $0-2,500 | Cloudflare Workers cost only (~$5/mo) |
-| **Clerk** | $3,000+ | $6,000+ | $24,000+ | Starts $25/mo, scales with users |
-| **Auth.js** | $0-500 | $0-500 | $0-2,500 | Self-hosted infra cost only |
+| Solution        | Year 1  | Year 5  | Total (5yr) | Notes                                 |
+| --------------- | ------- | ------- | ----------- | ------------------------------------- |
+| **better-auth** | $0-500  | $0-500  | $0-2,500    | Cloudflare Workers cost only (~$5/mo) |
+| **Clerk**       | $3,000+ | $6,000+ | $24,000+    | Starts $25/mo, scales with users      |
+| **Auth.js**     | $0-500  | $0-500  | $0-2,500    | Self-hosted infra cost only           |
 
 **Winner**: better-auth or Auth.js (tie for cost)
 
@@ -224,11 +241,11 @@ This guide compares better-auth with popular authentication alternatives to help
 
 ### Authentication Latency (p95)
 
-| Solution | Cold Start | Warm | Notes |
-|----------|------------|------|-------|
-| **better-auth (v1.4.0+)** | ~150ms | ~15ms | Cloudflare Workers edge + database joins |
-| **Clerk** | ~200ms | ~25ms | Managed service + network latency |
-| **Auth.js** | ~300ms | ~30ms | Traditional server architecture |
+| Solution                  | Cold Start | Warm  | Notes                                    |
+| ------------------------- | ---------- | ----- | ---------------------------------------- |
+| **better-auth (v1.4.0+)** | ~150ms     | ~15ms | Cloudflare Workers edge + database joins |
+| **Clerk**                 | ~200ms     | ~25ms | Managed service + network latency        |
+| **Auth.js**               | ~300ms     | ~30ms | Traditional server architecture          |
 
 **Winner**: better-auth (edge compute + optimized queries)
 
@@ -238,26 +255,30 @@ This guide compares better-auth with popular authentication alternatives to help
 
 ### GitHub Activity (2025-11-27)
 
-| Solution | Stars | Contributors | Issues (open) | Last Release |
-|----------|-------|--------------|---------------|--------------|
-| **better-auth** | 22.4k | 45+ | 120 | v1.4.3 (2025-11) |
-| **Clerk** | N/A (closed source) | N/A | N/A (support tickets) | Continuous |
-| **Auth.js** | 24.1k | 600+ | 180 | v5.0 (2025-09) |
+| Solution        | Stars               | Contributors | Issues (open)         | Last Release     |
+| --------------- | ------------------- | ------------ | --------------------- | ---------------- |
+| **better-auth** | 22.4k               | 45+          | 120                   | v1.4.3 (2025-11) |
+| **Clerk**       | N/A (closed source) | N/A          | N/A (support tickets) | Continuous       |
+| **Auth.js**     | 24.1k               | 600+         | 180                   | v5.0 (2025-09)   |
 
 ---
 
 ## Final Recommendation
 
 **For Cloudflare Workers + D1**: **better-auth** is the clear winner
+
 - Native support, modern architecture, database joins, no cost
 
 **For fastest launch**: **Clerk** wins
+
 - Managed service, pre-built UI, fastest to production
 
 **For Next.js only**: **Auth.js** is solid
+
 - Tight integration, mature ecosystem, free
 
 **For modern TypeScript projects**: **better-auth v1.4.0+**
+
 - ESM-first, type-safe, plugin ecosystem, no vendor lock-in
 
 ---

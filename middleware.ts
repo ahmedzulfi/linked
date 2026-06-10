@@ -32,8 +32,12 @@ export async function middleware(request: NextRequest) {
   if (!targetSlug && !mainDomains.includes(host)) {
     // It's a custom domain, ask resolve-host API route
     try {
-      const apiHost = host.includes("localhost") ? "http://localhost:3000" : `https://${host}`;
-      const res = await fetch(`${apiHost}/api/websites/resolve-host?host=${encodeURIComponent(host)}`);
+      const apiHost = host.includes("localhost")
+        ? "http://localhost:3000"
+        : `https://${host}`;
+      const res = await fetch(
+        `${apiHost}/api/websites/resolve-host?host=${encodeURIComponent(host)}`,
+      );
       const data = await res.json();
       if (data && data.slug) {
         targetSlug = data.slug;

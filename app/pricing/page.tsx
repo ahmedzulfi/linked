@@ -54,7 +54,7 @@ export default function PricingPage() {
 
       if (res.ok) {
         toast.success(
-          "Upgrade request logged! You'll receive an email to complete payment."
+          "Upgrade request logged! You'll receive an email to complete payment.",
         );
       } else {
         // Not logged in — redirect to login first
@@ -75,7 +75,6 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
-      
       {/* ── Background Graphic (Polished Light Mesh Gradient) ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden bg-[#FBFBFB]">
         <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-[#8DB8FF]/12 to-[#E0EBFF]/5 blur-[120px] opacity-70" />
@@ -93,7 +92,9 @@ export default function PricingPage() {
             onClick={() => router.push("/")}
           />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate">Pricing</span>
+          <span className="text-sm font-medium text-[#171717]/60 truncate">
+            Pricing
+          </span>
         </div>
 
         <div className="flex items-center gap-2 relative">
@@ -131,12 +132,13 @@ export default function PricingPage() {
 
       {/* ── Dashboard Layout Body ── */}
       <div className="flex flex-1 relative z-10">
-        
         {/* Sidebar */}
         <aside className="w-64 border-r border-[#E6E6E6] bg-white/50 backdrop-blur-md p-6 flex flex-col justify-between select-none shrink-0 min-h-[calc(100vh-3.5rem)] mt-14 relative z-20">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1 uppercase tracking-wider">Navigation</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1 uppercase tracking-wider">
+                Navigation
+              </span>
 
               <button
                 onClick={() => router.push(userName ? "/dashboard" : "/")}
@@ -148,15 +150,23 @@ export default function PricingPage() {
             </div>
 
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3">
+                Recent websites
+              </span>
               <button
                 onClick={() => router.push(userName ? "/dashboard" : "/")}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 text-left w-full"
               >
                 <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
-                  <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+                  <img
+                    src="/logoicon.png"
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{userName ? "Back to dashboard" : "Back to home"}</span>
+                <span className="text-[13px] font-semibold text-[#171717] truncate">
+                  {userName ? "Back to dashboard" : "Back to home"}
+                </span>
               </button>
             </div>
           </div>
@@ -193,8 +203,13 @@ export default function PricingPage() {
         {/* ── Main Content ── */}
         <main className="flex-1 px-8 md:px-16 py-12 mt-14 max-w-5xl">
           <div className="mb-10 text-center max-w-xl mx-auto">
-            <h1 className="text-3xl font-bold tracking-tight text-black font-inter-tight">Simple, Flat Pricing</h1>
-            <p className="text-[14px] text-gray-500 mt-2">Create a premium landing page from your LinkedIn profile in minutes.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-black font-inter-tight">
+              Simple, Flat Pricing
+            </h1>
+            <p className="text-[14px] text-gray-500 mt-2">
+              Create a premium landing page from your LinkedIn profile in
+              minutes.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto items-stretch">
@@ -206,16 +221,32 @@ export default function PricingPage() {
               className="bg-white/80 backdrop-blur-md border border-[#E6E6E6] rounded-[24px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-8 flex flex-col justify-between"
             >
               <div>
-                <h3 className="text-lg font-bold text-black font-inter-tight">Free Draft</h3>
-                <p className="text-[13px] text-gray-500 mt-1">Perfect for trying out templates and structures.</p>
+                <h3 className="text-lg font-bold text-black font-inter-tight">
+                  Free Draft
+                </h3>
+                <p className="text-[13px] text-gray-500 mt-1">
+                  Perfect for trying out templates and structures.
+                </p>
                 <div className="mt-5 flex items-baseline">
-                  <span className="text-4xl font-extrabold text-black font-inter-tight">$0</span>
-                  <span className="text-xs text-gray-400 ml-1 font-semibold">forever</span>
+                  <span className="text-4xl font-extrabold text-black font-inter-tight">
+                    $0
+                  </span>
+                  <span className="text-xs text-gray-400 ml-1 font-semibold">
+                    forever
+                  </span>
                 </div>
                 <div className="border-t border-gray-100 my-6" />
                 <ul className="space-y-3.5">
-                  {["1 Website Draft", "Standard Card Layouts", "Live Preview Panel", "LinkedPage Subdomain"].map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-[13.5px] font-medium text-gray-600">
+                  {[
+                    "1 Website Draft",
+                    "Standard Card Layouts",
+                    "Live Preview Panel",
+                    "LinkedPage Subdomain",
+                  ].map((f) => (
+                    <li
+                      key={f}
+                      className="flex items-center gap-2.5 text-[13.5px] font-medium text-gray-600"
+                    >
                       <Check className="w-4 h-4 text-[#369762]" />
                       {f}
                     </li>
@@ -245,11 +276,19 @@ export default function PricingPage() {
               </div>
 
               <div>
-                <h3 className="text-lg font-bold text-black font-inter-tight">Professional Pro</h3>
-                <p className="text-[13px] text-gray-500 mt-1">Unlock all templates, exports, and custom domains.</p>
+                <h3 className="text-lg font-bold text-black font-inter-tight">
+                  Professional Pro
+                </h3>
+                <p className="text-[13px] text-gray-500 mt-1">
+                  Unlock all templates, exports, and custom domains.
+                </p>
                 <div className="mt-5 flex items-baseline">
-                  <span className="text-4xl font-extrabold text-black font-inter-tight">{priceText}</span>
-                  <span className="text-xs text-gray-400 ml-1 font-semibold">one-time payment</span>
+                  <span className="text-4xl font-extrabold text-black font-inter-tight">
+                    {priceText}
+                  </span>
+                  <span className="text-xs text-gray-400 ml-1 font-semibold">
+                    one-time payment
+                  </span>
                 </div>
                 <div className="border-t border-gray-100 my-6" />
                 <ul className="space-y-3.5">
@@ -261,7 +300,10 @@ export default function PricingPage() {
                     "Premium SEO & Meta Editing",
                     "Priority AI Builder Assist",
                   ].map((f) => (
-                    <li key={f} className="flex items-center gap-2.5 text-[13.5px] font-medium text-gray-600">
+                    <li
+                      key={f}
+                      className="flex items-center gap-2.5 text-[13.5px] font-medium text-gray-600"
+                    >
                       <Check className="w-4 h-4 text-[#369762]" />
                       {f}
                     </li>
@@ -280,9 +322,7 @@ export default function PricingPage() {
             </motion.div>
           </div>
         </main>
-
       </div>
-
     </div>
   );
 }

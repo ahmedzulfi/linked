@@ -6,7 +6,10 @@ import { User, Briefcase, Link as LinkIcon, Plus, Trash2 } from "lucide-react";
 
 interface InlineEditorProps {
   profile: ProfileData;
-  onChange: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  onChange: <K extends keyof ProfileData>(
+    key: K,
+    value: ProfileData[K],
+  ) => void;
   activeTab?: "profile" | "experience" | "links";
   setActiveTab?: (tab: "profile" | "experience" | "links") => void;
 }
@@ -67,41 +70,66 @@ export default function InlineEditor({
 }: InlineEditorProps) {
   const [localTab, setLocalTab] = useState<Tab>("profile");
   const activeTab = controlledTab ?? localTab;
-  const setActiveTab = (controlledSetActive ?? setLocalTab) as (tab: Tab) => void;
+  const setActiveTab = (controlledSetActive ?? setLocalTab) as (
+    tab: Tab,
+  ) => void;
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profile", icon: <User className="w-5 h-5" /> },
-    { id: "experience", label: "Experience", icon: <Briefcase className="w-5 h-5" /> },
+    {
+      id: "experience",
+      label: "Experience",
+      icon: <Briefcase className="w-5 h-5" />,
+    },
     { id: "links", label: "Links", icon: <LinkIcon className="w-5 h-5" /> },
   ];
 
   // ── Experience helpers ──
-  const updateExperience = (index: number, field: keyof ProfileExperience, value: string) => {
+  const updateExperience = (
+    index: number,
+    field: keyof ProfileExperience,
+    value: string,
+  ) => {
     const next = [...profile.experience];
     next[index] = { ...next[index], [field]: value };
     onChange("experience", next);
   };
 
   const removeExperience = (index: number) => {
-    onChange("experience", profile.experience.filter((_, i) => i !== index));
+    onChange(
+      "experience",
+      profile.experience.filter((_, i) => i !== index),
+    );
   };
 
   const addExperience = () => {
     onChange("experience", [
       ...profile.experience,
-      { title: "New Role", company: "Company", duration: "2024 – Present", description: "" },
+      {
+        title: "New Role",
+        company: "Company",
+        duration: "2024 – Present",
+        description: "",
+      },
     ]);
   };
 
   // ── Link helpers ──
-  const updateLink = (index: number, field: keyof ProfileLink, value: string) => {
+  const updateLink = (
+    index: number,
+    field: keyof ProfileLink,
+    value: string,
+  ) => {
     const next = [...profile.links];
     next[index] = { ...next[index], [field]: value };
     onChange("links", next);
   };
 
   const removeLink = (index: number) => {
-    onChange("links", profile.links.filter((_, i) => i !== index));
+    onChange(
+      "links",
+      profile.links.filter((_, i) => i !== index),
+    );
   };
 
   const addLink = () => {
@@ -132,7 +160,10 @@ export default function InlineEditor({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4" style={{ scrollbarWidth: "none" }}>
+      <div
+        className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4"
+        style={{ scrollbarWidth: "none" }}
+      >
         {/* ── Profile Tab ── */}
         {activeTab === "profile" && (
           <div className="flex flex-col gap-4">
@@ -143,8 +174,12 @@ export default function InlineEditor({
                 className="w-12 h-12   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
               />
               <div className="flex flex-col gap-0.5 min-w-0">
-                <p className="text-sm font-medium text-black truncate">{profile.name}</p>
-                <p className="text-xs text-[#6B6B6B] truncate">{profile.headline}</p>
+                <p className="text-sm font-medium text-black truncate">
+                  {profile.name}
+                </p>
+                <p className="text-xs text-[#6B6B6B] truncate">
+                  {profile.headline}
+                </p>
               </div>
             </div>
 
@@ -253,7 +288,9 @@ export default function InlineEditor({
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-[#9CA3AF]">Link {i + 1}</span>
+                    <span className="text-xs font-semibold text-[#9CA3AF]">
+                      Link {i + 1}
+                    </span>
                   </div>
                   <button
                     onClick={() => removeLink(i)}

@@ -17,7 +17,10 @@ interface ChatPaneProps {
   profile: ProfileData | null;
   selectedTemplate: TemplateId;
   onSelectTemplate: (id: TemplateId) => void;
-  onChangeField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  onChangeField: <K extends keyof ProfileData>(
+    key: K,
+    value: ProfileData[K],
+  ) => void;
   activeTab: ChatTab;
   setActiveTab: (tab: ChatTab) => void;
   prefill: string;
@@ -35,7 +38,8 @@ const initialMessages: ChatMessage[] = [
   {
     id: "1",
     role: "assistant",
-    content: "Your page is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or switch the template. What would you like to adjust?",
+    content:
+      "Your page is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or switch the template. What would you like to adjust?",
     time: "",
   },
 ];
@@ -145,7 +149,8 @@ export default function ChatPane({
         {
           id: Date.now().toString(),
           role: "assistant",
-          content: "No active site loaded. Please select a website from the dashboard first.",
+          content:
+            "No active site loaded. Please select a website from the dashboard first.",
           time: "",
         },
       ]);
@@ -166,7 +171,12 @@ export default function ChatPane({
 
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: "assistant", content: data.reply, time: "" },
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: data.reply,
+          time: "",
+        },
       ]);
 
       if (data.template) {
@@ -180,7 +190,11 @@ export default function ChatPane({
       }
 
       const lower = msg.toLowerCase();
-      if (lower.includes("change template") || lower.includes("switch template") || lower.includes("switch to")) {
+      if (
+        lower.includes("change template") ||
+        lower.includes("switch template") ||
+        lower.includes("switch to")
+      ) {
         setActiveTab("grid");
       }
 
@@ -210,14 +224,18 @@ export default function ChatPane({
     {
       id: "chat" as ChatTab,
       icon: (isActive: boolean) => (
-        <MessageSquare className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+        <MessageSquare
+          className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`}
+        />
       ),
       label: "Chat",
     },
     {
       id: "grid" as ChatTab,
       icon: (isActive: boolean) => (
-        <LayoutGrid className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+        <LayoutGrid
+          className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`}
+        />
       ),
       label: "Templates",
     },
@@ -228,7 +246,11 @@ export default function ChatPane({
       {/* Title Header */}
       <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
+          <img
+            src="/logo.png"
+            alt="LinkedPage"
+            className="h-6 w-auto object-contain"
+          />
           <div className="w-px h-3 bg-black/10" />
           <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
             {profileName || "LinkedPage"}
@@ -251,10 +273,11 @@ export default function ChatPane({
                 id={tab.id === "grid" ? "onboarding-templates-tab" : undefined}
                 onClick={() => setActiveTab(tab.id)}
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none transition-all duration-300 ${isActive
-                  ? "flex-[1.5] text-blue-500 px-3 font-['Inter_Tight']"
-                  : "flex-1 text-[#171717]/60 hover:bg-zinc-200/40"
-                  }`}
+                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none transition-all duration-300 ${
+                  isActive
+                    ? "flex-[1.5] text-blue-500 px-3 font-['Inter_Tight']"
+                    : "flex-1 text-[#171717]/60 hover:bg-zinc-200/40"
+                }`}
               >
                 {/* Smoothly animated background pill */}
                 {isActive && (
@@ -303,7 +326,10 @@ export default function ChatPane({
         {activeTab === "chat" && (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto w-full px-4" style={{ scrollbarWidth: "none" }}>
+            <div
+              className="flex-1 overflow-y-auto w-full px-4"
+              style={{ scrollbarWidth: "none" }}
+            >
               <div className="max-w-[479px] mx-auto flex flex-col gap-6 pb-4 pt-4 w-full">
                 <AnimatePresence initial={false}>
                   {messages.map((msg) => (
@@ -326,8 +352,14 @@ export default function ChatPane({
                         <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
                           <div className="flex items-center gap-2 select-none">
                             {/* Logo Icon */}
-                            <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                            <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                            <img
+                              src="/logoicon.png"
+                              alt="Logo"
+                              className="h-5 w-auto object-contain"
+                            />
+                            <span className="font-semibold text-[13.5px] text-black">
+                              Webild
+                            </span>
                           </div>
 
                           <div className="w-full">
@@ -349,8 +381,14 @@ export default function ChatPane({
                       className="w-full flex flex-col justify-start items-start gap-2.5 font-inter"
                     >
                       <div className="flex items-center gap-2 select-none">
-                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain animate-pulse" />
-                        <span className="font-semibold text-[13.5px] text-black animate-pulse">Webild</span>
+                        <img
+                          src="/logoicon.png"
+                          alt="Logo"
+                          className="h-5 w-auto object-contain animate-pulse"
+                        />
+                        <span className="font-semibold text-[13.5px] text-black animate-pulse">
+                          Webild
+                        </span>
                       </div>
                       <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
                         <AnimatedThinkingIllustration />
@@ -365,7 +403,10 @@ export default function ChatPane({
             {/* Input area */}
             <div className="p-4 shrink-0 bg-white flex flex-col gap-3">
               {/* Suggestion pills */}
-              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+              <div
+                className="flex gap-2 overflow-x-auto pb-1"
+                style={{ scrollbarWidth: "none" }}
+              >
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
@@ -424,8 +465,14 @@ export default function ChatPane({
         )}
 
         {activeTab === "grid" && (
-          <div className="flex-1 overflow-y-auto pb-6" style={{ scrollbarWidth: "none" }}>
-            <TemplatePicker selected={selectedTemplate} onSelect={onSelectTemplate} />
+          <div
+            className="flex-1 overflow-y-auto pb-6"
+            style={{ scrollbarWidth: "none" }}
+          >
+            <TemplatePicker
+              selected={selectedTemplate}
+              onSelect={onSelectTemplate}
+            />
           </div>
         )}
       </div>

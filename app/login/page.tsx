@@ -63,7 +63,7 @@ export default function LoginPage() {
             firstName,
             lastName,
             email: data.user.email,
-          })
+          }),
         );
       }
 
@@ -90,13 +90,11 @@ export default function LoginPage() {
       <Navbar />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto  max-w-[1536px]">
-
         {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
           <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md">
             <div className="flex flex-col gap-5">
-
               {/* Header */}
               <div className="flex flex-col gap-1 text-center items-center">
                 <h1 className="text-2xl font-medium text-black w-fit leading-tight">
@@ -134,7 +132,6 @@ export default function LoginPage() {
 
               {/* Form */}
               <form className="flex flex-col gap-4" onSubmit={handleContinue}>
-
                 {/* Email */}
                 <div>
                   <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
@@ -169,7 +166,11 @@ export default function LoginPage() {
                         <button
                           type="button"
                           className="text-xs text-[#8DB8FF] font-medium hover:underline"
-                          onClick={() => toast.info("Password reset link sent to your email!")}
+                          onClick={() =>
+                            toast.info(
+                              "Password reset link sent to your email!",
+                            )
+                          }
                         >
                           Forgot password?
                         </button>
@@ -190,9 +191,11 @@ export default function LoginPage() {
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword
-                            ? <EyeOff className="w-5 h-5" />
-                            : <Eye className="w-5 h-5" />}
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -201,19 +204,28 @@ export default function LoginPage() {
 
                 {/* Submit */}
                 <button
-                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${(isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid))
-                    ? "opacity-50 select-none pointer-events-none"
-                    : ""
-                    }`}
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
+                    isSubmitting ||
+                    (showPasswordStep ? !isPasswordValid : !isEmailValid)
+                      ? "opacity-50 select-none pointer-events-none"
+                      : ""
+                  }`}
                   type="submit"
-                  disabled={isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid)}
+                  disabled={
+                    isSubmitting ||
+                    (showPasswordStep ? !isPasswordValid : !isEmailValid)
+                  }
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <span className="w-5 h-5   rounded-lg border-2 border-white border-t-transparent animate-spin" />
                       Processing...
                     </span>
-                  ) : showPasswordStep ? "Sign in" : "Continue"}
+                  ) : showPasswordStep ? (
+                    "Sign in"
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </form>
 
@@ -222,12 +234,13 @@ export default function LoginPage() {
                 Don't have an account?{" "}
                 <button
                   className="cursor-pointer text-[#000] font-medium hover:underline"
-                  onClick={() => router.push(`/signup${window.location.search}`)}
+                  onClick={() =>
+                    router.push(`/signup${window.location.search}`)
+                  }
                 >
                   Sign up
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -246,7 +259,6 @@ export default function LoginPage() {
             src="https://www.webild.io/images/input.svg"
           />
         </div>
-
       </div>
     </div>
   );

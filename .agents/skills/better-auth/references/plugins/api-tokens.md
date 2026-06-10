@@ -56,7 +56,7 @@ const { data: key } = await authClient.apiKey.create({
 });
 
 // IMPORTANT: key.key is only shown once!
-console.log(key.key);  // sk_abc123...
+console.log(key.key); // sk_abc123...
 ```
 
 ### Organization-Owned API Keys (v1.5+)
@@ -65,9 +65,7 @@ console.log(key.key);  // sk_abc123...
 import { apiKey } from "@better-auth/api-key";
 
 export const auth = betterAuth({
-  plugins: [
-    apiKey({ references: "organization" }),
-  ],
+  plugins: [apiKey({ references: "organization" })],
 });
 
 // Create org-owned key
@@ -115,7 +113,7 @@ await authClient.apiKey.revoke({
 // Client-side
 const response = await fetch("/api/data", {
   headers: {
-    "Authorization": `Bearer sk_abc123...`,
+    Authorization: `Bearer sk_abc123...`,
   },
 });
 
@@ -145,11 +143,11 @@ export const auth = betterAuth({
   plugins: [
     bearer({
       // Token expiration
-      expiresIn: 60 * 60 * 24 * 7,  // 7 days
+      expiresIn: 60 * 60 * 24 * 7, // 7 days
       // Refresh token settings
       refreshToken: {
         enabled: true,
-        expiresIn: 60 * 60 * 24 * 30,  // 30 days
+        expiresIn: 60 * 60 * 24 * 30, // 30 days
       },
     }),
   ],
@@ -186,7 +184,7 @@ const refreshToken = data.refreshToken;
 // API request with bearer token
 const response = await fetch("/api/protected", {
   headers: {
-    "Authorization": `Bearer ${accessToken}`,
+    Authorization: `Bearer ${accessToken}`,
   },
 });
 ```
@@ -216,7 +214,7 @@ export const auth = betterAuth({
   plugins: [
     jwt({
       // Signing algorithm
-      algorithm: "RS256",  // or HS256, ES256
+      algorithm: "RS256", // or HS256, ES256
       // Token expiration
       expiresIn: "1h",
       // Custom claims
@@ -267,16 +265,21 @@ const jwt = data.token;
 import { jwtVerify } from "jose";
 
 // Get public key from JWKS endpoint
-const response = await fetch("https://your-app.com/api/auth/.well-known/jwks.json");
+const response = await fetch(
+  "https://your-app.com/api/auth/.well-known/jwks.json",
+);
 const jwks = await response.json();
 
 // Verify token
-const { payload } = await jwtVerify(token, createRemoteJWKSet(
-  new URL("https://your-app.com/api/auth/.well-known/jwks.json")
-));
+const { payload } = await jwtVerify(
+  token,
+  createRemoteJWKSet(
+    new URL("https://your-app.com/api/auth/.well-known/jwks.json"),
+  ),
+);
 
-console.log(payload.sub);  // User ID
-console.log(payload.role);  // Custom claim
+console.log(payload.sub); // User ID
+console.log(payload.role); // Custom claim
 ```
 
 ### JWT for External Services
@@ -318,8 +321,8 @@ export const auth = betterAuth({
       // Supported scopes
       scopes: ["openid", "profile", "email", "offline_access"],
       // Token settings
-      accessTokenTTL: 60 * 60,  // 1 hour
-      refreshTokenTTL: 60 * 60 * 24 * 30,  // 30 days
+      accessTokenTTL: 60 * 60, // 1 hour
+      refreshTokenTTL: 60 * 60 * 24 * 30, // 30 days
     }),
   ],
 });
@@ -342,14 +345,14 @@ oidcProvider({
 
 Automatically created endpoints:
 
-| Endpoint | Description |
-|----------|-------------|
-| `/.well-known/openid-configuration` | Discovery document |
-| `/api/auth/oauth/authorize` | Authorization endpoint |
-| `/api/auth/oauth/token` | Token endpoint |
-| `/api/auth/oauth/userinfo` | UserInfo endpoint |
-| `/api/auth/oauth/jwks` | JWKS endpoint |
-| `/api/auth/oauth/revoke` | Token revocation |
+| Endpoint                            | Description            |
+| ----------------------------------- | ---------------------- |
+| `/.well-known/openid-configuration` | Discovery document     |
+| `/api/auth/oauth/authorize`         | Authorization endpoint |
+| `/api/auth/oauth/token`             | Token endpoint         |
+| `/api/auth/oauth/userinfo`          | UserInfo endpoint      |
+| `/api/auth/oauth/jwks`              | JWKS endpoint          |
+| `/api/auth/oauth/revoke`            | Token revocation       |
 
 ### Client App Integration
 
@@ -361,7 +364,7 @@ authUrl.searchParams.set("redirect_uri", "https://client-app.com/callback");
 authUrl.searchParams.set("response_type", "code");
 authUrl.searchParams.set("scope", "openid profile email");
 authUrl.searchParams.set("state", generateState());
-authUrl.searchParams.set("code_challenge", codeChallenge);  // PKCE
+authUrl.searchParams.set("code_challenge", codeChallenge); // PKCE
 authUrl.searchParams.set("code_challenge_method", "S256");
 
 // Redirect user to authUrl
@@ -407,7 +410,9 @@ export const auth = betterAuth({
     // OIDC for third-party apps
     oidcProvider({
       issuer: "https://your-app.com",
-      clients: [/* ... */],
+      clients: [
+        /* ... */
+      ],
     }),
   ],
 });
@@ -418,24 +423,29 @@ export const auth = betterAuth({
 ## Common Issues
 
 ### API Key: "Invalid API key"
+
 - Keys are hashed - original key only shown once on creation
 - Check prefix matches configured prefix
 - Verify key hasn't been revoked
 
 ### Bearer: "Token expired"
+
 - Implement token refresh flow
 - Check client timezone vs server timezone
 
 ### JWT: "Invalid signature"
+
 - Verify JWKS endpoint is accessible
 - Check algorithm matches (RS256 vs HS256)
 - Key rotation may have occurred - refetch JWKS
 
 ### OIDC: "Invalid redirect_uri"
+
 - Exact match required (including trailing slash)
 - Register all redirect URIs in client config
 
 ### OIDC: "PKCE required"
+
 - OAuth 2.1 mode requires PKCE
 - Generate code_verifier and code_challenge on client
 

@@ -8,6 +8,7 @@
 ## When to Use This Template
 
 Use this template when:
+
 - You have original data from surveys, experiments, tool analysis, or proprietary sources
 - The study reveals findings that challenge assumptions or fill knowledge gaps
 - You can present specific numbers, percentages, and comparisons
@@ -15,6 +16,7 @@ Use this template when:
 - The data is unique enough that other sites will want to cite it (link-building potential)
 
 Do NOT use this template for:
+
 - Step-by-step instructions (use tutorial)
 - Timely event commentary (use news-analysis)
 - Reference/FAQ content (use faq-knowledge)
@@ -31,11 +33,13 @@ Do NOT use this template for:
 ```
 
 **Examples:**
+
 - "AI Code Review Study: We Analyzed 10,000 Pull Requests - Here's What We Found"
 - "Blog SEO Benchmark: We Analyzed 500 Technical Blogs - Here's What We Found"
 - "Developer Tooling Survey: We Asked 2,000 Engineers - Here's What We Found"
 
 **Title Rules:**
+
 - Include the specific sample size (N) - this is your credibility signal
 - Name what was analyzed (pull requests, blogs, engineers, etc.)
 - "We Analyzed/Studied/Surveyed" establishes original research
@@ -43,6 +47,7 @@ Do NOT use this template for:
 - Keep under 70 characters for SERP display when possible
 
 **Alternative Title Formats:**
+
 - "[N] [Things] Analyzed: [Key Finding] ([Year] Study)"
 - "The State of [Topic]: [N]-[Unit] Analysis"
 - "[Topic] by the Numbers: Insights from [N] [Things]"
@@ -64,6 +69,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Every sentence must contain a data point (number, percentage, comparison)
 - Lead with the most surprising or impactful finding
 - Include "most surprisingly" or equivalent to hook readers
@@ -92,6 +98,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Each bullet must be self-contained - citable without context
 - Bold the data point, follow with one sentence of context
 - Order by magnitude of impact or surprise, not by study order
@@ -116,13 +123,13 @@ Do NOT use this template for:
 
 ### Sample
 
-| Parameter | Value |
-|-----------|-------|
-| Sample size | [N] |
-| Time period | [Start] to [End] |
-| Source | [Where from] |
-| Selection criteria | [How items were chosen] |
-| Exclusions | [What was filtered out and why] |
+| Parameter          | Value                           |
+| ------------------ | ------------------------------- |
+| Sample size        | [N]                             |
+| Time period        | [Start] to [End]                |
+| Source             | [Where from]                    |
+| Selection criteria | [How items were chosen]         |
+| Exclusions         | [What was filtered out and why] |
 
 ### Analysis Approach
 
@@ -136,6 +143,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Be transparent about limitations - this builds credibility
 - The [INFO-GAIN] here is your unique data source or method
 - Include enough detail that another researcher could evaluate (not necessarily reproduce) the study
@@ -159,6 +167,7 @@ Each finding is an H2 phrased as a question. Follow this structure for each:
 [VISUAL: chart appropriate to the finding - vary chart types across findings]
 
 Suggested chart types per finding:
+
 - Finding 1: Horizontal bar chart (comparison)
 - Finding 2: Line chart (trend over time)
 - Finding 3: Scatter plot (correlation)
@@ -168,9 +177,9 @@ Suggested chart types per finding:
 
 **How this compares:** [Comparison to industry benchmarks, prior research, or conventional wisdom]
 
-| This Study | Industry Benchmark | Difference |
-|------------|--------------------|------------|
-| [Our finding] | [Benchmark] | [Delta] |
+| This Study    | Industry Benchmark | Difference |
+| ------------- | ------------------ | ---------- |
+| [Our finding] | [Benchmark]        | [Delta]    |
 
 [STAT: supporting data point from an external source that validates or contrasts with the finding]
 
@@ -180,6 +189,7 @@ Suggested chart types per finding:
 ```
 
 **Rules for finding sections:**
+
 - Always open with the data point - never bury the lead
 - Each finding must have its own visualization (vary chart types)
 - Compare to a benchmark or prior research for context
@@ -209,6 +219,7 @@ We expected [expected result], but the data showed [actual result]. [Brief expla
 ```
 
 **Rules:**
+
 - Include at least 2 surprises or outliers
 - Be honest about what contradicted expectations
 - Offer a hypothesis for the surprise, but flag it as speculation
@@ -226,10 +237,12 @@ We expected [expected result], but the data showed [actual result]. [Brief expla
 [ANSWER-FIRST] This study has [N] key limitations that readers should consider when applying these findings.
 
 **What this study doesn't cover:**
+
 - [Limitation 1]: [Brief explanation]
 - [Limitation 2]: [Brief explanation]
 
 **Open questions for future research:**
+
 - [Question 1]
 - [Question 2]
 - [Question 3]
@@ -238,6 +251,7 @@ We expected [expected result], but the data showed [actual result]. [Brief expla
 ```
 
 **Rules:**
+
 - This section builds trust - be genuinely transparent
 - Distinguish between limitations (things that weaken the findings) and scope boundaries (things outside the study's intent)
 - Suggest specific future research directions (you may write those follow-ups)
@@ -269,6 +283,7 @@ We expected [expected result], but the data showed [actual result]. [Brief expla
 ```
 
 **Rules:**
+
 - Tie every recommendation directly to a specific finding (cite it)
 - Be specific enough that the reader can take action
 - Segment recommendations by audience if the study has broad appeal
@@ -307,6 +322,7 @@ We expected [expected result], but the data showed [actual result]. [Brief expla
 ```
 
 **FAQ Rules:**
+
 - Include a methodology question (most common reader concern)
 - Include a scope/applicability question
 - Include a citation question (encourage backlinks)
@@ -322,19 +338,21 @@ We expected [expected result], but the data showed [actual result]. [Brief expla
 ### Summary Data Table
 
 | [Category] | [Metric 1] | [Metric 2] | [Metric 3] |
-|------------|-------------|-------------|-------------|
-| [Row 1] | [Value] | [Value] | [Value] |
-| [Row 2] | [Value] | [Value] | [Value] |
-| [Row 3] | [Value] | [Value] | [Value] |
-| ... | ... | ... | ... |
+| ---------- | ---------- | ---------- | ---------- |
+| [Row 1]    | [Value]    | [Value]    | [Value]    |
+| [Row 2]    | [Value]    | [Value]    | [Value]    |
+| [Row 3]    | [Value]    | [Value]    | [Value]    |
+| ...        | ...        | ...        | ...        |
 
 **Download raw data:** [Link to CSV/spreadsheet if applicable]
 
 **Citation format:**
+
 > [Your name/org]. "[Study Title]." [Publication name], [Date]. [URL].
 ```
 
 **Rules:**
+
 - Include a summary data table at minimum
 - Offer raw data download if possible (increases backlink potential)
 - Provide a citation format (makes it easy for others to reference)

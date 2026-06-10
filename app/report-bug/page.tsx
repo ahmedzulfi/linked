@@ -80,7 +80,6 @@ export default function ReportBugPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
-      
       {/* ── Background Graphic (Polished Light Mesh Gradient) ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden bg-[#FBFBFB]">
         <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-[#8DB8FF]/12 to-[#E0EBFF]/5 blur-[120px] opacity-70" />
@@ -98,7 +97,9 @@ export default function ReportBugPage() {
             onClick={() => router.push("/")}
           />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate">Report a bug</span>
+          <span className="text-sm font-medium text-[#171717]/60 truncate">
+            Report a bug
+          </span>
         </div>
 
         <div className="flex items-center gap-2 relative">
@@ -136,12 +137,13 @@ export default function ReportBugPage() {
 
       {/* ── Dashboard Layout Body ── */}
       <div className="flex flex-1 relative z-10">
-        
         {/* Sidebar */}
         <aside className="w-64 border-r border-[#E6E6E6] bg-white/50 backdrop-blur-md p-6 flex flex-col justify-between select-none shrink-0 min-h-[calc(100vh-3.5rem)] mt-14 relative z-20">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-1">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1 uppercase tracking-wider">Navigation</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3 mb-1 uppercase tracking-wider">
+                Navigation
+              </span>
 
               <button
                 onClick={() => router.push(userName ? "/dashboard" : "/")}
@@ -153,15 +155,23 @@ export default function ReportBugPage() {
             </div>
 
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3">
+                Recent websites
+              </span>
               <button
                 onClick={() => router.push(userName ? "/dashboard" : "/")}
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 text-left w-full"
               >
                 <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
-                  <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+                  <img
+                    src="/logoicon.png"
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{userName ? "Back to dashboard" : "Back to home"}</span>
+                <span className="text-[13px] font-semibold text-[#171717] truncate">
+                  {userName ? "Back to dashboard" : "Back to home"}
+                </span>
               </button>
             </div>
           </div>
@@ -198,8 +208,12 @@ export default function ReportBugPage() {
         {/* ── Main Content ── */}
         <main className="flex-1 px-8 md:px-16 py-12 mt-14 max-w-4xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold tracking-tight text-black font-inter-tight">Report a Bug</h1>
-            <p className="text-[14px] text-gray-500 mt-1">Found something broken? Send a report directly to the developers.</p>
+            <h1 className="text-3xl font-bold tracking-tight text-black font-inter-tight">
+              Report a Bug
+            </h1>
+            <p className="text-[14px] text-gray-500 mt-1">
+              Found something broken? Send a report directly to the developers.
+            </p>
           </div>
 
           <motion.div
@@ -210,7 +224,9 @@ export default function ReportBugPage() {
           >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex flex-col gap-2">
-                <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider">Bug Title / Subject</label>
+                <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider">
+                  Bug Title / Subject
+                </label>
                 <input
                   type="text"
                   placeholder="e.g. Subdomain check is failing on certain keywords"
@@ -222,7 +238,9 @@ export default function ReportBugPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
-                  <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider">Severity Level</label>
+                  <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider">
+                    Severity Level
+                  </label>
                   <select
                     value={severity}
                     onChange={(e) => setSeverity(e.target.value)}
@@ -237,7 +255,9 @@ export default function ReportBugPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider">Description & Steps to reproduce</label>
+                <label className="text-[13px] font-bold text-gray-700 uppercase tracking-wider">
+                  Description & Steps to reproduce
+                </label>
                 <textarea
                   rows={6}
                   placeholder="Please describe exactly what happened and the steps to reproduce the issue."
@@ -253,15 +273,14 @@ export default function ReportBugPage() {
                   disabled={isSubmitting}
                   className="h-11 px-6 bg-[#2A2A2F] hover:bg-[#3A3A42] text-white text-[13px] font-bold rounded-xl transition-all active:scale-[0.97] transition-transform flex items-center justify-center gap-1.5 shadow-sm disabled:opacity-50"
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Report"} <ArrowRight className="w-4 h-4" />
+                  {isSubmitting ? "Submitting..." : "Submit Report"}{" "}
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </form>
           </motion.div>
         </main>
-
       </div>
-
     </div>
   );
 }

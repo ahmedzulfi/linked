@@ -12,6 +12,7 @@
 better-auth v1.4.0 introduces significant improvements including database joins (2-3x faster queries), stateless sessions, API key authentication, and SCIM provisioning. However, these come with **8 breaking changes** that require code updates, plus a critical session fixation vulnerability fix that's automatically applied.
 
 **This guide covers**:
+
 - All 8 breaking changes with before/after code
 - Critical session fixation vulnerability fix (automatic)
 - Step-by-step migration process
@@ -23,16 +24,16 @@ better-auth v1.4.0 introduces significant improvements including database joins 
 
 ## Breaking Changes Summary
 
-| Change | Impact | Migration Effort | Affected Code |
-|--------|--------|------------------|---------------|
-| 1. ESM-only | High | 30-60 min | package.json, all imports |
-| 2. `forgetPassword` renamed | Medium | 15-30 min | Password reset flows |
-| 3. `/account-info` method change | Low | 5-10 min | Account info API calls |
-| 4. Callback signature (`request` → `ctx`) | Medium | 15-30 min | Email/SMS callbacks |
-| 5. Passkey plugin package | Low | 5-10 min | If using passkeys |
-| 6. `sendChangeEmailVerification` removal | Medium | 20-30 min | Email change flows |
-| 7. API Key mock sessions disabled | Medium | 10-15 min | API key auth configs |
-| 8. OIDC `redirectURLs` → `redirectUrls` | High | 30-60 min | OIDC configs + DB |
+| Change                                    | Impact | Migration Effort | Affected Code             |
+| ----------------------------------------- | ------ | ---------------- | ------------------------- |
+| 1. ESM-only                               | High   | 30-60 min        | package.json, all imports |
+| 2. `forgetPassword` renamed               | Medium | 15-30 min        | Password reset flows      |
+| 3. `/account-info` method change          | Low    | 5-10 min         | Account info API calls    |
+| 4. Callback signature (`request` → `ctx`) | Medium | 15-30 min        | Email/SMS callbacks       |
+| 5. Passkey plugin package                 | Low    | 5-10 min         | If using passkeys         |
+| 6. `sendChangeEmailVerification` removal  | Medium | 20-30 min        | Email change flows        |
+| 7. API Key mock sessions disabled         | Medium | 10-15 min        | API key auth configs      |
+| 8. OIDC `redirectURLs` → `redirectUrls`   | High   | 30-60 min        | OIDC configs + DB         |
 
 **Security Critical**: Session fixation vulnerability fix (automatic, no code changes required)
 
@@ -70,8 +71,8 @@ better-auth v1.4.0+ requires **ES modules** (ESM). CommonJS (`require()`) is no 
 
 ```typescript
 // ❌ OLD (v1.3.x - CommonJS)
-const { betterAuth } = require('better-auth');
-const { drizzleAdapter } = require('better-auth/adapters/drizzle');
+const { betterAuth } = require("better-auth");
+const { drizzleAdapter } = require("better-auth/adapters/drizzle");
 
 // ✅ NEW (v1.4.0+ - ESM)
 import { betterAuth } from "better-auth";
@@ -115,6 +116,7 @@ node -e "const { betterAuth } = require('better-auth'); console.log('CJS')"
 ### What Changed
 
 The password reset API was renamed for clarity:
+
 - ❌ `forgetPassword` (deprecated)
 - ✅ `requestPasswordReset` (new name)
 
@@ -184,6 +186,7 @@ grep -r "forgetPassword" src/
 ### What Changed
 
 The `/account-info` endpoint changed from POST to GET:
+
 - ❌ POST `/api/auth/account-info` (v1.3.x)
 - ✅ GET `/api/auth/account-info` (v1.4.0+)
 
@@ -208,8 +211,8 @@ const accountInfo = await authClient.getAccountInfo({
   queryOptions: {
     // Query parameters go here
     includeProfile: true,
-    includeRoles: false
-  }
+    includeRoles: false,
+  },
 });
 ```
 
@@ -221,21 +224,24 @@ Parameters must be moved from request body to URL query string:
 
 ```typescript
 // ❌ OLD (v1.3.x) - parameters in POST body
-const response = await fetch('/api/auth/account-info', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
+const response = await fetch("/api/auth/account-info", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     includeProfile: true,
-    includeRoles: false
+    includeRoles: false,
   }),
 });
 
 // ✅ NEW (v1.4.0+) - parameters in GET query string
-const response = await fetch('/api/auth/account-info?includeProfile=true&includeRoles=false', {
-  method: 'GET',
-  credentials: 'include',
-  // Note: No Content-Type header or body needed for GET
-});
+const response = await fetch(
+  "/api/auth/account-info?includeProfile=true&includeRoles=false",
+  {
+    method: "GET",
+    credentials: "include",
+    // Note: No Content-Type header or body needed for GET
+  },
+);
 ```
 
 #### Building Query Strings Programmatically
@@ -244,14 +250,14 @@ For complex parameter objects, use URLSearchParams:
 
 ```typescript
 const params = new URLSearchParams({
-  includeProfile: 'true',
-  includeRoles: 'false',
-  nestedField: JSON.stringify({ complex: 'object' }) // For nested objects
+  includeProfile: "true",
+  includeRoles: "false",
+  nestedField: JSON.stringify({ complex: "object" }), // For nested objects
 });
 
 const response = await fetch(`/api/auth/account-info?${params.toString()}`, {
-  method: 'GET',
-  credentials: 'include',
+  method: "GET",
+  credentials: "include",
 });
 ```
 
@@ -270,6 +276,7 @@ grep -r "POST.*account-info" src/
 ### What Changed
 
 Callback functions now receive `ctx` instead of `request`:
+
 - ❌ `request` parameter (v1.3.x)
 - ✅ `ctx` parameter (v1.4.0+)
 
@@ -338,26 +345,26 @@ emailAndPassword: {
 ```typescript
 // ❌ OLD (v1.3.x)
 onSuccess: async (session, request) => {
-  console.log('Session created:', session.user.email);
-  console.log('IP:', request.headers.get('x-forwarded-for'));
-}
+  console.log("Session created:", session.user.email);
+  console.log("IP:", request.headers.get("x-forwarded-for"));
+};
 
 // ✅ NEW (v1.4.0+)
 onSuccess: async (session, ctx) => {
-  console.log('Session created:', session.user.email);
-  console.log('IP:', ctx.request.headers.get('x-forwarded-for'));
+  console.log("Session created:", session.user.email);
+  console.log("IP:", ctx.request.headers.get("x-forwarded-for"));
   // ctx also includes: body, params, context
-}
+};
 ```
 
 ### What's in `ctx`?
 
 ```typescript
 interface CallbackContext {
-  request: Request;        // The original request object
-  body: any;              // Parsed request body
-  params: Record<string, string>;  // URL parameters
-  context: any;           // Additional context
+  request: Request; // The original request object
+  body: any; // Parsed request body
+  params: Record<string, string>; // URL parameters
+  context: any; // Additional context
 }
 ```
 
@@ -384,6 +391,7 @@ grep -r "async ({ .* request })" src/
 ### What Changed
 
 The passkey plugin was extracted to a separate npm package:
+
 - ❌ `import { passkey } from "better-auth/plugins"` (v1.3.x)
 - ✅ `import { passkey } from "@better-auth/passkey"` (v1.4.0+)
 
@@ -446,6 +454,7 @@ npm list @better-auth/passkey
 ### What Changed
 
 The `sendChangeEmailVerification` function was removed and consolidated into the generic `sendVerificationEmail`:
+
 - ❌ `sendChangeEmailVerification` (v1.3.x)
 - ✅ `emailVerification.sendVerificationEmail` (v1.4.0+)
 
@@ -489,8 +498,8 @@ export const auth = betterAuth({
       // This handles both initial verification and email changes
       const to = isNewEmail ? isNewEmail : user.email;
       const subject = isNewEmail ? "Confirm email change" : "Verify your email";
-      const html = `<a href="${url}">${isNewEmail ? 'Confirm Email Change' : 'Verify Email'}</a>`;
-      
+      const html = `<a href="${url}">${isNewEmail ? "Confirm Email Change" : "Verify Email"}</a>`;
+
       await sendEmail({
         to,
         subject,
@@ -516,6 +525,7 @@ grep -r "sendChangeEmailVerification" src/
 ### What Changed
 
 API key authentication no longer enables mock sessions by default for security:
+
 - ❌ Mock sessions enabled by default (v1.3.x)
 - ✅ Mock sessions disabled by default (v1.4.0+)
 
@@ -542,7 +552,7 @@ import { betterAuth } from "better-auth";
 export const auth = betterAuth({
   apiKey: {
     enabled: true,
-    mockSession: process.env.NODE_ENV === 'development', // Explicit opt-in
+    mockSession: process.env.NODE_ENV === "development", // Explicit opt-in
   },
 });
 ```
@@ -566,6 +576,7 @@ grep -r "apiKey:" src/
 ### What Changed
 
 The OIDC plugin configuration option name was corrected for consistency:
+
 - ❌ `redirectURLs` (v1.3.x)
 - ✅ `redirectUrls` (v1.4.0+)
 
@@ -587,7 +598,7 @@ export const auth = betterAuth({
     oidc({
       redirectURLs: [
         "https://app.example.com/auth/callback",
-        "https://admin.example.com/auth/callback"
+        "https://admin.example.com/auth/callback",
       ],
     }),
   ],
@@ -602,7 +613,7 @@ export const auth = betterAuth({
     oidc({
       redirectUrls: [
         "https://app.example.com/auth/callback",
-        "https://admin.example.com/auth/callback"
+        "https://admin.example.com/auth/callback",
       ],
     }),
   ],
@@ -623,9 +634,9 @@ CREATE TABLE oidc_clients_new (
   redirectUrls TEXT NOT NULL
 );
 
-INSERT INTO oidc_clients_new SELECT 
-  id, 
-  name, 
+INSERT INTO oidc_clients_new SELECT
+  id,
+  name,
   -- ... other columns
   redirectURLs as redirectUrls,
   -- ... other columns
@@ -698,6 +709,7 @@ No code changes are required - the fix is automatically applied when upgrading t
 ### Phase 1: Preparation (15 min)
 
 1. **Backup your project**
+
    ```bash
    git commit -am "Pre-migration checkpoint: better-auth v1.3.x"
    git tag pre-migration-v1.3.x
@@ -728,6 +740,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 ### Phase 3: Enable ESM (20 min)
 
 1. **Update package.json**
+
    ```json
    {
      "type": "module"
@@ -735,6 +748,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
    ```
 
 2. **Convert all imports**
+
    ```bash
    # Find all require() statements
    grep -r "require(" src/
@@ -743,6 +757,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
    ```
 
 3. **Update tsconfig.json**
+
    ```json
    {
      "compilerOptions": {
@@ -760,6 +775,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 ### Phase 4: Update API Calls (30 min)
 
 1. **Replace `forgetPassword`**
+
    ```bash
    # Find usage
    grep -r "forgetPassword" src/
@@ -768,6 +784,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
    ```
 
 2. **Update callback signatures**
+
    ```bash
    # Find callbacks with 'request' parameter
    grep -r "async ({ .* request })" src/
@@ -784,6 +801,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 ### Phase 5: Testing (30 min)
 
 1. **Unit tests**
+
    ```bash
    bun test
    ```
@@ -803,6 +821,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
 ### Phase 6: Deploy (15 min)
 
 1. **Deploy to staging**
+
    ```bash
    wrangler deploy --env staging
    ```
@@ -812,6 +831,7 @@ bun add kysely@^0.28.8 @noxharmonium/kysely-d1@^0.4.0
    - Check error logs
 
 3. **Deploy to production**
+
    ```bash
    wrangler deploy
    ```
@@ -910,6 +930,7 @@ export const auth = betterAuth({
 
 **Cause**: Missing `"type": "module"` in package.json
 **Fix**:
+
 ```json
 {
   "type": "module"
@@ -935,6 +956,7 @@ export const auth = betterAuth({
 
 **Cause**: JWE encryption changed in v1.4.0
 **Fix**: Users may need to re-authenticate. Consider:
+
 ```typescript
 // Temporarily increase session expiry to ease transition
 session: {
@@ -974,6 +996,7 @@ bun add better-auth@1.3.34 drizzle-orm@0.36.0 drizzle-kit@0.28.0
 ### Option 3: Parallel Deployment
 
 Keep v1.3.x running while testing v1.4.0:
+
 ```bash
 # Deploy v1.4.0 to staging
 wrangler deploy --env staging
@@ -1035,12 +1058,14 @@ Use this checklist to ensure complete migration:
 ## Getting Help
 
 **Official Resources**:
+
 - **v1.4 Blog Post**: https://www.better-auth.com/blog/1-4
 - **Changelog**: https://www.better-auth.com/changelogs
 - **Documentation**: https://better-auth.com
 - **Discord**: https://discord.gg/better-auth
 
 **GitHub**:
+
 - **Issues**: https://github.com/better-auth/better-auth/issues
 - **Discussions**: https://github.com/better-auth/better-auth/discussions
 

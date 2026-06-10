@@ -14,7 +14,7 @@ import {
   Edit2,
   ExternalLink,
   Globe,
-  Share2
+  Share2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -50,10 +50,13 @@ export default function DashboardPage() {
         }
         setUserName(`${data.user.firstName} ${data.user.lastName}`);
         setUserEmail(data.user.email);
-        sessionStorage.setItem("linkedpage_user", JSON.stringify({
-          name: `${data.user.firstName} ${data.user.lastName}`,
-          email: data.user.email
-        }));
+        sessionStorage.setItem(
+          "linkedpage_user",
+          JSON.stringify({
+            name: `${data.user.firstName} ${data.user.lastName}`,
+            email: data.user.email,
+          }),
+        );
       } catch {
         router.push("/login");
       }
@@ -78,7 +81,11 @@ export default function DashboardPage() {
   }, [router]);
 
   const handleDeleteSite = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this website? This action cannot be undone.")) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this website? This action cannot be undone.",
+      )
+    ) {
       return;
     }
     const toastId = toast.loading("Deleting website draft...");
@@ -102,10 +109,13 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
-
       {/* ── Background Graphic ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
-        <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
+        <img
+          src="/bg.png"
+          alt=""
+          className="w-full h-full object-cover object-top"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
       </div>
 
@@ -120,14 +130,18 @@ export default function DashboardPage() {
             onClick={() => router.push("/")}
           />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{websites[0]?.brandName || "My Dashboard"}</span>
+          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">
+            {websites[0]?.brandName || "My Dashboard"}
+          </span>
         </div>
 
         {/* Right Action Side */}
         <div className="flex items-center gap-2 relative">
           <button
             onClick={() => {
-              const sub = websites[0] ? `${websites[0].subdomainSlug}.linkedpage.io` : "linkedpage.io";
+              const sub = websites[0]
+                ? `${websites[0].subdomainSlug}.linkedpage.io`
+                : "linkedpage.io";
               navigator.clipboard.writeText(`https://${sub}`);
               toast.success("Site link copied to clipboard!");
             }}
@@ -176,19 +190,26 @@ export default function DashboardPage() {
 
       {/* ── Main Container (Sidebar + Content) ── */}
       <div className="flex-1 flex pt-14 min-h-screen relative z-10">
-
         {/* ── Sidebar (Sticky Left) ── */}
         <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
-
           {/* Top navigation items */}
           <div className="flex flex-col gap-6">
-
             {/* New Website Button */}
             <button
               onClick={() => router.push("/onboarding")}
               className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
             >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-black"
+              >
                 <rect width="18" height="18" x="3" y="3" rx="2" />
                 <path d="M9 12h6M12 9v6" />
               </svg>
@@ -214,9 +235,7 @@ export default function DashboardPage() {
               </button>
 
               {/* Active Tab */}
-              <button
-                className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
-              >
+              <button className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all">
                 <Folder className="w-[18px] h-[18px] text-[#1A68FF]" />
                 All Websites
               </button>
@@ -224,24 +243,32 @@ export default function DashboardPage() {
 
             {/* Recent Websites Section */}
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3">
+                Recent websites
+              </span>
 
               <div
-                onClick={() => websites[0] && router.push(`/editor?id=${websites[0].id}`)}
+                onClick={() =>
+                  websites[0] && router.push(`/editor?id=${websites[0].id}`)
+                }
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
               >
                 <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
-                  <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+                  <img
+                    src="/logoicon.png"
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{websites[0]?.brandName || "No recent sites"}</span>
+                <span className="text-[13px] font-semibold text-[#171717] truncate">
+                  {websites[0]?.brandName || "No recent sites"}
+                </span>
               </div>
             </div>
-
           </div>
 
           {/* Bottom navigation & pricing items */}
           <div className="flex flex-col gap-6">
-
             {/* Pricing, Documentation, Settings */}
             <div className="flex flex-col gap-1">
               <button
@@ -268,14 +295,11 @@ export default function DashboardPage() {
                 Settings
               </button>
             </div>
-
           </div>
-
         </aside>
 
         {/* ── Main Content Area ── */}
         <main className="flex-1 flex flex-col items-center px-8 md:px-12 py-10">
-
           {/* User Provided Search and Title Container */}
           <div
             className="flex flex-col gap-4 items-center text-center w-full max-w-[420px] mb-12"
@@ -388,7 +412,10 @@ export default function DashboardPage() {
             {loadingWebsites ? (
               <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 w-full max-w-7xl">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="flex flex-col gap-3 p-3 rounded-[12px] bg-white border border-[#EBEBEB] animate-pulse">
+                  <div
+                    key={i}
+                    className="flex flex-col gap-3 p-3 rounded-[12px] bg-white border border-[#EBEBEB] animate-pulse"
+                  >
                     <div className="w-full bg-gray-100 rounded-[10px] aspect-video" />
                     <div className="flex flex-col gap-2 mt-1">
                       <div className="h-4 bg-gray-200 rounded w-1/2" />
@@ -415,7 +442,9 @@ export default function DashboardPage() {
                         key={web.id}
                         className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                       >
-                        <div onClick={() => router.push(`/editor?id=${web.id}`)}>
+                        <div
+                          onClick={() => router.push(`/editor?id=${web.id}`)}
+                        >
                           <div className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center">
                             <div className="relative w-full p-1 rounded-sm flex items-center justify-center">
                               <div className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none">
@@ -452,7 +481,9 @@ export default function DashboardPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                const sub = web.subdomainSlug ? `${web.subdomainSlug}.linkedpage.io` : "linkedpage.io";
+                                const sub = web.subdomainSlug
+                                  ? `${web.subdomainSlug}.linkedpage.io`
+                                  : "linkedpage.io";
                                 navigator.clipboard.writeText(`https://${sub}`);
                                 toast.success("Site link copied to clipboard!");
                               }}
@@ -463,7 +494,9 @@ export default function DashboardPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setActiveDropdownId(isDropdownOpen ? null : web.id);
+                                setActiveDropdownId(
+                                  isDropdownOpen ? null : web.id,
+                                );
                               }}
                               className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
                             >
@@ -487,14 +520,23 @@ export default function DashboardPage() {
                             {/* Dropdown Options */}
                             {isDropdownOpen && (
                               <>
-                                <div className="fixed inset-0 z-10" onClick={() => setActiveDropdownId(null)} />
+                                <div
+                                  className="fixed inset-0 z-10"
+                                  onClick={() => setActiveDropdownId(null)}
+                                />
                                 <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-lg">
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      const sub = web.subdomainSlug ? `${web.subdomainSlug}.linkedpage.io` : "linkedpage.io";
-                                      navigator.clipboard.writeText(`https://${sub}`);
-                                      toast.success("Site link copied to clipboard!");
+                                      const sub = web.subdomainSlug
+                                        ? `${web.subdomainSlug}.linkedpage.io`
+                                        : "linkedpage.io";
+                                      navigator.clipboard.writeText(
+                                        `https://${sub}`,
+                                      );
+                                      toast.success(
+                                        "Site link copied to clipboard!",
+                                      );
                                       setActiveDropdownId(null);
                                     }}
                                     className="px-4 py-2 text-left text-[13px] font-medium text-black hover:bg-[#F3F3F5] flex items-center gap-2"
@@ -543,7 +585,6 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
-
         </main>
       </div>
 

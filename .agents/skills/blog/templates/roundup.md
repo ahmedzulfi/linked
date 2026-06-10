@@ -29,11 +29,13 @@
 **Format:** "[N] Experts Share Their [Topic] Strategies for [Year]"
 
 **Alternative formats:**
+
 - "[N] [Industry] Leaders on the Future of [Topic]"
 - "We Asked [N] [Role] About [Topic]. Here's What They Said."
 - "[N] [Topic] Strategies From the People Who Know Best ([Year])"
 
 **Guidelines:**
+
 - Include the exact number of experts (specificity builds credibility)
 - Name the topic clearly so the reader knows what advice to expect
 - The year signals that insights are current
@@ -52,6 +54,7 @@
 [ANSWER-FIRST] State the key consensus finding or most surprising insight from the experts in the first sentence. Do not begin with "We reached out to experts..." - lead with the value.
 
 **Structure:**
+
 1. **Key finding** (1-2 sentences): The single most important takeaway from across all expert responses - what is the through-line?
    - [STAT: supporting data point that frames why this topic matters now]
 2. **Why expert perspectives matter** (1-2 sentences): What do these practitioners know that generalist articles miss?
@@ -107,6 +110,7 @@ Each expert gets their own H2 section. Order experts strategically - lead with t
 [ANSWER-FIRST] State the strongest area of consensus in the first sentence. This section is where your editorial voice matters most.
 
 **Structure:**
+
 1. **Common themes** (100-150 words): Identify 3-4 themes that emerged across multiple expert responses. For each theme:
    - Name the theme (H3 or bold)
    - Note which experts align on this theme
@@ -140,6 +144,7 @@ Each expert gets their own H2 section. Order experts strategically - lead with t
 
 **Structure:**
 Present 5-7 bullet points combining the best advice from across all experts. Each takeaway should be:
+
 - Specific and actionable (not vague platitudes)
 - Attributed to the expert(s) who inspired it
 - Framed as an action the reader can take
@@ -186,6 +191,7 @@ Organize resources into 2-3 categories based on what experts mentioned or recomm
 ```
 
 **Guidelines:**
+
 - Only include resources that were actually mentioned by experts or directly support their advice
 - Include a mix of free and paid resources
 - Link to resources where appropriate (use affiliate links with disclosure if applicable)
@@ -199,6 +205,7 @@ Organize resources into 2-3 categories based on what experts mentioned or recomm
 [FAQ] Source questions from the types of follow-up questions readers would have after reading expert advice.
 
 **Guidelines:**
+
 - Focus on implementation questions ("How do I start?") and clarification questions ("Does this apply to [my situation]?")
 - Each answer should be 40-80 words and lead with a direct answer
 - Reference specific experts when relevant
@@ -234,12 +241,14 @@ Organize resources into 2-3 categories based on what experts mentioned or recomm
 [ANSWER-FIRST] State the expert selection criteria in the first sentence to establish the roundup's credibility.
 
 **Structure:**
+
 1. **Selection criteria** (1-2 sentences): How and why these specific experts were chosen (e.g., minimum years of experience, specific domain expertise, practitioner vs. theorist, diversity of perspective)
 2. **Outreach method** (1 sentence): How experts were contacted (email interviews, video calls, published statements, conference talks)
 3. **Response handling** (1 sentence): Were quotes edited for clarity? Were responses reviewed by experts before publication?
 4. **Transparency** (1 sentence): Note any experts who were invited but declined, or any potential conflicts of interest
 
 **Guidelines:**
+
 - This section builds trust - be transparent about your process
 - If you sourced quotes from published materials (conference talks, podcasts, articles) rather than direct outreach, say so
 - Keep it factual and brief - this is not the place for editorial commentary

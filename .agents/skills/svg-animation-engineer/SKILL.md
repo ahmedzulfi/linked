@@ -60,7 +60,7 @@ description: Generates pure SVG code animations using flat design and CSS keyfra
       /* 适当使用 cubic-bezier 增加真实物理张力 */
       animation: bounce 1.5s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
     }
-    
+
     @keyframes bounce {
       0%, 100% { transform: translateY(0) scaleY(1); }
       50% { transform: translateY(-20px) scaleY(1.05); }

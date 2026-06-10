@@ -4,7 +4,10 @@ import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById } from "@/lib/db";
 import { compileStaticHtml } from "@/lib/compiler";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -54,6 +57,9 @@ You can upload this \`index.html\` file directly to any static web hosting provi
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to generate zip export" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to generate zip export" },
+      { status: 500 },
+    );
   }
 }

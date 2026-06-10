@@ -8,6 +8,7 @@
 ## When to Use This Template
 
 Use this template when:
+
 - A topic generates many recurring questions across forums, support channels, or search
 - Each question can be answered in 80-120 words with a clear, direct response
 - The content needs to be optimized for Google Featured Snippets and AI citations
@@ -15,6 +16,7 @@ Use this template when:
 - You want to create a linkable reference page that other content can point to
 
 Do NOT use this template for:
+
 - Step-by-step instructions (use tutorial)
 - Timely event analysis (use news-analysis)
 - Original data studies (use data-research)
@@ -31,17 +33,20 @@ Do NOT use this template for:
 ```
 
 **Examples:**
+
 - "Claude Code: Frequently Asked Questions (2026)"
 - "AI-Assisted Code Review: Frequently Asked Questions (2026)"
 - "Technical Blog SEO: Frequently Asked Questions (2026)"
 
 **Title Rules:**
+
 - Name the topic explicitly
 - Include "Frequently Asked Questions" (exact phrase for search matching)
 - Include the year (signals freshness; update annually)
 - Keep under 60 characters for full SERP display when possible
 
 **Alternative Title Formats:**
+
 - "[Topic] FAQ: [N] Questions Answered ([Year])"
 - "Everything You Need to Know About [Topic] ([Year])"
 - "[Topic] Explained: [N] Common Questions Answered"
@@ -76,6 +81,7 @@ This FAQ covers the [N] most common questions about [topic], organized into [N] 
 ```
 
 **Rules:**
+
 - The introduction should be skimmable - readers will jump to their question
 - Include a table of contents via the category list
 - State when the page was last updated (trust signal)
@@ -105,10 +111,12 @@ Foundational questions for newcomers. Each question is an H2.
 [ANSWER-FIRST] [Topic] is best suited for [specific audience] who need to [specific outcome]. [One sentence about who it's NOT for, to help readers self-select].
 
 **Ideal for:**
+
 - [Audience segment 1]: [Why]
 - [Audience segment 2]: [Why]
 
 **Not ideal for:**
+
 - [Audience segment]: [Why not]
 
 ---
@@ -153,12 +161,12 @@ Functional questions about mechanics and capabilities.
 
 [ANSWER-FIRST] The main difference is [key distinction in one sentence]. [A] is [characteristic], while [B] is [characteristic].
 
-| Feature | [A] | [B] |
-|---------|-----|-----|
+| Feature              | [A]         | [B]         |
+| -------------------- | ----------- | ----------- |
 | [Comparison point 1] | [A's value] | [B's value] |
 | [Comparison point 2] | [A's value] | [B's value] |
 | [Comparison point 3] | [A's value] | [B's value] |
-| **Best for** | [Use case] | [Use case] |
+| **Best for**         | [Use case]  | [Use case]  |
 
 [STAT: usage or performance data comparing A and B if available]
 
@@ -175,6 +183,7 @@ Functional questions about mechanics and capabilities.
 [ANSWER-FIRST] The main limitations of [topic/tool] are [top 2-3 limitations in one sentence]. [One sentence about whether these limitations are being addressed].
 
 **Current limitations:**
+
 1. **[Limitation 1]:** [Brief explanation]
 2. **[Limitation 2]:** [Brief explanation]
 3. **[Limitation 3]:** [Brief explanation]
@@ -188,7 +197,7 @@ Functional questions about mechanics and capabilities.
 
 Troubleshooting questions for users who are stuck.
 
-```markdown
+````markdown
 ## Common Problems & Solutions
 
 ### Why is [topic/tool] [not working / slow / showing error]?
@@ -197,8 +206,8 @@ Troubleshooting questions for users who are stuck.
 
 **Common causes and fixes:**
 
-| Cause | Fix |
-|-------|-----|
+| Cause     | Fix     |
+| --------- | ------- |
 | [Cause 1] | [Fix 1] |
 | [Cause 2] | [Fix 2] |
 | [Cause 3] | [Fix 3] |
@@ -215,6 +224,7 @@ Troubleshooting questions for users who are stuck.
 # [Fix command or code]
 [specific fix]
 ```
+````
 
 [STAT: how common this error is, if data is available]
 
@@ -225,6 +235,7 @@ Troubleshooting questions for users who are stuck.
 [ANSWER-FIRST] To migrate from [old] to [new], [high-level steps in one sentence]. The migration takes approximately [time] for a typical [project/setup].
 
 **Migration steps:**
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
@@ -238,10 +249,12 @@ Troubleshooting questions for users who are stuck.
 [ANSWER-FIRST] The best places to get help with [topic/tool] are [top 2-3 resources]. [One sentence about response times or community quality].
 
 **Help resources:**
+
 - **[Resource 1]:** [Description and link]
 - **[Resource 2]:** [Description and link]
 - **[Resource 3]:** [Description and link]
-```
+
+````
 
 ---
 
@@ -261,7 +274,7 @@ Questions from experienced users looking for deeper understanding.
 ```[language]
 # Example implementation
 [code snippet showing the approach]
-```
+````
 
 [INTERNAL-LINK: link to advanced tutorial covering this in detail]
 
@@ -285,15 +298,16 @@ Questions from experienced users looking for deeper understanding.
 
 [ANSWER-FIRST] For [specific use case], [topic] is [better/worse/comparable] to [alternative] because [key reason]. [One sentence nuance].
 
-| Criterion | [Topic] | [Alternative] |
-|-----------|---------|---------------|
+| Criterion     | [Topic]        | [Alternative]  |
+| ------------- | -------------- | -------------- |
 | [Criterion 1] | [Rating/value] | [Rating/value] |
 | [Criterion 2] | [Rating/value] | [Rating/value] |
 | [Criterion 3] | [Rating/value] | [Rating/value] |
-| **Verdict** | [Summary] | [Summary] |
+| **Verdict**   | [Summary]      | [Summary]      |
 
 [INTERNAL-LINK: link to detailed comparison content]
-```
+
+````
 
 ---
 
@@ -309,9 +323,10 @@ Explore these resources for deeper coverage of [topic]:
 - **[Comparison/review title]** - [One-sentence description] [INTERNAL-LINK]
 - **[Official documentation]** - [One-sentence description with external link]
 - **[Community/forum]** - [One-sentence description with external link]
-```
+````
 
 **Rules:**
+
 - Mix internal links (your content) with external links (official docs, communities)
 - Prioritize internal links - this is a hub page
 - Keep descriptions to one sentence each
@@ -352,6 +367,7 @@ This template requires FAQPage schema markup. When generating the final HTML:
 ```
 
 **Rules:**
+
 - Every H2 question must be included in the schema
 - Use the [ANSWER-FIRST] text as the answer in the schema
 - Limit schema to 10 questions maximum (Google's practical limit for display)

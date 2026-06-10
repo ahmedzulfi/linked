@@ -3,6 +3,7 @@
 This file contains the complete source code of all active project files.
 
 ## File: `AGENTS.md`
+
 ```markdown
 # Fusion Starter
 
@@ -19,21 +20,22 @@ While the starter comes with a express server, only create endpoint when strictl
 - **UI**: Radix UI + TailwindCSS 3 + Lucide React icons
 
 ## Project Structure
-
 ```
-client/                   # React SPA frontend
-├── pages/                # Route components (Index.tsx = home)
-├── components/ui/        # Pre-built UI component library
-├── App.tsx                # App entry point and with SPA routing setup
-└── global.css            # TailwindCSS 3 theming and global styles
 
-server/                   # Express API backend
-├── index.ts              # Main server setup (express config + routes)
-└── routes/               # API handlers
+client/ # React SPA frontend
+├── pages/ # Route components (Index.tsx = home)
+├── components/ui/ # Pre-built UI component library
+├── App.tsx # App entry point and with SPA routing setup
+└── global.css # TailwindCSS 3 theming and global styles
 
-shared/                   # Types used by both client & server
-└── api.ts                # Example of how to share api interfaces
-```
+server/ # Express API backend
+├── index.ts # Main server setup (express config + routes)
+└── routes/ # API handlers
+
+shared/ # Types used by both client & server
+└── api.ts # Example of how to share api interfaces
+
+````
 
 ## Key Features
 
@@ -55,12 +57,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
   <Route path="*" element={<NotFound />} />
 </Routes>;
-```
+````
 
 ### Styling System
 
 - **Primary**: TailwindCSS 3 utility classes
-- **Theme and design tokens**: Configure in `client/global.css` 
+- **Theme and design tokens**: Configure in `client/global.css`
 - **UI components**: Pre-built library in `client/components/ui/`
 - **Utility**: `cn()` function combines `clsx` + `tailwind-merge` for conditional classes
 
@@ -80,16 +82,20 @@ className={cn(
 - **API endpoints**: Prefixed with `/api/`
 
 #### Example API Routes
+
 - `GET /api/ping` - Simple ping api
-- `GET /api/demo` - Demo endpoint  
+- `GET /api/demo` - Demo endpoint
 
 ### Shared Types
+
 Import consistent types in both client and server:
+
 ```typescript
-import { DemoResponse } from '@shared/api';
+import { DemoResponse } from "@shared/api";
 ```
 
 Path aliases:
+
 - `@shared/*` - Shared folder
 - `@/*` - Client folder
 
@@ -110,7 +116,9 @@ pnpm test          # Run Vitest tests
 Open `client/global.css` and `tailwind.config.ts` and add new tailwind colors.
 
 ### New API Route
+
 1. **Optional**: Create a shared interface in `shared/api.ts`:
+
 ```typescript
 export interface MyRouteResponse {
   message: string;
@@ -119,19 +127,21 @@ export interface MyRouteResponse {
 ```
 
 2. Create a new route handler in `server/routes/my-route.ts`:
+
 ```typescript
 import { RequestHandler } from "express";
 import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
 
 export const handleMyRoute: RequestHandler = (req, res) => {
   const response: MyRouteResponse = {
-    message: 'Hello from my endpoint!'
+    message: "Hello from my endpoint!",
   };
   res.json(response);
 };
 ```
 
 3. Register the route in `server/index.ts`:
+
 ```typescript
 import { handleMyRoute } from "./routes/my-route";
 
@@ -140,16 +150,19 @@ app.get("/api/my-endpoint", handleMyRoute);
 ```
 
 4. Use in React components with type safety:
-```typescript
-import { MyRouteResponse } from '@shared/api'; // Optional: for type safety
 
-const response = await fetch('/api/my-endpoint');
+```typescript
+import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
+
+const response = await fetch("/api/my-endpoint");
 const data: MyRouteResponse = await response.json();
 ```
 
 ### New Page Route
+
 1. Create component in `client/pages/MyPage.tsx`
 2. Add route in `client/App.tsx`:
+
 ```typescript
 <Route path="/my-page" element={<MyPage />} />
 ```
@@ -169,18 +182,19 @@ const data: MyRouteResponse = await response.json();
 - Comprehensive UI component library included
 - Type-safe API communication via shared interfaces
 
-```
+````
 
 ---
 
 ## File: `all_code_compilation.md`
 ```markdown
 
-```
+````
 
 ---
 
 ## File: `components.json`
+
 ```json
 {
   "$schema": "https://ui.shadcn.com/schema.json",
@@ -202,12 +216,12 @@ const data: MyRouteResponse = await response.json();
     "hooks": "@/hooks"
   }
 }
-
 ```
 
 ---
 
 ## File: `design.md`
+
 ```markdown
 ---
 version: alpha
@@ -358,13 +372,16 @@ components:
 # Webild Cloud Editorial
 
 ## Overview
+
 Webild feels airy, optimistic, and lightly futuristic, with a polished landing-page aesthetic built to inspire quick creation and conversion. The experience balances playful cloudscape imagery with a serious, product-led structure, making it suitable for founders, marketers, and small teams wanting a fast way to launch pages. The overall tone is spacious and inviting rather than dense or technical.
 
 ## Branding & Logos
+
 - **logo.png (Full Logo):** Displays the brand icon and the brand name text. Used in standard headers, navbars, and footers where space allows for the complete brand signature.
 - **logoicon.png (Icon Logo):** Displays only the minimalist brand icon. Used in space-constrained slots such as sidebar project selectors, small avatar slots in recent lists, AI response bubble identifiers, and centered header accents.
 
 ## Colors
+
 - **Primary (#2A2A2F):** A deep charcoal used for the strongest call-to-action buttons, prominent UI contrast, and dark text accents. It gives the interface a grounded, premium anchor against the bright background.
 - **Secondary (#F3F3F3):** A soft off-white used for neutral buttons and subtle control surfaces. It keeps secondary actions visible without competing with the primary CTA.
 - **Tertiary (#FBFBFB):** The lightest elevated surface tone, ideal for cards and panels that sit above the background with minimal visual weight.
@@ -380,24 +397,31 @@ Webild feels airy, optimistic, and lightly futuristic, with a polished landing-p
 - **Error (#E45A5A):** A restrained red reserved for destructive states, validation, and alert messaging.
 
 ## Typography
+
 The system uses Inter Tight throughout, which gives the brand a compact, modern, and slightly editorial voice. Headlines rely on lighter weights for h2–h4 and a medium weight for the main display line, creating a sleek contrast with the bold visual imagery. Body text stays at 16px/24px for comfortable reading, while labels and button text move slightly smaller and medium-weight for crisp utility. Letter spacing is neutral, with no visible uppercase tracking treatment, so the hierarchy comes from size, weight, and contrast rather than decorative text styling.
 
 ## Layout & Spacing
+
 The layout is centered around a wide, fixed hero composition with generous negative space and a soft full-bleed background image. Major content sits inside layered floating panels, while the top navigation uses a rounded, inset container that spans most of the viewport width with even internal spacing. The spacing rhythm is simple and airy, using a compact base of 2px for micro-adjustments and then jumping to 12px, 18px, 40px, and 90px for component padding, section separation, and dramatic hero breathing room. Cards and controls prefer consistent internal padding over dense alignment, reinforcing the polished, easygoing feel.
 
 ## Elevation & Depth
+
 Depth is achieved more through translucency, soft borders, and gentle shadows than through dramatic stacking. Panels use pale surfaces with subtle gray edges and light shadowing to appear lifted from the cloud background without feeling heavy. The interface leans flat overall, but the contrast between white controls, frosted containers, and dark CTA buttons creates enough hierarchy for navigation and action. Inner shadow treatment on primary buttons adds a tactile, slightly embossed quality.
 
 ## Shapes
+
 The shape language is soft and rounded, with a notable 13px corner radius on major buttons and cards. Full pills appear on chips, icon buttons, and compact controls, while larger panels keep a moderate rounded rectangle profile. Overall, the system feels approachable and polished rather than angular or architectural.
 
 ## Components
+
 Buttons are the most expressive component family. `button-primary` uses the charcoal `#2A2A2F` background with white text, medium label typography, 14px vertical padding, and a 40px minimum height for a confident CTA. `button-secondary` uses `#F3F3F3` with black text and the same sizing, making it ideal for less dominant actions like “Decline” or “Log in.” `button-tertiary` is text-only and should remain visually quiet for low-emphasis navigation or inline actions.
 
 Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action buttons.
 
 ### Floating Overlay Sidebar
+
 The sidebar layout for floating navigation overlays uses a custom panel:
+
 - **Structure:** Absolute or fixed container with a left gap (`left-5`), top gap (`top-28`), and bottom gap (`bottom-5`).
 - **Width:** `260px` to maintain narrow, crisp spacing.
 - **Backdrop:** Light dark backdrop overlay (`bg-black/15`) with a subtle blur effect (`backdrop-blur-[2px]`).
@@ -406,6 +430,7 @@ The sidebar layout for floating navigation overlays uses a custom panel:
 - **Trigger:** Sleek, floating pill or circle trigger button (`w-10 h-10 rounded-full`) featuring a minimalist chevron icon, offset in alignment to open/close panels cleanly.
 
 ### User Menu (Profile Menu)
+
 - **Structure:** Absolute container positioned relative to the top right of the navigation header (`right-0 top-10`).
 - **Width:** `280px` (w-72) to accommodate user details and quick actions cleanly.
 - **Surface & Shadows:** Frosted glass panel (`bg-white/70 backdrop-blur-xl`) with a thin border (`border border-black/5` or `border-[#E6E6E6]`) and unified shadows (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
@@ -413,30 +438,36 @@ The sidebar layout for floating navigation overlays uses a custom panel:
 - **Details:** Includes user avatar, name, email, quick links, and a log-out action button utilizing the brand's secondary/tertiary colors.
 
 ### Template Picker Panel
+
 The sidebar editor layout picker for layout presets and AI generation uses:
+
 - **Dimensions:** Width `486.25px`, height `831.45px`, with content region of `434.09px` centered using `26.08px` horizontal margins.
 - **Card Elements:** Width `208.61px`, height `156.45px` with a `13px` corner radius, an underlying gradient mask, and action overlays on hover.
 - **Controls:** A simple header "Template Library" and a magnifying glass search field. The previous tab-selector buttons ("Presets" and "Generate AI") have been removed to display the template library directly.
 
 ### Media Picker Panel
+
 The media asset manager and uploader uses:
+
 - **Dimensions:** Identical structural specifications as the layout picker, maintaining width `486.25px`, height `831.45px`, and content boundaries of `434.09px`.
 - **Card Elements:** Two-column grid of image cards, each sized `w-[208.61px]` by `h-[156.45px]` with a `13px` corner radius, bottom gradient backdrop overlay, category text labels, and click/explore hover states.
 - **Controls & Tabs:** Interactive "Your Uploads" button of width `206.5px` and "Generate Images" button of width `210.52px` with absolute positioning for the glowing multicolor shadow. Includes a standard magnifying glass search field.
 
 ### Chat Panel UI
+
 The interactive chat composer and conversation view uses:
+
 - **User Message Bubbles:** Styled with a pure white background, light gray border (`border-neutral-200/60`), unified card shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`), and rounded corners (`rounded-[18px]`) aligned to the right.
 - **Webild AI Responses:** Rendered bubble-less directly on the panel. Includes a header with a 3D-glossy blue gradient sphere logo and bold text "Webild" in black.
 - **Interactive Suggestions:** Dynamic pill buttons rendered horizontally. Each pill has a light border, white background, black text, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`).
 - **Input Composer:** A floating white panel with `rounded-[20px]`, `border-neutral-200/80`, and unified shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`) containing a multi-line textarea, a circular left-aligned plus icon button, and right-aligned microphone and blue send buttons.
-
 
 ## Motion & Animation Guidelines
 
 To deliver premium interfaces that feel tactile and responsive, all page motions must follow strict design engineering constraints.
 
 ### 1. Easing & Timing System
+
 - **UI Interactions (Dropdowns, popovers, mobile drawers):**
   Use strong ease-out curves: `cubic-bezier(0.23, 1, 0.32, 1)`. Keep durations between `150ms` and `250ms`.
 - **Morphing or On-screen movement:**
@@ -447,10 +478,12 @@ To deliver premium interfaces that feel tactile and responsive, all page motions
   Use `stiffness: 380` and `damping: 30` to simulate quick settling and high physical momentum without bouncy overshoot.
 
 ### 2. Performance & Composition Guidelines
+
 - **Native Scrolling:** Scrolling relies on standard native browser actions with no scroll-jacking or interception.
 - **Hardware Acceleration:** Ensure interactive transitions are composited on the GPU rather than triggering browser repaints, using composite-friendly properties like transforms and opacity.
 
 ### 3. Tactile Micro-Interactions
+
 - **Active Press Scale:**
   - Major buttons (CTAs, primary triggers): scale down to `scale(0.97)` on active press.
   - Minor buttons (icons, smaller control pills): scale down to `scale(0.95)`.
@@ -463,6 +496,7 @@ To deliver premium interfaces that feel tactile and responsive, all page motions
   - Restrict all hover states to fine-pointer devices to avoid "sticky hovers" on iOS/Android. Use `@media (hover: hover) and (pointer: fine)` or Tailwind's `future.hoverOnlyWhenSupported` configuration.
 
 ## Do's and Don'ts
+
 - Do keep primary actions dark, rounded, and compact, with clear white text.
 - Do use generous whitespace and large centered hero compositions.
 - Do preserve the soft, high-key palette and avoid harsh outlines.
@@ -480,6 +514,7 @@ To deliver premium interfaces that feel tactile and responsive, all page motions
 ---
 
 ## File: `drizzle.config.ts`
+
 ```typescript
 import { defineConfig } from "drizzle-kit";
 
@@ -488,15 +523,17 @@ export default defineConfig({
   out: "./drizzle",
   dialect: "postgresql",
   dbCredentials: {
-    url: process.env.DATABASE_URL || "postgresql://postgres:imblue-12345@localhost:4000/linked",
+    url:
+      process.env.DATABASE_URL ||
+      "postgresql://postgres:imblue-12345@localhost:4000/linked",
   },
 });
-
 ```
 
 ---
 
 ## File: `middleware.ts`
+
 ```typescript
 import { NextResponse, NextRequest } from "next/server";
 
@@ -532,8 +569,12 @@ export async function middleware(request: NextRequest) {
   if (!targetSlug && !mainDomains.includes(host)) {
     // It's a custom domain, ask resolve-host API route
     try {
-      const apiHost = host.includes("localhost") ? "http://localhost:3000" : `https://${host}`;
-      const res = await fetch(`${apiHost}/api/websites/resolve-host?host=${encodeURIComponent(host)}`);
+      const apiHost = host.includes("localhost")
+        ? "http://localhost:3000"
+        : `https://${host}`;
+      const res = await fetch(
+        `${apiHost}/api/websites/resolve-host?host=${encodeURIComponent(host)}`,
+      );
       const data = await res.json();
       if (data && data.slug) {
         targetSlug = data.slug;
@@ -565,12 +606,12 @@ export const config = {
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };
-
 ```
 
 ---
 
 ## File: `next-env.d.ts`
+
 ```typescript
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
@@ -578,12 +619,12 @@ import "./.next/dev/types/routes.d.ts";
 
 // NOTE: This file should not be edited
 // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
-
 ```
 
 ---
 
 ## File: `package.json`
+
 ```json
 {
   "name": "fusion-starter",
@@ -695,20 +736,16 @@ import "./.next/dev/types/routes.d.ts";
     }
   },
   "pkg": {
-    "assets": [
-      "dist/spa/*"
-    ],
-    "scripts": [
-      "dist/server/**/*.js"
-    ]
+    "assets": ["dist/spa/*"],
+    "scripts": ["dist/server/**/*.js"]
   }
 }
-
 ```
 
 ---
 
 ## File: `postcss.config.js`
+
 ```javascript
 export default {
   plugins: {
@@ -716,12 +753,12 @@ export default {
     autoprefixer: {},
   },
 };
-
 ```
 
 ---
 
 ## File: `skills-lock.json`
+
 ```json
 {
   "version": 1,
@@ -752,12 +789,12 @@ export default {
     }
   }
 }
-
 ```
 
 ---
 
 ## File: `tailwind.config.ts`
+
 ```typescript
 import type { Config } from "tailwindcss";
 
@@ -770,7 +807,7 @@ export default {
     "./app/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
     "./hooks/**/*.{ts,tsx}",
-    "./lib/**/*.{ts,tsx}"
+    "./lib/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -783,8 +820,22 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Inter Tight', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        inter: ['Inter Tight', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        sans: [
+          "Inter Tight",
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
+        inter: [
+          "Inter Tight",
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "sans-serif",
+        ],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -832,31 +883,31 @@ export default {
         },
         // Webild Cloud Editorial brand colors
         webild: {
-          primary: '#2A2A2F',
-          secondary: '#F3F3F3',
-          tertiary: '#FBFBFB',
-          neutral: '#FFFFFF',
-          surface: '#FFFFFF',
-          'surface-muted': '#F7F7F7',
-          'on-surface': '#000000',
-          'on-surface-muted': '#171717',
-          border: '#E6E6E6',
-          accent: '#8DB8FF',
-          'accent-soft': '#DCEAFF',
-          'accent-green': '#8DFFB3',
-          'accent-green-dark': '#369762',
-          success: '#BFE7A9',
-          error: '#E45A5A',
+          primary: "#2A2A2F",
+          secondary: "#F3F3F3",
+          tertiary: "#FBFBFB",
+          neutral: "#FFFFFF",
+          surface: "#FFFFFF",
+          "surface-muted": "#F7F7F7",
+          "on-surface": "#000000",
+          "on-surface-muted": "#171717",
+          border: "#E6E6E6",
+          accent: "#8DB8FF",
+          "accent-soft": "#DCEAFF",
+          "accent-green": "#8DFFB3",
+          "accent-green-dark": "#369762",
+          success: "#BFE7A9",
+          error: "#E45A5A",
         },
         // Keep linkedpage mapped to Webild for compatibility
         linkedpage: {
-          blue: '#8DB8FF',
-          dark: '#2A2A2F',
-          'dark-card': '#FBFBFB',
-          'dark-card2': '#F3F3F3',
-          light: '#FBFBFB',
-          border: '#E6E6E6',
-          text: '#171717',
+          blue: "#8DB8FF",
+          dark: "#2A2A2F",
+          "dark-card": "#FBFBFB",
+          "dark-card2": "#F3F3F3",
+          light: "#FBFBFB",
+          border: "#E6E6E6",
+          text: "#171717",
         },
       },
       borderRadius: {
@@ -899,21 +950,17 @@ export default {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-
 ```
 
 ---
 
 ## File: `tsconfig.json`
+
 ```json
 {
   "compilerOptions": {
     "target": "es2020",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -932,12 +979,8 @@ export default {
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@shared/*": [
-        "./shared/*"
-      ]
+      "@/*": ["./*"],
+      "@shared/*": ["./shared/*"]
     }
   },
   "include": [
@@ -948,26 +991,26 @@ export default {
     "shared/**/*",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "dist",
-    "client"
-  ]
+  "exclude": ["node_modules", ".next", "dist", "client"]
 }
-
 ```
 
 ---
 
 ## File: `.vercel\project.json`
+
 ```json
-{"projectId":"prj_1J5yBTHexKAG31O1JN8gXqpO1Q3m","orgId":"team_PWgPdAQ7NcmD35J37bj8ri4t","projectName":"fusion-starter-529"}
+{
+  "projectId": "prj_1J5yBTHexKAG31O1JN8gXqpO1Q3m",
+  "orgId": "team_PWgPdAQ7NcmD35J37bj8ri4t",
+  "projectName": "fusion-starter-529"
+}
 ```
 
 ---
 
 ## File: `app\globals.css`
+
 ```css
 /** @import must precede all other statements */
 @import url("https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap");
@@ -1046,20 +1089,20 @@ export default {
     --dur-5: 500ms;
 
     /* Motion Ease-out */
-    --ease-out-quad: cubic-bezier(.25, .46, .45, .94);
-    --ease-out-cubic: cubic-bezier(.215, .61, .355, 1);
-    --ease-out-quart: cubic-bezier(.165, .84, .44, 1);
-    --ease-out-quint: cubic-bezier(.23, 1, .32, 1);
-    --ease-out-expo: cubic-bezier(.19, 1, .22, 1);
-    --ease-out-circ: cubic-bezier(.075, .82, .165, 1);
+    --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+    --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+    --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --ease-out-circ: cubic-bezier(0.075, 0.82, 0.165, 1);
 
     /* Motion Ease-in-out */
-    --ease-in-out-quad: cubic-bezier(.455, .03, .515, .955);
-    --ease-in-out-cubic: cubic-bezier(.645, .045, .355, 1);
-    --ease-in-out-quart: cubic-bezier(.77, 0, .175, 1);
-    --ease-in-out-quint: cubic-bezier(.86, 0, .07, 1);
+    --ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+    --ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-in-out-quint: cubic-bezier(0.86, 0, 0.07, 1);
     --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
-    --ease-in-out-circ: cubic-bezier(.785, .135, .15, .86);
+    --ease-in-out-circ: cubic-bezier(0.785, 0.135, 0.15, 0.86);
   }
 }
 
@@ -1086,14 +1129,23 @@ export default {
 
 @layer utilities {
   .font-inter {
-    font-family: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family:
+      "Inter Tight",
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
   }
 
   /* Dark flat button with tactile inner shadow */
   .btn-dark {
-    background-color: #2A2A2F;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
-    transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), box-shadow 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
+    background-color: #2a2a2f;
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
+    transition:
+      background-color 180ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      box-shadow 180ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform 120ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .btn-dark:active {
@@ -1101,9 +1153,12 @@ export default {
   }
 
   .btn-dark-sm {
-    background-color: #2A2A2F;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
-    transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), box-shadow 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
+    background-color: #2a2a2f;
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
+    transition:
+      background-color 180ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      box-shadow 180ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform 120ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .btn-dark-sm:active {
@@ -1112,10 +1167,12 @@ export default {
 
   /* Success gradient button */
   .btn-green {
-    background-color: #2A2A2F;
-    color: #FFFFFF;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
-    transition: opacity 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
+    background-color: #2a2a2f;
+    color: #ffffff;
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
+    transition:
+      opacity 180ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform 120ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .btn-green:active {
@@ -1124,21 +1181,21 @@ export default {
 
   /* Light card */
   .card-light {
-    background: #FBFBFB;
-    border: 1px solid #E6E6E6;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
+    background: #fbfbfb;
+    border: 1px solid #e6e6e6;
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   /* Card button shadow */
   .card-btn-shadow {
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   /* Dark card */
   .dark-card {
-    background: #FBFBFB;
-    border: 1px solid #E6E6E6;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
+    background: #fbfbfb;
+    border: 1px solid #e6e6e6;
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   /* Glass card (frosted panel) */
@@ -1146,12 +1203,18 @@ export default {
     background: rgba(255, 255, 255, 0.507);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(230, 230, 230, 0.4);
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   /* Rainbow gradient text */
   .gradient-text-rainbow {
-    background: linear-gradient(93deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%);
+    background: linear-gradient(
+      93deg,
+      #0894ff 0%,
+      #c959dd 34%,
+      #ff2e54 68%,
+      #ff9004 100%
+    );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1159,24 +1222,29 @@ export default {
 
   /* Hero gradient overlay */
   .hero-overlay {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.8) 50%, rgba(255, 255, 255, 0.95) 100%);
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.45) 0%,
+      rgba(255, 255, 255, 0.8) 50%,
+      rgba(255, 255, 255, 0.95) 100%
+    );
     opacity: 30%;
   }
 
   /* Section to dark (top transition) - modified to be simple soft transition */
   .section-to-dark-top {
-    background: linear-gradient(180deg, #FFFFFF 0%, #F7F7F7 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #f7f7f7 100%);
   }
 
   /* Section to dark (bottom transition) - modified to be simple soft transition */
   .section-to-dark-bottom {
-    background: linear-gradient(180deg, #F7F7F7 0%, #FFFFFF 100%);
+    background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
   }
 
   /* Footer gradient */
   .footer-gradient {
-    background: #FBFBFB;
-    border: 1px solid #E6E6E6;
+    background: #fbfbfb;
+    border: 1px solid #e6e6e6;
   }
 
   /* Scrollbar hidden for carousels */
@@ -1192,7 +1260,7 @@ export default {
   /* Template card hover overlay */
   .template-hover-overlay {
     opacity: 0;
-    transition: opacity 180ms cubic-bezier(.165, .84, .44, 1);
+    transition: opacity 180ms cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -1212,10 +1280,10 @@ export default {
 
   /* Card surface */
   .card {
-    background-color: #FBFBFB;
-    border: 1px solid #E6E6E6;
+    background-color: #fbfbfb;
+    border: 1px solid #e6e6e6;
     border-radius: 13px;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   /* Base button reset + shared styles */
@@ -1224,7 +1292,11 @@ export default {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    font-family: 'Inter Tight', 'Inter', -apple-system, sans-serif;
+    font-family:
+      "Inter Tight",
+      "Inter",
+      -apple-system,
+      sans-serif;
     font-size: 12px;
     font-weight: 500;
     line-height: 16px;
@@ -1235,7 +1307,9 @@ export default {
     border: none;
     outline: none;
     white-space: nowrap;
-    transition: background-color 180ms cubic-bezier(.165, .84, .44, 1), transform 120ms cubic-bezier(.25, .46, .45, .94);
+    transition:
+      background-color 180ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform 120ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
   .button:active {
@@ -1244,24 +1318,24 @@ export default {
 
   /* Primary button */
   .button-primary {
-    background-color: #2A2A2F;
-    color: #FFFFFF;
-    box-shadow: 0px 6px 10px -6px rgba(0,0,0,0.09);
+    background-color: #2a2a2f;
+    color: #ffffff;
+    box-shadow: 0px 6px 10px -6px rgba(0, 0, 0, 0.09);
   }
 
   .button-primary:hover {
-    background-color: #3A3A42;
+    background-color: #3a3a42;
   }
 
   /* Secondary button */
   .button-secondary {
-    background-color: #F3F3F3;
+    background-color: #f3f3f3;
     color: #000000;
-    border: 1px solid #E6E6E6;
+    border: 1px solid #e6e6e6;
   }
 
   .button-secondary:hover {
-    background-color: #EAEAEA;
+    background-color: #eaeaea;
   }
 
   /* Tertiary button */
@@ -1275,34 +1349,40 @@ export default {
 
   /* Design system input */
   .ds-input {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     color: #171717;
-    border: 1px solid #E6E6E6;
+    border: 1px solid #e6e6e6;
     border-radius: 13px;
     padding: 14px 16px;
     height: 48px;
-    font-family: 'Inter Tight', 'Inter', -apple-system, sans-serif;
+    font-family:
+      "Inter Tight",
+      "Inter",
+      -apple-system,
+      sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
     outline: none;
     width: 100%;
-    transition: border-color 150ms cubic-bezier(.165, .84, .44, 1), box-shadow 150ms cubic-bezier(.165, .84, .44, 1);
+    transition:
+      border-color 150ms cubic-bezier(0.165, 0.84, 0.44, 1),
+      box-shadow 150ms cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
   .ds-input::placeholder {
-    color: #9CA3AF;
+    color: #9ca3af;
   }
 
   .ds-input:focus {
-    border-color: #8DB8FF;
+    border-color: #8db8ff;
     box-shadow: 0 0 0 3px rgba(141, 184, 255, 0.15);
   }
 
   /* Divider */
   .ds-divider {
     height: 1px;
-    background-color: #E6E6E6;
+    background-color: #e6e6e6;
     width: 100%;
   }
 }
@@ -1311,6 +1391,7 @@ export default {
 ---
 
 ## File: `app\layout.tsx`
+
 ```tsx
 import type { Metadata } from "next";
 import "./globals.css";
@@ -1337,20 +1418,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen font-inter bg-white text-black antialiased">
-        <EditorProvider>
-          {children}
-        </EditorProvider>
+        <EditorProvider>{children}</EditorProvider>
         <Toaster position="bottom-right" richColors />
       </body>
     </html>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\not-found.tsx`
+
 ```tsx
 "use client";
 
@@ -1380,7 +1459,8 @@ export default function NotFound() {
           <div className="flex flex-col gap-2">
             <h1 className="text-4xl font-medium text-black">404</h1>
             <p className="text-base text-[#6B6B6B] leading-relaxed">
-              This page doesn't exist. Maybe it was moved, deleted, or you typed the URL incorrectly.
+              This page doesn't exist. Maybe it was moved, deleted, or you typed
+              the URL incorrectly.
             </p>
           </div>
 
@@ -1394,12 +1474,12 @@ export default function NotFound() {
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\page.tsx`
+
 ```tsx
 "use client";
 
@@ -1409,16 +1489,16 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { 
-  Home, 
-  Layout as LayoutIcon, 
-  Folder, 
-  CreditCard, 
-  BookOpen, 
-  Settings, 
+import {
+  Home,
+  Layout as LayoutIcon,
+  Folder,
+  CreditCard,
+  BookOpen,
+  Settings,
   LogOut,
   User,
-  Shield
+  Shield,
 } from "lucide-react";
 
 function UserMenu() {
@@ -1432,7 +1512,7 @@ function UserMenu() {
       style={{
         scrollbarWidth: "thin",
         scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
-        transformOrigin: "top right"
+        transformOrigin: "top right",
       }}
     >
       <div
@@ -1572,8 +1652,8 @@ function UserMenu() {
                   scrollbarColor: "rgba(0, 0, 0, 0.05) transparent",
                 }}
               >
-                You're on the free plan. Unlock additional features and
-                credits by upgrading your plan.
+                You're on the free plan. Unlock additional features and credits
+                by upgrading your plan.
               </span>
             </div>
           </div>
@@ -1774,7 +1854,15 @@ function UserMenu() {
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
-function DarkButton({ children, className = "", onClick }: { children: React.ReactNode; className?: string; onClick?: () => void }) {
+function DarkButton({
+  children,
+  className = "",
+  onClick,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+}) {
   return (
     <button
       onClick={onClick}
@@ -1787,7 +1875,9 @@ function DarkButton({ children, className = "", onClick }: { children: React.Rea
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[#369762] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">{children}</p>
+    <p className="text-[#369762] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">
+      {children}
+    </p>
   );
 }
 
@@ -1814,7 +1904,8 @@ const TEMPLATES_LARGE = [
   },
   {
     name: "Full-Page Scroll",
-    subtitle: "A modern, smooth-scrolling experience that tells your career story",
+    subtitle:
+      "A modern, smooth-scrolling experience that tells your career story",
     img: "https://api.builder.io/api/v1/image/assets/TEMP/22a1dcc1827cb472b41466029a5665e67ea82849?width=982",
   },
   {
@@ -1836,7 +1927,13 @@ const FAQ_ITEMS = [
 
 // ─── Live Preview Modal Component ─────────────────────────────────────────────
 
-function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+function PreviewModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   if (!isOpen) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
@@ -1851,7 +1948,9 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#F3F3F3]">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5   rounded-lg bg-[#369762]" />
-            <span className="text-[13px] font-semibold text-black font-mono">reidhoffman.linkedpage.me</span>
+            <span className="text-[13px] font-semibold text-black font-mono">
+              reidhoffman.linkedpage.me
+            </span>
           </div>
           <button
             onClick={onClose}
@@ -1874,26 +1973,44 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                 />
               </div>
               <div>
-                <h3 className="text-[20px] font-bold text-black font-inter-tight leading-tight">Reid Hoffman</h3>
-                <p className="text-[13px] text-gray-500 font-inter-tight">Co-founder LinkedIn | Partner at Greylock</p>
+                <h3 className="text-[20px] font-bold text-black font-inter-tight leading-tight">
+                  Reid Hoffman
+                </h3>
+                <p className="text-[13px] text-gray-500 font-inter-tight">
+                  Co-founder LinkedIn | Partner at Greylock
+                </p>
               </div>
             </div>
             <p className="text-[14px] text-[#171717]/80 leading-relaxed font-inter-tight">
-              Entrepreneur, executive, and venture capitalist. Passionate about building products that connect people and scale networks to transform industries.
+              Entrepreneur, executive, and venture capitalist. Passionate about
+              building products that connect people and scale networks to
+              transform industries.
             </p>
           </div>
 
           {/* Bento blocks */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-4 flex flex-col gap-2  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
-              <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Experience</span>
-              <p className="text-[14px] font-semibold text-black font-inter-tight">Greylock Partners</p>
-              <p className="text-[12px] text-gray-500 font-inter-tight">Partner • 2009 - Present</p>
+              <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">
+                Experience
+              </span>
+              <p className="text-[14px] font-semibold text-black font-inter-tight">
+                Greylock Partners
+              </p>
+              <p className="text-[12px] text-gray-500 font-inter-tight">
+                Partner • 2009 - Present
+              </p>
             </div>
             <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-4 flex flex-col gap-2  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
-              <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">Education</span>
-              <p className="text-[14px] font-semibold text-black font-inter-tight">Stanford University</p>
-              <p className="text-[12px] text-gray-500 font-inter-tight">BS in Cognitive Science</p>
+              <span className="text-[10px] font-mono uppercase text-gray-400 tracking-wider">
+                Education
+              </span>
+              <p className="text-[14px] font-semibold text-black font-inter-tight">
+                Stanford University
+              </p>
+              <p className="text-[12px] text-gray-500 font-inter-tight">
+                BS in Cognitive Science
+              </p>
             </div>
           </div>
         </div>
@@ -1901,13 +2018,20 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
         {/* Footer actions */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-[#F3F3F3] bg-white">
           <button
-            onClick={() => toast.success("Code ZIP export complete! check your downloads.")}
+            onClick={() =>
+              toast.success("Code ZIP export complete! check your downloads.")
+            }
             className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] transition-colors active:scale-95"
           >
             Export ZIP Source
           </button>
           <button
-            onClick={() => { toast.success("Micro-site published live on reidhoffman.linkedpage.me!"); onClose(); }}
+            onClick={() => {
+              toast.success(
+                "Micro-site published live on reidhoffman.linkedpage.me!",
+              );
+              onClose();
+            }}
             className="h-10 px-5      rounded-lg   bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20] text-[12px] font-medium hover:bg-[#D4FCD4] transition-colors active:scale-95"
           >
             Publish Live
@@ -1919,37 +2043,139 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
 }
 
 const COLOR_PALETTES = [
-  { name: "Alexandria", gradient: "conic-gradient(rgb(245, 250, 255) 0%, rgb(245, 250, 255) 25%, rgb(21, 71, 156) 25%, rgb(21, 71, 156) 50%, rgb(168, 204, 232) 50%, rgb(168, 204, 232) 75%, rgb(123, 163, 207) 75%, rgb(123, 163, 207) 100%)" },
-  { name: "Evergreen", gradient: "conic-gradient(rgb(250, 255, 251) 0%, rgb(250, 255, 251) 25%, rgb(10, 112, 95) 25%, rgb(10, 112, 95) 50%, rgb(168, 217, 190) 50%, rgb(168, 217, 190) 75%, rgb(107, 191, 184) 75%, rgb(107, 191, 184) 100%)" },
-  { name: "Crimson", gradient: "conic-gradient(rgb(255, 250, 250) 0%, rgb(255, 250, 250) 25%, rgb(230, 57, 70) 25%, rgb(230, 57, 70) 50%, rgb(245, 196, 199) 50%, rgb(245, 196, 199) 75%, rgb(240, 145, 153) 75%, rgb(240, 145, 153) 100%)" },
-  { name: "Lavender", gradient: "conic-gradient(rgb(251, 250, 255) 0%, rgb(251, 250, 255) 25%, rgb(139, 92, 246) 25%, rgb(139, 92, 246) 50%, rgb(216, 206, 245) 50%, rgb(216, 206, 245) 75%, rgb(196, 168, 249) 75%, rgb(196, 168, 249) 100%)" },
-  { name: "Sahara", gradient: "conic-gradient(rgb(246, 240, 233) 0%, rgb(246, 240, 233) 25%, rgb(43, 24, 10) 25%, rgb(43, 24, 10) 50%, rgb(148, 135, 124) 50%, rgb(148, 135, 124) 75%, rgb(175, 160, 148) 75%, rgb(175, 160, 148) 100%)" },
-  { name: "Glacier", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(21, 71, 156) 50%, rgb(21, 71, 156) 75%, rgb(168, 204, 232) 75%, rgb(168, 204, 232) 100%)" },
-  { name: "Forest", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(21, 156, 73) 50%, rgb(21, 156, 73) 75%, rgb(168, 232, 186) 75%, rgb(168, 232, 186) 100%)" },
-  { name: "Coral", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(230, 57, 70) 50%, rgb(230, 57, 70) 75%, rgb(232, 190, 168) 75%, rgb(232, 190, 168) 100%)" },
-  { name: "Amethyst", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(97, 57, 230) 50%, rgb(97, 57, 230) 75%, rgb(179, 168, 232) 75%, rgb(179, 168, 232) 100%)" },
-  { name: "Parchment", gradient: "conic-gradient(rgb(239, 235, 229) 0%, rgb(239, 235, 229) 25%, rgb(0, 0, 0) 25%, rgb(0, 0, 0) 50%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%, rgb(225, 184, 117) 75%, rgb(225, 184, 117) 100%)" },
-  { name: "Emerald City", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(31, 81, 76) 25%, rgb(31, 81, 76) 50%, rgb(21, 156, 73) 50%, rgb(21, 156, 73) 75%, rgb(168, 232, 186) 75%, rgb(168, 232, 186) 100%)" },
-  { name: "Navy Pier", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(31, 50, 81) 25%, rgb(31, 50, 81) 50%, rgb(21, 71, 156) 50%, rgb(21, 71, 156) 75%, rgb(168, 204, 232) 75%, rgb(168, 204, 232) 100%)" },
-  { name: "Bordeaux", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(230, 57, 70) 50%, rgb(230, 57, 70) 75%, rgb(232, 190, 168) 75%, rgb(232, 190, 168) 100%)" },
-  { name: "Plum", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(52, 31, 81) 25%, rgb(52, 31, 81) 50%, rgb(97, 57, 230) 50%, rgb(97, 57, 230) 75%, rgb(179, 168, 232) 75%, rgb(179, 168, 232) 100%)" },
-  { name: "Sakura", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(27, 12, 37) 25%, rgb(27, 12, 37) 50%, rgb(255, 147, 228) 50%, rgb(255, 147, 228) 75%, rgb(232, 168, 195) 75%, rgb(232, 168, 195) 100%)" },
-  { name: "Sunset", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(255, 98, 7) 25%, rgb(255, 98, 7) 50%, rgb(255, 206, 147) 50%, rgb(255, 206, 147) 75%, rgb(232, 207, 168) 75%, rgb(232, 207, 168) 100%)" },
-  { name: "Azure", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(7, 152, 255) 25%, rgb(7, 152, 255) 50%, rgb(147, 199, 255) 50%, rgb(147, 199, 255) 75%, rgb(168, 205, 232) 75%, rgb(168, 205, 232) 100%)" },
-  { name: "Peach Blossom", gradient: "conic-gradient(rgb(227, 222, 234) 0%, rgb(227, 222, 234) 25%, rgb(39, 35, 31) 25%, rgb(39, 35, 31) 50%, rgb(198, 138, 98) 50%, rgb(198, 138, 98) 75%, rgb(198, 138, 98) 75%, rgb(198, 138, 98) 100%)" },
-  { name: "Iris", gradient: "conic-gradient(rgb(227, 222, 234) 0%, rgb(227, 222, 234) 25%, rgb(31, 32, 39) 25%, rgb(31, 32, 39) 50%, rgb(98, 125, 198) 50%, rgb(98, 125, 198) 75%, rgb(98, 125, 198) 75%, rgb(98, 125, 198) 100%)" },
-  { name: "Sandstone", gradient: "conic-gradient(rgb(245, 244, 239) 0%, rgb(245, 244, 239) 25%, rgb(42, 41, 40) 25%, rgb(42, 41, 40) 50%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%, rgb(198, 177, 128) 75%, rgb(198, 177, 128) 100%)" },
-  { name: "Slate", gradient: "conic-gradient(rgb(245, 244, 240) 0%, rgb(245, 244, 240) 25%, rgb(44, 44, 44) 25%, rgb(44, 44, 44) 50%, rgb(138, 138, 138) 50%, rgb(138, 138, 138) 75%, rgb(232, 230, 225) 75%, rgb(232, 230, 225) 100%)" },
-  { name: "Botanical", gradient: "conic-gradient(rgb(246, 247, 244) 0%, rgb(246, 247, 244) 25%, rgb(14, 58, 41) 25%, rgb(14, 58, 41) 50%, rgb(53, 193, 139) 50%, rgb(53, 193, 139) 75%, rgb(198, 239, 198) 75%, rgb(198, 239, 198) 100%)" },
-  { name: "Desert", gradient: "conic-gradient(rgb(252, 246, 236) 0%, rgb(252, 246, 236) 25%, rgb(46, 37, 33) 25%, rgb(46, 37, 33) 50%, rgb(178, 162, 139) 50%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 100%)" },
-  { name: "Rosewood", gradient: "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(184, 43, 64) 25%, rgb(184, 43, 64) 50%, rgb(185, 9, 65) 50%, rgb(185, 9, 65) 75%, rgb(232, 168, 182) 75%, rgb(232, 168, 182) 100%)" },
-  { name: "Terra Cotta", gradient: "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(143, 56, 56) 50%, rgb(143, 56, 56) 75%, rgb(201, 114, 92) 75%, rgb(201, 114, 92) 100%)" }
+  {
+    name: "Alexandria",
+    gradient:
+      "conic-gradient(rgb(245, 250, 255) 0%, rgb(245, 250, 255) 25%, rgb(21, 71, 156) 25%, rgb(21, 71, 156) 50%, rgb(168, 204, 232) 50%, rgb(168, 204, 232) 75%, rgb(123, 163, 207) 75%, rgb(123, 163, 207) 100%)",
+  },
+  {
+    name: "Evergreen",
+    gradient:
+      "conic-gradient(rgb(250, 255, 251) 0%, rgb(250, 255, 251) 25%, rgb(10, 112, 95) 25%, rgb(10, 112, 95) 50%, rgb(168, 217, 190) 50%, rgb(168, 217, 190) 75%, rgb(107, 191, 184) 75%, rgb(107, 191, 184) 100%)",
+  },
+  {
+    name: "Crimson",
+    gradient:
+      "conic-gradient(rgb(255, 250, 250) 0%, rgb(255, 250, 250) 25%, rgb(230, 57, 70) 25%, rgb(230, 57, 70) 50%, rgb(245, 196, 199) 50%, rgb(245, 196, 199) 75%, rgb(240, 145, 153) 75%, rgb(240, 145, 153) 100%)",
+  },
+  {
+    name: "Lavender",
+    gradient:
+      "conic-gradient(rgb(251, 250, 255) 0%, rgb(251, 250, 255) 25%, rgb(139, 92, 246) 25%, rgb(139, 92, 246) 50%, rgb(216, 206, 245) 50%, rgb(216, 206, 245) 75%, rgb(196, 168, 249) 75%, rgb(196, 168, 249) 100%)",
+  },
+  {
+    name: "Sahara",
+    gradient:
+      "conic-gradient(rgb(246, 240, 233) 0%, rgb(246, 240, 233) 25%, rgb(43, 24, 10) 25%, rgb(43, 24, 10) 50%, rgb(148, 135, 124) 50%, rgb(148, 135, 124) 75%, rgb(175, 160, 148) 75%, rgb(175, 160, 148) 100%)",
+  },
+  {
+    name: "Glacier",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(21, 71, 156) 50%, rgb(21, 71, 156) 75%, rgb(168, 204, 232) 75%, rgb(168, 204, 232) 100%)",
+  },
+  {
+    name: "Forest",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(21, 156, 73) 50%, rgb(21, 156, 73) 75%, rgb(168, 232, 186) 75%, rgb(168, 232, 186) 100%)",
+  },
+  {
+    name: "Coral",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(230, 57, 70) 50%, rgb(230, 57, 70) 75%, rgb(232, 190, 168) 75%, rgb(232, 190, 168) 100%)",
+  },
+  {
+    name: "Amethyst",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(28, 28, 28) 25%, rgb(28, 28, 28) 50%, rgb(97, 57, 230) 50%, rgb(97, 57, 230) 75%, rgb(179, 168, 232) 75%, rgb(179, 168, 232) 100%)",
+  },
+  {
+    name: "Parchment",
+    gradient:
+      "conic-gradient(rgb(239, 235, 229) 0%, rgb(239, 235, 229) 25%, rgb(0, 0, 0) 25%, rgb(0, 0, 0) 50%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%, rgb(225, 184, 117) 75%, rgb(225, 184, 117) 100%)",
+  },
+  {
+    name: "Emerald City",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(31, 81, 76) 25%, rgb(31, 81, 76) 50%, rgb(21, 156, 73) 50%, rgb(21, 156, 73) 75%, rgb(168, 232, 186) 75%, rgb(168, 232, 186) 100%)",
+  },
+  {
+    name: "Navy Pier",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(31, 50, 81) 25%, rgb(31, 50, 81) 50%, rgb(21, 71, 156) 50%, rgb(21, 71, 156) 75%, rgb(168, 204, 232) 75%, rgb(168, 204, 232) 100%)",
+  },
+  {
+    name: "Bordeaux",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(230, 57, 70) 50%, rgb(230, 57, 70) 75%, rgb(232, 190, 168) 75%, rgb(232, 190, 168) 100%)",
+  },
+  {
+    name: "Plum",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(52, 31, 81) 25%, rgb(52, 31, 81) 50%, rgb(97, 57, 230) 50%, rgb(97, 57, 230) 75%, rgb(179, 168, 232) 75%, rgb(179, 168, 232) 100%)",
+  },
+  {
+    name: "Sakura",
+    gradient:
+      "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(27, 12, 37) 25%, rgb(27, 12, 37) 50%, rgb(255, 147, 228) 50%, rgb(255, 147, 228) 75%, rgb(232, 168, 195) 75%, rgb(232, 168, 195) 100%)",
+  },
+  {
+    name: "Sunset",
+    gradient:
+      "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(255, 98, 7) 25%, rgb(255, 98, 7) 50%, rgb(255, 206, 147) 50%, rgb(255, 206, 147) 75%, rgb(232, 207, 168) 75%, rgb(232, 207, 168) 100%)",
+  },
+  {
+    name: "Azure",
+    gradient:
+      "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(7, 152, 255) 25%, rgb(7, 152, 255) 50%, rgb(147, 199, 255) 50%, rgb(147, 199, 255) 75%, rgb(168, 205, 232) 75%, rgb(168, 205, 232) 100%)",
+  },
+  {
+    name: "Peach Blossom",
+    gradient:
+      "conic-gradient(rgb(227, 222, 234) 0%, rgb(227, 222, 234) 25%, rgb(39, 35, 31) 25%, rgb(39, 35, 31) 50%, rgb(198, 138, 98) 50%, rgb(198, 138, 98) 75%, rgb(198, 138, 98) 75%, rgb(198, 138, 98) 100%)",
+  },
+  {
+    name: "Iris",
+    gradient:
+      "conic-gradient(rgb(227, 222, 234) 0%, rgb(227, 222, 234) 25%, rgb(31, 32, 39) 25%, rgb(31, 32, 39) 50%, rgb(98, 125, 198) 50%, rgb(98, 125, 198) 75%, rgb(98, 125, 198) 75%, rgb(98, 125, 198) 100%)",
+  },
+  {
+    name: "Sandstone",
+    gradient:
+      "conic-gradient(rgb(245, 244, 239) 0%, rgb(245, 244, 239) 25%, rgb(42, 41, 40) 25%, rgb(42, 41, 40) 50%, rgb(255, 255, 255) 50%, rgb(255, 255, 255) 75%, rgb(198, 177, 128) 75%, rgb(198, 177, 128) 100%)",
+  },
+  {
+    name: "Slate",
+    gradient:
+      "conic-gradient(rgb(245, 244, 240) 0%, rgb(245, 244, 240) 25%, rgb(44, 44, 44) 25%, rgb(44, 44, 44) 50%, rgb(138, 138, 138) 50%, rgb(138, 138, 138) 75%, rgb(232, 230, 225) 75%, rgb(232, 230, 225) 100%)",
+  },
+  {
+    name: "Botanical",
+    gradient:
+      "conic-gradient(rgb(246, 247, 244) 0%, rgb(246, 247, 244) 25%, rgb(14, 58, 41) 25%, rgb(14, 58, 41) 50%, rgb(53, 193, 139) 50%, rgb(53, 193, 139) 75%, rgb(198, 239, 198) 75%, rgb(198, 239, 198) 100%)",
+  },
+  {
+    name: "Desert",
+    gradient:
+      "conic-gradient(rgb(252, 246, 236) 0%, rgb(252, 246, 236) 25%, rgb(46, 37, 33) 25%, rgb(46, 37, 33) 50%, rgb(178, 162, 139) 50%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 75%, rgb(178, 162, 139) 100%)",
+  },
+  {
+    name: "Rosewood",
+    gradient:
+      "conic-gradient(rgb(247, 246, 247) 0%, rgb(247, 246, 247) 25%, rgb(184, 43, 64) 25%, rgb(184, 43, 64) 50%, rgb(185, 9, 65) 50%, rgb(185, 9, 65) 75%, rgb(232, 168, 182) 75%, rgb(232, 168, 182) 100%)",
+  },
+  {
+    name: "Terra Cotta",
+    gradient:
+      "conic-gradient(rgb(245, 245, 245) 0%, rgb(245, 245, 245) 25%, rgb(81, 31, 31) 25%, rgb(81, 31, 31) 50%, rgb(143, 56, 56) 50%, rgb(143, 56, 56) 75%, rgb(201, 114, 92) 75%, rgb(201, 114, 92) 100%)",
+  },
 ];
 
 // ─── Hero Section ─────────────────────────────────────────────────────────────
 
 function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
-  const [profileUrl, setProfileUrl] = useState("https://www.linkedin.com/in/reidhoffman");
+  const [profileUrl, setProfileUrl] = useState(
+    "https://www.linkedin.com/in/reidhoffman",
+  );
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
 
   const selectPalette = (name: string) => {
@@ -1963,9 +2189,9 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.08
-      }
-    }
+        staggerChildren: 0.08,
+      },
+    },
   };
 
   const heroItemVariants = {
@@ -1976,9 +2202,9 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
       scale: 1,
       transition: {
         duration: 0.4,
-        ease: [0.23, 1, 0.32, 1] as const
-      }
-    }
+        ease: [0.23, 1, 0.32, 1] as const,
+      },
+    },
   };
 
   const enhancePrompt = () => {
@@ -1987,7 +2213,10 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
       return;
     }
     if (!profileUrl.includes("--theme")) {
-      setProfileUrl(prev => `${prev.trim()} --theme bento --layout modern --accent sky-blue`);
+      setProfileUrl(
+        (prev) =>
+          `${prev.trim()} --theme bento --layout modern --accent sky-blue`,
+      );
       toast.success("Prompt enhanced with theme and layout parameters!");
     } else {
       toast.info("Prompt is already enhanced!");
@@ -2024,8 +2253,20 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
           </span>
           <span className="flex items-center justify-center w-7 h-7   rounded-lg btn-dark-sm flex-shrink-0 active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3.98708 3.98709H9.6837V9.68372"
+                stroke="white"
+                strokeWidth="1.13917"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M3.98708 9.68372L9.6837 3.98709"
+                stroke="white"
+                strokeWidth="1.13917"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </span>
         </motion.div>
@@ -2057,12 +2298,26 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
               <div className="flex items-center gap-3">
                 {/* Add button */}
                 <button
-                  onClick={() => toast.success("Custom content block selector opened!")}
+                  onClick={() =>
+                    toast.success("Custom content block selector opened!")
+                  }
                   className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3.68124 8.83502H13.9887"
+                      stroke="black"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M8.83499 3.68127V13.9888"
+                      stroke="black"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
 
@@ -2082,11 +2337,32 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                   >
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                       <g clipPath="url(#palette-clip)">
-                        <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
-                        <circle cx="7.95378" cy="3.82957" r="0.59" fill="black" />
-                        <circle cx="10.3104" cy="6.18626" r="0.59" fill="black" />
+                        <path
+                          d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z"
+                          stroke="black"
+                          strokeWidth="0.589167"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <circle
+                          cx="7.95378"
+                          cy="3.82957"
+                          r="0.59"
+                          fill="black"
+                        />
+                        <circle
+                          cx="10.3104"
+                          cy="6.18626"
+                          r="0.59"
+                          fill="black"
+                        />
                         <circle cx="3.8296" cy="7.3646" r="0.59" fill="black" />
-                        <circle cx="5.00813" cy="4.41892" r="0.59" fill="black" />
+                        <circle
+                          cx="5.00813"
+                          cy="4.41892"
+                          r="0.59"
+                          fill="black"
+                        />
                       </g>
                       <defs>
                         <clipPath id="palette-clip">
@@ -2102,19 +2378,51 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                         initial={{ opacity: 0, scale: 0.95, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                        transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] as const }}
+                        transition={{
+                          duration: 0.2,
+                          ease: [0.23, 1, 0.32, 1] as const,
+                        }}
                         style={{ originX: 1, originY: 1 }}
                         className="absolute right-0 bottom-full mb-3 z-[9999] bg-white border border-[#E6E6E6]      rounded-lg    shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  p-3 flex flex-col gap-3 min-w-[260px] select-none text-left"
                       >
                         <div className="flex items-center gap-2 px-1 border-b border-[#F3F3F3] pb-2 text-black">
-                          <svg className="h-4 w-4 text-black" fill="none" stroke="currentColor" strokeWidth="2.2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <svg
+                            className="h-4 w-4 text-black"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
                             <path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" />
-                            <circle cx="13.5" cy="6.5" fill="currentColor" r=".5" />
-                            <circle cx="17.5" cy="10.5" fill="currentColor" r=".5" />
-                            <circle cx="6.5" cy="12.5" fill="currentColor" r=".5" />
-                            <circle cx="8.5" cy="7.5" fill="currentColor" r=".5" />
+                            <circle
+                              cx="13.5"
+                              cy="6.5"
+                              fill="currentColor"
+                              r=".5"
+                            />
+                            <circle
+                              cx="17.5"
+                              cy="10.5"
+                              fill="currentColor"
+                              r=".5"
+                            />
+                            <circle
+                              cx="6.5"
+                              cy="12.5"
+                              fill="currentColor"
+                              r=".5"
+                            />
+                            <circle
+                              cx="8.5"
+                              cy="7.5"
+                              fill="currentColor"
+                              r=".5"
+                            />
                           </svg>
-                          <span className="text-sm font-semibold">Color palettes</span>
+                          <span className="text-sm font-semibold">
+                            Color palettes
+                          </span>
                         </div>
 
                         <div className="flex flex-col gap-1 py-1 max-h-52 overflow-y-auto scrollbar-thin text-black">
@@ -2132,7 +2440,9 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                                   height: "22px",
                                 }}
                               />
-                              <span className="font-medium">{palette.name}</span>
+                              <span className="font-medium">
+                                {palette.name}
+                              </span>
                             </button>
                           ))}
                         </div>
@@ -2145,13 +2455,33 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
               <div className="flex items-center gap-3">
                 {/* Mic button */}
                 <button
-                  onClick={() => toast("Listening for profile voice commands...")}
+                  onClick={() =>
+                    toast("Listening for profile voice commands...")
+                  }
                   className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M7.95499 12.5954V14.5837"
+                      stroke="black"
+                      strokeWidth="0.662917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915"
+                      stroke="black"
+                      strokeWidth="0.662917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z"
+                      stroke="black"
+                      strokeWidth="0.662917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
 
@@ -2161,8 +2491,20 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
                   className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#3E3E45] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
                 >
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502"
+                      stroke="white"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M8.83502 13.9888V3.68127"
+                      stroke="white"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -2176,21 +2518,28 @@ function HeroSection({ onGenerate }: { onGenerate: (url: string) => void }) {
 
 // ─── Templates Section ────────────────────────────────────────────────────────
 
-function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: string) => void }) {
+function TemplatesSection({
+  onSelectTemplate,
+}: {
+  onSelectTemplate: (name: string) => void;
+}) {
   const carouselRef = useRef<HTMLDivElement>(null);
 
   const scrollCarousel = (dir: "prev" | "next") => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollBy({ left: dir === "next" ? 520 : -520, behavior: "smooth" });
+    carouselRef.current.scrollBy({
+      left: dir === "next" ? 520 : -520,
+      behavior: "smooth",
+    });
   };
 
   const containerVariants = {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.05
-      }
-    }
+        staggerChildren: 0.05,
+      },
+    },
   };
 
   const itemVariants = {
@@ -2201,13 +2550,16 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
       scale: 1,
       transition: {
         duration: 0.35,
-        ease: [0.23, 1, 0.32, 1] as const
-      }
-    }
+        ease: [0.23, 1, 0.32, 1] as const,
+      },
+    },
   };
 
   return (
-    <section id="templates" className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden border-t border-[#E6E6E6]">
+    <section
+      id="templates"
+      className="py-16 sm:py-20 lg:py-24 bg-white overflow-hidden border-t border-[#E6E6E6]"
+    >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -2246,18 +2598,38 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
                 className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
               >
                 <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
-                  <img src={t.img} alt={t.name} className="w-full h-full object-cover     rounded-lg " />
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    className="w-full h-full object-cover     rounded-lg "
+                  />
                   {/* Bottom gradient overlay inside padding */}
-                  <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
+                  <div
+                    className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)",
+                    }}
+                  />
                   {/* Title */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] p-5 z-10">
-                    <p className="text-white text-[20px] font-normal leading-[26px] font-inter-tight">{t.name}</p>
-                    <p className="text-white/75 text-[14px] leading-[20px] font-inter-tight">{t.subtitle}</p>
+                    <p className="text-white text-[20px] font-normal leading-[26px] font-inter-tight">
+                      {t.name}
+                    </p>
+                    <p className="text-white/75 text-[14px] leading-[20px] font-inter-tight">
+                      {t.subtitle}
+                    </p>
                   </div>
                   {/* Hover overlay */}
                   <div className="template-hover-overlay absolute inset-[11px] flex items-center justify-center     rounded-lg  bg-white/30 backdrop-blur-[1.5px]">
                     <div className="relative">
-                      <div className="absolute -inset-1 opacity-20 blur-[4px]" style={{ background: "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
+                      <div
+                        className="absolute -inset-1 opacity-20 blur-[4px]"
+                        style={{
+                          background:
+                            "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)",
+                        }}
+                      />
                       <div className="relative p-0.5      rounded-lg   overflow-hidden bg-white">
                         <button
                           onClick={() => onSelectTemplate(t.name)}
@@ -2277,7 +2649,12 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden mr-8">
-            <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)" }} />
+            <div
+              className="h-full w-1/4   rounded-lg"
+              style={{
+                background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)",
+              }}
+            />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -2285,7 +2662,13 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
               className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254"
+                  stroke="currentColor"
+                  strokeWidth="1.03417"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
             <button
@@ -2293,7 +2676,13 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
               className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254"
+                  stroke="currentColor"
+                  strokeWidth="1.03417"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
@@ -2309,17 +2698,20 @@ const HOW_IT_WORKS = [
   {
     img: "/process1 (1).png",
     boldText: "Paste your LinkedIn link",
-    restText: " and watch LinkedPage scrape your profile data to instantly render a professional personal page.",
+    restText:
+      " and watch LinkedPage scrape your profile data to instantly render a professional personal page.",
   },
   {
     img: "/process1 (2).png",
     boldText: "Customize inline",
-    restText: " text and images directly on the screen, and pick from multiple clean layout styles like Bento or minimal.",
+    restText:
+      " text and images directly on the screen, and pick from multiple clean layout styles like Bento or minimal.",
   },
   {
     img: "/process1 (3).png",
     boldText: "Publish or export",
-    restText: " instantly to a free subdomain or download the complete source code as a zip file to host anywhere.",
+    restText:
+      " instantly to a free subdomain or download the complete source code as a zip file to host anywhere.",
   },
 ];
 
@@ -2328,9 +2720,9 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.08
-      }
-    }
+        staggerChildren: 0.08,
+      },
+    },
   };
 
   const itemVariants = {
@@ -2341,13 +2733,16 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
       scale: 1,
       transition: {
         duration: 0.4,
-        ease: [0.23, 1, 0.32, 1] as const
-      }
-    }
+        ease: [0.23, 1, 0.32, 1] as const,
+      },
+    },
   };
 
   return (
-    <section id="how-it-works" className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-t border-b border-[#E6E6E6]">
+    <section
+      id="how-it-works"
+      className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-t border-b border-[#E6E6E6]"
+    >
       <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
@@ -2355,10 +2750,7 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
             <SectionLabel>How It Works</SectionLabel>
             <SectionHeading>Get your page in under 60 seconds</SectionHeading>
           </div>
-          <DarkButton
-            onClick={onStartGen}
-            className="self-start sm:self-auto"
-          >
+          <DarkButton onClick={onStartGen} className="self-start sm:self-auto">
             Generate Now
           </DarkButton>
         </div>
@@ -2372,7 +2764,11 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
           className="grid grid-cols-1 md:grid-cols-3 gap-6"
         >
           {HOW_IT_WORKS.map((item, i) => (
-            <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
+            <motion.div
+              variants={itemVariants}
+              key={i}
+              className="flex flex-col gap-4"
+            >
               <div className="     rounded-lg   border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden p-2 transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                 <img
                   src={item.img}
@@ -2381,7 +2777,9 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
                 />
               </div>
               <p className="text-[16px] leading-[24px] text-[#171717]/60 font-inter-tight">
-                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">{item.boldText}</span>
+                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">
+                  {item.boldText}
+                </span>
                 {item.restText}
               </p>
             </motion.div>
@@ -2399,7 +2797,7 @@ const BUSINESS_CARDS = [
   "https://api.builder.io/api/v1/image/assets/TEMP/dd2d088a6043ca3ede653099742f96ac52246893?width=2560",
   "https://api.builder.io/api/v1/image/assets/TEMP/bd350a3668e75fb33844ff3cbe4a31706b2273df?width=2560",
   "https://api.builder.io/api/v1/image/assets/TEMP/f502cc59ba5f4d7f14360e66cb7e6447fb3a3c98?width=2560",
-  "https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&q=80&w=1200" // 4th placeholder card image for Contact tab
+  "https://images.unsplash.com/photo-1557200134-90327ee9fafa?auto=format&fit=crop&q=80&w=1200", // 4th placeholder card image for Contact tab
 ];
 
 function BusinessSection() {
@@ -2414,7 +2812,7 @@ function BusinessSection() {
       if (slide) {
         container.scrollTo({
           left: slide.offsetLeft - 8,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       }
     }
@@ -2423,11 +2821,17 @@ function BusinessSection() {
   const scrollCarousel = (dir: "prev" | "next") => {
     if (!carouselRef.current) return;
     const scrollAmount = carouselRef.current.clientWidth;
-    carouselRef.current.scrollBy({ left: dir === "next" ? scrollAmount : -scrollAmount, behavior: "smooth" });
+    carouselRef.current.scrollBy({
+      left: dir === "next" ? scrollAmount : -scrollAmount,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <section id="showcase" className="py-16 sm:py-20 lg:py-24 bg-white border-b border-[#E6E6E6]">
+    <section
+      id="showcase"
+      className="py-16 sm:py-20 lg:py-24 bg-white border-b border-[#E6E6E6]"
+    >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -2456,7 +2860,11 @@ function BusinessSection() {
                     <motion.div
                       layoutId="active-business-tab"
                       className="absolute inset-0 bg-[#E6FFE6] border border-[#8DFFB3]/40 rounded-[10px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  -z-10"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 30,
+                      }}
                     />
                   )}
                   {tab}
@@ -2473,8 +2881,15 @@ function BusinessSection() {
             className="flex gap-6 overflow-x-auto scrollbar-hide      rounded-lg   border border-[#E6E6E6] p-2 bg-[#FBFBFB]"
           >
             {BUSINESS_CARDS.map((src, i) => (
-              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.005] will-change-transform">
-                <img src={src} alt={`Business card ${i + 1}`} className="w-full h-auto     rounded-lg  object-cover" />
+              <div
+                key={i}
+                className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.005] will-change-transform"
+              >
+                <img
+                  src={src}
+                  alt={`Business card ${i + 1}`}
+                  className="w-full h-auto     rounded-lg  object-cover"
+                />
               </div>
             ))}
           </div>
@@ -2484,7 +2899,13 @@ function BusinessSection() {
             className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254"
+                stroke="currentColor"
+                strokeWidth="1.03417"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
           <button
@@ -2492,7 +2913,13 @@ function BusinessSection() {
             className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254"
+                stroke="currentColor"
+                strokeWidth="1.03417"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
         </div>
@@ -2519,9 +2946,9 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -2532,13 +2959,16 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
       scale: 1,
       transition: {
         duration: 0.4,
-        ease: [0.23, 1, 0.32, 1] as const
-      }
-    }
+        ease: [0.23, 1, 0.32, 1] as const,
+      },
+    },
   };
 
   return (
-    <section id="features" className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-b border-[#E6E6E6]">
+    <section
+      id="features"
+      className="py-16 sm:py-20 lg:py-24 bg-[#F7F7F7] border-b border-[#E6E6E6]"
+    >
       <div className="max-w-[1536px] mx-auto px-6 sm:px-8 lg:px-20">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 mb-12">
@@ -2563,7 +2993,11 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
           {FEATURES.map((f, i) => (
-            <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
+            <motion.div
+              variants={itemVariants}
+              key={i}
+              className="flex flex-col gap-4"
+            >
               <div className="     rounded-lg   border border-[#E6E6E6] bg-white p-2 overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
                 <img
                   src={f.img}
@@ -2571,7 +3005,9 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
                   className="w-full     rounded-lg  object-cover aspect-[13/8]"
                 />
               </div>
-              <p className="text-[#171717] text-[16px] sm:text-[18px] leading-[27px] font-normal font-inter-tight">{f.text}</p>
+              <p className="text-[#171717] text-[16px] sm:text-[18px] leading-[27px] font-normal font-inter-tight">
+                {f.text}
+              </p>
             </motion.div>
           ))}
         </motion.div>
@@ -2609,7 +3045,9 @@ function FAQSection() {
         {/* Header */}
         <div className="flex flex-col items-center gap-3 text-center mb-12">
           <SectionLabel>Frequently Asked Questions</SectionLabel>
-          <SectionHeading>Still have questions about LinkedPage?</SectionHeading>
+          <SectionHeading>
+            Still have questions about LinkedPage?
+          </SectionHeading>
         </div>
 
         {/* FAQ items */}
@@ -2617,7 +3055,10 @@ function FAQSection() {
           {FAQ_ITEMS.map((question, i) => {
             const isOpen = openIdx === i;
             return (
-              <div key={i} className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden font-inter">
+              <div
+                key={i}
+                className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden font-inter"
+              >
                 <button
                   className="w-full flex items-center justify-between px-6 py-5 text-left"
                   onClick={() => toggle(i)}
@@ -2631,7 +3072,13 @@ function FAQSection() {
                     className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] "
                   >
                     <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                      <path d="M2.94586 7.5H11.1945" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
+                      <path
+                        d="M2.94586 7.5H11.1945"
+                        stroke="currentColor"
+                        strokeWidth="1.17833"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                       <path
                         d="M7.07001 3.375V11.625"
                         stroke="currentColor"
@@ -2640,9 +3087,10 @@ function FAQSection() {
                         strokeLinejoin="round"
                         style={{
                           transformOrigin: "center",
-                          transition: "transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease",
+                          transition:
+                            "transform 0.2s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.2s ease",
                           transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                          opacity: isOpen ? 0 : 1
+                          opacity: isOpen ? 0 : 1,
                         }}
                       />
                     </svg>
@@ -2703,7 +3151,9 @@ export default function Index() {
       return;
     }
     if (!raw.includes("linkedin.com/in/")) {
-      toast.error("Please paste a valid LinkedIn profile URL (linkedin.com/in/…)");
+      toast.error(
+        "Please paste a valid LinkedIn profile URL (linkedin.com/in/…)",
+      );
       return;
     }
     router.push(`/onboarding?url=${encodeURIComponent(raw)}`);
@@ -2732,7 +3182,6 @@ export default function Index() {
 
   return (
     <div className="min-h-screen font-inter bg-[#FBFBFB] text-black antialiased relative overflow-x-hidden">
-      
       {/* ── Original Floating Navbar ── */}
       <Navbar />
 
@@ -2743,7 +3192,17 @@ export default function Index() {
           className="fixed left-5 top-28 z-40 w-10 h-10 rounded-full bg-white border border-[#E6E6E6] hover:bg-[#F7F7F7] active:scale-95 flex items-center justify-center shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-all"
           title="Open Sidebar"
         >
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+          <svg
+            viewBox="0 0 24 24"
+            width="18"
+            height="18"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-black"
+          >
             <polyline points="9 18 15 12 9 6" />
           </svg>
         </button>
@@ -2770,32 +3229,49 @@ export default function Index() {
               transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
               className="fixed left-5 top-28 bottom-5 w-[260px] border border-[#E6E6E6] bg-white/95 backdrop-blur-md px-6 py-6 flex flex-col justify-between z-50 select-none rounded-[16px] shadow-[0_12px_32px_rgba(0,0,0,0.12)]"
             >
-              
               {/* Top navigation items */}
               <div className="flex flex-col gap-6">
-                
                 {/* Header with Close button */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-black/40 uppercase tracking-wider">Navigation</span>
-                  <button 
+                  <span className="text-xs font-bold text-black/40 uppercase tracking-wider">
+                    Navigation
+                  </span>
+                  <button
                     onClick={() => setIsSidebarOpen(false)}
                     className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-black/5 text-[#171717]/60 hover:text-black transition-colors"
                   >
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                    >
                       <path d="M18 6 6 18M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
 
                 {/* New Website Button */}
-                <button 
+                <button
                   onClick={() => {
                     setIsSidebarOpen(false);
                     router.push("/onboarding");
                   }}
                   className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
                 >
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-black"
+                  >
                     <rect width="18" height="18" x="3" y="3" rx="2" />
                     <path d="M9 12h6M12 9v6" />
                   </svg>
@@ -2804,7 +3280,7 @@ export default function Index() {
 
                 {/* Menu Items (Home Active) */}
                 <div className="flex flex-col gap-1.5">
-                  <button 
+                  <button
                     className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all text-left"
                     style={{ boxShadow: "0 6px 10px -6px #00000016" }}
                   >
@@ -2812,7 +3288,7 @@ export default function Index() {
                     Home
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/editor");
@@ -2823,7 +3299,7 @@ export default function Index() {
                     Templates
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/dashboard");
@@ -2837,9 +3313,11 @@ export default function Index() {
 
                 {/* Recent Websites Section */}
                 <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
-                  <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
-                  
-                  <div 
+                  <span className="text-[12px] font-semibold text-[#88888E] px-3">
+                    Recent websites
+                  </span>
+
+                  <div
                     onClick={() => {
                       setIsSidebarOpen(false);
                       router.push("/dashboard");
@@ -2849,18 +3327,18 @@ export default function Index() {
                     <div className="w-6 h-6 rounded-full bg-[#F3F3F5] flex items-center justify-center text-[11px] font-bold text-black border border-[#E6E6E6]">
                       c
                     </div>
-                    <span className="text-[13px] font-semibold text-[#171717] truncate">{brandName}</span>
+                    <span className="text-[13px] font-semibold text-[#171717] truncate">
+                      {brandName}
+                    </span>
                   </div>
                 </div>
-
               </div>
 
               {/* Bottom navigation & pricing items */}
               <div className="flex flex-col gap-6">
-                
                 {/* Pricing, Documentation, Settings */}
                 <div className="flex flex-col gap-1">
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       toast.info("Pricing modal coming soon!");
@@ -2871,7 +3349,7 @@ export default function Index() {
                     Pricing
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       toast.info("Documentation coming soon!");
@@ -2882,7 +3360,7 @@ export default function Index() {
                     Documentation
                   </button>
 
-                  <button 
+                  <button
                     onClick={() => {
                       setIsSidebarOpen(false);
                       toast.info("Settings panel coming soon!");
@@ -2893,9 +3371,7 @@ export default function Index() {
                     Settings
                   </button>
                 </div>
-
               </div>
-
             </motion.aside>
           </>
         )}
@@ -2916,18 +3392,21 @@ export default function Index() {
       {/* Scraped Site Live Preview Overlay Modal */}
       <AnimatePresence>
         {showPreview && (
-          <PreviewModal isOpen={showPreview} onClose={() => setShowPreview(false)} />
+          <PreviewModal
+            isOpen={showPreview}
+            onClose={() => setShowPreview(false)}
+          />
         )}
       </AnimatePresence>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\api\auth\me\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -2949,28 +3428,29 @@ export async function GET() {
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Session check failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Session check failed" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\auth\[...all]\route.ts`
+
 ```typescript
 import { auth } from "@/lib/auth";
 import { toNextJsHandler } from "better-auth/next-js";
 
 export const { GET, POST } = toNextJsHandler(auth);
-
-
-
 ```
 
 ---
 
 ## File: `app\api\chat\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -2988,7 +3468,10 @@ export async function POST(request: Request) {
     const { message, websiteId } = body;
 
     if (!message || !websiteId) {
-      return NextResponse.json({ error: "Message and websiteId are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Message and websiteId are required" },
+        { status: 400 },
+      );
     }
 
     const website = await getWebsiteById(websiteId);
@@ -3001,7 +3484,8 @@ export async function POST(request: Request) {
     }
 
     const lower = message.toLowerCase();
-    let reply = "I've applied that instruction. Let me know if you want any other edits!";
+    let reply =
+      "I've applied that instruction. Let me know if you want any other edits!";
     const profileUpdates: any = {};
     let templateUpdate: string | undefined = undefined;
 
@@ -3027,17 +3511,26 @@ export async function POST(request: Request) {
         profileUpdates.name = nextName;
         reply = `Updated your portfolio name to "${nextName}".`;
       }
-    } else if (lower.includes("headline is") || lower.includes("change headline to")) {
+    } else if (
+      lower.includes("headline is") ||
+      lower.includes("change headline to")
+    ) {
       const match = message.match(/(?:headline is|headline to)\s+([^.]+)/i);
       if (match && match[1]) {
         const nextHeadline = match[1].trim();
         profileUpdates.headline = nextHeadline;
         reply = `Updated your headline tag to "${nextHeadline}".`;
       }
-    } else if (lower.includes("bio") || lower.includes("summary") || lower.includes("about description")) {
-      reply = "Switched you to the Edit profile tab. You can directly edit your bio details there or type what changes you want.";
+    } else if (
+      lower.includes("bio") ||
+      lower.includes("summary") ||
+      lower.includes("about description")
+    ) {
+      reply =
+        "Switched you to the Edit profile tab. You can directly edit your bio details there or type what changes you want.";
     } else if (lower.includes("social links") || lower.includes("add link")) {
-      reply = "Switched you to the Edit profile tab under the Links sub-section so you can add or remove custom URLs.";
+      reply =
+        "Switched you to the Edit profile tab under the Links sub-section so you can add or remove custom URLs.";
     }
 
     // Save updates in DB if matched
@@ -3060,15 +3553,18 @@ export async function POST(request: Request) {
       profileUpdates,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to process chat query" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to process chat query" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\demo\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { DemoResponse } from "../../../shared/api";
@@ -3079,17 +3575,20 @@ export async function GET() {
   };
   return NextResponse.json(response);
 }
-
 ```
 
 ---
 
 ## File: `app\api\p\[slug]\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getWebsiteBySubdomain, getWebsiteByDomain } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> },
+) {
   try {
     const { slug } = await params;
     let website = await getWebsiteBySubdomain(slug);
@@ -3100,7 +3599,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
     }
 
     if (!website || !website.isPublished) {
-      return NextResponse.json({ error: "Published page not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Published page not found" },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json({
@@ -3109,15 +3611,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ slug
       template: website.publishedTemplate || website.templateId,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to load page content" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to load page content" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\ping\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 
@@ -3125,12 +3630,12 @@ export async function GET() {
   const ping = process.env.PING_MESSAGE ?? "ping";
   return NextResponse.json({ message: ping });
 }
-
 ```
 
 ---
 
 ## File: `app\api\scrape\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -3144,16 +3649,23 @@ const execAsync = promisify(exec);
 
 async function runScrapyScraper(url: string): Promise<any> {
   const pythonPath = "python";
-  const scriptPath = path.join(process.cwd(), "linkedin_scraper", "run_spider.py");
-  
-  const { stdout, stderr } = await execAsync(`"${pythonPath}" "${scriptPath}" "${url}"`, {
-    timeout: 30000,
-  });
-  
+  const scriptPath = path.join(
+    process.cwd(),
+    "linkedin_scraper",
+    "run_spider.py",
+  );
+
+  const { stdout, stderr } = await execAsync(
+    `"${pythonPath}" "${scriptPath}" "${url}"`,
+    {
+      timeout: 30000,
+    },
+  );
+
   if (stderr && stderr.includes("Error")) {
     console.warn("[Scrapy Warning/Error]:", stderr);
   }
-  
+
   const lines = stdout.split("\n");
   for (const line of lines) {
     const trimmed = line.trim();
@@ -3168,7 +3680,9 @@ async function runScrapyScraper(url: string): Promise<any> {
   throw new Error("Scrapy failed to output valid profile JSON data");
 }
 
-async function scrapeLinkedInProfileWithFallback(url: string): Promise<ProfileData> {
+async function scrapeLinkedInProfileWithFallback(
+  url: string,
+): Promise<ProfileData> {
   console.log(`[Scrape] Attempting Python Scrapy scraper for: ${url}`);
   try {
     const scrapyData = await runScrapyScraper(url);
@@ -3177,11 +3691,21 @@ async function scrapeLinkedInProfileWithFallback(url: string): Promise<ProfileDa
       ...MOCK_PROFILE,
       name: scrapyData.name || "John Doe",
       headline: scrapyData.headline || "Professional expert",
-      summary: scrapyData.summary || `I'm ${scrapyData.name}. Passionate about building products, driving impact, and solving complex challenges.`,
+      summary:
+        scrapyData.summary ||
+        `I'm ${scrapyData.name}. Passionate about building products, driving impact, and solving complex challenges.`,
       location: scrapyData.location || "San Francisco, CA",
-      avatarUrl: scrapyData.avatarUrl || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
-      experience: scrapyData.experience && scrapyData.experience.length > 0 ? scrapyData.experience : MOCK_PROFILE.experience,
-      education: scrapyData.education && scrapyData.education.length > 0 ? scrapyData.education : MOCK_PROFILE.education,
+      avatarUrl:
+        scrapyData.avatarUrl ||
+        `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
+      experience:
+        scrapyData.experience && scrapyData.experience.length > 0
+          ? scrapyData.experience
+          : MOCK_PROFILE.experience,
+      education:
+        scrapyData.education && scrapyData.education.length > 0
+          ? scrapyData.education
+          : MOCK_PROFILE.education,
       linkedinUrl: url,
       links: [
         { label: "LinkedIn", url, icon: "linkedin" },
@@ -3189,16 +3713,18 @@ async function scrapeLinkedInProfileWithFallback(url: string): Promise<ProfileDa
       ],
     };
   } catch (err: any) {
-    console.warn(`[Scrape] Scrapy scraper failed: ${err.message}. Falling back to Playwright...`);
+    console.warn(
+      `[Scrape] Scrapy scraper failed: ${err.message}. Falling back to Playwright...`,
+    );
     return scrapeLinkedInProfile(url);
   }
 }
 
-
 async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
-    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    userAgent:
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     viewport: { width: 1280, height: 800 },
     locale: "en-US",
   });
@@ -3213,35 +3739,87 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30000 });
 
     const currentUrl = page.url();
-    if (currentUrl.includes("linkedin.com/login") || currentUrl.includes("linkedin.com/signup") || currentUrl.includes("authwall")) {
+    if (
+      currentUrl.includes("linkedin.com/login") ||
+      currentUrl.includes("linkedin.com/signup") ||
+      currentUrl.includes("authwall")
+    ) {
       throw new Error(
-        "LinkedIn security check (authwall/login) blocked public access. Please request a Member Data ZIP export from LinkedIn and upload it below."
+        "LinkedIn security check (authwall/login) blocked public access. Please request a Member Data ZIP export from LinkedIn and upload it below.",
       );
     }
 
     // Verify page title / layout exists
-    await page.waitForSelector(".top-card-layout__title, h1", { timeout: 8000 }).catch(() => {
-      throw new Error("LinkedIn security challenges or loading timeouts blocked access. Please use the manual ZIP import option.");
-    });
+    await page
+      .waitForSelector(".top-card-layout__title, h1", { timeout: 8000 })
+      .catch(() => {
+        throw new Error(
+          "LinkedIn security challenges or loading timeouts blocked access. Please use the manual ZIP import option.",
+        );
+      });
 
     // Extract fields
-    const name = await page.$eval(".top-card-layout__title", (el) => el.textContent?.trim() || "John Doe").catch(() => "John Doe");
-    const headline = await page.$eval(".top-card-layout__headline", (el) => el.textContent?.trim() || "Professional expert").catch(() => "Professional expert");
-    const location = await page.$eval(".top-card-layout__first-subline, .top-card__subline-item", (el) => el.textContent?.trim() || "San Francisco, CA").catch(() => "San Francisco, CA");
-    const summary = await page.$eval(".summary__text", (el) => el.textContent?.trim() || "").catch(() => "");
+    const name = await page
+      .$eval(
+        ".top-card-layout__title",
+        (el) => el.textContent?.trim() || "John Doe",
+      )
+      .catch(() => "John Doe");
+    const headline = await page
+      .$eval(
+        ".top-card-layout__headline",
+        (el) => el.textContent?.trim() || "Professional expert",
+      )
+      .catch(() => "Professional expert");
+    const location = await page
+      .$eval(
+        ".top-card-layout__first-subline, .top-card__subline-item",
+        (el) => el.textContent?.trim() || "San Francisco, CA",
+      )
+      .catch(() => "San Francisco, CA");
+    const summary = await page
+      .$eval(".summary__text", (el) => el.textContent?.trim() || "")
+      .catch(() => "");
 
-    const avatarUrl = await page.$eval(".top-card-layout__entity-image-container img", (el) => (el as HTMLImageElement).src).catch(() => {
-      return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=8db8ff,8dffb3,2a2a2f`;
-    });
+    const avatarUrl = await page
+      .$eval(
+        ".top-card-layout__entity-image-container img",
+        (el) => (el as HTMLImageElement).src,
+      )
+      .catch(() => {
+        return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=8db8ff,8dffb3,2a2a2f`;
+      });
 
     // Parse experience
     const experience: any[] = [];
-    const experienceElements = await page.$$("li.experience-item, .experience-item");
+    const experienceElements = await page.$$(
+      "li.experience-item, .experience-item",
+    );
     for (const el of experienceElements) {
-      const title = await el.$eval(".experience-item__title, h3", (sub) => sub.textContent?.trim() || "").catch(() => "Role");
-      const company = await el.$eval(".experience-item__subtitle, h4", (sub) => sub.textContent?.trim() || "").catch(() => "Company");
-      const duration = await el.$eval(".experience-item__duration, .experience-item__meta-item", (sub) => sub.textContent?.trim() || "").catch(() => "");
-      const description = await el.$eval(".experience-item__description", (sub) => sub.textContent?.trim() || "").catch(() => "");
+      const title = await el
+        .$eval(
+          ".experience-item__title, h3",
+          (sub) => sub.textContent?.trim() || "",
+        )
+        .catch(() => "Role");
+      const company = await el
+        .$eval(
+          ".experience-item__subtitle, h4",
+          (sub) => sub.textContent?.trim() || "",
+        )
+        .catch(() => "Company");
+      const duration = await el
+        .$eval(
+          ".experience-item__duration, .experience-item__meta-item",
+          (sub) => sub.textContent?.trim() || "",
+        )
+        .catch(() => "");
+      const description = await el
+        .$eval(
+          ".experience-item__description",
+          (sub) => sub.textContent?.trim() || "",
+        )
+        .catch(() => "");
 
       experience.push({
         title,
@@ -3256,9 +3834,21 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
     const education: any[] = [];
     const educationElements = await page.$$("li.education__list-item");
     for (const el of educationElements) {
-      const school = await el.$eval(".education__school-name", (sub) => sub.textContent?.trim() || "").catch(() => "");
-      const degree = await el.$eval(".education__degree-name", (sub) => sub.textContent?.trim() || "").catch(() => "");
-      const duration = await el.$eval(".education__duration", (sub) => sub.textContent?.trim() || "").catch(() => "");
+      const school = await el
+        .$eval(
+          ".education__school-name",
+          (sub) => sub.textContent?.trim() || "",
+        )
+        .catch(() => "");
+      const degree = await el
+        .$eval(
+          ".education__degree-name",
+          (sub) => sub.textContent?.trim() || "",
+        )
+        .catch(() => "");
+      const duration = await el
+        .$eval(".education__duration", (sub) => sub.textContent?.trim() || "")
+        .catch(() => "");
 
       if (school) {
         education.push({
@@ -3275,7 +3865,9 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
       ...MOCK_PROFILE,
       name,
       headline,
-      summary: summary || `I'm ${name}. Passionate about building products, driving impact, and solving complex challenges.`,
+      summary:
+        summary ||
+        `I'm ${name}. Passionate about building products, driving impact, and solving complex challenges.`,
       location,
       avatarUrl,
       experience: experience.length > 0 ? experience : MOCK_PROFILE.experience,
@@ -3303,14 +3895,20 @@ export async function POST(request: Request) {
     const { url } = body;
 
     if (!url) {
-      return NextResponse.json({ error: "LinkedIn URL is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "LinkedIn URL is required" },
+        { status: 400 },
+      );
     }
 
     // Keep simulated failure for developer testing path
     if (url.toLowerCase().includes("fail")) {
       return NextResponse.json(
-        { error: "LinkedIn privacy settings are blocking direct public data access." },
-        { status: 403 }
+        {
+          error:
+            "LinkedIn privacy settings are blocking direct public data access.",
+        },
+        { status: 403 },
       );
     }
 
@@ -3323,16 +3921,16 @@ export async function POST(request: Request) {
   } catch (e: any) {
     return NextResponse.json(
       { error: e.message || "Failed to scrape LinkedIn profile details." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\scrape\manual\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import AdmZip from "adm-zip";
@@ -3350,10 +3948,10 @@ function parseCSV(csvText: string): Record<string, string>[] {
     if (char === '"') {
       insideQuotes = !insideQuotes;
       currentLine += char;
-    } else if (char === '\n' && !insideQuotes) {
+    } else if (char === "\n" && !insideQuotes) {
       lines.push(currentLine);
       currentLine = "";
-    } else if (char === '\r') {
+    } else if (char === "\r") {
       // ignore
     } else {
       currentLine += char;
@@ -3373,7 +3971,7 @@ function parseCSV(csvText: string): Record<string, string>[] {
       const char = line[i];
       if (char === '"') {
         inQuotes = !inQuotes;
-      } else if (char === ',' && !inQuotes) {
+      } else if (char === "," && !inQuotes) {
         cells.push(currentCell.trim().replace(/^"|"$/g, "").trim());
         currentCell = "";
       } else {
@@ -3411,7 +4009,10 @@ export async function POST(request: Request) {
     const file = formData.get("file") as File | null;
 
     if (!file) {
-      return NextResponse.json({ error: "ZIP file is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "ZIP file is required" },
+        { status: 400 },
+      );
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -3419,7 +4020,10 @@ export async function POST(request: Request) {
     try {
       zip = new AdmZip(buffer);
     } catch {
-      return NextResponse.json({ error: "Invalid ZIP file format" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid ZIP file format" },
+        { status: 400 },
+      );
     }
 
     const entries = zip.getEntries();
@@ -3438,7 +4042,7 @@ export async function POST(request: Request) {
     if (!profileContent) {
       return NextResponse.json(
         { error: "Could not find Profile.csv inside the ZIP archive." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -3447,7 +4051,10 @@ export async function POST(request: Request) {
     const positions = positionsContent ? parseCSV(positionsContent) : [];
 
     if (profiles.length === 0) {
-      return NextResponse.json({ error: "Profile.csv is empty" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Profile.csv is empty" },
+        { status: 400 },
+      );
     }
 
     const pRow = profiles[0];
@@ -3455,7 +4062,8 @@ export async function POST(request: Request) {
     const lastName = pRow["Last Name"] || user.lastName;
     const fullName = `${firstName} ${lastName}`;
     const headline = pRow["Headline"] || "Professional Expert";
-    const summary = pRow["Summary"] || `I'm ${fullName}. Welcome to my micro-site.`;
+    const summary =
+      pRow["Summary"] || `I'm ${fullName}. Welcome to my micro-site.`;
     const location = pRow["Address"] || "San Francisco, CA";
 
     // Map experience
@@ -3490,16 +4098,16 @@ export async function POST(request: Request) {
   } catch (e: any) {
     return NextResponse.json(
       { error: e.message || "Failed to process the LinkedIn ZIP data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -3516,7 +4124,10 @@ export async function GET() {
     const websites = await getUserWebsites(user.id);
     return NextResponse.json({ success: true, websites });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch websites" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to fetch websites" },
+      { status: 500 },
+    );
   }
 }
 
@@ -3540,15 +4151,18 @@ export async function POST(request: Request) {
     const website = await createWebsite(user.id, templateId);
     return NextResponse.json({ success: true, website });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to create website draft" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to create website draft" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\resolve-host\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getWebsiteByDomain, getWebsiteBySubdomain } from "@/lib/db";
@@ -3584,12 +4198,12 @@ export async function GET(request: Request) {
     return NextResponse.json({ slug: null });
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\subdomain\check\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -3607,7 +4221,10 @@ export async function GET(request: Request) {
     const websiteId = searchParams.get("websiteId");
 
     if (!slug) {
-      return NextResponse.json({ error: "Subdomain slug is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Subdomain slug is required" },
+        { status: 400 },
+      );
     }
 
     if (!/^[a-z0-9-]{3,30}$/.test(slug)) {
@@ -3619,21 +4236,27 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ success: true, available: isAvailable });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Subdomain verification failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Subdomain verification failed" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, deleteWebsite } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -3652,11 +4275,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true, website });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch website detail" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to fetch website detail" },
+      { status: 500 },
+    );
   }
 }
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -3686,11 +4315,17 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     const updatedWebsite = await updateWebsite(id, updates);
     return NextResponse.json({ success: true, website: updatedWebsite });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to save website updates" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to save website updates" },
+      { status: 500 },
+    );
   }
 }
 
-export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -3708,23 +4343,32 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     }
 
     await deleteWebsite(id);
-    return NextResponse.json({ success: true, message: "Website deleted successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Website deleted successfully",
+    });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to delete website" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to delete website" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\domains\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getWebsiteByDomain } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -3743,11 +4387,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true, domains: website.customDomains });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch domains" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to fetch domains" },
+      { status: 500 },
+    );
   }
 }
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -3768,17 +4418,26 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const domain = body.domain?.toLowerCase().trim();
 
     if (!domain) {
-      return NextResponse.json({ error: "Domain name is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Domain name is required" },
+        { status: 400 },
+      );
     }
 
     if (!domain.includes(".")) {
-      return NextResponse.json({ error: "Please enter a valid domain name (e.g. realitycheque.com)" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Please enter a valid domain name (e.g. realitycheque.com)" },
+        { status: 400 },
+      );
     }
 
     // Check if the domain is connected to any website
     const existing = await getWebsiteByDomain(domain);
     if (existing) {
-      return NextResponse.json({ error: "Domain is already connected to another site" }, { status: 409 });
+      return NextResponse.json(
+        { error: "Domain is already connected to another site" },
+        { status: 409 },
+      );
     }
 
     const newDomain = {
@@ -3792,15 +4451,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     return NextResponse.json({ success: true, domain: newDomain });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to connect domain" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to connect domain" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\domains\[domainId]\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -3808,7 +4470,7 @@ import { getWebsiteById, updateWebsite } from "@/lib/db";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ id: string; domainId: string }> }
+  { params }: { params: Promise<{ id: string; domainId: string }> },
 ) {
   try {
     const user = await getAuthenticatedUser();
@@ -3828,21 +4490,30 @@ export async function DELETE(
 
     const nextDomains = website.customDomains.filter((d) => d.id !== domainId);
     if (nextDomains.length === website.customDomains.length) {
-      return NextResponse.json({ error: "Domain connection not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Domain connection not found" },
+        { status: 404 },
+      );
     }
 
     await updateWebsite(id, { customDomains: nextDomains });
-    return NextResponse.json({ success: true, message: "Domain disconnected successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Domain disconnected successfully",
+    });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to disconnect domain" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to disconnect domain" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\domains\[domainId]\verify\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -3854,7 +4525,7 @@ const resolveA = promisify(dns.resolve4);
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ id: string; domainId: string }> }
+  { params }: { params: Promise<{ id: string; domainId: string }> },
 ) {
   try {
     const user = await getAuthenticatedUser();
@@ -3872,9 +4543,14 @@ export async function POST(
       return NextResponse.json({ error: "Access denied" }, { status: 403 });
     }
 
-    const domainIndex = website.customDomains.findIndex((d) => d.id === domainId);
+    const domainIndex = website.customDomains.findIndex(
+      (d) => d.id === domainId,
+    );
     if (domainIndex === -1) {
-      return NextResponse.json({ error: "Domain connection not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Domain connection not found" },
+        { status: 404 },
+      );
     }
 
     const domain = website.customDomains[domainIndex];
@@ -3903,15 +4579,18 @@ export async function POST(
 
     return NextResponse.json({ success: true, verified });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Domain verification failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Domain verification failed" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\export\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import AdmZip from "adm-zip";
@@ -3919,7 +4598,10 @@ import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById } from "@/lib/db";
 import { compileStaticHtml } from "@/lib/compiler";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -3969,21 +4651,27 @@ You can upload this \`index.html\` file directly to any static web hosting provi
       },
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to generate zip export" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to generate zip export" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\publish\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getWebsiteBySubdomain } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -4013,7 +4701,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       const cleanSlug = slug.toLowerCase().trim();
       const existing = await getWebsiteBySubdomain(cleanSlug);
       if (existing && existing.id !== id) {
-        return NextResponse.json({ error: "Subdomain is already in use by another website" }, { status: 409 });
+        return NextResponse.json(
+          { error: "Subdomain is already in use by another website" },
+          { status: 409 },
+        );
       }
       updates.subdomainSlug = cleanSlug;
     }
@@ -4029,21 +4720,27 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       slug: updated.subdomainSlug,
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to publish page" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to publish page" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\api\websites\[id]\unpublish\route.ts`
+
 ```typescript
 import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -4073,15 +4770,18 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       message: "Website unpublished successfully",
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to unpublish website" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to unpublish website" },
+      { status: 500 },
+    );
   }
 }
-
 ```
 
 ---
 
 ## File: `app\convert\page.tsx`
+
 ```tsx
 "use client";
 
@@ -4162,20 +4862,32 @@ function ConvertInner() {
               <AlertCircle className="w-7 h-7 text-[#E45A5A]" />
             </div>
             <div className="flex flex-col gap-2">
-              <h1 className="text-2xl font-medium text-black">Couldn't fetch that profile</h1>
-              <p className="text-sm text-[#6B6B6B] leading-relaxed">{scrapeError}</p>
+              <h1 className="text-2xl font-medium text-black">
+                Couldn't fetch that profile
+              </h1>
+              <p className="text-sm text-[#6B6B6B] leading-relaxed">
+                {scrapeError}
+              </p>
             </div>
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full">
-              <button onClick={() => router.push("/")} className="button button-secondary flex-1 gap-2">
+              <button
+                onClick={() => router.push("/")}
+                className="button button-secondary flex-1 gap-2"
+              >
                 <ArrowLeft className="w-5 h-5" />
                 Change URL
               </button>
-              <button onClick={handleRetry} className="button button-primary flex-1 gap-2">
+              <button
+                onClick={handleRetry}
+                className="button button-primary flex-1 gap-2"
+              >
                 <RefreshCw className="w-5 h-5" />
                 Try again
               </button>
             </div>
-            <p className="text-xs text-[#9CA3AF]">Make sure the LinkedIn URL is public and accessible</p>
+            <p className="text-xs text-[#9CA3AF]">
+              Make sure the LinkedIn URL is public and accessible
+            </p>
           </motion.div>
         )}
 
@@ -4193,7 +4905,11 @@ function ConvertInner() {
               <motion.div
                 className="absolute inset-0   rounded-lg border-4 border-[#E6E6E6] border-t-[#8DB8FF]"
                 animate={{ rotate: isDone ? 0 : 360 }}
-                transition={{ repeat: isDone ? 0 : Infinity, duration: 1.1, ease: "linear" }}
+                transition={{
+                  repeat: isDone ? 0 : Infinity,
+                  duration: 1.1,
+                  ease: "linear",
+                }}
               />
               <div className="absolute inset-[10px]   rounded-lg bg-[#0A66C2] flex items-center justify-center">
                 <svg viewBox="0 0 24 24" className="w-7 h-7 fill-white">
@@ -4208,7 +4924,13 @@ function ConvertInner() {
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     className="absolute inset-0   rounded-lg bg-[#8DFFB3] flex items-center justify-center"
                   >
-                    <svg viewBox="0 0 24 24" className="w-9 h-9 stroke-[#1a5c3a] fill-none" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-9 h-9 stroke-[#1a5c3a] fill-none"
+                      strokeWidth={2.5}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
                       <path d="M5 13l4 4L19 7" />
                     </svg>
                   </motion.div>
@@ -4246,7 +4968,9 @@ function ConvertInner() {
             {urlParam && (
               <div className="flex items-center gap-2 px-3 py-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB] max-w-full overflow-hidden">
                 <div className="w-2 h-2   rounded-lg bg-[#8DFFB3] flex-shrink-0 animate-pulse" />
-                <p className="text-xs text-[#171717] truncate font-medium">{urlParam}</p>
+                <p className="text-xs text-[#171717] truncate font-medium">
+                  {urlParam}
+                </p>
               </div>
             )}
 
@@ -4269,22 +4993,24 @@ export default function ConvertPage() {
   return (
     <div className="min-h-screen bg-white font-inter flex flex-col">
       <Navbar />
-      <Suspense fallback={
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-5 h-5   rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
-        </main>
-      }>
+      <Suspense
+        fallback={
+          <main className="flex-1 flex items-center justify-center">
+            <div className="w-5 h-5   rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          </main>
+        }
+      >
         <ConvertInner />
       </Suspense>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\dashboard\page.tsx`
+
 ```tsx
 "use client";
 
@@ -4301,7 +5027,7 @@ import {
   Trash2,
   Edit2,
   ExternalLink,
-  Globe
+  Globe,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -4336,10 +5062,13 @@ export default function DashboardPage() {
         }
         setUserName(`${data.user.firstName} ${data.user.lastName}`);
         setUserEmail(data.user.email);
-        sessionStorage.setItem("linkedpage_user", JSON.stringify({
-          name: `${data.user.firstName} ${data.user.lastName}`,
-          email: data.user.email
-        }));
+        sessionStorage.setItem(
+          "linkedpage_user",
+          JSON.stringify({
+            name: `${data.user.firstName} ${data.user.lastName}`,
+            email: data.user.email,
+          }),
+        );
       } catch {
         router.push("/login");
       }
@@ -4364,7 +5093,11 @@ export default function DashboardPage() {
   }, [router]);
 
   const handleDeleteSite = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this website? This action cannot be undone.")) {
+    if (
+      !confirm(
+        "Are you sure you want to delete this website? This action cannot be undone.",
+      )
+    ) {
       return;
     }
     const toastId = toast.loading("Deleting website draft...");
@@ -4388,10 +5121,13 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col text-black antialiased relative overflow-x-hidden">
-
       {/* ── Background Graphic ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
-        <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
+        <img
+          src="/bg.png"
+          alt=""
+          className="w-full h-full object-cover object-top"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
       </div>
 
@@ -4406,14 +5142,18 @@ export default function DashboardPage() {
             onClick={() => router.push("/")}
           />
           <div className="w-px h-4 bg-[#2A2A2F]/15" />
-          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">{websites[0]?.brandName || "My Dashboard"}</span>
+          <span className="text-sm font-medium text-[#171717]/60 truncate max-w-[120px]">
+            {websites[0]?.brandName || "My Dashboard"}
+          </span>
         </div>
 
         {/* Right Action Side */}
         <div className="flex items-center gap-2 relative">
           <button
             onClick={() => {
-              const sub = websites[0] ? `${websites[0].subdomainSlug}.linkedpage.io` : "linkedpage.io";
+              const sub = websites[0]
+                ? `${websites[0].subdomainSlug}.linkedpage.io`
+                : "linkedpage.io";
               navigator.clipboard.writeText(`https://${sub}`);
               toast.success("Site link copied to clipboard!");
             }}
@@ -4462,19 +5202,26 @@ export default function DashboardPage() {
 
       {/* ── Main Container (Sidebar + Content) ── */}
       <div className="flex-1 flex pt-14 min-h-screen relative z-10">
-
         {/* ── Sidebar (Sticky Left) ── */}
         <aside className="w-[260px] border-r border-[#F3F3F5] bg-white/50 backdrop-blur-sm px-6 py-6 flex flex-col justify-between hidden md:flex h-[calc(100vh-3.5rem)] sticky top-14 select-none">
-
           {/* Top navigation items */}
           <div className="flex flex-col gap-6">
-
             {/* New Website Button */}
             <button
               onClick={() => router.push("/onboarding")}
               className="w-full h-11 bg-[#F3F3F5] hover:bg-[#EAEAEB] active:scale-[0.98] transition-all rounded-[12px] flex items-center justify-center gap-2 text-[14px] font-semibold text-black"
             >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-black">
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-black"
+              >
                 <rect width="18" height="18" x="3" y="3" rx="2" />
                 <path d="M9 12h6M12 9v6" />
               </svg>
@@ -4500,9 +5247,7 @@ export default function DashboardPage() {
               </button>
 
               {/* Active Tab */}
-              <button
-                className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all"
-              >
+              <button className="w-full h-10 px-3 rounded-[8px] bg-[#E8F1FF] border border-[#8DB8FF]/40 flex items-center gap-3 text-[14px] font-semibold text-[#1A68FF] transition-all">
                 <Folder className="w-[18px] h-[18px] text-[#1A68FF]" />
                 All Websites
               </button>
@@ -4510,24 +5255,32 @@ export default function DashboardPage() {
 
             {/* Recent Websites Section */}
             <div className="flex flex-col gap-2.5 pt-2 border-t border-[#F5F5F7]">
-              <span className="text-[12px] font-semibold text-[#88888E] px-3">Recent websites</span>
+              <span className="text-[12px] font-semibold text-[#88888E] px-3">
+                Recent websites
+              </span>
 
               <div
-                onClick={() => websites[0] && router.push(`/editor?id=${websites[0].id}`)}
+                onClick={() =>
+                  websites[0] && router.push(`/editor?id=${websites[0].id}`)
+                }
                 className="flex items-center gap-2.5 px-3 py-2 rounded-[8px] hover:bg-white/60 cursor-pointer transition-all bg-white/30"
               >
                 <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center border border-[#E6E6E6] overflow-hidden p-0.5 shrink-0">
-                  <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+                  <img
+                    src="/logoicon.png"
+                    alt="Logo"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
-                <span className="text-[13px] font-semibold text-[#171717] truncate">{websites[0]?.brandName || "No recent sites"}</span>
+                <span className="text-[13px] font-semibold text-[#171717] truncate">
+                  {websites[0]?.brandName || "No recent sites"}
+                </span>
               </div>
             </div>
-
           </div>
 
           {/* Bottom navigation & pricing items */}
           <div className="flex flex-col gap-6">
-
             {/* Pricing, Documentation, Settings */}
             <div className="flex flex-col gap-1">
               <button
@@ -4554,14 +5307,11 @@ export default function DashboardPage() {
                 Settings
               </button>
             </div>
-
           </div>
-
         </aside>
 
         {/* ── Main Content Area ── */}
         <main className="flex-1 flex flex-col items-center px-8 md:px-12 py-10">
-
           {/* User Provided Search and Title Container */}
           <div
             className="flex flex-col gap-4 items-center text-center w-full max-w-[420px] mb-12"
@@ -4680,9 +5430,12 @@ export default function DashboardPage() {
                 <div className="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mb-4 border border-[#E6E6E6]">
                   <Folder className="w-6 h-6 text-[#2A2A2F]/50" />
                 </div>
-                <h3 className="text-lg font-bold text-black mb-1">No websites found</h3>
+                <h3 className="text-lg font-bold text-black mb-1">
+                  No websites found
+                </h3>
                 <p className="text-sm text-gray-500 max-w-sm mb-6 leading-relaxed">
-                  Import your LinkedIn profile or start with template data to create your first personal portfolio website.
+                  Import your LinkedIn profile or start with template data to
+                  create your first personal portfolio website.
                 </p>
                 <button
                   onClick={() => router.push("/onboarding")}
@@ -4709,7 +5462,9 @@ export default function DashboardPage() {
                         key={web.id}
                         className="relative flex flex-col gap-3 p-3 cursor-pointer rounded-[12px] bg-white border border-[#EBEBEB] hover:shadow-[0_12px_24px_rgba(0,0,0,0.04)] transition-all duration-300 group"
                       >
-                        <div onClick={() => router.push(`/editor?id=${web.id}`)}>
+                        <div
+                          onClick={() => router.push(`/editor?id=${web.id}`)}
+                        >
                           <div className="relative w-full bg-[#F7F7F7] rounded-[10px] overflow-hidden aspect-video border border-[#F5F5F7] flex items-center justify-center">
                             <div className="relative w-full p-1 rounded-sm flex items-center justify-center">
                               <div className="relative w-full aspect-video overflow-hidden rounded-[8px] bg-white flex items-center justify-center pointer-events-none">
@@ -4746,7 +5501,9 @@ export default function DashboardPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setActiveDropdownId(isDropdownOpen ? null : web.id);
+                                setActiveDropdownId(
+                                  isDropdownOpen ? null : web.id,
+                                );
                               }}
                               className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-100 transition-all my-auto text-gray-500"
                             >
@@ -4770,7 +5527,10 @@ export default function DashboardPage() {
                             {/* Dropdown Options */}
                             {isDropdownOpen && (
                               <>
-                                <div className="fixed inset-0 z-10" onClick={() => setActiveDropdownId(null)} />
+                                <div
+                                  className="fixed inset-0 z-10"
+                                  onClick={() => setActiveDropdownId(null)}
+                                />
                                 <div className="absolute right-0 bottom-10 z-20 w-44 bg-white border border-[#EBEBEB] rounded-[12px] py-1.5 flex flex-col shadow-lg">
                                   <button
                                     onClick={() => {
@@ -4813,7 +5573,6 @@ export default function DashboardPage() {
               </div>
             )}
           </div>
-
         </main>
       </div>
 
@@ -4843,12 +5602,12 @@ export default function DashboardPage() {
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\page.tsx`
+
 ```tsx
 "use client";
 
@@ -4871,8 +5630,18 @@ const navItems: NavItem[] = [
   {
     label: "Home",
     icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <svg
+        className="w-[18px] h-[18px]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
       </svg>
     ),
   },
@@ -4880,25 +5649,60 @@ const navItems: NavItem[] = [
     label: "Design",
     active: true,
     icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <svg
+        className="w-[18px] h-[18px]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
       </svg>
     ),
   },
   {
     label: "Domains",
     icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <svg
+        className="w-[18px] h-[18px]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
       </svg>
     ),
   },
   {
     label: "Site Settings",
     icon: (
-      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      <svg
+        className="w-[18px] h-[18px]"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
+        <path
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+        />
       </svg>
     ),
   },
@@ -4921,10 +5725,14 @@ function EditorInner() {
   } = useEditor();
 
   const [activeNav, setActiveNav] = useState(1); // Templates active by default
-  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
+  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">(
+    "desktop",
+  );
   const [publishing, setPublishing] = useState(false);
   const [activeTab, setActiveTab] = useState<ChatTab>("chat");
-  const [editorTab, setEditorTab] = useState<"profile" | "experience" | "links">("profile");
+  const [editorTab, setEditorTab] = useState<
+    "profile" | "experience" | "links"
+  >("profile");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
@@ -5011,7 +5819,10 @@ function EditorInner() {
         return;
       }
     }
-    if (lower.includes("dark")) { selectTemplate("dark"); toast.success("Dark mode template applied!"); }
+    if (lower.includes("dark")) {
+      selectTemplate("dark");
+      toast.success("Dark mode template applied!");
+    }
   };
 
   const handlePublish = async () => {
@@ -5050,7 +5861,7 @@ function EditorInner() {
     } else {
       setEditorTab("profile");
     }
-    
+
     setTimeout(() => {
       const el = document.getElementById(`editor-field-${fieldName}`);
       if (el) {
@@ -5073,7 +5884,6 @@ function EditorInner() {
 
   return (
     <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
-
       {/* ── Left Sidebar ── */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
         <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_32px_#ffff] py-4">
@@ -5081,12 +5891,28 @@ function EditorInner() {
             {/* Project Selector */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
               <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10 overflow-hidden p-1.5">
-                <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+                <img
+                  src="/logoicon.png"
+                  alt="Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
-                <span className="font-medium text-[#2A2A2F] text-[15px]">hi hellow</span>
-                <svg className="w-5 h-5 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                <span className="font-medium text-[#2A2A2F] text-[15px]">
+                  hi hellow
+                </span>
+                <svg
+                  className="w-5 h-5 text-[#171717]/60"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -5108,15 +5934,18 @@ function EditorInner() {
                     }
                   }}
                   title={item.label}
-                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
-                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-                    : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
-                    }`}
+                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${
+                    activeNav === i
+                      ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                      : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
+                  }`}
                 >
                   <div className="w-5 h-5 flex items-center justify-center shrink-0">
                     {item.icon}
                   </div>
-                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
+                  <span
+                    className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}
+                  >
                     {item.label}
                   </span>
                 </button>
@@ -5129,7 +5958,11 @@ function EditorInner() {
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
               <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px]   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden text-left mt-2">
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
-                  ONLY $16 to<br />unlock Premium<br />Features
+                  ONLY $16 to
+                  <br />
+                  unlock Premium
+                  <br />
+                  Features
                 </p>
                 <button className="w-full py-1.5 bg-[#4b93ff] text-white     rounded-lg  text-[13px] font-medium hover:bg-[#3b82f6] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
                   Upgrade Now
@@ -5141,9 +5974,24 @@ function EditorInner() {
             <div className="flex flex-col gap-1 w-full px-2">
               <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
                 <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <svg
+                    className="w-[18px] h-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
                   </svg>
                 </div>
                 <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
@@ -5152,8 +6000,18 @@ function EditorInner() {
               </button>
               <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
                 <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-[18px] h-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
                 <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
@@ -5169,8 +6027,18 @@ function EditorInner() {
             <div className="px-2 w-full">
               <button className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/80 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative">
                 <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                  <svg
+                    className="w-[18px] h-[18px]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                 </div>
                 <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
@@ -5197,26 +6065,35 @@ function EditorInner() {
           setEditorTab={setEditorTab}
         />
       )}
-      {activeNav === 2 && (
-        <DomainsPane />
-      )}
+      {activeNav === 2 && <DomainsPane />}
       {activeNav === 3 && (
         <SettingsPane profileName={profileName} router={router} />
       )}
 
       {/* ── Canvas ── */}
       <main className="flex-1 flex flex-col bg-white overflow-hidden relative p-5 gap-3">
-
         {/* ── Top bar (outside card) ── */}
         <div className="flex items-center justify-between shrink-0 h-9  bg-white">
           {/* Left: Upgrade Plan & Saving Indicator */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => toast.info("Upgrade to Pro for custom domains, priority support & more!")}
+              onClick={() =>
+                toast.info(
+                  "Upgrade to Pro for custom domains, priority support & more!",
+                )
+              }
               className="flex items-center gap-2 h-10 px-2  text-sm font-medium bg-white border border-[#E6E6E6]   rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
               style={{ boxShadow: " 0 1px 4px #fff" }}
             >
-              <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+              <svg
+                className="w-[20px] h-[20px]"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
                 <path d="M4 6h16M4 12h16M4 18h7" />
               </svg>
             </button>
@@ -5227,7 +6104,7 @@ function EditorInner() {
                 <>
                   <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   <span>Unsaved edits</span>
-                  <button 
+                  <button
                     onClick={resetEdits}
                     className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
                   >
@@ -5246,7 +6123,12 @@ function EditorInner() {
           {/* Right: Share + Publish + Avatar */}
           <div className="flex items-center gap-2 relative">
             <button
-              onClick={() => { navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`); toast.success("Share link copied!"); }}
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`,
+                );
+                toast.success("Share link copied!");
+              }}
               className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6]   rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
             >
               Share
@@ -5257,14 +6139,22 @@ function EditorInner() {
               disabled={publishing}
               className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white   rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
             >
-              {publishing && <span className="w-3 h-3   rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+              {publishing && (
+                <span className="w-3 h-3   rounded-lg border-2 border-white border-t-transparent animate-spin" />
+              )}
               Publish
             </button>
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               className="w-8 h-8   rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
             >
-              <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+              <img
+                src={
+                  editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"
+                }
+                alt="Avatar"
+                className="w-full h-full object-cover"
+              />
             </button>
             <AnimatePresence>
               {isUserMenuOpen && (
@@ -5275,10 +6165,10 @@ function EditorInner() {
                   transition={{ duration: 0.15, ease: "easeOut" }}
                   className="absolute right-0 top-10 z-50"
                 >
-                  <UserMenu 
-                    name={userName} 
-                    email={userEmail} 
-                    onClose={() => setIsUserMenuOpen(false)} 
+                  <UserMenu
+                    name={userName}
+                    email={userEmail}
+                    onClose={() => setIsUserMenuOpen(false)}
                   />
                 </motion.div>
               )}
@@ -5288,17 +6178,25 @@ function EditorInner() {
 
         {/* ── Canvas card ── */}
         <div className="relative flex-1 bg-white/75  backdrop-blur-xl  rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_rgba(255,255,255,0.6)_inset]">
-
           {/* ── Canvas toolbar ── */}
           <div className="relative z-30 flex items-center gap-3 w-full h-[54px]  border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md">
-
             {/* Left: Customize + Page */}
             <div className="flex items-center gap-2">
               {/* Customize button */}
               <div className="relative group">
                 <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6]     rounded-lg  text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
-                  <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
-                    <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
+                  <svg
+                    className="w-[14px] h-[14px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2.25"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14 4.1 12 6" />
+                    <path d="m5.1 8-2.9-.8" />
+                    <path d="m6 12-1.9 2" />
                     <path d="M7.2 2.2 8 5.1" />
                     <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
                   </svg>
@@ -5306,7 +6204,9 @@ function EditorInner() {
                 </button>
                 <div className="hidden md:block absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 left-full top-1/2 -translate-y-1/2 ml-2">
                   <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -left-1 top-1/2 -translate-y-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Edit text, images, colors, fonts, and layouts</div>
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">
+                    Edit text, images, colors, fonts, and layouts
+                  </div>
                 </div>
               </div>
 
@@ -5314,13 +6214,23 @@ function EditorInner() {
               <div className="relative group">
                 <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6]     rounded-lg  text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
                   <span className="text-sm leading-tight">Home</span>
-                  <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg
+                    className="w-3.5 h-3.5 text-[#171717]/50"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="m6 9 6 6 6-6" />
                   </svg>
                 </button>
                 <div className="hidden md:block absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
                   <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Switch and manage site pages</div>
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">
+                    Switch and manage site pages
+                  </div>
                 </div>
               </div>
             </div>
@@ -5329,14 +6239,28 @@ function EditorInner() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6]     rounded-lg ">
                 <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
-                  <svg className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg
+                    className="w-[14px] h-[14px] text-[#3b82f6] shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z" />
-                    <path d="M20 2v4" /><path d="M22 4h-4" /><circle cx="4" cy="20" r="2" />
+                    <path d="M20 2v4" />
+                    <path d="M22 4h-4" />
+                    <circle cx="4" cy="20" r="2" />
                   </svg>
                   <span className="min-w-0 truncate text-[#3b82f6] font-medium">
-                    {editedProfile?.name.toLowerCase().replace(/\s+/g, "") ?? "yourname"}.linkedpage.io
+                    {editedProfile?.name.toLowerCase().replace(/\s+/g, "") ??
+                      "yourname"}
+                    .linkedpage.io
                   </span>
-                  <span className="hidden lg:inline text-[#2A2A2F] font-normal">is available!</span>
+                  <span className="hidden lg:inline text-[#2A2A2F] font-normal">
+                    is available!
+                  </span>
                 </span>
               </div>
             </div>
@@ -5345,32 +6269,71 @@ function EditorInner() {
             <div className="flex items-center gap-1.5">
               {/* Undo */}
               <div className="relative group">
-                <button disabled className="w-8 h-8 flex items-center justify-center     rounded-lg  text-[#171717]/30 cursor-not-allowed">
-                  <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+                <button
+                  disabled
+                  className="w-8 h-8 flex items-center justify-center     rounded-lg  text-[#171717]/30 cursor-not-allowed"
+                >
+                  <svg
+                    className="w-[15px] h-[15px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M9 14 4 9l5-5" />
+                    <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
                   </svg>
                 </button>
               </div>
 
               {/* Redo */}
               <div className="relative group">
-                <button disabled className="w-8 h-8 flex items-center justify-center     rounded-lg  text-[#171717]/30 cursor-not-allowed">
-                  <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+                <button
+                  disabled
+                  className="w-8 h-8 flex items-center justify-center     rounded-lg  text-[#171717]/30 cursor-not-allowed"
+                >
+                  <svg
+                    className="w-[15px] h-[15px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="m15 14 5-5-5-5" />
+                    <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
                   </svg>
                 </button>
               </div>
 
               {/* History */}
               <div className="relative group">
-                <button disabled className="w-8 h-8 flex items-center justify-center     rounded-lg  text-[#171717]/30 cursor-not-allowed">
-                  <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" />
+                <button
+                  disabled
+                  className="w-8 h-8 flex items-center justify-center     rounded-lg  text-[#171717]/30 cursor-not-allowed"
+                >
+                  <svg
+                    className="w-[14px] h-[14px]"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                    <path d="M12 7v5l4 2" />
                   </svg>
                 </button>
                 <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 top-full left-1/2 -translate-x-1/2 mt-2">
                   <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -top-1 left-1/2 -translate-x-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Version history</div>
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">
+                    Version history
+                  </div>
                 </div>
               </div>
 
@@ -5384,22 +6347,43 @@ function EditorInner() {
                     onClick={() => setPreviewMode("desktop")}
                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "desktop" ? "bg-white   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
                   >
-                    <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                      <rect height="14" width="20" rx="2" x="2" y="3" /><line x1="8" x2="16" y1="21" y2="21" /><line x1="12" x2="12" y1="17" y2="21" />
+                    <svg
+                      className="w-[14px] h-[14px]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect height="14" width="20" rx="2" x="2" y="3" />
+                      <line x1="8" x2="16" y1="21" y2="21" />
+                      <line x1="12" x2="12" y1="17" y2="21" />
                     </svg>
                   </button>
                   <button
                     onClick={() => setPreviewMode("mobile")}
                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "mobile" ? "bg-white   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]" : "text-[#171717]/40 hover:text-[#2A2A2F]"}`}
                   >
-                    <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                      <rect height="20" width="14" rx="2" ry="2" x="5" y="2" /><path d="M12 18h.01" />
+                    <svg
+                      className="w-[14px] h-[14px]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect height="20" width="14" rx="2" ry="2" x="5" y="2" />
+                      <path d="M12 18h.01" />
                     </svg>
                   </button>
                 </div>
                 <div className="absolute z-50 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 right-full top-1/2 -translate-y-1/2 mr-2">
                   <div className="absolute w-2 h-2 bg-[#171717] rotate-45 -right-1 top-1/2 -translate-y-1/2" />
-                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">Switch between desktop and mobile</div>
+                  <div className="relative px-3 py-1 text-xs text-white bg-[#171717]     rounded-lg  whitespace-nowrap">
+                    Switch between desktop and mobile
+                  </div>
                 </div>
               </div>
             </div>
@@ -5422,20 +6406,50 @@ function EditorInner() {
                     /* Desktop canvas */
                     <div
                       className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white shadow-[0_8px_40px_-8px_#ffff,0_2px_8px_#ffff]"
-                      style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
+                      style={{
+                        width: 1024 * desktopScale,
+                        height: 768 * desktopScale,
+                      }}
                     >
-                      <div style={{ width: 1024, height: 768, transform: `scale(${desktopScale})`, transformOrigin: "top left", overflow: "auto" }}>
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} onFieldClick={handleFieldClick} />
+                      <div
+                        style={{
+                          width: 1024,
+                          height: 768,
+                          transform: `scale(${desktopScale})`,
+                          transformOrigin: "top left",
+                          overflow: "auto",
+                        }}
+                      >
+                        <ProfilePreview
+                          profile={editedProfile}
+                          template={selectedTemplate}
+                          onFieldClick={handleFieldClick}
+                        />
                       </div>
                     </div>
                   ) : (
                     /* Mobile canvas */
                     <div
                       className="rounded-[32px] overflow-hidden border-[7px] border-[#2A2A2F] bg-white shadow-[0_16px_48px_-12px_#ffff]"
-                      style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
+                      style={{
+                        width: 375 * mobileScale,
+                        height: 812 * mobileScale,
+                      }}
                     >
-                      <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto" }}>
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} onFieldClick={handleFieldClick} />
+                      <div
+                        style={{
+                          width: 375,
+                          height: 812,
+                          transform: `scale(${mobileScale})`,
+                          transformOrigin: "top left",
+                          overflow: "auto",
+                        }}
+                      >
+                        <ProfilePreview
+                          profile={editedProfile}
+                          template={selectedTemplate}
+                          onFieldClick={handleFieldClick}
+                        />
                       </div>
                     </div>
                   )
@@ -5443,17 +6457,38 @@ function EditorInner() {
                   /* Empty state */
                   <div
                     className="rounded-[16px] overflow-hidden border border-[#E6E6E6] bg-white flex flex-col items-center justify-center shadow-[0_8px_40px_-8px_#ffff]"
-                    style={{ width: 1024 * desktopScale, height: 768 * desktopScale }}
+                    style={{
+                      width: 1024 * desktopScale,
+                      height: 768 * desktopScale,
+                    }}
                   >
                     <div className="flex flex-col items-center text-center max-w-sm gap-4">
                       <div className="w-14 h-14 bg-[#2A2A2F] rounded-[18px] flex items-center justify-center transform rotate-3   shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                        <svg className="w-5 h-5 text-white transform -rotate-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                        <svg
+                          className="w-5 h-5 text-white transform -rotate-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                          />
                         </svg>
                       </div>
-                      <h2 className="text-xl font-medium text-[#2A2A2F]">Paste your LinkedIn URL</h2>
-                      <p className="text-sm text-[#9CA3AF]">Use the chat panel to paste a LinkedIn URL and generate your micro-site.</p>
-                      <button onClick={() => router.push("/")} className="mt-2 px-4 py-2 bg-[#2A2A2F] text-white text-sm font-medium     rounded-lg  hover:bg-[#3A3A42] transition-colors">
+                      <h2 className="text-xl font-medium text-[#2A2A2F]">
+                        Paste your LinkedIn URL
+                      </h2>
+                      <p className="text-sm text-[#9CA3AF]">
+                        Use the chat panel to paste a LinkedIn URL and generate
+                        your micro-site.
+                      </p>
+                      <button
+                        onClick={() => router.push("/")}
+                        className="mt-2 px-4 py-2 bg-[#2A2A2F] text-white text-sm font-medium     rounded-lg  hover:bg-[#3A3A42] transition-colors"
+                      >
                         Go to home
                       </button>
                     </div>
@@ -5462,7 +6497,6 @@ function EditorInner() {
               </motion.div>
             </AnimatePresence>
           </div>
-
         </div>
       </main>
 
@@ -5479,7 +6513,9 @@ function EditorInner() {
               const params = new URLSearchParams(window.location.search);
               params.delete("onboarding");
               const query = params.toString();
-              router.replace(`${window.location.pathname}${query ? `?${query}` : ""}`);
+              router.replace(
+                `${window.location.pathname}${query ? `?${query}` : ""}`,
+              );
             }}
             className="fixed inset-0 z-[100] cursor-pointer bg-black/15 backdrop-blur-[1px]"
           >
@@ -5487,13 +6523,20 @@ function EditorInner() {
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  top: onboardingCoords.templates.top + onboardingCoords.templates.height / 2,
-                  left: onboardingCoords.templates.left + onboardingCoords.templates.width / 2,
+                  top:
+                    onboardingCoords.templates.top +
+                    onboardingCoords.templates.height / 2,
+                  left:
+                    onboardingCoords.templates.left +
+                    onboardingCoords.templates.width / 2,
                   transform: "translate(-50%, -50%)",
                 }}
               >
                 <div className="w-6 h-6 rounded-full bg-[#8DB8FF]/30 flex items-center justify-center relative">
-                  <span className="absolute inset-0 rounded-full bg-[#8DB8FF]/40 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <span
+                    className="absolute inset-0 rounded-full bg-[#8DB8FF]/40 animate-ping"
+                    style={{ animationDuration: "1.5s" }}
+                  />
                   <div className="w-3 h-3 rounded-full bg-[#3b82f6] border-2 border-white shadow-sm" />
                 </div>
                 <div
@@ -5503,8 +6546,12 @@ function EditorInner() {
                     left: 0,
                   }}
                 >
-                  <span className="text-[12px] font-bold text-black">🎨 Templates</span>
-                  <span className="text-[10px] text-[#171717]/60">Switch layouts instantly</span>
+                  <span className="text-[12px] font-bold text-black">
+                    🎨 Templates
+                  </span>
+                  <span className="text-[10px] text-[#171717]/60">
+                    Switch layouts instantly
+                  </span>
                 </div>
               </div>
             )}
@@ -5513,13 +6560,20 @@ function EditorInner() {
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  top: onboardingCoords.publish.top + onboardingCoords.publish.height / 2,
-                  left: onboardingCoords.publish.left + onboardingCoords.publish.width / 2,
+                  top:
+                    onboardingCoords.publish.top +
+                    onboardingCoords.publish.height / 2,
+                  left:
+                    onboardingCoords.publish.left +
+                    onboardingCoords.publish.width / 2,
                   transform: "translate(-50%, -50%)",
                 }}
               >
                 <div className="w-6 h-6 rounded-full bg-[#8DFFB3]/30 flex items-center justify-center relative">
-                  <span className="absolute inset-0 rounded-full bg-[#8DFFB3]/40 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <span
+                    className="absolute inset-0 rounded-full bg-[#8DFFB3]/40 animate-ping"
+                    style={{ animationDuration: "1.5s" }}
+                  />
                   <div className="w-3 h-3 rounded-full bg-[#369762] border-2 border-white shadow-sm" />
                 </div>
                 <div
@@ -5530,8 +6584,12 @@ function EditorInner() {
                     transform: "translateX(30%)",
                   }}
                 >
-                  <span className="text-[12px] font-bold text-black">🚀 Go Live</span>
-                  <span className="text-[10px] text-[#171717]/60">Go live in one click</span>
+                  <span className="text-[12px] font-bold text-black">
+                    🚀 Go Live
+                  </span>
+                  <span className="text-[10px] text-[#171717]/60">
+                    Go live in one click
+                  </span>
                 </div>
               </div>
             )}
@@ -5540,13 +6598,20 @@ function EditorInner() {
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  top: onboardingCoords.preview.top + onboardingCoords.preview.height / 2,
-                  left: onboardingCoords.preview.left + onboardingCoords.preview.width / 2,
+                  top:
+                    onboardingCoords.preview.top +
+                    onboardingCoords.preview.height / 2,
+                  left:
+                    onboardingCoords.preview.left +
+                    onboardingCoords.preview.width / 2,
                   transform: "translate(-50%, -50%)",
                 }}
               >
                 <div className="w-6 h-6 rounded-full bg-[#8DB8FF]/30 flex items-center justify-center relative">
-                  <span className="absolute inset-0 rounded-full bg-[#8DB8FF]/40 animate-ping" style={{ animationDuration: "1.5s" }} />
+                  <span
+                    className="absolute inset-0 rounded-full bg-[#8DB8FF]/40 animate-ping"
+                    style={{ animationDuration: "1.5s" }}
+                  />
                   <div className="w-3 h-3 rounded-full bg-[#3b82f6] border-2 border-white shadow-sm" />
                 </div>
                 <div
@@ -5557,16 +6622,19 @@ function EditorInner() {
                     transform: "translateX(-50%)",
                   }}
                 >
-                  <span className="text-[12px] font-bold text-black">✏️ Click to Edit</span>
-                  <span className="text-[10px] text-[#171717]/60">Click any text to edit</span>
+                  <span className="text-[12px] font-bold text-black">
+                    ✏️ Click to Edit
+                  </span>
+                  <span className="text-[10px] text-[#171717]/60">
+                    Click any text to edit
+                  </span>
                 </div>
               </div>
             )}
           </motion.div>
         )}
       </AnimatePresence>
-
-    </div >
+    </div>
   );
 }
 
@@ -5583,17 +6651,24 @@ export default function EditorPage() {
     </Suspense>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\ChatPane.tsx`
+
 ```tsx
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { MessageSquare, LayoutGrid, Edit2, Plus, Mic, ArrowUp } from "lucide-react";
+import {
+  MessageSquare,
+  LayoutGrid,
+  Edit2,
+  Plus,
+  Mic,
+  ArrowUp,
+} from "lucide-react";
 import { toast } from "sonner";
 import { useEditor } from "@/context/EditorContext";
 import { ProfileData, TemplateId } from "@/shared/types";
@@ -5609,7 +6684,10 @@ interface ChatPaneProps {
   profile: ProfileData | null;
   selectedTemplate: TemplateId;
   onSelectTemplate: (id: TemplateId) => void;
-  onChangeField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  onChangeField: <K extends keyof ProfileData>(
+    key: K,
+    value: ProfileData[K],
+  ) => void;
   activeTab: ChatTab;
   setActiveTab: (tab: ChatTab) => void;
   editorTab?: "profile" | "experience" | "links";
@@ -5633,7 +6711,8 @@ const initialMessages: ChatMessage[] = [
   {
     id: "2",
     role: "assistant",
-    content: "Hello there, please describe your idea. Just share your thoughts with me and I'll help with rest!",
+    content:
+      "Hello there, please describe your idea. Just share your thoughts with me and I'll help with rest!",
     time: "",
   },
   {
@@ -5645,7 +6724,8 @@ const initialMessages: ChatMessage[] = [
   {
     id: "4",
     role: "assistant",
-    content: "Hey there, sounds like you're looking to create a website for your portfolio. I'll start building right away.\n\nA dynamic and modern portfolio website showcasing creative projects with a focus on engaging visuals and clear presentation. The design leverages a warm color palette and bold typography to highlight professional work and client testimonials, creating an inviting user experience.",
+    content:
+      "Hey there, sounds like you're looking to create a website for your portfolio. I'll start building right away.\n\nA dynamic and modern portfolio website showcasing creative projects with a focus on engaging visuals and clear presentation. The design leverages a warm color palette and bold typography to highlight professional work and client testimonials, creating an inviting user experience.",
     time: "",
   },
 ];
@@ -5693,7 +6773,8 @@ export default function ChatPane({
         {
           id: Date.now().toString(),
           role: "assistant",
-          content: "No active site loaded. Please select a website from the dashboard first.",
+          content:
+            "No active site loaded. Please select a website from the dashboard first.",
           time: "",
         },
       ]);
@@ -5713,7 +6794,12 @@ export default function ChatPane({
 
       setMessages((prev) => [
         ...prev,
-        { id: Date.now().toString(), role: "assistant", content: data.reply, time: "" },
+        {
+          id: Date.now().toString(),
+          role: "assistant",
+          content: data.reply,
+          time: "",
+        },
       ]);
 
       if (data.template) {
@@ -5771,21 +6857,27 @@ export default function ChatPane({
     {
       id: "chat" as ChatTab,
       icon: (isActive: boolean) => (
-        <MessageSquare className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+        <MessageSquare
+          className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`}
+        />
       ),
       label: "Chat",
     },
     {
       id: "grid" as ChatTab,
       icon: (isActive: boolean) => (
-        <LayoutGrid className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+        <LayoutGrid
+          className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`}
+        />
       ),
       label: "Templates",
     },
     {
       id: "theme" as ChatTab,
       icon: (isActive: boolean) => (
-        <Edit2 className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`} />
+        <Edit2
+          className={`w-4 h-4 transition-colors duration-200 ${isActive ? "text-blue-500" : "text-[#171717]/60"}`}
+        />
       ),
       label: "Edit",
     },
@@ -5796,7 +6888,11 @@ export default function ChatPane({
       {/* Title Header */}
       <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
+          <img
+            src="/logo.png"
+            alt="LinkedPage"
+            className="h-6 w-auto object-contain"
+          />
           <div className="w-px h-3 bg-black/10" />
           <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
             {profileName || "LinkedPage"}
@@ -5819,10 +6915,11 @@ export default function ChatPane({
                 id={tab.id === "grid" ? "onboarding-templates-tab" : undefined}
                 onClick={() => setActiveTab(tab.id)}
                 transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none transition-all duration-300 ${isActive
-                  ? "flex-[1.5] text-blue-500 px-3 font-['Inter_Tight']"
-                  : "flex-1 text-[#171717]/60 hover:bg-zinc-200/40"
-                  }`}
+                className={`relative h-8 rounded-xl flex items-center justify-center group cursor-pointer focus:outline-none select-none transition-all duration-300 ${
+                  isActive
+                    ? "flex-[1.5] text-blue-500 px-3 font-['Inter_Tight']"
+                    : "flex-1 text-[#171717]/60 hover:bg-zinc-200/40"
+                }`}
               >
                 {/* Smoothly animated background pill */}
                 {isActive && (
@@ -5871,7 +6968,10 @@ export default function ChatPane({
         {activeTab === "chat" && (
           <>
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto w-full px-4" style={{ scrollbarWidth: "none" }}>
+            <div
+              className="flex-1 overflow-y-auto w-full px-4"
+              style={{ scrollbarWidth: "none" }}
+            >
               <div className="max-w-[479px] mx-auto flex flex-col gap-6 pb-4 pt-4 w-full">
                 <AnimatePresence initial={false}>
                   {messages.map((msg) => (
@@ -5899,7 +6999,11 @@ export default function ChatPane({
                         <div className="w-full flex flex-col justify-start items-start gap-2">
                           <div className="self-stretch inline-flex justify-start items-center gap-2">
                             {/* Logo Icon */}
-                            <img src="/logoicon.png" alt="Logo" className="h-6 w-auto object-contain select-none" />
+                            <img
+                              src="/logoicon.png"
+                              alt="Logo"
+                              className="h-6 w-auto object-contain select-none"
+                            />
                           </div>
 
                           <div className="self-stretch flex flex-col justify-start items-start w-full">
@@ -5927,23 +7031,51 @@ export default function ChatPane({
 
                                       <div className="BackgroundBorderShadow w-full max-w-96 h-48 left-[23.33px] top-0 absolute bg-neutral-50 rounded-xl shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] outline outline-1 outline-zinc-100 overflow-hidden flex items-center justify-center p-4">
                                         <div className="flex flex-col items-center text-center gap-1">
-                                          <span className="font-semibold text-[13px] text-neutral-800">Portfolio Preview</span>
-                                          <span className="text-[11px] text-zinc-400">Template applied to active canvas</span>
+                                          <span className="font-semibold text-[13px] text-neutral-800">
+                                            Portfolio Preview
+                                          </span>
+                                          <span className="text-[11px] text-zinc-400">
+                                            Template applied to active canvas
+                                          </span>
                                         </div>
                                       </div>
                                     </div>
 
                                     <button className="Button h-9 px-2.5 left-0 top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
                                       <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
-                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M5 1L1 5L5 9" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        <svg
+                                          width="6"
+                                          height="10"
+                                          viewBox="0 0 6 10"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <path
+                                            d="M5 1L1 5L5 9"
+                                            stroke="black"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                          />
                                         </svg>
                                       </div>
                                     </button>
                                     <button className="Button h-9 px-2.5 left-[401.49px] top-[82.32px] absolute bg-zinc-100 rounded-xl inline-flex justify-center items-center border-none cursor-pointer hover:bg-zinc-200">
                                       <div className="Svg size-3.5 relative overflow-hidden flex items-center justify-center">
-                                        <svg width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                          <path d="M1 1L5 5L1 9" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        <svg
+                                          width="6"
+                                          height="10"
+                                          viewBox="0 0 6 10"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <path
+                                            d="M1 1L5 5L1 9"
+                                            stroke="black"
+                                            strokeWidth="1.5"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                          />
                                         </svg>
                                       </div>
                                     </button>
@@ -5963,13 +7095,18 @@ export default function ChatPane({
                                     "Skills & Tools inventory",
                                     "Testimonials section",
                                     "Custom footer metadata",
-                                    "Navigation header links"
+                                    "Navigation header links",
                                   ].map((item, idx) => (
-                                    <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
+                                    <div
+                                      key={idx}
+                                      className="self-stretch inline-flex justify-start items-center gap-2"
+                                    >
                                       <div className="w-5 h-5 rounded-full border border-[#E6E6E6] flex items-center justify-center bg-white shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
                                         <div className="w-2.5 h-2.5 rounded-full bg-blue-500 opacity-80" />
                                       </div>
-                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{item}</span>
+                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">
+                                        {item}
+                                      </span>
                                     </div>
                                   ))}
                                 </div>
@@ -5979,14 +7116,33 @@ export default function ChatPane({
                               <div className="self-stretch pt-3 flex flex-col justify-start items-start w-full">
                                 <div className="BackgroundBorder self-stretch p-5 bg-neutral-50 rounded-xl outline outline-1 outline-zinc-100 flex flex-col justify-start items-start gap-3 w-full">
                                   {[
-                                    { name: "Ocean Breeze", colors: "from-blue-600 to-cyan-400" },
-                                    { name: "Sunset Glow", colors: "from-orange-500 to-rose-400" },
-                                    { name: "Forest Moss", colors: "from-emerald-600 to-teal-400" },
-                                    { name: "Lavender Fields", colors: "from-purple-600 to-pink-400" }
+                                    {
+                                      name: "Ocean Breeze",
+                                      colors: "from-blue-600 to-cyan-400",
+                                    },
+                                    {
+                                      name: "Sunset Glow",
+                                      colors: "from-orange-500 to-rose-400",
+                                    },
+                                    {
+                                      name: "Forest Moss",
+                                      colors: "from-emerald-600 to-teal-400",
+                                    },
+                                    {
+                                      name: "Lavender Fields",
+                                      colors: "from-purple-600 to-pink-400",
+                                    },
                                   ].map((palette, idx) => (
-                                    <div key={idx} className="self-stretch inline-flex justify-start items-center gap-2">
-                                      <div className={`Gradient w-5 h-5 bg-gradient-to-b ${palette.colors} rounded-full shadow-sm`} />
-                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">{palette.name}</span>
+                                    <div
+                                      key={idx}
+                                      className="self-stretch inline-flex justify-start items-center gap-2"
+                                    >
+                                      <div
+                                        className={`Gradient w-5 h-5 bg-gradient-to-b ${palette.colors} rounded-full shadow-sm`}
+                                      />
+                                      <span className="text-[14px] font-medium text-neutral-700 font-['Inter']">
+                                        {palette.name}
+                                      </span>
                                     </div>
                                   ))}
                                 </div>
@@ -6005,7 +7161,10 @@ export default function ChatPane({
             {/* Input area */}
             <div className="p-4 shrink-0 bg-white flex flex-col gap-3">
               {/* Suggestion pills */}
-              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+              <div
+                className="flex gap-2 overflow-x-auto pb-1"
+                style={{ scrollbarWidth: "none" }}
+              >
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
@@ -6059,13 +7218,22 @@ export default function ChatPane({
         )}
 
         {activeTab === "grid" && (
-          <div className="flex-1 overflow-y-auto pb-6" style={{ scrollbarWidth: "none" }}>
-            <TemplatePicker selected={selectedTemplate} onSelect={onSelectTemplate} />
+          <div
+            className="flex-1 overflow-y-auto pb-6"
+            style={{ scrollbarWidth: "none" }}
+          >
+            <TemplatePicker
+              selected={selectedTemplate}
+              onSelect={onSelectTemplate}
+            />
           </div>
         )}
 
         {activeTab === "theme" && profile && (
-          <div className="flex-1 overflow-y-auto px-6 pb-6 pt-4" style={{ scrollbarWidth: "none" }}>
+          <div
+            className="flex-1 overflow-y-auto px-6 pb-6 pt-4"
+            style={{ scrollbarWidth: "none" }}
+          >
             <InlineEditor
               profile={profile}
               onChange={onChangeField}
@@ -6078,12 +7246,12 @@ export default function ChatPane({
     </section>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\DomainsPane.tsx`
+
 ```tsx
 "use client";
 
@@ -6149,7 +7317,7 @@ export default function DomainsPane() {
       toast.dismiss(toastId);
       setConnecting(false);
       if (res.ok && data.domain) {
-        setCustomDomains(prev => [...prev, data.domain]);
+        setCustomDomains((prev) => [...prev, data.domain]);
         setSearchVal("");
         toast.success("Domain added! Please configure your DNS settings.");
       } else {
@@ -6167,9 +7335,12 @@ export default function DomainsPane() {
     setVerifyingId(domainId);
     const toastId = toast.loading("Checking DNS resolution...");
     try {
-      const res = await fetch(`/api/websites/${websiteId}/domains/${domainId}/verify`, {
-        method: "POST",
-      });
+      const res = await fetch(
+        `/api/websites/${websiteId}/domains/${domainId}/verify`,
+        {
+          method: "POST",
+        },
+      );
       const data = await res.json();
       toast.dismiss(toastId);
       setVerifyingId(null);
@@ -6177,7 +7348,9 @@ export default function DomainsPane() {
         toast.success("Domain verified! SSL certificate issued.");
         loadDomains();
       } else {
-        toast.error("DNS records check failed. DNS propagation might take up to 24h.");
+        toast.error(
+          "DNS records check failed. DNS propagation might take up to 24h.",
+        );
       }
     } catch {
       toast.dismiss(toastId);
@@ -6188,16 +7361,20 @@ export default function DomainsPane() {
 
   const handleDelete = async (domainId: string) => {
     if (!websiteId) return;
-    if (!confirm("Are you sure you want to disconnect this custom domain?")) return;
+    if (!confirm("Are you sure you want to disconnect this custom domain?"))
+      return;
     const toastId = toast.loading("Disconnecting domain...");
     try {
-      const res = await fetch(`/api/websites/${websiteId}/domains/${domainId}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/websites/${websiteId}/domains/${domainId}`,
+        {
+          method: "DELETE",
+        },
+      );
       toast.dismiss(toastId);
       if (res.ok) {
         toast.success("Domain disconnected!");
-        setCustomDomains(prev => prev.filter(d => d.id !== domainId));
+        setCustomDomains((prev) => prev.filter((d) => d.id !== domainId));
       } else {
         toast.error("Failed to disconnect domain.");
       }
@@ -6211,15 +7388,24 @@ export default function DomainsPane() {
     <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
       {/* Title Header */}
       <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
-        <span className="font-semibold text-[15px] text-black">Domains & SSL</span>
-        <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">Pro Active</span>
+        <span className="font-semibold text-[15px] text-black">
+          Domains & SSL
+        </span>
+        <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
+          Pro Active
+        </span>
       </div>
 
       {/* Content container */}
-      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-6" style={{ scrollbarWidth: "none" }}>
+      <div
+        className="flex-1 overflow-y-auto p-5 flex flex-col gap-6"
+        style={{ scrollbarWidth: "none" }}
+      >
         {/* Section: Connected Domains */}
         <div className="flex flex-col gap-2.5">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Connected Domains</span>
+          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            Connected Domains
+          </span>
           {loading ? (
             <div className="flex justify-center py-4">
               <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
@@ -6231,17 +7417,28 @@ export default function DomainsPane() {
           ) : (
             <div className="flex flex-col gap-2">
               {customDomains.map((dom) => (
-                <div key={dom.id} className="p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-xl flex flex-col gap-2 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                <div
+                  key={dom.id}
+                  className="p-3 bg-[#F7F7F7] border border-[#E6E6E6] rounded-xl flex flex-col gap-2 shadow-[0_1px_3px_rgba(0,0,0,0.02)]"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col min-w-0">
-                      <span className="text-[13px] font-bold text-black truncate">{dom.name}</span>
+                      <span className="text-[13px] font-bold text-black truncate">
+                        {dom.name}
+                      </span>
                       <span className="text-[10px] text-gray-400">
-                        {dom.status === "active" ? "SSL secured & live" : "DNS config pending"}
+                        {dom.status === "active"
+                          ? "SSL secured & live"
+                          : "DNS config pending"}
                       </span>
                     </div>
-                    <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
-                      dom.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700 animate-pulse"
-                    }`}>
+                    <span
+                      className={`text-[9px] font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
+                        dom.status === "active"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-amber-100 text-amber-700 animate-pulse"
+                      }`}
+                    >
                       {dom.status === "active" ? "Active" : "Setup Required"}
                     </span>
                   </div>
@@ -6277,7 +7474,9 @@ export default function DomainsPane() {
 
         {/* Section: Connect Domain Input */}
         <div className="flex flex-col gap-2.5">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Connect Custom Domain</span>
+          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            Connect Custom Domain
+          </span>
           <div className="flex flex-col gap-2">
             <input
               type="text"
@@ -6291,27 +7490,45 @@ export default function DomainsPane() {
               disabled={connecting}
               className="w-full h-10 rounded-lg bg-[#2A2A2F] hover:bg-[#3E3E45] active:scale-95 transition-all text-white text-[12px] font-semibold flex items-center justify-center gap-2 shadow-sm"
             >
-              {connecting && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+              {connecting && (
+                <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />
+              )}
               Connect Domain
             </button>
           </div>
         </div>
 
         {/* DNS instructions panel if setup required exists */}
-        {customDomains.some(d => d.status === "pending") && (
+        {customDomains.some((d) => d.status === "pending") && (
           <div className="p-4 bg-amber-50/50 border border-amber-200/60 rounded-xl flex flex-col gap-2.5">
-            <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider">DNS Settings Required</span>
+            <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider">
+              DNS Settings Required
+            </span>
             <p className="text-xs text-amber-700/80 leading-relaxed">
-              Configure your domain registrar (Namecheap, GoDaddy, etc.) with the following DNS records:
+              Configure your domain registrar (Namecheap, GoDaddy, etc.) with
+              the following DNS records:
             </p>
             <div className="flex flex-col gap-1.5 font-mono text-[10px] text-gray-600 bg-white p-2.5 rounded-lg border border-amber-200/40">
-              <div>Type: <strong className="text-black">A</strong></div>
-              <div>Host: <strong className="text-black">@</strong></div>
-              <div>Value: <strong className="text-black">76.76.21.21</strong></div>
+              <div>
+                Type: <strong className="text-black">A</strong>
+              </div>
+              <div>
+                Host: <strong className="text-black">@</strong>
+              </div>
+              <div>
+                Value: <strong className="text-black">76.76.21.21</strong>
+              </div>
               <div className="h-px bg-gray-100 my-1" />
-              <div>Type: <strong className="text-black">CNAME</strong></div>
-              <div>Host: <strong className="text-black">www</strong></div>
-              <div>Value: <strong className="text-black">cname.linkedpage.co</strong></div>
+              <div>
+                Type: <strong className="text-black">CNAME</strong>
+              </div>
+              <div>
+                Host: <strong className="text-black">www</strong>
+              </div>
+              <div>
+                Value:{" "}
+                <strong className="text-black">cname.linkedpage.co</strong>
+              </div>
             </div>
           </div>
         )}
@@ -6319,12 +7536,12 @@ export default function DomainsPane() {
     </section>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\InlineEditor.tsx`
+
 ```tsx
 "use client";
 
@@ -6334,7 +7551,10 @@ import { User, Briefcase, Link as LinkIcon, Plus, Trash2 } from "lucide-react";
 
 interface InlineEditorProps {
   profile: ProfileData;
-  onChange: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  onChange: <K extends keyof ProfileData>(
+    key: K,
+    value: ProfileData[K],
+  ) => void;
   activeTab?: "profile" | "experience" | "links";
   setActiveTab?: (tab: "profile" | "experience" | "links") => void;
 }
@@ -6395,41 +7615,66 @@ export default function InlineEditor({
 }: InlineEditorProps) {
   const [localTab, setLocalTab] = useState<Tab>("profile");
   const activeTab = controlledTab ?? localTab;
-  const setActiveTab = (controlledSetActive ?? setLocalTab) as (tab: Tab) => void;
+  const setActiveTab = (controlledSetActive ?? setLocalTab) as (
+    tab: Tab,
+  ) => void;
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: "profile", label: "Profile", icon: <User className="w-5 h-5" /> },
-    { id: "experience", label: "Experience", icon: <Briefcase className="w-5 h-5" /> },
+    {
+      id: "experience",
+      label: "Experience",
+      icon: <Briefcase className="w-5 h-5" />,
+    },
     { id: "links", label: "Links", icon: <LinkIcon className="w-5 h-5" /> },
   ];
 
   // ── Experience helpers ──
-  const updateExperience = (index: number, field: keyof ProfileExperience, value: string) => {
+  const updateExperience = (
+    index: number,
+    field: keyof ProfileExperience,
+    value: string,
+  ) => {
     const next = [...profile.experience];
     next[index] = { ...next[index], [field]: value };
     onChange("experience", next);
   };
 
   const removeExperience = (index: number) => {
-    onChange("experience", profile.experience.filter((_, i) => i !== index));
+    onChange(
+      "experience",
+      profile.experience.filter((_, i) => i !== index),
+    );
   };
 
   const addExperience = () => {
     onChange("experience", [
       ...profile.experience,
-      { title: "New Role", company: "Company", duration: "2024 – Present", description: "" },
+      {
+        title: "New Role",
+        company: "Company",
+        duration: "2024 – Present",
+        description: "",
+      },
     ]);
   };
 
   // ── Link helpers ──
-  const updateLink = (index: number, field: keyof ProfileLink, value: string) => {
+  const updateLink = (
+    index: number,
+    field: keyof ProfileLink,
+    value: string,
+  ) => {
     const next = [...profile.links];
     next[index] = { ...next[index], [field]: value };
     onChange("links", next);
   };
 
   const removeLink = (index: number) => {
-    onChange("links", profile.links.filter((_, i) => i !== index));
+    onChange(
+      "links",
+      profile.links.filter((_, i) => i !== index),
+    );
   };
 
   const addLink = () => {
@@ -6460,7 +7705,10 @@ export default function InlineEditor({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4" style={{ scrollbarWidth: "none" }}>
+      <div
+        className="flex-1 overflow-y-auto flex flex-col gap-4 pb-4"
+        style={{ scrollbarWidth: "none" }}
+      >
         {/* ── Profile Tab ── */}
         {activeTab === "profile" && (
           <div className="flex flex-col gap-4">
@@ -6471,8 +7719,12 @@ export default function InlineEditor({
                 className="w-12 h-12   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
               />
               <div className="flex flex-col gap-0.5 min-w-0">
-                <p className="text-sm font-medium text-black truncate">{profile.name}</p>
-                <p className="text-xs text-[#6B6B6B] truncate">{profile.headline}</p>
+                <p className="text-sm font-medium text-black truncate">
+                  {profile.name}
+                </p>
+                <p className="text-xs text-[#6B6B6B] truncate">
+                  {profile.headline}
+                </p>
               </div>
             </div>
 
@@ -6581,7 +7833,9 @@ export default function InlineEditor({
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-[#9CA3AF]">Link {i + 1}</span>
+                    <span className="text-xs font-semibold text-[#9CA3AF]">
+                      Link {i + 1}
+                    </span>
                   </div>
                   <button
                     onClick={() => removeLink(i)}
@@ -6621,12 +7875,12 @@ export default function InlineEditor({
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\MediaPicker.tsx`
+
 ```tsx
 "use client";
 
@@ -6675,12 +7929,14 @@ const STOCK_MEDIA: MediaItem[] = [
 ];
 
 export default function MediaPicker() {
-  const [activePickerTab, setActivePickerTab] = useState<"uploads" | "ai">("uploads");
+  const [activePickerTab, setActivePickerTab] = useState<"uploads" | "ai">(
+    "uploads",
+  );
   const [search, setSearch] = useState("");
   const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
 
   const filteredMedia = STOCK_MEDIA.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
+    item.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleUploadClick = () => {
@@ -6693,47 +7949,75 @@ export default function MediaPicker() {
         <div className="flex flex-col justify-center self-stretch grow bg-[#fbfbfb] rounded-[13px] outline-1 outline-t-1 outline-l-1 outline-r-1 outline-b-1 outline outline-[#f3f3f3] relative overflow-hidden min-h-[832px]">
           {/* Background white sheet layer */}
           <div className="w-[486.25px] h-[831.4500122070312px] bg-white absolute left-0 top-0 rounded-[13px] pointer-events-none"></div>
-          
+
           <div className="self-stretch grow relative z-10 flex flex-col items-center py-[21.08px]">
             {/* Background mask layer */}
             <div className="w-[486.25px] h-[831.4500122070312px] bg-gradient-to-b from-black via-black to-black absolute left-0 top-0 pointer-events-none opacity-0"></div>
-            
+
             <div className="w-[434.0899963378906px] flex flex-col gap-[12.640000343322754px]">
               <div className="flex justify-between items-center self-stretch">
                 <div className="w-[83.16px] h-[27.34000015258789px] flex items-center">
-                  <span className="font-medium text-[17.899999618530273px] leading-[27.360000610351562px] text-neutral-900">Media</span>
+                  <span className="font-medium text-[17.899999618530273px] leading-[27.360000610351562px] text-neutral-900">
+                    Media
+                  </span>
                 </div>
-                
+
                 <div className="flex flex-col relative group/info">
                   <div className="w-[18.229999542236328px] h-[18.229999542236328px] flex items-center justify-center cursor-pointer">
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[15.191665649414062px] h-[15.191665649414062px]">
+                    <svg
+                      width="19"
+                      height="19"
+                      viewBox="0 0 19 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-[15.191665649414062px] h-[15.191665649414062px]"
+                    >
                       <g clipPath="url(#clip0_5_88)">
-                        <path d="M9.11488 16.7108C13.3099 16.7108 16.7107 13.3101 16.7107 9.115C16.7107 4.91994 13.3099 1.51917 9.11488 1.51917C4.91981 1.51917 1.51904 4.91994 1.51904 9.115C1.51904 13.3101 4.91981 16.7108 9.11488 16.7108Z" stroke="#171717" strokeWidth="1.51917" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M9.11523 12.1541V9.11499" stroke="#171717" strokeWidth="1.51917" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9.11523 6.07666H9.12283" stroke="#171717" stroke-width="1.51917" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path
+                          d="M9.11488 16.7108C13.3099 16.7108 16.7107 13.3101 16.7107 9.115C16.7107 4.91994 13.3099 1.51917 9.11488 1.51917C4.91981 1.51917 1.51904 4.91994 1.51904 9.115C1.51904 13.3101 4.91981 16.7108 9.11488 16.7108Z"
+                          stroke="#171717"
+                          strokeWidth="1.51917"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M9.11523 12.1541V9.11499"
+                          stroke="#171717"
+                          strokeWidth="1.51917"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9.11523 6.07666H9.12283"
+                          stroke="#171717"
+                          stroke-width="1.51917"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
                       </g>
                       <defs>
                         <clipPath id="clip0_5_88">
-                          <rect width="18.23" height="18.23" fill="white"/>
+                          <rect width="18.23" height="18.23" fill="white" />
                         </clipPath>
                       </defs>
                     </svg>
                   </div>
-                  
+
                   {/* Hover tooltip explanation */}
                   <div className="h-[66.62999725341797px] flex flex-col opacity-0 group-hover/info:opacity-100 transition-opacity duration-150 absolute right-0 top-[22px] z-50 pointer-events-none">
                     <div className="w-80 flex flex-col bg-gradient-to-b from-[#2a2a2f] to-[#3a3a42] px-[12.647899627685547px] pt-[3.109999895095825px] pb-[4.519999980926514px] rounded-lg shadow-md">
                       <span className="font-normal text-[13.300000190734863px] leading-[19.40999984741211px] text-white">
-                        Manage your site's visuals. Upload your own images, browse the library, or generate new ones with AI.
+                        Manage your site's visuals. Upload your own images,
+                        browse the library, or generate new ones with AI.
                       </span>
                     </div>
                   </div>
                 </div>
               </div>
-              
+
               <div className="h-0.5 border-t border-black/5"></div>
             </div>
-            
+
             {/* Tabs Selector Navigation */}
             <div className="flex w-[434.0899963378906px] h-[44px] items-center justify-between mt-3">
               {/* Your Uploads Tab Button */}
@@ -6743,17 +8027,19 @@ export default function MediaPicker() {
                   handleUploadClick();
                 }}
                 className={`w-[206.5px] h-10 rounded-[13px] relative cursor-pointer outline-none transition-all flex items-center justify-center gap-2 border ${
-                  activePickerTab === "uploads" 
-                    ? "bg-white border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]" 
+                  activePickerTab === "uploads"
+                    ? "bg-white border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
                     : "bg-[#f3f3f3] border-transparent hover:bg-zinc-200/50"
                 }`}
               >
                 <div className="w-[16.15999984741211px] h-[16.15999984741211px] flex items-center justify-center">
                   <Upload className="w-4 h-4 text-black" />
                 </div>
-                <span className="font-medium text-[14.899999618530273px] leading-[23px] text-center text-black">Your Uploads</span>
+                <span className="font-medium text-[14.899999618530273px] leading-[23px] text-center text-black">
+                  Your Uploads
+                </span>
               </button>
-              
+
               {/* Generate Images Tab Button */}
               <button
                 onClick={() => setActivePickerTab("ai")}
@@ -6763,20 +8049,24 @@ export default function MediaPicker() {
                   <div className="w-[210.52000427246094px] h-12 opacity-[0.20] bg-gradient-to-b from-[#0894ff] via-[#c959dd] via-[#ff2e54] to-[#ff9004] absolute -top-[4px] -left-[2px] blur-sm rounded-[14px] pointer-events-none"></div>
                 )}
                 <div className="flex flex-col self-stretch p-0.5 rounded-[14px] w-full relative z-10">
-                  <div className={`self-stretch h-10 rounded-[13px] flex items-center justify-center gap-2 border transition-all ${
-                    activePickerTab === "ai" 
-                      ? "bg-white border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]" 
-                      : "bg-[#f3f3f3] border-transparent hover:bg-zinc-200/50"
-                  }`}>
+                  <div
+                    className={`self-stretch h-10 rounded-[13px] flex items-center justify-center gap-2 border transition-all ${
+                      activePickerTab === "ai"
+                        ? "bg-white border-black/5 shadow-[0_1px_3px_rgba(0,0,0,0.05)]"
+                        : "bg-[#f3f3f3] border-transparent hover:bg-zinc-200/50"
+                    }`}
+                  >
                     <div className="w-[16.15999984741211px] h-[16.15999984741211px] flex items-center justify-center">
                       <Sparkles className="w-4 h-4 text-black" />
                     </div>
-                    <span className="font-medium text-[15.100000381469727px] leading-[23px] text-center text-black">Generate Images</span>
+                    <span className="font-medium text-[15.100000381469727px] leading-[23px] text-center text-black">
+                      Generate Images
+                    </span>
                   </div>
                 </div>
               </button>
             </div>
-            
+
             <AnimatePresence mode="wait">
               {activePickerTab === "uploads" ? (
                 <motion.div
@@ -6789,15 +8079,36 @@ export default function MediaPicker() {
                 >
                   {/* Library Header */}
                   <div className="w-[434.0899963378906px] flex flex-col mt-1">
-                    <span className="font-medium text-[14.899999618530273px] leading-[23px] text-black">Image Library</span>
+                    <span className="font-medium text-[14.899999618530273px] leading-[23px] text-black">
+                      Image Library
+                    </span>
                   </div>
-                  
+
                   {/* Search Input Bar Container */}
                   <div className="w-[434.0899963378906px] h-10 flex items-center gap-[4.199999809265137px] bg-[#f3f3f3] px-[12.647899627685547px] rounded-[13px] border border-black/5 relative">
                     <div className="relative shrink-0 w-[22.440000534057617px] h-[16.158000946044922px] flex items-center justify-center">
-                      <svg width="23" height="17" viewBox="0 0 23 17" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[18px] h-[14px]">
-                        <path d="M17.279 14.1379L14.3574 11.2163" stroke="black" strokeWidth="1.3465" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M10.5466 12.7918C13.5212 12.7918 15.9326 10.3804 15.9326 7.40578C15.9326 4.43117 13.5212 2.01978 10.5466 2.01978C7.57204 2.01978 5.16064 4.43117 5.16064 7.40578C5.16064 10.3804 7.57204 12.7918 10.5466 12.7918Z" stroke="black" strokeWidth="1.3465" strokeLinecap="round" strokeLinejoin="round"/>
+                      <svg
+                        width="23"
+                        height="17"
+                        viewBox="0 0 23 17"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-[18px] h-[14px]"
+                      >
+                        <path
+                          d="M17.279 14.1379L14.3574 11.2163"
+                          stroke="black"
+                          strokeWidth="1.3465"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M10.5466 12.7918C13.5212 12.7918 15.9326 10.3804 15.9326 7.40578C15.9326 4.43117 13.5212 2.01978 10.5466 2.01978C7.57204 2.01978 5.16064 4.43117 5.16064 7.40578C5.16064 10.3804 7.57204 12.7918 10.5466 12.7918Z"
+                          stroke="black"
+                          strokeWidth="1.3465"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </div>
                     <input
@@ -6808,9 +8119,12 @@ export default function MediaPicker() {
                       className="flex-1 bg-transparent border-none text-[14.600000381469727px] text-black placeholder:text-zinc-400 focus:outline-none focus:ring-0 p-0 font-normal ml-1"
                     />
                   </div>
-                  
+
                   {/* Media preset cards grid list */}
-                  <div className="grid grid-cols-2 gap-x-[15px] gap-y-[16px] w-[434.0899963378906px] h-[510px] overflow-y-auto mt-1 pb-4" style={{ scrollbarWidth: "none" }}>
+                  <div
+                    className="grid grid-cols-2 gap-x-[15px] gap-y-[16px] w-[434.0899963378906px] h-[510px] overflow-y-auto mt-1 pb-4"
+                    style={{ scrollbarWidth: "none" }}
+                  >
                     {filteredMedia.length > 0 ? (
                       filteredMedia.map((item) => {
                         const isSelected = selectedMedia === item.id;
@@ -6822,21 +8136,23 @@ export default function MediaPicker() {
                               toast.success(`Selected ${item.name} image!`);
                             }}
                             className={`w-[208.61000061035156px] h-[156.4499969482422px] bg-[#f3f3f3] rounded-[13px] relative overflow-hidden cursor-pointer group border transition-all ${
-                              isSelected ? "border-blue-500 ring-1 ring-blue-500" : "border-black/5 hover:border-zinc-300"
+                              isSelected
+                                ? "border-blue-500 ring-1 ring-blue-500"
+                                : "border-black/5 hover:border-zinc-300"
                             }`}
                           >
                             {/* Image element */}
-                            <img 
-                              src={item.url} 
+                            <img
+                              src={item.url}
                               alt={item.name}
                               className="w-[208.61000061035156px] h-[156.4499969482422px] object-cover absolute inset-0 select-none pointer-events-none opacity-85 group-hover:scale-105 transition-transform duration-300"
                             />
-                            
+
                             {/* Bottom Gradient overlay */}
                             <div className="w-[208.61000061035156px] h-[78.22116088867188px] absolute bottom-0 left-0 pointer-events-none">
                               <div className="w-[208.61000061035156px] h-[78.22116088867188px] bg-gradient-to-b from-black/0 to-black/80 absolute inset-0"></div>
                             </div>
-                            
+
                             {/* Media tag */}
                             <div className="flex flex-col absolute bottom-3 left-3 z-10 pointer-events-none">
                               <div className="h-[23.079999923706055px] flex items-center">
@@ -6845,14 +8161,17 @@ export default function MediaPicker() {
                                 </span>
                               </div>
                             </div>
-                            
+
                             {/* Selected Badge Indicator */}
                             {isSelected && (
                               <div className="absolute top-2 right-2 w-5 h-5 rounded-lg bg-blue-500 flex items-center justify-center shadow-sm z-20">
-                                <Check className="w-3 h-3 text-white" strokeWidth={2.5} />
+                                <Check
+                                  className="w-3 h-3 text-white"
+                                  strokeWidth={2.5}
+                                />
                               </div>
                             )}
-                            
+
                             {/* Action Hover overlay */}
                             <div className="w-[208.61000061035156px] h-[156.4499969482422px] flex justify-center items-center bg-white/20 backdrop-blur-[1px] absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
                               <div className="h-10 flex flex-col justify-center items-center bg-[#f3f3f3] px-[25.295799255371094px] py-[8px] rounded-[13px] shadow-sm">
@@ -6886,7 +8205,9 @@ export default function MediaPicker() {
                       <span>AI Image Generator</span>
                     </div>
                     <p className="text-[11px] text-zinc-500 leading-relaxed">
-                      Describe the concept or image style you desire, and our AI will automatically construct a customized image matching your request.
+                      Describe the concept or image style you desire, and our AI
+                      will automatically construct a customized image matching
+                      your request.
                     </p>
                     <div className="flex flex-col gap-2 mt-1">
                       {[
@@ -6898,7 +8219,9 @@ export default function MediaPicker() {
                         <button
                           key={prompt}
                           onClick={() => {
-                            toast.loading(`Analyzing description and generating image...`);
+                            toast.loading(
+                              `Analyzing description and generating image...`,
+                            );
                             setTimeout(() => {
                               toast.dismiss();
                               toast.success("AI image successfully generated!");
@@ -6922,12 +8245,12 @@ export default function MediaPicker() {
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\ProfilePreview.tsx`
+
 ```tsx
 "use client";
 
@@ -6969,22 +8292,46 @@ function EditableWrapper({
 
 // ─── Link icons (inline SVG) ───────────────────────────────────────────────────
 function LinkIcon({ icon }: { icon?: string }) {
-  if (icon === "linkedin") return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-  );
-  if (icon === "twitter") return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.856L2.25 2.25h6.883l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" /></svg>
-  );
-  if (icon === "github") return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
-  );
+  if (icon === "linkedin")
+    return (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+      </svg>
+    );
+  if (icon === "twitter")
+    return (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.856L2.25 2.25h6.883l4.253 5.622L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z" />
+      </svg>
+    );
+  if (icon === "github")
+    return (
+      <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+      </svg>
+    );
   return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" /></svg>
+    <svg
+      viewBox="0 0 24 24"
+      className="w-5 h-5 fill-none stroke-current"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+    </svg>
   );
 }
 
 // ─── Minimal Card Template ─────────────────────────────────────────────────────
-function MinimalCard({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
+function MinimalCard({
+  profile,
+  onFieldClick,
+}: {
+  profile: ProfileData;
+  onFieldClick?: (fieldName: string) => void;
+}) {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-6 font-inter">
       <div className="w-full max-w-lg">
@@ -7000,14 +8347,23 @@ function MinimalCard({ profile, onFieldClick }: { profile: ProfileData; onFieldC
             </EditableWrapper>
             <div className="flex flex-col gap-0.5 min-w-0">
               <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
-                <h1 className="text-xl font-medium text-black leading-tight">{profile.name}</h1>
+                <h1 className="text-xl font-medium text-black leading-tight">
+                  {profile.name}
+                </h1>
               </EditableWrapper>
               <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
-                <p className="text-sm text-[#6B6B6B] leading-tight mt-0.5">{profile.headline}</p>
+                <p className="text-sm text-[#6B6B6B] leading-tight mt-0.5">
+                  {profile.headline}
+                </p>
               </EditableWrapper>
               {profile.location && (
-                <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
-                  <p className="text-xs text-[#9CA3AF] mt-1">{profile.location}</p>
+                <EditableWrapper
+                  fieldName="location"
+                  onFieldClick={onFieldClick}
+                >
+                  <p className="text-xs text-[#9CA3AF] mt-1">
+                    {profile.location}
+                  </p>
                 </EditableWrapper>
               )}
             </div>
@@ -7015,14 +8371,19 @@ function MinimalCard({ profile, onFieldClick }: { profile: ProfileData; onFieldC
 
           {/* Summary */}
           <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
-            <p className="text-sm text-[#171717] leading-relaxed mb-6">{profile.summary}</p>
+            <p className="text-sm text-[#171717] leading-relaxed mb-6">
+              {profile.summary}
+            </p>
           </EditableWrapper>
 
           {/* Skills */}
           {profile.skills.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-6">
               {profile.skills.slice(0, 8).map((skill, i) => (
-                <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#DCEAFF] text-[#1A4A8A]">
+                <span
+                  key={i}
+                  className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#DCEAFF] text-[#1A4A8A]"
+                >
                   {skill.name}
                 </span>
               ))}
@@ -7033,14 +8394,28 @@ function MinimalCard({ profile, onFieldClick }: { profile: ProfileData; onFieldC
 
           {/* Experience */}
           {profile.experience.length > 0 && (
-            <EditableWrapper fieldName="experience" onFieldClick={onFieldClick} className="mb-6">
+            <EditableWrapper
+              fieldName="experience"
+              onFieldClick={onFieldClick}
+              className="mb-6"
+            >
               <div className="flex flex-col gap-4">
-                <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide">Experience</h2>
+                <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide">
+                  Experience
+                </h2>
                 {profile.experience.slice(0, 3).map((exp, i) => (
                   <div key={i} className="flex flex-col gap-0.5">
-                    <p className="text-sm font-medium text-black">{exp.title}</p>
-                    <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
-                    {exp.description && <p className="text-xs text-[#9CA3AF] leading-relaxed mt-0.5">{exp.description}</p>}
+                    <p className="text-sm font-medium text-black">
+                      {exp.title}
+                    </p>
+                    <p className="text-xs text-[#6B6B6B]">
+                      {exp.company} · {exp.duration}
+                    </p>
+                    {exp.description && (
+                      <p className="text-xs text-[#9CA3AF] leading-relaxed mt-0.5">
+                        {exp.description}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
@@ -7071,7 +8446,13 @@ function MinimalCard({ profile, onFieldClick }: { profile: ProfileData; onFieldC
 }
 
 // ─── Bento Grid Template ───────────────────────────────────────────────────────
-function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
+function BentoGrid({
+  profile,
+  onFieldClick,
+}: {
+  profile: ProfileData;
+  onFieldClick?: (fieldName: string) => void;
+}) {
   return (
     <div className="min-h-screen bg-[#FBFBFB] p-6 font-inter">
       <div className="max-w-2xl mx-auto grid grid-cols-2 gap-3">
@@ -7089,11 +8470,15 @@ function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldCli
               <h1 className="text-xl font-medium text-black">{profile.name}</h1>
             </EditableWrapper>
             <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
-              <p className="text-sm text-[#6B6B6B] leading-snug mt-0.5">{profile.headline}</p>
+              <p className="text-sm text-[#6B6B6B] leading-snug mt-0.5">
+                {profile.headline}
+              </p>
             </EditableWrapper>
             {profile.location && (
               <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
-                <p className="text-xs text-[#9CA3AF] mt-1">{profile.location}</p>
+                <p className="text-xs text-[#9CA3AF] mt-1">
+                  {profile.location}
+                </p>
               </EditableWrapper>
             )}
           </div>
@@ -7101,18 +8486,27 @@ function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldCli
 
         {/* Summary */}
         <div className="col-span-2 bg-white border border-[#E6E6E6] rounded-[16px] p-5">
-          <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-2">About</p>
+          <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-2">
+            About
+          </p>
           <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
-            <p className="text-sm text-[#171717] leading-relaxed">{profile.summary}</p>
+            <p className="text-sm text-[#171717] leading-relaxed">
+              {profile.summary}
+            </p>
           </EditableWrapper>
         </div>
 
         {/* Skills */}
         <div className="bg-[#DCEAFF]/40 border border-[#8DB8FF]/30 rounded-[16px] p-5">
-          <p className="text-xs font-medium text-[#1A4A8A] uppercase tracking-wide mb-3">Skills</p>
+          <p className="text-xs font-medium text-[#1A4A8A] uppercase tracking-wide mb-3">
+            Skills
+          </p>
           <div className="flex flex-wrap gap-1.5">
             {profile.skills.map((skill, i) => (
-              <span key={i} className="text-[11px] font-medium px-2 py-0.5   rounded-lg bg-white border border-[#8DB8FF]/40 text-[#1A4A8A]">
+              <span
+                key={i}
+                className="text-[11px] font-medium px-2 py-0.5   rounded-lg bg-white border border-[#8DB8FF]/40 text-[#1A4A8A]"
+              >
                 {skill.name}
               </span>
             ))}
@@ -7121,12 +8515,16 @@ function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldCli
 
         {/* Experience snippets */}
         <div className="bg-white border border-[#E6E6E6] rounded-[16px] p-5">
-          <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Experience</p>
+          <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">
+            Experience
+          </p>
           <EditableWrapper fieldName="experience" onFieldClick={onFieldClick}>
             <div className="flex flex-col gap-2.5">
               {profile.experience.slice(0, 3).map((exp, i) => (
                 <div key={i} className="flex flex-col gap-0">
-                  <p className="text-[12px] font-medium text-black">{exp.title}</p>
+                  <p className="text-[12px] font-medium text-black">
+                    {exp.title}
+                  </p>
                   <p className="text-[11px] text-[#9CA3AF]">{exp.company}</p>
                 </div>
               ))}
@@ -7137,7 +8535,9 @@ function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldCli
         {/* Links */}
         {profile.links.length > 0 && (
           <div className="col-span-2 bg-white border border-[#E6E6E6] rounded-[16px] p-5">
-            <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Links</p>
+            <p className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">
+              Links
+            </p>
             <EditableWrapper fieldName="links" onFieldClick={onFieldClick}>
               <div className="flex items-center gap-2 flex-wrap">
                 {profile.links.map((link, i) => (
@@ -7160,7 +8560,13 @@ function BentoGrid({ profile, onFieldClick }: { profile: ProfileData; onFieldCli
 }
 
 // ─── Full Scroll Template ──────────────────────────────────────────────────────
-function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
+function FullScroll({
+  profile,
+  onFieldClick,
+}: {
+  profile: ProfileData;
+  onFieldClick?: (fieldName: string) => void;
+}) {
   return (
     <div className="min-h-screen bg-[#F3F3F3] font-inter">
       {/* Hero banner */}
@@ -7168,7 +8574,11 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
 
       <div className="max-w-xl mx-auto px-6 -mt-10 pb-16">
         {/* Avatar */}
-        <EditableWrapper fieldName="avatarUrl" onFieldClick={onFieldClick} className="w-fit mb-4">
+        <EditableWrapper
+          fieldName="avatarUrl"
+          onFieldClick={onFieldClick}
+          className="w-fit mb-4"
+        >
           <img
             src={profile.avatarUrl}
             alt={profile.name}
@@ -7178,7 +8588,9 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
 
         {/* Name + headline */}
         <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
-          <h1 className="text-2xl font-medium text-black mb-1 leading-tight">{profile.name}</h1>
+          <h1 className="text-2xl font-medium text-black mb-1 leading-tight">
+            {profile.name}
+          </h1>
         </EditableWrapper>
         <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
           <p className="text-sm text-[#6B6B6B] mb-1">{profile.headline}</p>
@@ -7191,7 +8603,11 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
 
         {/* Links */}
         {profile.links.length > 0 && (
-          <EditableWrapper fieldName="links" onFieldClick={onFieldClick} className="mb-6">
+          <EditableWrapper
+            fieldName="links"
+            onFieldClick={onFieldClick}
+            className="mb-6"
+          >
             <div className="flex items-center gap-2 flex-wrap">
               {profile.links.map((link, i) => (
                 <a
@@ -7209,24 +8625,38 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
 
         {/* About */}
         <section className="bg-white rounded-[16px] border border-[#E6E6E6] p-6 mb-4">
-          <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">About</h2>
+          <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">
+            About
+          </h2>
           <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
-            <p className="text-sm text-[#171717] leading-relaxed">{profile.summary}</p>
+            <p className="text-sm text-[#171717] leading-relaxed">
+              {profile.summary}
+            </p>
           </EditableWrapper>
         </section>
 
         {/* Experience */}
         <section className="bg-white rounded-[16px] border border-[#E6E6E6] p-6 mb-4">
-          <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-4">Experience</h2>
+          <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-4">
+            Experience
+          </h2>
           <EditableWrapper fieldName="experience" onFieldClick={onFieldClick}>
             <div className="flex flex-col gap-5">
               {profile.experience.map((exp, i) => (
                 <div key={i} className="flex gap-3">
                   <div className="w-1 bg-[#E6E6E6]   rounded-lg flex-shrink-0 mt-1" />
                   <div>
-                    <p className="text-sm font-medium text-black">{exp.title}</p>
-                    <p className="text-xs text-[#6B6B6B]">{exp.company} · {exp.duration}</p>
-                    {exp.description && <p className="text-xs text-[#9CA3AF] leading-relaxed mt-1">{exp.description}</p>}
+                    <p className="text-sm font-medium text-black">
+                      {exp.title}
+                    </p>
+                    <p className="text-xs text-[#6B6B6B]">
+                      {exp.company} · {exp.duration}
+                    </p>
+                    {exp.description && (
+                      <p className="text-xs text-[#9CA3AF] leading-relaxed mt-1">
+                        {exp.description}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -7237,10 +8667,15 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
         {/* Skills */}
         {profile.skills.length > 0 && (
           <section className="bg-white rounded-[16px] border border-[#E6E6E6] p-6">
-            <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Skills</h2>
+            <h2 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">
+              Skills
+            </h2>
             <div className="flex flex-wrap gap-1.5">
               {profile.skills.map((skill, i) => (
-                <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#F3F3F3] border border-[#E6E6E6] text-[#171717]">
+                <span
+                  key={i}
+                  className="text-[11px] font-medium px-2.5 py-1   rounded-lg bg-[#F3F3F3] border border-[#E6E6E6] text-[#171717]"
+                >
                   {skill.name}
                 </span>
               ))}
@@ -7253,7 +8688,13 @@ function FullScroll({ profile, onFieldClick }: { profile: ProfileData; onFieldCl
 }
 
 // ─── Dark Template ─────────────────────────────────────────────────────────────
-function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onFieldClick?: (fieldName: string) => void }) {
+function DarkTemplate({
+  profile,
+  onFieldClick,
+}: {
+  profile: ProfileData;
+  onFieldClick?: (fieldName: string) => void;
+}) {
   return (
     <div className="min-h-screen bg-[#0D0D10] font-inter">
       <div className="max-w-xl mx-auto px-6 py-12">
@@ -7268,14 +8709,18 @@ function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onField
           </EditableWrapper>
           <div className="flex-1">
             <EditableWrapper fieldName="name" onFieldClick={onFieldClick}>
-              <h1 className="text-xl font-medium text-white mb-0.5 leading-tight">{profile.name}</h1>
+              <h1 className="text-xl font-medium text-white mb-0.5 leading-tight">
+                {profile.name}
+              </h1>
             </EditableWrapper>
             <EditableWrapper fieldName="headline" onFieldClick={onFieldClick}>
               <p className="text-sm text-[#8DB8FF]">{profile.headline}</p>
             </EditableWrapper>
             {profile.location && (
               <EditableWrapper fieldName="location" onFieldClick={onFieldClick}>
-                <p className="text-xs text-[#ffffff40] mt-0.5">{profile.location}</p>
+                <p className="text-xs text-[#ffffff40] mt-0.5">
+                  {profile.location}
+                </p>
               </EditableWrapper>
             )}
           </div>
@@ -7283,14 +8728,19 @@ function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onField
 
         {/* Summary */}
         <EditableWrapper fieldName="summary" onFieldClick={onFieldClick}>
-          <p className="text-sm text-[#ffffff80] leading-relaxed mb-8">{profile.summary}</p>
+          <p className="text-sm text-[#ffffff80] leading-relaxed mb-8">
+            {profile.summary}
+          </p>
         </EditableWrapper>
 
         {/* Skills */}
         {profile.skills.length > 0 && (
           <div className="flex flex-wrap gap-1.5 mb-8">
             {profile.skills.map((skill, i) => (
-              <span key={i} className="text-[11px] font-medium px-2.5 py-1   rounded-lg border border-[#ffffff15] text-[#8DB8FF]">
+              <span
+                key={i}
+                className="text-[11px] font-medium px-2.5 py-1   rounded-lg border border-[#ffffff15] text-[#8DB8FF]"
+              >
                 {skill.name}
               </span>
             ))}
@@ -7302,16 +8752,26 @@ function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onField
         {/* Experience */}
         {profile.experience.length > 0 && (
           <div className="flex flex-col gap-5 mb-8">
-            <h2 className="text-xs font-medium text-[#ffffff40] uppercase tracking-wide">Experience</h2>
+            <h2 className="text-xs font-medium text-[#ffffff40] uppercase tracking-wide">
+              Experience
+            </h2>
             <EditableWrapper fieldName="experience" onFieldClick={onFieldClick}>
               <div className="flex flex-col gap-5">
                 {profile.experience.map((exp, i) => (
                   <div key={i} className="flex gap-3">
                     <div className="w-px bg-[#ffffff15] flex-shrink-0 mt-1" />
                     <div>
-                      <p className="text-sm font-medium text-white">{exp.title}</p>
-                      <p className="text-xs text-[#8DB8FF]/70">{exp.company} · {exp.duration}</p>
-                      {exp.description && <p className="text-xs text-[#ffffff50] leading-relaxed mt-1">{exp.description}</p>}
+                      <p className="text-sm font-medium text-white">
+                        {exp.title}
+                      </p>
+                      <p className="text-xs text-[#8DB8FF]/70">
+                        {exp.company} · {exp.duration}
+                      </p>
+                      {exp.description && (
+                        <p className="text-xs text-[#ffffff50] leading-relaxed mt-1">
+                          {exp.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -7343,14 +8803,28 @@ function DarkTemplate({ profile, onFieldClick }: { profile: ProfileData; onField
 }
 
 // ─── Main exported component ───────────────────────────────────────────────────
-export default function ProfilePreview({ profile, template, scale = 1, onFieldClick, fluid = false }: ProfilePreviewProps) {
+export default function ProfilePreview({
+  profile,
+  template,
+  scale = 1,
+  onFieldClick,
+  fluid = false,
+}: ProfilePreviewProps) {
   if (fluid) {
     return (
       <div className="w-full min-h-screen">
-        {template === "minimal-card" && <MinimalCard profile={profile} onFieldClick={onFieldClick} />}
-        {template === "bento-grid" && <BentoGrid profile={profile} onFieldClick={onFieldClick} />}
-        {template === "full-scroll" && <FullScroll profile={profile} onFieldClick={onFieldClick} />}
-        {template === "dark" && <DarkTemplate profile={profile} onFieldClick={onFieldClick} />}
+        {template === "minimal-card" && (
+          <MinimalCard profile={profile} onFieldClick={onFieldClick} />
+        )}
+        {template === "bento-grid" && (
+          <BentoGrid profile={profile} onFieldClick={onFieldClick} />
+        )}
+        {template === "full-scroll" && (
+          <FullScroll profile={profile} onFieldClick={onFieldClick} />
+        )}
+        {template === "dark" && (
+          <DarkTemplate profile={profile} onFieldClick={onFieldClick} />
+        )}
       </div>
     );
   }
@@ -7375,20 +8849,28 @@ export default function ProfilePreview({ profile, template, scale = 1, onFieldCl
           overflow: "auto",
         }}
       >
-        {template === "minimal-card" && <MinimalCard profile={profile} onFieldClick={onFieldClick} />}
-        {template === "bento-grid" && <BentoGrid profile={profile} onFieldClick={onFieldClick} />}
-        {template === "full-scroll" && <FullScroll profile={profile} onFieldClick={onFieldClick} />}
-        {template === "dark" && <DarkTemplate profile={profile} onFieldClick={onFieldClick} />}
+        {template === "minimal-card" && (
+          <MinimalCard profile={profile} onFieldClick={onFieldClick} />
+        )}
+        {template === "bento-grid" && (
+          <BentoGrid profile={profile} onFieldClick={onFieldClick} />
+        )}
+        {template === "full-scroll" && (
+          <FullScroll profile={profile} onFieldClick={onFieldClick} />
+        )}
+        {template === "dark" && (
+          <DarkTemplate profile={profile} onFieldClick={onFieldClick} />
+        )}
       </div>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\SettingsPane.tsx`
+
 ```tsx
 "use client";
 
@@ -7401,11 +8883,18 @@ interface SettingsPaneProps {
   router: any;
 }
 
-export default function SettingsPane({ profileName, router }: SettingsPaneProps) {
+export default function SettingsPane({
+  profileName,
+  router,
+}: SettingsPaneProps) {
   const { websiteId } = useEditor();
   const [siteName, setSiteName] = useState(profileName);
-  const [seoTitle, setSeoTitle] = useState(`${profileName} - Professional Micro-site`);
-  const [seoDesc, setSeoDesc] = useState("Explore my professional experience, projects, education, and social networks.");
+  const [seoTitle, setSeoTitle] = useState(
+    `${profileName} - Professional Micro-site`,
+  );
+  const [seoDesc, setSeoDesc] = useState(
+    "Explore my professional experience, projects, education, and social networks.",
+  );
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -7458,7 +8947,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
   const handleDeleteSite = async () => {
     if (!websiteId) return;
-    const confirmDel = window.confirm("Are you absolutely sure you want to delete this website? This action is permanent!");
+    const confirmDel = window.confirm(
+      "Are you absolutely sure you want to delete this website? This action is permanent!",
+    );
     if (!confirmDel) return;
     const toastId = toast.loading("Deleting website...");
     try {
@@ -7485,14 +8976,21 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
     <section className="w-[340px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col h-full overflow-hidden select-none font-inter">
       {/* Title Header */}
       <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0">
-        <span className="font-semibold text-[15px] text-black">Site Settings</span>
+        <span className="font-semibold text-[15px] text-black">
+          Site Settings
+        </span>
       </div>
 
       {/* Content container */}
-      <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5" style={{ scrollbarWidth: "none" }}>
+      <div
+        className="flex-1 overflow-y-auto p-5 flex flex-col gap-5"
+        style={{ scrollbarWidth: "none" }}
+      >
         {/* Branding */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Brand Name</label>
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            Brand Name
+          </label>
           <input
             type="text"
             value={siteName}
@@ -7503,7 +9001,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
         {/* SEO Title */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">SEO Title Tag</label>
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            SEO Title Tag
+          </label>
           <input
             type="text"
             value={seoTitle}
@@ -7514,7 +9014,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
         {/* SEO Description */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Meta Description</label>
+          <label className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+            Meta Description
+          </label>
           <textarea
             value={seoDesc}
             onChange={(e) => setSeoDesc(e.target.value)}
@@ -7529,7 +9031,9 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
           disabled={saving}
           className="w-full h-10 rounded-lg bg-[#2A2A2F] text-white text-[12px] font-semibold hover:bg-[#3E3E45] active:scale-95 transition-all flex items-center justify-center gap-1.5 shadow-sm"
         >
-          {saving && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+          {saving && (
+            <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />
+          )}
           Save Configuration
         </button>
 
@@ -7537,9 +9041,12 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
 
         {/* Danger Zone */}
         <div className="p-4 border border-red-200 bg-red-50/40 rounded-xl flex flex-col gap-3">
-          <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">Danger Zone</span>
+          <span className="text-[11px] font-bold text-red-700 uppercase tracking-wider">
+            Danger Zone
+          </span>
           <p className="text-xs text-red-700/80 leading-relaxed">
-            Deleting your site will permanently wipe all pages, files, and domains. This cannot be undone.
+            Deleting your site will permanently wipe all pages, files, and
+            domains. This cannot be undone.
           </p>
           <button
             onClick={handleDeleteSite}
@@ -7552,12 +9059,12 @@ export default function SettingsPane({ profileName, router }: SettingsPaneProps)
     </section>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\editor\components\TemplatePicker.tsx`
+
 ```tsx
 "use client";
 
@@ -7575,7 +9082,10 @@ interface TemplatePickerProps {
 function TemplatePreview({ template }: { template: TemplateMeta }) {
   if (template.id === "minimal-card") {
     return (
-      <div className="w-full h-full p-3 flex items-center justify-center" style={{ backgroundColor: template.previewBg }}>
+      <div
+        className="w-full h-full p-3 flex items-center justify-center"
+        style={{ backgroundColor: template.previewBg }}
+      >
         <div className="w-full max-w-[140px] bg-white rounded-lg border border-[#E6E6E6] p-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-7 h-7 rounded-lg bg-[#E6E6E6]" />
@@ -7587,8 +9097,11 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
           <div className="h-1 w-full bg-[#F3F3F3] rounded mb-1" />
           <div className="h-1 w-4/5 bg-[#F3F3F3] rounded mb-2" />
           <div className="flex gap-1">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-3 px-2 rounded-lg bg-[#DCEAFF] flex items-center">
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-3 px-2 rounded-lg bg-[#DCEAFF] flex items-center"
+              >
                 <div className="h-0.5 w-5 bg-[#8DB8FF] rounded" />
               </div>
             ))}
@@ -7600,7 +9113,10 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
 
   if (template.id === "bento-grid") {
     return (
-      <div className="w-full h-full p-3 grid grid-cols-2 grid-rows-3 gap-1.5" style={{ backgroundColor: template.previewBg }}>
+      <div
+        className="w-full h-full p-3 grid grid-cols-2 grid-rows-3 gap-1.5"
+        style={{ backgroundColor: template.previewBg }}
+      >
         <div className="col-span-2 bg-white rounded-[6px] border border-[#E6E6E6] p-2 flex items-center gap-2">
           <div className="w-5 h-5 rounded-lg bg-[#E6E6E6] flex-shrink-0" />
           <div className="h-1.5 w-16 bg-[#2A2A2F] rounded-lg" />
@@ -7616,8 +9132,11 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
           <div className="h-1 w-2/3 bg-[#F3F3F3] rounded mt-1" />
         </div>
         <div className="col-span-2 bg-white rounded-[6px] border border-[#E6E6E6] p-2 flex gap-1">
-          {[1, 2, 3, 4].map(i => (
-            <div key={i} className="h-2 px-1.5 rounded-lg bg-[#F3F3F3] flex-shrink-0">
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              className="h-2 px-1.5 rounded-lg bg-[#F3F3F3] flex-shrink-0"
+            >
               <div className="h-full w-4 bg-[#E6E6E6] rounded" />
             </div>
           ))}
@@ -7628,7 +9147,10 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
 
   if (template.id === "full-scroll") {
     return (
-      <div className="w-full h-full flex flex-col" style={{ backgroundColor: template.previewBg }}>
+      <div
+        className="w-full h-full flex flex-col"
+        style={{ backgroundColor: template.previewBg }}
+      >
         <div className="h-12 bg-[#2A2A2F] flex items-end px-3 pb-2">
           <div className="w-8 h-8 rounded-lg bg-[#E6E6E6] border-2 border-white -mb-4" />
         </div>
@@ -7636,7 +9158,7 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
           <div className="h-2 w-20 bg-[#2A2A2F] rounded" />
           <div className="h-1 w-16 bg-[#E6E6E6] rounded" />
           <div className="h-px w-full bg-[#E6E6E6] my-1" />
-          {[1, 2].map(i => (
+          {[1, 2].map((i) => (
             <div key={i} className="flex gap-2 items-start">
               <div className="w-3 h-3 rounded-lg bg-[#8DB8FF] mt-0.5 flex-shrink-0" />
               <div className="flex-1 flex flex-col gap-1">
@@ -7651,7 +9173,10 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
   }
 
   return (
-    <div className="w-full h-full p-3 flex flex-col gap-2" style={{ backgroundColor: template.previewBg }}>
+    <div
+      className="w-full h-full p-3 flex flex-col gap-2"
+      style={{ backgroundColor: template.previewBg }}
+    >
       <div className="flex items-center gap-2">
         <div className="w-7 h-7 rounded-lg bg-[#2A2A2F] border border-[#333]" />
         <div className="flex flex-col gap-1">
@@ -7662,8 +9187,11 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
       <div className="h-1 w-full bg-white/10 rounded" />
       <div className="h-1 w-4/5 bg-white/10 rounded" />
       <div className="flex gap-1 mt-1">
-        {[1, 2, 3].map(i => (
-          <div key={i} className="h-3 px-2 rounded-lg bg-[#8DB8FF]/20 flex items-center">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="h-3 px-2 rounded-lg bg-[#8DB8FF]/20 flex items-center"
+          >
             <div className="h-0.5 w-4 bg-[#8DB8FF] rounded" />
           </div>
         ))}
@@ -7672,14 +9200,19 @@ function TemplatePreview({ template }: { template: TemplateMeta }) {
   );
 }
 
-export default function TemplatePicker({ selected, onSelect }: TemplatePickerProps) {
-  const [activePickerTab, setActivePickerTab] = useState<"presets" | "ai">("presets");
+export default function TemplatePicker({
+  selected,
+  onSelect,
+}: TemplatePickerProps) {
+  const [activePickerTab, setActivePickerTab] = useState<"presets" | "ai">(
+    "presets",
+  );
   const [search, setSearch] = useState("");
 
   const filteredTemplates = TEMPLATES.filter(
     (t) =>
       t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.description.toLowerCase().includes(search.toLowerCase())
+      t.description.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -7696,16 +9229,43 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
             <div className="w-[434.0899963378906px] flex flex-col gap-[12.640000343322754px]">
               <div className="flex justify-between items-center self-stretch">
                 <div className="w-[83.16px] h-[27.34000015258789px] flex items-center">
-                  <span className="font-medium text-[17.899999618530273px] leading-[27.360000610351562px] text-neutral-900">Templates</span>
+                  <span className="font-medium text-[17.899999618530273px] leading-[27.360000610351562px] text-neutral-900">
+                    Templates
+                  </span>
                 </div>
 
                 <div className="flex flex-col relative group/info">
                   <div className="w-[18.229999542236328px] h-[18.229999542236328px] flex items-center justify-center cursor-pointer">
-                    <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[15.191665649414062px] h-[15.191665649414062px]">
+                    <svg
+                      width="19"
+                      height="19"
+                      viewBox="0 0 19 19"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-[15.191665649414062px] h-[15.191665649414062px]"
+                    >
                       <g clipPath="url(#clip0_5_88)">
-                        <path d="M9.11488 16.7108C13.3099 16.7108 16.7107 13.3101 16.7107 9.115C16.7107 4.91994 13.3099 1.51917 9.11488 1.51917C4.91981 1.51917 1.51904 4.91994 1.51904 9.115C1.51904 13.3101 4.91981 16.7108 9.11488 16.7108Z" stroke="#171717" strokeWidth="1.51917" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M9.11523 12.1541V9.11499" stroke="#171717" strokeWidth="1.51917" stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M9.11523 6.07666H9.12283" stroke="#171717" strokeWidth="1.51917" stroke-linecap="round" stroke-linejoin="round" />
+                        <path
+                          d="M9.11488 16.7108C13.3099 16.7108 16.7107 13.3101 16.7107 9.115C16.7107 4.91994 13.3099 1.51917 9.11488 1.51917C4.91981 1.51917 1.51904 4.91994 1.51904 9.115C1.51904 13.3101 4.91981 16.7108 9.11488 16.7108Z"
+                          stroke="#171717"
+                          strokeWidth="1.51917"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M9.11523 12.1541V9.11499"
+                          stroke="#171717"
+                          strokeWidth="1.51917"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                        <path
+                          d="M9.11523 6.07666H9.12283"
+                          stroke="#171717"
+                          strokeWidth="1.51917"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
                       </g>
                       <defs>
                         <clipPath id="clip0_5_88">
@@ -7719,7 +9279,8 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
                   <div className="h-[66.62999725341797px] flex flex-col opacity-0 group-hover/info:opacity-100 transition-opacity duration-150 absolute right-0 top-[22px] z-50 pointer-events-none">
                     <div className="w-80 flex flex-col bg-gradient-to-b from-[#2a2a2f] to-[#3a3a42] px-[12.647899627685547px] pt-[3.109999895095825px] pb-[4.519999980926514px] rounded-lg shadow-md">
                       <span className="font-normal text-[13.300000190734863px] leading-[19.40999984741211px] text-white">
-                        Manage your site's templates. Select a layout, search presets, or generate customized structures using AI.
+                        Manage your site's templates. Select a layout, search
+                        presets, or generate customized structures using AI.
                       </span>
                     </div>
                   </div>
@@ -7732,13 +9293,31 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
             <div className="flex flex-col gap-3 mt-4">
               {/* Library Header */}
 
-
               {/* Search Input Bar Container */}
               <div className="w-[434.0899963378906px] h-10 flex items-center gap-[4.199999809265137px] bg-[#f3f3f3] px-[12.647899627685547px] rounded-[13px] border border-black/5 relative">
                 <div className="relative shrink-0 w-[22.440000534057617px] h-[16.158000946044922px] flex items-center justify-center">
-                  <svg width="23" height="17" viewBox="0 0 23 17" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-[18px] h-[14px]">
-                    <path d="M17.279 14.1379L14.3574 11.2163" stroke="black" strokeWidth="1.3465" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M10.5466 12.7918C13.5212 12.7918 15.9326 10.3804 15.9326 7.40578C15.9326 4.43117 13.5212 2.01978 10.5466 2.01978C7.57204 2.01978 5.16064 4.43117 5.16064 7.40578C5.16064 10.3804 7.57204 12.7918 10.5466 12.7918Z" stroke="black" strokeWidth="1.3465" strokeLinecap="round" strokeLinejoin="round" />
+                  <svg
+                    width="23"
+                    height="17"
+                    viewBox="0 0 23 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-[18px] h-[14px]"
+                  >
+                    <path
+                      d="M17.279 14.1379L14.3574 11.2163"
+                      stroke="black"
+                      strokeWidth="1.3465"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M10.5466 12.7918C13.5212 12.7918 15.9326 10.3804 15.9326 7.40578C15.9326 4.43117 13.5212 2.01978 10.5466 2.01978C7.57204 2.01978 5.16064 4.43117 5.16064 7.40578C5.16064 10.3804 7.57204 12.7918 10.5466 12.7918Z"
+                      stroke="black"
+                      strokeWidth="1.3465"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </div>
                 <input
@@ -7751,7 +9330,10 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
               </div>
 
               {/* Template preset cards grid list */}
-              <div className="grid grid-cols-2 gap-x-[15px] gap-y-[16px] w-[434.0899963378906px]  overflow-y-auto mt-1 pb-4" style={{ scrollbarWidth: "none" }}>
+              <div
+                className="grid grid-cols-2 gap-x-[15px] gap-y-[16px] w-[434.0899963378906px]  overflow-y-auto mt-1 pb-4"
+                style={{ scrollbarWidth: "none" }}
+              >
                 {filteredTemplates.length > 0 ? (
                   filteredTemplates.map((template) => {
                     const isSelected = selected === template.id;
@@ -7759,8 +9341,11 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
                       <div
                         key={template.id}
                         onClick={() => onSelect(template.id)}
-                        className={`w-[208.61000061035156px] h-[156.4499969482422px] bg-[#f3f3f3] rounded-[13px] relative overflow-hidden cursor-pointer group border transition-all ${isSelected ? "border-blue-500 ring-1 ring-blue-500" : "border-black/5 hover:border-zinc-300"
-                          }`}
+                        className={`w-[208.61000061035156px] h-[156.4499969482422px] bg-[#f3f3f3] rounded-[13px] relative overflow-hidden cursor-pointer group border transition-all ${
+                          isSelected
+                            ? "border-blue-500 ring-1 ring-blue-500"
+                            : "border-black/5 hover:border-zinc-300"
+                        }`}
                       >
                         {/* Template Virtual Preview */}
                         <div className="w-[208.61000061035156px] h-[156.4499969482422px] absolute inset-0 select-none pointer-events-none opacity-85">
@@ -7784,7 +9369,10 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
                         {/* Selected Badge Indicator */}
                         {isSelected && (
                           <div className="absolute top-2 right-2 w-5 h-5 rounded-lg bg-blue-500 flex items-center justify-center shadow-sm z-20">
-                            <Check className="w-3 h-3 text-white" strokeWidth={2.5} />
+                            <Check
+                              className="w-3 h-3 text-white"
+                              strokeWidth={2.5}
+                            />
                           </div>
                         )}
 
@@ -7812,12 +9400,12 @@ export default function TemplatePicker({ selected, onSelect }: TemplatePickerPro
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\login\page.tsx`
+
 ```tsx
 "use client";
 
@@ -7884,7 +9472,7 @@ export default function LoginPage() {
             firstName,
             lastName,
             email: data.user.email,
-          })
+          }),
         );
       }
 
@@ -7906,13 +9494,11 @@ export default function LoginPage() {
       <Navbar />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto  max-w-[1536px]">
-
         {/* ── Left: Form ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Card wrapper — exact reference style */}
           <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md">
             <div className="flex flex-col gap-5">
-
               {/* Header */}
               <div className="flex flex-col gap-1 text-center items-center">
                 <h1 className="text-2xl font-medium text-black w-fit leading-tight">
@@ -7950,7 +9536,6 @@ export default function LoginPage() {
 
               {/* Form */}
               <form className="flex flex-col gap-4" onSubmit={handleContinue}>
-
                 {/* Email */}
                 <div>
                   <div className="z-10 flex items-center gap-1 mb-2 w-full min-w-0 relative">
@@ -7985,7 +9570,11 @@ export default function LoginPage() {
                         <button
                           type="button"
                           className="text-xs text-[#8DB8FF] font-medium hover:underline"
-                          onClick={() => toast.info("Password reset link sent to your email!")}
+                          onClick={() =>
+                            toast.info(
+                              "Password reset link sent to your email!",
+                            )
+                          }
                         >
                           Forgot password?
                         </button>
@@ -8006,9 +9595,11 @@ export default function LoginPage() {
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword
-                            ? <EyeOff className="w-5 h-5" />
-                            : <Eye className="w-5 h-5" />}
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -8017,19 +9608,28 @@ export default function LoginPage() {
 
                 {/* Submit */}
                 <button
-                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${(isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid))
-                    ? "opacity-50 select-none pointer-events-none"
-                    : ""
-                    }`}
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
+                    isSubmitting ||
+                    (showPasswordStep ? !isPasswordValid : !isEmailValid)
+                      ? "opacity-50 select-none pointer-events-none"
+                      : ""
+                  }`}
                   type="submit"
-                  disabled={isSubmitting || (showPasswordStep ? !isPasswordValid : !isEmailValid)}
+                  disabled={
+                    isSubmitting ||
+                    (showPasswordStep ? !isPasswordValid : !isEmailValid)
+                  }
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <span className="w-5 h-5   rounded-lg border-2 border-white border-t-transparent animate-spin" />
                       Processing...
                     </span>
-                  ) : showPasswordStep ? "Sign in" : "Continue"}
+                  ) : showPasswordStep ? (
+                    "Sign in"
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </form>
 
@@ -8043,7 +9643,6 @@ export default function LoginPage() {
                   Sign up
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -8062,17 +9661,16 @@ export default function LoginPage() {
             src="https://www.webild.io/images/input.svg"
           />
         </div>
-
       </div>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\onboarding\page.tsx`
+
 ```tsx
 "use client";
 
@@ -8094,8 +9692,6 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
-
-
 
 // ── Typing dots indicator ────────────────────────────────────────────────────
 function TypingDots() {
@@ -8194,8 +9790,16 @@ function ChatBubble({
 function OnboardingInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { startScrape, startScrapeManual, isLoading, scrapeError, editedProfile, clearProfile, useMockProfile, websiteId } =
-    useEditor();
+  const {
+    startScrape,
+    startScrapeManual,
+    isLoading,
+    scrapeError,
+    editedProfile,
+    clearProfile,
+    useMockProfile,
+    websiteId,
+  } = useEditor();
 
   const [step, setStep] = useState<"input" | "loading" | "fallback">("input");
   const [url, setUrl] = useState("");
@@ -8205,7 +9809,12 @@ function OnboardingInner() {
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   // Chat messages for the loading state — sequentially revealed
-  const CHAT_STEPS: Array<{ text: string; tag: string; triggerAt: number; typingDuration: number }> = [
+  const CHAT_STEPS: Array<{
+    text: string;
+    tag: string;
+    triggerAt: number;
+    typingDuration: number;
+  }> = [
     {
       text: "Reading your LinkedIn profile and extracting all public data.",
       tag: "Fetching data",
@@ -8233,7 +9842,12 @@ function OnboardingInner() {
   ];
 
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>(
-    CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" as ChatMessageState }))
+    CHAT_STEPS.map((s, i) => ({
+      id: i,
+      text: s.text,
+      tag: s.tag,
+      state: "pending" as ChatMessageState,
+    })),
   );
 
   // If there's an initial URL query param, auto-start scraping
@@ -8243,18 +9857,27 @@ function OnboardingInner() {
       setUrl(initialUrl);
       handleStartScrape(initialUrl);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const handleStartScrape = async (targetUrl: string) => {
     const trimmed = targetUrl.trim();
     if (!trimmed.includes("linkedin.com/in/")) {
-      toast.error("Please paste a valid LinkedIn profile URL (e.g. linkedin.com/in/username)");
+      toast.error(
+        "Please paste a valid LinkedIn profile URL (e.g. linkedin.com/in/username)",
+      );
       return;
     }
     setStep("loading");
     setProgress(0);
-    setChatMessages(CHAT_STEPS.map((s, i) => ({ id: i, text: s.text, tag: s.tag, state: "pending" })));
+    setChatMessages(
+      CHAT_STEPS.map((s, i) => ({
+        id: i,
+        text: s.text,
+        tag: s.tag,
+        state: "pending",
+      })),
+    );
     startScrape(trimmed);
   };
 
@@ -8302,7 +9925,7 @@ function OnboardingInner() {
         });
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [progress, step]);
 
   // Scroll to bottom as new messages appear
@@ -8372,7 +9995,11 @@ function OnboardingInner() {
     <div className="min-h-screen bg-[#FBFBFB] font-inter flex flex-col items-center justify-center text-black antialiased relative overflow-hidden">
       {/* ── Background Graphic ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-50">
-        <img src="/bg.png" alt="" className="w-full h-full object-cover object-top" />
+        <img
+          src="/bg.png"
+          alt=""
+          className="w-full h-full object-cover object-top"
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-[#FBFBFB]/40 via-white/80 to-[#FBFBFB]" />
       </div>
 
@@ -8394,7 +10021,8 @@ function OnboardingInner() {
                   Paste your LinkedIn profile link to get started.
                 </h1>
                 <p className="text-[14px] text-gray-500 text-center mb-6 leading-relaxed">
-                  We'll extract your public profile contents and instantly set up your customizable web portfolio.
+                  We'll extract your public profile contents and instantly set
+                  up your customizable web portfolio.
                 </p>
 
                 <div className="flex flex-col gap-3">
@@ -8403,7 +10031,9 @@ function OnboardingInner() {
                     placeholder="linkedin.com/in/username"
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleStartScrape(url)}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && handleStartScrape(url)
+                    }
                     className="w-full h-11 px-4 rounded-xl bg-[#FBFBFB] border border-[#E6E6E6] focus:border-[#8DB8FF] focus:ring-1 focus:ring-[#8DB8FF] outline-none text-[14.5px] font-medium text-black transition-colors"
                     autoFocus
                   />
@@ -8431,14 +10061,22 @@ function OnboardingInner() {
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-[#F3F3F5]">
                   <AIAvatar size="md" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-semibold text-black">Webild AI</p>
-                    <p className="text-[11px] text-[#888] font-medium">Building your page</p>
+                    <p className="text-[13px] font-semibold text-black">
+                      Webild AI
+                    </p>
+                    <p className="text-[11px] text-[#888] font-medium">
+                      Building your page
+                    </p>
                   </div>
                   <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#3b82f6]">
                     <motion.div
                       className="w-1.5 h-1.5 rounded-full bg-[#3b82f6]"
                       animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                      transition={{
+                        duration: 1.4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     />
                     {progress}%
                   </div>
@@ -8479,9 +10117,12 @@ function OnboardingInner() {
                   <AlertCircle className="w-5 h-5 text-[#E45A5A]" />
                 </div>
 
-                <h2 className="text-xl font-bold text-black mb-2 font-inter-tight">Could not fetch public profile.</h2>
+                <h2 className="text-xl font-bold text-black mb-2 font-inter-tight">
+                  Could not fetch public profile.
+                </h2>
                 <p className="text-[14px] text-gray-500 leading-relaxed mb-5">
-                  LinkedIn's privacy restriction is blocking direct access. Please download your settings archive from{" "}
+                  LinkedIn's privacy restriction is blocking direct access.
+                  Please download your settings archive from{" "}
                   <a
                     href="https://www.linkedin.com/psettings/member-data"
                     target="_blank"
@@ -8506,8 +10147,18 @@ function OnboardingInner() {
                       className="hidden"
                       disabled={isImporting}
                     />
-                    <svg className="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z" />
+                    <svg
+                      className="w-8 h-8 text-gray-400 mb-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.5"
+                        d="M12 16v-8m0 8l-4-4m4 4l4-4M4 12v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2z"
+                      />
                     </svg>
                     {zipFile ? (
                       <div className="flex flex-col items-center gap-1">
@@ -8577,12 +10228,12 @@ export default function OnboardingPage() {
     </Suspense>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\p\[slug]\page.tsx`
+
 ```tsx
 "use client";
 
@@ -8633,13 +10284,26 @@ function PublishedPageInner() {
     return (
       <div className="min-h-screen bg-[#FBFBFB] flex flex-col items-center justify-center font-inter p-6 text-center select-none">
         <div className="w-16 h-16 rounded-[20px] bg-amber-50 border border-amber-200 flex items-center justify-center mb-6 shadow-sm">
-          <svg className="w-7 h-7 text-amber-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <svg
+            className="w-7 h-7 text-amber-500"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
           </svg>
         </div>
-        <h1 className="text-2xl font-bold text-black mb-2">Portfolio Not Found</h1>
+        <h1 className="text-2xl font-bold text-black mb-2">
+          Portfolio Not Found
+        </h1>
         <p className="text-sm text-gray-500 max-w-sm mb-6 leading-relaxed">
-          The requested portfolio is either not published or does not exist. Please check the URL.
+          The requested portfolio is either not published or does not exist.
+          Please check the URL.
         </p>
       </div>
     );
@@ -8656,21 +10320,23 @@ function PublishedPageInner() {
 
 export default function PublishedPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center font-inter select-none">
-        <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FBFBFB] flex items-center justify-center font-inter select-none">
+          <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+        </div>
+      }
+    >
       <PublishedPageInner />
     </Suspense>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\preview\page.tsx`
+
 ```tsx
 "use client";
 
@@ -8708,7 +10374,10 @@ function PublishPanel({
   const { editedProfile } = useEditor();
 
   const suggestedSlug = editedProfile
-    ? editedProfile.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
+    ? editedProfile.name
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "")
     : "yourname";
 
   const [slug, setSlug] = useState(suggestedSlug);
@@ -8726,7 +10395,9 @@ function PublishPanel({
     setChecking(true);
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/websites/subdomain/check?slug=${encodeURIComponent(slug)}`);
+        const res = await fetch(
+          `/api/websites/subdomain/check?slug=${encodeURIComponent(slug)}`,
+        );
         const data = await res.json();
         if (res.ok) {
           setIsAvailable(data.available);
@@ -8746,7 +10417,9 @@ function PublishPanel({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h3 className="text-sm font-medium text-black mb-1">Choose your subdomain</h3>
+        <h3 className="text-sm font-medium text-black mb-1">
+          Choose your subdomain
+        </h3>
         <p className="text-xs text-[#9CA3AF]">Your free URL on LinkedPage</p>
       </div>
 
@@ -8757,7 +10430,9 @@ function PublishPanel({
         <input
           className="flex-1 px-3 py-2.5 text-sm text-black bg-transparent outline-none min-w-0"
           value={slug}
-          onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+          onChange={(e) =>
+            setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))
+          }
           placeholder="yourname"
           maxLength={30}
         />
@@ -8773,7 +10448,8 @@ function PublishPanel({
         <div className="text-xs">
           {checking ? (
             <span className="text-[#9CA3AF] flex items-center gap-1">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking availability...
+              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking
+              availability...
             </span>
           ) : isAvailable ? (
             <p className="text-xs text-[#369762] flex items-center gap-1">
@@ -8791,8 +10467,11 @@ function PublishPanel({
       <button
         onClick={() => isValid && isAvailable && onPublish(slug)}
         disabled={!isValid || !isAvailable || publishing || checking}
-        className={`button button-primary w-full justify-center gap-2 ${!isValid || !isAvailable || publishing || checking ? "opacity-50 pointer-events-none" : ""
-          }`}
+        className={`button button-primary w-full justify-center gap-2 ${
+          !isValid || !isAvailable || publishing || checking
+            ? "opacity-50 pointer-events-none"
+            : ""
+        }`}
       >
         {publishing ? (
           <Loader2 className="w-5 h-5 animate-spin" />
@@ -8833,7 +10512,9 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
         onClick={copy}
       >
         <Globe className="w-5 h-5 text-[#9CA3AF] flex-shrink-0" />
-        <p className="text-sm text-black flex-1 truncate font-medium">linkedpage.io/{slug}</p>
+        <p className="text-sm text-black flex-1 truncate font-medium">
+          linkedpage.io/{slug}
+        </p>
         {copied ? (
           <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
         ) : (
@@ -8858,7 +10539,13 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
 function PreviewInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { editedProfile, selectedTemplate, useMockProfile, loadWebsite, websiteId } = useEditor();
+  const {
+    editedProfile,
+    selectedTemplate,
+    useMockProfile,
+    loadWebsite,
+    websiteId,
+  } = useEditor();
 
   const [previewMode, setPreviewMode] = useState<PreviewMode>("desktop");
   const [publishStep, setPublishStep] = useState<PublishStep>("idle");
@@ -8956,18 +10643,20 @@ function PreviewInner() {
   const mobileH = 812;
 
   // Calculate scale to fit within available space
-  const previewContainerW = typeof window !== "undefined" ? window.innerWidth - 340 : 700;
-  const previewContainerH = typeof window !== "undefined" ? window.innerHeight - 200 : 600;
+  const previewContainerW =
+    typeof window !== "undefined" ? window.innerWidth - 340 : 700;
+  const previewContainerH =
+    typeof window !== "undefined" ? window.innerHeight - 200 : 600;
 
   const desktopScale = Math.min(
     (previewContainerW - 40) / desktopW,
     (previewContainerH - 60) / desktopH,
-    0.85
+    0.85,
   );
   const mobileScale = Math.min(
     200 / mobileW,
     (previewContainerH - 60) / mobileH,
-    0.65
+    0.65,
   );
 
   return (
@@ -8979,7 +10668,9 @@ function PreviewInner() {
         <div className="max-w-[1536px] mx-auto flex items-center justify-between gap-3 h-12 px-4 bg-white/80 backdrop-blur-md rounded-lg border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
           {/* Left: back */}
           <button
-            onClick={() => router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")}
+            onClick={() =>
+              router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")
+            }
             className="flex items-center gap-1.5 text-[11px] font-medium text-[#6B6B6B] hover:text-black transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -8990,16 +10681,22 @@ function PreviewInner() {
           <div className="flex items-center gap-1 p-1 bg-[#F3F3F5] rounded-[10px]">
             <button
               onClick={() => setPreviewMode("desktop")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${previewMode === "desktop" ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" : "text-[#6B6B6B] hover:text-black"
-                }`}
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${
+                previewMode === "desktop"
+                  ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                  : "text-[#6B6B6B] hover:text-black"
+              }`}
             >
               <Monitor className="w-5 h-5" />
               Desktop
             </button>
             <button
               onClick={() => setPreviewMode("mobile")}
-              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${previewMode === "mobile" ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]" : "text-[#6B6B6B] hover:text-black"
-                }`}
+              className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-lg transition-[background,color] duration-150 ${
+                previewMode === "mobile"
+                  ? "bg-white text-black shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                  : "text-[#6B6B6B] hover:text-black"
+              }`}
             >
               <Smartphone className="w-5 h-5" />
               Mobile
@@ -9008,7 +10705,9 @@ function PreviewInner() {
 
           {/* Right: edit CTA */}
           <button
-            onClick={() => router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")}
+            onClick={() =>
+              router.push(websiteId ? `/editor?id=${websiteId}` : "/editor")
+            }
             className="button button-secondary !py-1.5 !px-3 !text-[11px] flex items-center gap-1.5"
           >
             <Pencil className="w-5 h-5" />
@@ -9019,7 +10718,6 @@ function PreviewInner() {
 
       {/* ── Layout: canvas + right panel ── */}
       <div className="flex flex-col lg:flex-row pt-[148px] pb-8 px-5 gap-4 max-w-[1536px] mx-auto">
-
         {/* ── Canvas ── */}
         <div className="flex-1 flex items-start justify-center min-w-0">
           <AnimatePresence mode="wait">
@@ -9036,7 +10734,8 @@ function PreviewInner() {
                   style={{
                     width: desktopW * desktopScale,
                     height: desktopH * desktopScale,
-                    boxShadow: "0 8px 30px -8px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.05)",
+                    boxShadow:
+                      "0 8px 30px -8px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.05)",
                   }}
                 >
                   <div
@@ -9049,7 +10748,10 @@ function PreviewInner() {
                       pointerEvents: "none",
                     }}
                   >
-                    <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                    <ProfilePreview
+                      profile={editedProfile}
+                      template={selectedTemplate}
+                    />
                   </div>
                 </div>
               ) : (
@@ -9071,7 +10773,10 @@ function PreviewInner() {
                       pointerEvents: "none",
                     }}
                   >
-                    <ProfilePreview profile={editedProfile} template={selectedTemplate} />
+                    <ProfilePreview
+                      profile={editedProfile}
+                      template={selectedTemplate}
+                    />
                   </div>
                 </div>
               )}
@@ -9081,9 +10786,14 @@ function PreviewInner() {
 
         {/* ── Right publish panel ── */}
         <div className="w-full lg:w-[280px] flex-shrink-0 flex flex-col gap-4">
-
           {/* Publish card */}
-          <div className="bg-white border border-[#E6E6E6] rounded-[16px] p-5" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)" }}>
+          <div
+            className="bg-white border border-[#E6E6E6] rounded-[16px] p-5"
+            style={{
+              boxShadow:
+                "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)",
+            }}
+          >
             <AnimatePresence mode="wait">
               {publishStep === "done" ? (
                 <motion.div
@@ -9093,7 +10803,11 @@ function PreviewInner() {
                   transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                 >
                   <PublishedPanel
-                    url={publishedSlug ? `https://${publishedSlug}.linkedpage.io` : `https://linkedpage.io/${publishedSlug}`}
+                    url={
+                      publishedSlug
+                        ? `https://${publishedSlug}.linkedpage.io`
+                        : `https://linkedpage.io/${publishedSlug}`
+                    }
                     slug={publishedSlug}
                   />
                 </motion.div>
@@ -9105,17 +10819,27 @@ function PreviewInner() {
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
                 >
-                  <PublishPanel onPublish={handlePublish} publishing={publishing} />
+                  <PublishPanel
+                    onPublish={handlePublish}
+                    publishing={publishing}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
 
           {/* Export card */}
-          <div className="bg-white border border-[#E6E6E6] rounded-[16px] p-5" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)" }}>
+          <div
+            className="bg-white border border-[#E6E6E6] rounded-[16px] p-5"
+            style={{
+              boxShadow:
+                "0 1px 3px rgba(0,0,0,0.04), 0 0 0 1px rgba(0,0,0,0.03)",
+            }}
+          >
             <h3 className="text-sm font-medium text-black mb-1">Export code</h3>
             <p className="text-xs text-[#9CA3AF] mb-4 leading-relaxed">
-              Download your page as a self-contained HTML + CSS file. Host it anywhere.
+              Download your page as a self-contained HTML + CSS file. Host it
+              anywhere.
             </p>
             <button
               onClick={handleExport}
@@ -9133,7 +10857,9 @@ function PreviewInner() {
 
           {/* What's included */}
           <div className="bg-[#FBFBFB] border border-[#E6E6E6] rounded-[16px] p-5">
-            <h3 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">Free plan includes</h3>
+            <h3 className="text-xs font-medium text-[#9CA3AF] uppercase tracking-wide mb-3">
+              Free plan includes
+            </h3>
             <ul className="flex flex-col gap-2">
               {[
                 "Custom subdomain (linkedpage.io/…)",
@@ -9141,16 +10867,21 @@ function PreviewInner() {
                 "Code export",
                 "Always up-to-date with LinkedIn",
               ].map((item, i) => (
-                <li key={i} className="flex items-center gap-2 text-xs text-[#171717]">
+                <li
+                  key={i}
+                  className="flex items-center gap-2 text-xs text-[#171717]"
+                >
                   <div className="w-5 h-5 rounded-lg bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
-                    <Check className="w-2.5 h-2.5 text-[#1a5c3a]" strokeWidth={2.5} />
+                    <Check
+                      className="w-2.5 h-2.5 text-[#1a5c3a]"
+                      strokeWidth={2.5}
+                    />
                   </div>
                   {item}
                 </li>
               ))}
             </ul>
           </div>
-
         </div>
       </div>
     </div>
@@ -9161,22 +10892,24 @@ export default function PreviewPage() {
   return (
     <div className="min-h-screen bg-white font-inter flex flex-col">
       <Navbar />
-      <Suspense fallback={
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
-        </main>
-      }>
+      <Suspense
+        fallback={
+          <main className="flex-1 flex items-center justify-center">
+            <div className="w-5 h-5 rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          </main>
+        }
+      >
         <PreviewInner />
       </Suspense>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\publish\page.tsx`
+
 ```tsx
 "use client";
 
@@ -9222,25 +10955,32 @@ function PublishInner() {
 
   const shareOnTwitter = () => {
     const text = encodeURIComponent(
-      `Just turned my LinkedIn into a beautiful personal micro-site in under 60 seconds with @LinkedPage ✨\n\n${url}`
+      `Just turned my LinkedIn into a beautiful personal micro-site in under 60 seconds with @LinkedPage ✨\n\n${url}`,
     );
     window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank");
   };
 
   const shareOnLinkedIn = () => {
     const shareUrl = encodeURIComponent(url);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`, "_blank");
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
+      "_blank",
+    );
   };
 
   return (
     <main className="flex-1 flex items-center justify-center px-5 pt-24 pb-16">
       <div className="flex flex-col items-center gap-10 max-w-md w-full text-center">
-
         {/* Success ring */}
         <motion.div
           initial={{ scale: 0.7, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 340, damping: 28, delay: 0.05 }}
+          transition={{
+            type: "spring",
+            stiffness: 340,
+            damping: 28,
+            delay: 0.05,
+          }}
           className="relative w-24 h-24"
         >
           <div className="absolute inset-0   rounded-lg bg-[#8DFFB3]/30 blur-xl" />
@@ -9258,11 +10998,16 @@ function PublishInner() {
         >
           <div className="flex items-center justify-center gap-2">
             <Sparkles className="w-5 h-5 text-[#8DB8FF]" />
-            <span className="text-xs font-medium text-[#8DB8FF] uppercase tracking-wide">Published</span>
+            <span className="text-xs font-medium text-[#8DB8FF] uppercase tracking-wide">
+              Published
+            </span>
           </div>
-          <h1 className="text-3xl font-medium text-black leading-tight">Your page is live!</h1>
+          <h1 className="text-3xl font-medium text-black leading-tight">
+            Your page is live!
+          </h1>
           <p className="text-sm text-[#6B6B6B] leading-relaxed">
-            Share it anywhere — your LinkedIn profile, email signature, portfolio, or bio link.
+            Share it anywhere — your LinkedIn profile, email signature,
+            portfolio, or bio link.
           </p>
         </motion.div>
 
@@ -9280,7 +11025,9 @@ function PublishInner() {
             <div className="w-8 h-8   rounded-lg bg-white border border-[#E6E6E6] flex items-center justify-center flex-shrink-0">
               <ExternalLink className="w-5 h-5 text-[#6B6B6B]" />
             </div>
-            <p className="text-sm text-black font-medium flex-1 text-left truncate">{url}</p>
+            <p className="text-sm text-black font-medium flex-1 text-left truncate">
+              {url}
+            </p>
             {copied ? (
               <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
             ) : (
@@ -9296,13 +11043,21 @@ function PublishInner() {
           transition={{ duration: 0.35, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
           className="flex flex-col gap-3 w-full"
         >
-          <p className="text-xs text-[#9CA3AF] font-medium uppercase tracking-wide">Share</p>
+          <p className="text-xs text-[#9CA3AF] font-medium uppercase tracking-wide">
+            Share
+          </p>
           <div className="grid grid-cols-2 gap-3">
-            <button onClick={shareOnTwitter} className="button button-secondary justify-center gap-2">
+            <button
+              onClick={shareOnTwitter}
+              className="button button-secondary justify-center gap-2"
+            >
               <Twitter className="w-5 h-5" />
               Post on X
             </button>
-            <button onClick={shareOnLinkedIn} className="button button-secondary justify-center gap-2">
+            <button
+              onClick={shareOnLinkedIn}
+              className="button button-secondary justify-center gap-2"
+            >
               <Linkedin className="w-5 h-5" />
               Share on LinkedIn
             </button>
@@ -9343,7 +11098,6 @@ function PublishInner() {
             Create another
           </button>
         </motion.div>
-
       </div>
     </main>
   );
@@ -9353,22 +11107,24 @@ export default function PublishPage() {
   return (
     <div className="min-h-screen bg-white font-inter flex flex-col">
       <Navbar />
-      <Suspense fallback={
-        <main className="flex-1 flex items-center justify-center">
-          <div className="w-5 h-5   rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
-        </main>
-      }>
+      <Suspense
+        fallback={
+          <main className="flex-1 flex items-center justify-center">
+            <div className="w-5 h-5   rounded-lg border-2 border-[#E6E6E6] border-t-[#2A2A2F] animate-spin" />
+          </main>
+        }
+      >
         <PublishInner />
       </Suspense>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `app\signup\page.tsx`
+
 ```tsx
 "use client";
 
@@ -9414,7 +11170,9 @@ export default function SignupPage() {
     }
 
     if (!isPasswordValid) {
-      toast.error("Password must be at least 8 characters with a number or symbol!");
+      toast.error(
+        "Password must be at least 8 characters with a number or symbol!",
+      );
       return;
     }
 
@@ -9443,7 +11201,7 @@ export default function SignupPage() {
             firstName,
             lastName,
             email: data.user.email,
-          })
+          }),
         );
       }
 
@@ -9470,13 +11228,11 @@ export default function SignupPage() {
       <Navbar />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 min-h-screen py-28 mx-auto max-w-[1536px]">
-
         {/* ── Left: Signup Form (exact reference UI) ── */}
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Outer card — button-secondary + rounded + p-8 as in reference */}
-          <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md" >
+          <div className="relative bg-white shadow-inner rounded-[20px] px-10 py-14 w-full max-w-md">
             <div className="flex flex-col gap-5">
-
               {/* Header */}
               <div className="flex flex-col gap-1 text-center items-center">
                 <h1 className="text-2xl font-medium text-black w-fit leading-tight">
@@ -9515,7 +11271,6 @@ export default function SignupPage() {
 
               {/* Form */}
               <form className="flex flex-col gap-4" onSubmit={handleContinue}>
-
                 {/* First name + Last name */}
                 <div className="grid grid-cols-2 gap-3">
                   {/* First name */}
@@ -9606,36 +11361,47 @@ export default function SignupPage() {
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                         >
-                          {showPassword
-                            ? <EyeOff className="w-5 h-5" />
-                            : <Eye className="w-5 h-5" />}
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
                         </button>
                       </div>
                       {/* Password strength hint */}
-                      {showPasswordStep && password.length > 0 && !isPasswordValid && (
-                        <p className="mt-1.5 text-xs text-[#E45A5A]">
-                          Min 8 characters with at least 1 number or symbol
-                        </p>
-                      )}
+                      {showPasswordStep &&
+                        password.length > 0 &&
+                        !isPasswordValid && (
+                          <p className="mt-1.5 text-xs text-[#E45A5A]">
+                            Min 8 characters with at least 1 number or symbol
+                          </p>
+                        )}
                     </div>
                   </div>
                 </div>
 
                 {/* Submit */}
                 <button
-                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)
-                    ? "opacity-50 select-none pointer-events-none"
-                    : ""
-                    }`}
+                  className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
+                    isSubmitting ||
+                    (showPasswordStep ? !canSubmit : !canContinue)
+                      ? "opacity-50 select-none pointer-events-none"
+                      : ""
+                  }`}
                   type="submit"
-                  disabled={isSubmitting || (showPasswordStep ? !canSubmit : !canContinue)}
+                  disabled={
+                    isSubmitting ||
+                    (showPasswordStep ? !canSubmit : !canContinue)
+                  }
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
                       <span className="w-5 h-5   rounded-lg border-2 border-white border-t-transparent animate-spin" />
                       Creating account...
                     </span>
-                  ) : "Continue"}
+                  ) : (
+                    "Continue"
+                  )}
                 </button>
               </form>
 
@@ -9649,7 +11415,6 @@ export default function SignupPage() {
                   Sign in
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -9668,17 +11433,16 @@ export default function SignupPage() {
             src="https://www.webild.io/images/input.svg"
           />
         </div>
-
       </div>
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `client\pages\Index.tsx`
+
 ```tsx
 import { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
@@ -9686,9 +11450,17 @@ import Footer from "../components/Footer";
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
-function DarkButton({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+function DarkButton({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <button className={`inline-flex items-center justify-center h-10 px-6      rounded-lg   btn-dark text-white text-[12px] font-medium transition-all duration-150 active:scale-97 whitespace-nowrap hover:bg-[#3E3E45] ${className}`}>
+    <button
+      className={`inline-flex items-center justify-center h-10 px-6      rounded-lg   btn-dark text-white text-[12px] font-medium transition-all duration-150 active:scale-97 whitespace-nowrap hover:bg-[#3E3E45] ${className}`}
+    >
       {children}
     </button>
   );
@@ -9696,7 +11468,9 @@ function DarkButton({ children, className = "" }: { children: React.ReactNode; c
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[#369762] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">{children}</p>
+    <p className="text-[#369762] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">
+      {children}
+    </p>
   );
 }
 
@@ -9723,7 +11497,8 @@ const TEMPLATES_LARGE = [
   },
   {
     name: "Full-Page Scroll",
-    subtitle: "A modern, smooth-scrolling experience that tells your career story",
+    subtitle:
+      "A modern, smooth-scrolling experience that tells your career story",
     img: "https://api.builder.io/api/v1/image/assets/TEMP/22a1dcc1827cb472b41466029a5665e67ea82849?width=982",
   },
   {
@@ -9767,8 +11542,20 @@ function HeroSection() {
           </span>
           <span className="flex items-center justify-center w-7 h-7   rounded-lg btn-dark-sm flex-shrink-0 active:scale-95 transition-all">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M3.98708 3.98709H9.6837V9.68372" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M3.98708 9.68372L9.6837 3.98709" stroke="white" strokeWidth="1.13917" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M3.98708 3.98709H9.6837V9.68372"
+                stroke="white"
+                strokeWidth="1.13917"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M3.98708 9.68372L9.6837 3.98709"
+                stroke="white"
+                strokeWidth="1.13917"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </span>
         </div>
@@ -9794,8 +11581,20 @@ function HeroSection() {
                 {/* Add button */}
                 <button className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-95 transition-all">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68124 8.83502H13.9887" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.83499 3.68127V13.9888" stroke="black" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3.68124 8.83502H13.9887"
+                      stroke="black"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M8.83499 3.68127V13.9888"
+                      stroke="black"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
 
@@ -9808,7 +11607,13 @@ function HeroSection() {
                 <button className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-95 transition-all">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                     <g clipPath="url(#palette-clip)">
-                      <path d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z" stroke="black" strokeWidth="0.589167" strokeLinecap="round" strokeLinejoin="round" />
+                      <path
+                        d="M7.07029 12.9622C5.50766 12.9622 4.00903 12.3415 2.90408 11.2365C1.79913 10.1316 1.17838 8.63296 1.17838 7.07032C1.17838 5.50769 1.79913 4.00906 2.90408 2.90411C4.00903 1.79916 5.50766 1.17841 7.07029 1.17841C8.63293 1.17841 10.1316 1.73708 11.2365 2.73154C12.3415 3.72599 12.9622 5.07476 12.9622 6.48113C12.9622 7.26245 12.6518 8.01176 12.0994 8.56424C11.5469 9.11671 10.7976 9.42709 10.0163 9.42709H8.69057C8.49908 9.42709 8.31138 9.48041 8.1485 9.58108C7.98561 9.68175 7.85397 9.82579 7.76834 9.99706C7.6827 10.1683 7.64645 10.3601 7.66365 10.5508C7.68085 10.7415 7.75081 10.9236 7.8657 11.0768L8.04246 11.3125C8.15735 11.4657 8.22731 11.6478 8.24451 11.8386C8.26171 12.0293 8.22546 12.221 8.13982 12.3923C8.05419 12.5635 7.92255 12.7076 7.75966 12.8082C7.59678 12.9089 7.40907 12.9622 7.21759 12.9622H7.07029Z"
+                        stroke="black"
+                        strokeWidth="0.589167"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                       <circle cx="7.95378" cy="3.82957" r="0.59" fill="black" />
                       <circle cx="10.3104" cy="6.18626" r="0.59" fill="black" />
                       <circle cx="3.8296" cy="7.3646" r="0.59" fill="black" />
@@ -9827,17 +11632,47 @@ function HeroSection() {
                 {/* Mic button */}
                 <button className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6] card-btn-shadow hover:bg-[#F7F7F7] active:scale-95 transition-all">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                    <path d="M7.95499 12.5954V14.5837" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z" stroke="black" strokeWidth="0.662917" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M7.95499 12.5954V14.5837"
+                      stroke="black"
+                      strokeWidth="0.662917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12.5954 6.62915V7.95498C12.5954 9.1857 12.1065 10.366 11.2363 11.2363C10.366 12.1065 9.18571 12.5954 7.95499 12.5954C6.72428 12.5954 5.54397 12.1065 4.67372 11.2363C3.80347 10.366 3.31458 9.1857 3.31458 7.95498V6.62915"
+                      stroke="black"
+                      strokeWidth="0.662917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M9.94375 3.31456C9.94375 2.2162 9.05335 1.32581 7.955 1.32581C6.85664 1.32581 5.96625 2.2162 5.96625 3.31456V7.95497C5.96625 9.05333 6.85664 9.94372 7.955 9.94372C9.05335 9.94372 9.94375 9.05333 9.94375 7.95497V3.31456Z"
+                      stroke="black"
+                      strokeWidth="0.662917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
 
                 {/* Send button (Primary action) */}
                 <button className="flex items-center justify-center w-9 h-9   rounded-lg bg-[#2A2A2F] text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#3E3E45] active:scale-95 transition-all">
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.83502 13.9888V3.68127" stroke="white" strokeWidth="0.73625" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3.68127 8.83502L8.83502 3.68127L13.9888 8.83502"
+                      stroke="white"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M8.83502 13.9888V3.68127"
+                      stroke="white"
+                      strokeWidth="0.73625"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -9856,7 +11691,10 @@ function TemplatesSection() {
 
   const scrollCarousel = (dir: "prev" | "next") => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollBy({ left: dir === "next" ? 520 : -520, behavior: "smooth" });
+    carouselRef.current.scrollBy({
+      left: dir === "next" ? 520 : -520,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -9868,7 +11706,9 @@ function TemplatesSection() {
             <SectionLabel>Browse our collection</SectionLabel>
             <SectionHeading>Start with a Template</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">View All Templates</DarkButton>
+          <DarkButton className="self-start sm:self-auto">
+            View All Templates
+          </DarkButton>
         </div>
 
         {/* Template cards carousel */}
@@ -9878,20 +11718,43 @@ function TemplatesSection() {
             className="flex gap-5 overflow-x-auto scrollbar-hide pb-4"
           >
             {TEMPLATES_LARGE.map((t, i) => (
-              <div key={i} className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group">
+              <div
+                key={i}
+                className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
+              >
                 <div className="relative aspect-square      rounded-lg   overflow-hidden bg-[#FBFBFB] border border-[#E6E6E6] p-[11px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
-                  <img src={t.img} alt={t.name} className="w-full h-full object-cover     rounded-lg " />
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    className="w-full h-full object-cover     rounded-lg "
+                  />
                   {/* Bottom gradient overlay inside padding */}
-                  <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
+                  <div
+                    className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]"
+                    style={{
+                      background:
+                        "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)",
+                    }}
+                  />
                   {/* Title */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] p-5 z-10">
-                    <p className="text-white text-[20px] font-normal leading-[26px] font-inter-tight">{t.name}</p>
-                    <p className="text-white/75 text-[14px] leading-[20px] font-inter-tight">{t.subtitle}</p>
+                    <p className="text-white text-[20px] font-normal leading-[26px] font-inter-tight">
+                      {t.name}
+                    </p>
+                    <p className="text-white/75 text-[14px] leading-[20px] font-inter-tight">
+                      {t.subtitle}
+                    </p>
                   </div>
                   {/* Hover overlay */}
                   <div className="template-hover-overlay absolute inset-[11px] flex items-center justify-center     rounded-lg  bg-white/30 backdrop-blur-[1.5px]">
                     <div className="relative">
-                      <div className="absolute -inset-1 opacity-20 blur-[4px]" style={{ background: "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
+                      <div
+                        className="absolute -inset-1 opacity-20 blur-[4px]"
+                        style={{
+                          background:
+                            "linear-gradient(95deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)",
+                        }}
+                      />
                       <div className="relative p-0.5      rounded-lg   overflow-hidden bg-white">
                         <button className="h-10 px-5      rounded-lg   bg-[#2A2A2F] text-white text-[12px] font-medium hover:bg-[#3E3E45] active:scale-97 transition-all  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                           Customize this look
@@ -9908,7 +11771,12 @@ function TemplatesSection() {
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden mr-8">
-            <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)" }} />
+            <div
+              className="h-full w-1/4   rounded-lg"
+              style={{
+                background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)",
+              }}
+            />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -9916,7 +11784,13 @@ function TemplatesSection() {
               className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254"
+                  stroke="currentColor"
+                  strokeWidth="1.03417"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
             <button
@@ -9924,7 +11798,13 @@ function TemplatesSection() {
               className="flex items-center justify-center w-8 h-8      rounded-lg   border border-[#E6E6E6] bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all"
             >
               <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-                <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254"
+                  stroke="currentColor"
+                  strokeWidth="1.03417"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </div>
@@ -9940,17 +11820,20 @@ const HOW_IT_WORKS = [
   {
     img: "/process1 (1).png",
     boldText: "Paste your LinkedIn link",
-    restText: " and watch LinkedPage scrape your profile data to instantly render a professional personal page.",
+    restText:
+      " and watch LinkedPage scrape your profile data to instantly render a professional personal page.",
   },
   {
     img: "/process1 (2).png",
     boldText: "Customize inline",
-    restText: " text and images directly on the screen, and pick from multiple clean layout styles like Bento or minimal.",
+    restText:
+      " text and images directly on the screen, and pick from multiple clean layout styles like Bento or minimal.",
   },
   {
     img: "/process1 (3).png",
     boldText: "Publish or export",
-    restText: " instantly to a free subdomain or download the complete source code as a zip file to host anywhere.",
+    restText:
+      " instantly to a free subdomain or download the complete source code as a zip file to host anywhere.",
   },
 ];
 
@@ -9964,7 +11847,9 @@ function HowItWorksSection() {
             <SectionLabel>How It Works</SectionLabel>
             <SectionHeading>Get your page in under 60 seconds</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">Generate Now</DarkButton>
+          <DarkButton className="self-start sm:self-auto">
+            Generate Now
+          </DarkButton>
         </div>
 
         {/* 3-column grid */}
@@ -9979,7 +11864,9 @@ function HowItWorksSection() {
                 />
               </div>
               <p className="text-[16px] leading-[24px] text-[#171717]/60 font-inter-tight">
-                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">{item.boldText}</span>
+                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">
+                  {item.boldText}
+                </span>
                 {item.restText}
               </p>
             </div>
@@ -10005,7 +11892,10 @@ function BusinessSection() {
 
   const scrollCarousel = (dir: "prev" | "next") => {
     if (!carouselRef.current) return;
-    carouselRef.current.scrollBy({ left: dir === "next" ? 600 : -600, behavior: "smooth" });
+    carouselRef.current.scrollBy({
+      left: dir === "next" ? 600 : -600,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -10024,10 +11914,11 @@ function BusinessSection() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(i)}
-                className={`h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-all duration-150 whitespace-nowrap font-inter-tight ${activeTab === i
-                  ? "bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  font-semibold"
-                  : "text-[#171717]/60 hover:text-black hover:bg-black/5"
-                  }`}
+                className={`h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-all duration-150 whitespace-nowrap font-inter-tight ${
+                  activeTab === i
+                    ? "bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  font-semibold"
+                    : "text-[#171717]/60 hover:text-black hover:bg-black/5"
+                }`}
               >
                 {tab}
               </button>
@@ -10042,8 +11933,15 @@ function BusinessSection() {
             className="flex gap-6 overflow-x-auto scrollbar-hide      rounded-lg   border border-[#E6E6E6] p-2 bg-[#FBFBFB]"
           >
             {BUSINESS_CARDS.map((src, i) => (
-              <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
-                <img src={src} alt={`Business card ${i + 1}`} className="w-full h-auto     rounded-lg  object-cover" />
+              <div
+                key={i}
+                className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] "
+              >
+                <img
+                  src={src}
+                  alt={`Business card ${i + 1}`}
+                  className="w-full h-auto     rounded-lg  object-cover"
+                />
               </div>
             ))}
           </div>
@@ -10053,7 +11951,13 @@ function BusinessSection() {
             className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M7.75625 9.30754L4.65375 6.20504L7.75625 3.10254"
+                stroke="currentColor"
+                strokeWidth="1.03417"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
           <button
@@ -10061,7 +11965,13 @@ function BusinessSection() {
             className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-10 h-10   rounded-lg bg-white border border-[#E6E6E6] text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  hover:bg-[#F3F3F3] active:scale-95 transition-all hidden sm:flex"
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254" stroke="currentColor" strokeWidth="1.03417" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M4.65375 9.30754L7.75625 6.20504L4.65375 3.10254"
+                stroke="currentColor"
+                strokeWidth="1.03417"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </button>
         </div>
@@ -10086,20 +11996,52 @@ function DomainSection() {
 
           {/* Search box */}
           <div className="w-full max-w-[800px] relative mt-2">
-            <div className="absolute -inset-0.5 opacity-15 blur-[4px]      rounded-lg  " style={{ background: "linear-gradient(92deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)" }} />
+            <div
+              className="absolute -inset-0.5 opacity-15 blur-[4px]      rounded-lg  "
+              style={{
+                background:
+                  "linear-gradient(92deg, #0894FF 0%, #C959DD 34%, #FF2E54 68%, #FF9004 100%)",
+              }}
+            />
             <div className="relative p-1      rounded-lg   overflow-hidden bg-white border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
               <div className="flex items-center justify-between px-5 py-4 rounded-[11px] bg-white">
                 <div className="flex items-center gap-3">
                   <svg width="16" height="19" viewBox="0 0 16 19" fill="none">
-                    <path d="M13.2211 14.7838L10.4889 12.0515" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M6.92514 13.5241C9.7067 13.5241 11.9616 11.2692 11.9616 8.48764C11.9616 5.70607 9.7067 3.45117 6.92514 3.45117C4.14357 3.45117 1.88867 5.70607 1.88867 8.48764C1.88867 11.2692 4.14357 13.5241 6.92514 13.5241Z" stroke="black" strokeWidth="1.25917" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M13.2211 14.7838L10.4889 12.0515"
+                      stroke="black"
+                      strokeWidth="1.25917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M6.92514 13.5241C9.7067 13.5241 11.9616 11.2692 11.9616 8.48764C11.9616 5.70607 9.7067 3.45117 6.92514 3.45117C4.14357 3.45117 1.88867 5.70607 1.88867 8.48764C1.88867 11.2692 4.14357 13.5241 6.92514 13.5241Z"
+                      stroke="black"
+                      strokeWidth="1.25917"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
-                  <span className="text-black text-[16px] sm:text-[17px] font-medium leading-[27px] font-inter-tight">reidhoffman.linkedpage.me</span>
+                  <span className="text-black text-[16px] sm:text-[17px] font-medium leading-[27px] font-inter-tight">
+                    reidhoffman.linkedpage.me
+                  </span>
                 </div>
                 <button className="flex items-center justify-center w-8 h-8   rounded-lg btn-dark-sm active:scale-95 transition-all text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
                   <svg width="19" height="19" viewBox="0 0 19 19" fill="none">
-                    <path d="M5.31708 5.31714H12.9129V12.913" stroke="currentColor" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M5.31708 12.913L12.9129 5.31714" stroke="currentColor" strokeWidth="0.949479" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M5.31708 5.31714H12.9129V12.913"
+                      stroke="currentColor"
+                      strokeWidth="0.949479"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M5.31708 12.913L12.9129 5.31714"
+                      stroke="currentColor"
+                      strokeWidth="0.949479"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </button>
               </div>
@@ -10121,12 +12063,14 @@ const BRAND_CARDS = [
   {
     img: "https://api.builder.io/api/v1/image/assets/TEMP/9f3a1f22cc257cf4f0da1f8d5b8c463fc3e20c54?width=1498",
     boldText: "Notion meets Linktree",
-    restText: " aesthetics that combine clean bento grid designs with rich professional content.",
+    restText:
+      " aesthetics that combine clean bento grid designs with rich professional content.",
   },
   {
     img: "https://api.builder.io/api/v1/image/assets/TEMP/8ef521fbb820f1b4a44b8f4b078009658f2a6baf?width=1498",
     boldText: "No dashboards or bloat",
-    restText: " — edit your content directly on the page and get a beautiful result in under 60 seconds.",
+    restText:
+      " — edit your content directly on the page and get a beautiful result in under 60 seconds.",
   },
 ];
 
@@ -10140,7 +12084,9 @@ function BrandSection() {
             <SectionLabel>Make it uniquely yours</SectionLabel>
             <SectionHeading>Designed for Professionals</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">Create Page</DarkButton>
+          <DarkButton className="self-start sm:self-auto">
+            Create Page
+          </DarkButton>
         </div>
 
         {/* 2-column grid */}
@@ -10155,7 +12101,9 @@ function BrandSection() {
                 />
               </div>
               <p className="text-[16px] leading-[24px] text-[#171717]/60 font-inter-tight">
-                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">{card.boldText}</span>
+                <span className="text-[#171717] font-medium block mb-1 text-[18px] leading-[24px]">
+                  {card.boldText}
+                </span>
                 {card.restText}
               </p>
             </div>
@@ -10189,7 +12137,9 @@ function FeaturesSection() {
             <SectionLabel>Clean & Modern Aesthetics</SectionLabel>
             <SectionHeading>A Page with Real Content</SectionHeading>
           </div>
-          <DarkButton className="self-start sm:self-auto">Try It Free</DarkButton>
+          <DarkButton className="self-start sm:self-auto">
+            Try It Free
+          </DarkButton>
         </div>
 
         {/* 2-column grid */}
@@ -10203,7 +12153,9 @@ function FeaturesSection() {
                   className="w-full     rounded-lg  object-cover aspect-[13/8]"
                 />
               </div>
-              <p className="text-[#171717] text-[16px] sm:text-[18px] leading-[27px] font-normal font-inter-tight">{f.text}</p>
+              <p className="text-[#171717] text-[16px] sm:text-[18px] leading-[27px] font-normal font-inter-tight">
+                {f.text}
+              </p>
             </div>
           ))}
         </div>
@@ -10235,13 +12187,18 @@ function FAQSection() {
         {/* Header */}
         <div className="flex flex-col items-center gap-3 text-center mb-12">
           <SectionLabel>Frequently Asked Questions</SectionLabel>
-          <SectionHeading>Still have questions about LinkedPage?</SectionHeading>
+          <SectionHeading>
+            Still have questions about LinkedPage?
+          </SectionHeading>
         </div>
 
         {/* FAQ items */}
         <div className="flex flex-col gap-4 max-w-4xl mx-auto">
           {FAQ_ITEMS.map((question, i) => (
-            <div key={i} className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden transition-all duration-150">
+            <div
+              key={i}
+              className="     rounded-lg   border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden transition-all duration-150"
+            >
               <button
                 className="w-full flex items-center justify-between px-6 py-5 text-left"
                 onClick={() => toggle(i)}
@@ -10251,9 +12208,21 @@ function FAQSection() {
                 </span>
                 <span className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-[10px] btn-dark-sm text-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  active:scale-95 transition-all">
                   <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                    <path d="M2.94586 7.5H11.1945" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M2.94586 7.5H11.1945"
+                      stroke="currentColor"
+                      strokeWidth="1.17833"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                     {openIdx !== i && (
-                      <path d="M7.07001 3.375V11.625" stroke="currentColor" strokeWidth="1.17833" strokeLinecap="round" strokeLinejoin="round" />
+                      <path
+                        d="M7.07001 3.375V11.625"
+                        stroke="currentColor"
+                        strokeWidth="1.17833"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     )}
                   </svg>
                 </span>
@@ -10289,12 +12258,12 @@ export default function Index() {
     </div>
   );
 }
-
 ```
 
 ---
 
 ## File: `components\Footer.tsx`
+
 ```tsx
 "use client";
 
@@ -10358,7 +12327,6 @@ export default function Footer() {
     >
       <div className="w-full max-w-[1536px] mx-auto bg-[#FBFBFB] rounded-[18px] border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  px-6 sm:px-12 lg:px-20 py-16 text-black font-inter pointer-events-auto">
         <div className="flex flex-col gap-12">
-
           {/* Top Section: Giant centered logo */}
           <div className="w-full flex justify-center py-4 border-b border-[#E6E6E6] pb-12">
             <img
@@ -10370,7 +12338,6 @@ export default function Footer() {
 
           {/* Details Grid Section */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 pt-4 pb-12 border-b border-[#E6E6E6]">
-
             {/* Left Column: Newsletter & Social */}
             <div className="md:col-span-4 flex flex-col justify-between gap-10 md:pr-12 md:border-r border-[#E6E6E6]">
               {/* Newsletter form */}
@@ -10378,7 +12345,10 @@ export default function Footer() {
                 <span className="font-mono text-xs uppercase tracking-wider text-gray-500 font-semibold font-inter-tight">
                   Newsletter
                 </span>
-                <form onSubmit={handleSubscribe} className="relative w-full max-w-sm mt-1">
+                <form
+                  onSubmit={handleSubscribe}
+                  className="relative w-full max-w-sm mt-1"
+                >
                   <input
                     type="email"
                     value={email}
@@ -10402,21 +12372,30 @@ export default function Footer() {
               <div className="flex items-center gap-4">
                 <a
                   href="#"
-                  onClick={(e) => { e.preventDefault(); toast.success("Opening Instagram profile..."); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast.success("Opening Instagram profile...");
+                  }}
                   className="text-gray-500 hover:text-black transition-colors"
                 >
                   <Instagram size={20} />
                 </a>
                 <a
                   href="#"
-                  onClick={(e) => { e.preventDefault(); toast.success("Opening LinkedIn showcase..."); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast.success("Opening LinkedIn showcase...");
+                  }}
                   className="text-gray-500 hover:text-black transition-colors"
                 >
                   <Linkedin size={20} />
                 </a>
                 <a
                   href="#"
-                  onClick={(e) => { e.preventDefault(); toast.success("Opening X (Twitter) profile..."); }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toast.success("Opening X (Twitter) profile...");
+                  }}
                   className="text-gray-500 hover:text-black transition-colors"
                 >
                   <Twitter size={20} />
@@ -10426,7 +12405,6 @@ export default function Footer() {
 
             {/* Right Columns: Nav Links */}
             <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8 md:pl-12">
-
               {/* Product */}
               <div className="flex flex-col gap-4">
                 <span className="font-mono text-xs uppercase tracking-wider text-gray-400 font-semibold font-inter-tight">
@@ -10502,27 +12480,24 @@ export default function Footer() {
                   ))}
                 </div>
               </div>
-
             </div>
-
           </div>
 
           {/* Bottom bar */}
           <div className="flex items-center justify-between text-xs text-gray-400 font-mono uppercase tracking-wider font-inter-tight">
             <span>Copyright LinkedPage 2026</span>
           </div>
-
         </div>
       </div>
     </footer>
   );
 }
-
 ```
 
 ---
 
 ## File: `components\Navbar.tsx`
+
 ```tsx
 "use client";
 
@@ -10580,7 +12555,6 @@ export default function Navbar() {
           >
             Pricing
           </button>
-
         </div>
 
         {/* Right side */}
@@ -10589,12 +12563,23 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-2">
             {/* Discord */}
             <button
-              onClick={() => toast.success("Redirecting to Discord community...")}
+              onClick={() =>
+                toast.success("Redirecting to Discord community...")
+              }
               className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
-              <svg width="16" height="12" viewBox="0 0 16 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="16"
+                height="12"
+                viewBox="0 0 16 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <g clipPath="url(#discord-clip)">
-                  <path d="M13.04 1.19272C12.1164 0.770902 11.12 0.450902 10.08 0.276357C10.0606 0.271508 10.0436 0.278781 10.0291 0.298175C9.89819 0.52363 9.76001 0.821811 9.65819 1.05454C8.53819 0.884842 7.43031 0.884842 6.33456 1.05454C6.23274 0.814539 6.08728 0.52363 5.96365 0.298175C5.95395 0.28363 5.93698 0.276357 5.91274 0.276357C4.87031 0.460599 3.88365 0.766054 2.95274 1.19272C2.94789 1.19272 2.94062 1.19757 2.93092 1.20727C1.04728 4.02181 0.530919 6.7709 0.785465 9.48363C0.785465 9.49818 0.792738 9.5103 0.807283 9.51999C2.05092 10.4364 3.25819 10.9891 4.43637 11.3527C4.45577 11.3527 4.47274 11.3479 4.48728 11.3382C4.7685 10.9551 5.01577 10.5527 5.2291 10.1309C5.2388 10.1067 5.23153 10.0848 5.20728 10.0654C4.81456 9.9103 4.43637 9.7309 4.07274 9.52727C4.04365 9.51272 4.04365 9.46908 4.07274 9.44727C4.15031 9.38908 4.22546 9.3309 4.29819 9.27272C4.31274 9.25818 4.32728 9.25818 4.34183 9.27272C6.72001 10.3564 9.30183 10.3564 11.6509 9.27272C11.6703 9.26787 11.6873 9.26787 11.7018 9.27272C11.7746 9.33575 11.8497 9.39393 11.9273 9.44727C11.9515 9.47636 11.9515 9.50302 11.9273 9.52727C11.5636 9.7406 11.1855 9.91999 10.7927 10.0654C10.7636 10.0751 10.7564 10.097 10.7709 10.1309C10.9891 10.5527 11.2364 10.9551 11.5127 11.3382C11.5273 11.3527 11.5443 11.3576 11.5636 11.3527C12.7491 10.9818 13.9564 10.4291 15.2 9.51999C15.2097 9.5103 15.217 9.49818 15.2218 9.48363C15.5273 6.34908 14.7127 3.62181 13.0691 1.20727C13.0691 1.19757 13.0618 1.19272 13.0473 1.19272H13.04ZM5.58546 7.83999C4.86546 7.83999 4.27637 7.18545 4.27637 6.3709C4.27637 5.55636 4.85819 4.90181 5.58546 4.90181C6.31274 4.90181 6.90183 5.56363 6.89456 6.3709C6.89456 7.17818 6.31274 7.83999 5.58546 7.83999ZM10.4218 7.83999C9.70183 7.83999 9.11274 7.18545 9.11274 6.3709C9.11274 5.55636 9.69456 4.90181 10.4218 4.90181C11.1491 4.90181 11.7382 5.56363 11.7309 6.3709C11.7309 7.17818 11.1564 7.83999 10.4218 7.83999Z" fill="black" />
+                  <path
+                    d="M13.04 1.19272C12.1164 0.770902 11.12 0.450902 10.08 0.276357C10.0606 0.271508 10.0436 0.278781 10.0291 0.298175C9.89819 0.52363 9.76001 0.821811 9.65819 1.05454C8.53819 0.884842 7.43031 0.884842 6.33456 1.05454C6.23274 0.814539 6.08728 0.52363 5.96365 0.298175C5.95395 0.28363 5.93698 0.276357 5.91274 0.276357C4.87031 0.460599 3.88365 0.766054 2.95274 1.19272C2.94789 1.19272 2.94062 1.19757 2.93092 1.20727C1.04728 4.02181 0.530919 6.7709 0.785465 9.48363C0.785465 9.49818 0.792738 9.5103 0.807283 9.51999C2.05092 10.4364 3.25819 10.9891 4.43637 11.3527C4.45577 11.3527 4.47274 11.3479 4.48728 11.3382C4.7685 10.9551 5.01577 10.5527 5.2291 10.1309C5.2388 10.1067 5.23153 10.0848 5.20728 10.0654C4.81456 9.9103 4.43637 9.7309 4.07274 9.52727C4.04365 9.51272 4.04365 9.46908 4.07274 9.44727C4.15031 9.38908 4.22546 9.3309 4.29819 9.27272C4.31274 9.25818 4.32728 9.25818 4.34183 9.27272C6.72001 10.3564 9.30183 10.3564 11.6509 9.27272C11.6703 9.26787 11.6873 9.26787 11.7018 9.27272C11.7746 9.33575 11.8497 9.39393 11.9273 9.44727C11.9515 9.47636 11.9515 9.50302 11.9273 9.52727C11.5636 9.7406 11.1855 9.91999 10.7927 10.0654C10.7636 10.0751 10.7564 10.097 10.7709 10.1309C10.9891 10.5527 11.2364 10.9551 11.5127 11.3382C11.5273 11.3527 11.5443 11.3576 11.5636 11.3527C12.7491 10.9818 13.9564 10.4291 15.2 9.51999C15.2097 9.5103 15.217 9.49818 15.2218 9.48363C15.5273 6.34908 14.7127 3.62181 13.0691 1.20727C13.0691 1.19757 13.0618 1.19272 13.0473 1.19272H13.04ZM5.58546 7.83999C4.86546 7.83999 4.27637 7.18545 4.27637 6.3709C4.27637 5.55636 4.85819 4.90181 5.58546 4.90181C6.31274 4.90181 6.90183 5.56363 6.89456 6.3709C6.89456 7.17818 6.31274 7.83999 5.58546 7.83999ZM10.4218 7.83999C9.70183 7.83999 9.11274 7.18545 9.11274 6.3709C9.11274 5.55636 9.69456 4.90181 10.4218 4.90181C11.1491 4.90181 11.7382 5.56363 11.7309 6.3709C11.7309 7.17818 11.1564 7.83999 10.4218 7.83999Z"
+                    fill="black"
+                  />
                 </g>
                 <defs>
                   <clipPath id="discord-clip">
@@ -10609,9 +12594,18 @@ export default function Navbar() {
               onClick={() => toast.success("Redirecting to Twitter feed...")}
               className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
-              <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="14"
+                height="13"
+                viewBox="0 0 14 13"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <g clipPath="url(#x-clip)">
-                  <path d="M11.0133 0H13.16L8.44667 5.36667L13.9533 12.6467H9.632L6.24867 8.22267L2.37534 12.6467H0.228669L5.222 6.90667L-0.0513306 0H4.37734L7.434 4.04133L11.0133 0ZM10.262 11.3867H11.452L3.752 1.21333H2.47334L10.262 11.3867Z" fill="black" />
+                  <path
+                    d="M11.0133 0H13.16L8.44667 5.36667L13.9533 12.6467H9.632L6.24867 8.22267L2.37534 12.6467H0.228669L5.222 6.90667L-0.0513306 0H4.37734L7.434 4.04133L11.0133 0ZM10.262 11.3867H11.452L3.752 1.21333H2.47334L10.262 11.3867Z"
+                    fill="black"
+                  />
                 </g>
                 <defs>
                   <clipPath id="x-clip">
@@ -10623,14 +12617,40 @@ export default function Navbar() {
 
             {/* Instagram */}
             <button
-              onClick={() => toast.success("Redirecting to Instagram profile...")}
+              onClick={() =>
+                toast.success("Redirecting to Instagram profile...")
+              }
               className="flex items-center justify-center w-9 h-9   rounded-lg bg-white border border-[#E6E6E6]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  text-black hover:bg-[#F3F3F3] active:scale-[0.95] transition-[transform,background-color] duration-150 ease-out"
             >
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
                 <g clipPath="url(#ig-clip)">
-                  <path d="M12.75 1.5H5.25C3.17893 1.5 1.5 3.17893 1.5 5.25V12.75C1.5 14.8211 3.17893 16.5 5.25 16.5H12.75C14.8211 16.5 16.5 14.8211 16.5 12.75V5.25C16.5 3.17893 14.8211 1.5 12.75 1.5Z" stroke="black" strokeWidth="1.6875" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M12 8.5275C12.0926 9.15168 11.986 9.78916 11.6953 10.3493C11.4047 10.9094 10.9449 11.3636 10.3812 11.6473C9.8176 11.9309 9.17886 12.0297 8.55586 11.9294C7.93287 11.8292 7.35734 11.5351 6.91115 11.0889C6.46496 10.6427 6.17082 10.0672 6.07058 9.44416C5.97033 8.82116 6.06907 8.18242 6.35277 7.61878C6.63647 7.05514 7.09066 6.5953 7.65076 6.30468C8.21086 6.01405 8.84834 5.90744 9.47252 6C10.1092 6.09441 10.6987 6.39109 11.1538 6.84623C11.6089 7.30136 11.9056 7.89081 12 8.5275Z" stroke="black" strokeWidth="1.6875" strokeLinecap="round" strokeLinejoin="round" />
-                  <path d="M13.125 4.875H13.1325" stroke="black" strokeWidth="1.6875" strokeLinecap="round" strokeLinejoin="round" />
+                  <path
+                    d="M12.75 1.5H5.25C3.17893 1.5 1.5 3.17893 1.5 5.25V12.75C1.5 14.8211 3.17893 16.5 5.25 16.5H12.75C14.8211 16.5 16.5 14.8211 16.5 12.75V5.25C16.5 3.17893 14.8211 1.5 12.75 1.5Z"
+                    stroke="black"
+                    strokeWidth="1.6875"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 8.5275C12.0926 9.15168 11.986 9.78916 11.6953 10.3493C11.4047 10.9094 10.9449 11.3636 10.3812 11.6473C9.8176 11.9309 9.17886 12.0297 8.55586 11.9294C7.93287 11.8292 7.35734 11.5351 6.91115 11.0889C6.46496 10.6427 6.17082 10.0672 6.07058 9.44416C5.97033 8.82116 6.06907 8.18242 6.35277 7.61878C6.63647 7.05514 7.09066 6.5953 7.65076 6.30468C8.21086 6.01405 8.84834 5.90744 9.47252 6C10.1092 6.09441 10.6987 6.39109 11.1538 6.84623C11.6089 7.30136 11.9056 7.89081 12 8.5275Z"
+                    stroke="black"
+                    strokeWidth="1.6875"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M13.125 4.875H13.1325"
+                    stroke="black"
+                    strokeWidth="1.6875"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </g>
                 <defs>
                   <clipPath id="ig-clip">
@@ -10665,14 +12685,39 @@ export default function Navbar() {
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               {mobileOpen ? (
                 <>
-                  <path d="M4 4L14 14" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
-                  <path d="M14 4L4 14" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
+                  <path
+                    d="M4 4L14 14"
+                    stroke="black"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M14 4L4 14"
+                    stroke="black"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
                 </>
               ) : (
                 <>
-                  <path d="M3 5H15" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
-                  <path d="M3 9H15" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
-                  <path d="M3 13H15" stroke="black" strokeWidth="1.5" strokeLinecap="round" />
+                  <path
+                    d="M3 5H15"
+                    stroke="black"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M3 9H15"
+                    stroke="black"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M3 13H15"
+                    stroke="black"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                  />
                 </>
               )}
             </svg>
@@ -10714,7 +12759,10 @@ export default function Navbar() {
             </a>
             <button
               className="text-[#171717]/85 text-[14px] py-2 hover:text-black transition-colors font-inter-tight font-medium text-left"
-              onClick={() => { setMobileOpen(false); toast.info("Pricing plans coming soon!"); }}
+              onClick={() => {
+                setMobileOpen(false);
+                toast.info("Pricing plans coming soon!");
+              }}
             >
               Pricing
             </button>
@@ -10741,12 +12789,12 @@ export default function Navbar() {
     </nav>
   );
 }
-
 ```
 
 ---
 
 ## File: `components\UserMenu.tsx`
+
 ```tsx
 import { motion } from "framer-motion";
 import { toast } from "sonner";
@@ -10760,11 +12808,11 @@ interface UserMenuProps {
   onClose?: () => void;
 }
 
-export function UserMenu({ 
-  name, 
-  email, 
+export function UserMenu({
+  name,
+  email,
   avatarUrl = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  onClose
+  onClose,
 }: UserMenuProps) {
   const router = useRouter();
 
@@ -10787,8 +12835,12 @@ export function UserMenu({
             />
           </div>
           <div className="truncate">
-            <p className="text-sm font-semibold text-[#2A2A2F] truncate">{name || "User"}</p>
-            <p className="text-xs text-[#171717]/60 truncate">{email || "user@example.com"}</p>
+            <p className="text-sm font-semibold text-[#2A2A2F] truncate">
+              {name || "User"}
+            </p>
+            <p className="text-xs text-[#171717]/60 truncate">
+              {email || "user@example.com"}
+            </p>
           </div>
         </div>
 
@@ -10798,18 +12850,29 @@ export function UserMenu({
         <div className="flex flex-col gap-3">
           <div className="relative p-4 flex flex-col gap-2 bg-black/5 backdrop-blur-sm border border-white/40 rounded-[10px]">
             <div className="flex justify-between">
-              <span className="text-sm font-medium text-[#2A2A2F]">Credits</span>
-              <span className="text-sm font-medium text-[#2A2A2F]">16 left</span>
+              <span className="text-sm font-medium text-[#2A2A2F]">
+                Credits
+              </span>
+              <span className="text-sm font-medium text-[#2A2A2F]">
+                16 left
+              </span>
             </div>
             <div className="w-full rounded-lg bg-white border border-[#E6E6E6] overflow-hidden p-0.5">
-              <div className="relative bg-[#8DFFB3] h-2 rounded-lg transition-all duration-300" style={{ width: "25%" }} />
+              <div
+                className="relative bg-[#8DFFB3] h-2 rounded-lg transition-all duration-300"
+                style={{ width: "25%" }}
+              />
             </div>
             <div className="text-xs text-[#171717]/70 mt-1 leading-relaxed">
-              You're on the free plan. Unlock additional features and credits by upgrading your plan.
+              You're on the free plan. Unlock additional features and credits by
+              upgrading your plan.
             </div>
           </div>
           <button
-            onClick={() => { toast.info("Pricing modal coming soon!"); onClose?.(); }}
+            onClick={() => {
+              toast.info("Pricing modal coming soon!");
+              onClose?.();
+            }}
             className="flex items-center justify-center font-medium transition-all duration-150 bg-[#2A2A2F] text-white hover:bg-[#3E3E45] rounded-[9px] w-full text-xs h-9 active:scale-95"
             type="button"
           >
@@ -10820,32 +12883,65 @@ export function UserMenu({
         {/* Links */}
         <div className="flex flex-col gap-1">
           <button
-            onClick={() => { toast.info("Settings panel coming soon!"); onClose?.(); }}
+            onClick={() => {
+              toast.info("Settings panel coming soon!");
+              onClose?.();
+            }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 0 3.319-1.915" />
               <circle cx="12" cy="12" r="3" />
             </svg>
             Settings
           </button>
           <button
-            onClick={() => { toast.info("Report a bug coming soon!"); onClose?.(); }}
+            onClick={() => {
+              toast.info("Report a bug coming soon!");
+              onClose?.();
+            }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
             </svg>
             Report a bug
           </button>
           <button
-            onClick={() => { toast.info("Documentation coming soon!"); onClose?.(); }}
+            onClick={() => {
+              toast.info("Documentation coming soon!");
+              onClose?.();
+            }}
             className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-[#F7F7F7] text-[#171717]/80 hover:text-black w-full"
             type="button"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M12 7v14" />
               <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
             </svg>
@@ -10865,7 +12961,15 @@ export function UserMenu({
           className="text-sm font-medium transition-colors duration-150 flex items-center h-fit gap-2 justify-start p-2 rounded-lg hover:bg-red-50 text-[#E45A5A] w-full"
           type="button"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
             <path d="M21 12H9" />
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
           </svg>
@@ -10875,12 +12979,12 @@ export function UserMenu({
     </motion.div>
   );
 }
-
 ```
 
 ---
 
 ## File: `components\ui\accordion.tsx`
+
 ```tsx
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
@@ -10938,12 +13042,12 @@ const AccordionContent = React.forwardRef<
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
-
 ```
 
 ---
 
 ## File: `components\ui\alert-dialog.tsx`
+
 ```tsx
 import * as React from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
@@ -11084,12 +13188,12 @@ export {
   AlertDialogAction,
   AlertDialogCancel,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\alert.tsx`
+
 ```tsx
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -11150,24 +13254,24 @@ const AlertDescription = React.forwardRef<
 AlertDescription.displayName = "AlertDescription";
 
 export { Alert, AlertTitle, AlertDescription };
-
 ```
 
 ---
 
 ## File: `components\ui\aspect-ratio.tsx`
+
 ```tsx
 import * as AspectRatioPrimitive from "@radix-ui/react-aspect-ratio";
 
 const AspectRatio = AspectRatioPrimitive.Root;
 
 export { AspectRatio };
-
 ```
 
 ---
 
 ## File: `components\ui\avatar.tsx`
+
 ```tsx
 import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
@@ -11217,12 +13321,12 @@ const AvatarFallback = React.forwardRef<
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
 export { Avatar, AvatarImage, AvatarFallback };
-
 ```
 
 ---
 
 ## File: `components\ui\badge.tsx`
+
 ```tsx
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -11250,9 +13354,8 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends
-  React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof badgeVariants> { }
+  extends React.HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
   return (
@@ -11261,12 +13364,12 @@ function Badge({ className, variant, ...props }: BadgeProps) {
 }
 
 export { Badge, badgeVariants };
-
 ```
 
 ---
 
 ## File: `components\ui\breadcrumb.tsx`
+
 ```tsx
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
@@ -11383,12 +13486,12 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\button.tsx`
+
 ```tsx
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
@@ -11426,9 +13529,8 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
@@ -11447,12 +13549,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = "Button";
 
 export { Button, buttonVariants };
-
 ```
 
 ---
 
 ## File: `components\ui\calendar.tsx`
+
 ```tsx
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -11522,12 +13624,12 @@ function Calendar({
 Calendar.displayName = "Calendar";
 
 export { Calendar };
-
 ```
 
 ---
 
 ## File: `components\ui\card.tsx`
+
 ```tsx
 import * as React from "react";
 
@@ -11615,12 +13717,12 @@ export {
   CardDescription,
   CardContent,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\carousel.tsx`
+
 ```tsx
 import * as React from "react";
 import useEmblaCarousel, {
@@ -11882,12 +13984,12 @@ export {
   CarouselPrevious,
   CarouselNext,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\chart.tsx`
+
 ```tsx
 import * as React from "react";
 import * as RechartsPrimitive from "recharts";
@@ -11973,13 +14075,13 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
             ([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
-                .map(([key, itemConfig]) => {
-                  const color =
-                    itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
-                    itemConfig.color;
-                  return color ? `  --color-${key}: ${color};` : null;
-                })
-                .join("\n")}
+  .map(([key, itemConfig]) => {
+    const color =
+      itemConfig.theme?.[theme as keyof typeof itemConfig.theme] ||
+      itemConfig.color;
+    return color ? `  --color-${key}: ${color};` : null;
+  })
+  .join("\n")}
 }
 `,
           )
@@ -11994,13 +14096,13 @@ const ChartTooltip = RechartsPrimitive.Tooltip;
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
-  React.ComponentProps<"div"> & {
-    hideLabel?: boolean;
-    hideIndicator?: boolean;
-    indicator?: "line" | "dot" | "dashed";
-    nameKey?: string;
-    labelKey?: string;
-  }
+    React.ComponentProps<"div"> & {
+      hideLabel?: boolean;
+      hideIndicator?: boolean;
+      indicator?: "line" | "dot" | "dashed";
+      nameKey?: string;
+      labelKey?: string;
+    }
 >(
   (
     {
@@ -12150,10 +14252,10 @@ const ChartLegend = RechartsPrimitive.Legend;
 const ChartLegendContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div"> &
-  Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
-    hideIcon?: boolean;
-    nameKey?: string;
-  }
+    Pick<RechartsPrimitive.LegendProps, "payload" | "verticalAlign"> & {
+      hideIcon?: boolean;
+      nameKey?: string;
+    }
 >(
   (
     { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey },
@@ -12217,8 +14319,8 @@ function getPayloadConfigFromPayload(
 
   const payloadPayload =
     "payload" in payload &&
-      typeof payload.payload === "object" &&
-      payload.payload !== null
+    typeof payload.payload === "object" &&
+    payload.payload !== null
       ? payload.payload
       : undefined;
 
@@ -12252,12 +14354,12 @@ export {
   ChartLegendContent,
   ChartStyle,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\checkbox.tsx`
+
 ```tsx
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
@@ -12287,12 +14389,12 @@ const Checkbox = React.forwardRef<
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 
 export { Checkbox };
-
 ```
 
 ---
 
 ## File: `components\ui\collapsible.tsx`
+
 ```tsx
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 
@@ -12303,12 +14405,12 @@ const CollapsibleTrigger = CollapsiblePrimitive.CollapsibleTrigger;
 const CollapsibleContent = CollapsiblePrimitive.CollapsibleContent;
 
 export { Collapsible, CollapsibleTrigger, CollapsibleContent };
-
 ```
 
 ---
 
 ## File: `components\ui\command.tsx`
+
 ```tsx
 import * as React from "react";
 import { type DialogProps } from "@radix-ui/react-dialog";
@@ -12333,7 +14435,7 @@ const Command = React.forwardRef<
 ));
 Command.displayName = CommandPrimitive.displayName;
 
-interface CommandDialogProps extends DialogProps { }
+interface CommandDialogProps extends DialogProps {}
 
 const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
   return (
@@ -12463,12 +14565,12 @@ export {
   CommandShortcut,
   CommandSeparator,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\context-menu.tsx`
+
 ```tsx
 import * as React from "react";
 import * as ContextMenuPrimitive from "@radix-ui/react-context-menu";
@@ -12668,12 +14770,12 @@ export {
   ContextMenuSubTrigger,
   ContextMenuRadioGroup,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\dialog.tsx`
+
 ```tsx
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
@@ -12795,12 +14897,12 @@ export {
   DialogTitle,
   DialogDescription,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\drawer.tsx`
+
 ```tsx
 import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
@@ -12918,12 +15020,12 @@ export {
   DrawerTitle,
   DrawerDescription,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\dropdown-menu.tsx`
+
 ```tsx
 import * as React from "react";
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
@@ -13123,12 +15225,12 @@ export {
   DropdownMenuSubTrigger,
   DropdownMenuRadioGroup,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\form.tsx`
+
 ```tsx
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
@@ -13307,12 +15409,12 @@ export {
   FormMessage,
   FormField,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\hover-card.tsx`
+
 ```tsx
 import * as React from "react";
 import * as HoverCardPrimitive from "@radix-ui/react-hover-card";
@@ -13341,12 +15443,12 @@ const HoverCardContent = React.forwardRef<
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName;
 
 export { HoverCard, HoverCardTrigger, HoverCardContent };
-
 ```
 
 ---
 
 ## File: `components\ui\input-otp.tsx`
+
 ```tsx
 import * as React from "react";
 import { OTPInput, OTPInputContext } from "input-otp";
@@ -13417,12 +15519,12 @@ const InputOTPSeparator = React.forwardRef<
 InputOTPSeparator.displayName = "InputOTPSeparator";
 
 export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator };
-
 ```
 
 ---
 
 ## File: `components\ui\input.tsx`
+
 ```tsx
 import * as React from "react";
 
@@ -13446,12 +15548,12 @@ const Input = React.forwardRef<HTMLInputElement, React.ComponentProps<"input">>(
 Input.displayName = "Input";
 
 export { Input };
-
 ```
 
 ---
 
 ## File: `components\ui\label.tsx`
+
 ```tsx
 import * as React from "react";
 import * as LabelPrimitive from "@radix-ui/react-label";
@@ -13477,12 +15579,12 @@ const Label = React.forwardRef<
 Label.displayName = LabelPrimitive.Root.displayName;
 
 export { Label };
-
 ```
 
 ---
 
 ## File: `components\ui\menubar.tsx`
+
 ```tsx
 import * as React from "react";
 import * as MenubarPrimitive from "@radix-ui/react-menubar";
@@ -13718,12 +15820,12 @@ export {
   MenubarSub,
   MenubarShortcut,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\navigation-menu.tsx`
+
 ```tsx
 import * as React from "react";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
@@ -13853,12 +15955,12 @@ export {
   NavigationMenuIndicator,
   NavigationMenuViewport,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\pagination.tsx`
+
 ```tsx
 import * as React from "react";
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
@@ -13977,12 +16079,12 @@ export {
   PaginationNext,
   PaginationPrevious,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\popover.tsx`
+
 ```tsx
 import * as React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
@@ -14013,12 +16115,12 @@ const PopoverContent = React.forwardRef<
 PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
 export { Popover, PopoverTrigger, PopoverContent };
-
 ```
 
 ---
 
 ## File: `components\ui\progress.tsx`
+
 ```tsx
 import * as React from "react";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
@@ -14046,12 +16148,12 @@ const Progress = React.forwardRef<
 Progress.displayName = ProgressPrimitive.Root.displayName;
 
 export { Progress };
-
 ```
 
 ---
 
 ## File: `components\ui\radio-group.tsx`
+
 ```tsx
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
@@ -14095,12 +16197,12 @@ const RadioGroupItem = React.forwardRef<
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
 
 export { RadioGroup, RadioGroupItem };
-
 ```
 
 ---
 
 ## File: `components\ui\resizable.tsx`
+
 ```tsx
 import { GripVertical } from "lucide-react";
 import * as ResizablePrimitive from "react-resizable-panels";
@@ -14145,12 +16247,12 @@ const ResizableHandle = ({
 );
 
 export { ResizablePanelGroup, ResizablePanel, ResizableHandle };
-
 ```
 
 ---
 
 ## File: `components\ui\scroll-area.tsx`
+
 ```tsx
 import * as React from "react";
 import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area";
@@ -14185,9 +16287,9 @@ const ScrollBar = React.forwardRef<
     className={cn(
       "flex touch-none select-none transition-colors",
       orientation === "vertical" &&
-      "h-full w-2.5 border-l border-l-transparent p-[1px]",
+        "h-full w-2.5 border-l border-l-transparent p-[1px]",
       orientation === "horizontal" &&
-      "h-2.5 flex-col border-t border-t-transparent p-[1px]",
+        "h-2.5 flex-col border-t border-t-transparent p-[1px]",
       className,
     )}
     {...props}
@@ -14198,12 +16300,12 @@ const ScrollBar = React.forwardRef<
 ScrollBar.displayName = ScrollAreaPrimitive.ScrollAreaScrollbar.displayName;
 
 export { ScrollArea, ScrollBar };
-
 ```
 
 ---
 
 ## File: `components\ui\select.tsx`
+
 ```tsx
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
@@ -14282,7 +16384,7 @@ const SelectContent = React.forwardRef<
       className={cn(
         "relative z-50 max-h-96 min-w-[8rem] overflow-hidden     rounded-lg  border bg-popover text-popover-foreground  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper" &&
-        "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className,
       )}
       position={position}
@@ -14293,7 +16395,7 @@ const SelectContent = React.forwardRef<
         className={cn(
           "p-1",
           position === "popper" &&
-          "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
         )}
       >
         {children}
@@ -14363,12 +16465,12 @@ export {
   SelectScrollUpButton,
   SelectScrollDownButton,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\separator.tsx`
+
 ```tsx
 import * as React from "react";
 import * as SeparatorPrimitive from "@radix-ui/react-separator";
@@ -14399,12 +16501,12 @@ const Separator = React.forwardRef<
 Separator.displayName = SeparatorPrimitive.Root.displayName;
 
 export { Separator };
-
 ```
 
 ---
 
 ## File: `components\ui\sheet.tsx`
+
 ```tsx
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -14456,9 +16558,8 @@ const sheetVariants = cva(
 );
 
 interface SheetContentProps
-  extends
-  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
-  VariantProps<typeof sheetVariants> { }
+  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
+    VariantProps<typeof sheetVariants> {}
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
@@ -14545,12 +16646,12 @@ export {
   SheetTitle,
   SheetTrigger,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\sidebar.tsx`
+
 ```tsx
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
@@ -15174,7 +17275,7 @@ const SidebarMenuAction = React.forwardRef<
         "peer-data-[size=lg]/menu-button:top-2.5",
         "group-data-[collapsible=icon]:hidden",
         showOnHover &&
-        "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
+          "group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0",
         className,
       )}
       {...props}
@@ -15219,7 +17320,10 @@ const SidebarMenuSkeleton = React.forwardRef<
     <div
       ref={ref}
       data-sidebar="menu-skeleton"
-      className={cn("    rounded-lg  h-8 flex gap-2 px-2 items-center", className)}
+      className={cn(
+        "    rounded-lg  h-8 flex gap-2 px-2 items-center",
+        className,
+      )}
       {...props}
     >
       {showIcon && (
@@ -15321,12 +17425,12 @@ export {
   SidebarTrigger,
   useSidebar,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\skeleton.tsx`
+
 ```tsx
 import { cn } from "@/lib/utils";
 
@@ -15343,12 +17447,12 @@ function Skeleton({
 }
 
 export { Skeleton };
-
 ```
 
 ---
 
 ## File: `components\ui\slider.tsx`
+
 ```tsx
 import * as React from "react";
 import * as SliderPrimitive from "@radix-ui/react-slider";
@@ -15376,12 +17480,12 @@ const Slider = React.forwardRef<
 Slider.displayName = SliderPrimitive.Root.displayName;
 
 export { Slider };
-
 ```
 
 ---
 
 ## File: `components\ui\sonner.tsx`
+
 ```tsx
 import { useTheme } from "next-themes";
 import { Toaster as Sonner } from "sonner";
@@ -15412,12 +17516,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
 };
 
 export { Toaster };
-
 ```
 
 ---
 
 ## File: `components\ui\switch.tsx`
+
 ```tsx
 import * as React from "react";
 import * as SwitchPrimitives from "@radix-ui/react-switch";
@@ -15446,12 +17550,12 @@ const Switch = React.forwardRef<
 Switch.displayName = SwitchPrimitives.Root.displayName;
 
 export { Switch };
-
 ```
 
 ---
 
 ## File: `components\ui\table.tsx`
+
 ```tsx
 import * as React from "react";
 
@@ -15570,12 +17674,12 @@ export {
   TableCell,
   TableCaption,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\tabs.tsx`
+
 ```tsx
 import * as React from "react";
 import * as TabsPrimitive from "@radix-ui/react-tabs";
@@ -15630,18 +17734,19 @@ const TabsContent = React.forwardRef<
 TabsContent.displayName = TabsPrimitive.Content.displayName;
 
 export { Tabs, TabsList, TabsTrigger, TabsContent };
-
 ```
 
 ---
 
 ## File: `components\ui\textarea.tsx`
+
 ```tsx
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> { }
+export interface TextareaProps
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
@@ -15660,12 +17765,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 Textarea.displayName = "Textarea";
 
 export { Textarea };
-
 ```
 
 ---
 
 ## File: `components\ui\toast.tsx`
+
 ```tsx
 import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
@@ -15710,7 +17815,7 @@ const toastVariants = cva(
 const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
-  VariantProps<typeof toastVariants>
+    VariantProps<typeof toastVariants>
 >(({ className, variant, ...props }, ref) => {
   return (
     <ToastPrimitives.Root
@@ -15794,12 +17899,12 @@ export {
   ToastClose,
   ToastAction,
 };
-
 ```
 
 ---
 
 ## File: `components\ui\toaster.tsx`
+
 ```tsx
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -15834,12 +17939,12 @@ export function Toaster() {
     </ToastProvider>
   );
 }
-
 ```
 
 ---
 
 ## File: `components\ui\toggle-group.tsx`
+
 ```tsx
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
@@ -15900,12 +18005,12 @@ const ToggleGroupItem = React.forwardRef<
 ToggleGroupItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
 export { ToggleGroup, ToggleGroupItem };
-
 ```
 
 ---
 
 ## File: `components\ui\toggle.tsx`
+
 ```tsx
 import * as React from "react";
 import * as TogglePrimitive from "@radix-ui/react-toggle";
@@ -15938,7 +18043,7 @@ const toggleVariants = cva(
 const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
-  VariantProps<typeof toggleVariants>
+    VariantProps<typeof toggleVariants>
 >(({ className, variant, size, ...props }, ref) => (
   <TogglePrimitive.Root
     ref={ref}
@@ -15950,12 +18055,12 @@ const Toggle = React.forwardRef<
 Toggle.displayName = TogglePrimitive.Root.displayName;
 
 export { Toggle, toggleVariants };
-
 ```
 
 ---
 
 ## File: `components\ui\tooltip.tsx`
+
 ```tsx
 import * as React from "react";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
@@ -15985,22 +18090,22 @@ const TooltipContent = React.forwardRef<
 TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
-
 ```
 
 ---
 
 ## File: `components\ui\use-toast.ts`
+
 ```typescript
 import { useToast, toast } from "@/hooks/use-toast";
 
 export { useToast, toast };
-
 ```
 
 ---
 
 ## File: `context\EditorContext.tsx`
+
 ```tsx
 "use client";
 
@@ -16034,7 +18139,10 @@ interface EditorActions {
   setLinkedinUrl: (url: string) => void;
   startScrape: (url: string) => Promise<void>;
   startScrapeManual: (file: File) => Promise<boolean>;
-  updateField: <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => void;
+  updateField: <K extends keyof ProfileData>(
+    key: K,
+    value: ProfileData[K],
+  ) => void;
   selectTemplate: (id: TemplateId) => void;
   resetEdits: () => void;
   clearProfile: () => void;
@@ -16055,7 +18163,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [linkedinUrl, setLinkedinUrlState] = useState("");
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [editedProfile, setEditedProfile] = useState<ProfileData | null>(null);
-  const [selectedTemplate, setSelectedTemplate] = useState<TemplateId>("minimal-card");
+  const [selectedTemplate, setSelectedTemplate] =
+    useState<TemplateId>("minimal-card");
   const [isLoading, setIsLoading] = useState(false);
   const [scrapeError, setScrapeError] = useState<string | null>(null);
 
@@ -16063,7 +18172,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const storedProfile = sessionStorage.getItem(SESSION_KEY);
-      const storedTemplate = sessionStorage.getItem(TEMPLATE_KEY) as TemplateId | null;
+      const storedTemplate = sessionStorage.getItem(
+        TEMPLATE_KEY,
+      ) as TemplateId | null;
       const storedUrl = sessionStorage.getItem(URL_KEY);
       if (storedProfile && !websiteId) {
         const p = JSON.parse(storedProfile) as ProfileData;
@@ -16087,38 +18198,46 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Helper to create a website in the backend and assign it the profile data
-  const createWebsiteWithProfile = useCallback(async (profileData: ProfileData): Promise<string> => {
-    // 1. Create a website draft
-    const createRes = await fetch("/api/websites", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ templateId: selectedTemplate }),
-    });
-    const createData = await createRes.json();
-    if (!createRes.ok || !createData.website) {
-      throw new Error(createData.error || "Failed to create website draft");
-    }
-    const newId = createData.website.id;
+  const createWebsiteWithProfile = useCallback(
+    async (profileData: ProfileData): Promise<string> => {
+      // 1. Create a website draft
+      const createRes = await fetch("/api/websites", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ templateId: selectedTemplate }),
+      });
+      const createData = await createRes.json();
+      if (!createRes.ok || !createData.website) {
+        throw new Error(createData.error || "Failed to create website draft");
+      }
+      const newId = createData.website.id;
 
-    // 2. Save profile data to the website
-    const updateRes = await fetch(`/api/websites/${newId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        brandName: profileData.name,
-        profile: profileData,
-      }),
-    });
-    const updateData = await updateRes.json();
-    if (!updateRes.ok) {
-      throw new Error(updateData.error || "Failed to save profile data to website draft");
-    }
+      // 2. Save profile data to the website
+      const updateRes = await fetch(`/api/websites/${newId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          brandName: profileData.name,
+          profile: profileData,
+        }),
+      });
+      const updateData = await updateRes.json();
+      if (!updateRes.ok) {
+        throw new Error(
+          updateData.error || "Failed to save profile data to website draft",
+        );
+      }
 
-    setWebsiteId(newId);
-    sessionStorage.setItem("linkedpage_brand_name", profileData.name);
-    sessionStorage.setItem("linkedpage_subdomain", `${createData.website.subdomainSlug}.linkedpage.io`);
-    return newId;
-  }, [selectedTemplate]);
+      setWebsiteId(newId);
+      sessionStorage.setItem("linkedpage_brand_name", profileData.name);
+      sessionStorage.setItem(
+        "linkedpage_subdomain",
+        `${createData.website.subdomainSlug}.linkedpage.io`,
+      );
+      return newId;
+    },
+    [selectedTemplate],
+  );
 
   // Load website from API
   const loadWebsite = useCallback(async (id: string) => {
@@ -16137,9 +18256,12 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       if (web.profile.linkedinUrl) {
         setLinkedinUrlState(web.profile.linkedinUrl);
       }
-      
+
       sessionStorage.setItem("linkedpage_brand_name", web.brandName);
-      sessionStorage.setItem("linkedpage_subdomain", `${web.subdomainSlug}.linkedpage.io`);
+      sessionStorage.setItem(
+        "linkedpage_subdomain",
+        `${web.subdomainSlug}.linkedpage.io`,
+      );
     } catch (e: any) {
       toast.error(e.message || "Failed to load website.");
     } finally {
@@ -16195,70 +18317,82 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   }, [websiteId, editedProfile, selectedTemplate]);
 
   // Scraping logic using the backend URL scraper
-  const startScrape = useCallback(async (url: string) => {
-    setIsLoading(true);
-    setScrapeError(null);
-    setLinkedinUrlState(url);
-    sessionStorage.setItem(URL_KEY, url);
+  const startScrape = useCallback(
+    async (url: string) => {
+      setIsLoading(true);
+      setScrapeError(null);
+      setLinkedinUrlState(url);
+      sessionStorage.setItem(URL_KEY, url);
 
-    try {
-      const response = await fetch("/api/scrape", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url }),
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch LinkedIn profile.");
+      try {
+        const response = await fetch("/api/scrape", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url }),
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch LinkedIn profile.");
+        }
+
+        const profileData = data.data;
+        setProfile(profileData);
+        setEditedProfile(profileData);
+        persistProfile(profileData);
+
+        // Create site draft in backend
+        await createWebsiteWithProfile(profileData);
+      } catch (e: any) {
+        setScrapeError(
+          e.message ||
+            "Failed to fetch LinkedIn profile. Please check the URL and try again.",
+        );
+      } finally {
+        setIsLoading(false);
       }
-
-      const profileData = data.data;
-      setProfile(profileData);
-      setEditedProfile(profileData);
-      persistProfile(profileData);
-
-      // Create site draft in backend
-      await createWebsiteWithProfile(profileData);
-    } catch (e: any) {
-      setScrapeError(e.message || "Failed to fetch LinkedIn profile. Please check the URL and try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persistProfile, createWebsiteWithProfile]);
+    },
+    [persistProfile, createWebsiteWithProfile],
+  );
 
   // Manual scraping logic via uploaded ZIP file
-  const startScrapeManual = useCallback(async (file: File): Promise<boolean> => {
-    setIsLoading(true);
-    setScrapeError(null);
+  const startScrapeManual = useCallback(
+    async (file: File): Promise<boolean> => {
+      setIsLoading(true);
+      setScrapeError(null);
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const response = await fetch("/api/scrape/manual", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to parse ZIP archive.");
+        const response = await fetch("/api/scrape/manual", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to parse ZIP archive.");
+        }
+
+        const profileData = data.data;
+        setProfile(profileData);
+        setEditedProfile(profileData);
+        persistProfile(profileData);
+
+        // Create site draft in backend
+        await createWebsiteWithProfile(profileData);
+        return true;
+      } catch (e: any) {
+        setScrapeError(
+          e.message ||
+            "Failed to process ZIP archive. Make sure it contains Profile.csv.",
+        );
+        return false;
+      } finally {
+        setIsLoading(false);
       }
-
-      const profileData = data.data;
-      setProfile(profileData);
-      setEditedProfile(profileData);
-      persistProfile(profileData);
-
-      // Create site draft in backend
-      await createWebsiteWithProfile(profileData);
-      return true;
-    } catch (e: any) {
-      setScrapeError(e.message || "Failed to process ZIP archive. Make sure it contains Profile.csv.");
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [persistProfile, createWebsiteWithProfile]);
+    },
+    [persistProfile, createWebsiteWithProfile],
+  );
 
   const updateField = useCallback(
     <K extends keyof ProfileData>(key: K, value: ProfileData[K]) => {
@@ -16269,7 +18403,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         return next;
       });
     },
-    [persistProfile]
+    [persistProfile],
   );
 
   const selectTemplate = useCallback((id: TemplateId) => {
@@ -16298,7 +18432,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     setProfile(MOCK_PROFILE);
     setEditedProfile(MOCK_PROFILE);
     persistProfile(MOCK_PROFILE);
-    
+
     // Create website draft in backend
     try {
       await createWebsiteWithProfile(MOCK_PROFILE);
@@ -16346,12 +18480,12 @@ export function useEditor(): EditorContextValue {
   if (!ctx) throw new Error("useEditor must be used inside <EditorProvider>");
   return ctx;
 }
-
 ```
 
 ---
 
 ## File: `hooks\use-mobile.tsx`
+
 ```tsx
 import * as React from "react";
 
@@ -16374,12 +18508,12 @@ export function useIsMobile() {
 
   return !!isMobile;
 }
-
 ```
 
 ---
 
 ## File: `hooks\use-toast.ts`
+
 ```typescript
 import * as React from "react";
 
@@ -16569,24 +18703,24 @@ function useToast() {
 }
 
 export { useToast, toast };
-
 ```
 
 ---
 
 ## File: `lib\auth-client.ts`
+
 ```typescript
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
 });
-
 ```
 
 ---
 
 ## File: `lib\auth.ts`
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -16599,7 +18733,9 @@ export const auth = betterAuth({
     provider: "pg",
     schema,
   }),
-  secret: process.env.BETTER_AUTH_SECRET || "linkedpage_local_secret_key_123456_better",
+  secret:
+    process.env.BETTER_AUTH_SECRET ||
+    "linkedpage_local_secret_key_123456_better",
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   emailAndPassword: {
     enabled: true,
@@ -16624,23 +18760,28 @@ export async function getAuthenticatedUser(): Promise<User | null> {
       lastName,
       email: session.user.email,
       passwordHash: "",
-      createdAt: session.user.createdAt ? new Date(session.user.createdAt).toISOString() : new Date().toISOString(),
+      createdAt: session.user.createdAt
+        ? new Date(session.user.createdAt).toISOString()
+        : new Date().toISOString(),
     };
   } catch (e) {
     console.error("Error in getAuthenticatedUser:", e);
     return null;
   }
 }
-
 ```
 
 ---
 
 ## File: `lib\compiler.ts`
+
 ```typescript
 import { ProfileData, TemplateId } from "@/shared/types";
 
-export function compileStaticHtml(profile: ProfileData, templateId: TemplateId): string {
+export function compileStaticHtml(
+  profile: ProfileData,
+  templateId: TemplateId,
+): string {
   const name = profile.name;
   const headline = profile.headline;
   const summary = profile.summary;
@@ -16648,7 +18789,9 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
   const avatarUrl = profile.avatarUrl || "https://i.pravatar.cc/300?img=47";
 
   // Pre-render experiences
-  const experienceHtml = profile.experience.map(exp => `
+  const experienceHtml = profile.experience
+    .map(
+      (exp) => `
     <div class="experience-item">
       <div class="experience-header">
         <h3 class="experience-title">${exp.title}</h3>
@@ -16657,19 +18800,29 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
       <p class="experience-company">${exp.company}</p>
       ${exp.description ? `<p class="experience-desc">${exp.description}</p>` : ""}
     </div>
-  `).join("");
+  `,
+    )
+    .join("");
 
   // Pre-render skills
-  const skillsHtml = profile.skills.map(skill => `
+  const skillsHtml = profile.skills
+    .map(
+      (skill) => `
     <span class="skill-badge">${skill.name}</span>
-  `).join("");
+  `,
+    )
+    .join("");
 
   // Pre-render links
-  const linksHtml = profile.links.map(link => `
+  const linksHtml = profile.links
+    .map(
+      (link) => `
     <a href="${link.url}" target="_blank" rel="noopener noreferrer" class="link-button">
       <span>${link.label}</span>
     </a>
-  `).join("");
+  `,
+    )
+    .join("");
 
   // Theme styling definitions
   let templateStyles = "";
@@ -16712,20 +18865,32 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
           </div>
           <p class="summary">${summary}</p>
           
-          ${profile.skills.length > 0 ? `
+          ${
+            profile.skills.length > 0
+              ? `
             <h2 class="section-title">Skills</h2>
             <div class="skills-container">${skillsHtml}</div>
-          ` : ""}
+          `
+              : ""
+          }
 
-          ${profile.experience.length > 0 ? `
+          ${
+            profile.experience.length > 0
+              ? `
             <h2 class="section-title">Experience</h2>
             <div class="experience-list">${experienceHtml}</div>
-          ` : ""}
+          `
+              : ""
+          }
 
-          ${profile.links.length > 0 ? `
+          ${
+            profile.links.length > 0
+              ? `
             <h2 class="section-title">Links</h2>
             <div class="links-container">${linksHtml}</div>
-          ` : ""}
+          `
+              : ""
+          }
         </div>
       </div>
     `;
@@ -16785,12 +18950,16 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
         </div>
 
         <!-- Links -->
-        ${profile.links.length > 0 ? `
+        ${
+          profile.links.length > 0
+            ? `
           <div class="bento-card col-span-2">
             <h2 class="section-title">Links</h2>
             <div class="links-container">${linksHtml}</div>
           </div>
-        ` : ""}
+        `
+            : ""
+        }
       </div>
     `;
   } else if (templateId === "full-scroll") {
@@ -16826,9 +18995,13 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
         ${location ? `<div class="location">${location}</div>` : ""}
 
         <!-- Links -->
-        ${profile.links.length > 0 ? `
+        ${
+          profile.links.length > 0
+            ? `
           <div class="links-container">${linksHtml}</div>
-        ` : ""}
+        `
+            : ""
+        }
 
         <!-- About -->
         <div class="panel">
@@ -16837,11 +19010,15 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
         </div>
 
         <!-- Experience -->
-        ${profile.experience.length > 0 ? `
+        ${
+          profile.experience.length > 0
+            ? `
           <div class="panel">
             <h2 class="section-title">Experience</h2>
             <div class="experience-list">
-              ${profile.experience.map(exp => `
+              ${profile.experience
+                .map(
+                  (exp) => `
                 <div class="experience-item">
                   <div class="experience-indicator"></div>
                   <div class="experience-content">
@@ -16850,18 +19027,26 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
                     ${exp.description ? `<p class="experience-desc">${exp.description}</p>` : ""}
                   </div>
                 </div>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
           </div>
-        ` : ""}
+        `
+            : ""
+        }
 
         <!-- Skills -->
-        ${profile.skills.length > 0 ? `
+        ${
+          profile.skills.length > 0
+            ? `
           <div class="panel">
             <h2 class="section-title">Skills</h2>
             <div class="skills-container">${skillsHtml}</div>
           </div>
-        ` : ""}
+        `
+            : ""
+        }
       </div>
     `;
   } else if (templateId === "dark") {
@@ -16906,17 +19091,25 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
         <p class="summary">${summary}</p>
 
         <!-- Skills -->
-        ${profile.skills.length > 0 ? `
+        ${
+          profile.skills.length > 0
+            ? `
           <div class="skills-container">${skillsHtml}</div>
-        ` : ""}
+        `
+            : ""
+        }
 
         <hr>
 
         <!-- Experience -->
-        ${profile.experience.length > 0 ? `
+        ${
+          profile.experience.length > 0
+            ? `
           <h2 class="section-title">Experience</h2>
           <div class="experience-list">
-            ${profile.experience.map(exp => `
+            ${profile.experience
+              .map(
+                (exp) => `
               <div class="experience-item">
                 <div class="experience-indicator"></div>
                 <div class="experience-content">
@@ -16925,14 +19118,22 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
                   ${exp.description ? `<p class="experience-desc">${exp.description}</p>` : ""}
                 </div>
               </div>
-            `).join("")}
+            `,
+              )
+              .join("")}
           </div>
-        ` : ""}
+        `
+            : ""
+        }
 
         <!-- Links -->
-        ${profile.links.length > 0 ? `
+        ${
+          profile.links.length > 0
+            ? `
           <div class="links-container">${linksHtml}</div>
-        ` : ""}
+        `
+            : ""
+        }
       </div>
     `;
   }
@@ -16963,12 +19164,12 @@ export function compileStaticHtml(profile: ProfileData, templateId: TemplateId):
 </body>
 </html>`;
 }
-
 ```
 
 ---
 
 ## File: `lib\db.ts`
+
 ```typescript
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
@@ -17009,7 +19210,9 @@ export interface Website {
   updatedAt: string;
 }
 
-const connectionString = process.env.DATABASE_URL || "postgresql://postgres:imblue-12345@localhost:4000/linked";
+const connectionString =
+  process.env.DATABASE_URL ||
+  "postgresql://postgres:imblue-12345@localhost:4000/linked";
 
 const pool = new Pool({
   connectionString,
@@ -17018,21 +19221,32 @@ const pool = new Pool({
 export const db = drizzle(pool, { schema });
 
 export async function getUserWebsites(userId: string): Promise<Website[]> {
-  const rows = await db.select().from(schema.website).where(eq(schema.website.userId, userId));
+  const rows = await db
+    .select()
+    .from(schema.website)
+    .where(eq(schema.website.userId, userId));
   return rows.map((w) => ({
     ...w,
     templateId: w.templateId as TemplateId,
     customDomains: (w.customDomains || []) as CustomDomain[],
     profile: w.profile as ProfileData,
-    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (w.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
   }));
 }
 
 export async function getWebsiteById(id: string): Promise<Website | undefined> {
-  const rows = await db.select().from(schema.website).where(eq(schema.website.id, id)).limit(1);
+  const rows = await db
+    .select()
+    .from(schema.website)
+    .where(eq(schema.website.id, id))
+    .limit(1);
   const w = rows[0];
   if (!w) return undefined;
   return {
@@ -17040,15 +19254,25 @@ export async function getWebsiteById(id: string): Promise<Website | undefined> {
     templateId: w.templateId as TemplateId,
     customDomains: (w.customDomains || []) as CustomDomain[],
     profile: w.profile as ProfileData,
-    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (w.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
   };
 }
 
-export async function getWebsiteBySubdomain(subdomainSlug: string): Promise<Website | undefined> {
-  const rows = await db.select().from(schema.website).where(eq(schema.website.subdomainSlug, subdomainSlug.toLowerCase())).limit(1);
+export async function getWebsiteBySubdomain(
+  subdomainSlug: string,
+): Promise<Website | undefined> {
+  const rows = await db
+    .select()
+    .from(schema.website)
+    .where(eq(schema.website.subdomainSlug, subdomainSlug.toLowerCase()))
+    .limit(1);
   const w = rows[0];
   if (!w) return undefined;
   return {
@@ -17056,19 +19280,25 @@ export async function getWebsiteBySubdomain(subdomainSlug: string): Promise<Webs
     templateId: w.templateId as TemplateId,
     customDomains: (w.customDomains || []) as CustomDomain[],
     profile: w.profile as ProfileData,
-    publishedProfile: (w.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (w.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (w.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (w.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: w.createdAt.toISOString(),
     updatedAt: w.updatedAt.toISOString(),
   };
 }
 
-export async function getWebsiteByDomain(domainName: string): Promise<Website | undefined> {
+export async function getWebsiteByDomain(
+  domainName: string,
+): Promise<Website | undefined> {
   const rows = await db.select().from(schema.website);
   const match = rows.find((w) =>
     ((w.customDomains || []) as CustomDomain[]).some(
-      (d) => d.name.toLowerCase() === domainName.toLowerCase()
-    )
+      (d) => d.name.toLowerCase() === domainName.toLowerCase(),
+    ),
   );
   if (!match) return undefined;
   return {
@@ -17076,18 +19306,35 @@ export async function getWebsiteByDomain(domainName: string): Promise<Website | 
     templateId: match.templateId as TemplateId,
     customDomains: (match.customDomains || []) as CustomDomain[],
     profile: match.profile as ProfileData,
-    publishedProfile: (match.publishedProfile || undefined) as ProfileData | undefined,
-    publishedTemplate: (match.publishedTemplate || undefined) as TemplateId | undefined,
+    publishedProfile: (match.publishedProfile || undefined) as
+      | ProfileData
+      | undefined,
+    publishedTemplate: (match.publishedTemplate || undefined) as
+      | TemplateId
+      | undefined,
     createdAt: match.createdAt.toISOString(),
     updatedAt: match.updatedAt.toISOString(),
   };
 }
 
-export async function createWebsite(userId: string, templateId: TemplateId = "minimal-card"): Promise<Website> {
-  const uRows = await db.select().from(schema.user).where(eq(schema.user.id, userId)).limit(1);
+export async function createWebsite(
+  userId: string,
+  templateId: TemplateId = "minimal-card",
+): Promise<Website> {
+  const uRows = await db
+    .select()
+    .from(schema.user)
+    .where(eq(schema.user.id, userId))
+    .limit(1);
   const user = uRows[0];
   const name = user ? user.name : "Alex Morgan";
-  const slug = name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") + "-" + Math.floor(1000 + Math.random() * 9000);
+  const slug =
+    name
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "") +
+    "-" +
+    Math.floor(1000 + Math.random() * 9000);
   const id = "web_" + Math.random().toString(36).substring(2, 11);
 
   const newWebsite = {
@@ -17097,7 +19344,8 @@ export async function createWebsite(userId: string, templateId: TemplateId = "mi
     subdomainSlug: slug,
     templateId: templateId as string,
     seoTitle: `${name} - Professional Micro-site`,
-    seoDesc: "Explore my professional experience, projects, education, and social networks.",
+    seoDesc:
+      "Explore my professional experience, projects, education, and social networks.",
     customDomains: [] as any,
     profile: {
       ...MOCK_PROFILE,
@@ -17130,13 +19378,19 @@ export async function createWebsite(userId: string, templateId: TemplateId = "mi
   };
 }
 
-export async function updateWebsite(id: string, updates: Partial<Omit<Website, "id" | "userId" | "createdAt">>): Promise<Website | undefined> {
+export async function updateWebsite(
+  id: string,
+  updates: Partial<Omit<Website, "id" | "userId" | "createdAt">>,
+): Promise<Website | undefined> {
   const formattedUpdates: any = {
     ...updates,
     updatedAt: new Date(),
   };
-  
-  await db.update(schema.website).set(formattedUpdates).where(eq(schema.website.id, id));
+
+  await db
+    .update(schema.website)
+    .set(formattedUpdates)
+    .where(eq(schema.website.id, id));
   return getWebsiteById(id);
 }
 
@@ -17144,15 +19398,22 @@ export async function deleteWebsite(id: string): Promise<boolean> {
   await db.delete(schema.website).where(eq(schema.website.id, id));
   return true;
 }
-
 ```
 
 ---
 
 ## File: `lib\schema.ts`
+
 ```typescript
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, jsonb, index } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  jsonb,
+  index,
+} from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -17229,7 +19490,9 @@ export const verification = pgTable(
 // App data website configuration table
 export const website = pgTable("website", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
   brandName: text("brand_name").notNull(),
   subdomainSlug: text("subdomain_slug").notNull().unique(),
   templateId: text("template_id").notNull(),
@@ -17270,12 +19533,12 @@ export const websiteRelations = relations(website, ({ one }) => ({
     references: [user.id],
   }),
 }));
-
 ```
 
 ---
 
 ## File: `lib\utils.spec.ts`
+
 ```typescript
 import { describe, it, expect } from "vitest";
 import { cn } from "./utils";
@@ -17309,12 +19572,12 @@ describe("cn function", () => {
     );
   });
 });
-
 ```
 
 ---
 
 ## File: `lib\utils.ts`
+
 ```typescript
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -17322,12 +19585,12 @@ import { twMerge } from "tailwind-merge";
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
 ```
 
 ---
 
 ## File: `linkedin_scraper\run_spider.py`
+
 ```python
 import sys
 import os
@@ -17346,15 +19609,15 @@ def scrape(url):
     # Configure JSON export format to stdout or temp file
     settings.set('FEED_FORMAT', 'json')
     settings.set('LOG_LEVEL', 'INFO')
-    
+
     # We want to capture the items inside a list
     results = []
-    
+
     class CapturePipeline:
         def process_item(self, item, spider):
             results.append(item)
             return item
-            
+
     # Dynamically attach pipeline to capture results in-memory
     settings.set('ITEM_PIPELINES', {
         CapturePipeline: 300
@@ -17363,14 +19626,14 @@ def scrape(url):
     process = CrawlerProcess(settings)
     process.crawl(LinkedinProfileSpider, url=url)
     process.start() # blocks until crawl completes
-    
+
     return results[0] if results else {"error": "No data scraped"}
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(json.dumps({"error": "LinkedIn URL parameter required"}))
         sys.exit(1)
-        
+
     url = sys.argv[1]
     data = scrape(url)
     print(json.dumps(data))
@@ -17380,6 +19643,7 @@ if __name__ == "__main__":
 ---
 
 ## File: `linkedin_scraper\scrapy.cfg`
+
 ```cfg
 # Automatically created by: scrapy startproject
 #
@@ -17398,6 +19662,7 @@ project = linkedin_scraper
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\items.py`
+
 ```python
 # Define here the models for your scraped items
 #
@@ -17417,6 +19682,7 @@ class LinkedinScraperItem(scrapy.Item):
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\middlewares.py`
+
 ```python
 # Define here the models for your spider middleware
 #
@@ -17524,6 +19790,7 @@ class LinkedinScraperDownloaderMiddleware:
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\pipelines.py`
+
 ```python
 # Define your item pipelines here
 #
@@ -17544,6 +19811,7 @@ class LinkedinScraperPipeline:
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\settings.py`
+
 ```python
 # Scrapy settings for linkedin_scraper project
 #
@@ -17638,6 +19906,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\__init__.py`
+
 ```python
 
 ```
@@ -17645,6 +19914,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\spiders\linkedin_profile.py`
+
 ```python
 import scrapy
 import json
@@ -17760,6 +20030,7 @@ class LinkedinProfileSpider(scrapy.Spider):
 ---
 
 ## File: `linkedin_scraper\linkedin_scraper\spiders\__init__.py`
+
 ```python
 # This package will contain the spiders of your Scrapy project
 #
@@ -17771,46 +20042,47 @@ class LinkedinProfileSpider(scrapy.Spider):
 ---
 
 ## File: `scripts\compile_codebase.py`
-```python
+
+````python
 import os
 
 def compile_project():
     exclude_dirs = {
-        'node_modules', '.git', '.next', 'dist', '.agents', '.gemini', 
+        'node_modules', '.git', '.next', 'dist', '.agents', '.gemini',
         'package-lock.json', 'pnpm-lock.yaml', 'tsconfig.tsbuildinfo'
     }
     exclude_files = {
-        'pnpm-lock.yaml', 'package-lock.yaml', 'tsconfig.tsbuildinfo', 
+        'pnpm-lock.yaml', 'package-lock.yaml', 'tsconfig.tsbuildinfo',
         'check-columns.ts', 'scratch-test.ts', 'test-signup.ts', 'test-api.ts'
     }
-    
+
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_path = os.path.join(root_dir, 'all_code_compilation.md')
-    
+
     with open(output_path, 'w', encoding='utf-8') as outfile:
         outfile.write("# Codebase Compilation\n\n")
         outfile.write("This file contains the complete source code of all active project files.\n\n")
-        
+
         for dirpath, dirnames, filenames in os.walk(root_dir):
             # Exclude directories
             dirnames[:] = [d for d in dirnames if d not in exclude_dirs]
-            
+
             for filename in filenames:
                 if filename in exclude_files:
                     continue
-                
+
                 filepath = os.path.join(dirpath, filename)
                 rel_path = os.path.relpath(filepath, root_dir)
-                
+
                 # Only include code/text files
                 ext = os.path.splitext(filename)[1].lower()
                 if ext in {'.ts', '.tsx', '.json', '.js', '.jsx', '.css', '.md', '.cfg', '.py', '.env'}:
                     try:
                         with open(filepath, 'r', encoding='utf-8') as infile:
                             content = infile.read()
-                        
+
                         outfile.write(f"## File: `{rel_path}`\n")
-                        
+
                         # Set Markdown codeblock syntax highlighting depending on extension
                         lang = ext.replace('.', '')
                         if lang == 'ts': lang = 'typescript'
@@ -17820,7 +20092,7 @@ def compile_project():
                         elif lang == 'css': lang = 'css'
                         elif lang == 'py': lang = 'python'
                         elif lang == 'md': lang = 'markdown'
-                        
+
                         outfile.write(f"```{lang}\n")
                         outfile.write(content)
                         outfile.write("\n```\n\n---\n\n")
@@ -17832,11 +20104,12 @@ def compile_project():
 if __name__ == '__main__':
     compile_project()
 
-```
+````
 
 ---
 
 ## File: `shared\api.ts`
+
 ```typescript
 /**
  * Shared code between client and server
@@ -17850,12 +20123,12 @@ if __name__ == '__main__':
 export interface DemoResponse {
   message: string;
 }
-
 ```
 
 ---
 
 ## File: `shared\types.ts`
+
 ```typescript
 // Shared types for LinkedPage — used by client pages and (future) server routes
 
@@ -17976,7 +20249,8 @@ export const MOCK_PROFILE: ProfileData = {
       title: "UI Designer",
       company: "Figma",
       duration: "2018 – 2020 · 2 yrs",
-      description: "Early design team hire. Shipped community, plugins, and multiplayer.",
+      description:
+        "Early design team hire. Shipped community, plugins, and multiplayer.",
       logo: "",
     },
   ],
@@ -18018,8 +20292,6 @@ export interface PublishResponse {
   slug?: string;
   error?: string;
 }
-
 ```
 
 ---
-

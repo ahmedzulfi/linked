@@ -22,11 +22,13 @@
 **Format:** "[N] Best [Things] for [Purpose] in [Year]"
 
 **Examples:**
+
 - "9 Best Static Site Generators for Developer Blogs in 2026"
 - "7 Best Free CI/CD Tools for Small Teams in 2026"
 - "12 Best VS Code Extensions for Python Development in 2026"
 
 **Rules:**
+
 - Use an odd or specific number (7, 9, 11) -- they outperform round numbers in CTR
 - Include the primary keyword and target audience
 - Include the year for freshness signals
@@ -36,9 +38,10 @@
 
 ### Introduction (100-150 words)
 
-[ANSWER-FIRST] Open with the single most important market statistic or data point that explains *why* this category matters right now. Not "there are many options" -- a specific number that creates urgency.
+[ANSWER-FIRST] Open with the single most important market statistic or data point that explains _why_ this category matters right now. Not "there are many options" -- a specific number that creates urgency.
 
 **Structure:**
+
 1. **Market context** (1-2 sentences): Why this category is relevant now. What changed?
 2. **The problem** (1 sentence): Why choosing is hard (too many options, misleading marketing, hidden costs, etc.)
 3. **Selection criteria anchor** (1-2 sentences): How you selected and ranked these items. Be specific about your methodology.
@@ -49,6 +52,7 @@
 [INFO-GAIN: selection methodology] Briefly explain your unique evaluation criteria -- what did you weight most heavily and why? This differentiates you from every other listicle.
 
 **Example opening:**
+
 > "[STAT: The static site generator market grew 340% between 2023 and 2025 (Source).] With over 50 SSGs now available, choosing the right one can waste weeks on migrations you'll regret. We evaluated 23 generators across build speed, plugin ecosystem, and learning curve -- testing each with a real 500-page documentation site. Here are the 9 that actually delivered."
 
 [INTERNAL-LINK] Link to a foundational guide: "New to [category]? Read our [What Is X and Why Does It Matter] guide first."
@@ -76,6 +80,7 @@
 [STAT: Performance metric, user count, or benchmark result for this item]
 
 **Example:**
+
 > ## 1. Astro -- Best for Content-Heavy Sites
 >
 > Astro ships zero JavaScript by default, which means your content-heavy site loads faster than anything else on this list -- our 500-page test site scored 100/100 on Lighthouse without any optimization.
@@ -145,6 +150,7 @@
 |------|----------|---------|-----------------|-----------------|-----------------|--------|
 
 **Rules:**
+
 - Use consistent units across all items
 - Include pricing tiers (Free / $X/mo / Custom)
 - Use specific values, not vague ratings (e.g., "2.3s build time" not "Fast")
@@ -160,6 +166,7 @@
 [ANSWER-FIRST] Open with the total number of options you evaluated and the primary elimination criterion.
 
 **Structure:**
+
 1. **Scope** (1 sentence): How many options you started with.
 2. **Evaluation criteria** (bulleted list): 3-5 specific criteria with brief explanations.
 3. **Testing methodology** (1-2 sentences): What you actually did to test (not just "we researched").
@@ -170,7 +177,9 @@
 [STAT: Total evaluation scope -- "We tested [N] tools over [X] weeks"]
 
 **Example:**
+
 > We started with 23 static site generators identified from GitHub trending, community surveys, and our own reader requests. Each was evaluated against five criteria:
+>
 > - **Build performance**: Time to build a 500-page test site
 > - **Developer experience**: Setup time, documentation quality, error messages
 > - **Ecosystem maturity**: Plugin count, community activity, corporate backing
@@ -188,6 +197,7 @@
 **Format:** Each question as an H3, answer in 2-4 sentences.
 
 **Question selection criteria:**
+
 1. "What is the best [X] overall?" (Restate your top pick with reasoning)
 2. "Is [popular free option] good enough?" (Address the budget-conscious reader)
 3. "What's the difference between [A] and [B]?" (Address the most common head-to-head confusion)
@@ -215,6 +225,7 @@
 ### Conclusion with Top Pick Recommendation (50-100 words)
 
 **Structure:**
+
 1. **Top pick restatement** (1 sentence): Name the overall winner and the single biggest reason.
 2. **Runner-up for different need** (1 sentence): Name the best alternative for a different use case.
 3. **Decision framework** (1 sentence): Give the reader a simple rule for choosing ("If you need [X], go with [A]. If you need [Y], go with [B].").

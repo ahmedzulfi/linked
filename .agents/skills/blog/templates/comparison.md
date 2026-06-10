@@ -22,11 +22,13 @@
 **Format:** "[Product A] vs [Product B]: [Key Differentiator] Compared ([Year])"
 
 **Examples:**
+
 - "Next.js vs Astro: Performance and DX Compared (2026)"
 - "PostgreSQL vs MySQL: Which Database Fits Your Stack? (2026)"
 - "Tailwind CSS vs Styled Components: Styling Approaches Compared (2026)"
 
 **Rules:**
+
 - Put the more popular/searched product first (higher search volume = first position)
 - Include a differentiating phrase that signals what the comparison covers
 - Include the year for freshness signals
@@ -42,20 +44,23 @@
 **Format:** A visually distinct callout box placed immediately after the title.
 
 **Structure:**
+
 1. **Quick verdict** (1 sentence): Name the overall winner and the single strongest reason.
 2. **Exception** (1 sentence): Name the specific use case where the other option wins.
 3. **Decision rule** (1 sentence): "Choose [A] if [X]. Choose [B] if [Y]."
 
 **Example:**
+
 > **TL;DR:** Astro wins for content-heavy sites -- it's faster out of the box and ships zero JS by default. Next.js wins for interactive web applications where you need server-side rendering, API routes, and a mature ecosystem. Choose Astro if your site is mostly content. Choose Next.js if your site is mostly application.
 
 ---
 
 ### Introduction (100-150 words)
 
-[ANSWER-FIRST] Open with the specific market context that makes this comparison relevant *right now*. What changed recently that makes people search for this?
+[ANSWER-FIRST] Open with the specific market context that makes this comparison relevant _right now_. What changed recently that makes people search for this?
 
 **Structure:**
+
 1. **Timeliness hook** (1-2 sentences): What happened recently (release, trend, shift) that makes this comparison urgent?
 2. **The core tension** (1-2 sentences): What is the fundamental trade-off between these two options? Frame it as a genuine dilemma, not a strawman.
 3. **Scope statement** (1 sentence): What specific dimensions will this comparison cover?
@@ -77,19 +82,20 @@
 
 **Required rows (adapt to your category):**
 
-| Category | [Product A] | [Product B] |
-|----------|-------------|-------------|
-| **Best For** | [Primary use case] | [Primary use case] |
-| **Pricing** | [Specific tiers] | [Specific tiers] |
-| **Learning Curve** | [Specific assessment] | [Specific assessment] |
-| **[Key Metric 1]** | [Specific value] | [Specific value] |
-| **[Key Metric 2]** | [Specific value] | [Specific value] |
-| **[Key Metric 3]** | [Specific value] | [Specific value] |
-| **[Key Metric 4]** | [Specific value] | [Specific value] |
-| **Community / Ecosystem** | [Specific data point] | [Specific data point] |
-| **Our Verdict** | [Win/Lose/Tie per row] | [Win/Lose/Tie per row] |
+| Category                  | [Product A]            | [Product B]            |
+| ------------------------- | ---------------------- | ---------------------- |
+| **Best For**              | [Primary use case]     | [Primary use case]     |
+| **Pricing**               | [Specific tiers]       | [Specific tiers]       |
+| **Learning Curve**        | [Specific assessment]  | [Specific assessment]  |
+| **[Key Metric 1]**        | [Specific value]       | [Specific value]       |
+| **[Key Metric 2]**        | [Specific value]       | [Specific value]       |
+| **[Key Metric 3]**        | [Specific value]       | [Specific value]       |
+| **[Key Metric 4]**        | [Specific value]       | [Specific value]       |
+| **Community / Ecosystem** | [Specific data point]  | [Specific data point]  |
+| **Our Verdict**           | [Win/Lose/Tie per row] | [Win/Lose/Tie per row] |
 
 **Rules:**
+
 - Use specific, measurable values -- never "Good" or "Fast"
 - Bold the winner in each row
 - Include a "Best For" row at the top and "Our Verdict" row at the bottom
@@ -108,6 +114,7 @@
 **H2 format:** Frame each category as a question: `## Which Has Better Performance?`
 
 **Structure for EVERY category section:**
+
 1. **Winner declaration** (1 sentence): "[Product A/B] wins on [category] because [specific reason]."
 2. **Product A evaluation** (2-3 sentences): How Product A performs in this category with specific details, metrics, or examples.
 3. **Product B evaluation** (2-3 sentences): How Product B performs in this category with specific details, metrics, or examples.
@@ -119,6 +126,7 @@
 [IMAGE] Side-by-side screenshot, benchmark result, or visual comparison showing the difference in this category.
 
 **Example:**
+
 > ## Which Has Better Build Performance?
 >
 > **Astro wins on build speed** -- building our 500-page test site in 4.2 seconds compared to Next.js's 18.7 seconds.
@@ -172,6 +180,7 @@
 ### Categories 6-7: [Additional categories as needed] (150-200 words each)
 
 [Follow the same structure. Use 5-7 categories total. Common categories include:]
+
 - Performance / Speed
 - Developer Experience / Learning Curve
 - Ecosystem / Plugins / Integrations
@@ -190,6 +199,7 @@
 [ANSWER-FIRST] Open with the bottom line: "For [typical use case], [Product A] costs [X] and [Product B] costs [Y]."
 
 **Structure:**
+
 1. **Direct cost comparison** (2-3 sentences): Side-by-side pricing for the most common tier or usage pattern.
 2. **Free tier analysis** (1-2 sentences): What's actually usable in each free tier? What are the real limits?
 3. **Scaling costs** (2-3 sentences): How does pricing change as usage grows? Where are the inflection points?
@@ -198,11 +208,11 @@
 
 [VISUAL: pricing-comparison-table] A simple table showing pricing tiers side by side.
 
-| Tier | [Product A] | [Product B] |
-|------|-------------|-------------|
-| Free | [Details] | [Details] |
+| Tier          | [Product A]       | [Product B]       |
+| ------------- | ----------------- | ----------------- |
+| Free          | [Details]         | [Details]         |
 | Starter / Pro | [Price + details] | [Price + details] |
-| Enterprise | [Price + details] | [Price + details] |
+| Enterprise    | [Price + details] | [Price + details] |
 
 [STAT: Total cost of ownership for a specific scenario (e.g., "For a 10-person team with 100K monthly users")]
 
@@ -217,6 +227,7 @@
 **Format:** 2-4 reader profiles, each as a bolded persona with a 1-2 sentence recommendation.
 
 **Structure:**
+
 1. **Persona 1** (bold): "[Profile description]" -> Recommendation + reason
 2. **Persona 2** (bold): "[Profile description]" -> Recommendation + reason
 3. **Persona 3** (bold): "[Profile description]" -> Recommendation + reason
@@ -225,6 +236,7 @@
 [INTERNAL-LINK] Link to a detailed guide for each recommended product: "Getting started with [Product A]? Read our [Setup Guide]."
 
 **Example:**
+
 > **Solo developers building content sites:** Choose Astro. You'll ship faster, spend less time configuring, and get better performance out of the box.
 >
 > **Teams building SaaS applications:** Choose Next.js. The API routes, authentication patterns, and middleware ecosystem will save you months.
@@ -242,6 +254,7 @@
 **Format:** Each question as an H3, answer in 2-4 sentences.
 
 **Question selection criteria:**
+
 1. "Is [Product A] better than [Product B]?" (Restate verdict with nuance)
 2. "Can I migrate from [A] to [B]?" (Address switching costs and feasibility)
 3. "Can I use [A] and [B] together?" (Address hybrid approaches if applicable)
@@ -278,15 +291,15 @@
 
 **Format:** A summary table followed by an overall recommendation.
 
-| Category | Winner |
-|----------|--------|
-| [Category 1] | [Product] |
-| [Category 2] | [Product] |
-| [Category 3] | [Product] |
-| [Category 4] | [Product] |
-| [Category 5] | [Product] |
-| **Pricing** | [Product] |
-| **Overall** | **[Product] (for [specific use case])** |
+| Category     | Winner                                  |
+| ------------ | --------------------------------------- |
+| [Category 1] | [Product]                               |
+| [Category 2] | [Product]                               |
+| [Category 3] | [Product]                               |
+| [Category 4] | [Product]                               |
+| [Category 5] | [Product]                               |
+| **Pricing**  | [Product]                               |
+| **Overall**  | **[Product] (for [specific use case])** |
 
 **Overall verdict** (2-3 sentences): Restate the decision rule from the TL;DR with any additional nuance earned through the detailed analysis.
 
@@ -302,7 +315,7 @@ Before publishing, verify:
 
 - [ ] Title includes both product names, a differentiator, and the current year
 - [ ] TL;DR box delivers a clear verdict in under 60 words
-- [ ] Introduction establishes timeliness -- why this comparison matters *now*
+- [ ] Introduction establishes timeliness -- why this comparison matters _now_
 - [ ] Quick comparison table uses specific metrics, not vague ratings
 - [ ] Every category section opens by naming the winner (answer-first)
 - [ ] Every category section evaluates both products with comparable depth and fairness

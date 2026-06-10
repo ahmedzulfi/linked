@@ -34,6 +34,7 @@ Gather context through questions or project analysis:
 ### Step 2: Competitive Landscape
 
 Research competitors' blogs:
+
 1. WebSearch for competitor blog URLs
 2. For each competitor, assess:
    - Publishing frequency
@@ -59,6 +60,7 @@ competitors appear in AI-generated responses for target keywords.
 ```
 
 Score each competitor's AI visibility:
+
 - **High**: Cited in 3/3 platforms for multiple queries
 - **Medium**: Cited in 1-2 platforms or for limited queries
 - **Low**: Rarely cited, only in niche queries
@@ -123,6 +125,7 @@ For each pillar, design the complete hub-and-spoke structure:
 ```
 
 For each cluster, specify:
+
 - **8-12 spoke topics** per pillar, each targeting a specific long-tail keyword
 - **Internal linking plan** between all cluster pages (every spoke links to pillar, pillar links to all spokes, spokes cross-link to related spokes)
 - **Content template assignment** for each piece from the 12 available templates:
@@ -148,14 +151,14 @@ Reference: `references/internal-linking.md` for hub-and-spoke model and anchor t
 The December 2025 Core Update rewards first-hand experience. Plan
 how to demonstrate genuine expertise:
 
-| Signal Type | Implementation |
-|-------------|---------------|
-| Original data | Conduct surveys, analyze proprietary data, run experiments |
-| Case studies | Document real client/project results with metrics |
-| Build in public | Share process, learnings, and failures transparently |
-| Expert interviews | Feature practitioners with first-hand knowledge |
-| Tool reviews | Test products personally, share screenshots and results |
-| Industry analysis | Provide unique perspective on public data |
+| Signal Type       | Implementation                                             |
+| ----------------- | ---------------------------------------------------------- |
+| Original data     | Conduct surveys, analyze proprietary data, run experiments |
+| Case studies      | Document real client/project results with metrics          |
+| Build in public   | Share process, learnings, and failures transparently       |
+| Expert interviews | Feature practitioners with first-hand knowledge            |
+| Tool reviews      | Test products personally, share screenshots and results    |
+| Industry analysis | Provide unique perspective on public data                  |
 
 ### Step 5.5: AI Citation Surface Strategy
 
@@ -166,6 +169,7 @@ is insufficient.
 #### On-Site Optimization
 
 Structure every piece of content for AI citability:
+
 - Every H2 opens with an answer-first paragraph (40-60 words with stat + source)
 - **Citation capsules**: 40-60 word self-contained passages per H2 section
 - **Q&A format**: 60-70% of H2 headings phrased as questions
@@ -175,13 +179,13 @@ Structure every piece of content for AI citability:
 
 #### Off-Site Presence (Critical -- 88-92% of AI citations from off-site)
 
-| Channel | AI Citation Impact | Priority Action |
-|---------|-------------------|-----------------|
-| YouTube | 0.737 correlation (strongest) | Companion videos for pillar posts |
-| Reddit | 450% citation surge | Authentic participation in 3-5 subreddits |
-| Review platforms | 2.6-3.5x multiplier | Maintain profiles on G2, Capterra (B2B) |
-| Wikipedia/Wikidata | Credibility tiebreaker | Build notability, create Wikidata entry |
-| Industry publications | Tier 2-3 citation source | Guest posts, expert commentary |
+| Channel               | AI Citation Impact            | Priority Action                           |
+| --------------------- | ----------------------------- | ----------------------------------------- |
+| YouTube               | 0.737 correlation (strongest) | Companion videos for pillar posts         |
+| Reddit                | 450% citation surge           | Authentic participation in 3-5 subreddits |
+| Review platforms      | 2.6-3.5x multiplier           | Maintain profiles on G2, Capterra (B2B)   |
+| Wikipedia/Wikidata    | Credibility tiebreaker        | Build notability, create Wikidata entry   |
+| Industry publications | Tier 2-3 citation source      | Guest posts, expert commentary            |
 
 #### Cross-Platform Monitoring
 
@@ -216,13 +220,14 @@ should be revised before going live.
 
 Plan passage-level citability across all content, tailored to each AI platform.
 
-| AI Platform | Favors | Optimization Focus |
-|-------------|--------|-------------------|
-| ChatGPT | Recency, brand authority, conversational clarity | Update posts within 30 days, clear entity definitions |
-| Perplexity | Citations, source diversity, structured answers | Tier 1-3 sources, numbered lists, data tables |
-| Google AI Overviews | Structured data, schema, topical authority | FAQ schema, HowTo schema, complete topic clusters |
+| AI Platform         | Favors                                           | Optimization Focus                                    |
+| ------------------- | ------------------------------------------------ | ----------------------------------------------------- |
+| ChatGPT             | Recency, brand authority, conversational clarity | Update posts within 30 days, clear entity definitions |
+| Perplexity          | Citations, source diversity, structured answers  | Tier 1-3 sources, numbered lists, data tables         |
+| Google AI Overviews | Structured data, schema, topical authority       | FAQ schema, HowTo schema, complete topic clusters     |
 
 Strategy by platform:
+
 - **ChatGPT**: Ensure brand name appears consistently, maintain 30-day freshness, use conversational answer-first formatting
 - **Perplexity**: Maximize external citation count (8+ per post), use structured data tables, cite authoritative sources
 - **AI Overviews**: Complete topic cluster coverage, implement all relevant schema types, achieve featured snippet format
@@ -234,14 +239,14 @@ Reference: `references/geo-optimization.md` for platform-specific optimization g
 AI visibility requires off-site presence (88-92% of AI citations come
 from off-site signals). Plan brand presence:
 
-| Channel | AI Impact | Strategy |
-|---------|-----------|----------|
-| YouTube | 0.737 correlation (strongest) | Companion videos for pillar posts, how-tos, demos |
-| Reddit | 450% citation surge | Authentic participation in 3-5 subreddits, share insights not links |
-| Review platforms | 2.6-3.5x citation multiplier | Maintain profiles on G2, Capterra, TrustRadius (B2B) |
-| Wikipedia/Wikidata | Credibility tiebreaker | Build notability through earned media, create Wikidata entry |
-| Industry publications | Tier 2-3 citation source | Guest posts, expert commentary, study contributions |
-| Social media | Brand mentions | LinkedIn thought leadership, Twitter/X insights |
+| Channel               | AI Impact                     | Strategy                                                            |
+| --------------------- | ----------------------------- | ------------------------------------------------------------------- |
+| YouTube               | 0.737 correlation (strongest) | Companion videos for pillar posts, how-tos, demos                   |
+| Reddit                | 450% citation surge           | Authentic participation in 3-5 subreddits, share insights not links |
+| Review platforms      | 2.6-3.5x citation multiplier  | Maintain profiles on G2, Capterra, TrustRadius (B2B)                |
+| Wikipedia/Wikidata    | Credibility tiebreaker        | Build notability through earned media, create Wikidata entry        |
+| Industry publications | Tier 2-3 citation source      | Guest posts, expert commentary, study contributions                 |
+| Social media          | Brand mentions                | LinkedIn thought leadership, Twitter/X insights                     |
 
 Budget allocation recommendation: **40% owned content / 60% earned media and distribution**.
 

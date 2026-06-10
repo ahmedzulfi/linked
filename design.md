@@ -1,7 +1,7 @@
 ---
 version: alpha
-name: Webild Cloud Editorial - Forest Green Edition
-description: A soft, structured landing-page system with Plus Jakarta Sans headers, frosted panels, and organic Forest Green accents.
+name: Webild Cloud Editorial
+description: A soft, airy landing-page system with bold type, frosted panels, and restrained dark accents.
 colors:
   primary: "#2A2A2F"
   primary-contrast: "#FFFFFF"
@@ -13,75 +13,75 @@ colors:
   on-surface: "#000000"
   on-surface-muted: "#171717"
   border: "#E6E6E6"
-  accent: "#0A705F"
-  accent-soft: "#E6FFE6"
+  accent: "#8DB8FF"
+  accent-soft: "#DCEAFF"
   accent-green: "#8DFFB3"
-  accent-green-dark: "#0A705F"
+  accent-green-dark: "#369762"
   success: "#BFE7A9"
   error: "#E45A5A"
 typography:
   headline-display:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "51px"
-    fontWeight: 700
+    fontWeight: 500
     lineHeight: "51.2px"
-    letterSpacing: "-0.02em"
+    letterSpacing: "0px"
   headline-lg:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "38px"
-    fontWeight: 600
+    fontWeight: 400
     lineHeight: "46px"
-    letterSpacing: "-0.015em"
+    letterSpacing: "0px"
   headline-md:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "29px"
-    fontWeight: 600
+    fontWeight: 400
     lineHeight: "35px"
-    letterSpacing: "-0.01em"
+    letterSpacing: "0px"
   headline-sm:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "21px"
-    fontWeight: 600
+    fontWeight: 400
     lineHeight: "25px"
-    letterSpacing: "-0.01em"
+    letterSpacing: "0px"
   body-lg:
-    fontFamily: "Inter"
+    fontFamily: "Inter Tight"
     fontSize: "18px"
     fontWeight: 400
     lineHeight: "27px"
     letterSpacing: "0px"
   body-md:
-    fontFamily: "Inter"
+    fontFamily: "Inter Tight"
     fontSize: "16px"
     fontWeight: 400
     lineHeight: "24px"
     letterSpacing: "0px"
   body-sm:
-    fontFamily: "Inter"
+    fontFamily: "Inter Tight"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: "20px"
     letterSpacing: "0px"
   label-lg:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "13px"
     fontWeight: 500
     lineHeight: "18px"
     letterSpacing: "0px"
   label-md:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "12px"
     fontWeight: 500
     lineHeight: "16px"
     letterSpacing: "0px"
   label-sm:
-    fontFamily: "Plus Jakarta Sans"
+    fontFamily: "Inter Tight"
     fontSize: "11px"
     fontWeight: 500
     lineHeight: "14px"
     letterSpacing: "0px"
   caption:
-    fontFamily: "Inter"
+    fontFamily: "Inter Tight"
     fontSize: "11px"
     fontWeight: 400
     lineHeight: "14px"
@@ -144,61 +144,122 @@ components:
     size: "36px"
 ---
 
-# Webild Cloud Editorial - Forest Green Edition
+# Webild Cloud Editorial
 
 ## Overview
-
-Webild feels airy, structured, and premium-editorial, with a polished landing-page aesthetic built to inspire quick creation and conversion. The experience balances playful cloudscape imagery with a high-end, product-led asymmetric structure, making it suitable for founders, marketers, and teams wanting a fast way to launch page products.
+Webild feels airy, optimistic, and lightly futuristic, with a polished landing-page aesthetic built to inspire quick creation and conversion. The experience balances playful cloudscape imagery with a serious, product-led structure, making it suitable for founders, marketers, and small teams wanting a fast way to launch pages. The overall tone is spacious and inviting rather than dense or technical.
 
 ## Branding & Logos
-
-- **logo.png (Full Logo):** Displays the brand icon and the brand name text. Used in standard headers, navbars, and footers.
-- **logoicon.png (Icon Logo):** Displays only the minimalist brand icon. Used in space-constrained slots such as sidebar selectors and small avatar tags.
+- **logo.png (Full Logo):** Displays the brand icon and the brand name text. Used in standard headers, navbars, and footers where space allows for the complete brand signature.
+- **logoicon.png (Icon Logo):** Displays only the minimalist brand icon. Used in space-constrained slots such as sidebar project selectors, small avatar slots in recent lists, AI response bubble identifiers, and centered header accents.
 
 ## Colors
-
-- **Primary (#2A2A2F):** A deep charcoal used for the strongest call-to-action buttons, prominent UI contrast, and dark text accents.
-- **Secondary (#F3F3F3):** A soft off-white used for neutral buttons and subtle control surfaces.
-- **Tertiary (#FBFBFB):** The lightest elevated surface tone, ideal for cards and panels.
+- **Primary (#2A2A2F):** A deep charcoal used for the strongest call-to-action buttons, prominent UI contrast, and dark text accents. It gives the interface a grounded, premium anchor against the bright background.
+- **Secondary (#F3F3F3):** A soft off-white used for neutral buttons and subtle control surfaces. It keeps secondary actions visible without competing with the primary CTA.
+- **Tertiary (#FBFBFB):** The lightest elevated surface tone, ideal for cards and panels that sit above the background with minimal visual weight.
 - **Neutral / Surface (#FFFFFF):** Pure white is used for the base canvas, input areas, and high-clarity containers.
-- **On-surface (#000000):** Crisp black text for headlines, navigation, and essential labels.
-- **On-surface-muted (#171717):** A near-black supporting text tone for card content and body copy.
-- **Border (#E6E6E6):** A faint divider color for structural separation and soft edges.
-- **Accent (#0A705F):** A muted, organic forest green used for active states, link hover states, and primary status indicators.
-- **Accent-soft (#E6FFE6):** A pale minty green highlight for low-emphasis background panels and highlighted tabs.
-- **Accent-green (#8DFFB3):** A soft mint green highlight matching the luminance of the primary accent-soft tone.
-- **Success (#BFE7A9):** A fresh green used sparingly for positive signals and subtle warmth.
-- **Error (#E45A5A):** A restrained red reserved for destructive states.
+- **On-surface (#000000):** Crisp black text for headlines, navigation, and essential labels, matching the high-contrast editorial feel.
+- **On-surface-muted (#171717):** A near-black supporting text tone for card content and body copy where full black would feel too stark.
+- **Border (#E6E6E6):** A faint divider color for structural separation and soft edges, especially on floating panels and controls.
+- **Accent (#8DB8FF):** A gentle sky-blue highlight used for active states, visual emphasis, and lightweight interactive cues.
+- **Accent-soft (#DCEAFF):** A pale blue companion for low-emphasis highlights and blended interface accents.
+- **Accent-green (#8DFFB3):** A soft mint green highlight matching the luminance and shade of the sky-blue accent, used for visual accents, progress indicators, and active highlights.
+- **Accent-green-dark (#369762):** A deeper version of the mint green accent, optimized for text readability and high-contrast labels on white backgrounds.
+- **Success (#BFE7A9):** A fresh green used sparingly for positive signals and subtle environmental warmth.
+- **Error (#E45A5A):** A restrained red reserved for destructive states, validation, and alert messaging.
 
 ## Typography
-
-The system uses Plus Jakarta Sans for headlines and display text, which gives the brand a wide, modern, geometric, and high-end agency voice. Body text uses Inter for comfortable reading. Headlines rely on tight letter-spacing (`tracking-tight` or `-0.02em`) and heavier weights (Medium/SemiBold/Bold).
+The system uses Inter Tight throughout, which gives the brand a compact, modern, and slightly editorial voice. Headlines rely on lighter weights for h2–h4 and a medium weight for the main display line, creating a sleek contrast with the bold visual imagery. Body text stays at 16px/24px for comfortable reading, while labels and button text move slightly smaller and medium-weight for crisp utility. Letter spacing is neutral, with no visible uppercase tracking treatment, so the hierarchy comes from size, weight, and contrast rather than decorative text styling.
 
 ## Layout & Spacing
+The layout uses centered compositions throughout, maintaining a wide, fixed structure with generous negative space and a soft full-bleed background.
+- **Landing Page Hero Layout (Website Image Showcase):** To align with premium SaaS product design, the hero section spans exactly `100vh` with overflow hidden. The layout is centered and consists of a bold display headline, description, and pill-shaped CTAs (with the previous badge removed). At the bottom of the section, the website preview image (`heroimage.png`) is rendered at `80%` width and translated vertically downward by `20%` to hide the lower portion of the screen mockup, with a viewport-bottom absolute white gradient overlay fading upward to blend the visual elements into the white page background.
+- **Onboarding Page Layout:** The onboarding page specifically uses a lightweight CSS-based animated mesh gradient instead of image assets to ensure instant page loads. Major content sits inside layered floating panels, while the top navigation uses a rounded, inset container that spans most of the viewport width with even internal spacing. To minimize user friction, the main screen and scraper fallback screens render a prominent "Start from Scratch (Empty Canvas)" bypass button (`h-11`, `rounded-2xl`, border color matching `#E6E6E6`, active press animation `active:scale-[0.98] transition-transform duration-100 ease-out`). This skips ZIP archive uploads and transitions directly to the wizard, initializing template fields with visual layout placeholder variables.
 
-- **Landing Page Hero Layout (Asymmetric Split):** The hero section is structured as a 50/50 split on desktop viewports. The left side holds a bold display headline (constrained to a maximum of 2 lines to fit neatly in the initial viewport), a concise paragraph description, and pill-shaped CTAs. The right side showcases the interactive website preview image (`heroimage.png`) inside a premium squircle-bezel container, floating with hardware-accelerated transitions.
-- **Section Order & Padding:** The landing page has a clear AIDA flow:
-  1. Navbar (floating glass pill)
-  2. Hero Section (asymmetric split)
-  3. How It Works Section (3-column parse steps)
-  4. Templates Carousel Section (slider showing template aesthetics)
-  5. Career Showcase Section (tabs for Experience, Projects, Education with mockup blocks)
-  6. Features Section (2-column details)
-  7. FAQ Section (smooth spring toggled cards)
-  8. Footer Section (large centered logo with clean links and newsletter)
-
-  Sections use massive vertical padding (`py-24 md:py-32`) to create a spacious, breathable editorial feel.
+The spacing rhythm is simple and airy, using a compact base of 2px for micro-adjustments and then jumping to 12px, 18px, 40px, and 90px for component padding, section separation, and dramatic hero breathing room. Cards and controls prefer consistent internal padding over dense alignment, reinforcing the polished, easygoing feel.
 
 ## Elevation & Depth
+Depth is achieved more through translucency, soft borders, and gentle shadows than through dramatic stacking. Panels use pale surfaces with subtle gray edges and light shadowing to appear lifted from the cloud background without feeling heavy. The interface leans flat overall, but the contrast between white controls, frosted containers, and dark CTA buttons creates enough hierarchy for navigation and action. Inner shadow treatment on primary buttons adds a tactile, slightly embossed quality.
 
-Depth is achieved via the Doppelrand (Double-Bezel) card layout technique:
+## Shapes
+The shape language is soft and rounded, with a notable 13px corner radius on major buttons and cards. Full pills appear on chips, icon buttons, and compact controls, while larger panels keep a moderate rounded rectangle profile. Overall, the system feels approachable and polished rather than angular or architectural.
 
-- **Outer Shell:** Light background padding wrapper with a thin neutral border (`border border-black/5` or `border border-white/10`) and large rounded radius (`rounded-[2rem]`).
-- **Inner Core:** Nested content container with a calculated concentric radius (`rounded-[calc(2rem-0.5rem)]`) and soft inner highlight shadow to create a physical bezel appearance.
+## Components
+Buttons are the most expressive component family. `button-primary` uses the charcoal `#2A2A2F` background with white text, medium label typography, 14px vertical padding, and a 40px minimum height for a confident CTA. `button-secondary` uses `#F3F3F3` with black text and the same sizing, making it ideal for less dominant actions like “Decline” or “Log in.” `button-tertiary` is text-only and should remain visually quiet for low-emphasis navigation or inline actions.
+
+Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action
+
+### Editor Dashboard Layout & Wizard Integration
+The editor `/editor` displays the full dashboard layout shell integrated with the conversational wizard and sub-panels:
+- **Left Sidebar (Collapsible Drawer):**
+  - Hovering expands the panel from `60px` to `250px`.
+  - Hosts navigation items: Home (dashboard redirect), Design (active workspace), Domains (custom domain panel), and Site Settings (site details).
+  - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
+- **Left Column Panels (Navigation Switcher):**
+  - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with interactive forms.
+    - **Step 1 (Welcome Kickoff):** Entry welcome screen containing a visual checklist of tasks to complete, displaying the user's name and avatar.
+    - **Steps 2-5 (Core Profile Forms):** Timeline-based inline widgets for Projects, Interests, Skills, and Experience. The forms utilize a minimal, flat, Notion-like UI system redesigned under the `/ui-ux-pro-max` guidelines: structural emojis are replaced with premium Lucide SVG vector icons, inputs and buttons are expanded to standard touch-friendly height (`h-11` or 44px), grey text colors have been upgraded to WCAG AA-compliant high-contrast shades (Tailwind standard colors like `text-neutral-500` / `text-neutral-600`), and buttons/cards feature targeted fluid scale transitions (`active:scale-[0.97] transition-transform duration-100 ease-out`).
+    - **Step 6 (AI Copy Refinement):** Displays an interactive "Before vs. After" comparison of their headline and summary/bio, highlighting the AI optimization with a line-through on original text and allowing the user to make manual copy tweaks directly in the inputs before advancing.
+    - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts.
+    - **Step 9 (Free-form Chat Editor Mode):** Activated after selecting a template. Unlocks the bottom text chat composer with a row of quick suggestion pills, letting the user converse freely with the assistant to update copy/styles in real-time.
+    - **Data Persistence:** To prevent data loss on page reloads, form state mutations are synced to the database context in real-time (triggering debounced autosaves), and the active wizard step status is preserved in `sessionStorage` (key: `webild_onboarding_step`).
+  - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
+  - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
+- **Top Navbar:**
+  - Renders saving indicators ("Unsaved edits" / "All changes saved") with a Reset trigger.
+  - Hosts Share (link copier) and Publish actions alongside the User profile menu dropdown.
+- **Main Canvas Workspace:**
+  - **Canvas Header:** Customize/page dropdowns, subdomain availability ticker, and device size switches (Desktop vs. Mobile).
+  - **Preview Area:** Renders step-specific `WizardAnimations` (steps <= 6) in the Design tab directly on an immersive Figma-like dot-grid canvas workspace background, and transitions to the live scalable `ProfilePreview` once the user reaches step >= 7 (where template selection and free-form chat modifications occur) or switches to the Domains/Settings panels. The animations are built as self-contained, resolution-independent pure SVG objects sitting transparently on top of the dot-grid, utilizing custom `<defs>` gradients (blue, mint, purple), filter drop-shadow offsets, and glowing overlays. They feature physical motion curves (floating oscillations, squash-and-stretch landing impacts, timeline particles) centering around the Webild logo icon (`/logoicon.png`).
+  - **Dynamic Real-Time Data Binding:** The SVG animations dynamically map real state variables from the editor (such as active avatar/name on Step 1, projects list on Step 2, confirmed skills on Step 3/4, and job experience nodes on Step 5) to draw the user's actual entered data in real-time.
+
+### Template Style System (4 Premium Framer-Inspired Layouts)
+The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
+- **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
+- **Julian Mercer:** elegant, warm paper style. Uses a warm background `#FAF8F5`, italic serif typography (`font-serif font-light italic`), monospace metadata tags, and soft dividers.
+- **Link Hunt:** links-in-bio style. Features a centered layout (`max-w-md mx-auto text-center`), large avatar, pill buttons for social accounts with icons, and card containers.
+- **Biobricks:** grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
 
 ## Motion & Animation Guidelines
 
-- **UI Interactions:** Strong ease-out curves (`cubic-bezier(0.23, 1, 0.32, 1)`) with durations between `150ms` and `250ms`.
-- **Spring Physics:** Active states for buttons and tabs use spring curves (`stiffness: 380`, `damping: 30`) to simulate high physical momentum without bouncy overshoot.
-- **Tactile Active Press:** Clickable cards and buttons scale down to `scale(0.97)` on active press.
-- **Hardware Acceleration:** Only translate `transform` and `opacity` to avoid layout reflow repaints on GPU.
+To deliver premium interfaces that feel tactile and responsive, all page motions must follow strict design engineering constraints.
+
+### 1. Easing & Timing System
+- **UI Interactions (Dropdowns, popovers, mobile drawers):**
+  Use strong ease-out curves: `cubic-bezier(0.23, 1, 0.32, 1)`. Keep durations between `150ms` and `250ms`.
+- **Morphing or On-screen movement:**
+  Use strong ease-in-out curves: `cubic-bezier(0.77, 0, 0.175, 1)`. Keep durations between `250ms` and `400ms`.
+- **Active / Press Interactions:**
+  Use crisp ease-out: `cubic-bezier(0.25, 0.46, 0.45, 0.94)`. Keep duration between `100ms` and `160ms`.
+- **Spring Physics (Interpreted Tabs):**
+  Use `stiffness: 380` and `damping: 30` to simulate quick settling and high physical momentum without bouncy overshoot.
+
+### 2. Performance & Composition Guidelines
+- **Native Scrolling:** Scrolling relies on standard native browser actions with no scroll-jacking or interception.
+- **Hardware Acceleration:** Ensure interactive transitions are composited on the GPU rather than triggering browser repaints, using composite-friendly properties like transforms and opacity.
+
+### 3. Tactile Micro-Interactions
+- **Active Press Scale:**
+  - Major buttons (CTAs, primary triggers): scale down to `scale(0.97)` on active press.
+  - Minor buttons (icons, smaller control pills): scale down to `scale(0.95)`.
+  - Apply transition directly to the `transform` property. Never use `transition: all`.
+- **Entrance Animation Origin:**
+  - Never animate element entrances from `scale(0)`. Start from `scale(0.95)` combined with `opacity: 0` to simulate spatial materialization.
+- **Stagger Delays:**
+  - When rendering lists or grids (templates, process cards), stagger entry delays between `30ms` and `80ms` per item. Never block page interactivity during staggering.
+- **Touch-Device Guard:**
+  - Restrict all hover states to fine-pointer devices to avoid "sticky hovers" on iOS/Android. Use `@media (hover: hover) and (pointer: fine)` or Tailwind's `future.hoverOnlyWhenSupported` configuration.
+
+## Do's and Don'ts
+- Do keep primary actions dark, rounded, and compact, with clear white text.
+- Do use generous whitespace and large centered hero compositions.
+- Do preserve the soft, high-key palette and avoid harsh outlines.
+- Do keep body copy and labels clean, plain, and highly legible with Inter Tight.
+- Do specify exact target properties for CSS transitions (avoid `transition: all`).
+- Do use hardware-accelerated transforms for interactive transitions.
+- Don't introduce sharp corners or aggressive geometric styling.
+- Don't overuse shadows; depth should feel subtle and atmospheric.
+- Don't make secondary controls louder than the main CTA.
+- Don't compress layouts into dense grids; the system should breathe.
+- Don't animate element entries starting from a scale of 0.
+- Don't trigger animations on keyboard-activated shortcuts.

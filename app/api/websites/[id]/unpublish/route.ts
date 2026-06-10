@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite } from "@/lib/db";
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -32,6 +35,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       message: "Website unpublished successfully",
     });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to unpublish website" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to unpublish website" },
+      { status: 500 },
+    );
   }
 }

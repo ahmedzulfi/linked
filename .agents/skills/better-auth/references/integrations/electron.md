@@ -23,14 +23,14 @@ import { betterAuth } from "better-auth";
 import { electron } from "@better-auth/electron";
 
 export const auth = betterAuth({
-    plugins: [electron()],
-    emailAndPassword: { enabled: true },
-    social: {
-        google: {
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-        },
+  plugins: [electron()],
+  emailAndPassword: { enabled: true },
+  social: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     },
+  },
 });
 ```
 
@@ -45,12 +45,12 @@ import { createAuthClient } from "better-auth/client";
 import { electronProxyClient } from "@better-auth/electron/proxy";
 
 export const authClient = createAuthClient({
-    baseURL: "http://localhost:8081",
-    plugins: [
-        electronProxyClient({
-            protocol: { scheme: "com.example.app" },
-        }),
-    ],
+  baseURL: "http://localhost:8081",
+  plugins: [
+    electronProxyClient({
+      protocol: { scheme: "com.example.app" },
+    }),
+  ],
 });
 ```
 
@@ -91,17 +91,21 @@ import { createAuthClient } from "better-auth/client";
 import { electronClient } from "@better-auth/electron/client";
 
 export const authClient = createAuthClient({
-    baseURL: "http://localhost:8081",
-    plugins: [
-        electronClient({
-            signInURL: "https://app.example.com/sign-in",
-            protocol: { scheme: "com.example.app" },
-            storage: {
-                getItem: async (key) => { /* read from storage */ },
-                setItem: async (key, value) => { /* write to storage */ },
-            },
-        }),
-    ],
+  baseURL: "http://localhost:8081",
+  plugins: [
+    electronClient({
+      signInURL: "https://app.example.com/sign-in",
+      protocol: { scheme: "com.example.app" },
+      storage: {
+        getItem: async (key) => {
+          /* read from storage */
+        },
+        setItem: async (key, value) => {
+          /* write to storage */
+        },
+      },
+    }),
+  ],
 });
 ```
 
@@ -115,7 +119,7 @@ npm install conf
 import { storage } from "@better-auth/electron/storage";
 
 electronClient({
-    storage: storage(),
+  storage: storage(),
 });
 ```
 
@@ -128,12 +132,14 @@ Register protocol scheme in build config:
 ```javascript
 // electron-forge
 module.exports = {
-    packagerConfig: {
-        protocols: [{
-            name: "MyApp Protocol",
-            schemes: ["com.example.app"],
-        }],
-    },
+  packagerConfig: {
+    protocols: [
+      {
+        name: "MyApp Protocol",
+        schemes: ["com.example.app"],
+      },
+    ],
+  },
 };
 ```
 
@@ -141,7 +147,7 @@ Add to server's `trustedOrigins`:
 
 ```typescript
 export const auth = betterAuth({
-    trustedOrigins: ["com.example.app:/"],
+  trustedOrigins: ["com.example.app:/"],
 });
 ```
 
@@ -154,11 +160,11 @@ import { BrowserWindow } from "electron";
 import { join } from "node:path";
 
 const win = new BrowserWindow({
-    webPreferences: {
-        preload: join(__dirname, "preload.mjs"),
-        nodeIntegration: false,
-        contextIsolation: true,
-    },
+  webPreferences: {
+    preload: join(__dirname, "preload.mjs"),
+    nodeIntegration: false,
+    contextIsolation: true,
+  },
 });
 ```
 
@@ -167,13 +173,13 @@ For sandbox mode, ensure `@better-auth/electron` is bundled into preload:
 ```typescript
 // electron.vite.config.ts
 export default defineConfig({
-    preload: {
-        build: {
-            externalizeDeps: {
-                exclude: ["@better-auth/electron"],
-            },
-        },
+  preload: {
+    build: {
+      externalizeDeps: {
+        exclude: ["@better-auth/electron"],
+      },
     },
+  },
 });
 ```
 
@@ -209,8 +215,8 @@ setupRenderer();
 import type { authClient } from "./lib/auth-client";
 
 declare global {
-    type Bridges = typeof authClient.$Infer.Bridges;
-    interface Window extends Bridges {}
+  type Bridges = typeof authClient.$Infer.Bridges;
+  interface Window extends Bridges {}
 }
 ```
 
@@ -261,10 +267,10 @@ function Auth() {
 
 ```typescript
 useEffect(() => {
-    const unsub = window.onUserUpdated((user) => {
-        console.log("User updated:", user);
-    });
-    return () => unsub();
+  const unsub = window.onUserUpdated((user) => {
+    console.log("User updated:", user);
+  });
+  return () => unsub();
 }, []);
 ```
 
@@ -279,7 +285,7 @@ Fallback for environments where deep links don't work reliably.
 ```typescript
 const authorizationCode = authClient.electron.getAuthorizationCode();
 if (authorizationCode) {
-    // Display code for user to copy
+  // Display code for user to copy
 }
 ```
 
@@ -319,10 +325,10 @@ Configure or disable:
 
 ```typescript
 electronClient({
-    userImageProxy: {
-        enabled: true,     // default
-        maxSize: 1024 * 1024 * 5, // 5MB default
-    },
+  userImageProxy: {
+    enabled: true, // default
+    maxSize: 1024 * 1024 * 5, // 5MB default
+  },
 });
 ```
 
@@ -336,11 +342,11 @@ electronClient({
 import { ipcMain } from "electron";
 
 ipcMain.handle("myBridge", async (_event, data) => {
-    const cookie = authClient.getCookie();
-    return await authClient.someEndpoint({
-        data,
-        fetchOptions: { headers: { cookie } },
-    });
+  const cookie = authClient.getCookie();
+  return await authClient.someEndpoint({
+    data,
+    fetchOptions: { headers: { cookie } },
+  });
 });
 ```
 
@@ -350,7 +356,7 @@ ipcMain.handle("myBridge", async (_event, data) => {
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("myBridge", (data: Record<string, any>) => {
-    return ipcRenderer.invoke("myBridge", data);
+  return ipcRenderer.invoke("myBridge", data);
 });
 ```
 
@@ -358,10 +364,10 @@ contextBridge.exposeInMainWorld("myBridge", (data: Record<string, any>) => {
 
 ```typescript
 declare global {
-    type Bridges = typeof authClient.$Infer.Bridges;
-    interface Window extends Bridges {
-        myBridge: (data: Record<string, any>) => Promise<any>;
-    }
+  type Bridges = typeof authClient.$Infer.Bridges;
+  interface Window extends Bridges {
+    myBridge: (data: Record<string, any>) => Promise<any>;
+  }
 }
 ```
 
@@ -369,26 +375,26 @@ declare global {
 
 ## Server Plugin Options
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `codeExpiresIn` | `300` | Authorization code validity (seconds) |
-| `redirectCookieExpiresIn` | `120` | Redirect cookie validity (seconds) |
-| `cookiePrefix` | `"better-auth"` | Cookie name prefix |
-| `clientID` | `"electron"` | Client identifier |
-| `disableOriginOverride` | `false` | Override origin for Electron API routes |
+| Option                    | Default         | Description                             |
+| ------------------------- | --------------- | --------------------------------------- |
+| `codeExpiresIn`           | `300`           | Authorization code validity (seconds)   |
+| `redirectCookieExpiresIn` | `120`           | Redirect cookie validity (seconds)      |
+| `cookiePrefix`            | `"better-auth"` | Cookie name prefix                      |
+| `clientID`                | `"electron"`    | Client identifier                       |
+| `disableOriginOverride`   | `false`         | Override origin for Electron API routes |
 
 ## Client Plugin Options
 
-| Option | Default | Description |
-|--------|---------|-------------|
-| `signInURL` | Required | URL for authentication page |
-| `protocol` | Required | Deep link protocol scheme |
-| `callbackPath` | `"/auth/callback"` | Auth redirect path |
-| `storage` | File-based | Storage implementation |
-| `storagePrefix` | `"better-auth"` | Storage key prefix |
-| `cookiePrefix` | `"better-auth"` | Server cookie name filter |
-| `channelPrefix` | `"better-auth"` | IPC channel prefix |
-| `clientID` | `"electron"` | Client identifier |
-| `sanitizeUser` | None | Strip sensitive fields before sending to renderer |
-| `userImageProxy` | `{ enabled: true, maxSize: 5MB }` | Avatar proxy config |
-| `disableCache` | `false` | Disable local session caching |
+| Option           | Default                           | Description                                       |
+| ---------------- | --------------------------------- | ------------------------------------------------- |
+| `signInURL`      | Required                          | URL for authentication page                       |
+| `protocol`       | Required                          | Deep link protocol scheme                         |
+| `callbackPath`   | `"/auth/callback"`                | Auth redirect path                                |
+| `storage`        | File-based                        | Storage implementation                            |
+| `storagePrefix`  | `"better-auth"`                   | Storage key prefix                                |
+| `cookiePrefix`   | `"better-auth"`                   | Server cookie name filter                         |
+| `channelPrefix`  | `"better-auth"`                   | IPC channel prefix                                |
+| `clientID`       | `"electron"`                      | Client identifier                                 |
+| `sanitizeUser`   | None                              | Strip sensitive fields before sending to renderer |
+| `userImageProxy` | `{ enabled: true, maxSize: 5MB }` | Avatar proxy config                               |
+| `disableCache`   | `false`                           | Disable local session caching                     |

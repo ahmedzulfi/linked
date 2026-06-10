@@ -11,9 +11,20 @@ import { resolve } from "path";
 
 const REQUIRED_FIELDS = ["secret", "database"];
 const COMMON_MISTAKES = [
-  { pattern: /d1Adapter/i, message: "d1Adapter doesn't exist - use drizzleAdapter(db) for Drizzle or new Kysely({ dialect: new D1Dialect() }) for Kysely" },
-  { pattern: /forgetPassword/i, message: "forgetPassword is deprecated - use requestPasswordReset (v1.4.0+)" },
-  { pattern: /require\s*\(/i, message: "CommonJS require() detected - better-auth v1.4.0+ is ESM-only" },
+  {
+    pattern: /d1Adapter/i,
+    message:
+      "d1Adapter doesn't exist - use drizzleAdapter(db) for Drizzle or new Kysely({ dialect: new D1Dialect() }) for Kysely",
+  },
+  {
+    pattern: /forgetPassword/i,
+    message:
+      "forgetPassword is deprecated - use requestPasswordReset (v1.4.0+)",
+  },
+  {
+    pattern: /require\s*\(/i,
+    message: "CommonJS require() detected - better-auth v1.4.0+ is ESM-only",
+  },
 ];
 
 function validateRequiredFields(content: string): string[] {
@@ -26,12 +37,20 @@ function validateRequiredFields(content: string): string[] {
   return errors;
 }
 
-function validateConfig(filePath: string): { valid: boolean; errors: string[]; warnings: string[] } {
+function validateConfig(filePath: string): {
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+} {
   const errors: string[] = [];
   const warnings: string[] = [];
 
   if (!existsSync(filePath)) {
-    return { valid: false, errors: [`File not found: ${filePath}`], warnings: [] };
+    return {
+      valid: false,
+      errors: [`File not found: ${filePath}`],
+      warnings: [],
+    };
   }
 
   const content = readFileSync(filePath, "utf-8");
@@ -52,13 +71,22 @@ function validateConfig(filePath: string): { valid: boolean; errors: string[]; w
   }
 
   // Check for database adapter
-  if (!content.includes("drizzleAdapter") && !content.includes("prismaAdapter") && !content.includes("mongoAdapter") && !content.includes("new Kysely(")) {
-    warnings.push("No database adapter detected - ensure you're using drizzleAdapter, prismaAdapter, mongoAdapter, or new Kysely()");
+  if (
+    !content.includes("drizzleAdapter") &&
+    !content.includes("prismaAdapter") &&
+    !content.includes("mongoAdapter") &&
+    !content.includes("new Kysely(")
+  ) {
+    warnings.push(
+      "No database adapter detected - ensure you're using drizzleAdapter, prismaAdapter, mongoAdapter, or new Kysely()",
+    );
   }
 
   // Check for baseURL in production
   if (!content.includes("baseURL")) {
-    warnings.push("Missing 'baseURL' - required for OAuth callbacks in production");
+    warnings.push(
+      "Missing 'baseURL' - required for OAuth callbacks in production",
+    );
   }
 
   // Check for ESM compatibility

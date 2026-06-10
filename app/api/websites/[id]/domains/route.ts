@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { getWebsiteById, updateWebsite, getWebsiteByDomain } from "@/lib/db";
 
-export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -21,11 +24,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     return NextResponse.json({ success: true, domains: website.customDomains });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch domains" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to fetch domains" },
+      { status: 500 },
+    );
   }
 }
 
-export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
     const user = await getAuthenticatedUser();
     if (!user) {
@@ -46,17 +55,26 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const domain = body.domain?.toLowerCase().trim();
 
     if (!domain) {
-      return NextResponse.json({ error: "Domain name is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Domain name is required" },
+        { status: 400 },
+      );
     }
 
     if (!domain.includes(".")) {
-      return NextResponse.json({ error: "Please enter a valid domain name (e.g. realitycheque.com)" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Please enter a valid domain name (e.g. realitycheque.com)" },
+        { status: 400 },
+      );
     }
 
     // Check if the domain is connected to any website
     const existing = await getWebsiteByDomain(domain);
     if (existing) {
-      return NextResponse.json({ error: "Domain is already connected to another site" }, { status: 409 });
+      return NextResponse.json(
+        { error: "Domain is already connected to another site" },
+        { status: 409 },
+      );
     }
 
     const newDomain = {
@@ -70,6 +88,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
 
     return NextResponse.json({ success: true, domain: newDomain });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to connect domain" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to connect domain" },
+      { status: 500 },
+    );
   }
 }

@@ -23,9 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen font-inter bg-white text-black antialiased">
-        <EditorProvider>
-          {children}
-        </EditorProvider>
+        <EditorProvider>{children}</EditorProvider>
         <Toaster position="bottom-right" richColors />
       </body>
     </html>

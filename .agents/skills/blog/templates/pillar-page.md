@@ -28,6 +28,7 @@
 **Format:** "The Complete Guide to [Topic] in [Year]"
 
 **Guidelines:**
+
 - Include primary keyword naturally
 - The year signals freshness and improves CTR
 - Keep under 60 characters for full SERP display
@@ -78,6 +79,7 @@ Auto-generated from H2 headings. Use anchor links for jump navigation. This impr
 [ANSWER-FIRST] Open with a clear, direct statement about what [Topic] is and why it matters right now. Do not bury the lead with backstory or fluff.
 
 **Structure:**
+
 1. **Opening hook** (1-2 sentences): Lead with a compelling statistic or trend that creates urgency
    - [STAT: current year statistic showing the scale or growth of this topic]
 2. **Topic overview** (2-3 sentences): Define the topic clearly for someone encountering it for the first time
@@ -96,6 +98,7 @@ Auto-generated from H2 headings. Use anchor links for jump navigation. This impr
 [ANSWER-FIRST] Start with a one-sentence definition that could serve as a featured snippet. Keep it jargon-free for accessibility.
 
 **Structure:**
+
 1. **Clear definition** (1-2 sentences): Simple, authoritative definition of the topic
 2. **Context and scope** (2-3 sentences): Where this fits in the broader landscape - what category does it belong to?
 3. **Key components** (3-5 bullet points): Break the topic into its essential parts or characteristics
@@ -115,6 +118,7 @@ Auto-generated from H2 headings. Use anchor links for jump navigation. This impr
 [ANSWER-FIRST] Lead with the single most compelling reason this topic deserves attention. Quantify the impact wherever possible.
 
 **Structure:**
+
 1. **Primary impact statement** (1-2 sentences): The most important reason backed by data
    - [STAT: impact or ROI statistic]
 2. **Industry trends** (2-3 sentences): Market data showing growth, adoption, or shifting priorities
@@ -144,6 +148,7 @@ Each core section covers a major sub-topic within the pillar. These sections sho
 [ANSWER-FIRST] Open with a 1-2 sentence answer or definition of this sub-topic before elaborating.
 
 **Structure per section:**
+
 1. **Direct answer or definition** (1-2 sentences): What is this sub-topic and why does it matter within the broader topic?
 2. **Key principles or steps** (150-200 words): The essential knowledge, broken into:
    - Numbered steps (for processes)
@@ -169,6 +174,7 @@ Each core section covers a major sub-topic within the pillar. These sections sho
 [ANSWER-FIRST] Signal immediately that this section is for experienced practitioners, then deliver an advanced insight they will not find in beginner guides.
 
 **Structure:**
+
 1. **Audience gate** (1 sentence): "If you're already [doing X], here's how to [achieve Y]."
 2. **Advanced insight** (100-150 words): A technique, framework, or perspective that goes beyond standard advice
 3. **Evidence or application** (50-75 words): Where this has been applied successfully
@@ -185,6 +191,7 @@ Each core section covers a major sub-topic within the pillar. These sections sho
 [ANSWER-FIRST] Start by naming the top 1-2 recommended tools before listing the full set.
 
 **Structure:**
+
 - Organize tools into 2-3 categories (e.g., "Free Tools," "Premium Tools," "Learning Resources")
 - For each tool, include:
   - **Tool name** (linked if appropriate)
@@ -203,6 +210,7 @@ Each core section covers a major sub-topic within the pillar. These sections sho
 [ANSWER-FIRST] Give the reader their very first action step in the opening sentence. Remove all friction to starting.
 
 **Structure:**
+
 1. **Step 1** (2-3 sentences): The lowest-friction first action - what can someone do in the next 5 minutes?
 2. **Step 2** (2-3 sentences): The next logical step that builds on Step 1
 3. **Step 3** (2-3 sentences): A step that creates momentum and leads to ongoing engagement
@@ -217,6 +225,7 @@ Each core section covers a major sub-topic within the pillar. These sections sho
 [FAQ] Each Q&A pair should be structured for featured snippet eligibility. Use the `<details>` pattern or H3 headings.
 
 **Guidelines for FAQ questions:**
+
 - Source questions from People Also Ask, forums, and comment sections
 - Each answer should be 40-80 words - concise and direct
 - The first sentence of each answer should be a standalone answer (featured snippet format)
@@ -262,6 +271,7 @@ Each core section covers a major sub-topic within the pillar. These sections sho
 [ANSWER-FIRST] Restate the single most important takeaway from the guide in the opening sentence.
 
 **Structure:**
+
 1. **Key takeaway** (1-2 sentences): The single most important thing to remember
 2. **Brief recap** (2-3 sentences): Summarize the guide's main points without repeating section headings verbatim
 3. **Forward-looking statement** (1-2 sentences): How this topic is evolving and why staying current matters

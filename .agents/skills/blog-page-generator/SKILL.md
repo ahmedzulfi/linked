@@ -16,6 +16,7 @@ Guides blog page structure, SEO, and content marketing best practices.
 **Check for project context first:** If `.claude/project-context.md` or `.cursor/project-context.md` exists, read it for topics, audience, and keywords.
 
 Identify:
+
 1. **Blog purpose**: SEO traffic, thought leadership, product education
 2. **Content mix**: Pillar pages, cluster content, news
 3. **Audience**: Buyers, existing customers, developers
@@ -24,22 +25,22 @@ Identify:
 
 ### Blog Placement: Subdomain vs Subdirectory
 
-| Option | Example | SEO / Use |
-|--------|---------|-----------|
-| **Subdirectory** | `example.com/blog` | SEO weight flows to main domain; recommended for product blogs |
-| **Subdomain** | `blog.example.com` | Treated as separate entity; consider for distinct brands or technical isolation |
+| Option           | Example            | SEO / Use                                                                       |
+| ---------------- | ------------------ | ------------------------------------------------------------------------------- |
+| **Subdirectory** | `example.com/blog` | SEO weight flows to main domain; recommended for product blogs                  |
+| **Subdomain**    | `blog.example.com` | Treated as separate entity; consider for distinct brands or technical isolation |
 
 Choose based on SEO weight distribution, brand consistency, and technical architecture. See [Alignify subdomain vs subdirectory guide](https://alignify.co/zh/seo/create-blog) for details.
 
 ### Blog Index Page Structure
 
-| Section | Purpose |
-|---------|---------|
-| **Featured/Recent** | Highlight newest or most important posts |
-| **Categories/Topics** | Help users find by theme |
-| **Editor's Picks** | Curate best content |
-| **Related posts** | Per-article recommendations |
-| **Search** | Help users find specific topics |
+| Section               | Purpose                                  |
+| --------------------- | ---------------------------------------- |
+| **Featured/Recent**   | Highlight newest or most important posts |
+| **Categories/Topics** | Help users find by theme                 |
+| **Editor's Picks**    | Curate best content                      |
+| **Related posts**     | Per-article recommendations              |
+| **Search**            | Help users find specific topics          |
 
 ### Content Strategy
 

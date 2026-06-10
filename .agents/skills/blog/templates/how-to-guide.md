@@ -7,7 +7,7 @@
 ## When to Use This Template
 
 - **Content Goals:** Drive organic traffic from instructional queries, establish topical authority, earn featured snippets for step-based queries
-- **Search Intent:** Informational / Transactional hybrid -- the reader has a specific problem and wants a clear solution *right now*
+- **Search Intent:** Informational / Transactional hybrid -- the reader has a specific problem and wants a clear solution _right now_
 - **Best For:** Process explanations, software tutorials, setup guides, configuration walkthroughs, skill-building content
 - **Avoid When:** The topic lacks a clear sequential process or has fewer than 3 meaningful steps
 
@@ -22,10 +22,12 @@
 **Format:** "How to [Achieve X]: A [Year] Step-by-Step Guide"
 
 **Examples:**
+
 - "How to Set Up a CI/CD Pipeline: A 2026 Step-by-Step Guide"
 - "How to Migrate from WordPress to Next.js: A 2026 Step-by-Step Guide"
 
 **Rules:**
+
 - Include the primary keyword naturally
 - Include the year for freshness signals
 - Keep under 60 characters if possible
@@ -34,9 +36,10 @@
 
 ### Introduction (150-200 words)
 
-[ANSWER-FIRST] Open with the single most compelling statistic or fact that validates *why* this process matters. Not a vague claim -- a specific number.
+[ANSWER-FIRST] Open with the single most compelling statistic or fact that validates _why_ this process matters. Not a vague claim -- a specific number.
 
 **Structure:**
+
 1. **Problem statement** (1-2 sentences): What pain point does the reader have?
 2. **Agitation** (1-2 sentences): What happens if they don't solve it? What's the cost of inaction?
 3. **Promise** (1 sentence): What will they be able to do after following this guide?
@@ -47,6 +50,7 @@
 [INFO-GAIN: personal experience] Share a specific, brief anecdote about encountering this problem yourself -- when, what happened, what the stakes were.
 
 **Example opening:**
+
 > "[STAT: 73% of deployments fail due to misconfigured pipelines (Source, Year).] If you've ever pushed code on a Friday and spent the weekend firefighting, you already know the pain. This guide walks you through setting up a bulletproof CI/CD pipeline in under an hour -- the same process we used to reduce deployment failures by 90% across 12 projects."
 
 [INTERNAL-LINK] Link to a related foundational concept post (e.g., "If you're new to [topic], start with our [Beginner's Guide to X]").
@@ -58,6 +62,7 @@
 **Format:** Bulleted checklist under an H2 heading.
 
 **Include:**
+
 - Required tools/software (with versions)
 - Required accounts or access
 - Assumed knowledge level (be specific: "You should be comfortable with [X]")
@@ -67,7 +72,9 @@
 [IMAGE] Screenshot or diagram showing the tools/environment the reader should have ready before starting.
 
 **Example:**
+
 > **What you'll need:**
+>
 > - Node.js v20+ installed ([how to install](/link))
 > - A GitHub account with repo access
 > - Basic familiarity with the terminal
@@ -81,6 +88,7 @@
 [ANSWER-FIRST] Open with what the reader will have accomplished by the end of this step -- the micro-outcome.
 
 **Structure for EVERY step section:**
+
 1. **Micro-outcome statement** (1 sentence): "By the end of this step, you'll have [specific result]."
 2. **Context** (1-2 sentences): Why this step matters in the overall process.
 3. **Instructions** (numbered sub-steps): Concrete actions. Use code blocks, exact UI paths, or specific settings.
@@ -91,6 +99,7 @@
 [INFO-GAIN: specific configuration or setting] Share a non-obvious detail -- a specific config value, flag, or option that makes a difference and isn't in the official docs.
 
 **Formatting rules:**
+
 - Use H2 for the step heading: `## Step 1: Install and Configure the CLI`
 - Use numbered sub-lists for individual actions within the step
 - Use code blocks for any commands, file contents, or configuration
@@ -155,6 +164,7 @@
 **Format:** 3-5 mistakes, each as a bolded sub-heading with 2-3 sentences of explanation.
 
 **Structure for each mistake:**
+
 1. **The mistake** (bold): What people do wrong
 2. **Why it happens** (1 sentence): The underlying cause or misconception
 3. **The fix** (1 sentence): What to do instead
@@ -164,6 +174,7 @@
 [STAT: Failure rate or error frequency for the most common mistake]
 
 **Example:**
+
 > **1. Skipping environment variable validation**
 > Most tutorials assume your `.env` file is correctly formatted, but in our experience, 40% of "it works on my machine" bugs trace back to missing or malformed env vars. Always run `printenv | grep APP_` before deploying.
 
@@ -174,6 +185,7 @@
 [ANSWER-FIRST] Open with the specific, measurable outcome: "If everything went correctly, you should now see [X]."
 
 **Include:**
+
 - What the reader should see/have now (concrete, verifiable)
 - Key metrics that indicate success (load time, response code, test pass rate, etc.)
 - One "stretch goal" or next-level enhancement they can pursue
@@ -193,6 +205,7 @@
 **Format:** Each question as an H3, answer in 2-4 sentences. Structure answers for featured snippet eligibility.
 
 **Question selection criteria:**
+
 1. The most common "People Also Ask" question for this topic
 2. A question about an alternative approach ("Can I do this with [Y] instead?")
 3. A question about troubleshooting ("What if [X] doesn't work?")
@@ -228,6 +241,7 @@
 ### Conclusion with CTA (50-100 words)
 
 **Structure:**
+
 1. **Recap** (1 sentence): Summarize what they accomplished.
 2. **Reinforce value** (1 sentence): Restate the benefit with the key metric.
 3. **CTA** (1-2 sentences): Clear next action -- share the post, subscribe, try a related guide, leave a comment with their results.

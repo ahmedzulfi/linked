@@ -18,12 +18,12 @@ optimization alone, with no new content published.
 
 The number of internal links per post should scale with content length.
 
-| Post Length | Internal Links | Notes |
-|-------------|---------------|-------|
-| < 1,000 words | 3-5 | Short posts, fewer natural insertion points |
-| 1,000-2,000 words | 5-7 | Standard blog posts |
-| 2,000-3,000 words | 7-10 | Detailed guides |
-| 3,000+ words (pillar) | 8-12 | Comprehensive pillar pages |
+| Post Length           | Internal Links | Notes                                       |
+| --------------------- | -------------- | ------------------------------------------- |
+| < 1,000 words         | 3-5            | Short posts, fewer natural insertion points |
+| 1,000-2,000 words     | 5-7            | Standard blog posts                         |
+| 2,000-3,000 words     | 7-10           | Detailed guides                             |
+| 3,000+ words (pillar) | 8-12           | Comprehensive pillar pages                  |
 
 ### Hard Rules
 
@@ -42,13 +42,13 @@ critical but overuse of exact-match anchors triggers spam signals.
 
 ### Recommended Distribution
 
-| Anchor Type | Target Share | Example for "technical SEO" |
-|-------------|-------------|----------------------------|
-| Exact match | 5-10% | "technical SEO" |
-| Partial match | 20-30% | "technical SEO best practices", "guide to technical SEO" |
-| Semantic/related | 30-40% | "site architecture optimization", "crawlability improvements" |
-| Branded | 10-15% | "our SEO guide", "[Brand] technical audit" |
-| Natural/contextual | 15-25% | "the framework we outlined earlier", "as we discussed" |
+| Anchor Type        | Target Share | Example for "technical SEO"                                   |
+| ------------------ | ------------ | ------------------------------------------------------------- |
+| Exact match        | 5-10%        | "technical SEO"                                               |
+| Partial match      | 20-30%       | "technical SEO best practices", "guide to technical SEO"      |
+| Semantic/related   | 30-40%       | "site architecture optimization", "crawlability improvements" |
+| Branded            | 10-15%       | "our SEO guide", "[Brand] technical audit"                    |
+| Natural/contextual | 15-25%       | "the framework we outlined earlier", "as we discussed"        |
 
 ### Anchor Text Rules
 
@@ -63,15 +63,15 @@ critical but overuse of exact-match anchors triggers spam signals.
 
 ### Anchor Text Anti-Patterns -- NEVER Use
 
-| Pattern | Problem | Fix |
-|---------|---------|-----|
-| "click here" | Zero topical signal | "Read our [technical SEO checklist]" |
-| "this article" | No descriptive value | "Our [guide to crawl budget optimization]" |
-| "read more" | Generic, no context | "[How structured data improves AI visibility]" |
-| "learn more" | Generic, no context | "Learn [how to audit your internal links]" |
-| Naked URLs | Unreadable, no context | Replace with descriptive text |
-| Full sentence as anchor | Looks spammy, dilutes signal | Reduce to 2-6 key words |
-| Same exact anchor everywhere | Over-optimization signal | Vary anchor text across pages |
+| Pattern                      | Problem                      | Fix                                            |
+| ---------------------------- | ---------------------------- | ---------------------------------------------- |
+| "click here"                 | Zero topical signal          | "Read our [technical SEO checklist]"           |
+| "this article"               | No descriptive value         | "Our [guide to crawl budget optimization]"     |
+| "read more"                  | Generic, no context          | "[How structured data improves AI visibility]" |
+| "learn more"                 | Generic, no context          | "Learn [how to audit your internal links]"     |
+| Naked URLs                   | Unreadable, no context       | Replace with descriptive text                  |
+| Full sentence as anchor      | Looks spammy, dilutes signal | Reduce to 2-6 key words                        |
+| Same exact anchor everywhere | Over-optimization signal     | Vary anchor text across pages                  |
 
 ---
 
@@ -83,15 +83,15 @@ than links in footers or sidebars.
 
 ### Placement Priority
 
-| Location | Weight | Notes |
-|----------|--------|-------|
-| First 2-3 paragraphs | Highest | Most crawled, most clicked |
-| Within body content (contextual) | High | Natural editorial links |
-| After key sections (H2s) | Medium-High | Contextually relevant transitions |
-| Table of contents | Medium | Navigation aid, passes some authority |
-| Related posts section | Medium-Low | Algorithmic, less editorial signal |
-| Sidebar | Low | Often templated, discounted |
-| Footer | Lowest | Heavily discounted by search engines |
+| Location                         | Weight      | Notes                                 |
+| -------------------------------- | ----------- | ------------------------------------- |
+| First 2-3 paragraphs             | Highest     | Most crawled, most clicked            |
+| Within body content (contextual) | High        | Natural editorial links               |
+| After key sections (H2s)         | Medium-High | Contextually relevant transitions     |
+| Table of contents                | Medium      | Navigation aid, passes some authority |
+| Related posts section            | Medium-Low  | Algorithmic, less editorial signal    |
+| Sidebar                          | Low         | Often templated, discounted           |
+| Footer                           | Lowest      | Heavily discounted by search engines  |
 
 ### Best Practices
 
@@ -122,10 +122,12 @@ contextually relevant). This creates a strong topical relationship signal.
 ### Example
 
 **Post A**: "Complete Guide to Technical SEO"
+
 - Contains: "...proper [schema markup implementation](/blog/schema-guide)
   is essential for AI visibility."
 
 **Post B**: "Schema Markup Implementation Guide" (should link back)
+
 - Add: "...schema is a critical component of [technical SEO
   optimization](/blog/technical-seo-guide), affecting how search engines
   interpret your content."
@@ -159,20 +161,21 @@ linking architecture for topical authority.
 
 ### Requirements
 
-| Element | Specification |
-|---------|--------------|
-| Pillar page | 3,000-4,000 words, covers topic broadly |
-| Supporting articles (spokes) | 8-12 articles, each covers a subtopic in depth |
-| Pillar → Spoke links | Pillar links to ALL supporting articles |
-| Spoke → Pillar links | Every supporting article links back to pillar |
-| Spoke ↔ Spoke links | Cross-link between related subtopics (where natural) |
-| Anchor text to pillar | Varied -- use different anchor text from each spoke |
+| Element                      | Specification                                        |
+| ---------------------------- | ---------------------------------------------------- |
+| Pillar page                  | 3,000-4,000 words, covers topic broadly              |
+| Supporting articles (spokes) | 8-12 articles, each covers a subtopic in depth       |
+| Pillar → Spoke links         | Pillar links to ALL supporting articles              |
+| Spoke → Pillar links         | Every supporting article links back to pillar        |
+| Spoke ↔ Spoke links         | Cross-link between related subtopics (where natural) |
+| Anchor text to pillar        | Varied -- use different anchor text from each spoke  |
 
 ### Example Topic Cluster: "Technical SEO"
 
 **Pillar**: "The Complete Guide to Technical SEO in 2026"
 
 **Spokes**:
+
 1. Schema Markup Implementation Guide
 2. Core Web Vitals Optimization
 3. Crawl Budget Management
@@ -201,6 +204,7 @@ through sitemap.xml (which carries less authority signal).
 
 2. **Manual check**: For each published blog post URL, search the rest of the
    site for links pointing to it:
+
    ```bash
    # Check if any page links to a specific URL
    grep -r "/blog/your-post-slug" ./content/ --include="*.md"
@@ -212,6 +216,7 @@ through sitemap.xml (which carries less authority signal).
 ### Fixing Orphan Pages
 
 For each orphan page:
+
 1. Identify 2-3 topically related existing pages
 2. Add a contextual link from each related page to the orphan
 3. Ensure the orphan page links back to at least one of those pages
@@ -228,12 +233,12 @@ authority and often results in neither page ranking well.
 
 ### Symptoms
 
-| Indicator | What It Means |
-|-----------|---------------|
-| Two pages ranking for same keyword, both fluctuating | Google is unsure which to show |
-| One page dropped after publishing a similar new post | New post cannibalized the old one |
-| Neither page ranks in top 10 despite strong content | Split authority |
-| Search Console shows impressions split across URLs for same query | Confirmed cannibalization |
+| Indicator                                                         | What It Means                     |
+| ----------------------------------------------------------------- | --------------------------------- |
+| Two pages ranking for same keyword, both fluctuating              | Google is unsure which to show    |
+| One page dropped after publishing a similar new post              | New post cannibalized the old one |
+| Neither page ranks in top 10 despite strong content               | Split authority                   |
+| Search Console shows impressions split across URLs for same query | Confirmed cannibalization         |
 
 ### Detection Method
 
@@ -244,13 +249,13 @@ authority and often results in neither page ranking well.
 
 ### Resolution Strategies
 
-| Strategy | When to Use |
-|----------|-------------|
-| **Merge** | Both pages cover the same topic; combine the best content from both into one, redirect the weaker URL |
-| **Differentiate** | Pages cover overlapping but distinct angles; sharpen each page's unique focus and keyword targeting |
-| **Canonical** | One page is clearly the primary; add `rel="canonical"` from secondary to primary |
-| **301 Redirect** | Weaker page adds no unique value; redirect to stronger page |
-| **Noindex secondary** | Keep both pages for users but exclude weaker from search |
+| Strategy              | When to Use                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------------- |
+| **Merge**             | Both pages cover the same topic; combine the best content from both into one, redirect the weaker URL |
+| **Differentiate**     | Pages cover overlapping but distinct angles; sharpen each page's unique focus and keyword targeting   |
+| **Canonical**         | One page is clearly the primary; add `rel="canonical"` from secondary to primary                      |
+| **301 Redirect**      | Weaker page adds no unique value; redirect to stronger page                                           |
+| **Noindex secondary** | Keep both pages for users but exclude weaker from search                                              |
 
 ---
 
@@ -260,30 +265,30 @@ Run this audit quarterly or when publishing new content.
 
 ### Per-Post Checks
 
-| Check | Pass Criteria | Fail Action |
-|-------|---------------|-------------|
-| Internal link count | 3-10 links (length-dependent) | Add links to related content |
-| No orphan status | At least 1 internal link points to this page | Add links from 2-3 related pages |
-| Anchor text variety | No single anchor used more than twice for same destination | Vary anchor text |
-| No generic anchors | Zero instances of "click here", "read more", "this article" | Replace with descriptive text |
-| Bidirectional links | Linked pages reciprocate where relevant | Add reciprocal links |
-| Pillar link present | If part of a topic cluster, links to/from pillar | Add pillar connection |
-| Links functional | All internal links return 200 | Fix broken links (301 or remove) |
-| Link placement | At least 1 link in first 3 paragraphs | Move important link higher |
-| No over-linking | No paragraph has more than 2 internal links | Remove least relevant link |
-| Anchor describes destination | Reader can predict what they'll find | Rewrite anchor text |
+| Check                        | Pass Criteria                                               | Fail Action                      |
+| ---------------------------- | ----------------------------------------------------------- | -------------------------------- |
+| Internal link count          | 3-10 links (length-dependent)                               | Add links to related content     |
+| No orphan status             | At least 1 internal link points to this page                | Add links from 2-3 related pages |
+| Anchor text variety          | No single anchor used more than twice for same destination  | Vary anchor text                 |
+| No generic anchors           | Zero instances of "click here", "read more", "this article" | Replace with descriptive text    |
+| Bidirectional links          | Linked pages reciprocate where relevant                     | Add reciprocal links             |
+| Pillar link present          | If part of a topic cluster, links to/from pillar            | Add pillar connection            |
+| Links functional             | All internal links return 200                               | Fix broken links (301 or remove) |
+| Link placement               | At least 1 link in first 3 paragraphs                       | Move important link higher       |
+| No over-linking              | No paragraph has more than 2 internal links                 | Remove least relevant link       |
+| Anchor describes destination | Reader can predict what they'll find                        | Rewrite anchor text              |
 
 ### Site-Wide Checks
 
-| Check | Pass Criteria | Fail Action |
-|-------|---------------|-------------|
-| Orphan page count | 0 orphan pages | Link to all orphans from related content |
-| Cannibalization | No two pages target same primary keyword | Merge or differentiate |
-| Pillar coverage | Every topic cluster has a pillar page | Create missing pillar pages |
-| Spoke count per pillar | 8-12 supporting articles | Create more supporting content |
-| Average internal links per page | 5-8 | Bulk-add links to under-linked pages |
-| Max clicks from homepage | Any page reachable in 3-4 clicks | Restructure navigation |
-| Broken internal links | 0 broken links (404s) | Fix or remove all broken links |
+| Check                           | Pass Criteria                            | Fail Action                              |
+| ------------------------------- | ---------------------------------------- | ---------------------------------------- |
+| Orphan page count               | 0 orphan pages                           | Link to all orphans from related content |
+| Cannibalization                 | No two pages target same primary keyword | Merge or differentiate                   |
+| Pillar coverage                 | Every topic cluster has a pillar page    | Create missing pillar pages              |
+| Spoke count per pillar          | 8-12 supporting articles                 | Create more supporting content           |
+| Average internal links per page | 5-8                                      | Bulk-add links to under-linked pages     |
+| Max clicks from homepage        | Any page reachable in 3-4 clicks         | Restructure navigation                   |
+| Broken internal links           | 0 broken links (404s)                    | Fix or remove all broken links           |
 
 ---
 
@@ -292,13 +297,13 @@ Run this audit quarterly or when publishing new content.
 When adding internal links to existing content, do not bulk-update every page
 at once. This can trigger algorithmic review.
 
-| Action | Recommended Pace |
-|--------|-----------------|
-| New post with links | Normal -- add all links at publish time |
-| Updating existing posts | 3-5 posts per week maximum |
-| New pillar page launch | Update all spokes within 1-2 weeks |
-| Site-wide link audit fix | Spread changes over 2-4 weeks |
-| Fixing orphan pages | 2-3 per day |
+| Action                   | Recommended Pace                        |
+| ------------------------ | --------------------------------------- |
+| New post with links      | Normal -- add all links at publish time |
+| Updating existing posts  | 3-5 posts per week maximum              |
+| New pillar page launch   | Update all spokes within 1-2 weeks      |
+| Site-wide link audit fix | Spread changes over 2-4 weeks           |
+| Fixing orphan pages      | 2-3 per day                             |
 
 ---
 
@@ -308,16 +313,17 @@ Maintain a simple tracking mechanism to ensure link health over time.
 
 ### Recommended Fields
 
-| Field | Purpose |
-|-------|---------|
-| Source URL | Page containing the link |
-| Destination URL | Page being linked to |
-| Anchor text | Clickable text used |
-| Date added | When the link was created |
-| Context | Why this link exists (editorial, navigation, pillar-spoke) |
-| Status | Active, broken, or removed |
+| Field           | Purpose                                                    |
+| --------------- | ---------------------------------------------------------- |
+| Source URL      | Page containing the link                                   |
+| Destination URL | Page being linked to                                       |
+| Anchor text     | Clickable text used                                        |
+| Date added      | When the link was created                                  |
+| Context         | Why this link exists (editorial, navigation, pillar-spoke) |
+| Status          | Active, broken, or removed                                 |
 
 This tracking helps identify:
+
 - Over-linked pages (too many pages linking to one destination)
 - Under-linked pages (valuable content with few inbound links)
 - Stale anchor text that needs updating after content refreshes

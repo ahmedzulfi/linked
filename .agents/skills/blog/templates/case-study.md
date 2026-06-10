@@ -22,11 +22,13 @@
 **Format:** "How [Company/Team] [Achieved Specific Result] in [Timeframe]"
 
 **Examples:**
+
 - "How Acme Corp Reduced API Latency by 73% in 6 Weeks"
 - "How a 3-Person Team Scaled to 1M Monthly Users in 90 Days"
 - "How We Cut Build Times from 12 Minutes to 45 Seconds"
 
 **Rules:**
+
 - Include the specific result metric in the title -- this is the hook
 - Include the timeframe to create urgency and credibility
 - Use the company/team name if known; use "We" for internal case studies
@@ -41,11 +43,13 @@
 **Format:** A visually distinct callout box (blockquote, colored background, or bordered section) placed immediately after the title.
 
 **Structure:**
+
 1. **Headline metric** (1 sentence): The single most impressive result.
 2. **How** (1 sentence): The core strategy in plain language.
 3. **Timeframe** (phrase): How long it took.
 
 **Example:**
+
 > **TL;DR:** Acme Corp reduced API response times from 1,200ms to 320ms (73% improvement) by migrating from a monolithic REST API to an edge-cached GraphQL gateway. The migration was completed in 6 weeks with zero downtime and a 2-person engineering team.
 
 [STAT: The headline metric that anchors the entire case study]
@@ -57,6 +61,7 @@
 [ANSWER-FIRST] Open with the key result metric in the very first sentence. Don't build up to it -- lead with it.
 
 **Structure:**
+
 1. **Result lead** (1 sentence): State the primary outcome with specific numbers.
 2. **Context** (2-3 sentences): Who is the subject? What's their scale? Why does this matter to the reader?
 3. **Stakes framing** (1 sentence): What was at risk if the problem wasn't solved?
@@ -75,6 +80,7 @@
 [ANSWER-FIRST] Open with the single most painful symptom of the problem -- the thing that made someone say "we have to fix this."
 
 **Structure:**
+
 1. **Pain point** (1-2 sentences): The specific, felt problem. Use concrete details -- error rates, customer complaints, revenue impact.
 2. **Root cause** (2-3 sentences): What was actually causing the problem at a technical or strategic level?
 3. **Scale of impact** (1-2 sentences): Quantify the damage -- how many users affected, how much revenue at risk, how many engineering hours wasted.
@@ -88,6 +94,7 @@
 [IMAGE] Diagram or screenshot showing the "before" state -- the broken architecture, the poor metrics dashboard, the error logs.
 
 **Example opening:**
+
 > "At peak traffic, Acme's API was returning 500 errors on 12% of requests -- and their largest enterprise client had set a 30-day deadline to fix it or cancel their $2M annual contract."
 
 ---
@@ -97,12 +104,14 @@
 [ANSWER-FIRST] Open with the core strategic decision in one sentence -- what approach was chosen and the single most important reason why.
 
 **Structure:**
+
 1. **Strategic choice** (1-2 sentences): What approach was selected? Name the methodology, technology, or framework.
 2. **Why this approach** (3-4 sentences): What made this the right choice over alternatives? Reference the failed attempts from the Challenge section. Include specific criteria used in the decision.
 3. **Key decisions** (3-5 bullets or sub-sections): Break down the 3-5 most important decisions made during strategy formulation. Each should include the decision, the alternatives considered, and the reasoning.
 4. **Risk assessment** (1-2 sentences): What were the known risks and how were they mitigated?
 
 [INFO-GAIN: process documentation] This is the highest-value section. Document the decision-making process with enough specificity that another team could replicate the thinking. Include:
+
 - Selection criteria used to evaluate options
 - Trade-offs explicitly discussed and weighed
 - Any frameworks, scorecards, or evaluation tools used
@@ -115,6 +124,7 @@
 [INTERNAL-LINK] Link to a detailed guide on the strategy or technology chosen: "We wrote a comprehensive guide on [strategy/technology] -- read it here."
 
 **Example:**
+
 > "The team chose to migrate from REST to GraphQL -- not because of hype, but because their analysis showed that 78% of API calls were over-fetching data by 3-10x, and the client-specific BFF (Backend for Frontend) pattern they'd tried first added latency instead of reducing it."
 
 ---
@@ -124,6 +134,7 @@
 [ANSWER-FIRST] Open with the total timeline and team size -- "A [N]-person team completed the implementation in [timeframe]."
 
 **Structure:**
+
 1. **Team and timeline** (1-2 sentences): Who did the work, how long it took, and any phasing.
 2. **Step-by-step execution** (numbered list): 4-6 key implementation steps in chronological order. Each step should include what was done, any tools used, and any unexpected challenges.
 3. **Tools and technology** (bulleted list): Specific tools, services, and technologies used.
@@ -136,6 +147,7 @@
 [STAT: Implementation efficiency metric -- time spent, cost, iterations required]
 
 **Example step:**
+
 > 3. **Deployed edge caching layer** (Week 3-4): Set up Cloudflare Workers as a caching layer between the GraphQL gateway and origin servers. Used stale-while-revalidate with a 60s TTL -- this single change accounted for 40% of the total latency reduction.
 
 ---
@@ -145,6 +157,7 @@
 [ANSWER-FIRST] Open by restating the headline metric, then immediately expand with 2-3 supporting metrics. Use before/after format.
 
 **Structure:**
+
 1. **Headline result** (1 sentence): The primary metric, stated as before -> after with percentage change.
 2. **Supporting metrics** (bulleted list): 3-5 additional measurable outcomes, each with before/after values.
 3. **Business impact** (1-2 sentences): Translate technical metrics into business outcomes (revenue retained, customers saved, team hours freed, etc.).
@@ -158,12 +171,13 @@
 [IMAGE] Screenshot of the "after" state -- the improved dashboard, the clean error logs, the performance graph.
 
 **Example:**
-> | Metric | Before | After | Change |
-> |--------|--------|-------|--------|
-> | API response time (p95) | 1,200ms | 320ms | -73% |
-> | Error rate (5xx) | 12% | 0.3% | -97.5% |
-> | Infrastructure cost | $8,400/mo | $3,200/mo | -62% |
-> | Client satisfaction (NPS) | 24 | 67 | +179% |
+
+> | Metric                    | Before    | After     | Change |
+> | ------------------------- | --------- | --------- | ------ |
+> | API response time (p95)   | 1,200ms   | 320ms     | -73%   |
+> | Error rate (5xx)          | 12%       | 0.3%      | -97.5% |
+> | Infrastructure cost       | $8,400/mo | $3,200/mo | -62%   |
+> | Client satisfaction (NPS) | 24        | 67        | +179%  |
 
 ---
 
@@ -174,6 +188,7 @@
 **Format:** 3-5 numbered takeaways, each as a bolded insight followed by 1-2 sentences of explanation.
 
 **Criteria for each takeaway:**
+
 - It must be **transferable** -- applicable to the reader's own situation, not just this specific case
 - It must be **specific** -- actionable advice, not a platitude
 - It must be **earned** -- grounded in what actually happened in this case study
@@ -181,6 +196,7 @@
 [INFO-GAIN: contrarian or surprising lesson] Include at least one takeaway that challenges conventional wisdom or contradicts common advice in the space.
 
 **Example:**
+
 > **1. Measure the problem before designing the solution.**
 > The team spent the first week purely on instrumentation -- adding detailed logging and tracing before writing a single line of migration code. This investment paid for itself by revealing that the real bottleneck wasn't where they assumed (database queries) but in serialization overhead.
 
@@ -195,6 +211,7 @@
 **Format:** Each question as an H3, answer in 2-4 sentences.
 
 **Question selection criteria:**
+
 1. **Applicability question:** "Would this approach work for [different context]?" (Address transferability)
 2. **Resource question:** "What was the budget/team size for this project?" (Address feasibility)
 3. **Alternative question:** "What would you do differently if you started over?" (Demonstrate honest reflection)
@@ -226,7 +243,7 @@ Before publishing, verify:
 - [ ] Introduction opens with the result metric, not background context
 - [ ] The Challenge section quantifies the problem with specific numbers
 - [ ] The Challenge section documents at least one failed prior attempt
-- [ ] The Strategy section explains *why* this approach was chosen over alternatives
+- [ ] The Strategy section explains _why_ this approach was chosen over alternatives
 - [ ] The Strategy section includes enough process detail for replication [INFO-GAIN: process documentation]
 - [ ] The Implementation section includes specific tools, timeline, and team size
 - [ ] The Results section has before/after metrics for at least 3 KPIs

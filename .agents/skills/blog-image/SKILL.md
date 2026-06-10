@@ -30,25 +30,26 @@ Always interpret, enhance, and construct an optimized prompt using the
 
 ## Quick Reference
 
-| Command | What it does |
-|---------|-------------|
-| `/blog image generate <idea>` | Generate a blog image with full prompt engineering |
-| `/blog image edit <path> <instructions>` | Edit an existing blog image intelligently |
-| `/blog image setup` | Configure MCP server and API key |
+| Command                                  | What it does                                       |
+| ---------------------------------------- | -------------------------------------------------- |
+| `/blog image generate <idea>`            | Generate a blog image with full prompt engineering |
+| `/blog image edit <path> <instructions>` | Edit an existing blog image intelligently          |
+| `/blog image setup`                      | Configure MCP server and API key                   |
 
 ## Blog Image Types
 
 Match the image type to blog use case:
 
-| Image Type | Aspect Ratio | Resolution | Domain Mode | Placement |
-|------------|-------------|-----------|-------------|-----------|
-| Hero/Cover | `16:9` | 2K or 4K | Editorial / Landscape | Frontmatter `coverImage` |
-| OG/Social Card | `16:9` | 1K | Editorial / Infographic | Frontmatter `ogImage` |
-| Inline Illustration | `16:9` or `4:3` | 1K | Varies by topic | After H2, before body |
-| Inline Product Shot | `4:3` or `1:1` | 1K | Product | Within product sections |
-| Section Divider | `8:1` or `4:1` | 1K | Abstract / Landscape | Between major sections |
+| Image Type          | Aspect Ratio    | Resolution | Domain Mode             | Placement                |
+| ------------------- | --------------- | ---------- | ----------------------- | ------------------------ |
+| Hero/Cover          | `16:9`          | 2K or 4K   | Editorial / Landscape   | Frontmatter `coverImage` |
+| OG/Social Card      | `16:9`          | 1K         | Editorial / Infographic | Frontmatter `ogImage`    |
+| Inline Illustration | `16:9` or `4:3` | 1K         | Varies by topic         | After H2, before body    |
+| Inline Product Shot | `4:3` or `1:1`  | 1K         | Product                 | Within product sections  |
+| Section Divider     | `8:1` or `4:1`  | 1K         | Abstract / Landscape    | Between major sections   |
 
 **Sizing requirements:**
+
 - Blog hero/cover: 1200x630 (OG-compatible) or 1920x1080
 - Open Graph (OG): 1200x630 (required for social sharing)
 - Inline images: 1200px+ wide
@@ -70,6 +71,7 @@ For `/blog image generate <idea>` or when invoked internally:
 ### Step 1: Analyze Intent
 
 Determine what the blog needs:
+
 - **Image type**: Hero, inline, OG card, section divider?
 - **Blog topic**: What is the article about?
 - **Style**: Photorealistic, editorial, illustrated, minimal?
@@ -82,14 +84,14 @@ If the request is vague, ask one clarifying question about use case and style.
 
 Choose the expertise lens for the image:
 
-| Mode | When to use | Prompt emphasis |
-|------|-------------|-----------------|
-| **Editorial** | Blog headers, feature images, lifestyle | Styling, composition, publication references |
-| **Product** | E-commerce posts, reviews, comparisons | Surface materials, studio lighting, clean BG |
-| **Landscape** | Environmental backgrounds, travel, hero sections | Atmospheric perspective, depth layers, time of day |
-| **UI/Web** | Tech blog icons, illustrations, diagrams | Clean vectors, flat design, exact colors |
-| **Infographic** | Data-driven posts, processes, comparisons | Layout structure, hierarchy, accessible colors |
-| **Abstract** | Pattern backgrounds, section dividers, decorative | Color theory, mathematical forms, textures |
+| Mode            | When to use                                       | Prompt emphasis                                    |
+| --------------- | ------------------------------------------------- | -------------------------------------------------- |
+| **Editorial**   | Blog headers, feature images, lifestyle           | Styling, composition, publication references       |
+| **Product**     | E-commerce posts, reviews, comparisons            | Surface materials, studio lighting, clean BG       |
+| **Landscape**   | Environmental backgrounds, travel, hero sections  | Atmospheric perspective, depth layers, time of day |
+| **UI/Web**      | Tech blog icons, illustrations, diagrams          | Clean vectors, flat design, exact colors           |
+| **Infographic** | Data-driven posts, processes, comparisons         | Layout structure, hierarchy, accessible colors     |
+| **Abstract**    | Pattern backgrounds, section dividers, decorative | Color theory, mathematical forms, textures         |
 
 Load `references/prompt-engineering-blog.md` for domain mode modifier libraries.
 
@@ -105,6 +107,7 @@ Build the prompt as natural narrative paragraphs - NEVER as keyword lists:
 6. **Style** - Art medium, aesthetic, film stock, reference artists/eras
 
 **Template for photorealistic blog images:**
+
 ```
 A photorealistic [shot type] of [subject with physical detail], [action/pose],
 set in [environment with specifics]. [Lighting conditions] create [mood].
@@ -114,6 +117,7 @@ suitable as a blog [hero image/inline illustration] at [target dimensions].
 ```
 
 **Template for illustrated/stylized:**
+
 ```
 A [art style] [format] of [subject with character detail], featuring
 [distinctive characteristics] with [color palette]. [Line style] and
@@ -124,25 +128,26 @@ A [art style] [format] of [subject with character detail], featuring
 
 Call `set_aspect_ratio` BEFORE generating:
 
-| Blog Use Case | Ratio |
-|---------------|-------|
-| Hero / Cover / OG | `16:9` |
+| Blog Use Case         | Ratio          |
+| --------------------- | -------------- |
+| Hero / Cover / OG     | `16:9`         |
 | Product shot / Square | `4:3` or `1:1` |
-| Section divider | `8:1` or `4:1` |
-| Vertical (stories) | `9:16` |
+| Section divider       | `8:1` or `4:1` |
+| Vertical (stories)    | `9:16`         |
 
 ### Step 5: Generate via MCP
 
-| MCP Tool | When |
-|----------|------|
-| `set_aspect_ratio` | Always call first if ratio differs from 1:1 |
-| `gemini_generate_image` | New image from crafted prompt |
-| `gemini_edit_image` | Modify existing image |
-| `gemini_chat` | Iterative refinement / multi-turn sessions |
-| `get_image_history` | Review generated images |
-| `clear_conversation` | Reset session context |
+| MCP Tool                | When                                        |
+| ----------------------- | ------------------------------------------- |
+| `set_aspect_ratio`      | Always call first if ratio differs from 1:1 |
+| `gemini_generate_image` | New image from crafted prompt               |
+| `gemini_edit_image`     | Modify existing image                       |
+| `gemini_chat`           | Iterative refinement / multi-turn sessions  |
+| `get_image_history`     | Review generated images                     |
+| `clear_conversation`    | Reset session context                       |
 
 **Model selection** (use `set_model` MCP tool if switching):
+
 - **NB2 Flash** (default): Best for most blog images - fast, 14 ratios, 4K, $0.067/img
 - **NB Pro**: Use for hero images with text overlays (94% text accuracy) or highest quality - $0.134/img
 - **Original**: Budget option at $0.039/img - 5 ratios, 1K max
@@ -173,16 +178,19 @@ Check if `magick` (ImageMagick 7) is available. Fall back to `convert` if not.
 ### Step 7: Deliver
 
 Provide:
+
 1. **Image path** - where it was saved (`~/Documents/nanobanana_generated/`)
 2. **Crafted prompt** - show the full Reasoning Brief (educational)
 3. **Settings** - model, aspect ratio, domain mode
 4. **Alt text** - descriptive sentence, 10-125 chars, topic keywords naturally
 5. **Frontmatter snippet** (for hero/OG images):
+
 ```yaml
 coverImage: "/path/to/generated-image.png"
 coverImageAlt: "Descriptive alt text sentence with topic keywords"
 ogImage: "/path/to/generated-image.png"
 ```
+
 6. **Refinement suggestions** - 1-2 ideas if relevant
 
 ## Edit Workflow
@@ -206,6 +214,7 @@ For `/blog image edit <path> <instructions>`:
 When invoked as a Task subagent from blog-write or blog-rewrite:
 
 **Input** (provided by calling skill):
+
 - `image_type`: hero, inline, og, divider
 - `topic`: blog post topic/title
 - `section_context`: (optional) heading or section the image supports
@@ -213,8 +222,10 @@ When invoked as a Task subagent from blog-write or blog-rewrite:
 - `count`: (optional) number of images needed (default: 1)
 
 **Output** (returned to calling skill):
+
 ```markdown
 ### Generated Image
+
 - **Path:** ~/Documents/nanobanana_generated/image_timestamp.png
 - **Alt Text:** Descriptive sentence about the image
 - **Type:** hero / inline / og
@@ -232,6 +243,7 @@ blog-rewrite because image generation is unavailable.
 ## Alt Text Generation
 
 For every generated image, create alt text following blog standards:
+
 - Full descriptive sentence (not keyword list)
 - 10-125 characters
 - Include topic keywords naturally
@@ -274,6 +286,7 @@ regenerating from scratch. The session maintains style consistency, so targeted 
 preserve what works while fixing what doesn't.
 
 **When to edit vs regenerate:**
+
 - Color slightly off → Edit ("shift the color temperature warmer")
 - Wrong composition entirely → Regenerate with revised brief
 - Good scene but wrong lighting → Edit ("change to golden hour lighting from the left")
@@ -281,21 +294,22 @@ preserve what works while fixing what doesn't.
 
 ## Error Handling
 
-| Error | Resolution |
-|-------|-----------|
-| MCP not configured | Run `/blog image setup` |
-| API key invalid | New key at https://aistudio.google.com/apikey |
-| Rate limited (429) | Wait 60s, retry. Free tier: ~5-15 RPM / ~20-500 RPD (varies by model and billing) |
-| `IMAGE_SAFETY` | Auto-rephrase (see above) - Layer 2 filter, non-configurable |
-| `PROHIBITED_CONTENT` | Content policy violation - topic is blocked. Non-retryable. |
-| `SAFETY` | Rephrase prompt - Layer 1 filter |
-| Vague request | Ask one clarifying question before generating |
-| Poor quality | Review Reasoning Brief - likely missing lighting (biggest quality differentiator) |
-| MCP unavailable (internal call) | Return silently - calling workflow uses stock photos |
+| Error                           | Resolution                                                                        |
+| ------------------------------- | --------------------------------------------------------------------------------- |
+| MCP not configured              | Run `/blog image setup`                                                           |
+| API key invalid                 | New key at https://aistudio.google.com/apikey                                     |
+| Rate limited (429)              | Wait 60s, retry. Free tier: ~5-15 RPM / ~20-500 RPD (varies by model and billing) |
+| `IMAGE_SAFETY`                  | Auto-rephrase (see above) - Layer 2 filter, non-configurable                      |
+| `PROHIBITED_CONTENT`            | Content policy violation - topic is blocked. Non-retryable.                       |
+| `SAFETY`                        | Rephrase prompt - Layer 1 filter                                                  |
+| Vague request                   | Ask one clarifying question before generating                                     |
+| Poor quality                    | Review Reasoning Brief - likely missing lighting (biggest quality differentiator) |
+| MCP unavailable (internal call) | Return silently - calling workflow uses stock photos                              |
 
 ## Reference Documentation
 
 Load on-demand - do NOT load all at startup:
+
 - `references/prompt-engineering-blog.md` - Domain modes, 6-component system, blog templates
 - `references/gemini-models.md` - Model specs, rate limits, aspect ratios, pricing
 - `references/mcp-tools.md` - MCP tool parameters and response formats

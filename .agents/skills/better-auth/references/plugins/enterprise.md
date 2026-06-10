@@ -29,7 +29,7 @@ export const auth = betterAuth({
       maximumOrganizationsPerUser: 5,
       // Custom roles
       roles: {
-        owner: ["*"],  // All permissions
+        owner: ["*"], // All permissions
         admin: ["invite", "remove", "update"],
         member: ["read"],
       },
@@ -54,7 +54,7 @@ export const authClient = createAuthClient({
 ```typescript
 const { data: org } = await authClient.organization.create({
   name: "Acme Corp",
-  slug: "acme-corp",  // Unique identifier
+  slug: "acme-corp", // Unique identifier
 });
 ```
 
@@ -65,7 +65,7 @@ const { data: org } = await authClient.organization.create({
 await authClient.organization.inviteMember({
   organizationId: org.id,
   email: "new@member.com",
-  role: "member",  // owner, admin, member
+  role: "member", // owner, admin, member
 });
 
 // Invited user receives email and can accept
@@ -143,7 +143,7 @@ export const auth = betterAuth({
     sso({
       saml: {
         enableSingleLogout: true,
-        enableInResponseToValidation: true,  // default ON in v1.6+
+        enableInResponseToValidation: true, // default ON in v1.6+
         clockSkew: 60 * 1000,
       },
     }),
@@ -222,16 +222,16 @@ export const auth = betterAuth({
 
 SCIM 2.0 endpoints are automatically created:
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/scim/Users` | GET | List users |
-| `/api/scim/Users` | POST | Create user |
-| `/api/scim/Users/:id` | GET | Get user |
-| `/api/scim/Users/:id` | PUT | Replace user |
-| `/api/scim/Users/:id` | PATCH | Update user |
-| `/api/scim/Users/:id` | DELETE | Delete user |
-| `/api/scim/Groups` | GET | List groups |
-| `/api/scim/Groups` | POST | Create group |
+| Endpoint              | Method | Description  |
+| --------------------- | ------ | ------------ |
+| `/api/scim/Users`     | GET    | List users   |
+| `/api/scim/Users`     | POST   | Create user  |
+| `/api/scim/Users/:id` | GET    | Get user     |
+| `/api/scim/Users/:id` | PUT    | Replace user |
+| `/api/scim/Users/:id` | PATCH  | Update user  |
+| `/api/scim/Users/:id` | DELETE | Delete user  |
+| `/api/scim/Groups`    | GET    | List groups  |
+| `/api/scim/Groups`    | POST   | Create group |
 
 ### v1.4.4+ SCIM Features
 
@@ -396,22 +396,27 @@ export const auth = betterAuth({
 ## Common Issues
 
 ### Organizations: "User already in organization"
+
 - Check if user is already a member with a different role
 - Use `updateMemberRole` instead of re-inviting
 
 ### SSO: "SAML signature validation failed"
+
 - Ensure certificate is correct and not expired
 - Check signature algorithm matches IdP configuration
 
 ### SSO: "Clock skew error" (v1.4.7+)
+
 - Use `clockSkew` option to allow for time drift (measured in milliseconds)
 - Ensure server time is synced (NTP)
 
 ### SCIM: "401 Unauthorized"
+
 - Verify bearer token matches
 - Check token is sent in `Authorization: Bearer <token>` header
 
 ### Admin: "Not authorized"
+
 - Ensure user email is in `adminUsers` array
 - Or user has role listed in `adminRoles`
 

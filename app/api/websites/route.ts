@@ -13,7 +13,10 @@ export async function GET() {
     const websites = await getUserWebsites(user.id);
     return NextResponse.json({ success: true, websites });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to fetch websites" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to fetch websites" },
+      { status: 500 },
+    );
   }
 }
 
@@ -37,6 +40,9 @@ export async function POST(request: Request) {
     const website = await createWebsite(user.id, templateId);
     return NextResponse.json({ success: true, website });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "Failed to create website draft" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to create website draft" },
+      { status: 500 },
+    );
   }
 }

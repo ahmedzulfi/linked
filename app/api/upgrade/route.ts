@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     console.error("Failed to log upgrade request:", e);
     return NextResponse.json(
       { error: e.message || "Failed to process upgrade" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

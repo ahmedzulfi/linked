@@ -17,6 +17,7 @@ bun add better-auth mongodb
 ### Database Connection
 
 **`src/db/index.ts`**:
+
 ```typescript
 import { MongoClient } from "mongodb";
 
@@ -32,6 +33,7 @@ export { client };
 ### Auth Configuration
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { mongoAdapter } from "better-auth/adapters/mongo";
@@ -65,6 +67,7 @@ better-auth automatically creates these collections:
 ### Document Schemas
 
 **User Document**:
+
 ```typescript
 {
   _id: ObjectId,
@@ -78,6 +81,7 @@ better-auth automatically creates these collections:
 ```
 
 **Session Document**:
+
 ```typescript
 {
   _id: ObjectId,
@@ -92,6 +96,7 @@ better-auth automatically creates these collections:
 ```
 
 **Account Document**:
+
 ```typescript
 {
   _id: ObjectId,
@@ -151,14 +156,20 @@ async function createIndexes() {
   // Sessions collection
   await db.collection("sessions").createIndex({ userId: 1 });
   await db.collection("sessions").createIndex({ token: 1 }, { unique: true });
-  await db.collection("sessions").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+  await db
+    .collection("sessions")
+    .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
   // Accounts collection
   await db.collection("accounts").createIndex({ userId: 1 });
-  await db.collection("accounts").createIndex({ providerId: 1, accountId: 1 }, { unique: true });
+  await db
+    .collection("accounts")
+    .createIndex({ providerId: 1, accountId: 1 }, { unique: true });
 
   // Verifications collection
-  await db.collection("verifications").createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
+  await db
+    .collection("verifications")
+    .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 }
 ```
 
@@ -225,16 +236,21 @@ async function checkConnection() {
 ### Find User by Email
 
 ```typescript
-const user = await db.collection("users").findOne({ email: "user@example.com" });
+const user = await db
+  .collection("users")
+  .findOne({ email: "user@example.com" });
 ```
 
 ### Find Active Sessions
 
 ```typescript
-const sessions = await db.collection("sessions").find({
-  userId: new ObjectId(userId),
-  expiresAt: { $gt: new Date() },
-}).toArray();
+const sessions = await db
+  .collection("sessions")
+  .find({
+    userId: new ObjectId(userId),
+    expiresAt: { $gt: new Date() },
+  })
+  .toArray();
 ```
 
 ### Delete Expired Sessions (Manual Cleanup)

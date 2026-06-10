@@ -1,3 +1,6 @@
-const fs = require('fs');
-const content = fs.readFileSync('C:/Users/GIGABYTE/Downloads/Danielcross - Personal Portfolio Framer Template.html', 'utf8');
+const fs = require("fs");
+const content = fs.readFileSync(
+  "C:/Users/GIGABYTE/Downloads/Danielcross - Personal Portfolio Framer Template.html",
+  "utf8",
+);
 console.log(content.substring(217000, 222000));

@@ -8,22 +8,26 @@ interface PublishedPageProps {
 
 export default async function PublishedPage({ params }: PublishedPageProps) {
   const { slug } = await params;
-  
+
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
   const res = await fetch(`${baseUrl}/api/p/${slug}`, { cache: "no-store" });
-  
+
   if (!res.ok) {
     notFound();
   }
-  
+
   const data = await res.json();
   if (!data.success || !data.profile) {
     notFound();
   }
-  
+
   return (
     <div className="min-h-screen w-full bg-white">
-      <ProfileWrapper profile={data.profile} template={data.template} fluid={true} />
+      <ProfileWrapper
+        profile={data.profile}
+        template={data.template}
+        fluid={true}
+      />
     </div>
   );
 }
@@ -31,7 +35,7 @@ export default async function PublishedPage({ params }: PublishedPageProps) {
 export async function generateMetadata({ params }: PublishedPageProps) {
   const { slug } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-  
+
   try {
     const res = await fetch(`${baseUrl}/api/p/${slug}`, { cache: "no-store" });
     if (!res.ok) return {};

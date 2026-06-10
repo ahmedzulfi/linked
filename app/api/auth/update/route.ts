@@ -13,7 +13,10 @@ export async function POST(req: Request) {
 
     const { firstName, lastName } = await req.json();
     if (!firstName || !lastName) {
-      return NextResponse.json({ error: "First and last name are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "First and last name are required" },
+        { status: 400 },
+      );
     }
 
     const name = `${firstName.trim()} ${lastName.trim()}`;
@@ -22,6 +25,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true, name });
   } catch (e: any) {
     console.error("Failed to update user profile:", e);
-    return NextResponse.json({ error: e.message || "Failed to update profile" }, { status: 500 });
+    return NextResponse.json(
+      { error: e.message || "Failed to update profile" },
+      { status: 500 },
+    );
   }
 }

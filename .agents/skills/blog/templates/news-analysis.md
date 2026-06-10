@@ -8,6 +8,7 @@
 ## When to Use This Template
 
 Use this template when:
+
 - A significant event, announcement, or release has just occurred
 - The audience needs fast, opinionated analysis (not just a summary)
 - You can publish within 2-4 hours of the event
@@ -15,6 +16,7 @@ Use this template when:
 - You have a clear perspective or expertise that adds value beyond the press release
 
 Do NOT use this template for:
+
 - Evergreen how-to content (use tutorial)
 - Original research or data studies (use data-research)
 - Reference/FAQ content (use faq-knowledge)
@@ -31,17 +33,20 @@ Do NOT use this template for:
 ```
 
 **Examples:**
+
 - "OpenAI's GPT-5 Release: What It Means for AI Developers"
 - "Google's March 2026 Core Update: What It Means for Content Creators"
 - "React 20 Announcement: What It Means for Frontend Teams"
 
 **Title Rules:**
+
 - Name the event explicitly (people search for event names)
 - Specify the audience who should care
 - Keep under 60 characters for full SERP display when possible
 - Avoid clickbait - the event itself is the hook
 
 **Alternative Title Formats:**
+
 - "[N] Things [Audience] Should Know About [Event]"
 - "[Event] Explained: [Impact Statement]"
 - "Breaking Down [Event]: Implications for [Audience]"
@@ -59,10 +64,11 @@ Do NOT use this template for:
 ```markdown
 > **TL;DR:** [Event name] [what happened in one clause]. The biggest implications for
 > [audience] are [implication 1] and [implication 2]. [One-sentence recommendation
-> or prediction]. [Action to take now].
+> > or prediction]. [Action to take now].
 ```
 
 **Rules:**
+
 - Assume the reader already saw the headline - don't just restate the news
 - Lead with implications, not with what happened
 - Include one actionable recommendation
@@ -80,6 +86,7 @@ Do NOT use this template for:
 [1-2 sentences of factual detail].
 
 **Key facts:**
+
 - [Fact 1 with source attribution]
 - [Fact 2 with source attribution]
 - [Fact 3 with source attribution]
@@ -90,6 +97,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Cite sources for every factual claim
 - Include at least one direct quote from a primary source
 - Keep this section objective - no analysis yet
@@ -125,6 +133,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Be opinionated - "this matters because" not "this might matter"
 - Compare to a previous event or baseline so readers understand scale
 - Include at least one data point for context
@@ -159,6 +168,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Use the actual audience name in the heading (e.g., "What This Means for Frontend Developers")
 - Each impact should be a concrete change, not a vague observation
 - Include at least one non-obvious implication (this is your differentiation)
@@ -182,6 +192,7 @@ Do NOT use this template for:
 5. **[If applicable]:** [Specific action with brief explanation]
 
 **Do NOT:**
+
 - [Common overreaction to avoid]
 - [Premature action to avoid]
 
@@ -189,6 +200,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Order by urgency - what should they do today vs. this quarter?
 - Be specific enough that the reader can act without further research
 - Include "do NOT" items to prevent overreaction (shows credibility)
@@ -206,6 +218,7 @@ Do NOT use this template for:
 [ANSWER-FIRST] [Event] is part of a larger trend toward [broader pattern].
 
 [1-2 paragraphs connecting this event to:]
+
 - Industry direction or macro trends
 - Previous events that form a pattern
 - What this signals about the future
@@ -216,6 +229,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - This section is where you demonstrate strategic thinking
 - Connect to 1-2 broader trends maximum - don't overextend
 - End with a forward-looking statement (prediction or question to watch)
@@ -247,6 +261,7 @@ Do NOT use this template for:
 ```
 
 **FAQ Rules:**
+
 - Use questions people are actually searching for right now
 - Answers must be self-contained and extractable for Featured Snippets
 - Keep answers to 40-60 words for snippet optimization
@@ -266,6 +281,7 @@ Do NOT use this template for:
 ```
 
 **Rules:**
+
 - Every factual claim in the article must have a source listed here
 - Use primary sources (official announcements, press releases) over secondary coverage
 - Include the date of each source

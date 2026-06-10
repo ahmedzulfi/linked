@@ -15,6 +15,7 @@ bun add better-auth
 ### Server Configuration
 
 **`src/auth.ts`**:
+
 ```typescript
 import { betterAuth } from "better-auth";
 import { twoFactor } from "better-auth/plugins";
@@ -23,10 +24,10 @@ export const auth = betterAuth({
   // ... database config
   plugins: [
     twoFactor({
-      issuer: "Your App Name",  // Shown in authenticator apps
+      issuer: "Your App Name", // Shown in authenticator apps
       totpOptions: {
         digits: 6,
-        period: 30,  // seconds
+        period: 30, // seconds
       },
     }),
   ],
@@ -94,7 +95,7 @@ await authClient.twoFactor.verifyBackupCode({
 
 ```typescript
 await authClient.twoFactor.disable({
-  password: "current-password",  // Verify user identity
+  password: "current-password", // Verify user identity
 });
 ```
 
@@ -143,7 +144,7 @@ export const authClient = createAuthClient({
 ```typescript
 await authClient.passkey.addPasskey({
   name: "MacBook Pro Touch ID",
-  authenticatorAttachment: "platform",  // or "cross-platform"
+  authenticatorAttachment: "platform", // or "cross-platform"
 });
 ```
 
@@ -151,7 +152,7 @@ await authClient.passkey.addPasskey({
 
 ```typescript
 const result = await authClient.signIn.passkey({
-  autoFill: true,  // Enable conditional UI
+  autoFill: true, // Enable conditional UI
 });
 ```
 
@@ -221,7 +222,7 @@ await authClient.passkey.updatePasskey({ id: "passkey-id", name: "New Name" });
 Add `webauthn` to input `autocomplete` attribute:
 
 ```html
-<input type="text" autocomplete="username webauthn">
+<input type="text" autocomplete="username webauthn" />
 ```
 
 ```typescript
@@ -256,7 +257,7 @@ export const auth = betterAuth({
           html: `<a href="${url}">Click to sign in</a>`,
         });
       },
-      expiresIn: 60 * 10,  // 10 minutes
+      expiresIn: 60 * 10, // 10 minutes
     }),
   ],
 });
@@ -274,7 +275,7 @@ const authClient = createAuthClient({
 // Request magic link
 await authClient.signIn.magicLink({
   email: "user@example.com",
-  callbackURL: "/dashboard",  // Where to redirect after verification
+  callbackURL: "/dashboard", // Where to redirect after verification
 });
 
 // User clicks link in email → automatically signed in
@@ -317,7 +318,7 @@ export const auth = betterAuth({
         });
       },
       otpLength: 6,
-      expiresIn: 60 * 5,  // 5 minutes
+      expiresIn: 60 * 5, // 5 minutes
     }),
   ],
 });
@@ -402,19 +403,26 @@ if (session?.user.isAnonymous) {
 ```typescript
 import { betterAuth } from "better-auth";
 import { passkey } from "@better-auth/passkey";
-import {
-  twoFactor,
-  magicLink,
-  emailOTP,
-  anonymous
-} from "better-auth/plugins";
+import { twoFactor, magicLink, emailOTP, anonymous } from "better-auth/plugins";
 
 export const auth = betterAuth({
   plugins: [
     twoFactor({ issuer: "Your App" }),
-    passkey({ rpID: "your-domain.com", rpName: "Your App", origin: "https://your-domain.com" }),
-    magicLink({ sendMagicLink: async ({ email, url }) => { /* ... */ } }),
-    emailOTP({ sendVerificationOTP: async ({ email, otp }) => { /* ... */ } }),
+    passkey({
+      rpID: "your-domain.com",
+      rpName: "Your App",
+      origin: "https://your-domain.com",
+    }),
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        /* ... */
+      },
+    }),
+    emailOTP({
+      sendVerificationOTP: async ({ email, otp }) => {
+        /* ... */
+      },
+    }),
     anonymous({ allowLinking: true }),
   ],
 });
@@ -425,18 +433,22 @@ export const auth = betterAuth({
 ## Common Issues
 
 ### 2FA: "Invalid code"
+
 - Ensure device time is synced (NTP)
 - Check TOTP period matches (default 30s)
 
 ### Passkeys: "Origin mismatch"
+
 - `origin` in config must match exactly (https://domain.com, not https://domain.com/)
 - `rpID` must be the domain without protocol
 
 ### Magic Link: "Token expired"
+
 - Default expiry is 10 minutes
 - Increase `expiresIn` if needed
 
 ### Anonymous: "Cannot link account"
+
 - Ensure `allowLinking: true` in config
 - User must be currently signed in as anonymous
 

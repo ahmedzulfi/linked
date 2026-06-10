@@ -71,16 +71,18 @@ wrangler d1 migrations apply my-app-db --remote
 **Solution**: Use `CamelCasePlugin` with Kysely or configure Drizzle properly:
 
 **With Kysely**:
+
 ```typescript
 import { CamelCasePlugin } from "kysely";
 
 new Kysely({
   dialect: new D1Dialect({ database: env.DB }),
   plugins: [new CamelCasePlugin()], // Converts between naming conventions
-})
+});
 ```
 
 **With Drizzle**: Define schema with camelCase from the start:
+
 ```typescript
 export const user = sqliteTable("user", {
   emailVerified: integer({ mode: "boolean" }), // camelCase
@@ -127,6 +129,7 @@ export function createAuth(db: Database, env: Env) {
 ```
 
 **Add to `wrangler.toml`**:
+
 ```toml
 [[kv_namespaces]]
 binding = "SESSIONS_KV"
@@ -154,7 +157,7 @@ app.use(
     origin: ["https://yourdomain.com", "http://localhost:3000"],
     credentials: true, // CRITICAL - Allow cookies
     allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  })
+  }),
 );
 ```
 
@@ -179,6 +182,7 @@ better-auth URL:  https://yourdomain.com/api/auth/callback/google
 ```
 
 **Check better-auth callback URL**:
+
 ```typescript
 // It's always: {baseURL}/api/auth/callback/{provider}
 const callbackURL = `${env.BETTER_AUTH_URL}/api/auth/callback/google`;
@@ -198,11 +202,13 @@ console.log("Configure this URL in Google Console:", callbackURL);
 **Solution**: Install all required packages:
 
 **For Drizzle approach**:
+
 ```bash
 npm install better-auth drizzle-orm drizzle-kit @cloudflare/workers-types
 ```
 
 **For Kysely approach**:
+
 ```bash
 npm install better-auth kysely @noxharmonium/kysely-d1 @cloudflare/workers-types
 ```
@@ -387,6 +393,7 @@ await authClient.requestPasswordReset({
 ```
 
 Also update tsconfig.json:
+
 ```json
 {
   "compilerOptions": {
@@ -437,6 +444,7 @@ emailAndPassword: {
 ### Problem: better-auth routes return 404
 
 **Solution**:
+
 1. Verify route handler: `app.all("/api/auth/*", async (c) => { ... })`
 2. Check `baseURL` matches your deployment URL
 3. Test with: `curl http://localhost:8787/api/auth/session`
@@ -444,6 +452,7 @@ emailAndPassword: {
 ### Problem: Session not persisting across requests
 
 **Solution**:
+
 1. Ensure CORS `credentials: true` is set
 2. Check cookies are being sent (same-site policy)
 3. Verify `BETTER_AUTH_SECRET` is set correctly
@@ -452,6 +461,7 @@ emailAndPassword: {
 ### Problem: OAuth returns "invalid_client" error
 
 **Solution**:
+
 1. Verify client ID and secret are correct
 2. Check environment variables are set: `wrangler secret list`
 3. Ensure secrets match OAuth provider configuration
@@ -460,6 +470,7 @@ emailAndPassword: {
 ### Problem: Database queries fail with "no such table"
 
 **Solution**:
+
 1. Run migrations: `wrangler d1 migrations apply my-app-db --local`
 2. Check schema.ts defines all required tables
 3. Verify Drizzle config points to correct schema file
@@ -487,6 +498,7 @@ Use this to avoid all 15 errors:
 ---
 
 **Official Resources**:
+
 - better-auth Troubleshooting: https://better-auth.com/docs/troubleshooting
 - Drizzle + D1: https://orm.drizzle.team/docs/get-started-sqlite#cloudflare-d1
 - Cloudflare D1 Docs: https://developers.cloudflare.com/d1/

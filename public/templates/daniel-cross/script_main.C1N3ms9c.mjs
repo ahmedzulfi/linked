@@ -1,4 +1,604 @@
-import{t as e}from"./rolldown-runtime.CawJvvTp.mjs";import{C as t,F as n,L as r,M as i,N as a,O as o,P as s,R as c,T as l,_ as u,a as d,c as f,g as p,h as m,i as h,l as g,m as ee,n as _,o as v,p as te,r as ne,t as y,u as b,y as re,z as x}from"./react.DAIiAXiH.mjs";import{C as ie,r as ae,t as oe}from"./motion.XrlSSTca.mjs";import{$ as S,C,D as se,G as ce,J as le,K as ue,Tt as de,Y as w,Z as fe,_ as pe,b as me,ct as he,dt as ge,gt as _e,i as ve,j as T,l as ye,lt as be,m as xe,o as Se,p as Ce,pt as E,q as D,r as we,rt as Te,st as Ee,tt as De,u as O,v as Oe,wt as ke,yt as Ae,z as je}from"./framer.B_cl8LBk.mjs";import{b as Me,y as k}from"./shared-lib.CK1j1DVz.mjs";var A,j,M,N,P,F,I,L,R,z,B,V,H,U,W,G,Ne=e((()=>{v(),D(),oe(),l(),Me(),A=je(k),j={cPfWI38v5:`(min-width: 1200px)`,TvbZNloJt:`(min-width: 810px) and (max-width: 1199.98px)`,x9EbuxsIT:`(max-width: 809.98px)`},M=()=>typeof document<`u`,N=`framer-50OQE`,P={cPfWI38v5:`framer-v-1qhc3uf`,TvbZNloJt:`framer-v-fxvzmu`,x9EbuxsIT:`framer-v-2hwz5n`},F={},I=Object.keys(F),L=[`@supports (aspect-ratio: 1) { body { --framer-aspect-ratio-supported: auto; } }`,`.framer-50OQE.framer-17bnlvf, .framer-50OQE .framer-17bnlvf { display: block; }`,`.framer-50OQE.framer-1qhc3uf { --selection-background-color: var(--token-09c1722d-5d82-4a0e-b304-abc5a551cacb, #4a3429) /* {"name":"Brown"} */; --selection-color: var(--token-af0bccb2-50e5-4a50-a625-e2f308148175, #e5e2de) /* {"name":"Main"} */; align-content: center; align-items: center; background-color: var(--token-d469a4a3-0708-4dfe-8498-9b2828796a10, #e9e6e2); display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0px; height: min-content; justify-content: flex-start; overflow: var(--overflow-clip-fallback, clip); padding: 0px; position: relative; width: 100%; }`,`.framer-50OQE .framer-tfstyy-container { flex: none; height: auto; left: 50%; position: var(--framer-canvas-fixed-position, fixed); top: 0px; transform: translateX(-50%); width: 390px; z-index: 1; }`,`.framer-50OQE .framer-l02eg4 { background: transparent; flex-grow: 1; height: 0px; margin: 0px; margin-bottom: -0px; position: relative; width: 0px; }`,`[data-layout-template="true"] > #overlay { margin-bottom: -0px; }`,`.framer-50OQE[data-selection="true"] * ::selection, .framer-50OQE [data-selection="true"] * ::selection { color: var(--selection-color, none); background-color: var(--selection-background-color, none); }`],R={cPfWI38v5:`(min-width: 1200px)`,TvbZNloJt:`(min-width: 810px) and (max-width: 1199.98px)`,x9EbuxsIT:`(max-width: 809.98px)`},z=({value:e})=>ge()?null:f(`style`,{dangerouslySetInnerHTML:{__html:e},"data-framer-html-style":``}),B={Desktop:`cPfWI38v5`,Phone:`x9EbuxsIT`,Tablet:`TvbZNloJt`},V=({height:e,id:t,width:n,...r})=>({...r,variant:B[r.variant]??r.variant??`cPfWI38v5`}),H=p(function(e,t){let n=o(null),r=t??n,i=re(),{activeLocale:a,setLocale:s}=E(),{style:c,className:l,layoutId:u,variant:d,children:p,...m}=V(e),[h,ee]=be(d,j,!1),_=T(N),v=()=>!M()||h===`x9EbuxsIT`;return he({}),f(ye.Provider,{value:{isLayoutTemplate:!0,primaryVariantId:`cPfWI38v5`,variantClassNames:P},children:g(ae,{id:u??i,children:[f(z,{value:`:root body { background: var(--token-d469a4a3-0708-4dfe-8498-9b2828796a10, rgb(233, 230, 226)); }`}),g(ie.div,{...m,className:T(_,`framer-1qhc3uf`,l),"data-layout-template":!0,"data-selection":!0,ref:r,style:{...c},children:[v()&&f(me,{breakpoint:h,overrides:{x9EbuxsIT:{height:800,width:`390px`,y:0}},children:f(we,{children:f(ve,{className:`framer-tfstyy-container hidden-1qhc3uf hidden-fxvzmu`,"data-framer-layout-hint-center-x":!0,layoutScroll:!0,nodeId:`io21XKM3h`,scopeId:`I6WTOQi9n`,children:f(k,{AA5f7IDGo:`ojHezOueI`,CYUI5JhJV:`ojHezOueI`,height:`100%`,id:`io21XKM3h`,layoutId:`io21XKM3h`,NU6imwlus:`oHT1CeHq0`,ow5Zzl3Jp:`pf6bmfBDd`,ryZfUIC9F:`ojHezOueI`,style:{width:`100%`},tDdmPHKdy:`pf6bmfBDd`,variant:`mAsA1Xz4Q`,width:`100%`,wLzFO013k:`QAYVJWMPI`,zXg53Fhkc:`pf6bmfBDd`})})})}),p,f(`div`,{className:`framer-l02eg4`})]}),f(`div`,{id:`template-overlay`})]})})}),U=e=>e===C.canvas||e===C.export?[...L,...I.flatMap(e=>{let t=F[e];return F[e].map(e=>`${t} {${e}}`)})]:[...L,...I.map(e=>`@media ${R[e]} { ${F[e].join(` `)} }`)],W=Ae(H,U,`framer-50OQE`),G=W,W.displayName=`Template`,W.defaultProps={height:800,width:1200},se(W,[{explicitInter:!0,fonts:[]},...A],{supportsExplicitInterCodegen:!0})}));function Pe({webPageId:e,children:t,style:n,...r}){let i={}[e]??{};switch(e){case`augiA20Il`:case`p33r2r9HB`:case`M4d8ob2Mz`:case`HSsFOaCVN`:case`Fmy_DVcvW`:case`IubclNn4w`:return b(G,{...i,key:`Template1`,style:n},t(!0));default:return t(!1)}}function Fe(e){switch(e){case`augiA20Il`:case`p33r2r9HB`:case`M4d8ob2Mz`:case`HSsFOaCVN`:case`Fmy_DVcvW`:case`IubclNn4w`:return[{hash:`1qhc3uf`,mediaQuery:`(min-width: 1200px)`},{hash:`fxvzmu`,mediaQuery:`(min-width: 810px) and (max-width: 1199.98px)`},{hash:`2hwz5n`,mediaQuery:`(max-width: 809.98px)`}];default:return}}async function K({routeId:e,pathVariables:r,localeId:c,collectionItemId:l}){let u=J[e].page.preload(),d=b(pe,{children:b(O,{children:b(xe,{children:b(Oe,{isWebsite:!0,environment:`site`,routeId:e,pathVariables:r,routes:J,collectionUtils:X,framerSiteId:Z,notFoundPage:w(()=>import(`./DJtOYmnEElRoX5wNErgjp-hqtQMCmrexD4fH6klrlfM.Kzu5MwsP.mjs`)),isReducedMotion:!0,localeId:c,locales:Y,preserveQueryParams:!0,siteCanonicalURL:`https://danielcross.framer.website`,EditorBar:x===void 0?void 0:(()=>{if($){console.log(`[Framer On-Page Editing] Unavailable because navigator is bot`);return}return w(async()=>{x.__framer_editorBarDependencies={__version:3,framer:{useCurrentRoute:Ee,useLocaleInfo:E,useRouter:_e},react:{createElement:b,Fragment:s,memo:m,useCallback:i,useEffect:a,useRef:o,useState:n,useLayoutEffect:t},"react-dom":{createPortal:h}};let{createEditorBar:e}=await import(`https://framer.com/edit/init.mjs`);return{default:e()}})})(),adaptLayoutToTextDirection:!1,LayoutTemplate:Pe,loadSnippetsModule:new Ce(()=>import(`./B3lQOP5VqOpT_lkEwmXkQEorGX3QuXlryZPL3p2xc7U.C4eIKz3_.mjs`)),initialCollectionItemId:l}),value:{autobahnNavigation:!0,disableCustomCode:!1,editorBarDisableFrameAncestorsSecurity:!1,motionDivToDiv:!1,onPageLocalizationSupport:!0,onPageMoveTool:!0,synchronousNavigationOnDesktop:!1,yieldOnTap:!1}})}),value:{routes:{}}});return await u,d}function Ie(){Q&&x.__framer_events.push(arguments)}async function q(e,t){function n(e,t,n=!0){if(e.caught||x.__framer_hadFatalError)return;let r=t?.componentStack;if(n){if(console.warn(`Caught a recoverable error. The site is still functional, but might have some UI flickering or degraded page load performance. If you are the author of this website, update external components and check recently added custom code or code overrides to fix the following server/client mismatches:
-`,e,r),Math.random()>.01)return}else console.error(`Caught a fatal error. Please report the following to the Framer team via https://www.framer.com/contact/:
-`,e,r);Ie(n?`published_site_load_recoverable_error`:`published_site_load_error`,{message:String(e),componentStack:r,stack:r?void 0:e instanceof Error&&typeof e.stack==`string`?e.stack:null})}try{let r,i,a,o,s;if(e)s=JSON.parse(t.dataset.framerHydrateV2),r=s.routeId,i=s.localeId,a=s.pathVariables,o=s.breakpoints,r=S(J,r);else{S(J,void 0);let e=performance.getEntriesByType(`navigation`)[0]?.serverTiming?.find(e=>e.name===`route`)?.description;if(e){let t=new URLSearchParams(e);r=t.get(`id`),i=t.get(`locale`);for(let[e,n]of t.entries())e.startsWith(`var.`)&&(a??={},a[e.slice(4)]=n)}if(!r||!i){let e=ce(J,decodeURIComponent(location.pathname),!0,Y);r=e.routeId,i=e.localeId,a=e.pathVariables}}let c=K({routeId:r,localeId:i,pathVariables:a,collectionItemId:s?.collectionItemId});x!==void 0&&(async()=>{let e=J[r],t=Y.find(({id:e})=>i?e===i:e===`default`).code,n=s?.collectionItemId??null;if(n===null&&e?.collectionId&&X){let r=await X[e.collectionId]?.(),[i]=Object.values(a);r&&typeof i==`string`&&(n=await r.getRecordIdBySlug(i,t||void 0)??null)}let o=Intl.DateTimeFormat().resolvedOptions(),c=o.timeZone,l=o.locale;await new Promise(e=>{document.prerendering?document.addEventListener(`prerenderingchange`,e,{once:!0}):e()}),x.__framer_events.push([`published_site_pageview`,{framerSiteId:Z??null,version:2,routePath:e?.path||`/`,collectionItemId:n,framerLocale:t||null,webPageId:e?.abTestingVariantId??r,abTestId:e?.abTestId,referrer:document.referrer||null,url:x.location.href,hostname:x.location.hostname||null,pathname:x.location.pathname||null,hash:x.location.hash||null,search:x.location.search||null,timezone:c,locale:l},`eager`]),await de({priority:`background`,ensureContinueBeforeUnload:!0,continueAfter:`paint`}),document.dispatchEvent(new CustomEvent(`framer:pageview`,{detail:{framerLocale:t||null}}))})();let l=await c;e?(ke(`framer-rewrite-breakpoints`,()=>{De(o),x.__framer_onRewriteBreakpoints?.(o)}),($?e=>e():u)(()=>{fe(),Te(),y(t,l,{onRecoverableError:n})})):ne(t,{onRecoverableError:n}).render(l)}catch(e){throw n(e,void 0,!1),e}}var J,Y,X,Z,Q,$;e((()=>{if(r(),D(),l(),d(),_(),Ne(),J={augiA20Il:{elements:{},page:w(()=>import(`./Gevj_uphHwW3-uCmxeuUzhFGydFGDqmbP1cq6LIPRIs.j9I0Ngbc.mjs`)),path:`/`},p33r2r9HB:{elements:{},page:w(()=>import(`./phJyEKLrGe40zw4oNZjOAjJrB_89xvIHJWesk_iAbNw.BBp38RvO.mjs`)),path:`/about`},M4d8ob2Mz:{elements:{},page:w(()=>import(`./xmZqwZHoZVxP9aFXWBxlWphsrn4PJafy2XcF90KyjiY.JNdCaIly.mjs`)),path:`/contact`},HSsFOaCVN:{elements:{},page:w(()=>import(`./mD1YRt2OQZDSpoyBNHQIN_c2YveR7bINVg6N-K_Vtq0.D_O5jzEM.mjs`)),path:`/work`},Fmy_DVcvW:{elements:{},page:w(()=>import(`./DJtOYmnEElRoX5wNErgjp-hqtQMCmrexD4fH6klrlfM.Kzu5MwsP.mjs`)),path:`/404`},IubclNn4w:{collectionId:`qGYp3qnZo`,elements:{},page:w(()=>import(`./zMDQWE_iY7jGlrKLVhLgiVzJho6GU6sOLxI4ATnQuRM.DtUtDxEr.mjs`)),path:`/work/:YFcmX7KTe`}},Y=[{code:`en`,id:`default`,name:`English`,slug:``,textDirection:`ltr`}],X={qGYp3qnZo:async()=>(await import(`./KJzA5tVG241_sgCNp-UZb9USPdZrzapdo6sVsiZHry8.BH5ftgwh.mjs`))?.utils},Z=`3ae43041a4a51f93f610bf27f843f71dd8761f96f7a2baf2fb21519464263ce5`,Q=typeof document<`u`,$=Q&&/bot|-google|google-|yandex|ia_archiver|crawl|spider/iu.test(c.userAgent),Q){x.__framer_importFromPackage=(e,t)=>()=>b(Se,{error:`Package component not supported: "`+t+`" in "`+e+`"`}),x.__framer_events=x.__framer_events||[],ue(),le();let e=document.getElementById(`main`);`framerHydrateV2`in e.dataset?q(!0,e):q(!1,e)}(function(){Q&&u(()=>{y(document.getElementById(`__framer-badge-container`),b(ee,{},b(te(()=>import(`./PX9hIOIVM.CVsDIj0n.mjs`)))))})})()}))();export{Fe as getLayoutTemplateBreakpoints,K as getPageRoot};
+import { t as e } from "./rolldown-runtime.CawJvvTp.mjs";
+import {
+  C as t,
+  F as n,
+  L as r,
+  M as i,
+  N as a,
+  O as o,
+  P as s,
+  R as c,
+  T as l,
+  _ as u,
+  a as d,
+  c as f,
+  g as p,
+  h as m,
+  i as h,
+  l as g,
+  m as ee,
+  n as _,
+  o as v,
+  p as te,
+  r as ne,
+  t as y,
+  u as b,
+  y as re,
+  z as x,
+} from "./react.DAIiAXiH.mjs";
+import { C as ie, r as ae, t as oe } from "./motion.XrlSSTca.mjs";
+import {
+  $ as S,
+  C,
+  D as se,
+  G as ce,
+  J as le,
+  K as ue,
+  Tt as de,
+  Y as w,
+  Z as fe,
+  _ as pe,
+  b as me,
+  ct as he,
+  dt as ge,
+  gt as _e,
+  i as ve,
+  j as T,
+  l as ye,
+  lt as be,
+  m as xe,
+  o as Se,
+  p as Ce,
+  pt as E,
+  q as D,
+  r as we,
+  rt as Te,
+  st as Ee,
+  tt as De,
+  u as O,
+  v as Oe,
+  wt as ke,
+  yt as Ae,
+  z as je,
+} from "./framer.B_cl8LBk.mjs";
+import { b as Me, y as k } from "./shared-lib.CK1j1DVz.mjs";
+var A,
+  j,
+  M,
+  N,
+  P,
+  F,
+  I,
+  L,
+  R,
+  z,
+  B,
+  V,
+  H,
+  U,
+  W,
+  G,
+  Ne = e(() => {
+    (v(),
+      D(),
+      oe(),
+      l(),
+      Me(),
+      (A = je(k)),
+      (j = {
+        cPfWI38v5: `(min-width: 1200px)`,
+        TvbZNloJt: `(min-width: 810px) and (max-width: 1199.98px)`,
+        x9EbuxsIT: `(max-width: 809.98px)`,
+      }),
+      (M = () => typeof document < `u`),
+      (N = `framer-50OQE`),
+      (P = {
+        cPfWI38v5: `framer-v-1qhc3uf`,
+        TvbZNloJt: `framer-v-fxvzmu`,
+        x9EbuxsIT: `framer-v-2hwz5n`,
+      }),
+      (F = {}),
+      (I = Object.keys(F)),
+      (L = [
+        `@supports (aspect-ratio: 1) { body { --framer-aspect-ratio-supported: auto; } }`,
+        `.framer-50OQE.framer-17bnlvf, .framer-50OQE .framer-17bnlvf { display: block; }`,
+        `.framer-50OQE.framer-1qhc3uf { --selection-background-color: var(--token-09c1722d-5d82-4a0e-b304-abc5a551cacb, #4a3429) /* {"name":"Brown"} */; --selection-color: var(--token-af0bccb2-50e5-4a50-a625-e2f308148175, #e5e2de) /* {"name":"Main"} */; align-content: center; align-items: center; background-color: var(--token-d469a4a3-0708-4dfe-8498-9b2828796a10, #e9e6e2); display: flex; flex-direction: column; flex-wrap: nowrap; gap: 0px; height: min-content; justify-content: flex-start; overflow: var(--overflow-clip-fallback, clip); padding: 0px; position: relative; width: 100%; }`,
+        `.framer-50OQE .framer-tfstyy-container { flex: none; height: auto; left: 50%; position: var(--framer-canvas-fixed-position, fixed); top: 0px; transform: translateX(-50%); width: 390px; z-index: 1; }`,
+        `.framer-50OQE .framer-l02eg4 { background: transparent; flex-grow: 1; height: 0px; margin: 0px; margin-bottom: -0px; position: relative; width: 0px; }`,
+        `[data-layout-template="true"] > #overlay { margin-bottom: -0px; }`,
+        `.framer-50OQE[data-selection="true"] * ::selection, .framer-50OQE [data-selection="true"] * ::selection { color: var(--selection-color, none); background-color: var(--selection-background-color, none); }`,
+      ]),
+      (R = {
+        cPfWI38v5: `(min-width: 1200px)`,
+        TvbZNloJt: `(min-width: 810px) and (max-width: 1199.98px)`,
+        x9EbuxsIT: `(max-width: 809.98px)`,
+      }),
+      (z = ({ value: e }) =>
+        ge()
+          ? null
+          : f(`style`, {
+              dangerouslySetInnerHTML: { __html: e },
+              "data-framer-html-style": ``,
+            })),
+      (B = { Desktop: `cPfWI38v5`, Phone: `x9EbuxsIT`, Tablet: `TvbZNloJt` }),
+      (V = ({ height: e, id: t, width: n, ...r }) => ({
+        ...r,
+        variant: B[r.variant] ?? r.variant ?? `cPfWI38v5`,
+      })),
+      (H = p(function (e, t) {
+        let n = o(null),
+          r = t ?? n,
+          i = re(),
+          { activeLocale: a, setLocale: s } = E(),
+          {
+            style: c,
+            className: l,
+            layoutId: u,
+            variant: d,
+            children: p,
+            ...m
+          } = V(e),
+          [h, ee] = be(d, j, !1),
+          _ = T(N),
+          v = () => !M() || h === `x9EbuxsIT`;
+        return (
+          he({}),
+          f(ye.Provider, {
+            value: {
+              isLayoutTemplate: !0,
+              primaryVariantId: `cPfWI38v5`,
+              variantClassNames: P,
+            },
+            children: g(ae, {
+              id: u ?? i,
+              children: [
+                f(z, {
+                  value: `:root body { background: var(--token-d469a4a3-0708-4dfe-8498-9b2828796a10, rgb(233, 230, 226)); }`,
+                }),
+                g(ie.div, {
+                  ...m,
+                  className: T(_, `framer-1qhc3uf`, l),
+                  "data-layout-template": !0,
+                  "data-selection": !0,
+                  ref: r,
+                  style: { ...c },
+                  children: [
+                    v() &&
+                      f(me, {
+                        breakpoint: h,
+                        overrides: {
+                          x9EbuxsIT: { height: 800, width: `390px`, y: 0 },
+                        },
+                        children: f(we, {
+                          children: f(ve, {
+                            className: `framer-tfstyy-container hidden-1qhc3uf hidden-fxvzmu`,
+                            "data-framer-layout-hint-center-x": !0,
+                            layoutScroll: !0,
+                            nodeId: `io21XKM3h`,
+                            scopeId: `I6WTOQi9n`,
+                            children: f(k, {
+                              AA5f7IDGo: `ojHezOueI`,
+                              CYUI5JhJV: `ojHezOueI`,
+                              height: `100%`,
+                              id: `io21XKM3h`,
+                              layoutId: `io21XKM3h`,
+                              NU6imwlus: `oHT1CeHq0`,
+                              ow5Zzl3Jp: `pf6bmfBDd`,
+                              ryZfUIC9F: `ojHezOueI`,
+                              style: { width: `100%` },
+                              tDdmPHKdy: `pf6bmfBDd`,
+                              variant: `mAsA1Xz4Q`,
+                              width: `100%`,
+                              wLzFO013k: `QAYVJWMPI`,
+                              zXg53Fhkc: `pf6bmfBDd`,
+                            }),
+                          }),
+                        }),
+                      }),
+                    p,
+                    f(`div`, { className: `framer-l02eg4` }),
+                  ],
+                }),
+                f(`div`, { id: `template-overlay` }),
+              ],
+            }),
+          })
+        );
+      })),
+      (U = (e) =>
+        e === C.canvas || e === C.export
+          ? [
+              ...L,
+              ...I.flatMap((e) => {
+                let t = F[e];
+                return F[e].map((e) => `${t} {${e}}`);
+              }),
+            ]
+          : [...L, ...I.map((e) => `@media ${R[e]} { ${F[e].join(` `)} }`)]),
+      (W = Ae(H, U, `framer-50OQE`)),
+      (G = W),
+      (W.displayName = `Template`),
+      (W.defaultProps = { height: 800, width: 1200 }),
+      se(W, [{ explicitInter: !0, fonts: [] }, ...A], {
+        supportsExplicitInterCodegen: !0,
+      }));
+  });
+function Pe({ webPageId: e, children: t, style: n, ...r }) {
+  let i = {}[e] ?? {};
+  switch (e) {
+    case `augiA20Il`:
+    case `p33r2r9HB`:
+    case `M4d8ob2Mz`:
+    case `HSsFOaCVN`:
+    case `Fmy_DVcvW`:
+    case `IubclNn4w`:
+      return b(G, { ...i, key: `Template1`, style: n }, t(!0));
+    default:
+      return t(!1);
+  }
+}
+function Fe(e) {
+  switch (e) {
+    case `augiA20Il`:
+    case `p33r2r9HB`:
+    case `M4d8ob2Mz`:
+    case `HSsFOaCVN`:
+    case `Fmy_DVcvW`:
+    case `IubclNn4w`:
+      return [
+        { hash: `1qhc3uf`, mediaQuery: `(min-width: 1200px)` },
+        {
+          hash: `fxvzmu`,
+          mediaQuery: `(min-width: 810px) and (max-width: 1199.98px)`,
+        },
+        { hash: `2hwz5n`, mediaQuery: `(max-width: 809.98px)` },
+      ];
+    default:
+      return;
+  }
+}
+async function K({
+  routeId: e,
+  pathVariables: r,
+  localeId: c,
+  collectionItemId: l,
+}) {
+  let u = J[e].page.preload(),
+    d = b(pe, {
+      children: b(O, {
+        children: b(xe, {
+          children: b(Oe, {
+            isWebsite: !0,
+            environment: `site`,
+            routeId: e,
+            pathVariables: r,
+            routes: J,
+            collectionUtils: X,
+            framerSiteId: Z,
+            notFoundPage: w(
+              () =>
+                import(
+                  `./DJtOYmnEElRoX5wNErgjp-hqtQMCmrexD4fH6klrlfM.Kzu5MwsP.mjs`
+                ),
+            ),
+            isReducedMotion: !0,
+            localeId: c,
+            locales: Y,
+            preserveQueryParams: !0,
+            siteCanonicalURL: `https://danielcross.framer.website`,
+            EditorBar:
+              x === void 0
+                ? void 0
+                : (() => {
+                    if ($) {
+                      console.log(
+                        `[Framer On-Page Editing] Unavailable because navigator is bot`,
+                      );
+                      return;
+                    }
+                    return w(async () => {
+                      x.__framer_editorBarDependencies = {
+                        __version: 3,
+                        framer: {
+                          useCurrentRoute: Ee,
+                          useLocaleInfo: E,
+                          useRouter: _e,
+                        },
+                        react: {
+                          createElement: b,
+                          Fragment: s,
+                          memo: m,
+                          useCallback: i,
+                          useEffect: a,
+                          useRef: o,
+                          useState: n,
+                          useLayoutEffect: t,
+                        },
+                        "react-dom": { createPortal: h },
+                      };
+                      let { createEditorBar: e } = await import(
+                        `https://framer.com/edit/init.mjs`
+                      );
+                      return { default: e() };
+                    });
+                  })(),
+            adaptLayoutToTextDirection: !1,
+            LayoutTemplate: Pe,
+            loadSnippetsModule: new Ce(
+              () =>
+                import(
+                  `./B3lQOP5VqOpT_lkEwmXkQEorGX3QuXlryZPL3p2xc7U.C4eIKz3_.mjs`
+                ),
+            ),
+            initialCollectionItemId: l,
+          }),
+          value: {
+            autobahnNavigation: !0,
+            disableCustomCode: !1,
+            editorBarDisableFrameAncestorsSecurity: !1,
+            motionDivToDiv: !1,
+            onPageLocalizationSupport: !0,
+            onPageMoveTool: !0,
+            synchronousNavigationOnDesktop: !1,
+            yieldOnTap: !1,
+          },
+        }),
+      }),
+      value: { routes: {} },
+    });
+  return (await u, d);
+}
+function Ie() {
+  Q && x.__framer_events.push(arguments);
+}
+async function q(e, t) {
+  function n(e, t, n = !0) {
+    if (e.caught || x.__framer_hadFatalError) return;
+    let r = t?.componentStack;
+    if (n) {
+      if (
+        (console.warn(
+          `Caught a recoverable error. The site is still functional, but might have some UI flickering or degraded page load performance. If you are the author of this website, update external components and check recently added custom code or code overrides to fix the following server/client mismatches:
+`,
+          e,
+          r,
+        ),
+        Math.random() > 0.01)
+      )
+        return;
+    } else
+      console.error(
+        `Caught a fatal error. Please report the following to the Framer team via https://www.framer.com/contact/:
+`,
+        e,
+        r,
+      );
+    Ie(
+      n ? `published_site_load_recoverable_error` : `published_site_load_error`,
+      {
+        message: String(e),
+        componentStack: r,
+        stack: r
+          ? void 0
+          : e instanceof Error && typeof e.stack == `string`
+            ? e.stack
+            : null,
+      },
+    );
+  }
+  try {
+    let r, i, a, o, s;
+    if (e)
+      ((s = JSON.parse(t.dataset.framerHydrateV2)),
+        (r = s.routeId),
+        (i = s.localeId),
+        (a = s.pathVariables),
+        (o = s.breakpoints),
+        (r = S(J, r)));
+    else {
+      S(J, void 0);
+      let e = performance
+        .getEntriesByType(`navigation`)[0]
+        ?.serverTiming?.find((e) => e.name === `route`)?.description;
+      if (e) {
+        let t = new URLSearchParams(e);
+        ((r = t.get(`id`)), (i = t.get(`locale`)));
+        for (let [e, n] of t.entries())
+          e.startsWith(`var.`) && ((a ??= {}), (a[e.slice(4)] = n));
+      }
+      if (!r || !i) {
+        let e = ce(J, decodeURIComponent(location.pathname), !0, Y);
+        ((r = e.routeId), (i = e.localeId), (a = e.pathVariables));
+      }
+    }
+    let c = K({
+      routeId: r,
+      localeId: i,
+      pathVariables: a,
+      collectionItemId: s?.collectionItemId,
+    });
+    x !== void 0 &&
+      (async () => {
+        let e = J[r],
+          t = Y.find(({ id: e }) => (i ? e === i : e === `default`)).code,
+          n = s?.collectionItemId ?? null;
+        if (n === null && e?.collectionId && X) {
+          let r = await X[e.collectionId]?.(),
+            [i] = Object.values(a);
+          r &&
+            typeof i == `string` &&
+            (n = (await r.getRecordIdBySlug(i, t || void 0)) ?? null);
+        }
+        let o = Intl.DateTimeFormat().resolvedOptions(),
+          c = o.timeZone,
+          l = o.locale;
+        (await new Promise((e) => {
+          document.prerendering
+            ? document.addEventListener(`prerenderingchange`, e, { once: !0 })
+            : e();
+        }),
+          x.__framer_events.push([
+            `published_site_pageview`,
+            {
+              framerSiteId: Z ?? null,
+              version: 2,
+              routePath: e?.path || `/`,
+              collectionItemId: n,
+              framerLocale: t || null,
+              webPageId: e?.abTestingVariantId ?? r,
+              abTestId: e?.abTestId,
+              referrer: document.referrer || null,
+              url: x.location.href,
+              hostname: x.location.hostname || null,
+              pathname: x.location.pathname || null,
+              hash: x.location.hash || null,
+              search: x.location.search || null,
+              timezone: c,
+              locale: l,
+            },
+            `eager`,
+          ]),
+          await de({
+            priority: `background`,
+            ensureContinueBeforeUnload: !0,
+            continueAfter: `paint`,
+          }),
+          document.dispatchEvent(
+            new CustomEvent(`framer:pageview`, {
+              detail: { framerLocale: t || null },
+            }),
+          ));
+      })();
+    let l = await c;
+    e
+      ? (ke(`framer-rewrite-breakpoints`, () => {
+          (De(o), x.__framer_onRewriteBreakpoints?.(o));
+        }),
+        ($ ? (e) => e() : u)(() => {
+          (fe(), Te(), y(t, l, { onRecoverableError: n }));
+        }))
+      : ne(t, { onRecoverableError: n }).render(l);
+  } catch (e) {
+    throw (n(e, void 0, !1), e);
+  }
+}
+var J, Y, X, Z, Q, $;
+e(() => {
+  if (
+    (r(),
+    D(),
+    l(),
+    d(),
+    _(),
+    Ne(),
+    (J = {
+      augiA20Il: {
+        elements: {},
+        page: w(
+          () =>
+            import(
+              `./Gevj_uphHwW3-uCmxeuUzhFGydFGDqmbP1cq6LIPRIs.j9I0Ngbc.mjs`
+            ),
+        ),
+        path: `/`,
+      },
+      p33r2r9HB: {
+        elements: {},
+        page: w(
+          () =>
+            import(
+              `./phJyEKLrGe40zw4oNZjOAjJrB_89xvIHJWesk_iAbNw.BBp38RvO.mjs`
+            ),
+        ),
+        path: `/about`,
+      },
+      M4d8ob2Mz: {
+        elements: {},
+        page: w(
+          () =>
+            import(
+              `./xmZqwZHoZVxP9aFXWBxlWphsrn4PJafy2XcF90KyjiY.JNdCaIly.mjs`
+            ),
+        ),
+        path: `/contact`,
+      },
+      HSsFOaCVN: {
+        elements: {},
+        page: w(
+          () =>
+            import(
+              `./mD1YRt2OQZDSpoyBNHQIN_c2YveR7bINVg6N-K_Vtq0.D_O5jzEM.mjs`
+            ),
+        ),
+        path: `/work`,
+      },
+      Fmy_DVcvW: {
+        elements: {},
+        page: w(
+          () =>
+            import(
+              `./DJtOYmnEElRoX5wNErgjp-hqtQMCmrexD4fH6klrlfM.Kzu5MwsP.mjs`
+            ),
+        ),
+        path: `/404`,
+      },
+      IubclNn4w: {
+        collectionId: `qGYp3qnZo`,
+        elements: {},
+        page: w(
+          () =>
+            import(
+              `./zMDQWE_iY7jGlrKLVhLgiVzJho6GU6sOLxI4ATnQuRM.DtUtDxEr.mjs`
+            ),
+        ),
+        path: `/work/:YFcmX7KTe`,
+      },
+    }),
+    (Y = [
+      {
+        code: `en`,
+        id: `default`,
+        name: `English`,
+        slug: ``,
+        textDirection: `ltr`,
+      },
+    ]),
+    (X = {
+      qGYp3qnZo: async () =>
+        (
+          await import(
+            `./KJzA5tVG241_sgCNp-UZb9USPdZrzapdo6sVsiZHry8.BH5ftgwh.mjs`
+          )
+        )?.utils,
+    }),
+    (Z = `3ae43041a4a51f93f610bf27f843f71dd8761f96f7a2baf2fb21519464263ce5`),
+    (Q = typeof document < `u`),
+    ($ =
+      Q &&
+      /bot|-google|google-|yandex|ia_archiver|crawl|spider/iu.test(
+        c.userAgent,
+      )),
+    Q)
+  ) {
+    ((x.__framer_importFromPackage = (e, t) => () =>
+      b(Se, {
+        error: `Package component not supported: "` + t + `" in "` + e + `"`,
+      })),
+      (x.__framer_events = x.__framer_events || []),
+      ue(),
+      le());
+    let e = document.getElementById(`main`);
+    `framerHydrateV2` in e.dataset ? q(!0, e) : q(!1, e);
+  }
+  (function () {
+    Q &&
+      u(() => {
+        y(
+          document.getElementById(`__framer-badge-container`),
+          b(ee, {}, b(te(() => import(`./PX9hIOIVM.CVsDIj0n.mjs`)))),
+        );
+      });
+  })();
+})();
+export { Fe as getLayoutTemplateBreakpoints, K as getPageRoot };
 //# sourceMappingURL=script_main.C1N3ms9c.mjs.map
