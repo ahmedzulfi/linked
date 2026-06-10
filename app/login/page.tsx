@@ -207,14 +207,11 @@ export default function LoginPage() {
                   className={`button text-sm font-medium outline-none focus:outline-none focus-visible:outline-none transition-all duration-200 button-primary w-full justify-center ${
                     isSubmitting ||
                     (showPasswordStep ? !isPasswordValid : !isEmailValid)
-                      ? "opacity-50 select-none pointer-events-none"
+                      ? "opacity-50"
                       : ""
                   }`}
                   type="submit"
-                  disabled={
-                    isSubmitting ||
-                    (showPasswordStep ? !isPasswordValid : !isEmailValid)
-                  }
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">

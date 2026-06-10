@@ -128,7 +128,7 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   html = replaceAll(html, ">ui/ux designer<", `>${esc(profile.headline)}<`);
 
   // Hero first name
-  const firstName = profile.name.split(" ")[0].toLowerCase();
+  const firstName = profile.name.split(" ")[0];
   html = replaceAll(html, ">daniel<", `>${esc(firstName)}<`);
 
   // About me paragraph
