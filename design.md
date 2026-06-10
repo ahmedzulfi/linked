@@ -217,19 +217,24 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - **Dynamic Real-Time Data Binding:** The SVG animations dynamically map real state variables from the editor (such as active avatar/name on Step 1, projects list on Step 2, confirmed skills on Step 3/4, and job experience nodes on Step 5) to draw the user's actual entered data in real-time.
   - **Customizable Avatar & Portrait Images:** Substitutes the template placeholders with the user's `avatarUrl` (sidebar and layout avatar) and `bannerUrl` / `avatarUrl` (large hero portrait) in both the published page compiler and client-side editor preview.
 
+### User Dashboard Layout (/dashboard)
+The `/dashboard` view presents the portfolio draft manager:
+- **Background Workspace**: Uses a soft-gray background (#F5F5F7) overlaid with a 24px dot-grid pattern and blended ambient mesh blurs (light blue & violet).
+- **Navigation & Sidebar**: Styled as glassmorphic panels. The active state highlights using a spring-physic soft-blue container style with active-press scaling.
+- **Cinematic Hero**: Centered max-width H1 title featuring Satoshi/Geist typography and an inline logo image icon (no more than 2 lines).
+- **Capsule Search**: Rounded search bar with soft focus shadow outlines.
+- **Bento Website Cards Grid**:
+  - Cards arrange in a gapless, responsive grid layout.
+  - Hover states animate: cards translate vertically (-4px) and preview frame content scales up (105%) under smooth easing.
+  - Live indicator: A green pulsating dot (ping + state dot) represents active published subdomains, while drafts display a neutral status dot.
+  - Skeletons: Layout-matched loading cards are shown before data binds.
+
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
 - **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
 - **Julian Mercer:** elegant, warm paper style. Uses a warm background `#FAF8F5`, italic serif typography (`font-serif font-light italic`), monospace metadata tags, and soft dividers.
 - **Link Hunt:** links-in-bio style. Features a centered layout (`max-w-md mx-auto text-center`), large avatar, pill buttons for social accounts with icons, and card containers.
-- **Biobricks**: grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
-
-### Dashboard Layout & Redesign (Anti-Slop Guidelines)
-- **Top Header**: Thin, transparent white header (`bg-white/70 backdrop-blur-xl border-b border-neutral-200/55`) styled for grid alignment with clean, high-contrast actions.
-- **Sidebar**: Frosted-glass look (`bg-neutral-50/20 backdrop-blur-xl border-r border-neutral-200/50`). Custom rounded-lg navigational links, with text and icon hover states shifting colors seamlessly. Primary "New Website" button styled as a bold charcoal CTA button (`bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg transition-transform`).
-- **Search Component**: Clean border input field, pill-shaped (`rounded-xl border border-neutral-200/80 bg-white shadow-xs`), with focus outlines and zero inline style slop.
-- **Website Cards**: Styled as floating elements (`bg-white border border-neutral-200/80 rounded-xl p-3.5 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300`). They embed the compiled live previews inside macOS-style browser mock bezels with traffic control dots, and feature clean status indicators.
-
+- **Biobricks:** grid bento style. Organizes details into modular bricks/cards (`bg-white border border-[#E6E6E6] rounded-2xl p-5`) structured with a clean grid system.
 
 ## Motion & Animation Guidelines
 
