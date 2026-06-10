@@ -42,7 +42,6 @@ export interface ProfileData {
   name: string;
   headline: string;
   location?: string;
-  phone?: string;
   summary: string;
   avatarUrl: string;
   bannerUrl?: string;
@@ -74,8 +73,7 @@ export const TEMPLATES: TemplateMeta[] = [
   {
     id: "daniel-cross",
     name: "Daniel Cross",
-    description:
-      "Premium Framer portfolio template with modern typography and sleek aesthetics.",
+    description: "Premium Framer portfolio template with modern typography and sleek aesthetics.",
     previewBg: "#e9e6e2",
     accent: "#4a3429",
     dark: false,
@@ -113,8 +111,7 @@ export const MOCK_PROFILE: ProfileData = {
       title: "UI Designer",
       company: "Figma",
       duration: "2018 – 2020 · 2 yrs",
-      description:
-        "Early design team hire. Shipped community, plugins, and multiplayer.",
+      description: "Early design team hire. Shipped community, plugins, and multiplayer.",
       logo: "",
     },
   ],
@@ -149,8 +146,7 @@ export const BLANK_PROFILE: ProfileData = {
   headline: "Your Professional Headline",
   location: "Your Location",
   summary: "Write a short bio or summary of your professional background here.",
-  avatarUrl:
-    "https://api.dicebear.com/7.x/initials/svg?seed=User&backgroundColor=8db8ff",
+  avatarUrl: "https://api.dicebear.com/7.x/initials/svg?seed=User&backgroundColor=8db8ff",
   bannerUrl: "",
   connections: "",
   experience: [
@@ -158,19 +154,21 @@ export const BLANK_PROFILE: ProfileData = {
       title: "Your Role",
       company: "Your Company",
       duration: "Duration",
-      description:
-        "Describe your responsibilities and achievements in this role.",
+      description: "Describe your responsibilities and achievements in this role.",
       logo: "",
-    },
+    }
   ],
   education: [
     {
       degree: "Your Degree",
       school: "Your School",
       year: "Year",
-    },
+    }
   ],
-  skills: [{ name: "Skill 1" }, { name: "Skill 2" }],
+  skills: [
+    { name: "Skill 1" },
+    { name: "Skill 2" },
+  ],
   links: [
     { label: "LinkedIn", url: "#", icon: "linkedin" },
     { label: "Website", url: "#", icon: "website" },

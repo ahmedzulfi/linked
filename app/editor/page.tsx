@@ -27,6 +27,7 @@ import {
   FileText,
 } from "lucide-react";
 import ProfilePreview from "./components/ProfilePreview";
+import InlineEditor from "./components/InlineEditor";
 import WizardAnimations from "@/components/WizardAnimations";
 import DomainsPane from "./components/DomainsPane";
 import SettingsPane from "./components/SettingsPane";
@@ -36,9 +37,7 @@ import { UserMenu } from "@/components/UserMenu";
 function UserAvatar() {
   return (
     <div className="w-8 h-8 rounded-full bg-neutral-200 border border-neutral-300 flex items-center justify-center shrink-0 shadow-xs">
-      <span className="text-[10px] font-bold text-neutral-600 uppercase">
-        You
-      </span>
+      <span className="text-[10px] font-bold text-neutral-600 uppercase">You</span>
     </div>
   );
 }
@@ -50,78 +49,33 @@ const navItems: NavItem[] = [
   {
     label: "Home",
     icon: (
-      <svg
-        className="w-[18px] h-[18px]"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
     label: "Design",
     icon: (
-      <svg
-        className="w-[18px] h-[18px]"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
     label: "Domains",
     icon: (
-      <svg
-        className="w-[18px] h-[18px]"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
   {
     label: "Site Settings",
     icon: (
-      <svg
-        className="w-[18px] h-[18px]"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
-        <path
-          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-        />
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
       </svg>
     ),
   },
@@ -143,7 +97,7 @@ const getNotionTagClasses = (name: string) => {
     "bg-blue-50 text-blue-700 border-blue-200/60",
     "bg-indigo-50 text-indigo-700 border-indigo-200/60",
     "bg-pink-50 text-pink-700 border-pink-200/60",
-    "bg-rose-50 text-rose-800 border-rose-200/60",
+    "bg-rose-50 text-rose-800 border-rose-200/60"
   ];
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
@@ -167,7 +121,6 @@ function EditorInner() {
     updateField,
     isDirty,
     resetEdits,
-    createWebsiteWithProfile,
   } = useEditor();
 
   // Navigation Panel tab state (1: Design/Wizard, 2: Domains, 3: Site Settings)
@@ -180,29 +133,18 @@ function EditorInner() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
-  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">(
-    "desktop",
-  );
+  const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">("desktop");
   const [publishing, setPublishing] = useState(false);
   const [optimizing, setOptimizing] = useState(false);
 
   // Form states
-  const [projects, setProjects] = useState<
-    { title: string; description: string; link?: string; image?: string }[]
-  >([]);
+  const [projects, setProjects] = useState<{ title: string; description: string; link?: string; image?: string }[]>([]);
   const [interests, setInterests] = useState("");
   const [skills, setSkills] = useState<{ name: string }[]>([]);
-  const [experience, setExperience] = useState<
-    { title: string; company: string; duration: string; description: string }[]
-  >([]);
-  const [education, setEducation] = useState<
-    { degree: string; school: string; year: string }[]
-  >([]);
+  const [experience, setExperience] = useState<{ title: string; company: string; duration: string; description: string }[]>([]);
   const [subdomain, setSubdomain] = useState("");
   const [checkingSubdomain, setCheckingSubdomain] = useState(false);
-  const [isSubdomainAvailable, setIsSubdomainAvailable] = useState<
-    boolean | null
-  >(null);
+  const [isSubdomainAvailable, setIsSubdomainAvailable] = useState<boolean | null>(null);
 
   // Inline Add states
   const [newProjTitle, setNewProjTitle] = useState("");
@@ -212,13 +154,10 @@ function EditorInner() {
   const [newSkill, setNewSkill] = useState("");
 
   // Free-form editor mode states (Step 9)
-  const [customMessages, setCustomMessages] = useState<
-    { id: string; role: "user" | "assistant"; content: string }[]
-  >([]);
+  const [customMessages, setCustomMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
-  const [editorTab, setEditorTab] = useState<"chat" | "visual">("visual");
-  const [openSection, setOpenSection] = useState<string>("basics");
+  const [designSubTab, setDesignSubTab] = useState<"chat" | "manual">("chat");
 
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -238,17 +177,23 @@ function EditorInner() {
         if (id) {
           await loadWebsite(id);
         } else {
-          // If no id parameter, check if we have a pending scraped/uploaded profile to save
-          const pendingProfileStr = sessionStorage.getItem("linkedpage_profile");
-          if (pendingProfileStr) {
-            try {
-              const pendingProfile = JSON.parse(pendingProfileStr);
-              const newId = await createWebsiteWithProfile(pendingProfile);
-              router.push(`/editor?id=${newId}&onboarding=true`);
-            } catch (err) {
-              console.error("Failed to auto-create website draft from pending profile:", err);
-              router.push("/onboarding");
-            }
+          // Attempt to restore last active website
+          const lastId = sessionStorage.getItem("linkedpage_last_website_id");
+          if (lastId) {
+            router.push(`/editor?id=${lastId}`);
+            return;
+          }
+
+          // Otherwise fetch from database
+          const websRes = await fetch("/api/websites");
+          const websData = await websRes.json();
+          if (websRes.ok && websData.success && websData.websites && websData.websites.length > 0) {
+            // Sort by updatedAt desc to get latest draft
+            const sorted = websData.websites.sort((a: any, b: any) => 
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+            );
+            const latestId = sorted[0].id;
+            router.push(`/editor?id=${latestId}`);
           } else {
             router.push("/onboarding");
           }
@@ -258,25 +203,39 @@ function EditorInner() {
       }
     };
     checkUserAndLoad();
-  }, [id, loadWebsite, router, createWebsiteWithProfile]);
+  }, [id, loadWebsite, router]);
 
-  // Load saved onboarding step from sessionStorage on mount (if in onboarding mode)
+  // Load saved chat history when websiteId is available
+  useEffect(() => {
+    if (!websiteId) return;
+    const fetchChatHistory = async () => {
+      try {
+        const res = await fetch(`/api/chat?websiteId=${websiteId}`);
+        const data = await res.json();
+        if (res.ok && data.success && data.history) {
+          const formatted = data.history.map((msg: any) => ({
+            id: msg.id || String(msg.createdAt),
+            role: msg.role as "user" | "assistant",
+            content: msg.content,
+          }));
+          setCustomMessages(formatted);
+        }
+      } catch (err) {
+        console.error("Failed to load chat history:", err);
+      }
+    };
+    fetchChatHistory();
+  }, [websiteId]);
+
+  // Load saved onboarding step from sessionStorage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const urlParams = new URLSearchParams(window.location.search);
-      const isOnboarding = urlParams.get("onboarding") === "true";
-      if (isOnboarding) {
-        const savedStep = sessionStorage.getItem("webild_onboarding_step");
-        if (savedStep) {
-          const parsed = parseInt(savedStep, 10);
-          if (!isNaN(parsed) && parsed >= 1 && parsed <= 9) {
-            setCurrentStep(parsed);
-            return;
-          }
+      const savedStep = sessionStorage.getItem("webild_onboarding_step");
+      if (savedStep) {
+        const parsed = parseInt(savedStep, 10);
+        if (!isNaN(parsed) && parsed >= 1 && parsed <= 9) {
+          setCurrentStep(parsed);
         }
-        setCurrentStep(1);
-      } else {
-        setCurrentStep(9);
       }
     }
   }, []);
@@ -287,29 +246,6 @@ function EditorInner() {
       sessionStorage.setItem("webild_onboarding_step", currentStep.toString());
     }
   }, [currentStep]);
-
-  // Load saved chat history when websiteId is set/loaded
-  useEffect(() => {
-    if (!websiteId) return;
-    const fetchChatHistory = async () => {
-      try {
-        const res = await fetch(`/api/chat?websiteId=${websiteId}`);
-        const data = await res.json();
-        if (res.ok && data.success && data.history) {
-          setCustomMessages(
-            data.history.map((msg: any) => ({
-              id: msg.id,
-              role: msg.role as "user" | "assistant",
-              content: msg.content,
-            }))
-          );
-        }
-      } catch (err) {
-        console.error("Failed to fetch chat history:", err);
-      }
-    };
-    fetchChatHistory();
-  }, [websiteId]);
 
   // Sync profile data to forms
   useEffect(() => {
@@ -324,23 +260,15 @@ function EditorInner() {
         setSkills(editedProfile.skills);
       }
       if (experience.length === 0 && editedProfile.experience) {
-        setExperience(
-          editedProfile.experience.map((exp) => ({
-            title: exp.title,
-            company: exp.company,
-            duration: exp.duration,
-            description: exp.description || "",
-          })),
-        );
-      }
-      if (education.length === 0 && editedProfile.education) {
-        setEducation(editedProfile.education);
+        setExperience(editedProfile.experience.map(exp => ({
+          title: exp.title,
+          company: exp.company,
+          duration: exp.duration,
+          description: exp.description || ""
+        })));
       }
       if (!subdomain && editedProfile.name) {
-        const slug = editedProfile.name
-          .toLowerCase()
-          .replace(/\s+/g, "")
-          .replace(/[^a-z0-9]/g, "");
+        const slug = editedProfile.name.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9]/g, "");
         setSubdomain(slug);
       }
     }
@@ -355,9 +283,7 @@ function EditorInner() {
     setCheckingSubdomain(true);
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(
-          `/api/websites/subdomain/check?slug=${subdomain}${websiteId ? `&websiteId=${websiteId}` : ""}`,
-        );
+        const res = await fetch(`/api/websites/subdomain/check?slug=${subdomain}${websiteId ? `&websiteId=${websiteId}` : ""}`);
         const data = await res.json();
         if (res.ok && data.success) {
           setIsSubdomainAvailable(data.available);
@@ -422,9 +348,7 @@ function EditorInner() {
   const handlePublish = async () => {
     if (!websiteId) return;
     setPublishing(true);
-    const toastId = toast.loading(
-      "Publishing your professional portfolio page...",
-    );
+    const toastId = toast.loading("Publishing your professional portfolio page...");
     try {
       // 1. Update slug & template preference in DB
       const saveRes = await fetch(`/api/websites/${websiteId}`, {
@@ -512,9 +436,7 @@ function EditorInner() {
   const addSkillTag = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newSkill.trim()) return;
-    if (
-      skills.some((s) => s.name.toLowerCase() === newSkill.trim().toLowerCase())
-    ) {
+    if (skills.some(s => s.name.toLowerCase() === newSkill.trim().toLowerCase())) {
       setNewSkill("");
       return;
     }
@@ -525,7 +447,7 @@ function EditorInner() {
   };
 
   const removeSkillTag = (name: string) => {
-    const updated = skills.filter((s) => s.name !== name);
+    const updated = skills.filter(s => s.name !== name);
     setSkills(updated);
     updateField("skills", updated);
   };
@@ -557,39 +479,6 @@ function EditorInner() {
     updateField("experience", updated);
   };
 
-  const updateProjectItem = (index: number, key: string, value: string) => {
-    const updated = [...projects];
-    updated[index] = { ...updated[index], [key]: value };
-    setProjects(updated);
-    updateField("projects", updated);
-  };
-
-  const addEducationItem = () => {
-    const updated = [
-      ...education,
-      {
-        degree: "New Degree",
-        school: "School Name",
-        year: new Date().getFullYear().toString(),
-      },
-    ];
-    setEducation(updated);
-    updateField("education", updated);
-  };
-
-  const updateEducationItem = (index: number, key: string, value: string) => {
-    const updated = [...education];
-    updated[index] = { ...updated[index], [key]: value };
-    setEducation(updated);
-    updateField("education", updated);
-  };
-
-  const removeEducationItem = (idx: number) => {
-    const updated = education.filter((_, i) => i !== idx);
-    setEducation(updated);
-    updateField("education", updated);
-  };
-
   // Dispatch free-form messages to backend AI route
   const sendChatMessage = async (text?: string) => {
     const msg = text ?? chatInput.trim();
@@ -597,22 +486,13 @@ function EditorInner() {
     if (!text) setChatInput("");
 
     // Append user message bubble to timeline
-    const userMsg = {
-      id: Date.now().toString(),
-      role: "user" as const,
-      content: msg,
-    };
-    setCustomMessages((prev) => [...prev, userMsg]);
+    const userMsg = { id: Date.now().toString(), role: "user" as const, content: msg };
+    setCustomMessages(prev => [...prev, userMsg]);
 
     if (!websiteId) {
-      setCustomMessages((prev) => [
+      setCustomMessages(prev => [
         ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          role: "assistant" as const,
-          content:
-            "No active site loaded. Please select a website from the dashboard first.",
-        },
+        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: "No active site loaded. Please select a website from the dashboard first." }
       ]);
       return;
     }
@@ -630,13 +510,9 @@ function EditorInner() {
       }
 
       // Append assistant text answer
-      setCustomMessages((prev) => [
+      setCustomMessages(prev => [
         ...prev,
-        {
-          id: (Date.now() + 2).toString(),
-          role: "assistant" as const,
-          content: data.reply,
-        },
+        { id: (Date.now() + 2).toString(), role: "assistant" as const, content: data.reply }
       ]);
 
       if (data.template) {
@@ -652,13 +528,9 @@ function EditorInner() {
       // Reload website details to sync latest changes to local context and preview
       await loadWebsite(websiteId);
     } catch (err: any) {
-      setCustomMessages((prev) => [
+      setCustomMessages(prev => [
         ...prev,
-        {
-          id: (Date.now() + 3).toString(),
-          role: "assistant" as const,
-          content: `Error: ${err.message || "Failed to parse AI response."}`,
-        },
+        { id: (Date.now() + 3).toString(), role: "assistant" as const, content: `Error: ${err.message || "Failed to parse AI response."}` }
       ]);
     } finally {
       setIsThinking(false);
@@ -677,9 +549,7 @@ function EditorInner() {
     } else if (fieldName === "experience") {
       setCurrentStep(5);
     } else {
-      toast.info(
-        `Select the options in the chat flow to modify your ${fieldName}.`,
-      );
+      toast.info(`Select the options in the chat flow to modify your ${fieldName}.`);
     }
   };
 
@@ -689,6 +559,7 @@ function EditorInner() {
 
   return (
     <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
+      
       {/* ── Left Sidebar (Collapsible hover style) ── */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
         <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_32px_#ffff] py-4">
@@ -696,28 +567,12 @@ function EditorInner() {
             {/* Project/Brand logo icon */}
             <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
               <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10 overflow-hidden p-1.5">
-                <img
-                  src="/logoicon.png"
-                  alt="Logo"
-                  className="w-full h-full object-contain"
-                />
+                <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
-                <span className="font-medium text-[#2A2A2F] text-[15px] truncate">
-                  {profileName}
-                </span>
-                <svg
-                  className="w-5 h-5 text-[#171717]/60"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M19 9l-7 7-7-7"
-                  />
+                <span className="font-medium text-[#2A2A2F] text-[15px] truncate">{profileName}</span>
+                <svg className="w-5 h-5 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>
@@ -748,9 +603,7 @@ function EditorInner() {
                   <div className="w-5 h-5 flex items-center justify-center shrink-0">
                     {item.icon}
                   </div>
-                  <span
-                    className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}
-                  >
+                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
                     {item.label}
                   </span>
                 </button>
@@ -763,11 +616,7 @@ function EditorInner() {
             <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
               <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden text-left mt-2">
                 <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
-                  ONLY {process.env.NEXT_PUBLIC_UPGRADE_PRICE || "$16"} to
-                  <br />
-                  unlock Premium
-                  <br />
-                  Features
+                  ONLY {process.env.NEXT_PUBLIC_UPGRADE_PRICE || "$16"} to<br />unlock Premium<br />Features
                 </p>
                 <button
                   onClick={() => toast.info("Premium plans unlocking soon!")}
@@ -785,24 +634,9 @@ function EditorInner() {
                 className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
               >
                 <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                  <svg
-                    className="w-[18px] h-[18px]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
                 <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
@@ -810,24 +644,12 @@ function EditorInner() {
                 </span>
               </button>
               <button
-                onClick={() =>
-                  toast.info("Check back later for help articles.")
-                }
+                onClick={() => toast.info("Check back later for help articles.")}
                 className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
               >
                 <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                  <svg
-                    className="w-[18px] h-[18px]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
@@ -846,18 +668,8 @@ function EditorInner() {
                 className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/80 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
               >
                 <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                  <svg
-                    className="w-[18px] h-[18px]"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 4v16m8-8H4"
-                    />
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
                   </svg>
                 </div>
                 <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
@@ -870,18 +682,14 @@ function EditorInner() {
       </div>
 
       {/* ── Left Column Panel Switcher based on activeNav ── */}
-
+      
       {/* 1. Design / AI Onboarding Wizard Panel (510px width) */}
       {activeNav === 1 && (
         <aside className="w-[510px] shrink-0 h-full bg-white border-r border-[#E6E6E6]/60 flex flex-col justify-between shadow-xs relative z-20 font-inter">
           {/* Title Header */}
           <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0 bg-white">
             <div className="flex items-center gap-2">
-              <img
-                src="/logo.png"
-                alt="LinkedPage"
-                className="h-6 w-auto object-contain"
-              />
+              <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
               <div className="w-px h-3 bg-black/10" />
               <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
                 {profileName}
@@ -900,32 +708,52 @@ function EditorInner() {
             </div>
           </div>
 
+          {currentStep === 9 && (
+            <div className="px-6 py-2.5 border-b border-neutral-100 bg-neutral-50/50 flex gap-2 select-none shrink-0">
+              <button
+                onClick={() => setDesignSubTab("chat")}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 active:scale-[0.97] ${
+                  designSubTab === "chat"
+                    ? "bg-white text-neutral-900 shadow-sm border border-neutral-200"
+                    : "text-neutral-500 hover:text-neutral-900 border border-transparent"
+                }`}
+              >
+                💬 AI Chat Assistant
+              </button>
+              <button
+                onClick={() => setDesignSubTab("manual")}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 active:scale-[0.97] ${
+                  designSubTab === "manual"
+                    ? "bg-white text-neutral-900 shadow-sm border border-neutral-200"
+                    : "text-neutral-500 hover:text-neutral-900 border border-transparent"
+                }`}
+              >
+                ✍️ Manual Editor
+              </button>
+            </div>
+          )}
+
           {/* Scrollable Wizard History */}
-          <div
-            className="flex-1 overflow-y-auto px-6 py-4 space-y-6"
-            style={{ scrollbarWidth: "none" }}
-          >
+          {currentStep === 9 && designSubTab === "manual" ? (
+            <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
+              {editedProfile && (
+                <InlineEditor profile={editedProfile} onChange={updateField} />
+              )}
+            </div>
+          ) : (
+            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" style={{ scrollbarWidth: "none" }}>
+            
             {/* Step 1 Welcome Chat Bubble */}
             {currentStep >= 1 && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Hello{editedProfile?.name ? `, ${editedProfile.name}` : ""}!
-                  Welcome to Webild. I've successfully initialized your profile
-                  details using your LinkedIn profile.
-                  <br />
-                  <br />
-                  Let's review and customize your portfolio details
-                  step-by-step.
+                  Hello{editedProfile?.name ? `, ${editedProfile.name}` : ""}! Welcome to Webild. I've successfully initialized your profile details using your LinkedIn profile.
+                  <br/><br/>
+                  Let's review and customize your portfolio details step-by-step.
                 </div>
               </div>
             )}
@@ -945,19 +773,11 @@ function EditorInner() {
             {currentStep >= 2 && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  First, let's review your{" "}
-                  <strong>Projects & Portfolio Highlights</strong>. Showcase
-                  your best apps, portfolios, or articles.
+                  First, let's review your <strong>Projects & Portfolio Highlights</strong>. Showcase your best apps, portfolios, or articles.
                 </div>
               </div>
             )}
@@ -977,19 +797,11 @@ function EditorInner() {
             {currentStep >= 3 && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Got it. Next, let's document your{" "}
-                  <strong>Core Interests and Career Goals</strong> to
-                  personalize your profile bio.
+                  Got it. Next, let's document your <strong>Core Interests and Career Goals</strong> to personalize your profile bio.
                 </div>
               </div>
             )}
@@ -1009,18 +821,11 @@ function EditorInner() {
             {currentStep >= 4 && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Excellent. Let's adjust your{" "}
-                  <strong>Core Skills & Tools</strong> tags.
+                  Excellent. Let's adjust your <strong>Core Skills & Tools</strong> tags.
                 </div>
               </div>
             )}
@@ -1040,18 +845,11 @@ function EditorInner() {
             {currentStep >= 5 && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Perfect. Finally, let's verify your{" "}
-                  <strong>Work Experience timeline</strong>.
+                  Perfect. Finally, let's verify your <strong>Work Experience timeline</strong>.
                 </div>
               </div>
             )}
@@ -1071,14 +869,8 @@ function EditorInner() {
             {currentStep === 6 && optimizing && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain animate-pulse"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black animate-pulse">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain animate-pulse" />
+                  <span className="font-semibold text-[13.5px] text-black animate-pulse">Webild</span>
                 </div>
                 <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center gap-2 text-xs font-semibold text-neutral-750">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
@@ -1090,22 +882,13 @@ function EditorInner() {
             {currentStep >= 6 && !optimizing && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  I've run my AI copy refinement engine on your bio and headline
-                  to make them more impactful and professional.
-                  <br />
-                  <br />
-                  Please review the changes below and adjust them to your
-                  liking.
+                  I've run my AI copy refinement engine on your bio and headline to make them more impactful and professional.
+                  <br/><br/>
+                  Please review the changes below and adjust them to your liking.
                 </div>
               </div>
             )}
@@ -1125,21 +908,13 @@ function EditorInner() {
             {currentStep >= 7 && (
               <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
                 <div className="flex items-center gap-2 select-none">
-                  <img
-                    src="/logoicon.png"
-                    alt="Logo"
-                    className="h-5 w-auto object-contain"
-                  />
-                  <span className="font-semibold text-[13.5px] text-black">
-                    Webild
-                  </span>
+                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
                 </div>
                 <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
                   AI optimization finished! I've polished your text copy.
-                  <br />
-                  <br />
-                  Now, please **select one of the 4 Framer-inspired template
-                  styles** below to apply your design theme.
+                  <br/><br/>
+                  Now, please **select one of the 4 Framer-inspired template styles** below to apply your design theme.
                 </div>
               </div>
             )}
@@ -1158,603 +933,65 @@ function EditorInner() {
             {/* Free-form chat transition separator & timeline (Step 9) */}
             {currentStep === 9 && (
               <>
-                {/* Tab selector at top of Step 9 */}
-                <div className="flex items-center bg-[#F3F3F5] rounded-xl p-1 mb-4 select-none">
-                  <button
-                    onClick={() => setEditorTab("chat")}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                      editorTab === "chat"
-                        ? "bg-white text-black shadow-sm"
-                        : "text-neutral-500 hover:text-black"
-                    }`}
-                  >
-                    AI Chat Assistant
-                  </button>
-                  <button
-                    onClick={() => setEditorTab("visual")}
-                    className={`flex-1 py-1.5 text-xs font-semibold rounded-lg transition-all ${
-                      editorTab === "visual"
-                        ? "bg-white text-black shadow-sm"
-                        : "text-neutral-500 hover:text-black"
-                    }`}
-                  >
-                    Visual Editor
-                  </button>
+                <div className="flex items-center gap-2 py-4 select-none">
+                  <div className="h-px bg-neutral-100 flex-1" />
+                  <span className="text-[10.5px] font-bold text-neutral-400 uppercase tracking-widest font-mono">Free-Form Chat Editor</span>
+                  <div className="h-px bg-neutral-100 flex-1" />
                 </div>
 
-                {editorTab === "chat" ? (
-                  <>
-                    <div className="flex items-center gap-2 py-4 select-none">
-                      <div className="h-px bg-neutral-100 flex-1" />
-                      <span className="text-[10.5px] font-bold text-neutral-400 uppercase tracking-widest font-mono">
-                        Free-Form Chat Editor
-                      </span>
-                      <div className="h-px bg-neutral-100 flex-1" />
-                    </div>
+                {/* Setup complete assistant message */}
+                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-300">
+                  <div className="flex items-center gap-2 select-none">
+                    <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                    <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                  </div>
+                  <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
+                    Setup complete! Your website is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or swap templates. What would you like to adjust?
+                  </div>
+                </div>
 
-                    {/* Setup complete assistant message */}
-                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-300">
-                      <div className="flex items-center gap-2 select-none">
-                        <img
-                          src="/logoicon.png"
-                          alt="Logo"
-                          className="h-5 w-auto object-contain"
-                        />
-                        <span className="font-semibold text-[13.5px] text-black">
-                          Webild
-                        </span>
-                      </div>
-                      <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                        Setup complete! Your website is ready. Tell me what you'd
-                        like to change — I can update your headline, summary,
-                        skills, links, or swap templates. What would you like to
-                        adjust?
-                      </div>
-                    </div>
-
-                    {/* Custom chat history messages */}
-                    {customMessages.map((msg) => (
-                      <div key={msg.id} className="w-full flex flex-col gap-2.5">
-                        {msg.role === "user" ? (
-                          <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                            <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                              <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                                {msg.content}
-                              </p>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                            <div className="flex items-center gap-2 select-none">
-                              <img
-                                src="/logoicon.png"
-                                alt="Logo"
-                                className="h-5 w-auto object-contain"
-                              />
-                              <span className="font-semibold text-[13.5px] text-black">
-                                Webild
-                              </span>
-                            </div>
-                            <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal whitespace-pre-wrap">
-                              {msg.content}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-
-                    {/* Thinking / Dots loader */}
-                    {isThinking && (
-                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
-                        <div className="flex items-center gap-2 select-none">
-                          <img
-                            src="/logoicon.png"
-                            alt="Logo"
-                            className="h-5 w-auto object-contain"
-                          />
-                          <span className="font-semibold text-[13.5px] text-black">
-                            Webild
-                          </span>
+                {/* Custom chat history messages */}
+                {customMessages.map((msg) => (
+                  <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                    {msg.role === "user" ? (
+                      <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                        <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                          <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
+                            {msg.content}
+                          </p>
                         </div>
-                        <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
-                          <div className="flex items-center gap-[3px] px-1 py-0.5">
-                            {[0, 1, 2].map((i) => (
-                              <div
-                                key={i}
-                                className="w-[5px] h-[5px] rounded-full bg-[#2A2A2F]/40 animate-bounce"
-                                style={{ animationDelay: `${i * 0.18}s` }}
-                              />
-                            ))}
-                          </div>
+                      </div>
+                    ) : (
+                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                        <div className="flex items-center gap-2 select-none">
+                          <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                          <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                        </div>
+                        <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal whitespace-pre-wrap">
+                          {msg.content}
                         </div>
                       </div>
                     )}
-                  </>
-                ) : (
-                  /* Visual Editor Form panels */
-                  <div className="w-full space-y-4 animate-in fade-in duration-200 text-left">
-                    {/* Collapsible basics */}
-                    <div className="border border-neutral-200/60 rounded-xl overflow-hidden bg-white shadow-xs">
-                      <button
-                        onClick={() => setOpenSection(openSection === "basics" ? "" : "basics")}
-                        className="w-full px-4 py-3 flex items-center justify-between font-semibold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100/60 transition-colors"
-                      >
-                        <span>Profile Basics</span>
-                        <span>{openSection === "basics" ? "▲" : "▼"}</span>
-                      </button>
-                      {openSection === "basics" && editedProfile && (
-                        <div className="p-4 space-y-3.5 border-t border-neutral-100">
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Full Name</label>
-                            <input
-                              type="text"
-                              value={editedProfile.name || ""}
-                              onChange={(e) => updateField("name", e.target.value)}
-                              className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
-                            <input
-                              type="text"
-                              value={editedProfile.headline || ""}
-                              onChange={(e) => updateField("headline", e.target.value)}
-                              className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                            />
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
-                            <textarea
-                              value={editedProfile.summary || ""}
-                              onChange={(e) => updateField("summary", e.target.value)}
-                              rows={4}
-                              className="w-full text-xs p-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800 resize-none leading-relaxed"
-                            />
-                          </div>
-                        </div>
-                      )}
+                  </div>
+                ))}
+
+                {/* Thinking / Dots loader */}
+                {isThinking && (
+                  <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
+                    <div className="flex items-center gap-2 select-none">
+                      <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                      <span className="font-semibold text-[13.5px] text-black">Webild</span>
                     </div>
-
-                    {/* Collapsible Contact & Socials */}
-                    <div className="border border-neutral-200/60 rounded-xl overflow-hidden bg-white shadow-xs">
-                      <button
-                        onClick={() => setOpenSection(openSection === "contact" ? "" : "contact")}
-                        className="w-full px-4 py-3 flex items-center justify-between font-semibold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100/60 transition-colors"
-                      >
-                        <span>Contact & Social Links</span>
-                        <span>{openSection === "contact" ? "▲" : "▼"}</span>
-                      </button>
-                      {openSection === "contact" && editedProfile && (
-                        <div className="p-4 space-y-3.5 border-t border-neutral-100">
-                          <div className="grid grid-cols-2 gap-3">
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Email</label>
-                              <input
-                                type="email"
-                                placeholder="hello@example.com"
-                                value={
-                                  editedProfile.links
-                                    .find((l) => l.icon === "email")
-                                    ?.url.replace("mailto:", "") || ""
-                                }
-                                onChange={(e) => {
-                                  const next = editedProfile.links.filter((l) => l.icon !== "email");
-                                  if (e.target.value)
-                                    next.push({
-                                      label: "Email",
-                                      url: `mailto:${e.target.value}`,
-                                      icon: "email",
-                                    });
-                                  updateField("links", next);
-                                }}
-                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Phone</label>
-                              <input
-                                type="tel"
-                                placeholder="+1 555 000 0000"
-                                value={editedProfile.phone || ""}
-                                onChange={(e) => updateField("phone", e.target.value)}
-                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Location</label>
-                              <input
-                                type="text"
-                                placeholder="New York, USA"
-                                value={editedProfile.location || ""}
-                                onChange={(e) => updateField("location", e.target.value)}
-                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">LinkedIn URL</label>
-                              <input
-                                type="url"
-                                placeholder="https://linkedin.com/in/..."
-                                value={
-                                  editedProfile.links.find((l) => l.icon === "linkedin")?.url || ""
-                                }
-                                onChange={(e) => {
-                                  const next = editedProfile.links.filter((l) => l.icon !== "linkedin");
-                                  if (e.target.value)
-                                    next.push({
-                                      label: "LinkedIn",
-                                      url: e.target.value,
-                                      icon: "linkedin",
-                                    });
-                                  updateField("links", next);
-                                }}
-                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Twitter / X URL</label>
-                              <input
-                                type="url"
-                                placeholder="https://x.com/..."
-                                value={
-                                  editedProfile.links.find((l) => l.icon === "twitter")?.url || ""
-                                }
-                                onChange={(e) => {
-                                  const next = editedProfile.links.filter((l) => l.icon !== "twitter");
-                                  if (e.target.value)
-                                    next.push({
-                                      label: "Twitter",
-                                      url: e.target.value,
-                                      icon: "twitter",
-                                    });
-                                  updateField("links", next);
-                                }}
-                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">GitHub URL</label>
-                              <input
-                                type="url"
-                                placeholder="https://github.com/..."
-                                value={
-                                  editedProfile.links.find((l) => l.icon === "github")?.url || ""
-                                }
-                                onChange={(e) => {
-                                  const next = editedProfile.links.filter((l) => l.icon !== "github");
-                                  if (e.target.value)
-                                    next.push({
-                                      label: "GitHub",
-                                      url: e.target.value,
-                                      icon: "github",
-                                    });
-                                  updateField("links", next);
-                                }}
-                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                              />
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Profile Photo URL</label>
-                            <input
-                              type="url"
-                              placeholder="https://example.com/photo.jpg"
-                              value={editedProfile.avatarUrl || ""}
-                              onChange={(e) => updateField("avatarUrl", e.target.value)}
-                              className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white text-neutral-800"
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Collapsible Skills */}
-                    <div className="border border-neutral-200/60 rounded-xl overflow-hidden bg-white shadow-xs">
-                      <button
-                        onClick={() => setOpenSection(openSection === "skills" ? "" : "skills")}
-                        className="w-full px-4 py-3 flex items-center justify-between font-semibold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100/60 transition-colors"
-                      >
-                        <span>Core Skills</span>
-                        <span>{openSection === "skills" ? "▲" : "▼"}</span>
-                      </button>
-                      {openSection === "skills" && (
-                        <div className="p-4 space-y-4 border-t border-neutral-100">
-                          <div className="flex flex-wrap gap-1.5 p-3 bg-neutral-50/30 border border-neutral-200/60 rounded-xl min-h-[70px]">
-                            {skills.map((skill, idx) => {
-                              const tagColor = getNotionTagClasses(skill.name);
-                              return (
-                                <span
-                                  key={idx}
-                                  className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor}`}
-                                >
-                                  {skill.name}
-                                  <button
-                                    onClick={() => removeSkillTag(skill.name)}
-                                    className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-900 ml-0.5"
-                                    style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
-                                  >
-                                    ×
-                                  </button>
-                                </span>
-                              );
-                            })}
-                          </div>
-                          <form onSubmit={addSkillTag} className="flex gap-2">
-                            <input
-                              type="text"
-                              placeholder="Add a skill..."
-                              value={newSkill}
-                              onChange={(e) => setNewSkill(e.target.value)}
-                              className="flex-1 h-10 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white"
-                            />
-                            <button
-                              type="submit"
-                              className="px-4 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl active:scale-[0.97]"
-                            >
-                              Add
-                            </button>
-                          </form>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Collapsible Work Experience */}
-                    <div className="border border-neutral-200/60 rounded-xl overflow-hidden bg-white shadow-xs">
-                      <button
-                        onClick={() => setOpenSection(openSection === "experience" ? "" : "experience")}
-                        className="w-full px-4 py-3 flex items-center justify-between font-semibold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100/60 transition-colors"
-                      >
-                        <span>Work Experience</span>
-                        <span>{openSection === "experience" ? "▲" : "▼"}</span>
-                      </button>
-                      {openSection === "experience" && (
-                        <div className="p-4 space-y-4 border-t border-neutral-100">
-                          <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
-                            {experience.map((exp, idx) => (
-                              <div key={idx} className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative">
-                                <button
-                                  onClick={() => removeExperienceItem(idx)}
-                                  className="text-neutral-400 hover:text-red-600 bg-white border border-neutral-200/40 p-1.5 rounded-lg absolute right-2.5 top-2.5 active:scale-[0.95]"
-                                  title="Remove experience"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                                <div className="grid grid-cols-2 gap-2.5">
-                                  <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
-                                    <input
-                                      type="text"
-                                      value={exp.title}
-                                      onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                                      className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                    />
-                                  </div>
-                                  <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Company</label>
-                                    <input
-                                      type="text"
-                                      value={exp.company}
-                                      onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                                      className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Duration</label>
-                                  <input
-                                    type="text"
-                                    value={exp.duration}
-                                    onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                                    className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Responsibilities</label>
-                                  <textarea
-                                    value={exp.description}
-                                    rows={2}
-                                    onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                                    className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl bg-white resize-none leading-relaxed"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          <button
-                            onClick={addExperienceItem}
-                            className="w-full h-10 border border-dashed border-neutral-200 hover:border-neutral-350 text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1 bg-neutral-50/20 hover:bg-neutral-50 rounded-xl"
-                          >
-                            + Add Experience Item
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Collapsible Education */}
-                    <div className="border border-neutral-200/60 rounded-xl overflow-hidden bg-white shadow-xs">
-                      <button
-                        onClick={() => setOpenSection(openSection === "education" ? "" : "education")}
-                        className="w-full px-4 py-3 flex items-center justify-between font-semibold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100/60 transition-colors"
-                      >
-                        <span>Education</span>
-                        <span>{openSection === "education" ? "▲" : "▼"}</span>
-                      </button>
-                      {openSection === "education" && (
-                        <div className="p-4 space-y-4 border-t border-neutral-100">
-                          <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
-                            {education.map((edu, idx) => (
-                              <div key={idx} className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative">
-                                <button
-                                  onClick={() => removeEducationItem(idx)}
-                                  className="text-neutral-400 hover:text-red-600 bg-white border border-neutral-200/40 p-1.5 rounded-lg absolute right-2.5 top-2.5 active:scale-[0.95]"
-                                  title="Remove education"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                                <div className="grid grid-cols-2 gap-2.5">
-                                  <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Degree / Major</label>
-                                    <input
-                                      type="text"
-                                      value={edu.degree}
-                                      onChange={(e) => updateEducationItem(idx, "degree", e.target.value)}
-                                      className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                    />
-                                  </div>
-                                  <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">School / University</label>
-                                    <input
-                                      type="text"
-                                      value={edu.school}
-                                      onChange={(e) => updateEducationItem(idx, "school", e.target.value)}
-                                      className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Year / Class Of</label>
-                                  <input
-                                    type="text"
-                                    value={edu.year}
-                                    onChange={(e) => updateEducationItem(idx, "year", e.target.value)}
-                                    className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                  />
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                          <button
-                            onClick={addEducationItem}
-                            className="w-full h-10 border border-dashed border-neutral-200 hover:border-neutral-350 text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1 bg-neutral-50/20 hover:bg-neutral-50 rounded-xl"
-                          >
-                            + Add Education Item
-                          </button>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Collapsible Projects */}
-                    <div className="border border-neutral-200/60 rounded-xl overflow-hidden bg-white shadow-xs">
-                      <button
-                        onClick={() => setOpenSection(openSection === "projects" ? "" : "projects")}
-                        className="w-full px-4 py-3 flex items-center justify-between font-semibold text-xs text-neutral-800 bg-neutral-50 hover:bg-neutral-100/60 transition-colors"
-                      >
-                        <span>Projects</span>
-                        <span>{openSection === "projects" ? "▲" : "▼"}</span>
-                      </button>
-                      {openSection === "projects" && (
-                        <div className="p-4 space-y-4 border-t border-neutral-100">
-                          <div className="space-y-3.5 max-h-80 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
-                            {projects.map((proj, idx) => (
-                              <div key={idx} className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative">
-                                <button
-                                  onClick={() => removeProject(idx)}
-                                  className="text-neutral-400 hover:text-red-600 bg-white border border-neutral-200/40 p-1.5 rounded-lg absolute right-2.5 top-2.5 active:scale-[0.95]"
-                                  title="Remove project"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
-                                  <input
-                                    type="text"
-                                    value={proj.title}
-                                    onChange={(e) => updateProjectItem(idx, "title", e.target.value)}
-                                    className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                  />
-                                </div>
-                                <div className="space-y-1">
-                                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Description</label>
-                                  <textarea
-                                    value={proj.description}
-                                    rows={2}
-                                    onChange={(e) => updateProjectItem(idx, "description", e.target.value)}
-                                    className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl bg-white resize-none leading-relaxed"
-                                  />
-                                </div>
-                                <div className="grid grid-cols-2 gap-2.5">
-                                  <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Link / URL</label>
-                                    <input
-                                      type="text"
-                                      value={proj.link || ""}
-                                      placeholder="https://..."
-                                      onChange={(e) => updateProjectItem(idx, "link", e.target.value)}
-                                      className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                    />
-                                  </div>
-                                  <div className="space-y-1">
-                                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Image URL</label>
-                                    <input
-                                      type="text"
-                                      value={proj.image || ""}
-                                      placeholder="https://..."
-                                      onChange={(e) => updateProjectItem(idx, "image", e.target.value)}
-                                      className="w-full h-10 text-xs px-2.5 border border-neutral-200 rounded-xl bg-white"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-
-                          {showAddProject ? (
-                            <div className="border border-neutral-200 bg-neutral-50/40 rounded-xl p-4 space-y-3 shadow-xs text-left">
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
-                                <input
-                                  type="text"
-                                  placeholder="e.g. Finance Dashboard"
-                                  value={newProjTitle}
-                                  onChange={(e) => setNewProjTitle(e.target.value)}
-                                  className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl bg-white"
-                                />
-                              </div>
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Short Description</label>
-                                <textarea
-                                  placeholder="What does it do?"
-                                  value={newProjDesc}
-                                  onChange={(e) => setNewProjDesc(e.target.value)}
-                                  rows={2}
-                                  className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl bg-white resize-none leading-relaxed"
-                                />
-                              </div>
-                              <div className="space-y-1">
-                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Link (Optional)</label>
-                                <input
-                                  type="text"
-                                  placeholder="https://..."
-                                  value={newProjLink}
-                                  onChange={(e) => setNewProjLink(e.target.value)}
-                                  className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-xl bg-white"
-                                />
-                              </div>
-                              <div className="flex gap-2 justify-end pt-1">
-                                <button
-                                  onClick={() => setShowAddProject(false)}
-                                  className="h-9 px-4 text-xs font-semibold text-neutral-700 bg-white border border-neutral-200 rounded-xl"
-                                >
-                                  Cancel
-                                </button>
-                                <button
-                                  onClick={addProject}
-                                  className="h-9 px-4 text-xs font-bold bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl shadow-sm"
-                                >
-                                  Add
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => setShowAddProject(true)}
-                              className="w-full h-10 border border-dashed border-neutral-200 hover:border-neutral-350 text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1 bg-neutral-50/20 hover:bg-neutral-50 rounded-xl"
-                            >
-                              + Create New Project
-                            </button>
-                          )}
-                        </div>
-                      )}
+                    <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
+                      <div className="flex items-center gap-[3px] px-1 py-0.5">
+                        {[0, 1, 2].map((i) => (
+                          <div
+                            key={i}
+                            className="w-[5px] h-[5px] rounded-full bg-[#2A2A2F]/40 animate-bounce"
+                            style={{ animationDelay: `${i * 0.18}s` }}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -1768,58 +1005,35 @@ function EditorInner() {
                 <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-center gap-4 border-b border-neutral-100 pb-4">
                     <div className="w-12 h-12 rounded-full overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center">
-                      <img
-                        src={
-                          editedProfile?.avatarUrl ||
-                          "https://i.pravatar.cc/80?img=47"
-                        }
-                        alt="Avatar"
-                        className="w-full h-full object-cover"
-                      />
+                      <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-neutral-800 truncate">
-                        {editedProfile?.name || "Your Profile"}
-                      </h3>
-                      <p className="text-xs text-neutral-500 truncate max-w-[200px] mt-0.5">
-                        {editedProfile?.headline || "Professional Headline"}
-                      </p>
+                      <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
+                      <p className="text-xs text-neutral-500 truncate max-w-[200px] mt-0.5">{editedProfile?.headline || "Professional Headline"}</p>
                     </div>
                   </div>
-
+                  
                   <div className="space-y-3.5">
-                    <h4 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
-                      Your Customization Steps
-                    </h4>
+                    <h4 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Your Customization Steps</h4>
                     <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
                       <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">
-                          1
-                        </span>
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
                         <span>📂 Review Projects & Highlights</span>
                       </div>
                       <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">
-                          2
-                        </span>
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
                         <span>🎯 Refine Interests & Aspirations</span>
                       </div>
                       <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">
-                          3
-                        </span>
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
                         <span>🛠 Select Core Skills & Tools</span>
                       </div>
                       <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">
-                          4
-                        </span>
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">4</span>
                         <span>💼 Verify Work Experience Timeline</span>
                       </div>
                       <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">
-                          5
-                        </span>
+                        <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0">5</span>
                         <span>🎨 Choose Layout Template & Edit Live</span>
                       </div>
                     </div>
@@ -1842,36 +1056,28 @@ function EditorInner() {
                       <Folder className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        Projects & Highlights
-                      </h3>
-                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">
-                        Showcase your best apps, portfolios, or articles.
-                      </p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Projects & Highlights</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Showcase your best apps, portfolios, or articles.</p>
                     </div>
                   </div>
-
+                  
                   <div className="space-y-1">
                     {projects.map((proj, idx) => (
-                      <div
-                        key={idx}
+                      <div 
+                        key={idx} 
                         className="group flex items-start justify-between p-2.5 rounded-xl hover:bg-neutral-50/80 transition-colors duration-150 relative border border-transparent hover:border-neutral-200/40"
                       >
                         <div className="flex items-start gap-2.5 min-w-0 flex-1">
                           <FileText className="w-4 h-4 text-neutral-550 shrink-0 mt-0.5" />
                           <div className="truncate pr-4 flex-1">
-                            <span className="text-xs font-semibold text-neutral-800 block truncate">
-                              {proj.title}
-                            </span>
+                            <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
                             {proj.description && (
-                              <span className="text-[11px] text-neutral-500 block truncate mt-0.5 leading-relaxed">
-                                {proj.description}
-                              </span>
+                              <span className="text-[11px] text-neutral-500 block truncate mt-0.5 leading-relaxed">{proj.description}</span>
                             )}
                           </div>
                         </div>
-                        <button
-                          onClick={() => removeProject(idx)}
+                        <button 
+                          onClick={() => removeProject(idx)} 
                           className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
                           title="Remove project"
                         >
@@ -1882,9 +1088,7 @@ function EditorInner() {
                     {projects.length === 0 && !showAddProject && (
                       <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
                         <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
-                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">
-                          No projects added yet
-                        </span>
+                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No projects added yet</span>
                       </div>
                     )}
                   </div>
@@ -1892,9 +1096,7 @@ function EditorInner() {
                   {showAddProject ? (
                     <div className="border border-neutral-200/80 bg-neutral-50/30 rounded-xl p-4 space-y-3.5 shadow-xs">
                       <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                          Project Title
-                        </label>
+                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
                         <input
                           type="text"
                           placeholder="e.g. Financial Dashboard App"
@@ -1904,9 +1106,7 @@ function EditorInner() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                          Short Description
-                        </label>
+                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Short Description</label>
                         <textarea
                           placeholder="What did you build? What technologies did you use?"
                           value={newProjDesc}
@@ -1916,9 +1116,7 @@ function EditorInner() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                          Project URL (Optional)
-                        </label>
+                        <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project URL (Optional)</label>
                         <input
                           type="text"
                           placeholder="https://github.com/username/project"
@@ -1928,14 +1126,14 @@ function EditorInner() {
                         />
                       </div>
                       <div className="flex gap-2 justify-end pt-1">
-                        <button
-                          onClick={() => setShowAddProject(false)}
+                        <button 
+                          onClick={() => setShowAddProject(false)} 
                           className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                         >
                           Cancel
                         </button>
-                        <button
-                          onClick={addProject}
+                        <button 
+                          onClick={addProject} 
                           className="h-10 px-4 text-xs font-bold bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                         >
                           Add Project
@@ -1952,8 +1150,8 @@ function EditorInner() {
                   )}
 
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                    <button
-                      onClick={handleBackStep}
+                    <button 
+                      onClick={handleBackStep} 
                       className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -1976,12 +1174,8 @@ function EditorInner() {
                       <Sparkles className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        Interests & Aspirations
-                      </h3>
-                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">
-                        Share your career goals, research fields, or passions.
-                      </p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Interests & Aspirations</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Share your career goals, research fields, or passions.</p>
                     </div>
                   </div>
                   <textarea
@@ -1995,8 +1189,8 @@ function EditorInner() {
                     className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
                   />
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                    <button
-                      onClick={handleBackStep}
+                    <button 
+                      onClick={handleBackStep} 
                       className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -2019,37 +1213,24 @@ function EditorInner() {
                       <Wrench className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        Core Skills & Tools
-                      </h3>
-                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">
-                        Highlight your technical skills, methodologies, or
-                        design software.
-                      </p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Core Skills & Tools</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Highlight your technical skills, methodologies, or design software.</p>
                     </div>
                   </div>
-
-                  <div
-                    className="flex flex-wrap gap-1.5 p-3.5 bg-neutral-50/30 border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto"
-                    style={{ scrollbarWidth: "none" }}
-                  >
+                  
+                  <div className="flex flex-wrap gap-1.5 p-3.5 bg-neutral-50/30 border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
                     {skills.map((skill, idx) => {
                       const tagColor = getNotionTagClasses(skill.name);
                       return (
-                        <span
-                          key={idx}
+                        <span 
+                          key={idx} 
                           className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor} transition-transform duration-105 active:scale-[0.95]`}
                         >
                           {skill.name}
-                          <button
-                            onClick={() => removeSkillTag(skill.name)}
+                          <button 
+                            onClick={() => removeSkillTag(skill.name)} 
                             className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-900 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
-                            style={{
-                              width: "12px",
-                              height: "12px",
-                              fontSize: "10px",
-                              lineHeight: 1,
-                            }}
+                            style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
                           >
                             ×
                           </button>
@@ -2057,9 +1238,7 @@ function EditorInner() {
                       );
                     })}
                     {skills.length === 0 && (
-                      <span className="text-[11px] text-neutral-500 italic self-center mx-auto select-none font-medium">
-                        No skills added yet. Add some below.
-                      </span>
+                      <span className="text-[11px] text-neutral-500 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
                     )}
                   </div>
 
@@ -2071,8 +1250,8 @@ function EditorInner() {
                       onChange={(e) => setNewSkill(e.target.value)}
                       className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                     />
-                    <button
-                      type="submit"
+                    <button 
+                      type="submit" 
                       className="px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm"
                     >
                       Add
@@ -2080,8 +1259,8 @@ function EditorInner() {
                   </form>
 
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                    <button
-                      onClick={handleBackStep}
+                    <button 
+                      onClick={handleBackStep} 
                       className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -2104,105 +1283,66 @@ function EditorInner() {
                       <Briefcase className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        Work Experience
-                      </h3>
-                      <p className="text-xs text-neutral-550 mt-1 leading-normal font-medium">
-                        Refine your work timeline, companies, and achievements.
-                      </p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Work Experience</h3>
+                      <p className="text-xs text-neutral-550 mt-1 leading-normal font-medium">Refine your work timeline, companies, and achievements.</p>
                     </div>
                   </div>
-
-                  <div
-                    className="space-y-3.5 max-h-72 overflow-y-auto pr-1"
-                    style={{ scrollbarWidth: "none" }}
-                  >
+                  
+                  <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
                     {experience.map((exp, idx) => (
-                      <div
-                        key={idx}
+                      <div 
+                        key={idx} 
                         className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
                       >
-                        <button
-                          onClick={() => removeExperienceItem(idx)}
+                        <button 
+                          onClick={() => removeExperienceItem(idx)} 
                           className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
                           title="Remove experience"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
-
+ 
                         <div className="grid grid-cols-2 gap-2.5">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                              Job Title
-                            </label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
                             <input
                               type="text"
                               value={exp.title}
                               placeholder="e.g. Lead Engineer"
-                              onChange={(e) =>
-                                updateExperienceItem(
-                                  idx,
-                                  "title",
-                                  e.target.value,
-                                )
-                              }
+                              onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
                               className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                              Company
-                            </label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Company</label>
                             <input
                               type="text"
                               value={exp.company}
                               placeholder="e.g. Acme Corp"
-                              onChange={(e) =>
-                                updateExperienceItem(
-                                  idx,
-                                  "company",
-                                  e.target.value,
-                                )
-                              }
+                              onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
                               className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                              Duration
-                            </label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Duration</label>
                             <input
                               type="text"
                               value={exp.duration}
                               placeholder="e.g. Jan 2024 - Present"
-                              onChange={(e) =>
-                                updateExperienceItem(
-                                  idx,
-                                  "duration",
-                                  e.target.value,
-                                )
-                              }
+                              onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
                               className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                            Key Responsibilities / Impact
-                          </label>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Key Responsibilities / Impact</label>
                           <textarea
                             value={exp.description}
                             placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
                             rows={2}
-                            onChange={(e) =>
-                              updateExperienceItem(
-                                idx,
-                                "description",
-                                e.target.value,
-                              )
-                            }
+                            onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
                             className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
                           />
                         </div>
@@ -2211,24 +1351,21 @@ function EditorInner() {
                     {experience.length === 0 && (
                       <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
                         <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
-                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">
-                          No work history items added yet
-                        </span>
+                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No work history items added yet</span>
                       </div>
                     )}
                   </div>
-
+ 
                   <button
                     onClick={addExperienceItem}
                     className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
                   >
-                    <Plus className="w-4 h-4 text-neutral-500" /> Add Work
-                    Experience
+                    <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
                   </button>
-
+ 
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                    <button
-                      onClick={handleBackStep}
+                    <button 
+                      onClick={handleBackStep} 
                       className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -2251,13 +1388,8 @@ function EditorInner() {
                       <Sparkles className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        AI Copy Optimization
-                      </h3>
-                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">
-                        Review and tweak the AI-optimized details of your
-                        profile.
-                      </p>
+                      <h3 className="text-sm font-semibold text-neutral-800">AI Copy Optimization</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Review and tweak the AI-optimized details of your profile.</p>
                     </div>
                   </div>
 
@@ -2265,9 +1397,7 @@ function EditorInner() {
                     /* AI Refinement Loading Screen */
                     <div className="py-10 flex flex-col items-center justify-center gap-3">
                       <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-                      <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">
-                        Refining your portfolio details...
-                      </p>
+                      <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">Refining your portfolio details...</p>
                     </div>
                   ) : (
                     /* Comparison Screen */
@@ -2275,29 +1405,22 @@ function EditorInner() {
                       {/* Headline Compare */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                            Headline
-                          </label>
-                          <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">
-                            AI Polished
-                          </span>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
+                          <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">AI Polished</span>
                         </div>
-
+                        
                         {/* Before (original) */}
-                        {originalHeadline &&
-                          originalHeadline !== editedProfile?.headline && (
-                            <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70">
-                              {originalHeadline}
-                            </div>
-                          )}
-
+                        {originalHeadline && originalHeadline !== editedProfile?.headline && (
+                          <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70">
+                            {originalHeadline}
+                          </div>
+                        )}
+                        
                         {/* After (interactive input) */}
                         <input
                           type="text"
                           value={editedProfile?.headline || ""}
-                          onChange={(e) =>
-                            updateField("headline", e.target.value)
-                          }
+                          onChange={(e) => updateField("headline", e.target.value)}
                           className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all"
                           placeholder="Your professional headline"
                         />
@@ -2306,29 +1429,22 @@ function EditorInner() {
                       {/* Bio Compare */}
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                            Bio Summary
-                          </label>
-                          <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">
-                            AI Polished
-                          </span>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
+                          <span className="text-[10px] bg-green-50 text-green-700 px-2 py-0.5 rounded-full font-bold">AI Polished</span>
                         </div>
-
+                        
                         {/* Before (original) */}
-                        {originalBio &&
-                          originalBio !== editedProfile?.summary && (
-                            <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70 max-h-24 overflow-y-auto">
-                              {originalBio}
-                            </div>
-                          )}
-
+                        {originalBio && originalBio !== editedProfile?.summary && (
+                          <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70 max-h-24 overflow-y-auto">
+                            {originalBio}
+                          </div>
+                        )}
+                        
                         {/* After (interactive textarea) */}
                         <textarea
                           rows={4}
                           value={editedProfile?.summary || ""}
-                          onChange={(e) =>
-                            updateField("summary", e.target.value)
-                          }
+                          onChange={(e) => updateField("summary", e.target.value)}
                           className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all resize-none"
                           placeholder="Your professional bio summary"
                         />
@@ -2336,8 +1452,8 @@ function EditorInner() {
 
                       {/* Action Button */}
                       <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                        <button
-                          onClick={handleBackStep}
+                        <button 
+                          onClick={handleBackStep} 
                           className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                         >
                           <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -2362,60 +1478,49 @@ function EditorInner() {
                       <Palette className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">
-                        Theme Styles
-                      </h3>
-                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">
-                        Choose one of the 4 Framer-inspired template styles.
-                      </p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Theme Styles</h3>
+                      <p className="text-xs text-neutral-500 mt-1 leading-normal font-medium">Choose one of the 4 Framer-inspired template styles.</p>
                     </div>
                   </div>
+                  
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                      const isSelected = selectedTemplate === id;
+                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                      
+                      let descText = "";
+                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                      if (id === "biobricks") descText = "Grid-based bento block structure";
 
-                  {/* Single Daniel Cross premium card */}
-                  <div
-                    onClick={() => selectTemplate("daniel-cross")}
-                    className="group bg-white border border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30 p-4 rounded-xl cursor-pointer text-left flex flex-col gap-2 relative active:scale-[0.97] transition-transform duration-100 ease-out"
-                  >
-                    {/* Wireframe mini-preview */}
-                    <div className="w-full h-20 bg-[#e9e6e2] rounded-lg overflow-hidden relative flex">
-                      <div className="w-[28%] h-full bg-[#edeae7] flex flex-col gap-1 p-1.5">
-                        <div className="w-full h-2 rounded bg-[#4a3429]/20" />
-                        {[100, 80, 90, 70].map((w, i) => (
-                          <div
-                            key={i}
-                            className="h-1.5 rounded bg-[#4a3429]/10"
-                            style={{ width: `${w}%` }}
-                          />
-                        ))}
-                      </div>
-                      <div className="flex-1 p-1.5 flex flex-col gap-1">
-                        <div className="h-6 w-3/4 rounded bg-[#4a3429]/20" />
-                        <div className="h-1.5 w-full rounded bg-black/10" />
-                        <div className="h-1.5 w-5/6 rounded bg-black/10" />
-                        <div className="grid grid-cols-2 gap-1 mt-1">
-                          <div className="h-6 rounded-md bg-[#4a3429]/15" />
-                          <div className="h-6 rounded-md bg-[#4a3429]/15" />
+                      return (
+                        <div
+                          key={id}
+                          onClick={() => selectTemplate(id as any)}
+                          className={`group bg-white border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[90px] relative active:scale-[0.97] transition-transform duration-100 ease-out ${
+                            isSelected
+                              ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30"
+                              : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/20"
+                          }`}
+                        >
+                          <div className="pr-5">
+                            <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
+                            <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-neutral-900 flex items-center justify-center">
+                              <Check className="w-2.5 h-2.5 text-white" />
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-xs font-semibold text-neutral-800 block">
-                          Daniel Cross
-                        </span>
-                        <span className="text-[9.5px] text-neutral-500 block mt-0.5">
-                          Premium Framer portfolio with sidebar nav
-                        </span>
-                      </div>
-                      <div className="w-4 h-4 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
-                        <Check className="w-2.5 h-2.5 text-white" />
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
 
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                    <button
-                      onClick={handleBackStep}
+                    <button 
+                      onClick={handleBackStep} 
                       className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -2435,243 +1540,71 @@ function EditorInner() {
               )}
             </div>
 
-            {/* ── Contact Details quick-edit (shown in step 9 free-form editor) ── */}
-            {currentStep === 9 && editorTab === "chat" && editedProfile && (
-              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-4 animate-in fade-in duration-300 text-left mt-2">
-                <div className="flex items-start gap-3 border-b border-neutral-100 pb-3">
-                  <div className="w-8 h-8 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center shrink-0">
-                    <Globe className="w-4 h-4 text-neutral-600 stroke-[1.75]" />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold text-neutral-800">
-                      Contact & Social Links
-                    </h3>
-                    <p className="text-xs text-neutral-500 mt-0.5 font-medium">
-                      Shown in the Contact section of your portfolio.
-                    </p>
-                  </div>
-                </div>
+            <div ref={chatEndRef} />
+          </div>
+          )}
 
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="hello@example.com"
-                      value={
-                        editedProfile.links
-                          .find((l) => l.icon === "email")
-                          ?.url.replace("mailto:", "") || ""
-                      }
-                      onChange={(e) => {
-                        const next = editedProfile.links.filter(
-                          (l) => l.icon !== "email",
-                        );
-                        if (e.target.value)
-                          next.push({
-                            label: "Email",
-                            url: `mailto:${e.target.value}`,
-                            icon: "email",
-                          });
-                        updateField("links", next);
-                      }}
-                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="+1 555 000 0000"
-                      value={editedProfile.phone || ""}
-                      onChange={(e) => updateField("phone", e.target.value)}
-                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                      Location
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="New York, USA"
-                      value={editedProfile.location || ""}
-                      onChange={(e) => updateField("location", e.target.value)}
-                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                      LinkedIn URL
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://linkedin.com/in/..."
-                      value={
-                        editedProfile.links.find((l) => l.icon === "linkedin")
-                          ?.url || ""
-                      }
-                      onChange={(e) => {
-                        const next = editedProfile.links.filter(
-                          (l) => l.icon !== "linkedin",
-                        );
-                        if (e.target.value)
-                          next.push({
-                            label: "LinkedIn",
-                            url: e.target.value,
-                            icon: "linkedin",
-                          });
-                        updateField("links", next);
-                      }}
-                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                      Twitter / X URL
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://x.com/..."
-                      value={
-                        editedProfile.links.find((l) => l.icon === "twitter")
-                          ?.url || ""
-                      }
-                      onChange={(e) => {
-                        const next = editedProfile.links.filter(
-                          (l) => l.icon !== "twitter",
-                        );
-                        if (e.target.value)
-                          next.push({
-                            label: "Twitter",
-                            url: e.target.value,
-                            icon: "twitter",
-                          });
-                        updateField("links", next);
-                      }}
-                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                      GitHub URL
-                    </label>
-                    <input
-                      type="url"
-                      placeholder="https://github.com/..."
-                      value={
-                        editedProfile.links.find((l) => l.icon === "github")
-                          ?.url || ""
-                      }
-                      onChange={(e) => {
-                        const next = editedProfile.links.filter(
-                          (l) => l.icon !== "github",
-                        );
-                        if (e.target.value)
-                          next.push({
-                            label: "GitHub",
-                            url: e.target.value,
-                            icon: "github",
-                          });
-                        updateField("links", next);
-                      }}
-                      className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">
-                    Profile Photo URL
-                  </label>
-                  <input
-                    type="url"
-                    placeholder="https://example.com/photo.jpg"
-                    value={editedProfile.avatarUrl || ""}
-                    onChange={(e) => updateField("avatarUrl", e.target.value)}
-                    className="w-full h-9 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                  />
-                </div>
+          {/* Bottom input composer area */}
+          {!(currentStep === 9 && designSubTab === "manual") && (
+            <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
+            {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
+            {currentStep === 9 && (
+              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => sendChatMessage(s)}
+                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-black transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                  >
+                    {s}
+                  </button>
+                ))}
               </div>
             )}
 
-            <div ref={chatEndRef} />
-          </div>
-
-          {/* Bottom input composer area */}
-          {!(currentStep === 9 && editorTab === "visual") && (
-            <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
-              {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
-              {currentStep === 9 && (
-                <div
-                  className="flex gap-2 overflow-x-auto pb-1"
-                  style={{ scrollbarWidth: "none" }}
-                >
-                  {SUGGESTIONS.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => sendChatMessage(s)}
-                      className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-black transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Text input composer */}
-              <div
-                className={`bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 ${currentStep === 9 ? "opacity-100" : "opacity-60"}`}
-              >
-                <textarea
-                  disabled={currentStep !== 9}
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey && currentStep === 9) {
-                      e.preventDefault();
-                      sendChatMessage();
-                    }
-                  }}
-                  className={`w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter ${currentStep === 9 ? "text-neutral-800 placeholder:text-neutral-400 cursor-text" : "text-neutral-400 placeholder:text-neutral-400 cursor-not-allowed"}`}
-                  placeholder={
-                    currentStep === 9
-                      ? "Ask Webild to adjust copy, headline, template style..."
-                      : "Complete wizard steps above to proceed..."
+            {/* Text input composer */}
+            <div className={`bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 ${currentStep === 9 ? "opacity-100" : "opacity-60"}`}>
+              <textarea
+                disabled={currentStep !== 9}
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey && currentStep === 9) {
+                    e.preventDefault();
+                    sendChatMessage();
                   }
-                  rows={2}
-                />
-                <div className="flex items-center justify-between px-1">
+                }}
+                className={`w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter ${currentStep === 9 ? "text-neutral-800 placeholder:text-neutral-400 cursor-text" : "text-neutral-400 placeholder:text-neutral-400 cursor-not-allowed"}`}
+                placeholder={currentStep === 9 ? "Ask Webild to adjust copy, headline, template style..." : "Complete wizard steps above to proceed..."}
+                rows={2}
+              />
+              <div className="flex items-center justify-between px-1">
+                <button
+                  disabled={currentStep !== 9}
+                  onClick={() => toast.info("Attachments coming soon!")}
+                  className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
+                >
+                  <Plus className="w-[18px] h-[18px]" />
+                </button>
+                <div className="flex items-center gap-2">
                   <button
                     disabled={currentStep !== 9}
-                    onClick={() => toast.info("Attachments coming soon!")}
+                    onClick={() => toast.info("Voice input coming soon!")}
                     className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
                   >
-                    <Plus className="w-[18px] h-[18px]" />
+                    <Mic className="w-[18px] h-[18px]" />
                   </button>
-                  <div className="flex items-center gap-2">
-                    <button
-                      disabled={currentStep !== 9}
-                      onClick={() => toast.info("Voice input coming soon!")}
-                      className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
-                    >
-                      <Mic className="w-[18px] h-[18px]" />
-                    </button>
-                    <button
-                      disabled={currentStep !== 9}
-                      onClick={() => sendChatMessage()}
-                      className={`w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none ${currentStep === 9 ? "bg-[#8DB8FF] hover:bg-[#7ca8f0] cursor-pointer active:scale-[0.93]" : "bg-neutral-200 cursor-not-allowed"}`}
-                    >
-                      <ArrowUp className="w-[18px] h-[18px]" />
-                    </button>
-                  </div>
+                  <button
+                    disabled={currentStep !== 9}
+                    onClick={() => sendChatMessage()}
+                    className={`w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none ${currentStep === 9 ? "bg-[#8DB8FF] hover:bg-[#7ca8f0] cursor-pointer active:scale-[0.93]" : "bg-neutral-200 cursor-not-allowed"}`}
+                  >
+                    <ArrowUp className="w-[18px] h-[18px]" />
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
           )}
         </aside>
       )}
@@ -2680,34 +1613,22 @@ function EditorInner() {
       {activeNav === 2 && <DomainsPane />}
 
       {/* 3. Settings Panel */}
-      {activeNav === 3 && (
-        <SettingsPane profileName={profileName} router={router} />
-      )}
+      {activeNav === 3 && <SettingsPane profileName={profileName} router={router} />}
 
       {/* ── Main Canvas Workspace ── */}
       <main className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3">
+        
         {/* Top Navbar */}
         <div className="flex items-center justify-between shrink-0 h-9 bg-white">
+          
           {/* Left Side: Collapse Button + Saving Indicator */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() =>
-                toast.info(
-                  "Upgrade to Pro to link custom domains & unlock premium features!",
-                )
-              }
+              onClick={() => toast.info("Upgrade to Pro to link custom domains & unlock premium features!")}
               className="flex items-center gap-2 h-10 px-2 text-sm font-medium bg-white border border-[#E6E6E6] rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
               style={{ boxShadow: "0 1px 4px #fff" }}
             >
-              <svg
-                className="w-[20px] h-[20px]"
-                fill="none"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M4 6h16M4 12h16M4 18h7" />
               </svg>
             </button>
@@ -2718,7 +1639,7 @@ function EditorInner() {
                 <>
                   <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                   <span>Unsaved edits</span>
-                  <button
+                  <button 
                     onClick={resetEdits}
                     className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
                   >
@@ -2738,9 +1659,7 @@ function EditorInner() {
           <div className="flex items-center gap-2 relative">
             <button
               onClick={() => {
-                navigator.clipboard.writeText(
-                  `https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`,
-                );
+                navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`);
                 toast.success("Share link copied to clipboard!");
               }}
               className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
@@ -2753,24 +1672,16 @@ function EditorInner() {
               disabled={publishing}
               className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
             >
-              {publishing && (
-                <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />
-              )}
+              {publishing && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
               Publish
             </button>
-
+            
             {/* Profile Avatar Button */}
             <button
               onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
               className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
             >
-              <img
-                src={
-                  editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"
-                }
-                alt="Avatar"
-                className="w-full h-full object-cover"
-              />
+              <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
             </button>
 
             {/* Profile User Menu Dropdown */}
@@ -2783,37 +1694,30 @@ function EditorInner() {
                   transition={{ duration: 0.15, ease: "easeOut" }}
                   className="absolute right-0 top-10 z-50"
                 >
-                  <UserMenu
-                    name={userName}
-                    email={userEmail}
-                    onClose={() => setIsUserMenuOpen(false)}
+                  <UserMenu 
+                    name={userName} 
+                    email={userEmail} 
+                    onClose={() => setIsUserMenuOpen(false)} 
                   />
                 </motion.div>
               )}
             </AnimatePresence>
           </div>
+
         </div>
 
         {/* Elevated Canvas Card Frame */}
         <div className="relative flex-1 bg-white/75 backdrop-blur-xl rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_rgba(255,255,255,0.6)_inset]">
+          
           {/* Canvas Toolbar */}
           <div className="relative z-30 flex items-center gap-3 w-full h-[54px] border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md px-4">
+            
             {/* Left: Customize + Page switcher */}
             <div className="flex items-center gap-2">
               <div className="relative group">
                 <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
-                  <svg
-                    className="w-[14px] h-[14px]"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2.25"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M14 4.1 12 6" />
-                    <path d="m5.1 8-2.9-.8" />
-                    <path d="m6 12-1.9 2" />
+                  <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
+                    <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
                     <path d="M7.2 2.2 8 5.1" />
                     <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
                   </svg>
@@ -2824,15 +1728,7 @@ function EditorInner() {
               <div className="relative group">
                 <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
                   <span className="text-sm leading-tight">Home</span>
-                  <svg
-                    className="w-3.5 h-3.5 text-[#171717]/50"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
                     <path d="m6 9 6 6 6-6" />
                   </svg>
                 </button>
@@ -2845,23 +1741,14 @@ function EditorInner() {
                 <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
                   <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
                   <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
-                    {subdomain ||
-                      editedProfile?.name.toLowerCase().replace(/\s+/g, "") ||
-                      "yourname"}
-                    .linkedpage.io
+                    {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
                   </span>
                   {checkingSubdomain ? (
-                    <span className="hidden lg:inline text-gray-400 font-normal">
-                      checking...
-                    </span>
+                    <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
                   ) : isSubdomainAvailable === true ? (
-                    <span className="hidden lg:inline text-[#369762] font-semibold text-xs">
-                      available!
-                    </span>
+                    <span className="hidden lg:inline text-[#369762] font-semibold text-xs">available!</span>
                   ) : isSubdomainAvailable === false ? (
-                    <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">
-                      taken!
-                    </span>
+                    <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">taken!</span>
                   ) : null}
                 </span>
               </div>
@@ -2870,38 +1757,14 @@ function EditorInner() {
             {/* Right: Device scale switches */}
             <div className="flex items-center gap-1.5">
               {/* Undo/Redo/History Placeholders */}
-              <button
-                disabled
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed"
-              >
-                <svg
-                  className="w-[15px] h-[15px]"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M9 14 4 9l5-5" />
-                  <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
                 </svg>
               </button>
-              <button
-                disabled
-                className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed"
-              >
-                <svg
-                  className="w-[15px] h-[15px]"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="m15 14 5-5-5-5" />
-                  <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
                 </svg>
               </button>
 
@@ -2916,8 +1779,8 @@ function EditorInner() {
                     activeNav === 1 && currentStep <= 6
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "desktop"
-                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
                   }`}
                   title="Desktop preview"
                 >
@@ -2930,8 +1793,8 @@ function EditorInner() {
                     activeNav === 1 && currentStep <= 6
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "mobile"
-                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
                   }`}
                   title="Mobile preview"
                 >
@@ -2939,19 +1802,19 @@ function EditorInner() {
                 </button>
               </div>
             </div>
+
           </div>
 
           {/* Canvas Main content area */}
-          <div
-            className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
-              activeNav === 1 && currentStep <= 6
-                ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8"
-                : previewMode === "desktop"
-                  ? "bg-white p-0"
-                  : "bg-[#F9F9F9] p-8"
-            }`}
-          >
+          <div className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
+            activeNav === 1 && currentStep <= 6 
+              ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
+              : previewMode === "desktop"
+              ? "bg-white p-0"
+              : "bg-[#F9F9F9] p-8"
+          }`}>
             <AnimatePresence mode="wait">
+              
               {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 6 */}
               {activeNav === 1 && currentStep <= 6 ? (
                 <motion.div
@@ -2962,8 +1825,8 @@ function EditorInner() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                   className="w-full flex items-center justify-center"
                 >
-                  <WizardAnimations
-                    step={currentStep}
+                  <WizardAnimations 
+                    step={currentStep} 
                     profile={editedProfile}
                     projects={projects}
                     interests={interests}
@@ -2985,51 +1848,31 @@ function EditorInner() {
                     previewMode === "desktop" ? (
                       /* Desktop view - FULL SCREEN */
                       <div className="w-full h-full overflow-auto bg-white relative">
-                        <ProfilePreview
-                          profile={editedProfile}
-                          template={selectedTemplate}
-                          fluid={true}
-                          onFieldClick={handleFieldClick}
-                        />
+                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
                       </div>
                     ) : (
                       /* Mobile view */
                       <div
                         className="rounded-3xl overflow-hidden border-[6px] border-neutral-800 bg-white shadow-md relative"
-                        style={{
-                          width: 375 * mobileScale,
-                          height: 812 * mobileScale,
-                        }}
+                        style={{ width: 375 * mobileScale, height: 812 * mobileScale }}
                       >
-                        <div
-                          style={{
-                            width: 375,
-                            height: 812,
-                            transform: `scale(${mobileScale})`,
-                            transformOrigin: "top left",
-                            overflow: "auto",
-                          }}
-                        >
-                          <ProfilePreview
-                            profile={editedProfile}
-                            template={selectedTemplate}
-                            fluid={true}
-                            onFieldClick={handleFieldClick}
-                          />
+                        <div style={{ width: 375, height: 812, transform: `scale(${mobileScale})`, transformOrigin: "top left", overflow: "auto" }}>
+                          <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
                         </div>
                       </div>
                     )
                   ) : (
-                    <div className="text-neutral-400 text-xs font-mono">
-                      Loading preview data...
-                    </div>
+                    <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
                   )}
                 </motion.div>
               )}
+
             </AnimatePresence>
           </div>
+
         </div>
       </main>
+
     </div>
   );
 }
@@ -3041,9 +1884,7 @@ export default function EditorPage() {
         <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <Loader2 className="w-6 h-6 text-neutral-800 animate-spin" />
-            <span className="text-xs text-neutral-400 font-mono">
-              Loading workspace...
-            </span>
+            <span className="text-xs text-neutral-400 font-mono">Loading workspace...</span>
           </div>
         </div>
       }

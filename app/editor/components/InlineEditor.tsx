@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ProfileData, ProfileExperience, ProfileLink } from "@/shared/types";
-import { User, Briefcase, Link as LinkIcon, Plus, Trash2 } from "lucide-react";
+import { ProfileData, ProfileExperience, ProfileLink, ProfileProject } from "@/shared/types";
+import { User, Briefcase, Link as LinkIcon, Folder, Plus, Trash2 } from "lucide-react";
 
 interface InlineEditorProps {
   profile: ProfileData;
@@ -10,8 +10,8 @@ interface InlineEditorProps {
     key: K,
     value: ProfileData[K],
   ) => void;
-  activeTab?: "profile" | "experience" | "links";
-  setActiveTab?: (tab: "profile" | "experience" | "links") => void;
+  activeTab?: "profile" | "experience" | "links" | "projects";
+  setActiveTab?: (tab: "profile" | "experience" | "links" | "projects") => void;
 }
 
 // Reusable editable field
@@ -33,14 +33,14 @@ function EditableField({
   id?: string;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <label className="text-[11px] font-medium text-[#9CA3AF] uppercase tracking-wide">
+    <div className="flex flex-col gap-1 text-left">
+      <label className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wide">
         {label}
       </label>
       {multiline ? (
         <textarea
           id={id}
-          className={`ds-input !h-auto min-h-[80px] resize-none py-3 text-sm ${className}`}
+          className={`ds-input !h-auto min-h-[80px] resize-none py-3 text-sm border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors ${className}`}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
@@ -49,7 +49,7 @@ function EditableField({
       ) : (
         <input
           id={id}
-          className={`ds-input text-sm ${className}`}
+          className={`ds-input text-sm border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors ${className}`}
           type="text"
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -60,7 +60,7 @@ function EditableField({
   );
 }
 
-type Tab = "profile" | "experience" | "links";
+type Tab = "profile" | "experience" | "links" | "projects";
 
 export default function InlineEditor({
   profile,
@@ -75,13 +75,14 @@ export default function InlineEditor({
   ) => void;
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
-    { id: "profile", label: "Profile", icon: <User className="w-5 h-5" /> },
+    { id: "profile", label: "Profile", icon: <User className="w-4 h-4" /> },
+    { id: "projects", label: "Projects", icon: <Folder className="w-4 h-4" /> },
     {
       id: "experience",
       label: "Experience",
-      icon: <Briefcase className="w-5 h-5" />,
+      icon: <Briefcase className="w-4 h-4" />,
     },
-    { id: "links", label: "Links", icon: <LinkIcon className="w-5 h-5" /> },
+    { id: "links", label: "Links", icon: <LinkIcon className="w-4 h-4" /> },
   ];
 
   // ── Experience helpers ──
@@ -139,18 +140,48 @@ export default function InlineEditor({
     ]);
   };
 
+  // ── Project helpers ──
+  const updateProject = (
+    index: number,
+    field: keyof ProfileProject,
+    value: string,
+  ) => {
+    const next = [...(profile.projects || [])];
+    next[index] = { ...next[index], [field]: value };
+    onChange("projects", next);
+  };
+
+  const removeProject = (index: number) => {
+    onChange(
+      "projects",
+      (profile.projects || []).filter((_, i) => i !== index),
+    );
+  };
+
+  const addProject = () => {
+    onChange("projects", [
+      ...(profile.projects || []),
+      {
+        title: "New Project",
+        description: "Project description",
+        link: "https://",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60",
+      },
+    ]);
+  };
+
   return (
     <div className="flex flex-col gap-4 h-full">
       {/* Tab bar */}
-      <div className="flex items-center gap-1 p-1 bg-[#F3F3F3] rounded-[10px]">
+      <div className="flex items-center gap-1 p-1 bg-[#F3F3F3] rounded-[10px] select-none">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-medium     rounded-lg  transition-[background-color,color] duration-150 ${
+            className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-[11px] font-semibold rounded-lg transition-[background-color,color] duration-150 active:scale-[0.97] ${
               activeTab === tab.id
-                ? "bg-white text-black  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-                : "text-[#6B6B6B] hover:text-black"
+                ? "bg-white text-neutral-900 shadow-sm border border-neutral-200/50"
+                : "text-neutral-550 hover:text-neutral-900 border border-transparent"
             }`}
           >
             {tab.icon}
@@ -167,17 +198,17 @@ export default function InlineEditor({
         {/* ── Profile Tab ── */}
         {activeTab === "profile" && (
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg  ">
+            <div className="flex items-center gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6] rounded-lg">
               <img
-                src={profile.avatarUrl || "https://i.pravatar.cc/80?img=47"}
+                src={profile.avatarUrl || "https://api.dicebear.com/7.x/initials/svg?seed=User&backgroundColor=8db8ff"}
                 alt={profile.name}
-                className="w-12 h-12   rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
+                className="w-12 h-12 rounded-lg object-cover border border-[#E6E6E6] flex-shrink-0"
               />
-              <div className="flex flex-col gap-0.5 min-w-0">
-                <p className="text-sm font-medium text-black truncate">
+              <div className="flex flex-col gap-0.5 min-w-0 text-left">
+                <p className="text-sm font-semibold text-neutral-800 truncate">
                   {profile.name}
                 </p>
-                <p className="text-xs text-[#6B6B6B] truncate">
+                <p className="text-xs text-neutral-500 truncate">
                   {profile.headline}
                 </p>
               </div>
@@ -213,34 +244,103 @@ export default function InlineEditor({
               placeholder="Write a short bio…"
             />
             <EditableField
+              id="editor-field-interests"
+              label="Interests & Aspirations"
+              value={profile.interests ?? ""}
+              onChange={(v) => onChange("interests", v)}
+              multiline
+              placeholder="e.g. AI Engineering, Design Systems..."
+            />
+            <EditableField
               id="editor-field-avatarUrl"
-              label="Avatar URL"
+              label="Avatar Image URL"
               value={profile.avatarUrl}
               onChange={(v) => onChange("avatarUrl", v)}
               placeholder="https://example.com/photo.jpg"
             />
+            <EditableField
+              id="editor-field-bannerUrl"
+              label="Hero Portrait / Banner Image URL"
+              value={profile.bannerUrl ?? ""}
+              onChange={(v) => onChange("bannerUrl", v)}
+              placeholder="https://example.com/hero.jpg"
+            />
+          </div>
+        )}
+
+        {/* ── Projects Tab ── */}
+        {activeTab === "projects" && (
+          <div className="flex flex-col gap-3 animate-in fade-in duration-200" id="editor-field-projects">
+            {(profile.projects || []).map((proj, i) => (
+              <div
+                key={i}
+                className="flex flex-col gap-3 p-3.5 bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl relative hover:bg-neutral-50/50 transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-neutral-500 uppercase">
+                    Project {i + 1}
+                  </span>
+                  <button
+                    onClick={() => removeProject(i)}
+                    className="p-1.5 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-600 transition-colors duration-150 active:scale-95 border border-neutral-200/50 bg-white"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+                <EditableField
+                  label="Project Title"
+                  value={proj.title}
+                  onChange={(v) => updateProject(i, "title", v)}
+                  placeholder="e.g. Finance Dashboard App"
+                />
+                <EditableField
+                  label="Description"
+                  value={proj.description}
+                  onChange={(v) => updateProject(i, "description", v)}
+                  multiline
+                  placeholder="Tell us about the project..."
+                />
+                <EditableField
+                  label="Project URL"
+                  value={proj.link ?? ""}
+                  onChange={(v) => updateProject(i, "link", v)}
+                  placeholder="https://example.com"
+                />
+                <EditableField
+                  label="Cover Image URL"
+                  value={proj.image ?? ""}
+                  onChange={(v) => updateProject(i, "image", v)}
+                  placeholder="https://images.unsplash.com/..."
+                />
+              </div>
+            ))}
+
+            <button
+              onClick={addProject}
+              className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/40 text-neutral-700 text-xs font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-xs mt-2"
+            >
+              <Plus className="w-4 h-4 text-neutral-550" /> Add Project
+            </button>
           </div>
         )}
 
         {/* ── Experience Tab ── */}
         {activeTab === "experience" && (
-          <div className="flex flex-col gap-3" id="editor-field-experience">
+          <div className="flex flex-col gap-3 animate-in fade-in duration-200" id="editor-field-experience">
             {profile.experience.map((exp, i) => (
               <div
                 key={i}
-                className="flex flex-col gap-3 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg   relative"
+                className="flex flex-col gap-3 p-3.5 bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl relative hover:bg-neutral-50/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-[#9CA3AF]">
-                      Experience {i + 1}
-                    </span>
-                  </div>
+                  <span className="text-xs font-bold text-neutral-500 uppercase">
+                    Experience {i + 1}
+                  </span>
                   <button
                     onClick={() => removeExperience(i)}
-                    className="p-1     rounded-lg  hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
+                    className="p-1.5 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-600 transition-colors duration-150 active:scale-95 border border-neutral-200/50 bg-white"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
                 <EditableField
@@ -271,32 +371,30 @@ export default function InlineEditor({
 
             <button
               onClick={addExperience}
-              className="w-full h-10 border border-[#E6E6E6] hover:bg-gray-50 text-black text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-sm mt-2"
+              className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/40 text-neutral-700 text-xs font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-xs mt-2"
             >
-              <Plus className="w-4 h-4" /> Add experience
+              <Plus className="w-4 h-4 text-neutral-550" /> Add Experience
             </button>
           </div>
         )}
 
         {/* ── Links Tab ── */}
         {activeTab === "links" && (
-          <div className="flex flex-col gap-3" id="editor-field-links">
+          <div className="flex flex-col gap-3 animate-in fade-in duration-200" id="editor-field-links">
             {profile.links.map((link, i) => (
               <div
                 key={i}
-                className="flex flex-col gap-2 p-3 bg-[#FBFBFB] border border-[#E6E6E6]      rounded-lg  "
+                className="flex flex-col gap-2 p-3.5 bg-[#FBFBFB] border border-[#E6E6E6] rounded-xl relative hover:bg-neutral-50/50 transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold text-[#9CA3AF]">
-                      Link {i + 1}
-                    </span>
-                  </div>
+                  <span className="text-xs font-bold text-neutral-500 uppercase">
+                    Link {i + 1}
+                  </span>
                   <button
                     onClick={() => removeLink(i)}
-                    className="p-1     rounded-lg  hover:bg-[#FEF2F2] text-[#9CA3AF] hover:text-[#E45A5A] transition-colors duration-150"
+                    className="p-1.5 rounded-lg hover:bg-red-50 text-neutral-400 hover:text-red-600 transition-colors duration-150 active:scale-95 border border-neutral-200/50 bg-white"
                   >
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
                 <EditableField
@@ -316,12 +414,12 @@ export default function InlineEditor({
 
             <button
               onClick={addLink}
-              className="w-full h-10 border border-[#E6E6E6] hover:bg-gray-50 text-black text-[12.5px] font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-sm mt-2"
+              className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/40 text-neutral-700 text-xs font-bold rounded-xl transition-all active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-xs mt-2"
             >
-              <Plus className="w-4 h-4" /> Add link
+              <Plus className="w-4 h-4 text-neutral-550" /> Add Link
             </button>
 
-            <p className="text-[11px] text-[#9CA3AF] text-center mt-2 font-medium">
+            <p className="text-[11px] text-neutral-400 text-center mt-2 font-semibold">
               Links appear in your profile header and footer.
             </p>
           </div>

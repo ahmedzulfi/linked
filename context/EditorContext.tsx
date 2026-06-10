@@ -46,7 +46,6 @@ interface EditorActions {
   useMockProfile: () => void;
   setScrapeError: (err: string | null) => void;
   setPendingZip: (file: File | null) => void;
-  createWebsiteWithProfile: (profileData: ProfileData) => Promise<string>;
 }
 
 type EditorContextValue = EditorState & EditorActions;
@@ -137,6 +136,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       }
 
       setWebsiteId(newId);
+      sessionStorage.setItem("linkedpage_last_website_id", newId);
       sessionStorage.setItem("linkedpage_brand_name", profileData.name);
       sessionStorage.setItem(
         "linkedpage_subdomain",
@@ -158,6 +158,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       }
       const web = data.website;
       setWebsiteId(web.id);
+      sessionStorage.setItem("linkedpage_last_website_id", web.id);
       setProfile(web.profile);
       setEditedProfile(web.profile);
       setSelectedTemplate(web.templateId || "minimal-card");
@@ -380,7 +381,6 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         useMockProfile,
         setScrapeError,
         setPendingZip,
-        createWebsiteWithProfile,
       }}
     >
       {children}
