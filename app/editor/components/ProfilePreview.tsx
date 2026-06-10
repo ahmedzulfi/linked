@@ -31,7 +31,7 @@ function buildProjectCard(
 ): string {
   const resolvedImg = imageUrl || "/templates/daniel-cross/NZiJk1LCTBcGzs2MNANRaoxI2IA.png";
   return `
-<div style="position:relative;border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;flex:0 0 calc(50% - 12px)">
+<div class="project-card-item" style="position:relative;border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;flex:0 0 calc(50% - 12px)">
   <a href="${esc(link)}" target="_blank" rel="noopener" style="display:block;position:relative;border-radius:12px;overflow:hidden;text-decoration:none;">
     <div style="position:relative;height:320px;overflow:hidden;">
       <img src="${esc(resolvedImg)}" alt="${esc(title)}" style="width:100%;height:100%;object-fit:cover;display:block;">
@@ -67,7 +67,7 @@ function buildProjectsSection(profile: ProfileData): string {
     .join("\n");
 
   return `
-<div style="display:flex;flex-wrap:wrap;gap:24px;width:100%;padding:0 25px;">
+<div class="projects-grid-container" style="display:flex;flex-wrap:wrap;gap:24px;width:100%;padding:0 25px;">
   ${cards}
 </div>`;
 }
@@ -194,6 +194,101 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
 
   // Remove Framer badge
   html = html.replace(/<div id="__framer-badge-container"[\s\S]*?<\/div>/g, "");
+
+  // Add custom responsive stylesheet overrides to prevent absolute width overflows and correctly display hidden variants
+  const responsiveStyles = `
+<style data-custom-responsive="true">
+  /* Base hidden class overrides */
+  @media (max-width: 809.98px) {
+    .hidden-18pvjnd {
+      display: none !important;
+    }
+  }
+  @media (min-width: 810px) and (max-width: 1199.98px) {
+    .hidden-1bkts62 {
+      display: none !important;
+    }
+  }
+
+  /* Make containers fluid on screens smaller than desktop (1200px) */
+  @media (max-width: 1199.98px) {
+    .framer-NYla7.framer-nqzx6h {
+      width: 100% !important;
+      max-width: 100vw !important;
+      overflow-x: hidden !important;
+    }
+    
+    .framer-NYla7 .framer-1qj9dji {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    .framer-NYla7 .framer-11htobf {
+      max-width: 100% !important;
+    }
+    
+    .framer-NYla7 .framer-vprhwm {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 1 1 auto !important;
+    }
+
+    .framer-DKwHu.framer-ha6joy {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding-left: 24px !important;
+      padding-right: 24px !important;
+    }
+    
+    .framer-cOcSQ.framer-ryc3c {
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+    }
+    
+    .framer-euNV9.framer-mfpv4s {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+
+  /* Specific mobile-size adjustments (under 810px) */
+  @media (max-width: 809.98px) {
+    .framer-50OQE .framer-tfstyy-container {
+      width: 100% !important;
+      max-width: 100vw !important;
+    }
+    
+    .framer-Cxj9g.framer-v-117swu5.framer-1g4vz55,
+    .framer-Cxj9g.framer-v-tlavhy.framer-1g4vz55 {
+      width: 100% !important;
+      max-width: 100vw !important;
+    }
+
+    .framer-DKwHu.framer-v-1qhzu7s.framer-ha6joy {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+    }
+
+    .framer-DKwHu .framer-1bh76c {
+      padding: 40px 16px !important;
+    }
+
+    /* Stack project cards vertically on mobile */
+    .project-card-item {
+      flex: 0 0 100% !important;
+    }
+    
+    .projects-grid-container {
+      padding: 0 16px !important;
+      gap: 16px !important;
+    }
+  }
+</style>
+`;
+  html = html.replace("</head>", `${responsiveStyles}</head>`);
 
   return html;
 }
