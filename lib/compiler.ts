@@ -33,19 +33,17 @@ function buildProjectCard(
 ): string {
   const resolvedImg = imageUrl || "/templates/daniel-cross/NZiJk1LCTBcGzs2MNANRaoxI2IA.png";
   return `
-<div class="project-card-item" style="position:relative;border-radius:12px;overflow:hidden;background:#fff;cursor:pointer;flex:0 0 calc(50% - 12px)">
-  <a href="${esc(link)}" target="_blank" rel="noopener" style="display:block;position:relative;border-radius:12px;overflow:hidden;text-decoration:none;">
-    <div style="position:relative;height:320px;overflow:hidden;">
-      <img src="${esc(resolvedImg)}" alt="${esc(title)}" style="width:100%;height:100%;object-fit:cover;display:block;">
-      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,1) 100%);"></div>
-      <div style="position:absolute;bottom:20px;left:20px;right:20px;z-index:2;">
-        <h4 style="font-family:'Inter Display',sans-serif;font-size:20px;font-weight:600;color:#fff;margin:0 0 6px 0;">${esc(title)}</h4>
-        <div style="display:flex;gap:8px;align-items:center;opacity:0.8;">
-          <span style="font-family:'Inter Display',sans-serif;font-size:13px;color:#fff;">${esc(category)}</span>
-          <span style="font-family:'Inter Display',sans-serif;font-size:13px;color:#fff;">/</span>
-          <span style="font-family:'Inter Display',sans-serif;font-size:13px;color:#fff;">${esc(year)}</span>
-        </div>
+<div class="project-card-item" style="position:relative;border-radius:12px;overflow:hidden;background:#fff;border:1px solid #E6E6E6;cursor:pointer;flex:0 0 calc(50% - 12px);display:flex;flex-direction:column;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:transform 0.2s ease,box-shadow 0.2s ease;">
+  <a href="${esc(link)}" target="_blank" rel="noopener" style="display:block;text-decoration:none;color:inherit;height:100%;display:flex;flex-direction:column;">
+    <div style="position:relative;height:200px;overflow:hidden;background:#f5f5f5;">
+      <img src="${esc(resolvedImg)}" alt="${esc(title)}" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s ease;">
+    </div>
+    <div style="padding:20px;flex-grow:1;display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;width:100%;gap:12px;">
+        <h4 style="font-family:'Inter Display',sans-serif;font-size:18px;font-weight:600;color:#000;margin:0;">${esc(title)}</h4>
+        <span style="font-family:'Inter Display',sans-serif;font-size:12px;font-weight:500;color:#666;background:#f3f3f3;padding:2px 8px;border-radius:12px;white-space:nowrap;">${esc(category)}</span>
       </div>
+      <p style="font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;color:#666;margin:4px 0 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${esc(description)}</p>
     </div>
   </a>
 </div>`;
@@ -76,6 +74,38 @@ function buildProjectsSection(profile: ProfileData): string {
 <div class="projects-grid-container" style="display:flex;flex-wrap:wrap;gap:24px;width:100%;padding:0 25px;">
   ${cards}
 </div>`;
+}
+
+function replaceWorkWrapperContent(html: string, projectsHtml: string): string {
+  const workWrapperStart = 'data-framer-name="work wrapper">';
+  const wIdx = html.indexOf(workWrapperStart);
+  if (wIdx === -1) return html;
+
+  const contentStart = wIdx + workWrapperStart.length;
+  
+  let pos = contentStart;
+  let depth = 1;
+  while (depth > 0 && pos < html.length) {
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+    
+    if (nextClose === -1) break;
+    
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + 4;
+    } else {
+      depth--;
+      pos = nextClose + 6;
+    }
+  }
+  
+  if (depth === 0) {
+    const wrapperEnd = pos - 6;
+    return html.substring(0, contentStart) + projectsHtml + html.substring(wrapperEnd);
+  }
+  
+  return html;
 }
 
 /**
@@ -229,31 +259,10 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   }
 
   // ─── 10. Projects / Work cards section ────────────────────────────────
-  // Replace the entire work wrapper content with user's projects
-  const workWrapperStart = 'data-framer-name="work wrapper">';
-  const workWrapperEnd = '</section>';
-  const wIdx = html.indexOf(workWrapperStart);
-  
-  if (wIdx !== -1 && (profile.projects || []).length > 0) {
-    // Find the range: from after work wrapper open tag to the Explore All button section
-    const contentStart = wIdx + workWrapperStart.length;
-    // Find the section close tag that ends the projects section
-    const projectsSection = html.indexOf('data-framer-name="Projects"');
-    if (projectsSection !== -1) {
-      // Replace the projects/work section
-      const projectsHtml = buildProjectsSection(profile);
-      const EXPLORE_MARKER = '<!--$--></div></div><!-/$--></div></section>';
-      const exploreIdx = html.indexOf('data-framer-name="Text wraooer"'); // typo in Framer
-      if (exploreIdx !== -1) {
-        const sectionEndClose = html.lastIndexOf('</section>', exploreIdx);
-        if (sectionEndClose !== -1) {
-          // We'll inject a marker and do a targeted replace
-          const OLD_WORK_WRAPPER_SECTION = html.substring(wIdx, wIdx + workWrapperStart.length);
-          // Just append our HTML after the wrapper open tag marker
-          html = html.substring(0, contentStart) + projectsHtml + html.substring(contentStart);
-        }
-      }
-    }
+  // Replace the entire work wrapper content with user's projects (replaces placeholder cards)
+  if ((profile.projects || []).length > 0) {
+    const projectsHtml = buildProjectsSection(profile);
+    html = replaceWorkWrapperContent(html, projectsHtml);
   }
 
   // ─── 11. Brands ticker section ─────────────────────────────────────────
@@ -384,6 +393,110 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
     .projects-grid-container {
       padding: 0 16px !important;
       gap: 16px !important;
+    }
+  }
+
+  /* --- Testimonials (Reviews) Slideshow Grid Restructuring --- */
+  .framer-9ivh3c-container, 
+  .framer-9ivh3c-container section, 
+  .framer-9ivh3c-container div, 
+  .framer-9ivh3c-container ul {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    transform: none !important;
+    gap: 24px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .framer-NYla7 .framer-9ivh3c-container {
+    height: auto !important;
+  }
+
+  /* Hide broken next/prev slider navigation controls */
+  .framer--slideshow-controls, 
+  .framer-9ivh3c-container fieldset {
+    display: none !important;
+  }
+
+  /* Set equal spacing & auto heights for cards */
+  .framer-esrupl-container, 
+  .framer-1x1fbg7-container, 
+  .framer-16lsjul-container {
+    position: relative !important;
+    width: calc(33.3333% - 16px) !important;
+    height: auto !important;
+    flex-shrink: 0 !important;
+    flex-grow: 1 !important;
+    max-width: 100% !important;
+    transform: none !important;
+    visibility: visible !important;
+    display: flex !important;
+  }
+
+  /* Premium testimonial card styling */
+  .framer-KjIJu {
+    width: 100% !important;
+    height: auto !important;
+    padding: 24px !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 24px !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
+  }
+
+  /* Testimonial card hover transition */
+  .framer-KjIJu:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  .framer-17i8f2v {
+    margin-top: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+
+  /* Project card hover effects */
+  .project-card-item:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08) !important;
+  }
+  .project-card-item:hover img {
+    transform: scale(1.03) !important;
+  }
+
+  /* Responsive breakpoints for testimonials */
+  @media (max-width: 991px) {
+    .framer-esrupl-container, 
+    .framer-1x1fbg7-container, 
+    .framer-16lsjul-container {
+      width: calc(50% - 12px) !important;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .framer-9ivh3c-container ul {
+      flex-direction: column !important;
+      gap: 16px !important;
+    }
+    .framer-esrupl-container, 
+    .framer-1x1fbg7-container, 
+    .framer-16lsjul-container {
+      width: 100% !important;
     }
   }
 </style>
