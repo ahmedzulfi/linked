@@ -380,6 +380,37 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
       width: 100% !important;
       max-width: 100% !important;
     }
+
+    /* Testimonials slideshow responsive sizing & swipe adjustments */
+    .framer-9ivh3c-container {
+      height: auto !important;
+      min-height: 280px !important;
+    }
+    .framer-9ivh3c-container section > div {
+      overflow-x: auto !important;
+      scroll-snap-type: x mandatory !important;
+      -webkit-overflow-scrolling: touch !important;
+      -ms-overflow-style: none !important;
+      scrollbar-width: none !important;
+    }
+    .framer-9ivh3c-container section > div::-webkit-scrollbar {
+      display: none !important;
+    }
+    
+    .framer-esrupl-container,
+    .framer-1x1fbg7-container,
+    .framer-16lsjul-container {
+      width: calc(50% - 7px) !important;
+      height: auto !important;
+      min-height: 240px !important;
+      scroll-snap-align: start !important;
+      flex-shrink: 0 !important;
+    }
+    .framer-KjIJu {
+      height: 100% !important;
+      min-height: 220px !important;
+      box-sizing: border-box !important;
+    }
   }
 
   /* Specific mobile-size adjustments (under 810px) */
@@ -404,6 +435,19 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
 
     .framer-DKwHu .framer-1bh76c {
       padding: 40px 16px !important;
+    }
+
+    .framer-9ivh3c-container {
+      min-height: 320px !important;
+    }
+    .framer-esrupl-container,
+    .framer-1x1fbg7-container,
+    .framer-16lsjul-container {
+      width: 100% !important;
+      min-height: 280px !important;
+    }
+    .framer-KjIJu {
+      min-height: 260px !important;
     }
   }
 </style>
