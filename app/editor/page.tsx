@@ -28,12 +28,32 @@ import {
   Inbox,
   FileText,
 } from "lucide-react";
-import ProfilePreview from "./components/ProfilePreview";
+import dynamic from "next/dynamic";
 import InlineEditor from "./components/InlineEditor";
 import WizardAnimations from "@/components/WizardAnimations";
-import DomainsPane from "./components/DomainsPane";
-import SettingsPane from "./components/SettingsPane";
 import { UserMenu } from "@/components/UserMenu";
+
+const ProfilePreview = dynamic(() => import("./components/ProfilePreview"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 font-sans">
+      <div className="flex flex-col items-center gap-2">
+        <div className="w-6 h-6 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />
+        <span>Loading preview…</span>
+      </div>
+    </div>
+  )
+});
+
+const DomainsPane = dynamic(() => import("./components/DomainsPane"), {
+  ssr: false,
+  loading: () => <div className="p-8 text-neutral-400 text-sm">Loading domains config...</div>,
+});
+
+const SettingsPane = dynamic(() => import("./components/SettingsPane"), {
+  ssr: false,
+  loading: () => <div className="p-8 text-neutral-400 text-sm">Loading settings...</div>,
+});
 
 // User avatar placeholder
 function UserAvatar() {

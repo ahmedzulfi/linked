@@ -2,6 +2,19 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { EditorProvider } from "@/context/EditorContext";
+import { Inter, Inter_Tight } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  variable: "--font-inter-tight",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "LinkedPage – Turn Your LinkedIn Into a Beautiful Personal Site",
@@ -21,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${interTight.variable}`}>
       <body className="min-h-screen font-inter bg-white text-black antialiased">
         <EditorProvider>{children}</EditorProvider>
         <Toaster position="bottom-right" richColors />

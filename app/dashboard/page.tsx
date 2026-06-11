@@ -20,8 +20,13 @@ import { toast } from "sonner";
 
 import { UserMenu } from "@/components/UserMenu";
 import { useEditor } from "@/context/EditorContext";
-import ProfilePreview from "@/app/editor/components/ProfilePreview";
+import dynamic from "next/dynamic";
 import { MOCK_PROFILE } from "@/shared/types";
+
+const ProfilePreview = dynamic(() => import("@/app/editor/components/ProfilePreview"), {
+  ssr: false,
+  loading: () => <div className="w-full h-full bg-neutral-100 animate-pulse" />,
+});
 import { AnimatedDashboardEmptyIllustration } from "@/components/AnimatedSVGs";
 
 export default function DashboardPage() {
