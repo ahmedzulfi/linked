@@ -167,36 +167,32 @@ function buildSystemPrompt(
   return `You are an expert AI website generator and editor assistant for "LinkedPage" (a platform that transforms LinkedIn profiles into personal websites).
 Your task is to conversationally interact with the user and execute their requested updates.
 
-### 🌟 DYNAMIC WEBPAGE LAYOUT (ai-custom)
-When the active template is "ai-custom", the website is composed of dynamic, fully customizable HTML/Tailwind CSS blocks. This allows you to generate, style, and add any custom sections (like a custom Education box, FAQ, projects showcase, custom text cards, styling grids, etc.) directly using raw Tailwind CSS v3 classes!
-
-The page automatically loads Tailwind CDN, so you can write *any* standard Tailwind v3 class (colors, margins, padding, flexbox, grid, shadows, borders, text size, etc.) and it will compile in real-time.
-
-To manage custom blocks on "ai-custom":
-1. Use 'initialize_custom_blocks' to populate default HTML blocks (Hero, About, Experience, Skills, Education, Links) based on the user's current profile data, and automatically switch the active template to "ai-custom".
-2. Use 'add_custom_block' to create and insert a completely new box/section anywhere in the layout.
-3. Use 'update_block_html' to rewrite the structure, design, text, colors, or classes of any block.
-4. Use 'delete_block' to remove any block.
-5. Use 'reorder_blocks' to rearrange the layout block structure.
+### 🌟 PREMIUM TEMPLATE (daniel-cross) CUSTOMIZATION
+When the active template is "daniel-cross", the layout features highly stylized, responsive sections including:
+- **What I Do / Services section**: Services grid cards (title, price, description) and a customizable Call-to-Action (CTA) block. Use 'update_services' to edit these.
+- **My Process Steps timeline**: Timeline steps (stepTag like '/01', title, description). Use 'update_processes' to edit these.
+- **Client Testimonials / Reviews slider**: A gorgeous client testimonials slider (quote, name, role, avatarUrl). Use 'update_testimonials' to edit these.
+- **Graphics & Portrait Overrides**: Custom About photo/portrait url ('aboutPhotoUrl'), handwritten signature graphic ('signatureUrl'), and footer banner graphic ('footerBannerUrl'). Use 'update_profile_field' to set these URLs.
 
 Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
 - Profile Data JSON:
 ${JSON.stringify({ ...profile, blocks: undefined }, null, 2)}
 
-${currentTemplate === "ai-custom" ? `- CURRENT BLOCKS INSTALLED:\n${currentBlocksList}` : "- Dynamic blocks: Not initialized on this template. Call 'initialize_custom_blocks' to convert this template to block-based editing."}
-
 ### 🛠️ STANDARD PROFILE TOOLS
 You also have standard tools to update structured profile fields:
-- To update text fields like name, headline, summary, location, avatarUrl, bannerUrl, use 'update_profile_field'.
+- To update text fields like name, headline, summary, location, avatarUrl, bannerUrl, aboutPhotoUrl, signatureUrl, footerBannerUrl, servicesTitle, processTitle, testimonialsTitle, use 'update_profile_field'.
 - To replace experience items, use 'update_experience'.
 - To replace education items, use 'update_education'.
 - To replace skills, use 'update_skills'.
 - To replace links, use 'update_links'.
-- To switch the template style, use 'switch_template' (available: "minimal-card", "bento-grid", "full-scroll", "dark", "ai-custom").
+- To replace or update testimonials/reviews, use 'update_testimonials'.
+- To replace or update services grid cards & call-to-action block, use 'update_services'.
+- To replace or update work/design process steps, use 'update_processes'.
+- To switch the template style, use 'switch_template' (available templates: "daniel-cross").
 
 ### 📋 INSTRUCTIONS
-1. If the user wants to add an education section or a new section that isn't showing up (or if they ask to make edits to elements, add custom boxes, or change element colors/sizes), first switch template to "ai-custom" or call "initialize_custom_blocks", then edit the block's HTML code using 'update_block_html' or inject a custom block with 'add_custom_block'.
+1. If the user asks you to modify services, client reviews/testimonials, process timeline, or profile override graphics, use the specialized tools ('update_services', 'update_testimonials', 'update_processes', 'update_profile_field').
 2. Explain friendly and conversationally what updates you are making in your response.
 3. Keep updates clean, beautiful, premium, and highly responsive.`;
 }
@@ -327,7 +323,7 @@ export async function POST(request: Request) {
       tools: {
         update_profile_field: tool({
           description:
-            "Updates a single string/text field in the user's profile (name, headline, summary, location, avatarUrl, bannerUrl). Only call this for text fields.",
+            "Updates a single string/text field in the user's profile (name, headline, summary, location, avatarUrl, bannerUrl, aboutPhotoUrl, signatureUrl, footerBannerUrl, servicesTitle, processTitle, testimonialsTitle). Only call this for text fields.",
           inputSchema: z.object({
             key: z
               .enum([
@@ -337,6 +333,12 @@ export async function POST(request: Request) {
                 "location",
                 "avatarUrl",
                 "bannerUrl",
+                "aboutPhotoUrl",
+                "signatureUrl",
+                "footerBannerUrl",
+                "servicesTitle",
+                "processTitle",
+                "testimonialsTitle",
               ])
               .describe("The field name to update"),
             value: z.string().describe("The new value for the field"),
@@ -353,6 +355,119 @@ export async function POST(request: Request) {
                 await updateWebsite(websiteId, { profile: newProfile });
               }
               return { success: true, updated: key, value };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          },
+        }),
+        update_testimonials: tool({
+          description:
+            "Replaces/updates the list of client reviews (testimonials). Always provide the complete array.",
+          inputSchema: z.object({
+            testimonials: z
+              .array(
+                z.object({
+                  quote: z.string().describe("The review/testimonial text quoted from the client"),
+                  name: z.string().describe("Client name"),
+                  role: z.string().describe("Client's role or company"),
+                  avatarUrl: z.string().describe("Client's avatar image URL or empty string"),
+                })
+              )
+              .describe("The complete list of client testimonials"),
+          }),
+          execute: async ({ testimonials }) => {
+            try {
+              profileUpdates.testimonials = testimonials;
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  testimonials,
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "testimonials", count: testimonials.length };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          },
+        }),
+        update_services: tool({
+          description:
+            "Replaces/updates the services list and the call-to-action details under the services section.",
+          inputSchema: z.object({
+            servicesTitle: z.string().optional().describe("Optional new title for the services section"),
+            services: z
+              .array(
+                z.object({
+                  title: z.string().describe("Service name/title"),
+                  price: z.string().describe("Price/cost detail, e.g. '$2,500' or 'Custom'"),
+                  description: z.string().describe("Description of what this service covers"),
+                })
+              )
+              .describe("The complete list of services"),
+            servicesCta: z
+              .object({
+                title: z.string().describe("CTA card heading"),
+                text: z.string().describe("CTA card description body"),
+                buttonText: z.string().describe("CTA button text"),
+                buttonUrl: z.string().describe("CTA button URL link"),
+              })
+              .optional()
+              .describe("Optional Call-To-Action card updates"),
+          }),
+          execute: async ({ servicesTitle, services, servicesCta }) => {
+            try {
+              if (servicesTitle) profileUpdates.servicesTitle = servicesTitle;
+              profileUpdates.services = services;
+              if (servicesCta) profileUpdates.servicesCta = servicesCta;
+              
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  services,
+                  ...(servicesTitle ? { servicesTitle } : {}),
+                  ...(servicesCta ? { servicesCta } : {}),
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "services", count: services.length };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          },
+        }),
+        update_processes: tool({
+          description:
+            "Replaces/updates the timeline steps of the work/design process.",
+          inputSchema: z.object({
+            processTitle: z.string().optional().describe("Optional new title for the process steps section"),
+            processes: z
+              .array(
+                z.object({
+                  stepTag: z.string().describe("Visual sequence indicator, e.g., '/01', '/02'"),
+                  title: z.string().describe("Title of this phase of the process"),
+                  description: z.string().describe("Brief details describing this process step"),
+                })
+              )
+              .describe("The complete list of process steps"),
+          }),
+          execute: async ({ processTitle, processes }) => {
+            try {
+              if (processTitle) profileUpdates.processTitle = processTitle;
+              profileUpdates.processes = processes;
+              
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  processes,
+                  ...(processTitle ? { processTitle } : {}),
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "processes", count: processes.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }

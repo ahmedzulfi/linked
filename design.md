@@ -203,7 +203,13 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
     - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts.
     - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts.
     - **Step 9 (Free-form Editor & Chat Mode):** Activated after selecting a template. Features a sub-tab switcher at the top of the panel to toggle between the **💬 AI Chat Assistant** (timeline chat + suggestions pills + input composer) and **✍️ Manual Editor** (rendered via `InlineEditor` component).
-      - **Manual Editor:** Exposes visual input fields to directly modify all profile fields manually, including Profile (name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL), Projects (adding, modifying details, deleting projects), Experience timeline, and Links.
+      - **Manual Editor:** Exposes visual input fields to directly modify all profile fields manually, including:
+        - **Profile:** Name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL, and graphics overrides (About photo/portrait, handwritten signature image, footer work banner background).
+        - **Projects:** Adding, modifying details, deleting projects.
+        - **Work:** Work experience roles timeline.
+        - **Services:** Services grid cards (title, price, description), services call-to-action details (title, text, button text/URL), and custom process steps (step tag, title, description).
+        - **Reviews:** Custom client testimonials (quote, client name, role, avatar URL).
+        - **Links:** Contact & social links.
     - **Data Persistence:** To prevent data loss on page reloads, form state mutations are synced to the database context in real-time (triggering debounced autosaves), the last edited website draft ID is stored in `sessionStorage` (key: `linkedpage_last_website_id`), the active wizard step status is preserved in `sessionStorage` (key: `webild_onboarding_step`), and chat history is fully restored from `/api/chat` on load.
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
