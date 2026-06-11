@@ -202,8 +202,8 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
     - **Step 6 (AI Copy Refinement):** Displays an interactive "Before vs. After" comparison of their headline and summary/bio, highlighting the AI optimization with a line-through on original text and allowing the user to make manual copy tweaks directly in the inputs before advancing.
     - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts.
     - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts.
-    - **Step 9 (Free-form Editor & Chat Mode):** Activated after selecting a template. Features a sub-tab switcher at the top of the panel to toggle between the **💬 AI Chat Assistant** (timeline chat + suggestions pills + input composer) and **✍️ Manual Editor** (rendered via `InlineEditor` component).
-      - **Manual Editor:** Exposes visual input fields to directly modify all profile fields manually, including:
+    - **Step 9 (Free-form Editor & Chat Mode):** Activated after selecting a template. Features a visual canvas selection mode:
+      - **Visual Customizer (Properties Panel):** Replaces the chat sidebar when the **Customize** button is active and an element on the canvas is clicked/selected. Exposes contextual input forms to modify:
         - **Profile:** Name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL, and graphics overrides (About photo/portrait, handwritten signature image, footer work banner background).
         - **Projects:** Adding, modifying details, deleting projects.
         - **Work:** Work experience roles timeline.

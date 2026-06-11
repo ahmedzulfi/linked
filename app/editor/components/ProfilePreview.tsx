@@ -7,8 +7,11 @@ interface ProfilePreviewProps {
   profile: ProfileData;
   template: TemplateId;
   scale?: number;
-  onFieldClick?: (fieldName: string) => void;
+  onFieldClick?: (fieldName: string, index?: number) => void;
   fluid?: boolean;
+  isSelectionMode?: boolean;
+  selectedField?: string | null;
+  selectedIndex?: number;
 }
 
 // ── Helpers for client-side HTML compilation ───────────────────────────────
@@ -27,11 +30,12 @@ function buildProjectCard(
   link: string,
   imageUrl: string,
   category: string,
-  year: string
+  year: string,
+  index: number
 ): string {
   const resolvedImg = imageUrl || "/templates/daniel-cross/NZiJk1LCTBcGzs2MNANRaoxI2IA.png";
   return `
-<div class="ssr-variant">
+<div class="ssr-variant" data-editable-field="project" data-editable-index="${index}">
   <div class="framer-1kys2js-container" data-framer-name="Work card" name="Work card" style="will-change: transform; opacity: 1; transform: none;">
     <!--$--><a name="Work card" class="framer-cOcSQ framer-x2WlA framer-5K3Le framer-ryc3c framer-v-ryc3c framer-j0rmx6" data-framer-name="Work card" href="${esc(link)}" style="background-color: var(--token-594aa502-e203-45ce-9ad2-f76051124fa9, rgb(255, 255, 255)); width: 100%; border-radius: 12px; opacity: 1;">
       <div class="framer-z31oie" data-framer-name="Cover image" style="transform: none; opacity: 1;">
@@ -66,14 +70,15 @@ function buildProjectsSection(profile: ProfileData): string {
   if (projects.length === 0) return "";
 
   const cards = projects
-    .map((p) =>
+    .map((p, index) =>
       buildProjectCard(
         p.title,
         p.description,
         p.link || "#",
         p.image || "",
         "Design",
-        new Date().getFullYear().toString()
+        new Date().getFullYear().toString(),
+        index
       )
     )
     .join("\n");
@@ -172,8 +177,8 @@ function buildServicesSection(profile: ProfileData): string {
   const services = profile.services && profile.services.length > 0 ? profile.services : DEFAULT_SERVICES;
   const cta = profile.servicesCta || DEFAULT_SERVICES_CTA;
 
-  const cards = services.map((s) => `
-<div class="ssr-variant">
+  const cards = services.map((s, index) => `
+<div class="ssr-variant" data-editable-field="service" data-editable-index="${index}">
   <div class="framer-1pxl5gq-container" data-framer-name="Service card" name="Service card" style="will-change: transform; opacity: 1; transform: none;">
     <div name="Service card" class="framer-VzKJz framer-jF71g framer-7fvNa framer-6tapR framer-1e9a2dx framer-v-1e9a2dx" data-framer-name="Service card" style="background-color: var(--token-1f466c1a-ea57-4ca6-b62a-278c9a994c3b, rgb(237, 234, 231)); width: 100%; border-radius: 10px; opacity: 1;">
       <div class="framer-1gbvodd" data-framer-name="Top text" style="opacity: 1;">
@@ -194,7 +199,7 @@ function buildServicesSection(profile: ProfileData): string {
 </div>`).join("\n");
 
   const ctaCard = `
-<div class="framer-qz5mfl" data-framer-name="Services Contact card" style="will-change: transform; opacity: 1; transform: none;">
+<div class="framer-qz5mfl" data-editable-field="servicesCta" data-framer-name="Services Contact card" style="will-change: transform; opacity: 1; transform: none;">
   <div class="framer-1pi5p4y" data-framer-name="Text wrapper">
     <div class="framer-z96g2q" data-framer-component-type="RichTextContainer" style="transform:none">
       <p class="framer-text framer-styles-preset-tupu2d" data-styles-preset="gDmw1PFmz">${esc(cta.title)}</p>
@@ -246,7 +251,7 @@ function buildProcessStepsSection(profile: ProfileData): string {
   const cards = steps.map((s, idx) => {
     const stepName = `Step 0${idx + 1}`;
     return `
-<div class="ssr-variant">
+<div class="ssr-variant" data-editable-field="process" data-editable-index="${idx}">
   <div class="framer-h03gyd-container" data-framer-name="${esc(stepName)}" name="${esc(stepName)}" style="will-change: transform; opacity: 1; transform: none;">
     <div name="${esc(stepName)}" class="framer-euNV9 framer-jF71g framer-7fvNa framer-6tapR framer-mfpv4s framer-v-mfpv4s" data-border="true" data-framer-name="Process step" style="--1og3yzz: 0px 0px 24px 0px; --border-bottom-width: 1px; --border-color: var(--token-d14b4603-7c19-4eb1-a2c4-11c0d954f027, rgba(0, 0, 0, 0.1)); --border-left-width: 0px; --border-right-width: 0px; --border-style: solid; --border-top-width: 0px; width: 100%; opacity: 1;">
       <div class="framer-k69a0f" data-framer-name="Top text" style="opacity: 1;">
@@ -311,7 +316,7 @@ function buildTestimonialsSection(profile: ProfileData): string {
     const resolvedAvatar = t.avatarUrl || defaultAvatars[idx % 3];
 
     return `
-<li style="display: contents;">
+<li style="display: contents;" data-editable-field="testimonial" data-editable-index="${idx}">
   <div class="framer-esrupl-container" data-framer-name="Reviews card" name="Reviews card" style="flex-shrink: 0; user-select: none; width: calc(33.3333% - 9.33333px); height: 100%; opacity: 1; visibility: visible; transform: none; transform-origin: 100% 50% 0px;" aria-hidden="true">
     <div name="Reviews card" class="framer-KjIJu framer-6tapR framer-5K3Le framer-ufx0vo framer-v-ufx0vo" data-framer-name="Reviews card" style="background-color: var(--token-1f466c1a-ea57-4ca6-b62a-278c9a994c3b, rgb(237, 234, 231)); width: 100%; border-radius: 16px; opacity: 1;">
       <div class="framer-1uws27r" data-framer-component-type="RichTextContainer" style="--framer-link-text-color: rgb(0, 153, 255); --framer-link-text-decoration: underline; transform: none; opacity: 1;">
@@ -387,45 +392,45 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Page title
   html = replaceAll(html, "Danielcross - Personal Portfolio Framer Template", esc(`${profile.name} - Portfolio`));
 
-  // Sidebar name
-  html = replaceAll(html, ">Daniel Cross<", `>${esc(profile.name)}<`);
+  // Sidebar name wrapped for selection
+  html = replaceAll(html, ">Daniel Cross<", `><span data-editable-field="name">${esc(profile.name)}</span><`);
 
-  // Role / headline
-  html = replaceAll(html, ">ui/ux designer<", `>${esc(profile.headline)}<`);
+  // Role / headline wrapped for selection
+  html = replaceAll(html, ">ui/ux designer<", `><span data-editable-field="headline">${esc(profile.headline)}</span><`);
 
   // Hero first name
   const firstName = profile.name.split(" ")[0];
   html = replaceAll(html, ">daniel<", `>${esc(firstName)}<`);
 
-  // About me paragraph
+  // About me paragraph wrapped for selection
   html = replaceAll(
     html,
     "I'm Daniel Cross, a passionate UI/UX Designer dedicated to crafting digital experiences that truly connect with people. With a focus on simplicity, usability, and creativity, I design products that not only look beautiful but also solve real problems. My approach blends strategy, design, and technology to transform ideas into meaningful solutions. Whether it's designing intuitive interfaces, building websites, or shaping brand identities, I bring every project to life with precision and purpose.",
-    esc(profile.summary)
+    `<span data-editable-field="summary">${esc(profile.summary)}</span>`
   );
 
-  // Location
+  // Location wrapped for selection
   const location = profile.location || "Remote";
-  html = replaceAll(html, ">Based in London-UK<", `>Based in ${esc(location)}<`);
-  html = replaceAll(html, ">London-UK<", `>${esc(location)}<`);
+  html = replaceAll(html, ">Based in London-UK<", `><span data-editable-field="location">Based in ${esc(location)}</span><`);
+  html = replaceAll(html, ">London-UK<", `><span data-editable-field="location">${esc(location)}</span><`);
 
-  // Footer email
+  // Footer email wrapped for selection
   const emailLink = profile.links.find((l) => l.icon === "email");
   const email = emailLink ? emailLink.url.replace("mailto:", "") : "hello@example.com";
   html = replaceAll(html, 'href="mailto:hello@gmail.com"', `href="mailto:${esc(email)}"`);
-  html = replaceAll(html, ">hello@gmail.com<", `>${esc(email)}<`);
-  html = replaceAll(html, ">+44 7700 900123<", `>${esc(location)}<`);
+  html = replaceAll(html, ">hello@gmail.com<", `><span data-editable-field="email">${esc(email)}</span><`);
+  html = replaceAll(html, ">+44 7700 900123<", `><span data-editable-field="location">${esc(location)}</span><`);
 
-  // Social link hrefs
+  // Social link hrefs tagged for selection
   const linksByIcon: Record<string, string> = {};
   for (const l of profile.links) {
     if (l.icon) linksByIcon[l.icon] = l.url;
   }
   if (linksByIcon.linkedin) {
-    html = replaceAll(html, 'href="https://www.linkedin.com/"', `href="${esc(linksByIcon.linkedin)}"`);
+    html = replaceAll(html, 'href="https://www.linkedin.com/"', `data-editable-field="links" href="${esc(linksByIcon.linkedin)}"`);
   }
   if (linksByIcon.twitter) {
-    html = replaceAll(html, 'href="https://x.com/"', `href="${esc(linksByIcon.twitter)}"`);
+    html = replaceAll(html, 'href="https://x.com/"', `data-editable-field="links" href="${esc(linksByIcon.twitter)}"`);
   }
 
   // Projects / Work cards section (replaces the entire placeholder cards inside the wrapper)
@@ -434,7 +439,7 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
     html = replaceWorkWrapperContent(html, projectsHtml);
   }
 
-  // Brands ticker section
+  // Brands ticker section wrapped in a selectable div
   const tickerMarker = 'data-framer-name="Ticker logos"';
   const tickerIdx = html.indexOf(tickerMarker);
   if (tickerIdx !== -1 && profile.experience.length > 0) {
@@ -442,39 +447,55 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
     const tickerClose = html.indexOf("<!--/$-->", tickerOpenEnd);
     if (tickerClose !== -1) {
       const tickerHtml = buildBrandsTicker(profile);
-      html = html.substring(0, tickerOpenEnd) + tickerHtml + html.substring(tickerClose);
+      html = html.substring(0, tickerOpenEnd) + `<div data-editable-field="experience" style="width: 100%;">` + tickerHtml + `</div>` + html.substring(tickerClose);
     }
   }
 
-  // Replace avatars and banners
+  // Replace avatars and banners tagged for selection
   if (profile.avatarUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl));
+    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl) + '" data-editable-field="avatarUrl" data-editable-type="image');
+  } else {
+    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", '/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg" data-editable-field="avatarUrl" data-editable-type="image');
   }
   const heroPhoto = profile.bannerUrl || profile.avatarUrl;
   if (heroPhoto) {
-    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto) + '" data-editable-field="bannerUrl" data-editable-type="image');
+  } else {
+    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", '/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png" data-editable-field="bannerUrl" data-editable-type="image');
   }
 
-  // Replace custom section titles if provided
+  // Replace custom section titles if provided, wrapped in spans
   if (profile.servicesTitle) {
-    html = replaceAll(html, ">Turning ideas into digital experiences<", `>${esc(profile.servicesTitle)}<`);
+    html = replaceAll(html, ">Turning ideas into digital experiences<", `><span data-editable-field="servicesTitle">${esc(profile.servicesTitle)}</span><`);
+  } else {
+    html = replaceAll(html, ">Turning ideas into digital experiences<", `><span data-editable-field="servicesTitle">Turning ideas into digital experiences</span><`);
   }
   if (profile.processTitle) {
-    html = replaceAll(html, ">From ideas to impactful creative results.<", `>${esc(profile.processTitle)}<`);
+    html = replaceAll(html, ">From ideas to impactful creative results.<", `><span data-editable-field="processTitle">${esc(profile.processTitle)}</span><`);
+  } else {
+    html = replaceAll(html, ">From ideas to impactful creative results.<", `><span data-editable-field="processTitle">From ideas to impactful creative results.</span><`);
   }
   if (profile.testimonialsTitle) {
-    html = replaceAll(html, ">Voices of trust from happy clients<", `>${esc(profile.testimonialsTitle)}<`);
+    html = replaceAll(html, ">Voices of trust from happy clients<", `><span data-editable-field="testimonialsTitle">${esc(profile.testimonialsTitle)}</span><`);
+  } else {
+    html = replaceAll(html, ">Voices of trust from happy clients<", `><span data-editable-field="testimonialsTitle">Voices of trust from happy clients</span><`);
   }
 
-  // Replace customizable images if provided
+  // Replace customizable images if provided, tagged for selection
   if (profile.aboutPhotoUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png", esc(profile.aboutPhotoUrl));
+    html = replaceAll(html, "/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png", esc(profile.aboutPhotoUrl) + '" data-editable-field="aboutPhotoUrl" data-editable-type="image');
+  } else {
+    html = replaceAll(html, "/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png", '/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png" data-editable-field="aboutPhotoUrl" data-editable-type="image');
   }
   if (profile.signatureUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png", esc(profile.signatureUrl));
+    html = replaceAll(html, "/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png", esc(profile.signatureUrl) + '" data-editable-field="signatureUrl" data-editable-type="image');
+  } else {
+    html = replaceAll(html, "/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png", '/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png" data-editable-field="signatureUrl" data-editable-type="image');
   }
   if (profile.footerBannerUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png", esc(profile.footerBannerUrl));
+    html = replaceAll(html, "/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png", esc(profile.footerBannerUrl) + '" data-editable-field="footerBannerUrl" data-editable-type="image');
+  } else {
+    html = replaceAll(html, "/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png", '/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png" data-editable-field="footerBannerUrl" data-editable-type="image');
   }
 
   // Compile custom services
@@ -495,7 +516,24 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Reset reviews slider starting translation to 0px so testimonials are visible by default
   html = replaceAll(html, "transform: translateX(-1214px);", "transform: translateX(0px);");
 
-  // Add custom responsive stylesheet overrides to prevent absolute width overflows and correctly display hidden variants
+  // Injected CSS variables for custom colors theme override
+  let colorStyles = "";
+  if (profile.themeColors) {
+    const { primaryBg, accentColor, cardBg, textPrimary, textMuted } = profile.themeColors;
+    colorStyles = `
+<style id="custom-theme-colors">
+  body {
+    ${primaryBg ? `--token-d469a4a3-0708-4dfe-8498-9b2828796a10: ${primaryBg} !important; --token-1d129b27-20b9-421b-bc87-4be93ee49891: ${primaryBg} !important;` : ""}
+    ${accentColor ? `--token-09c1722d-5d82-4a0e-b304-abc5a551cacb: ${accentColor} !important;` : ""}
+    ${cardBg ? `--token-1f466c1a-ea57-4ca6-b62a-278c9a994c3b: ${cardBg} !important;` : ""}
+    ${textPrimary ? `--token-5b7978f2-455d-4675-a18c-26d9c3d422ca: ${textPrimary} !important;` : ""}
+    ${textMuted ? `--token-13ef338a-a018-4b90-9b3e-7bf1136daf34: ${textMuted} !important;` : ""}
+  }
+</style>
+`;
+  }
+
+  // Add custom responsive stylesheet overrides
   const responsiveStyles = `
 <style data-custom-responsive="true">
   /* Base hidden class overrides */
@@ -629,7 +667,81 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   }
 </style>
 `;
-  html = html.replace("</head>", `${responsiveStyles}</head>`);
+
+  // Visual selection outline highlight overlay script inside iframe
+  const selectionScripts = `
+<style id="editable-highlight-styles">
+  [data-editable-field] {
+    transition: outline 0.15s ease-in-out, background-color 0.15s ease-in-out;
+  }
+  body.selection-mode-active [data-editable-field] {
+    cursor: pointer !important;
+  }
+  body.selection-mode-active [data-editable-field]:hover {
+    outline: 2px solid #3b82f6 !important;
+    outline-offset: 2px;
+    background-color: rgba(59, 130, 246, 0.04) !important;
+  }
+  body.selection-mode-active [data-editable-field].selected-element {
+    outline: 2px solid #2563eb !important;
+    outline-offset: 2px;
+    background-color: rgba(37, 99, 235, 0.08) !important;
+  }
+</style>
+<script id="editable-highlight-script">
+  // Listen for selection mode updates from host
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'SET_SELECTION_MODE') {
+      if (e.data.active) {
+        document.body.classList.add('selection-mode-active');
+      } else {
+        document.body.classList.remove('selection-mode-active');
+        document.querySelectorAll('.selected-element').forEach(el => el.classList.remove('selected-element'));
+      }
+    }
+    if (e.data && e.data.type === 'SET_SELECTED_FIELD') {
+      document.querySelectorAll('.selected-element').forEach(el => el.classList.remove('selected-element'));
+      const field = e.data.field;
+      const index = e.data.index;
+      if (field) {
+        let selector = '[data-editable-field="' + field + '"]';
+        if (index !== undefined && index !== null) {
+          selector += '[data-editable-index="' + index + '"]';
+        }
+        const target = document.querySelector(selector);
+        if (target) {
+          target.classList.add('selected-element');
+        }
+      }
+    }
+  });
+
+  // Capture clicks on customizable elements and post them to parent
+  document.addEventListener('click', (e) => {
+    if (!document.body.classList.contains('selection-mode-active')) return;
+    
+    const target = e.target.closest('[data-editable-field]');
+    if (target) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const field = target.getAttribute('data-editable-field');
+      const index = target.getAttribute('data-editable-index');
+      
+      document.querySelectorAll('.selected-element').forEach(el => el.classList.remove('selected-element'));
+      target.classList.add('selected-element');
+      
+      window.parent.postMessage({
+        type: 'ELEMENT_CLICKED',
+        field: field,
+        index: index ? parseInt(index, 10) : undefined
+      }, '*');
+    }
+  }, true);
+</script>
+`;
+
+  html = html.replace("</head>", `${responsiveStyles}${colorStyles}${selectionScripts}</head>`);
 
   return html;
 }
@@ -640,6 +752,10 @@ export default function ProfilePreview({
   template,
   scale = 1,
   fluid = false,
+  isSelectionMode = false,
+  selectedField = null,
+  selectedIndex,
+  onFieldClick,
 }: ProfilePreviewProps) {
   const [rawTemplate, setRawTemplate] = useState<string | null>(null);
   const [compiledHtml, setCompiledHtml] = useState<string>("");
@@ -662,6 +778,36 @@ export default function ProfilePreview({
     setCompiledHtml(html);
   }, [rawTemplate, profile]);
 
+  // Handle click captures from iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === "ELEMENT_CLICKED") {
+        if (onFieldClick) {
+          onFieldClick(event.data.field, event.data.index);
+        }
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [onFieldClick]);
+
+  // Sync state to iframe when selection changes
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    
+    iframe.contentWindow.postMessage({
+      type: "SET_SELECTION_MODE",
+      active: isSelectionMode
+    }, "*");
+
+    iframe.contentWindow.postMessage({
+      type: "SET_SELECTED_FIELD",
+      field: selectedField,
+      index: selectedIndex
+    }, "*");
+  }, [isSelectionMode, selectedField, selectedIndex, compiledHtml]);
+
   const PREVIEW_W = 1200;
   const PREVIEW_H = 900;
 
@@ -675,6 +821,23 @@ export default function ProfilePreview({
           style={{ height: "100%" }}
           sandbox="allow-same-origin allow-scripts"
           title="Profile Preview"
+          onLoad={() => {
+            // Push active state immediately on iframe load completion to prevent race conditions
+            const iframe = iframeRef.current;
+            if (iframe && iframe.contentWindow) {
+              iframe.contentWindow.postMessage({
+                type: "SET_SELECTION_MODE",
+                active: isSelectionMode
+              }, "*");
+              if (selectedField) {
+                iframe.contentWindow.postMessage({
+                  type: "SET_SELECTED_FIELD",
+                  field: selectedField,
+                  index: selectedIndex
+                }, "*");
+              }
+            }
+          }}
         />
       </div>
     );
@@ -709,6 +872,22 @@ export default function ProfilePreview({
         }}
         sandbox="allow-same-origin allow-scripts"
         title="Profile Preview"
+        onLoad={() => {
+          const iframe = iframeRef.current;
+          if (iframe && iframe.contentWindow) {
+            iframe.contentWindow.postMessage({
+              type: "SET_SELECTION_MODE",
+              active: isSelectionMode
+            }, "*");
+            if (selectedField) {
+              iframe.contentWindow.postMessage({
+                type: "SET_SELECTED_FIELD",
+                field: selectedField,
+                index: selectedIndex
+              }, "*");
+            }
+          }
+        }}
       />
     </div>
   );

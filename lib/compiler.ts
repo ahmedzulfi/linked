@@ -711,7 +711,22 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   }
 </style>
 `;
-  html = html.replace("</head>", `${responsiveStyles}</head>`);
+  let colorStyles = "";
+  if (profile.themeColors) {
+    const { primaryBg, accentColor, cardBg, textPrimary, textMuted } = profile.themeColors;
+    colorStyles = `
+<style id="custom-theme-colors">
+  body {
+    ${primaryBg ? `--token-d469a4a3-0708-4dfe-8498-9b2828796a10: ${primaryBg} !important; --token-1d129b27-20b9-421b-bc87-4be93ee49891: ${primaryBg} !important;` : ""}
+    ${accentColor ? `--token-09c1722d-5d82-4a0e-b304-abc5a551cacb: ${accentColor} !important;` : ""}
+    ${cardBg ? `--token-1f466c1a-ea57-4ca6-b62a-278c9a994c3b: ${cardBg} !important;` : ""}
+    ${textPrimary ? `--token-5b7978f2-455d-4675-a18c-26d9c3d422ca: ${textPrimary} !important;` : ""}
+    ${textMuted ? `--token-13ef338a-a018-4b90-9b3e-7bf1136daf34: ${textMuted} !important;` : ""}
+  }
+</style>
+`;
+  }
+  html = html.replace("</head>", `${responsiveStyles}${colorStyles}</head>`);
 
   return html;
 }

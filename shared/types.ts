@@ -68,6 +68,13 @@ export interface ProfileData {
   processes?: Array<{ stepTag: string; title: string; description: string }>;
   testimonialsTitle?: string;
   testimonials?: Array<{ quote: string; name: string; role: string; avatarUrl: string }>;
+  themeColors?: {
+    primaryBg?: string;
+    accentColor?: string;
+    cardBg?: string;
+    textPrimary?: string;
+    textMuted?: string;
+  };
 }
 
 export type TemplateId = "daniel-cross";
