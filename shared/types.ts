@@ -56,6 +56,18 @@ export interface ProfileData {
   linkedinUrl: string;
   // AI-generated dynamic blocks
   blocks?: CustomBlock[];
+
+  // Custom template elements
+  aboutPhotoUrl?: string;
+  signatureUrl?: string;
+  footerBannerUrl?: string;
+  servicesTitle?: string;
+  services?: Array<{ title: string; price: string; description: string }>;
+  servicesCta?: { title: string; text: string; buttonText: string; buttonUrl: string };
+  processTitle?: string;
+  processes?: Array<{ stepTag: string; title: string; description: string }>;
+  testimonialsTitle?: string;
+  testimonials?: Array<{ quote: string; name: string; role: string; avatarUrl: string }>;
 }
 
 export type TemplateId = "daniel-cross";

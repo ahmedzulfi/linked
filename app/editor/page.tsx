@@ -1008,7 +1008,9 @@ function EditorInner() {
                     <span className="font-semibold text-[13.5px] text-black">Webild</span>
                   </div>
                   <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                    Setup complete! Your website is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or swap templates. What would you like to adjust?
+                    Setup complete! Your website is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or swap templates.
+                    <br/><br/>
+                    On the <strong>Daniel Cross</strong> template, you can also ask me to adjust your <strong>Services cards</strong>, client <strong>Reviews</strong>, or design <strong>Process steps</strong>! Or switch to the <strong>✍️ Manual Editor</strong> tab to tweak them visual-form style. What would you like to adjust?
                   </div>
                 </div>
 
