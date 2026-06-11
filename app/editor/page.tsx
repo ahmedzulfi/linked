@@ -29,7 +29,7 @@ import {
   FileText,
 } from "lucide-react";
 import dynamic from "next/dynamic";
-import InlineEditor from "./components/InlineEditor";
+import PropertiesPanel from "./components/PropertiesPanel";
 import WizardAnimations from "@/components/WizardAnimations";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -182,7 +182,11 @@ function EditorInner() {
   const [customMessages, setCustomMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
   const [chatInput, setChatInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
-  const [designSubTab, setDesignSubTab] = useState<"chat" | "manual">("chat");
+
+  // Selection mode states for the visual customizer
+  const [isSelectionMode, setIsSelectionMode] = useState<boolean>(false);
+  const [selectedField, setSelectedField] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
@@ -619,19 +623,24 @@ function EditorInner() {
     }
   };
 
-  // Preview click handler to map sections to wizard steps
-  const handleFieldClick = (fieldName: string) => {
-    setActiveNav(1); // Switch back to Design/Wizard tab
-    if (fieldName === "projects" || fieldName.startsWith("block-")) {
-      setCurrentStep(2);
-    } else if (fieldName === "interests" || fieldName === "summary") {
-      setCurrentStep(3);
-    } else if (fieldName === "skills") {
-      setCurrentStep(4);
-    } else if (fieldName === "experience") {
-      setCurrentStep(5);
+  // Preview click handler to map sections to wizard steps or select elements
+  const handleFieldClick = (fieldName: string, index?: number) => {
+    if (isSelectionMode) {
+      setSelectedField(fieldName);
+      setSelectedIndex(index);
     } else {
-      toast.info(`Select the options in the chat flow to modify your ${fieldName}.`);
+      setActiveNav(1); // Switch back to Design/Wizard tab
+      if (fieldName === "projects" || fieldName.startsWith("block-")) {
+        setCurrentStep(2);
+      } else if (fieldName === "interests" || fieldName === "summary") {
+        setCurrentStep(3);
+      } else if (fieldName === "skills") {
+        setCurrentStep(4);
+      } else if (fieldName === "experience") {
+        setCurrentStep(5);
+      } else {
+        toast.info(`Select the options in the chat flow to modify your ${fieldName}.`);
+      }
     }
   };
 
@@ -673,6 +682,11 @@ function EditorInner() {
                       router.push("/dashboard");
                     } else {
                       setActiveNav(i);
+                      if (i !== 1) {
+                        setIsSelectionMode(false);
+                        setSelectedField(null);
+                        setSelectedIndex(undefined);
+                      }
                     }
                   }}
                   title={item.label}
@@ -768,8 +782,35 @@ function EditorInner() {
       {/* 1. Design / AI Onboarding Wizard Panel (510px width) */}
       {activeNav === 1 && (
         <aside className="w-[510px] shrink-0 h-full bg-white border-r border-[#E6E6E6]/60 flex flex-col justify-between shadow-xs relative z-20 font-inter">
-          {/* Title Header */}
-          <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0 bg-white">
+          {isSelectionMode ? (
+            editedProfile ? (
+              <PropertiesPanel
+                profile={editedProfile}
+                selectedField={selectedField}
+                selectedIndex={selectedIndex}
+                onChange={updateField}
+                onClose={() => {
+                  setIsSelectionMode(false);
+                  setSelectedField(null);
+                  setSelectedIndex(undefined);
+                }}
+                onSelectField={(field, idx) => {
+                  setSelectedField(field);
+                  setSelectedIndex(idx);
+                }}
+              />
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-sm text-neutral-400 font-sans">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-6 h-6 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />
+                  <span>Loading customizer…</span>
+                </div>
+              </div>
+            )
+          ) : (
+            <>
+              {/* Title Header */}
+              <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0 bg-white">
             <div className="flex items-center gap-2">
               <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
               <div className="w-px h-3 bg-black/10" />
@@ -790,40 +831,8 @@ function EditorInner() {
             </div>
           </div>
 
-          {currentStep === 9 && (
-            <div className="px-6 py-2.5 border-b border-neutral-100 bg-neutral-50/50 flex gap-2 select-none shrink-0">
-              <button
-                onClick={() => setDesignSubTab("chat")}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 active:scale-[0.97] ${
-                  designSubTab === "chat"
-                    ? "bg-white text-neutral-900 shadow-sm border border-neutral-200"
-                    : "text-neutral-500 hover:text-neutral-900 border border-transparent"
-                }`}
-              >
-                💬 AI Chat Assistant
-              </button>
-              <button
-                onClick={() => setDesignSubTab("manual")}
-                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all duration-150 active:scale-[0.97] ${
-                  designSubTab === "manual"
-                    ? "bg-white text-neutral-900 shadow-sm border border-neutral-200"
-                    : "text-neutral-500 hover:text-neutral-900 border border-transparent"
-                }`}
-              >
-                ✍️ Manual Editor
-              </button>
-            </div>
-          )}
-
           {/* Scrollable Wizard History */}
-          {currentStep === 9 && designSubTab === "manual" ? (
-            <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
-              {editedProfile && (
-                <InlineEditor profile={editedProfile} onChange={updateField} />
-              )}
-            </div>
-          ) : (
-            <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" style={{ scrollbarWidth: "none" }}>
+          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" style={{ scrollbarWidth: "none" }}>
             
             {/* Step 1 Welcome Chat Bubble */}
             {currentStep >= 1 && (
@@ -1626,11 +1635,9 @@ function EditorInner() {
 
             <div ref={chatEndRef} />
           </div>
-          )}
 
           {/* Bottom input composer area */}
-          {!(currentStep === 9 && designSubTab === "manual") && (
-            <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
+          <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
             {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
             {currentStep === 9 && (
               <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
@@ -1689,8 +1696,9 @@ function EditorInner() {
               </div>
             </div>
           </div>
-          )}
-        </aside>
+        </>
+      )}
+    </aside>
       )}
 
       {/* 2. Domains Panel */}
@@ -1799,13 +1807,34 @@ function EditorInner() {
             {/* Left: Customize + Page switcher */}
             <div className="flex items-center gap-2">
               <div className="relative group">
-                <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                <button
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  onClick={() => {
+                    if (isSelectionMode) {
+                      setIsSelectionMode(false);
+                      setSelectedField(null);
+                      setSelectedIndex(undefined);
+                    } else {
+                      setIsSelectionMode(true);
+                      setActiveNav(1); // Make sure Design tab is active
+                      setSelectedField(null);
+                      setSelectedIndex(undefined);
+                    }
+                  }}
+                  className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed bg-[#F7F7F7] border-[#E6E6E6] text-neutral-450"
+                      : isSelectionMode
+                      ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+                      : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
+                  }`}
+                >
                   <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
                     <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
                     <path d="M7.2 2.2 8 5.1" />
                     <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
                   </svg>
-                  Customize
+                  {isSelectionMode ? "Editing Canvas" : "Customize"}
                 </button>
               </div>
 
@@ -2014,7 +2043,15 @@ function EditorInner() {
                           <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
                         )}
                         
-                        <ProfilePreview profile={editedProfile} template={selectedTemplate} fluid={true} onFieldClick={handleFieldClick} />
+                        <ProfilePreview
+                          profile={editedProfile}
+                          template={selectedTemplate}
+                          fluid={true}
+                          onFieldClick={handleFieldClick}
+                          isSelectionMode={isSelectionMode}
+                          selectedField={selectedField}
+                          selectedIndex={selectedIndex}
+                        />
                       </div>
 
                       {/* Left Resizing Drag Handle */}
