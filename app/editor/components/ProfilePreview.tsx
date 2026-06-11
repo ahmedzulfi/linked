@@ -190,6 +190,39 @@ function replaceWorkWrapperContent(html: string, projectsHtml: string): string {
   return html;
 }
 
+function wrapPlaceholderProjects(html: string): string {
+  const workWrapperStart = 'data-framer-name="work wrapper">';
+  const wIdx = html.indexOf(workWrapperStart);
+  if (wIdx === -1) return html;
+
+  const contentStart = wIdx + workWrapperStart.length;
+  
+  let pos = contentStart;
+  let depth = 1;
+  while (depth > 0 && pos < html.length) {
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+    
+    if (nextClose === -1) break;
+    
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + 4;
+    } else {
+      depth--;
+      pos = nextClose + 6;
+    }
+  }
+  
+  if (depth === 0) {
+    const wrapperEnd = pos - 6;
+    const innerContent = html.substring(contentStart, wrapperEnd);
+    return html.substring(0, contentStart) + `<div data-editable-field="projects_list" style="display: contents;">` + innerContent + `</div>` + html.substring(wrapperEnd);
+  }
+  
+  return html;
+}
+
 // ── Customization Defaults & Builders ────────────────────────────────────────
 
 const DEFAULT_SERVICES = [
@@ -463,6 +496,8 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Footer Credit Details
   html = replaceAll(html, ">Template by </p>", `><span data-editable-field="footerCreditText">${esc(profile.footerCreditText || "Template by")}</span></p>`);
   html = replaceAll(html, ">Muddasir Hussain</a>", `><span data-editable-field="footerCreditName">${esc(profile.footerCreditName || "Muddasir Hussain")}</span></a>`);
+  html = replaceAll(html, ">Built in</p>", `><span data-editable-field="builtInFramerText">${esc(profile.builtInFramerText || "Built in")}</span></p>`);
+  html = replaceAll(html, ">Framer</a>", `><span data-editable-field="builtInFramerUrl">${esc(profile.builtInFramerUrl || "Framer")}</span></a>`);
 
   // About me paragraph wrapped for selection
   html = replaceAll(
@@ -479,9 +514,11 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Footer email wrapped for selection
   const emailLink = profile.links.find((l) => l.icon === "email");
   const email = emailLink ? emailLink.url.replace("mailto:", "") : "hello@example.com";
+  const phone = profile.phone || "+44 7700 900123";
   html = replaceAll(html, 'href="mailto:hello@gmail.com"', `href="mailto:${esc(email)}"`);
+  html = replaceAll(html, 'href="tel:+44 7700 900123"', `href="tel:${esc(phone)}"`);
   html = replaceAll(html, ">hello@gmail.com<", `><span data-editable-field="email">${esc(email)}</span><`);
-  html = replaceAll(html, ">+44 7700 900123<", `><span data-editable-field="location">${esc(location)}</span><`);
+  html = replaceAll(html, ">+44 7700 900123<", `><span data-editable-field="phone">${esc(phone)}</span><`);
 
   // Compile dynamic social links block
   const socialHtml = buildSocialLinksBlock(profile, true);
@@ -535,16 +572,18 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   if ((profile.projects || []).length > 0) {
     const projectsHtml = buildProjectsSection(profile);
     html = replaceWorkWrapperContent(html, projectsHtml);
+  } else {
+    html = wrapPlaceholderProjects(html);
   }
 
   // Brands ticker section wrapped in a selectable div
   const tickerMarker = 'data-framer-name="Ticker logos"';
   const tickerIdx = html.indexOf(tickerMarker);
-  if (tickerIdx !== -1 && profile.experience.length > 0) {
+  if (tickerIdx !== -1) {
     const tickerOpenEnd = html.indexOf(">", tickerIdx) + 1;
     const tickerClose = html.indexOf("<!--/$-->", tickerOpenEnd);
     if (tickerClose !== -1) {
-      const tickerHtml = buildBrandsTicker(profile);
+      const tickerHtml = profile.experience.length > 0 ? buildBrandsTicker(profile) : html.substring(tickerOpenEnd, tickerClose);
       html = html.substring(0, tickerOpenEnd) + `<div data-editable-field="experience" style="width: 100%;">` + tickerHtml + `</div>` + html.substring(tickerClose);
     }
   }

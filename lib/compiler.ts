@@ -500,6 +500,8 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   // Footer Credit Details
   html = replaceAll(html, ">Template by </p>", `>${esc(profile.footerCreditText || "Template by")}</p>`);
   html = replaceAll(html, ">Muddasir Hussain</a>", `>${esc(profile.footerCreditName || "Muddasir Hussain")}</a>`);
+  html = replaceAll(html, ">Built in</p>", `>${esc(profile.builtInFramerText || "Built in")}</p>`);
+  html = replaceAll(html, ">Framer</a>", `>${esc(profile.builtInFramerUrl || "Framer")}</a>`);
 
   // ─── 7. Hero bio paragraph ────────────────────────────────────────────
   html = replaceAll(
@@ -527,12 +529,10 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   html = replaceAll(html, 'href="mailto:hello@gmail.com"', `href="mailto:${esc(email)}"`);
   html = replaceAll(html, ">hello@gmail.com<", `>${esc(email)}<`);
 
-  // Phone — remove or replace
-  const phoneLinkIdx = html.indexOf('href="tel:+44 7700 900123"');
-  if (phoneLinkIdx !== -1) {
-    html = replaceAll(html, 'href="tel:+44 7700 900123"', 'href="#"');
-    html = replaceAll(html, ">+44 7700 900123<", `>${esc(location)}<`);
-  }
+  // Phone
+  const phone = profile.phone || "+44 7700 900123";
+  html = replaceAll(html, 'href="tel:+44 7700 900123"', `href="tel:${esc(phone)}"`);
+  html = replaceAll(html, ">+44 7700 900123<", `>${esc(phone)}<`);
 
   // ─── 9.5 Custom Template Customizations ────────────────────────────────
   // Hero Badge

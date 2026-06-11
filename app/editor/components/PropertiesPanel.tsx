@@ -991,6 +991,17 @@ export default function PropertiesPanel({
 
     return (
       <div className="space-y-4 animate-in fade-in duration-200 text-left">
+        <div className="flex flex-col gap-1 pb-4 border-b border-neutral-100">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Phone Number</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.phone || ""}
+            onChange={(e) => onChange("phone", e.target.value)}
+            placeholder="+44 7700 900123"
+          />
+        </div>
+
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Social & Portfolio Links ({list.length})</span>
           <button
@@ -1288,6 +1299,28 @@ export default function PropertiesPanel({
           />
         </div>
       </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Framer Badge Text</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.builtInFramerText || ""}
+            onChange={(e) => onChange("builtInFramerText", e.target.value)}
+            placeholder="Built in"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Framer Link Text</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.builtInFramerUrl || ""}
+            onChange={(e) => onChange("builtInFramerUrl", e.target.value)}
+            placeholder="Framer"
+          />
+        </div>
+      </div>
     </div>
   );
 
@@ -1387,6 +1420,8 @@ export default function PropertiesPanel({
       case "followMeLabel":
       case "footerCreditText":
       case "footerCreditName":
+      case "builtInFramerText":
+      case "builtInFramerUrl":
         return renderLabelsFields();
 
       case "navigation":
@@ -1430,6 +1465,7 @@ export default function PropertiesPanel({
 
       case "links":
       case "email":
+      case "phone":
         return renderLinksEditor();
 
       case "colors":
@@ -1459,131 +1495,7 @@ export default function PropertiesPanel({
         </button>
       </div>
 
-      {/* Navigation shortcuts if field selected */}
-      {selectedField && (
-        <div className="px-6 py-2 border-b border-neutral-50 bg-neutral-50/30 flex gap-2 select-none overflow-x-auto shrink-0" style={{ scrollbarWidth: "none" }}>
-          <button
-            onClick={() => onSelectField("name")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["name", "headline", "location", "summary"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Profile Text
-          </button>
-          <button
-            onClick={() => onSelectField("avatarUrl")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["avatarUrl", "bannerUrl", "aboutPhotoUrl", "signatureUrl", "footerBannerUrl"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Graphics
-          </button>
-          <button
-            onClick={() => onSelectField("hero")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["hero", "heroBadgeText", "heroGreetingStart", "heroGreetingName", "heroGreetingEnd", "heroSubheadline", "heroCtaText", "heroCtaUrl", "heroRatingText"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Hero Section
-          </button>
-          <button
-            onClick={() => onSelectField("navigation")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["navigation", "navHomeText", "navAboutText", "navProjectsText", "navContactText"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Navigation
-          </button>
-          <button
-            onClick={() => onSelectField("labels")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["labels", "servicesLabel", "aboutLabel", "brandsLabel", "projectsLabel", "projectsSubtitle", "projectsExploreText", "projectsExploreUrl", "processLabel", "testimonialsLabel", "footerLabel", "statusText", "followMeLabel", "footerCreditText", "footerCreditName"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Section Labels
-          </button>
-          <button
-            onClick={() => onSelectField("colors")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              selectedField === "colors"
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Colors
-          </button>
-          <button
-            onClick={() => onSelectField("projects_list")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["projects", "projects_list", "project"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Projects
-          </button>
-          <button
-            onClick={() => onSelectField("experience")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              selectedField === "experience"
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Experience
-          </button>
-          <button
-            onClick={() => onSelectField("services")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["services", "servicesTitle", "service", "servicesCta"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Services
-          </button>
-          <button
-            onClick={() => onSelectField("processes")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["processes", "processTitle", "process"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Process
-          </button>
-          <button
-            onClick={() => onSelectField("testimonials")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              ["testimonials", "testimonialsTitle", "testimonial"].includes(selectedField)
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Reviews
-          </button>
-          <button
-            onClick={() => onSelectField("links")}
-            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
-              selectedField === "links"
-                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
-                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
-            }`}
-          >
-            Links
-          </button>
-        </div>
-      )}
+
 
       {/* Editor Content Area */}
       <div className="flex-1 overflow-y-auto px-6 py-5" style={{ scrollbarWidth: "none" }}>
