@@ -779,9 +779,15 @@ function EditorInner() {
 
       {/* ── Left Column Panel Switcher based on activeNav ── */}
       
-      {/* 1. Design / AI Onboarding Wizard Panel (510px width) */}
+      {/* 1. Design / AI Onboarding Wizard Panel */}
       {activeNav === 1 && (
-        <aside className="w-[510px] shrink-0 h-full bg-white border-r border-[#E6E6E6]/60 flex flex-col justify-between shadow-xs relative z-20 font-inter">
+        <aside 
+          className={`h-full relative z-20 font-inter transition-all duration-300 ${
+            currentStep <= 6
+              ? "flex-1 flex items-center justify-center p-6 bg-transparent"
+              : "w-[510px] shrink-0 bg-white border-r border-[#E6E6E6]/60 shadow-xs"
+          }`}
+        >
           {isSelectionMode ? (
             editedProfile ? (
               <PropertiesPanel
@@ -808,7 +814,13 @@ function EditorInner() {
               </div>
             )
           ) : (
-            <>
+            <div 
+              className={
+                currentStep <= 6
+                  ? "max-w-[560px] w-full h-[90%] bg-white border border-[#E6E6E6]/60 rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col overflow-hidden animate-in fade-in duration-300"
+                  : "flex flex-col justify-between h-full w-full"
+              }
+            >
               {/* Title Header */}
               <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0 bg-white">
             <div className="flex items-center gap-2">
@@ -1696,7 +1708,7 @@ function EditorInner() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </aside>
       )}
@@ -1708,7 +1720,11 @@ function EditorInner() {
       {activeNav === 3 && <SettingsPane profileName={profileName} router={router} />}
 
       {/* ── Main Canvas Workspace ── */}
-      <main className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3">
+      <main 
+        className={`flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3 ${
+          activeNav === 1 && currentStep <= 6 ? "hidden" : ""
+        }`}
+      >
         
         {/* Top Navbar */}
         <div className="flex items-center justify-between shrink-0 h-9 bg-white">
