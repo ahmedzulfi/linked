@@ -1053,6 +1053,289 @@ export default function PropertiesPanel({
     );
   };
 
+  const renderHeroFields = () => (
+    <div className="space-y-4 animate-in fade-in duration-200 text-left">
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Badge Text</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.heroBadgeText || ""}
+          onChange={(e) => onChange("heroBadgeText", e.target.value)}
+          placeholder="Welcome here ❤️"
+        />
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting Start</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
+            value={profile.heroGreetingStart || ""}
+            onChange={(e) => onChange("heroGreetingStart", e.target.value)}
+            placeholder="Hey,"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Name Text</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
+            value={profile.heroGreetingName || ""}
+            onChange={(e) => onChange("heroGreetingName", e.target.value)}
+            placeholder="daniel"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting End</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
+            value={profile.heroGreetingEnd || ""}
+            onChange={(e) => onChange("heroGreetingEnd", e.target.value)}
+            placeholder="here"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Subheadline (Inline Wrap)</label>
+        <textarea
+          className="min-h-[80px] border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl p-3.5 text-sm transition-colors outline-none resize-none leading-relaxed"
+          value={profile.heroSubheadline || ""}
+          onChange={(e) => onChange("heroSubheadline", e.target.value)}
+          placeholder="I design Interfaces, experiences, & brands."
+          rows={3}
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero CTA Button Text</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.heroCtaText || ""}
+            onChange={(e) => onChange("heroCtaText", e.target.value)}
+            placeholder="Book A Call"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero CTA Button Link</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none font-mono"
+            value={profile.heroCtaUrl || ""}
+            onChange={(e) => onChange("heroCtaUrl", e.target.value)}
+            placeholder="#contact"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Rating Text</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.heroRatingText || ""}
+          onChange={(e) => onChange("heroRatingText", e.target.value)}
+          placeholder="4.9 / 5"
+        />
+      </div>
+    </div>
+  );
+
+  const renderLabelsFields = () => (
+    <div className="space-y-4 animate-in fade-in duration-200 text-left max-h-[580px] overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Services Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.servicesLabel || ""}
+          onChange={(e) => onChange("servicesLabel", e.target.value)}
+          placeholder="What I Do"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">About Section Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.aboutLabel || ""}
+          onChange={(e) => onChange("aboutLabel", e.target.value)}
+          placeholder="About me"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Brands Ticker Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.brandsLabel || ""}
+          onChange={(e) => onChange("brandsLabel", e.target.value)}
+          placeholder="Worked with Global Brands"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Projects Section Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.projectsLabel || ""}
+          onChange={(e) => onChange("projectsLabel", e.target.value)}
+          placeholder="My Portfolio"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Projects Section Subtitle</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.projectsSubtitle || ""}
+          onChange={(e) => onChange("projectsSubtitle", e.target.value)}
+          placeholder="Every project built to inspire users"
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Explore Projects Button Label</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.projectsExploreText || ""}
+            onChange={(e) => onChange("projectsExploreText", e.target.value)}
+            placeholder="Explore All"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Explore Projects Button URL</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none font-mono"
+            value={profile.projectsExploreUrl || ""}
+            onChange={(e) => onChange("projectsExploreUrl", e.target.value)}
+            placeholder="#work"
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Process Section Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.processLabel || ""}
+          onChange={(e) => onChange("processLabel", e.target.value)}
+          placeholder="My Process"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Testimonials Section Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.testimonialsLabel || ""}
+          onChange={(e) => onChange("testimonialsLabel", e.target.value)}
+          placeholder="Reviews"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Footer Section Tag Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.footerLabel || ""}
+          onChange={(e) => onChange("footerLabel", e.target.value)}
+          placeholder="Have a question"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Status Tag Text</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.statusText || ""}
+          onChange={(e) => onChange("statusText", e.target.value)}
+          placeholder="Available for work"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Follow Me Header Text</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.followMeLabel || ""}
+          onChange={(e) => onChange("followMeLabel", e.target.value)}
+          placeholder="Follow me"
+        />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Footer Credit Intro</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.footerCreditText || ""}
+            onChange={(e) => onChange("footerCreditText", e.target.value)}
+            placeholder="Template by"
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Footer Credit Name</label>
+          <input
+            type="text"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.footerCreditName || ""}
+            onChange={(e) => onChange("footerCreditName", e.target.value)}
+            placeholder="Muddasir Hussain"
+          />
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderNavigationFields = () => (
+    <div className="space-y-4 animate-in fade-in duration-200 text-left">
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Home Nav Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.navHomeText || ""}
+          onChange={(e) => onChange("navHomeText", e.target.value)}
+          placeholder="Home"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">About Nav Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.navAboutText || ""}
+          onChange={(e) => onChange("navAboutText", e.target.value)}
+          placeholder="About"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Projects Nav Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.navProjectsText || ""}
+          onChange={(e) => onChange("navProjectsText", e.target.value)}
+          placeholder="Projects"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Contact Nav Label</label>
+        <input
+          type="text"
+          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+          value={profile.navContactText || ""}
+          onChange={(e) => onChange("navContactText", e.target.value)}
+          placeholder="Contact"
+        />
+      </div>
+    </div>
+  );
+
   // Determine which properties editor pane to display based on selectedField
   const renderEditorContent = () => {
     if (!selectedField) {
@@ -1077,6 +1360,41 @@ export default function PropertiesPanel({
       case "location":
       case "summary":
         return renderProfileFields();
+      
+      case "hero":
+      case "heroBadgeText":
+      case "heroGreetingStart":
+      case "heroGreetingName":
+      case "heroGreetingEnd":
+      case "heroSubheadline":
+      case "heroCtaText":
+      case "heroCtaUrl":
+      case "heroRatingText":
+        return renderHeroFields();
+
+      case "labels":
+      case "servicesLabel":
+      case "aboutLabel":
+      case "brandsLabel":
+      case "projectsLabel":
+      case "projectsSubtitle":
+      case "projectsExploreText":
+      case "projectsExploreUrl":
+      case "processLabel":
+      case "testimonialsLabel":
+      case "footerLabel":
+      case "statusText":
+      case "followMeLabel":
+      case "footerCreditText":
+      case "footerCreditName":
+        return renderLabelsFields();
+
+      case "navigation":
+      case "navHomeText":
+      case "navAboutText":
+      case "navProjectsText":
+      case "navContactText":
+        return renderNavigationFields();
       
       case "avatarUrl":
       case "bannerUrl":
@@ -1163,6 +1481,36 @@ export default function PropertiesPanel({
             }`}
           >
             Graphics
+          </button>
+          <button
+            onClick={() => onSelectField("hero")}
+            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
+              ["hero", "heroBadgeText", "heroGreetingStart", "heroGreetingName", "heroGreetingEnd", "heroSubheadline", "heroCtaText", "heroCtaUrl", "heroRatingText"].includes(selectedField)
+                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
+            }`}
+          >
+            Hero Section
+          </button>
+          <button
+            onClick={() => onSelectField("navigation")}
+            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
+              ["navigation", "navHomeText", "navAboutText", "navProjectsText", "navContactText"].includes(selectedField)
+                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
+            }`}
+          >
+            Navigation
+          </button>
+          <button
+            onClick={() => onSelectField("labels")}
+            className={`flex-shrink-0 px-2.5 py-1 rounded-md text-[10.5px] font-bold border ${
+              ["labels", "servicesLabel", "aboutLabel", "brandsLabel", "projectsLabel", "projectsSubtitle", "projectsExploreText", "projectsExploreUrl", "processLabel", "testimonialsLabel", "footerLabel", "statusText", "followMeLabel", "footerCreditText", "footerCreditName"].includes(selectedField)
+                ? "bg-white text-neutral-900 border-neutral-250 shadow-sm"
+                : "text-neutral-500 hover:text-neutral-900 border-transparent bg-transparent"
+            }`}
+          >
+            Section Labels
           </button>
           <button
             onClick={() => onSelectField("colors")}

@@ -14,7 +14,53 @@ interface ProfilePreviewProps {
   selectedIndex?: number;
 }
 
-// ── Helpers for client-side HTML compilation ───────────────────────────────
+function buildSocialLinksBlock(profile: ProfileData, isPreview: boolean): string {
+  const links = profile.links || [];
+  if (links.length === 0) return "";
+
+  return links.map((lnk, index) => {
+    const editableAttr = isPreview ? `data-editable-field="links" data-editable-index="${index}"` : "";
+    return `
+<div class="ssr-variant" ${editableAttr} style="opacity: 1; margin-bottom: 6px;">
+  <!--$--><a class="framer-RdB2l framer-5K3Le framer-7fvNa framer-wyk4az framer-v-wyk4az framer-g0nscs" href="${esc(lnk.url)}" target="_blank" rel="noopener" style="background-color:rgba(0, 0, 0, 0); opacity:1; display:flex; justify-content:space-between; width:100%; text-decoration:none; padding: 4px 0;">
+    <div class="framer-pq6inv" style="opacity: 1;">
+      <p class="framer-text framer-styles-preset-zy5y8s" data-styles-preset="XkMlNAnh0" style="color:var(--token-5b7978f2-455d-4675-a18c-26d9c3d422ca, rgb(0, 0, 0)); margin:0;">${esc(lnk.label)}</p>
+    </div>
+  </a><!--/$-->
+</div>`;
+  }).join("\n");
+}
+
+function replaceSocialLinksContent(html: string, socialHtml: string): string {
+  const marker = 'data-framer-name="Social links"';
+  const sIdx = html.indexOf(marker);
+  if (sIdx === -1) return html;
+
+  const contentStart = html.indexOf(">", sIdx) + 1;
+  let pos = contentStart;
+  let depth = 1;
+  while (depth > 0 && pos < html.length) {
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+
+    if (nextClose === -1) break;
+
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + 4;
+    } else {
+      depth--;
+      pos = nextClose + 6;
+    }
+  }
+
+  if (depth === 0) {
+    const wrapperEnd = pos - 6;
+    return html.substring(0, contentStart) + socialHtml + html.substring(wrapperEnd);
+  }
+
+  return html;
+}
 
 function esc(s: string): string {
   return s
@@ -398,9 +444,25 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Role / headline wrapped for selection
   html = replaceAll(html, ">ui/ux designer<", `><span data-editable-field="headline">${esc(profile.headline)}</span><`);
 
-  // Hero first name
+  // Hero Greeting words
   const firstName = profile.name.split(" ")[0];
-  html = replaceAll(html, ">daniel<", `>${esc(firstName)}<`);
+  html = replaceAll(html, ">Hey,<", `><span data-editable-field="heroGreetingStart">${esc(profile.heroGreetingStart || "Hey,")}</span><`);
+  html = replaceAll(html, ">daniel<", `><span data-editable-field="heroGreetingName">${esc(profile.heroGreetingName || firstName)}</span><`);
+  html = replaceAll(html, ">here<", `><span data-editable-field="heroGreetingEnd">${esc(profile.heroGreetingEnd || "here")}</span><`);
+
+  // Status and follow labels
+  html = replaceAll(html, ">Available for work</p>", `><span data-editable-field="statusText">${esc(profile.statusText || "Available for work")}</span></p>`);
+  html = replaceAll(html, ">Follow me</p>", `><span data-editable-field="followMeLabel">${esc(profile.followMeLabel || "Follow me")}</span></p>`);
+
+  // Navigation Links Text Overrides
+  html = replaceAll(html, ">Home<", `><span data-editable-field="navHomeText">${esc(profile.navHomeText || "Home")}</span><`);
+  html = replaceAll(html, ">About<", `><span data-editable-field="navAboutText">${esc(profile.navAboutText || "About")}</span><`);
+  html = replaceAll(html, ">Projects<", `><span data-editable-field="navProjectsText">${esc(profile.navProjectsText || "Projects")}</span><`);
+  html = replaceAll(html, ">Contact<", `><span data-editable-field="navContactText">${esc(profile.navContactText || "Contact")}</span><`);
+
+  // Footer Credit Details
+  html = replaceAll(html, ">Template by </p>", `><span data-editable-field="footerCreditText">${esc(profile.footerCreditText || "Template by")}</span></p>`);
+  html = replaceAll(html, ">Muddasir Hussain</a>", `><span data-editable-field="footerCreditName">${esc(profile.footerCreditName || "Muddasir Hussain")}</span></a>`);
 
   // About me paragraph wrapped for selection
   html = replaceAll(
@@ -421,17 +483,53 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   html = replaceAll(html, ">hello@gmail.com<", `><span data-editable-field="email">${esc(email)}</span><`);
   html = replaceAll(html, ">+44 7700 900123<", `><span data-editable-field="location">${esc(location)}</span><`);
 
-  // Social link hrefs tagged for selection
-  const linksByIcon: Record<string, string> = {};
-  for (const l of profile.links) {
-    if (l.icon) linksByIcon[l.icon] = l.url;
-  }
-  if (linksByIcon.linkedin) {
-    html = replaceAll(html, 'href="https://www.linkedin.com/"', `data-editable-field="links" href="${esc(linksByIcon.linkedin)}"`);
-  }
-  if (linksByIcon.twitter) {
-    html = replaceAll(html, 'href="https://x.com/"', `data-editable-field="links" href="${esc(linksByIcon.twitter)}"`);
-  }
+  // Compile dynamic social links block
+  const socialHtml = buildSocialLinksBlock(profile, true);
+  html = replaceSocialLinksContent(html, socialHtml);
+
+  // ─── 9.5 Custom Template Customizations ────────────────────────────────
+  // Hero Badge
+  const badgeText = profile.heroBadgeText || "Welcome here ❤️";
+  html = replaceAll(html, "Welcome here ❤️", `<span data-editable-field="heroBadgeText">${esc(badgeText)}</span>`);
+
+  // Hero subheadline words block
+  const subheadlineText = profile.heroSubheadline || "I design Interfaces, experiences, & brands.";
+  const words = subheadlineText.split(" ");
+  const wordsHtml = words
+    .map(
+      (w) =>
+        `<div class="ssr-variant" data-editable-field="heroSubheadline"><div style="opacity:1;transform:none;will-change:transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">${esc(w)}</h1></div></div>`
+    )
+    .join("");
+  const originalWordsSequence = `</div></div><div class="framer-1q82b98" data-framer-appear-id="1q82b98" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">I</h1></div><div class="framer-a5yabo" data-framer-appear-id="a5yabo" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">design</h1></div><div class="framer-oik3st" data-framer-appear-id="oik3st" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">Interfaces,</h1></div><div class="framer-198z1h1" data-framer-appear-id="198z1h1" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">experiences,</h1></div><div class="framer-k25hut" data-framer-appear-id="k25hut" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">&amp;</h1></div><div class="framer-9xarsm" data-framer-appear-id="9xarsm" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">brands.</h1></div>`;
+  html = replaceAll(html, originalWordsSequence, `</div></div>` + wordsHtml);
+
+  // Hero CTA Button
+  const heroCtaText = profile.heroCtaText || "Book A Call";
+  const heroCtaUrl = profile.heroCtaUrl || "#contact";
+  html = replaceAll(html, 'data-framer-name="Brown" href="https://danielcross.framer.website/contact"', `data-framer-name="Brown" data-editable-field="heroCtaUrl" href="${esc(heroCtaUrl)}"`);
+  html = replaceAll(html, 'data-framer-name="Brown" href="#contact"', `data-framer-name="Brown" data-editable-field="heroCtaUrl" href="${esc(heroCtaUrl)}"`);
+  html = replaceAll(html, "Book A Call", `<span data-editable-field="heroCtaText">${esc(heroCtaText)}</span>`);
+
+  // Hero rating text
+  html = replaceAll(html, "4.9 / 5", `<span data-editable-field="heroRatingText">${esc(profile.heroRatingText || "4.9 / 5")}</span>`);
+
+  // Section Labels
+  html = replaceAll(html, ">What I Do<", `><span data-editable-field="servicesLabel">${esc(profile.servicesLabel || "What I Do")}</span><`);
+  html = replaceAll(html, ">About me<", `><span data-editable-field="aboutLabel">${esc(profile.aboutLabel || "About me")}</span><`);
+  html = replaceAll(html, ">Worked with Global Brands<", `><span data-editable-field="brandsLabel">${esc(profile.brandsLabel || "Worked with Global Brands")}</span><`);
+  html = replaceAll(html, ">My Portfolio<", `><span data-editable-field="projectsLabel">${esc(profile.projectsLabel || "My Portfolio")}</span><`);
+  html = replaceAll(html, ">Every project built to inspire users<", `><span data-editable-field="projectsSubtitle">${esc(profile.projectsSubtitle || "Every project built to inspire users")}</span><`);
+
+  // Projects list CTA button
+  const exploreUrl = profile.projectsExploreUrl || "#work";
+  html = replaceAll(html, 'data-framer-name="Brown" href="https://danielcross.framer.website/work"', `data-framer-name="Brown" data-editable-field="projectsExploreUrl" href="${esc(exploreUrl)}"`);
+  html = replaceAll(html, 'data-framer-name="Brown" href="#work"', `data-framer-name="Brown" data-editable-field="projectsExploreUrl" href="${esc(exploreUrl)}"`);
+  html = replaceAll(html, "Explore All", `<span data-editable-field="projectsExploreText">${esc(profile.projectsExploreText || "Explore All")}</span>`);
+
+  html = replaceAll(html, ">My Process<", `><span data-editable-field="processLabel">${esc(profile.processLabel || "My Process")}</span><`);
+  html = replaceAll(html, ">Reviews<", `><span data-editable-field="testimonialsLabel">${esc(profile.testimonialsLabel || "Reviews")}</span><`);
+  html = replaceAll(html, ">Have a question<", `><span data-editable-field="footerLabel">${esc(profile.footerLabel || "Have a question")}</span><`);
 
   // Projects / Work cards section (replaces the entire placeholder cards inside the wrapper)
   if ((profile.projects || []).length > 0) {
@@ -674,8 +772,21 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   [data-editable-field] {
     transition: outline 0.15s ease-in-out, background-color 0.15s ease-in-out;
   }
+  body.selection-mode-active * {
+    pointer-events: none !important;
+  }
+  body.selection-mode-active [data-editable-field],
+  body.selection-mode-active [data-editable-field] * {
+    pointer-events: auto !important;
+  }
   body.selection-mode-active [data-editable-field] {
     cursor: pointer !important;
+    position: relative !important;
+    z-index: 999999 !important;
+  }
+  body.selection-mode-active span[data-editable-field],
+  body.selection-mode-active a[data-editable-field] {
+    display: inline-block !important;
   }
   body.selection-mode-active [data-editable-field]:hover {
     outline: 2px solid #3b82f6 !important;
