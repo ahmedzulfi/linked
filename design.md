@@ -204,12 +204,14 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
     - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts.
     - **Step 9 (Free-form Editor & Chat Mode):** Activated after selecting a template. Features a visual canvas selection mode:
       - **Visual Customizer (Properties Panel):** Replaces the chat sidebar when the **Customize** button is active and an element on the canvas is clicked/selected. Exposes contextual input forms to modify:
-        - **Profile:** Name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL, and graphics overrides (About photo/portrait, handwritten signature image, footer work banner background).
+        - **Profile & Greeting:** Name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL, greeting start, greeting name, greeting end, status text, and follow me label.
+        - **Graphics:** Graphics overrides (About photo/portrait, handwritten signature image, footer work banner background).
+        - **Navigation:** Custom navigation links override text labels (Home, About, Projects, Contact).
         - **Projects:** Adding, modifying details, deleting projects.
         - **Work:** Work experience roles timeline.
         - **Services:** Services grid cards (title, price, description), services call-to-action details (title, text, button text/URL), and custom process steps (step tag, title, description).
         - **Reviews:** Custom client testimonials (quote, client name, role, avatar URL).
-        - **Links:** Contact & social links.
+        - **Links:** Contact, social, and portfolio links, compiled dynamically replacing the hardcoded social links.
     - **Data Persistence:** To prevent data loss on page reloads, form state mutations are synced to the database context in real-time (triggering debounced autosaves), the last edited website draft ID is stored in `sessionStorage` (key: `linkedpage_last_website_id`), the active wizard step status is preserved in `sessionStorage` (key: `webild_onboarding_step`), and chat history is fully restored from `/api/chat` on load.
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.

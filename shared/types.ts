@@ -75,6 +75,37 @@ export interface ProfileData {
     textPrimary?: string;
     textMuted?: string;
   };
+  // Complete template customization fields
+  heroBadgeText?: string;
+  heroSubheadline?: string;
+  heroCtaText?: string;
+  heroCtaUrl?: string;
+  heroRatingText?: string;
+  servicesLabel?: string;
+  aboutLabel?: string;
+  brandsLabel?: string;
+  projectsLabel?: string;
+  projectsSubtitle?: string;
+  projectsExploreText?: string;
+  projectsExploreUrl?: string;
+  processLabel?: string;
+  testimonialsLabel?: string;
+  footerLabel?: string;
+  // Hero Greeting words
+  heroGreetingStart?: string;
+  heroGreetingName?: string;
+  heroGreetingEnd?: string;
+  // Status and follow labels
+  statusText?: string;
+  followMeLabel?: string;
+  // Navigation links labels
+  navHomeText?: string;
+  navAboutText?: string;
+  navProjectsText?: string;
+  navContactText?: string;
+  // Footer credit
+  footerCreditText?: string;
+  footerCreditName?: string;
 }
 
 export type TemplateId = "daniel-cross";

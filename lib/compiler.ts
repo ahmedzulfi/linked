@@ -164,28 +164,52 @@ function buildHeroBio(profile: ProfileData): string {
   return esc(profile.summary);
 }
 
-/**
- * Build social links HTML for the sidebar.
- */
-function buildSocialLinks(profile: ProfileData): string {
-  const linkMap: Record<string, string> = {};
-  for (const l of profile.links) {
-    const icon = l.icon || "website";
-    linkMap[icon] = l.url;
+function buildSocialLinksBlock(profile: ProfileData, isPreview: boolean): string {
+  const links = profile.links || [];
+  if (links.length === 0) return "";
+
+  return links.map((lnk, index) => {
+    const editableAttr = isPreview ? `data-editable-field="links" data-editable-index="${index}"` : "";
+    return `
+<div class="ssr-variant" ${editableAttr} style="opacity: 1; margin-bottom: 6px;">
+  <!--$--><a class="framer-RdB2l framer-5K3Le framer-7fvNa framer-wyk4az framer-v-wyk4az framer-g0nscs" href="${esc(lnk.url)}" target="_blank" rel="noopener" style="background-color:rgba(0, 0, 0, 0); opacity:1; display:flex; justify-content:space-between; width:100%; text-decoration:none; padding: 4px 0;">
+    <div class="framer-pq6inv" style="opacity: 1;">
+      <p class="framer-text framer-styles-preset-zy5y8s" data-styles-preset="XkMlNAnh0" style="color:var(--token-5b7978f2-455d-4675-a18c-26d9c3d422ca, rgb(0, 0, 0)); margin:0;">${esc(lnk.label)}</p>
+    </div>
+  </a><!--/$-->
+</div>`;
+  }).join("\n");
+}
+
+function replaceSocialLinksContent(html: string, socialHtml: string): string {
+  const marker = 'data-framer-name="Social links"';
+  const sIdx = html.indexOf(marker);
+  if (sIdx === -1) return html;
+
+  const contentStart = html.indexOf(">", sIdx) + 1;
+  let pos = contentStart;
+  let depth = 1;
+  while (depth > 0 && pos < html.length) {
+    const nextOpen = html.indexOf("<div", pos);
+    const nextClose = html.indexOf("</div>", pos);
+
+    if (nextClose === -1) break;
+
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + 4;
+    } else {
+      depth--;
+      pos = nextClose + 6;
+    }
   }
 
-  return [
-    { name: "LinkedIn", icon: "linkedin", url: linkMap.linkedin || profile.linkedinUrl || "#" },
-    { name: "Twitter-X", icon: "twitter", url: linkMap.twitter || "#" },
-    { name: "GitHub", icon: "github", url: linkMap.github || "#" },
-    { name: "Website", icon: "website", url: linkMap.website || "#" },
-  ]
-    .filter((l) => l.url !== "#" || l.name === "LinkedIn")
-    .map(
-      (l) =>
-        `<div style="padding:4px 0;"><a href="${esc(l.url)}" target="_blank" rel="noopener" style="font-family:'Inter Display',sans-serif;font-size:13px;font-weight:500;color:#333;text-decoration:none;letter-spacing:-0.04em;">${esc(l.name)}</a></div>`
-    )
-    .join("");
+  if (depth === 0) {
+    const wrapperEnd = pos - 6;
+    return html.substring(0, contentStart) + socialHtml + html.substring(wrapperEnd);
+  }
+
+  return html;
 }
 
 // ── Customization Defaults & Builders ────────────────────────────────────────
@@ -459,7 +483,23 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   // ─── 6. Hero headline (first name on h1) ──────────────────────────────
   // The template has "Hey,\ndaniel\nhere" split across multiple h1 elements
   const firstName = profile.name.split(" ")[0].toLowerCase();
-  html = replaceAll(html, ">daniel<", `>${esc(firstName)}<`);
+  html = replaceAll(html, ">daniel<", `>${esc(profile.heroGreetingName || firstName)}<`);
+  html = replaceAll(html, ">Hey,<", `>${esc(profile.heroGreetingStart || "Hey,")}<`);
+  html = replaceAll(html, ">here<", `>${esc(profile.heroGreetingEnd || "here")}<`);
+
+  // Status and follow labels
+  html = replaceAll(html, ">Available for work</p>", `>${esc(profile.statusText || "Available for work")}</p>`);
+  html = replaceAll(html, ">Follow me</p>", `>${esc(profile.followMeLabel || "Follow me")}</p>`);
+
+  // Navigation Links Text Overrides
+  html = replaceAll(html, ">Home<", `>${esc(profile.navHomeText || "Home")}<`);
+  html = replaceAll(html, ">About<", `>${esc(profile.navAboutText || "About")}<`);
+  html = replaceAll(html, ">Projects<", `>${esc(profile.navProjectsText || "Projects")}<`);
+  html = replaceAll(html, ">Contact<", `>${esc(profile.navContactText || "Contact")}<`);
+
+  // Footer Credit Details
+  html = replaceAll(html, ">Template by </p>", `>${esc(profile.footerCreditText || "Template by")}</p>`);
+  html = replaceAll(html, ">Muddasir Hussain</a>", `>${esc(profile.footerCreditName || "Muddasir Hussain")}</a>`);
 
   // ─── 7. Hero bio paragraph ────────────────────────────────────────────
   html = replaceAll(
@@ -494,6 +534,50 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
     html = replaceAll(html, ">+44 7700 900123<", `>${esc(location)}<`);
   }
 
+  // ─── 9.5 Custom Template Customizations ────────────────────────────────
+  // Hero Badge
+  const badgeText = profile.heroBadgeText || "Welcome here ❤️";
+  html = replaceAll(html, "Welcome here ❤️", esc(badgeText));
+
+  // Hero subheadline words block
+  const subheadlineText = profile.heroSubheadline || "I design Interfaces, experiences, & brands.";
+  const words = subheadlineText.split(" ");
+  const wordsHtml = words
+    .map(
+      (w) =>
+        `<div style="opacity:1;transform:none;will-change:transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">${esc(w)}</h1></div>`
+    )
+    .join("");
+  const originalWordsSequence = `</div></div><div class="framer-1q82b98" data-framer-appear-id="1q82b98" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">I</h1></div><div class="framer-a5yabo" data-framer-appear-id="a5yabo" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">design</h1></div><div class="framer-oik3st" data-framer-appear-id="oik3st" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">Interfaces,</h1></div><div class="framer-198z1h1" data-framer-appear-id="198z1h1" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">experiences,</h1></div><div class="framer-k25hut" data-framer-appear-id="k25hut" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">&amp;</h1></div><div class="framer-9xarsm" data-framer-appear-id="9xarsm" data-framer-component-type="RichTextContainer" style="opacity: 1; transform: none; will-change: transform;"><h1 class="framer-text framer-styles-preset-1jz5tz9" data-styles-preset="PHHRPNoBI">brands.</h1></div>`;
+  html = replaceAll(html, originalWordsSequence, `</div></div>` + wordsHtml);
+
+  // Hero CTA Button
+  const heroCtaText = profile.heroCtaText || "Book A Call";
+  const heroCtaUrl = profile.heroCtaUrl || "#contact";
+  html = replaceAll(html, 'data-framer-name="Brown" href="https://danielcross.framer.website/contact"', `data-framer-name="Brown" href="${esc(heroCtaUrl)}"`);
+  html = replaceAll(html, 'data-framer-name="Brown" href="#contact"', `data-framer-name="Brown" href="${esc(heroCtaUrl)}"`);
+  html = replaceAll(html, "Book A Call", esc(heroCtaText));
+
+  // Hero rating text
+  html = replaceAll(html, "4.9 / 5", esc(profile.heroRatingText || "4.9 / 5"));
+
+  // Section Labels
+  html = replaceAll(html, ">What I Do<", `>${esc(profile.servicesLabel || "What I Do")}<`);
+  html = replaceAll(html, ">About me<", `>${esc(profile.aboutLabel || "About me")}<`);
+  html = replaceAll(html, ">Worked with Global Brands<", `>${esc(profile.brandsLabel || "Worked with Global Brands")}<`);
+  html = replaceAll(html, ">My Portfolio<", `>${esc(profile.projectsLabel || "My Portfolio")}<`);
+  html = replaceAll(html, ">Every project built to inspire users<", `>${esc(profile.projectsSubtitle || "Every project built to inspire users")}<`);
+
+  // Projects list CTA button
+  const exploreUrl = profile.projectsExploreUrl || "#work";
+  html = replaceAll(html, 'data-framer-name="Brown" href="https://danielcross.framer.website/work"', `data-framer-name="Brown" href="${esc(exploreUrl)}"`);
+  html = replaceAll(html, 'data-framer-name="Brown" href="#work"', `data-framer-name="Brown" href="${esc(exploreUrl)}"`);
+  html = replaceAll(html, "Explore All", esc(profile.projectsExploreText || "Explore All"));
+
+  html = replaceAll(html, ">My Process<", `>${esc(profile.processLabel || "My Process")}<`);
+  html = replaceAll(html, ">Reviews<", `>${esc(profile.testimonialsLabel || "Reviews")}<`);
+  html = replaceAll(html, ">Have a question<", `>${esc(profile.footerLabel || "Have a question")}<`);
+
   // ─── 10. Projects / Work cards section ────────────────────────────────
   // Replace the entire work wrapper content with user's projects (replaces placeholder cards)
   if ((profile.projects || []).length > 0) {
@@ -513,20 +597,9 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
     }
   }
 
-  // ─── 12. Social links in sidebar (hrefs) ──────────────────────────────
-  const linksByIcon: Record<string, string> = {};
-  for (const l of profile.links) {
-    if (l.icon) linksByIcon[l.icon] = l.url;
-  }
-  if (linksByIcon.linkedin) {
-    html = replaceAll(html, 'href="https://www.linkedin.com/"', `href="${esc(linksByIcon.linkedin)}"`);
-  }
-  if (linksByIcon.twitter) {
-    html = replaceAll(html, 'href="https://x.com/"', `href="${esc(linksByIcon.twitter)}"`);
-  }
-  if (linksByIcon.github) {
-    html = replaceAll(html, 'href="https://www.instagram.com/"', `href="${esc(linksByIcon.github)}"`);
-  }
+  // ─── 12. Social links in sidebar (compiled block replacement) ─────────
+  const socialHtml = buildSocialLinksBlock(profile, false);
+  html = replaceSocialLinksContent(html, socialHtml);
 
   // ─── 13. Remove Framer badge ──────────────────────────────────────────
   html = html.replace(/<div id="__framer-badge-container"[\s\S]*?<\/div>/g, "");
