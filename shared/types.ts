@@ -106,6 +106,9 @@ export interface ProfileData {
   // Footer credit
   footerCreditText?: string;
   footerCreditName?: string;
+  phone?: string;
+  builtInFramerText?: string;
+  builtInFramerUrl?: string;
 }
 
 export type TemplateId = "daniel-cross";
