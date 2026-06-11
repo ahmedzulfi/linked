@@ -22,7 +22,7 @@ import {
 } from "lucide-react";
 import { UserMenu } from "@/components/UserMenu";
 import { useEditor } from "@/context/EditorContext";
-
+import Image from "next/image";
 
 // ─── Small reusable pieces ───────────────────────────────────────────────────
 
@@ -118,11 +118,13 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           {/* Micro-site content */}
           <div className="bg-white      rounded-lg   border border-[#E6E6E6] p-6 flex flex-col gap-4  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] ">
             <div className="flex items-center gap-4">
-              <div className="w-16 h-16   rounded-lg bg-gray-200 overflow-hidden flex-shrink-0">
-                <img
+              <div className="w-16 h-16   rounded-lg bg-gray-200 overflow-hidden flex-shrink-0 relative">
+                <Image
                   src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=256"
                   alt="Reid Hoffman"
-                  className="w-full h-full object-cover"
+                  className="object-cover"
+                  fill
+                  sizes="64px"
                 />
               </div>
               <div>
@@ -222,10 +224,14 @@ function HabitlineProductShowcase() {
         animate="visible"
         className="relative w-full overflow-hidden rounded-t-2xl border border-gray-200/80 border-b-0 shadow-[0_-12px_30px_-5px_rgba(0,0,0,0.03),0_20px_40px_-15px_rgba(0,0,0,0.08)]"
       >
-        <img
+        <Image
           src="/heroimage.png"
           alt="Website Preview"
           className="w-full h-auto object-cover object-top select-none pointer-events-none"
+          width={1200}
+          height={675}
+          priority
+          sizes="(max-width: 768px) 100vw, 80vw"
         />
       </motion.div>
     </div>
@@ -261,10 +267,13 @@ function HeroSection() {
     <section className="relative w-full h-[100vh] flex flex-col items-center justify-between overflow-hidden bg-white pt-24 pb-0">
       {/* Background image + overlay */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none opacity-90">
-        <img
+        <Image
           src="/bg.png"
-          alt=""
-          className="w-full h-full object-cover object-top"
+          alt="Hero Background"
+          fill
+          priority
+          className="object-cover object-top"
+          sizes="100vw"
         />
         <div className="absolute inset-0 hero-overlay" />
       </div>
@@ -402,7 +411,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
                 className="flex-shrink-0 w-[300px] sm:w-[380px] lg:w-[495px] template-card group"
               >
                 <div className="relative aspect-square      rounded-lg   overflow-hidden p-0 bg-[#FBFBFB] border border-[#E6E6E6] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
-                  <img src={t.img} alt={t.name} className="w-full h-full object-cover     rounded-lg " />
+                  <Image src={t.img} alt={t.name} fill className="object-cover rounded-lg" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                   {/* Bottom gradient overlay inside padding */}
                   <div className="absolute bottom-[11px] left-[11px] right-[11px] h-2/5 rounded-b-[8px]" style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%)" }} />
                   {/* Title */}
@@ -530,10 +539,13 @@ function HowItWorksSection({ onStartGen }: { onStartGen: () => void }) {
           {HOW_IT_WORKS.map((item, i) => (
             <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
               <div className="     rounded-lg   border border-[#E6E6E6] bg-white  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden p-2 transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
-                <img
+                <Image
                   src={item.img}
                   alt={item.boldText}
-                  className="w-full     rounded-lg  object-cover aspect-[41/38]"
+                  className="w-full rounded-lg object-cover aspect-[41/38]"
+                  width={410}
+                  height={380}
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
               <p className="text-[16px] leading-[24px] text-[#171717]/60 font-inter-tight">
@@ -630,7 +642,7 @@ function BusinessSection() {
           >
             {BUSINESS_CARDS.map((src, i) => (
               <div key={i} className="flex-shrink-0 w-full max-w-[900px] sm:max-w-[1100px]     rounded-lg  overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.005] will-change-transform">
-                <img src={src} alt={`Business card ${i + 1}`} className="w-full h-auto     rounded-lg  object-cover" />
+                <Image src={src} alt={`Business card ${i + 1}`} className="w-full h-auto rounded-lg object-cover" width={1100} height={620} sizes="(max-width: 1200px) 100vw, 1100px" />
               </div>
             ))}
           </div>
@@ -721,10 +733,13 @@ function FeaturesSection({ onStartTrial }: { onStartTrial: () => void }) {
           {FEATURES.map((f, i) => (
             <motion.div variants={itemVariants} key={i} className="flex flex-col gap-4">
               <div className="     rounded-lg   border border-[#E6E6E6] bg-white p-2 overflow-hidden  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  transition-transform duration-300 ease-out hover:scale-[1.01] will-change-transform">
-                <img
+                <Image
                   src={f.img}
                   alt={f.text}
-                  className="w-full     rounded-lg  object-cover aspect-[13/8]"
+                  className="w-full rounded-lg object-cover aspect-[13/8]"
+                  width={650}
+                  height={400}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
               <p className="text-[#171717] text-[16px] sm:text-[18px] leading-[27px] font-normal font-inter-tight">{f.text}</p>
