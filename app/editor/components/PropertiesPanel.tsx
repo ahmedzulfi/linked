@@ -111,9 +111,9 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.location || ""}
+          value={profile.location ?? "London-UK"}
           onChange={(e) => onChange("location", e.target.value)}
-          placeholder="e.g. San Francisco, CA"
+          placeholder="London-UK"
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -1064,94 +1064,97 @@ export default function PropertiesPanel({
     );
   };
 
-  const renderHeroFields = () => (
-    <div className="space-y-4 animate-in fade-in duration-200 text-left">
-      <div className="flex flex-col gap-1">
-        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Badge Text</label>
-        <input
-          type="text"
-          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.heroBadgeText || ""}
-          onChange={(e) => onChange("heroBadgeText", e.target.value)}
-          placeholder="Welcome here ❤️"
-        />
-      </div>
-      <div className="grid grid-cols-3 gap-2">
+  const renderHeroFields = () => {
+    const firstName = profile.name ? profile.name.split(" ")[0].toLowerCase() : "daniel";
+    return (
+      <div className="space-y-4 animate-in fade-in duration-200 text-left">
         <div className="flex flex-col gap-1">
-          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting Start</label>
-          <input
-            type="text"
-            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
-            value={profile.heroGreetingStart || ""}
-            onChange={(e) => onChange("heroGreetingStart", e.target.value)}
-            placeholder="Hey,"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Name Text</label>
-          <input
-            type="text"
-            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
-            value={profile.heroGreetingName || ""}
-            onChange={(e) => onChange("heroGreetingName", e.target.value)}
-            placeholder="daniel"
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting End</label>
-          <input
-            type="text"
-            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
-            value={profile.heroGreetingEnd || ""}
-            onChange={(e) => onChange("heroGreetingEnd", e.target.value)}
-            placeholder="here"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Subheadline (Inline Wrap)</label>
-        <textarea
-          className="min-h-[80px] border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl p-3.5 text-sm transition-colors outline-none resize-none leading-relaxed"
-          value={profile.heroSubheadline || ""}
-          onChange={(e) => onChange("heroSubheadline", e.target.value)}
-          placeholder="I design Interfaces, experiences, & brands."
-          rows={3}
-        />
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div className="flex flex-col gap-1">
-          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero CTA Button Text</label>
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Badge Text</label>
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-            value={profile.heroCtaText || ""}
-            onChange={(e) => onChange("heroCtaText", e.target.value)}
-            placeholder="Book A Call"
+            value={profile.heroBadgeText ?? "Welcome here ❤️"}
+            onChange={(e) => onChange("heroBadgeText", e.target.value)}
+            placeholder="Welcome here ❤️"
           />
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting Start</label>
+            <input
+              type="text"
+              className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
+              value={profile.heroGreetingStart ?? "Hey,"}
+              onChange={(e) => onChange("heroGreetingStart", e.target.value)}
+              placeholder="Hey,"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Name Text</label>
+            <input
+              type="text"
+              className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
+              value={profile.heroGreetingName ?? firstName}
+              onChange={(e) => onChange("heroGreetingName", e.target.value)}
+              placeholder="daniel"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting End</label>
+            <input
+              type="text"
+              className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-2 text-xs transition-colors outline-none"
+              value={profile.heroGreetingEnd ?? "here"}
+              onChange={(e) => onChange("heroGreetingEnd", e.target.value)}
+              placeholder="here"
+            />
+          </div>
         </div>
         <div className="flex flex-col gap-1">
-          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero CTA Button Link</label>
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Subheadline (Inline Wrap)</label>
+          <textarea
+            className="min-h-[80px] border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl p-3.5 text-sm transition-colors outline-none resize-none leading-relaxed"
+            value={profile.heroSubheadline ?? "I design Interfaces, experiences, & brands."}
+            onChange={(e) => onChange("heroSubheadline", e.target.value)}
+            placeholder="I design Interfaces, experiences, & brands."
+            rows={3}
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero CTA Button Text</label>
+            <input
+              type="text"
+              className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+              value={profile.heroCtaText ?? "Book A Call"}
+              onChange={(e) => onChange("heroCtaText", e.target.value)}
+              placeholder="Book A Call"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero CTA Button Link</label>
+            <input
+              type="text"
+              className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none font-mono"
+              value={profile.heroCtaUrl ?? "#contact"}
+              onChange={(e) => onChange("heroCtaUrl", e.target.value)}
+              placeholder="#contact"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-1">
+          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Rating Text</label>
           <input
             type="text"
-            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none font-mono"
-            value={profile.heroCtaUrl || ""}
-            onChange={(e) => onChange("heroCtaUrl", e.target.value)}
-            placeholder="#contact"
+            className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
+            value={profile.heroRatingText ?? "4.9 / 5"}
+            onChange={(e) => onChange("heroRatingText", e.target.value)}
+            placeholder="4.9 / 5"
           />
         </div>
       </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Rating Text</label>
-        <input
-          type="text"
-          className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.heroRatingText || ""}
-          onChange={(e) => onChange("heroRatingText", e.target.value)}
-          placeholder="4.9 / 5"
-        />
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderLabelsFields = () => (
     <div className="space-y-4 animate-in fade-in duration-200 text-left max-h-[580px] overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
@@ -1160,7 +1163,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.servicesLabel || ""}
+          value={profile.servicesLabel ?? "What I Do"}
           onChange={(e) => onChange("servicesLabel", e.target.value)}
           placeholder="What I Do"
         />
@@ -1170,7 +1173,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.aboutLabel || ""}
+          value={profile.aboutLabel ?? "About me"}
           onChange={(e) => onChange("aboutLabel", e.target.value)}
           placeholder="About me"
         />
@@ -1180,7 +1183,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.brandsLabel || ""}
+          value={profile.brandsLabel ?? "Worked with Global Brands"}
           onChange={(e) => onChange("brandsLabel", e.target.value)}
           placeholder="Worked with Global Brands"
         />
@@ -1190,7 +1193,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.projectsLabel || ""}
+          value={profile.projectsLabel ?? "My Portfolio"}
           onChange={(e) => onChange("projectsLabel", e.target.value)}
           placeholder="My Portfolio"
         />
@@ -1200,7 +1203,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.projectsSubtitle || ""}
+          value={profile.projectsSubtitle ?? "Every project built to inspire users"}
           onChange={(e) => onChange("projectsSubtitle", e.target.value)}
           placeholder="Every project built to inspire users"
         />
@@ -1211,7 +1214,7 @@ export default function PropertiesPanel({
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-            value={profile.projectsExploreText || ""}
+            value={profile.projectsExploreText ?? "Explore All"}
             onChange={(e) => onChange("projectsExploreText", e.target.value)}
             placeholder="Explore All"
           />
@@ -1221,7 +1224,7 @@ export default function PropertiesPanel({
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none font-mono"
-            value={profile.projectsExploreUrl || ""}
+            value={profile.projectsExploreUrl ?? "#work"}
             onChange={(e) => onChange("projectsExploreUrl", e.target.value)}
             placeholder="#work"
           />
@@ -1232,7 +1235,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.processLabel || ""}
+          value={profile.processLabel ?? "My Process"}
           onChange={(e) => onChange("processLabel", e.target.value)}
           placeholder="My Process"
         />
@@ -1242,7 +1245,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.testimonialsLabel || ""}
+          value={profile.testimonialsLabel ?? "Reviews"}
           onChange={(e) => onChange("testimonialsLabel", e.target.value)}
           placeholder="Reviews"
         />
@@ -1252,7 +1255,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.footerLabel || ""}
+          value={profile.footerLabel ?? "Have a question"}
           onChange={(e) => onChange("footerLabel", e.target.value)}
           placeholder="Have a question"
         />
@@ -1262,7 +1265,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.statusText || ""}
+          value={profile.statusText ?? "Available for work"}
           onChange={(e) => onChange("statusText", e.target.value)}
           placeholder="Available for work"
         />
@@ -1272,7 +1275,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.followMeLabel || ""}
+          value={profile.followMeLabel ?? "Follow me"}
           onChange={(e) => onChange("followMeLabel", e.target.value)}
           placeholder="Follow me"
         />
@@ -1283,7 +1286,7 @@ export default function PropertiesPanel({
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-            value={profile.footerCreditText || ""}
+            value={profile.footerCreditText ?? "Template by"}
             onChange={(e) => onChange("footerCreditText", e.target.value)}
             placeholder="Template by"
           />
@@ -1293,7 +1296,7 @@ export default function PropertiesPanel({
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-            value={profile.footerCreditName || ""}
+            value={profile.footerCreditName ?? "Muddasir Hussain"}
             onChange={(e) => onChange("footerCreditName", e.target.value)}
             placeholder="Muddasir Hussain"
           />
@@ -1305,7 +1308,7 @@ export default function PropertiesPanel({
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-            value={profile.builtInFramerText || ""}
+            value={profile.builtInFramerText ?? "Built in"}
             onChange={(e) => onChange("builtInFramerText", e.target.value)}
             placeholder="Built in"
           />
@@ -1315,7 +1318,7 @@ export default function PropertiesPanel({
           <input
             type="text"
             className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-405 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-            value={profile.builtInFramerUrl || ""}
+            value={profile.builtInFramerUrl ?? "Framer"}
             onChange={(e) => onChange("builtInFramerUrl", e.target.value)}
             placeholder="Framer"
           />
@@ -1331,7 +1334,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.navHomeText || ""}
+          value={profile.navHomeText ?? "Home"}
           onChange={(e) => onChange("navHomeText", e.target.value)}
           placeholder="Home"
         />
@@ -1341,7 +1344,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.navAboutText || ""}
+          value={profile.navAboutText ?? "About"}
           onChange={(e) => onChange("navAboutText", e.target.value)}
           placeholder="About"
         />
@@ -1351,7 +1354,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.navProjectsText || ""}
+          value={profile.navProjectsText ?? "Projects"}
           onChange={(e) => onChange("navProjectsText", e.target.value)}
           placeholder="Projects"
         />
@@ -1361,7 +1364,7 @@ export default function PropertiesPanel({
         <input
           type="text"
           className="h-11 border border-neutral-200 focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 rounded-xl px-3.5 text-sm transition-colors outline-none"
-          value={profile.navContactText || ""}
+          value={profile.navContactText ?? "Contact"}
           onChange={(e) => onChange("navContactText", e.target.value)}
           placeholder="Contact"
         />
