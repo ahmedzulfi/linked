@@ -196,11 +196,18 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Hosts navigation items: Home (dashboard redirect), Design (active workspace), Domains (custom domain panel), and Site Settings (site details).
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
 - **Left Column Panels (Navigation Switcher):**
-  - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with interactive forms.
-    - **Step 1 (Welcome Kickoff):** Entry welcome screen containing a visual checklist of tasks to complete, displaying the user's name and avatar. All step cards utilize a premium, high-contrast visual design featuring solid deep charcoal (`#2A2A2F`) header bars, white typography, translucent `bg-white/10` icon bezels, and colored subtitle tags.
-    - **Steps 2-5 (Core Profile Forms):** Timeline-based inline widgets for Projects, Interests, Skills, and Experience. Emojis are replaced with premium Lucide SVG vector icons, inputs and buttons are expanded to standard touch-friendly height (`h-11` or 44px), text is styled with high-contrast readable shades (`text-neutral-800` / `text-neutral-700` / `text-neutral-600`), and interactive triggers feature standard fluid scale press transitions (`active:scale-[0.97] transition-all duration-150`).
-    - **Step 6 (AI Copy Refinement):** Displays an interactive "Before vs. After" comparison of their headline and summary/bio, highlighting the AI optimization with a line-through on original text and allowing the user to make manual copy tweaks directly in the inputs before advancing.
-    - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts utilizing matching solid header accents.
+  - **Design Tab (Conversational Onboarding Wizard):**
+    - The onboarding wizard is a fully conversational, step-by-step chat flow integrated with a checklist progress tracker. Instead of rendering static form inputs inside separate cards, the bottom composer input textarea dynamically transforms to capture all details sub-step by sub-step.
+    - All absolute blacks (`#000000`) and heavy dark charcoals (`#2A2A2F`, `#171717`) inside onboarding panels are banned. Instead, the UI utilizes warm neutral white/bone surfaces (`bg-white`), whisper borders (`border-[#EAEAEA]`), soft slate text colors (`text-slate-800` / `text-slate-600`), and Electric Blue (`#3B82F6`) buttons.
+    - Conversation bubbles are optimized for premium readability, using `text-[16px]` font size and relaxed leading `leading-[26px]`.
+    - **Step 1: Basics & Identity** (Full name, Professional headline, Geolocation, Custom avatar URL).
+    - **Step 2: Hero Greeting & CTA** (Greeting start/end, Hero subheadline, Work availability, CTA button text and URL).
+    - **Step 3: Services & Offerings** (Services catching title, Service offering details, Services CTA card heading and description).
+    - **Step 4: Custom Process Steps** (Process section title, step title/descriptions).
+    - **Step 5: Bio, Photos & Testimonials** (Detailed summary, about portrait photo, signature image, client reviews quote/name/role).
+    - **Step 6: Client Logos Ticker List** (Marquee logo text ticker companies list).
+    - **Step 7: Portfolio Grid Projects** (Portfolio tagline subtitle, project title/description/link).
+    - **Step 8: Contact, Socials & Theme Layout** (Email, Phone, social URLs, and theme selection).
     - **Step 9 (Free-form Editor & Chat Mode):** Activated after selecting a template. Features a visual canvas selection mode:
       - **Visual Customizer (Properties Panel):** Replaces the chat sidebar when the **Customize** button is active and an element on the canvas is clicked/selected. Exposes contextual input forms to modify:
         - **Profile & Greeting:** Name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL, greeting start, greeting name, greeting end, status text, and follow me label.

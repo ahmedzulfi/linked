@@ -107,6 +107,7 @@ export interface ProfileData {
   footerCreditText?: string;
   footerCreditName?: string;
   phone?: string;
+  email?: string;
   builtInFramerText?: string;
   builtInFramerUrl?: string;
 }
