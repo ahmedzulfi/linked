@@ -32,11 +32,12 @@ import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
 import WizardAnimations from "@/components/WizardAnimations";
 import { UserMenu } from "@/components/UserMenu";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 const ProfilePreview = dynamic(() => import("./components/ProfilePreview"), {
   ssr: false,
@@ -788,7 +789,7 @@ function EditorInner() {
       {activeNav === 1 && (
         <aside 
           className={`h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300 ${
-            currentStep <= 6
+            currentStep <= 7
               ? "flex-1"
               : "w-[510px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs"
           }`}
@@ -822,7 +823,7 @@ function EditorInner() {
             <div className="flex flex-col justify-between h-full w-full">
               {/* Title Header */}
               <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
-                <div className={`flex items-center justify-between w-full ${currentStep <= 6 ? "max-w-3xl mx-auto" : ""}`}>
+                <div className={`flex items-center justify-between w-full ${currentStep <= 7 ? "max-w-3xl mx-auto" : ""}`}>
                   <div className="flex items-center gap-2">
                     <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
                     <div className="w-px h-3 bg-black/10" />
@@ -846,7 +847,7 @@ function EditorInner() {
 
           {/* Scrollable Wizard History */}
           <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
-            <div className={`space-y-6 flex flex-col ${currentStep <= 6 ? "max-w-3xl mx-auto w-full py-4" : ""}`}>
+            <div className={`space-y-6 flex flex-col ${currentStep <= 7 ? "max-w-3xl mx-auto w-full py-4" : ""}`}>
             
             {/* Step 1 Welcome Chat Bubble */}
             {currentStep >= 1 && (
@@ -1107,16 +1108,16 @@ function EditorInner() {
 
             {/* DYNAMIC FORMS */}
             <div className="pt-2">
-              {/* Step 1 */}
+              {/* Step 1 Welcome / Kickoff Form */}
               {currentStep === 1 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Sparkles className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Sparkles className="w-4 h-4 text-[#8DB8FF] fill-[#8DB8FF]/10" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">ONBOARDING KICKOFF</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Welcome to Webild</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">ONBOARDING KICKOFF</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">Welcome to Webild</CardTitle>
                     </div>
                   </CardHeader>
 
@@ -1133,62 +1134,60 @@ function EditorInner() {
                     </div>
                     
                     <div className="space-y-3.5">
-                      <h4 className="text-[10px] font-bold text-[#369762] uppercase tracking-wider">Your Customization Steps</h4>
+                      <h4 className="text-[10px] font-bold text-[#2A2A2F]/60 uppercase tracking-wider font-mono">Your Customization Steps</h4>
                       <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">1</span>
+                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">1</Badge>
                           <span>📂 Review Projects & Highlights</span>
                         </div>
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">2</span>
+                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">2</Badge>
                           <span>🎯 Refine Interests & Aspirations</span>
                         </div>
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">3</span>
+                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">3</Badge>
                           <span>🛠 Select Core Skills & Tools</span>
                         </div>
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">4</span>
+                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">4</Badge>
                           <span>💼 Verify Work Experience Timeline</span>
                         </div>
                         <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">5</span>
+                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">5</Badge>
                           <span>🎨 Choose Layout Template & Edit Live</span>
                         </div>
                       </div>
                     </div>
-                  </CardContent>
 
-                  <CardFooter className="p-6 pt-0">
                     <Button
                       onClick={() => setCurrentStep(2)}
-                      className="w-full h-11 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-all duration-100 shadow-sm border border-[#8DFFB3]/80 cursor-pointer"
+                      className="w-full h-11 bg-neutral-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform duration-100 shadow-sm cursor-pointer hover:bg-neutral-800 border-none"
                     >
-                      Get Started <ArrowRight className="w-4 h-4 text-[#171717]" />
+                      Get Started <ArrowRight className="w-4 h-4" />
                     </Button>
-                  </CardFooter>
+                  </CardContent>
                 </Card>
               )}
 
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Folder className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Folder className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 2 OF 7 • PORTFOLIO</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Projects & Highlights</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 2 OF 7 • PORTFOLIO</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">Projects & Highlights</CardTitle>
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="p-6 pt-5 space-y-5">
+                  <CardContent className="p-6 space-y-5">
                     <div className="space-y-1">
                       {projects.map((proj, idx) => (
-                        <div 
+                        <Card 
                           key={idx} 
-                          className="group flex items-start justify-between p-3 rounded-xl hover:bg-neutral-50/80 transition-colors duration-150 relative border border-transparent hover:border-neutral-200/50 bg-[#FBFBFB] mb-2"
+                          className="group flex items-start justify-between p-3.5 rounded-xl hover:bg-neutral-50/80 transition-colors duration-150 relative border-neutral-200/50 bg-[#FBFBFB] mb-2 shadow-none"
                         >
                           <div className="flex items-start gap-2.5 min-w-0 flex-1">
                             <FileText className="w-4 h-4 text-[#2A2A2F]/70 shrink-0 mt-0.5" />
@@ -1200,14 +1199,15 @@ function EditorInner() {
                             </div>
                           </div>
                           <Button 
-                            variant="ghost"
                             onClick={() => removeProject(idx)} 
-                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95] h-8 w-8"
+                            variant="ghost"
+                            size="icon"
+                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-650 hover:bg-red-50/50 w-7 h-7 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
                             title="Remove project"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </Button>
-                        </div>
+                        </Card>
                       ))}
                       {projects.length === 0 && !showAddProject && (
                         <div className="flex flex-col items-center justify-center py-6 bg-[#FBFBFB] border border-dashed border-neutral-200/80 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
@@ -1218,96 +1218,96 @@ function EditorInner() {
                     </div>
 
                     {showAddProject ? (
-                      <div className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-xs animate-in fade-in duration-200">
+                      <Card className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-none">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Project Title</label>
                           <Input
                             type="text"
                             placeholder="e.g. Financial Dashboard App"
                             value={newProjTitle}
                             onChange={(e) => setNewProjTitle(e.target.value)}
-                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                           />
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Short Description</label>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Short Description</label>
                           <Textarea
                             placeholder="What did you build? What technologies did you use?"
                             value={newProjDesc}
                             onChange={(e) => setNewProjDesc(e.target.value)}
                             rows={2}
-                            className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
+                            className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[70px]"
                           />
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project URL (Optional)</label>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Project URL (Optional)</label>
                           <Input
                             type="text"
                             placeholder="https://github.com/username/project"
                             value={newProjLink}
                             onChange={(e) => setNewProjLink(e.target.value)}
-                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                           />
                         </div>
                         <div className="flex gap-2 justify-end pt-1">
                           <Button 
-                            variant="outline"
                             onClick={() => setShowAddProject(false)} 
-                            className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                            variant="outline"
+                            className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
                           >
                             Cancel
                           </Button>
                           <Button 
                             onClick={addProject} 
-                            className="h-10 px-4 text-xs font-bold bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                            className="h-10 px-4 text-xs font-bold bg-[#2A2A2F] hover:bg-[#1f1f22] text-white rounded-xl transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
                           >
                             Add Project
                           </Button>
                         </div>
-                      </div>
+                      </Card>
                     ) : (
                       <Button
-                        variant="outline"
                         onClick={() => setShowAddProject(true)}
-                        className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
+                        variant="outline"
+                        className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-350 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.98] duration-100 ease-out"
                       >
                         <Plus className="w-4 h-4 text-neutral-500" /> Add Project
                       </Button>
                     )}
-                  </CardContent>
 
-                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
-                    <Button 
-                      variant="outline"
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </Button>
-                    <Button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                    >
-                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                    </Button>
-                  </CardFooter>
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <Button 
+                        onClick={handleBackStep} 
+                        variant="outline"
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </Button>
+                      <Button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
+                      >
+                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </CardContent>
                 </Card>
               )}
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Sparkles className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Sparkles className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 3 OF 7 • TARGETS</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Interests & Career Goals</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 3 OF 7 • TARGETS</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">Interests & Career Goals</CardTitle>
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="p-6 pt-5 space-y-5">
+                  <CardContent className="p-6 space-y-5">
                     <Textarea
                       placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
                       value={interests}
@@ -1316,55 +1316,58 @@ function EditorInner() {
                         updateField("interests", e.target.value);
                       }}
                       rows={5}
-                      className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-[#FBFBFB] focus:bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
+                      className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-[#FBFBFB] focus:bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[120px]"
                     />
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <Button 
+                        onClick={handleBackStep} 
+                        variant="outline"
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </Button>
+                      <Button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
+                      >
+                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
                   </CardContent>
-
-                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
-                    <Button 
-                      variant="outline"
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </Button>
-                    <Button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                    >
-                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                    </Button>
-                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Wrench className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Wrench className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 4 OF 7 • SKILLS</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Core Skills & Tools</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 4 OF 7 • SKILLS</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">Core Skills & Tools</CardTitle>
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="p-6 pt-5 space-y-5">
+                  <CardContent className="p-6 space-y-5">
                     <div className="flex flex-wrap gap-1.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
                       {skills.map((skill, idx) => {
                         const tagColor = getNotionTagClasses(skill.name);
                         return (
                           <Badge 
                             key={idx} 
-                            className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor} hover:bg-opacity-80 transition-transform duration-105 active:scale-[0.95] bg-transparent text-inherit`}
+                            variant="outline"
+                            className={cn(
+                              "inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-md border transition-transform duration-100 active:scale-[0.95] shadow-none",
+                              tagColor
+                            )}
                           >
                             {skill.name}
                             <button 
                               type="button"
                               onClick={() => removeSkillTag(skill.name)} 
-                              className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-900 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
+                              className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-950 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
                               style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
                             >
                               ×
@@ -1373,7 +1376,7 @@ function EditorInner() {
                         );
                       })}
                       {skills.length === 0 && (
-                        <span className="text-[11px] text-neutral-555 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
+                        <span className="text-[11px] text-neutral-550 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
                       )}
                     </div>
 
@@ -1383,106 +1386,107 @@ function EditorInner() {
                         placeholder="e.g. TypeScript, UI Design, Next.js"
                         value={newSkill}
                         onChange={(e) => setNewSkill(e.target.value)}
-                        className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                        className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                       />
                       <Button 
                         type="submit" 
-                        className="px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm cursor-pointer"
+                        className="px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl transition-transform active:scale-[0.98] duration-100 ease-out h-11 shadow-sm border-none"
                       >
                         Add
                       </Button>
                     </form>
-                  </CardContent>
 
-                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
-                    <Button 
-                      variant="outline"
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </Button>
-                    <Button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                    >
-                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                    </Button>
-                  </CardFooter>
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <Button 
+                        onClick={handleBackStep} 
+                        variant="outline"
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </Button>
+                      <Button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
+                      >
+                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </CardContent>
                 </Card>
               )}
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Briefcase className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Briefcase className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 5 OF 7 • TIMELINE</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Work Experience</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 5 OF 7 • TIMELINE</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">Work Experience</CardTitle>
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="p-6 pt-5 space-y-5">
+                  <CardContent className="p-6 space-y-5">
                     <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
                       {experience.map((exp, idx) => (
                         <div 
                           key={idx} 
-                          className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
+                          className="group bg-[#FBFBFB] border border-neutral-200/85 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
                         >
                           <Button 
-                            variant="ghost"
                             onClick={() => removeExperienceItem(idx)} 
-                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95] h-8 w-8"
+                            variant="ghost"
+                            size="icon"
+                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-650 hover:bg-red-50/55 w-7 h-7 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
                             title="Remove experience"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </Button>
-   
+  
                           <div className="grid grid-cols-2 gap-2.5">
                             <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Job Title</label>
                               <Input
                                 type="text"
                                 value={exp.title}
                                 placeholder="e.g. Lead Engineer"
                                 onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                               />
                             </div>
                             <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Company</label>
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Company</label>
                               <Input
                                 type="text"
                                 value={exp.company}
                                 placeholder="e.g. Acme Corp"
                                 onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                               />
                             </div>
                           </div>
                           <div className="grid grid-cols-1 gap-2">
                             <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Duration</label>
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Duration</label>
                               <Input
                                 type="text"
                                 value={exp.duration}
                                 placeholder="e.g. Jan 2024 - Present"
                                 onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                               />
                             </div>
                           </div>
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Key Responsibilities / Impact</label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Key Responsibilities / Impact</label>
                             <Textarea
                               value={exp.description}
                               placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
                               rows={2}
                               onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
+                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
                             />
                           </div>
                         </div>
@@ -1494,53 +1498,53 @@ function EditorInner() {
                         </div>
                       )}
                     </div>
-   
+ 
                     <Button
-                      variant="outline"
                       onClick={addExperienceItem}
-                      className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
+                      variant="outline"
+                      className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-350 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.98] duration-100 ease-out"
                     >
                       <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
                     </Button>
+ 
+                    <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                      <Button 
+                        onClick={handleBackStep} 
+                        variant="outline"
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </Button>
+                      <Button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
+                      >
+                        Refine with AI <Sparkles className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
                   </CardContent>
-   
-                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
-                    <Button 
-                      variant="outline"
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </Button>
-                    <Button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                    >
-                      Refine with AI <Sparkles className="w-3.5 h-3.5" />
-                    </Button>
-                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 6 Form: AI Copy Refinement Compare */}
               {currentStep === 6 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Sparkles className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Sparkles className="w-4 h-4 text-[#8DFFB3]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 6 OF 7 • COPYWRITING</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">AI Copy Optimization</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DFFB3] uppercase block font-mono">STEP 6 OF 7 • COPYWRITING</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">AI Copy Optimization</CardTitle>
                     </div>
                   </CardHeader>
 
-                  <CardContent className="p-6 pt-5 space-y-5">
+                  <CardContent className="p-6 space-y-5">
                     {optimizing ? (
                       /* AI Refinement Loading Screen */
                       <div className="py-10 flex flex-col items-center justify-center gap-3">
-                        <Loader2 className="w-8 h-8 animate-spin text-[#369762]" />
-                        <p className="text-xs font-semibold text-[#369762] animate-pulse">Refining your portfolio details...</p>
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                        <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">Refining your portfolio details...</p>
                       </div>
                     ) : (
                       /* Comparison Screen */
@@ -1548,8 +1552,8 @@ function EditorInner() {
                         {/* Headline Compare */}
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Headline</label>
-                            <Badge className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] hover:bg-[#8DFFB3]/30 border-transparent px-2 py-0.5 rounded-full font-bold">AI Polished</Badge>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Headline</label>
+                            <Badge className="text-[10px] bg-[#EDF3EC] text-[#346538] px-2 py-0.5 rounded-full font-bold border-none shadow-none font-mono">AI Polished</Badge>
                           </div>
                           
                           {/* Before (original) */}
@@ -1564,7 +1568,7 @@ function EditorInner() {
                             type="text"
                             value={editedProfile?.headline || ""}
                             onChange={(e) => updateField("headline", e.target.value)}
-                            className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all"
+                            className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-850 focus-visible:ring-1 focus-visible:ring-neutral-400 bg-[#FBFBFB] focus-visible:bg-white transition-all"
                             placeholder="Your professional headline"
                           />
                         </div>
@@ -1572,8 +1576,8 @@ function EditorInner() {
                         {/* Bio Compare */}
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Bio Summary</label>
-                            <Badge className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] hover:bg-[#8DFFB3]/30 border-transparent px-2 py-0.5 rounded-full font-bold">AI Polished</Badge>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Bio Summary</label>
+                            <Badge className="text-[10px] bg-[#EDF3EC] text-[#346538] px-2 py-0.5 rounded-full font-bold border-none shadow-none font-mono">AI Polished</Badge>
                           </div>
                           
                           {/* Before (original) */}
@@ -1588,47 +1592,47 @@ function EditorInner() {
                             rows={4}
                             value={editedProfile?.summary || ""}
                             onChange={(e) => updateField("summary", e.target.value)}
-                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all resize-none min-h-[100px]"
+                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-850 focus-visible:ring-1 focus-visible:ring-neutral-400 bg-[#FBFBFB] focus-visible:bg-white transition-all resize-none min-h-[90px]"
+                            placeholder="Your professional bio summary"
                           />
+                        </div>
+
+                        {/* Action Button */}
+                        <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                          <Button 
+                            onClick={handleBackStep} 
+                            variant="outline"
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </Button>
+                          <Button
+                            onClick={() => setCurrentStep(7)}
+                            className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Apply & Next <ArrowRight className="w-4 h-4" />
+                          </Button>
                         </div>
                       </div>
                     )}
                   </CardContent>
-
-                  {!optimizing && (
-                    <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
-                      <Button 
-                        variant="outline"
-                        onClick={handleBackStep} 
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={() => setCurrentStep(7)}
-                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                      >
-                        Apply & Next <ArrowRight className="w-4 h-4" />
-                      </Button>
-                    </CardFooter>
-                  )}
                 </Card>
               )}
 
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
-                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
-                      <Palette className="w-4.5 h-4.5" />
+                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
+                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Palette className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 7 OF 7 • STYLES</span>
-                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Theme Styles</CardTitle>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 7 OF 7 • STYLES</span>
+                      <CardTitle className="text-sm font-semibold text-white leading-tight">Theme Styles</CardTitle>
                     </div>
                   </CardHeader>
                   
-                  <CardContent className="p-6 pt-5 space-y-5">
+                  <CardContent className="p-6 space-y-5">
                     <div className="grid grid-cols-2 gap-2.5">
                       {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
                         const isSelected = selectedTemplate === id;
@@ -1641,60 +1645,59 @@ function EditorInner() {
                         if (id === "biobricks") descText = "Grid-based bento block structure";
  
                         return (
-                          <div
+                          <Card
                             key={id}
                             onClick={() => selectTemplate(id as any)}
-                            className={`group bg-[#FBFBFB] border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.97] transition-transform duration-100 ease-out ${
+                            className={`group bg-[#FBFBFB] border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out shadow-none ${
                               isSelected
-                                ? "border-[#369762] ring-1 ring-[#369762] bg-[#8DFFB3]/10 shadow-xs"
-                                : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/20"
+                                ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30 shadow-sm"
+                                : "border-neutral-200 hover:border-neutral-305 hover:bg-neutral-50/20"
                             }`}
                           >
                             <div className="pr-5">
                               <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
-                              <span className="text-[9.5px] text-neutral-550 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                              <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
                             </div>
                             {isSelected && (
-                              <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#369762] flex items-center justify-center shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
+                              <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#2A2A2F] flex items-center justify-center">
                                 <Check className="w-2.5 h-2.5 text-white" />
                               </div>
                             )}
-                          </div>
+                          </Card>
                         );
                       })}
                     </div>
-                  </CardContent>
  
-                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
-                    <Button 
-                      variant="outline"
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        // Confirm theme and transition straight to free-form chat (step 9)
-                        setCurrentStep(9);
-                        toast.success("Theme confirmed and setup complete!");
-                      }}
-                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                    >
-                      Confirm & Finish <Check className="w-3.5 h-3.5" />
-                    </Button>
-                  </CardFooter>
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <Button 
+                        onClick={handleBackStep} 
+                        variant="outline"
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          // Confirm theme and transition straight to free-form chat (step 9)
+                          setCurrentStep(9);
+                          toast.success("Theme confirmed and setup complete!");
+                        }}
+                        className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
+                      >
+                        Confirm & Finish <Check className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  </CardContent>
                 </Card>
               )}
             </div>
-
-              <div ref={chatEndRef} />
-            </div>
+            <div ref={chatEndRef} />
           </div>
+        </div>
 
           {/* Bottom input composer area */}
           <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
-            <div className={`w-full flex flex-col gap-3 ${currentStep <= 6 ? "max-w-3xl mx-auto" : ""}`}>
+            <div className={`w-full flex flex-col gap-3 ${currentStep <= 7 ? "max-w-3xl mx-auto" : ""}`}>
               {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
             {currentStep === 9 && (
               <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
@@ -1768,7 +1771,7 @@ function EditorInner() {
       {/* ── Main Canvas Workspace ── */}
       <main 
         className={`flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3 ${
-          activeNav === 1 && currentStep <= 6 ? "hidden" : ""
+          activeNav === 1 && currentStep <= 7 ? "hidden" : ""
         }`}
       >
         
@@ -1870,7 +1873,7 @@ function EditorInner() {
             <div className="flex items-center gap-2">
               <div className="relative group">
                 <button
-                  disabled={activeNav === 1 && currentStep <= 6}
+                  disabled={activeNav === 1 && currentStep <= 7}
                   onClick={() => {
                     if (isSelectionMode) {
                       setIsSelectionMode(false);
@@ -1884,7 +1887,7 @@ function EditorInner() {
                     }
                   }}
                   className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${
-                    activeNav === 1 && currentStep <= 6
+                    activeNav === 1 && currentStep <= 7
                       ? "opacity-30 cursor-not-allowed bg-[#F7F7F7] border-[#E6E6E6] text-neutral-450"
                       : isSelectionMode
                       ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
@@ -1949,9 +1952,9 @@ function EditorInner() {
               <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5">
                 <button
                   onClick={() => setPreviewMode("desktop")}
-                  disabled={activeNav === 1 && currentStep <= 6}
+                  disabled={activeNav === 1 && currentStep <= 7}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 6
+                    activeNav === 1 && currentStep <= 7
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "desktop"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -1963,9 +1966,9 @@ function EditorInner() {
                 </button>
                 <button
                   onClick={() => setPreviewMode("tablet")}
-                  disabled={activeNav === 1 && currentStep <= 6}
+                  disabled={activeNav === 1 && currentStep <= 7}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 6
+                    activeNav === 1 && currentStep <= 7
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "tablet"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -1977,9 +1980,9 @@ function EditorInner() {
                 </button>
                 <button
                   onClick={() => setPreviewMode("mobile")}
-                  disabled={activeNav === 1 && currentStep <= 6}
+                  disabled={activeNav === 1 && currentStep <= 7}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 6
+                    activeNav === 1 && currentStep <= 7
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "mobile"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -1997,9 +2000,9 @@ function EditorInner() {
                       setResizableWidth(800);
                     }
                   }}
-                  disabled={activeNav === 1 && currentStep <= 6}
+                  disabled={activeNav === 1 && currentStep <= 7}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 6
+                    activeNav === 1 && currentStep <= 7
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "resizable"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -2018,15 +2021,15 @@ function EditorInner() {
           <div 
             ref={previewContainerRef}
             className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
-              activeNav === 1 && currentStep <= 6 
+              activeNav === 1 && currentStep <= 7 
                 ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
                 : "bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
             }`}
           >
             <AnimatePresence mode="wait">
               
-              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 6 */}
-              {activeNav === 1 && currentStep <= 6 ? (
+              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 7 */}
+              {activeNav === 1 && currentStep <= 7 ? (
                 <motion.div
                   key={`anim-${currentStep}`}
                   initial={{ opacity: 0, scale: 0.95 }}
