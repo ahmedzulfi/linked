@@ -1100,293 +1100,313 @@ function EditorInner() {
               </>
             )}
 
-                  <div className="pt-2">
+            {/* DYNAMIC FORMS */}
+            <div className="pt-2">
               {/* Step 1 Welcome / Kickoff Form */}
               {currentStep === 1 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-center gap-4 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#2A2A2F] shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
-                      <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Sparkles className="w-4 h-4 text-[#8DB8FF] fill-[#8DB8FF]/10" />
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900 truncate">{editedProfile?.name || "Your Profile"}</h3>
-                      <p className="text-xs text-neutral-600 truncate max-w-[200px] mt-0.5">{editedProfile?.headline || "Professional Headline"}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3.5">
-                    <h4 className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Your Customization Steps</h4>
-                    <div className="space-y-2.5">
-                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#2A2A2F] rounded-xl shadow-xs transition-all hover:bg-[#F3F8FF] hover:translate-y-[-2px] duration-150">
-                        <span className="w-6 h-6 rounded-lg bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-sm">1</span>
-                        <span className="text-xs font-bold text-neutral-800">📂 Review Projects & Highlights</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#2A2A2F] rounded-xl shadow-xs transition-all hover:bg-[#F3F8FF] hover:translate-y-[-2px] duration-150">
-                        <span className="w-6 h-6 rounded-lg bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-sm">2</span>
-                        <span className="text-xs font-bold text-neutral-800">🎯 Refine Interests & Aspirations</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#2A2A2F] rounded-xl shadow-xs transition-all hover:bg-[#F3F8FF] hover:translate-y-[-2px] duration-150">
-                        <span className="w-6 h-6 rounded-lg bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-sm">3</span>
-                        <span className="text-xs font-bold text-neutral-800">🛠 Select Core Skills & Tools</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#2A2A2F] rounded-xl shadow-xs transition-all hover:bg-[#F3F8FF] hover:translate-y-[-2px] duration-150">
-                        <span className="w-6 h-6 rounded-lg bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-sm">4</span>
-                        <span className="text-xs font-bold text-neutral-800">💼 Verify Work Experience Timeline</span>
-                      </div>
-                      <div className="flex items-center gap-3 p-3 bg-white border-2 border-[#2A2A2F] rounded-xl shadow-xs transition-all hover:bg-[#F3F8FF] hover:translate-y-[-2px] duration-150">
-                        <span className="w-6 h-6 rounded-lg bg-[#2A2A2F] text-white flex items-center justify-center font-bold text-[11px] shrink-0 shadow-sm">5</span>
-                        <span className="text-xs font-bold text-neutral-800">🎨 Choose Layout Template & Edit Live</span>
-                      </div>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">ONBOARDING KICKOFF</span>
+                      <h3 className="text-sm font-semibold text-white leading-tight">Welcome to Webild</h3>
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => setCurrentStep(2)}
-                    className="w-full h-11 bg-[#2A2A2F] hover:bg-neutral-800 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-transform duration-100 shadow-[2px_2px_0px_0px_#8DB8FF] border border-[#2A2A2F] cursor-pointer"
-                  >
-                    Get Started <ArrowRight className="w-4 h-4 text-white" />
-                  </button>
+                  <div className="p-6 space-y-5">
+                    {/* User profile card visual slot */}
+                    <div className="flex items-center gap-3.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/80 rounded-xl">
+                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
+                        <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
+                        <p className="text-xs text-neutral-500 truncate max-w-[320px] mt-0.5 font-medium">{editedProfile?.headline || "Professional Headline"}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3.5">
+                      <h4 className="text-[10px] font-bold text-[#2A2A2F]/60 uppercase tracking-wider">Your Customization Steps</h4>
+                      <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">1</span>
+                          <span>📂 Review Projects & Highlights</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">2</span>
+                          <span>🎯 Refine Interests & Aspirations</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">3</span>
+                          <span>🛠 Select Core Skills & Tools</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">4</span>
+                          <span>💼 Verify Work Experience Timeline</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">5</span>
+                          <span>🎨 Choose Layout Template & Edit Live</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setCurrentStep(2)}
+                      className="w-full h-11 bg-neutral-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-transform duration-100 shadow-sm cursor-pointer hover:bg-neutral-800"
+                    >
+                      Get Started <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               )}
 
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-[#DCEAFF] border-2 border-[#2A2A2F] flex items-center justify-center shadow-xs shrink-0 text-[#2A2A2F]">
-                      <Folder className="w-5 h-5 stroke-[2]" />
+                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Folder className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900">Projects & Highlights</h3>
-                      <p className="text-xs text-neutral-600 mt-1 leading-normal font-semibold">Showcase your best apps, portfolios, or articles.</p>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 2 OF 7 • PORTFOLIO</span>
+                      <h3 className="text-sm font-semibold text-white leading-tight">Projects & Highlights</h3>
                     </div>
                   </div>
                   
-                  <div className="space-y-2">
-                    {projects.map((proj, idx) => (
-                      <div 
-                        key={idx} 
-                        className="group flex items-start justify-between p-3.5 bg-white border-2 border-[#2A2A2F] rounded-xl relative transition-all duration-150 hover:bg-[#F3F8FF] shadow-xs"
-                      >
-                        <div className="flex items-start gap-3 min-w-0 flex-1">
-                          <div className="w-8 h-8 rounded-lg bg-[#F3F3F3] border border-[#2A2A2F] flex items-center justify-center text-[#2A2A2F] shrink-0">
-                            <FileText className="w-4 h-4" />
+                  <div className="p-6 space-y-5">
+                    <div className="space-y-1">
+                      {projects.map((proj, idx) => (
+                        <div 
+                          key={idx} 
+                          className="group flex items-start justify-between p-3 rounded-xl hover:bg-neutral-50/80 transition-colors duration-150 relative border border-transparent hover:border-neutral-200/50 bg-[#FBFBFB] mb-2"
+                        >
+                          <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                            <FileText className="w-4 h-4 text-[#2A2A2F]/70 shrink-0 mt-0.5" />
+                            <div className="truncate pr-4 flex-1">
+                              <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
+                              {proj.description && (
+                                <span className="text-[11px] text-[#171717]/60 block truncate mt-0.5 leading-relaxed font-medium">{proj.description}</span>
+                              )}
+                            </div>
                           </div>
-                          <div className="truncate pr-4 flex-1">
-                            <span className="text-xs font-bold text-neutral-900 block truncate">{proj.title}</span>
-                            {proj.description && (
-                              <span className="text-[11px] text-neutral-600 block truncate mt-1 leading-normal">{proj.description}</span>
-                            )}
-                          </div>
+                          <button 
+                            onClick={() => removeProject(idx)} 
+                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
+                            title="Remove project"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
                         </div>
-                        <button 
-                          onClick={() => removeProject(idx)} 
-                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50 p-1.5 rounded-lg border border-[#2A2A2F] transition-all absolute right-3 top-3 bg-white shadow-xs active:scale-[0.95]"
-                          title="Remove project"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    ))}
-                    {projects.length === 0 && !showAddProject && (
-                      <div className="flex flex-col items-center justify-center py-6 bg-white border-2 border-dashed border-[#2A2A2F]/40 rounded-xl text-neutral-500 text-center animate-in fade-in duration-200">
-                        <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
-                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No projects added yet</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {showAddProject ? (
-                    <div className="border-2 border-[#2A2A2F] bg-white rounded-xl p-4 space-y-3.5 shadow-sm">
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Project Title</label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Financial Dashboard App"
-                          value={newProjTitle}
-                          onChange={(e) => setNewProjTitle(e.target.value)}
-                          className="w-full h-11 text-xs px-3 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Short Description</label>
-                        <textarea
-                          placeholder="What did you build? What technologies did you use?"
-                          value={newProjDesc}
-                          onChange={(e) => setNewProjDesc(e.target.value)}
-                          rows={2}
-                          className="w-full text-xs px-3 py-2.5 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Project URL (Optional)</label>
-                        <input
-                          type="text"
-                          placeholder="https://github.com/username/project"
-                          value={newProjLink}
-                          onChange={(e) => setNewProjLink(e.target.value)}
-                          className="w-full h-11 text-xs px-3 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 transition-colors"
-                        />
-                      </div>
-                      <div className="flex gap-2 justify-end pt-1">
-                        <button 
-                          onClick={() => setShowAddProject(false)} 
-                          className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all active:scale-[0.97]"
-                        >
-                          Cancel
-                        </button>
-                        <button 
-                          onClick={addProject} 
-                          className="h-10 px-4 text-xs font-bold bg-[#2A2A2F] hover:bg-neutral-850 text-white rounded-xl border border-[#2A2A2F] shadow-sm transition-all active:scale-[0.97]"
-                        >
-                          Add Project
-                        </button>
-                      </div>
+                      ))}
+                      {projects.length === 0 && !showAddProject && (
+                        <div className="flex flex-col items-center justify-center py-6 bg-[#FBFBFB] border border-dashed border-neutral-200/80 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
+                          <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
+                          <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No projects added yet</span>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <button
-                      onClick={() => setShowAddProject(true)}
-                      className="w-full h-11 border-2 border-dashed border-[#2A2A2F] hover:border-solid rounded-xl text-xs font-semibold text-neutral-800 flex items-center justify-center gap-1.5 hover:bg-[#F3F3F3] transition-all active:scale-[0.97]"
-                    >
-                      <Plus className="w-4 h-4 text-neutral-600" /> Add Project
-                    </button>
-                  )}
 
-                  <div className="flex justify-between items-center pt-2 border-t-2 border-[#2A2A2F]/20">
-                    <button 
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </button>
-                    <button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#2A2A2F] hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-[2px_2px_0px_0px_#8DB8FF] border border-[#2A2A2F]"
-                    >
-                      Save & Next <ArrowRight className="w-3.5 h-3.5 text-white" />
-                    </button>
+                    {showAddProject ? (
+                      <div className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-xs">
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Financial Dashboard App"
+                            value={newProjTitle}
+                            onChange={(e) => setNewProjTitle(e.target.value)}
+                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Short Description</label>
+                          <textarea
+                            placeholder="What did you build? What technologies did you use?"
+                            value={newProjDesc}
+                            onChange={(e) => setNewProjDesc(e.target.value)}
+                            rows={2}
+                            className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project URL (Optional)</label>
+                          <input
+                            type="text"
+                            placeholder="https://github.com/username/project"
+                            value={newProjLink}
+                            onChange={(e) => setNewProjLink(e.target.value)}
+                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                          />
+                        </div>
+                        <div className="flex gap-2 justify-end pt-1">
+                          <button 
+                            onClick={() => setShowAddProject(false)} 
+                            className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                          >
+                            Cancel
+                          </button>
+                          <button 
+                            onClick={addProject} 
+                            className="h-10 px-4 text-xs font-bold bg-[#2A2A2F] hover:bg-[#1f1f22] text-white rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                          >
+                            Add Project
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setShowAddProject(true)}
+                        className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
+                      >
+                        <Plus className="w-4 h-4 text-neutral-500" /> Add Project
+                      </button>
+                    )}
+
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <button 
+                        onClick={handleBackStep} 
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </button>
+                      <button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                      >
+                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-[#DCEAFF] border-2 border-[#2A2A2F] flex items-center justify-center shadow-xs shrink-0 text-[#2A2A2F]">
-                      <Sparkles className="w-5 h-5 stroke-[2]" />
+                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Sparkles className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900">Interests & Aspirations</h3>
-                      <p className="text-xs text-neutral-600 mt-1 leading-normal font-semibold">Share your career goals, research fields, or passions.</p>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 3 OF 7 • TARGETS</span>
+                      <h3 className="text-sm font-semibold text-white leading-tight">Interests & Career Goals</h3>
                     </div>
                   </div>
-                  <textarea
-                    placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
-                    value={interests}
-                    onChange={(e) => {
-                      setInterests(e.target.value);
-                      updateField("interests", e.target.value);
-                    }}
-                    rows={5}
-                    className="w-full text-xs p-3.5 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-[#2A2A2F]/10 transition-colors"
-                  />
-                  <div className="flex justify-between items-center pt-2 border-t-2 border-[#2A2A2F]/20">
-                    <button 
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </button>
-                    <button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#2A2A2F] hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-[2px_2px_0px_0px_#8DB8FF] border border-[#2A2A2F]"
-                    >
-                      Save & Next <ArrowRight className="w-3.5 h-3.5 text-white" />
-                    </button>
+                  
+                  <div className="p-6 space-y-5">
+                    <textarea
+                      placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
+                      value={interests}
+                      onChange={(e) => {
+                        setInterests(e.target.value);
+                        updateField("interests", e.target.value);
+                      }}
+                      rows={5}
+                      className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-[#FBFBFB] focus:bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
+                    />
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <button 
+                        onClick={handleBackStep} 
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </button>
+                      <button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                      >
+                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-[#DCEAFF] border-2 border-[#2A2A2F] flex items-center justify-center shadow-xs shrink-0 text-[#2A2A2F]">
-                      <Wrench className="w-5 h-5 stroke-[2]" />
+                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Wrench className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900">Core Skills & Tools</h3>
-                      <p className="text-xs text-neutral-600 mt-1 leading-normal font-semibold">Highlight your technical skills, methodologies, or design software.</p>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 4 OF 7 • SKILLS</span>
+                      <h3 className="text-sm font-semibold text-white leading-tight">Core Skills & Tools</h3>
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-1.5 p-3.5 bg-white border-2 border-[#2A2A2F] rounded-xl min-h-[90px] max-h-36 overflow-y-auto shadow-inner" style={{ scrollbarWidth: "none" }}>
-                    {skills.map((skill, idx) => {
-                      return (
-                        <span 
-                          key={idx} 
-                          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-lg bg-[#DCEAFF] text-blue-900 border-2 border-[#2A2A2F] hover:bg-[#b8d7ff] transition-all duration-105 active:scale-[0.95] select-none"
-                        >
-                          {skill.name}
-                          <button 
-                            onClick={() => removeSkillTag(skill.name)} 
-                            className="hover:bg-blue-300/50 rounded-md p-0.5 text-[#2A2A2F] font-bold ml-1 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
-                            style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
+                  <div className="p-6 space-y-5">
+                    <div className="flex flex-wrap gap-1.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
+                      {skills.map((skill, idx) => {
+                        const tagColor = getNotionTagClasses(skill.name);
+                        return (
+                          <span 
+                            key={idx} 
+                            className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor} transition-transform duration-105 active:scale-[0.95]`}
                           >
-                            ×
-                          </button>
-                        </span>
-                      );
-                    })}
-                    {skills.length === 0 && (
-                      <span className="text-[11px] text-neutral-500 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
-                    )}
-                  </div>
+                            {skill.name}
+                            <button 
+                              onClick={() => removeSkillTag(skill.name)} 
+                              className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-900 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
+                              style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
+                            >
+                              ×
+                            </button>
+                          </span>
+                        );
+                      })}
+                      {skills.length === 0 && (
+                        <span className="text-[11px] text-neutral-550 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
+                      )}
+                    </div>
 
-                  <form onSubmit={addSkillTag} className="flex gap-2">
-                    <input
-                      type="text"
-                      placeholder="e.g. TypeScript, UI Design, Next.js"
-                      value={newSkill}
-                      onChange={(e) => setNewSkill(e.target.value)}
-                      className="flex-1 h-11 text-xs px-3 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 transition-colors"
-                    />
-                    <button 
-                      type="submit" 
-                      className="px-5 bg-[#2A2A2F] hover:bg-neutral-800 text-white text-xs font-bold rounded-xl border border-[#2A2A2F] transition-all h-11 shadow-sm"
-                    >
-                      Add
-                    </button>
-                  </form>
+                    <form onSubmit={addSkillTag} className="flex gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. TypeScript, UI Design, Next.js"
+                        value={newSkill}
+                        onChange={(e) => setNewSkill(e.target.value)}
+                        className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                      />
+                      <button 
+                        type="submit" 
+                        className="px-5 bg-[#2A2A2F] hover:bg-neutral-850 text-white text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm"
+                      >
+                        Add
+                      </button>
+                    </form>
 
-                  <div className="flex justify-between items-center pt-2 border-t-2 border-[#2A2A2F]/20">
-                    <button 
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </button>
-                    <button
-                      onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#2A2A2F] hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-[2px_2px_0px_0px_#8DB8FF] border border-[#2A2A2F]"
-                    >
-                      Save & Next <ArrowRight className="w-3.5 h-3.5 text-white" />
-                    </button>
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <button 
+                        onClick={handleBackStep} 
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </button>
+                      <button
+                        onClick={handleNextStep}
+                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                      >
+                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-[#DCEAFF] border-2 border-[#2A2A2F] flex items-center justify-center shadow-xs shrink-0 text-[#2A2A2F]">
-                      <Briefcase className="w-5 h-5 stroke-[2]" />
+                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
+                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
+                      <Briefcase className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900">Work Experience</h3>
-                      <p className="text-xs text-neutral-600 mt-1 leading-normal font-semibold">Refine your work timeline, companies, and achievements.</p>
+                      <h3 className="text-sm font-semibold text-neutral-800">Work Experience</h3>
+                      <p className="text-xs text-neutral-550 mt-1 leading-normal font-medium">Refine your work timeline, companies, and achievements.</p>
                     </div>
                   </div>
                   
@@ -1394,11 +1414,11 @@ function EditorInner() {
                     {experience.map((exp, idx) => (
                       <div 
                         key={idx} 
-                        className="group bg-white border-l-[4px] border-l-[#8DB8FF] border-y-2 border-r-2 border-[#2A2A2F] rounded-xl p-4 space-y-3 relative hover:bg-[#FBFBFB] transition-colors duration-150 shadow-xs"
+                        className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
                       >
                         <button 
                           onClick={() => removeExperienceItem(idx)} 
-                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50 p-1.5 rounded-lg border border-[#2A2A2F] transition-all absolute right-2.5 top-2.5 bg-white shadow-xs active:scale-[0.95]"
+                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
                           title="Remove experience"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -1406,52 +1426,52 @@ function EditorInner() {
  
                         <div className="grid grid-cols-2 gap-2.5">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Job Title</label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
                             <input
                               type="text"
                               value={exp.title}
                               placeholder="e.g. Lead Engineer"
                               onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                              className="w-full h-11 text-xs px-2.5 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 transition-colors"
+                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Company</label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Company</label>
                             <input
                               type="text"
                               value={exp.company}
                               placeholder="e.g. Acme Corp"
                               onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                              className="w-full h-11 text-xs px-2.5 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 transition-colors"
+                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                         </div>
                         <div className="grid grid-cols-1 gap-2">
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Duration</label>
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Duration</label>
                             <input
                               type="text"
                               value={exp.duration}
                               placeholder="e.g. Jan 2024 - Present"
                               onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                              className="w-full h-11 text-xs px-2.5 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 transition-colors"
+                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                             />
                           </div>
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Key Responsibilities / Impact</label>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Key Responsibilities / Impact</label>
                           <textarea
                             value={exp.description}
                             placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
                             rows={2}
                             onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                            className="w-full text-xs px-2.5 py-1.5 border-2 border-[#2A2A2F] rounded-xl outline-none focus:bg-[#F3F8FF] placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
+                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
                           />
                         </div>
                       </div>
                     ))}
                     {experience.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-6 bg-white border-2 border-dashed border-[#2A2A2F]/40 rounded-xl text-neutral-500 text-center animate-in fade-in duration-200">
+                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
                         <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
                         <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No work history items added yet</span>
                       </div>
@@ -1460,23 +1480,23 @@ function EditorInner() {
  
                   <button
                     onClick={addExperienceItem}
-                    className="w-full h-11 border-2 border-dashed border-[#2A2A2F] hover:border-solid rounded-xl text-xs font-semibold text-neutral-800 flex items-center justify-center gap-1.5 hover:bg-[#F3F3F3] transition-all active:scale-[0.97]"
+                    className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
                   >
-                    <Plus className="w-4 h-4 text-neutral-600" /> Add Work Experience
+                    <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
                   </button>
  
-                  <div className="flex justify-between items-center pt-2 border-t-2 border-[#2A2A2F]/20">
+                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
                     <button 
                       onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all"
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-11 px-5 bg-[#2A2A2F] hover:bg-neutral-850 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all active:scale-[0.97] shadow-md"
+                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
                     >
-                      Refine with AI <Sparkles className="w-3.5 h-3.5 text-white" />
+                      Refine with AI <Sparkles className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -1484,165 +1504,163 @@ function EditorInner() {
 
               {/* Step 6 Form: AI Copy Refinement Compare */}
               {currentStep === 6 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-[#DCEAFF] border-2 border-[#2A2A2F] flex items-center justify-center shadow-xs shrink-0 text-amber-600">
-                      <Sparkles className="w-5 h-5 stroke-[2]" />
+                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Sparkles className="w-4 h-4 text-[#8DFFB3]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900">AI Copy Optimization</h3>
-                      <p className="text-xs text-neutral-600 mt-1 leading-normal font-semibold">Review and tweak the AI-optimized details of your profile.</p>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DFFB3] uppercase block">STEP 6 OF 7 • COPYWRITING</span>
+                      <h3 className="text-sm font-semibold text-white leading-tight">AI Copy Optimization</h3>
                     </div>
                   </div>
- 
-                  {optimizing ? (
-                    /* AI Refinement Loading Screen */
-                    <div className="py-10 flex flex-col items-center justify-center gap-3">
-                      <Loader2 className="w-8 h-8 animate-spin text-[#2A2A2F]" />
-                      <p className="text-xs font-semibold text-[#2A2A2F] font-mono animate-pulse">Refining your portfolio details...</p>
-                    </div>
-                  ) : (
-                    /* Comparison Screen */
-                    <div className="space-y-4">
-                      {/* Headline Compare */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Headline</label>
-                        </div>
-                        
-                        {/* Before (original) */}
-                        {originalHeadline && originalHeadline !== editedProfile?.headline && (
-                          <div className="bg-rose-50 border-2 border-rose-300 rounded-xl p-3.5 text-[11px] text-rose-800 leading-normal line-through opacity-85 relative pt-7 select-none">
-                            <span className="absolute top-2 left-3.5 text-[8px] font-bold text-rose-600 uppercase tracking-widest bg-rose-100 border border-rose-300 px-1.5 py-0.5 rounded">Original</span>
-                            {originalHeadline}
+
+                  <div className="p-6 space-y-5">
+                    {optimizing ? (
+                      /* AI Refinement Loading Screen */
+                      <div className="py-10 flex flex-col items-center justify-center gap-3">
+                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                        <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">Refining your portfolio details...</p>
+                      </div>
+                    ) : (
+                      /* Comparison Screen */
+                      <div className="space-y-4">
+                        {/* Headline Compare */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
+                            <span className="text-[10px] bg-[#8DFFB3]/15 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
                           </div>
-                        )}
-                        
-                        {/* After (interactive input) */}
-                        <div className="relative pt-7 bg-white border-2 border-[#2A2A2F] rounded-xl focus-within:bg-[#F3F8FF] transition-all">
-                          <span className="absolute top-2 left-3 text-[8px] font-bold text-emerald-800 uppercase tracking-widest bg-[#8DFFB3] border border-[#2A2A2F] px-1.5 py-0.5 rounded">AI Polished</span>
+                          
+                          {/* Before (original) */}
+                          {originalHeadline && originalHeadline !== editedProfile?.headline && (
+                            <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70">
+                              {originalHeadline}
+                            </div>
+                          )}
+                          
+                          {/* After (interactive input) */}
                           <input
                             type="text"
                             value={editedProfile?.headline || ""}
                             onChange={(e) => updateField("headline", e.target.value)}
-                            className="w-full h-11 px-3 bg-transparent text-xs font-semibold text-neutral-800 outline-none border-none focus:ring-0"
+                            className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all"
                             placeholder="Your professional headline"
                           />
                         </div>
-                      </div>
- 
-                      {/* Bio Compare */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-[10px] font-bold text-neutral-700 uppercase tracking-wider block">Bio Summary</label>
-                        </div>
-                        
-                        {/* Before (original) */}
-                        {originalBio && originalBio !== editedProfile?.summary && (
-                          <div className="bg-rose-50 border-2 border-rose-300 rounded-xl p-3.5 text-[11px] text-rose-800 leading-relaxed line-through opacity-85 max-h-24 overflow-y-auto relative pt-7 select-none" style={{ scrollbarWidth: "none" }}>
-                            <span className="absolute top-2 left-3.5 text-[8px] font-bold text-rose-600 uppercase tracking-widest bg-rose-100 border border-rose-300 px-1.5 py-0.5 rounded">Original</span>
-                            {originalBio}
+
+                        {/* Bio Compare */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
+                            <span className="text-[10px] bg-[#8DFFB3]/15 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
                           </div>
-                        )}
-                        
-                        {/* After (interactive textarea) */}
-                        <div className="relative pt-7 bg-white border-2 border-[#2A2A2F] rounded-xl focus-within:bg-[#F3F8FF] transition-all">
-                          <span className="absolute top-2 left-3 text-[8px] font-bold text-emerald-800 uppercase tracking-widest bg-[#8DFFB3] border border-[#2A2A2F] px-1.5 py-0.5 rounded">AI Polished</span>
+                          
+                          {/* Before (original) */}
+                          {originalBio && originalBio !== editedProfile?.summary && (
+                            <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70 max-h-24 overflow-y-auto">
+                              {originalBio}
+                            </div>
+                          )}
+                          
+                          {/* After (interactive textarea) */}
                           <textarea
                             rows={4}
                             value={editedProfile?.summary || ""}
                             onChange={(e) => updateField("summary", e.target.value)}
-                            className="w-full px-3 py-2 bg-transparent text-xs font-semibold text-neutral-800 outline-none border-none focus:ring-0 resize-none leading-relaxed"
+                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all resize-none"
                             placeholder="Your professional bio summary"
                           />
                         </div>
+
+                        {/* Action Button */}
+                        <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={() => setCurrentStep(7)}
+                            className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                          >
+                            Apply & Next <ArrowRight className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
- 
-                      {/* Action Button */}
-                      <div className="flex justify-between items-center pt-2 border-t-2 border-[#2A2A2F]/20">
-                        <button 
-                          onClick={handleBackStep} 
-                          className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all"
-                        >
-                          <ArrowLeft className="w-3.5 h-3.5" /> Back
-                        </button>
-                        <button
-                          onClick={() => setCurrentStep(7)}
-                          className="h-11 px-5 bg-[#2A2A2F] hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-[2px_2px_0px_0px_#8DB8FF] border border-[#2A2A2F] cursor-pointer"
-                        >
-                          Apply & Next <ArrowRight className="w-4 h-4 text-white" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               )}
- 
+
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <div className="bg-[#FBFBFB] border-2 border-[#2A2A2F] rounded-2xl p-6 shadow-[6px_6px_0px_0px_#2A2A2F] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b-2 border-[#2A2A2F] pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-[#DCEAFF] border-2 border-[#2A2A2F] flex items-center justify-center shadow-xs shrink-0 text-[#2A2A2F]">
-                      <Palette className="w-5 h-5 stroke-[2]" />
+                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
+                      <Palette className="w-4 h-4 text-[#8DB8FF]" />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-extrabold text-neutral-900">Theme Styles</h3>
-                      <p className="text-xs text-neutral-600 mt-1 leading-normal font-semibold">Choose one of the 4 Framer-inspired template styles.</p>
+                    <div>
+                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 7 OF 7 • STYLES</span>
+                      <h3 className="text-sm font-semibold text-white leading-tight">Theme Styles</h3>
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                      const isSelected = selectedTemplate === id;
-                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                      
-                      let descText = "";
-                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                      if (id === "biobricks") descText = "Grid-based bento block structure";
- 
-                      return (
-                        <div
-                          key={id}
-                          onClick={() => selectTemplate(id as any)}
-                          className={`group p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[90px] relative active:scale-[0.97] transition-all duration-150 ease-out border-2 ${
-                            isSelected
-                              ? "bg-[#DCEAFF] border-[#2A2A2F] shadow-[4px_4px_0px_0px_#2A2A2F]"
-                              : "bg-white border-[#2A2A2F]/30 hover:border-[#2A2A2F] hover:bg-[#FBFBFB] hover:shadow-xs"
-                          }`}
-                        >
-                          <div className="pr-5">
-                            <span className={`text-xs block ${isSelected ? "text-neutral-900 font-extrabold" : "text-neutral-800 font-bold"}`}>{labelName}</span>
-                            <span className="text-[9.5px] text-neutral-600 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                          </div>
-                          {isSelected && (
-                            <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#2A2A2F] flex items-center justify-center border border-[#2A2A2F]">
-                              <Check className="w-2.5 h-2.5 text-white" />
+                  <div className="p-6 space-y-5">
+                    <div className="grid grid-cols-2 gap-2.5">
+                      {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                        const isSelected = selectedTemplate === id;
+                        const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                        
+                        let descText = "";
+                        if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                        if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                        if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                        if (id === "biobricks") descText = "Grid-based bento block structure";
+
+                        return (
+                          <div
+                            key={id}
+                            onClick={() => selectTemplate(id as any)}
+                            className={`group bg-[#FBFBFB] border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.97] transition-transform duration-100 ease-out ${
+                              isSelected
+                                ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30 shadow-sm"
+                                : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/20"
+                            }`}
+                          >
+                            <div className="pr-5">
+                              <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
+                              <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
                             </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
- 
-                  <div className="flex justify-between items-center pt-2 border-t-2 border-[#2A2A2F]/20">
-                    <button 
-                      onClick={handleBackStep} 
-                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border-2 border-[#2A2A2F] bg-white transition-all"
-                    >
-                      <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </button>
-                    <button
-                      onClick={() => {
-                        // Confirm theme and transition straight to free-form chat (step 9)
-                        setCurrentStep(9);
-                        toast.success("Theme confirmed and setup complete!");
-                      }}
-                      className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#85858B] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-[2px_2px_0px_0px_#8DB8FF] border border-[#2A2A2F]"
-                    >
-                      Confirm & Finish <Check className="w-3.5 h-3.5 text-white" />
-                    </button>
+                            {isSelected && (
+                              <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#2A2A2F] flex items-center justify-center">
+                                <Check className="w-2.5 h-2.5 text-white" />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
+                      <button 
+                        onClick={handleBackStep} 
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </button>
+                      <button
+                        onClick={() => {
+                          // Confirm theme and transition straight to free-form chat (step 9)
+                          setCurrentStep(9);
+                          toast.success("Theme confirmed and setup complete!");
+                        }}
+                        className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                      >
+                        Confirm & Finish <Check className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
