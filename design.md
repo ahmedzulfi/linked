@@ -197,10 +197,12 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
 - **Left Column Panels (Navigation Switcher):**
   - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with interactive forms.
-    - **Step 1 (Welcome Kickoff):** Entry welcome screen containing a visual checklist of tasks to complete, displaying the user's name and avatar. All step cards utilize a premium, high-contrast visual design featuring solid deep charcoal (`#2A2A2F`) header bars, white typography, translucent `bg-white/10` icon bezels, and colored subtitle tags.
-    - **Steps 2-5 (Core Profile Forms):** Timeline-based inline widgets for Projects, Interests, Skills, and Experience. Emojis are replaced with premium Lucide SVG vector icons, inputs and buttons are expanded to standard touch-friendly height (`h-11` or 44px), text is styled with high-contrast readable shades (`text-neutral-800` / `text-neutral-700` / `text-neutral-600`), and interactive triggers feature standard fluid scale press transitions (`active:scale-[0.97] transition-all duration-150`).
-    - **Step 6 (AI Copy Refinement):** Displays an interactive "Before vs. After" comparison of their headline and summary/bio, highlighting the AI optimization with a line-through on original text and allowing the user to make manual copy tweaks directly in the inputs before advancing.
-    - **Step 7 (Template Picker):** Selection of theme styles with card-based layouts utilizing matching solid header accents.
+    - **Redesigned Step Cards (Steps 1-7):** To match the look and feel of the AI chat bubbles, all onboarding step cards use a clean white header instead of a solid dark charcoal banner. The step cards are styled with a soft shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`), thin borders, and rounded corners (`rounded-[18px]`).
+    - **Lime Green Brand Styling:** The primary lime green brand color is integrated with optimal readability and contrast.
+      - **Header Icons:** Housed in a translucent mint green bezel (`bg-[#8DFFB3]/25 border border-[#8DFFB3]/40`) with text and border details in dark green (`text-[#369762]`).
+      - **Badges/Tags:** Dynamic indicators utilize translucent green (`bg-[#8DFFB3]/20 text-[#369762]`).
+      - **CTA/Action Buttons:** Styled with solid green (`bg-[#8DFFB3] hover:bg-[#75eb9d]`) and dark charcoal text (`text-[#171717]`) to guarantee high contrast.
+      - **Template Picker (Step 7):** Highlight selected card elements using green border accents (`border-[#369762] ring-1 ring-[#369762] bg-[#8DFFB3]/10`) and a solid green checkmark badge (`bg-[#369762] text-white`).
     - **Step 9 (Free-form Editor & Chat Mode):** Activated after selecting a template. Features a visual canvas selection mode:
       - **Visual Customizer (Properties Panel):** Replaces the chat sidebar when the **Customize** button is active and an element on the canvas is clicked/selected. Exposes contextual input forms to modify:
         - **Profile & Greeting:** Name, headline, location, summary, interests, avatar image URL, banner/hero portrait URL, greeting start, greeting name, greeting end, status text, and follow me label.
