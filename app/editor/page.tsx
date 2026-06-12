@@ -116,6 +116,323 @@ const SUGGESTIONS = [
   "Add a new project named Finance App",
 ];
 
+interface WizardQuestion {
+  step: number;
+  subStep: number;
+  prompt: string;
+  placeholder: string;
+  field: string;
+  optional?: boolean;
+}
+
+const WIZARD_QUESTIONS: WizardQuestion[] = [
+  // STEP 1: BASICS & IDENTITY
+  {
+    step: 1,
+    subStep: 0,
+    prompt: "Welcome to Webild! I've loaded your LinkedIn profile data. Let's customize your personal page step-by-step. Press 'Start' or type 'start' below to begin!",
+    placeholder: "Type 'start' or click Start...",
+    field: "start",
+  },
+  {
+    step: 1,
+    subStep: 1,
+    prompt: "Let's begin with your core identity. What is your full name?",
+    placeholder: "Type your full name (e.g. Alex Morgan)...",
+    field: "name",
+  },
+  {
+    step: 1,
+    subStep: 2,
+    prompt: "What is your professional headline or role?",
+    placeholder: "Type your headline (e.g. Senior UX Designer & Creative Director)...",
+    field: "headline",
+  },
+  {
+    step: 1,
+    subStep: 3,
+    prompt: "Where are you professionally based?",
+    placeholder: "Type your location (e.g. San Francisco, CA)...",
+    field: "location",
+    optional: true,
+  },
+  {
+    step: 1,
+    subStep: 4,
+    prompt: "Enter a custom image URL for your profile avatar photo (optional, or type 'skip'):",
+    placeholder: "Enter avatar image URL (or 'skip')...",
+    field: "avatarUrl",
+    optional: true,
+  },
+  // STEP 2: HERO GREETING & CTA
+  {
+    step: 2,
+    subStep: 0,
+    prompt: "Let's customize your hero greeting block. What greeting start word should we use?",
+    placeholder: "Type greeting start (default: 'Hey,')...",
+    field: "heroGreetingStart",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 1,
+    prompt: "What greeting end word should we use?",
+    placeholder: "Type greeting end (default: 'here')...",
+    field: "heroGreetingEnd",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 2,
+    prompt: "Enter your hero subheadline text. This describes what you do in a brief, punchy sentence:",
+    placeholder: "Type hero subheadline (e.g. 'I design interfaces, experiences, & brands.')...",
+    field: "heroSubheadline",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 3,
+    prompt: "What is your availability badge status text?",
+    placeholder: "Type availability text (default: 'Available for work')...",
+    field: "statusText",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 4,
+    prompt: "What label should your hero call-to-action button have?",
+    placeholder: "Type hero CTA button label (default: 'Book A Call')...",
+    field: "heroCtaText",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 5,
+    prompt: "Where should the hero call-to-action button link to?",
+    placeholder: "Type hero CTA url (default: '#contact')...",
+    field: "heroCtaUrl",
+    optional: true,
+  },
+  // STEP 3: SERVICES & CONSULTATION
+  {
+    step: 3,
+    subStep: 0,
+    prompt: "Let's configure your services. What section catchphrase title should we use?",
+    placeholder: "Type services section catchphrase (e.g. 'Turning ideas into experiences')...",
+    field: "servicesTitle",
+    optional: true,
+  },
+  {
+    step: 3,
+    subStep: 1,
+    prompt: "Enter details for your primary service offering in the format: 'Title | Price | Description' (e.g. 'Web Design | $1200 | Clean layouts'):",
+    placeholder: "Type service 1 (Title | Price | Description)...",
+    field: "service1",
+    optional: true,
+  },
+  {
+    step: 3,
+    subStep: 2,
+    prompt: "Enter details for a secondary service in the same format: 'Title | Price | Description' (or type 'done' to finish services):",
+    placeholder: "Type service 2 or 'done'...",
+    field: "service2",
+    optional: true,
+  },
+  {
+    step: 3,
+    subStep: 3,
+    prompt: "What heading should be displayed on your services free consultation card?",
+    placeholder: "Type consultation heading (default: 'Book A 30 min Free Call')...",
+    field: "servicesCtaTitle",
+    optional: true,
+  },
+  {
+    step: 3,
+    subStep: 4,
+    prompt: "What description text should be displayed on your services consultation card?",
+    placeholder: "Type consultation description details...",
+    field: "servicesCtaText",
+    optional: true,
+  },
+  // STEP 4: CUSTOM PROCESS STEPS
+  {
+    step: 4,
+    subStep: 0,
+    prompt: "Let's define the steps in your creative process. What section title should we display?",
+    placeholder: "Type process section title (default: 'From ideas to impactful creative results.')...",
+    field: "processTitle",
+    optional: true,
+  },
+  {
+    step: 4,
+    subStep: 1,
+    prompt: "Enter your first process step details in the format: 'Title | Description' (e.g. 'Discovery | We discuss goals...'):",
+    placeholder: "Type process step 1...",
+    field: "processStep1",
+    optional: true,
+  },
+  {
+    step: 4,
+    subStep: 2,
+    prompt: "Enter your second process step details in the format: 'Title | Description' (or 'done' to finish):",
+    placeholder: "Type process step 2 or 'done'...",
+    field: "processStep2",
+    optional: true,
+  },
+  {
+    step: 4,
+    subStep: 3,
+    prompt: "Enter your third process step details in the format: 'Title | Description' (or 'done' to finish):",
+    placeholder: "Type process step 3 or 'done'...",
+    field: "processStep3",
+    optional: true,
+  },
+  // STEP 5: BIO, PHOTOS & TESTIMONIALS
+  {
+    step: 5,
+    subStep: 0,
+    prompt: "Excellent. Let's write your professional bio/summary paragraph. Describe your background, creative philosophy, and key skills:",
+    placeholder: "Type your professional bio/summary text...",
+    field: "summary",
+  },
+  {
+    step: 5,
+    subStep: 1,
+    prompt: "Enter a custom image URL for the 'About Photo' block (optional, or 'skip' to keep template default):",
+    placeholder: "Enter about photo URL...",
+    field: "aboutPhotoUrl",
+    optional: true,
+  },
+  {
+    step: 5,
+    subStep: 2,
+    prompt: "Enter a custom image URL for your signature overlay (optional, or 'skip' to keep template default):",
+    placeholder: "Enter signature image URL...",
+    field: "signatureUrl",
+    optional: true,
+  },
+  {
+    step: 5,
+    subStep: 3,
+    prompt: "Let's configure client testimonials. What reviews section heading should we display?",
+    placeholder: "Type testimonials heading (default: 'Voices of trust from happy clients')...",
+    field: "testimonialsTitle",
+    optional: true,
+  },
+  {
+    step: 5,
+    subStep: 4,
+    prompt: "Enter details for your first client review in this format: 'Quote | Client Name | Role' (e.g. 'Daniel did amazing work! | James Walker | Director'):",
+    placeholder: "Type testimonial 1...",
+    field: "testimonial1",
+    optional: true,
+  },
+  {
+    step: 5,
+    subStep: 5,
+    prompt: "Enter details for your second client review in the same format: 'Quote | Client Name | Role' (or type 'done' to finish):",
+    placeholder: "Type testimonial 2 or 'done'...",
+    field: "testimonial2",
+    optional: true,
+  },
+  // STEP 6: SCROLLING TICKER EXPERIENCE
+  {
+    step: 6,
+    subStep: 0,
+    prompt: "Let's configure your client logos/brands scrolling marquee ticker. What marquee label header should we display?",
+    placeholder: "Type marquee label (default: 'Worked with Global Brands')...",
+    field: "brandsLabel",
+    optional: true,
+  },
+  {
+    step: 6,
+    subStep: 1,
+    prompt: "List the first company you have worked with to showcase in the ticker:",
+    placeholder: "Type company name (e.g. Stripe)...",
+    field: "company1",
+    optional: true,
+  },
+  {
+    step: 6,
+    subStep: 2,
+    prompt: "List a second company you have worked with (or type 'done' to finish):",
+    placeholder: "Type company name or 'done'...",
+    field: "company2",
+    optional: true,
+  },
+  // STEP 7: PORTFOLIO PROJECTS
+  {
+    step: 7,
+    subStep: 0,
+    prompt: "Let's configure your portfolio projects grid. What tagline subtitle should we display under 'My Portfolio'?",
+    placeholder: "Type projects subtitle (default: 'Every project built to inspire users')...",
+    field: "projectsSubtitle",
+    optional: true,
+  },
+  {
+    step: 7,
+    subStep: 1,
+    prompt: "Enter details for your first project in the format: 'Title | Description | Demo Link URL' (e.g. 'Webild | Onboarding website editor | https://github.com'):",
+    placeholder: "Type project 1 details...",
+    field: "project1",
+    optional: true,
+  },
+  {
+    step: 7,
+    subStep: 2,
+    prompt: "Enter details for your second project in the format: 'Title | Description | Link' (or type 'done' to finish):",
+    placeholder: "Type project 2 details or 'done'...",
+    field: "project2",
+    optional: true,
+  },
+  // STEP 8: CONTACT, SOCIALS & THEME
+  {
+    step: 8,
+    subStep: 0,
+    prompt: "Almost there! Let's get your public contact information. What is your public email address?",
+    placeholder: "Type public email (e.g. hello@example.com)...",
+    field: "email",
+  },
+  {
+    step: 8,
+    subStep: 1,
+    prompt: "What is your public phone number?",
+    placeholder: "Type public phone number (e.g. +44 7700 900123)...",
+    field: "phone",
+  },
+  {
+    step: 8,
+    subStep: 2,
+    prompt: "What is your LinkedIn profile page URL?",
+    placeholder: "Type LinkedIn profile URL (or 'skip')...",
+    field: "linkedinUrl",
+    optional: true,
+  },
+  {
+    step: 8,
+    subStep: 3,
+    prompt: "What is your GitHub profile page URL?",
+    placeholder: "Type GitHub profile URL (or 'skip')...",
+    field: "githubUrl",
+    optional: true,
+  },
+  {
+    step: 8,
+    subStep: 4,
+    prompt: "What is your Twitter profile page URL?",
+    placeholder: "Type Twitter profile URL (or 'skip')...",
+    field: "twitterUrl",
+    optional: true,
+  },
+  {
+    step: 8,
+    subStep: 5,
+    prompt: "Fantastic! All details have been captured. Please select a design template layout card above and click 'Confirm & Finish' to enter the workspace!",
+    placeholder: "Select template card above and finish...",
+    field: "theme",
+  },
+];
+
 const getNotionTagClasses = (name: string) => {
   const colors = [
     "bg-neutral-50 text-neutral-700 border-neutral-200",
@@ -159,6 +476,7 @@ function EditorInner() {
 
   // Onboarding wizard steps (1 to 7, then 9 for free-form editor mode)
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [currentSubStep, setCurrentSubStep] = useState<number>(0);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
   const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile" | "resizable">("desktop");
@@ -185,7 +503,15 @@ function EditorInner() {
   const [newSkill, setNewSkill] = useState("");
 
   // Free-form editor mode states (Step 9)
-  const [customMessages, setCustomMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
+  const [customMessages, setCustomMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>(() => {
+    return [
+      {
+        id: "welcome",
+        role: "assistant",
+        content: "Welcome to Webild! I've loaded your LinkedIn data. Let's customize your profile step-by-step. Press 'Start' or type 'start' below to begin!"
+      }
+    ];
+  });
   const [chatInput, setChatInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
 
@@ -196,6 +522,269 @@ function EditorInner() {
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
+
+  // Onboarding controllers
+  const handleWizardInput = (inputValue: string) => {
+    const text = inputValue.trim();
+    if (!text && !WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional) return;
+
+    // Add user reply bubble
+    const userMsg = { id: Date.now().toString(), role: "user" as const, content: text || "Skip" };
+    setCustomMessages(prev => [...prev, userMsg]);
+    setChatInput("");
+
+    const activeQ = WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep);
+    if (activeQ) {
+      const field = activeQ.field;
+      if (field === "name") {
+        updateField("name", text);
+        const first = text.split(" ")[0].toLowerCase();
+        updateField("heroGreetingName", first);
+      } else if (field === "headline") {
+        updateField("headline", text);
+      } else if (field === "location") {
+        updateField("location", text || "Remote");
+      } else if (field === "avatarUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          updateField("avatarUrl", text);
+        }
+      } else if (field === "heroGreetingStart") {
+        updateField("heroGreetingStart", text || "Hey,");
+      } else if (field === "heroGreetingEnd") {
+        updateField("heroGreetingEnd", text || "here");
+      } else if (field === "heroSubheadline") {
+        updateField("heroSubheadline", text || "I design interfaces, experiences, & brands.");
+      } else if (field === "statusText") {
+        updateField("statusText", text || "Available for work");
+      } else if (field === "heroCtaText") {
+        updateField("heroCtaText", text || "Book A Call");
+      } else if (field === "heroCtaUrl") {
+        updateField("heroCtaUrl", text || "#contact");
+      } else if (field === "servicesTitle") {
+        updateField("servicesTitle", text || "Turning ideas into digital experiences");
+      } else if (field === "service1") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newService = {
+            title: parts[0] || "Custom Service",
+            price: parts[1] || "$100",
+            description: parts[2] || "Description of custom service"
+          };
+          updateField("services", [newService]);
+        }
+      } else if (field === "service2") {
+        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newService = {
+            title: parts[0] || "Secondary Service",
+            price: parts[1] || "$150",
+            description: parts[2] || "Description of secondary service"
+          };
+          const currentServices = editedProfile?.services || [];
+          updateField("services", [...currentServices, newService]);
+        }
+      } else if (field === "servicesCtaTitle") {
+        const currentCta = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+        updateField("servicesCta", {
+          ...currentCta,
+          title: text || "Book A 30 min Free Call"
+        });
+      } else if (field === "servicesCtaText") {
+        const currentCta = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+        updateField("servicesCta", {
+          ...currentCta,
+          text: text || "Let’s connect to discuss your design needs, explore creative ideas, and plan your project effectively together.",
+          buttonText: "Book A Call",
+          buttonUrl: "#contact"
+        });
+      } else if (field === "processTitle") {
+        updateField("processTitle", text || "From ideas to impactful creative results.");
+      } else if (field === "processStep1") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newStep = {
+            stepTag: "/01",
+            title: parts[0] || "Discovery",
+            description: parts[1] || "Discovery description"
+          };
+          updateField("processes", [newStep]);
+        }
+      } else if (field === "processStep2") {
+        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newStep = {
+            stepTag: "/02",
+            title: parts[0] || "Design",
+            description: parts[1] || "Design description"
+          };
+          const currentSteps = editedProfile?.processes || [];
+          updateField("processes", [...currentSteps, newStep]);
+        }
+      } else if (field === "processStep3") {
+        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newStep = {
+            stepTag: "/03",
+            title: parts[0] || "Delivery",
+            description: parts[1] || "Delivery description"
+          };
+          const currentSteps = editedProfile?.processes || [];
+          updateField("processes", [...currentSteps, newStep]);
+        }
+      } else if (field === "summary") {
+        updateField("summary", text);
+      } else if (field === "aboutPhotoUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          updateField("aboutPhotoUrl", text);
+        }
+      } else if (field === "signatureUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          updateField("signatureUrl", text);
+        }
+      } else if (field === "testimonialsTitle") {
+        updateField("testimonialsTitle", text || "Voices of trust from happy clients");
+      } else if (field === "testimonial1") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newTestimonial = {
+            quote: parts[0] || "Amazing work!",
+            name: parts[1] || "Client Name",
+            role: parts[2] || "CEO",
+            avatarUrl: ""
+          };
+          updateField("testimonials", [newTestimonial]);
+        }
+      } else if (field === "testimonial2") {
+        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newTestimonial = {
+            quote: parts[0] || "Professional developer!",
+            name: parts[1] || "Client Name 2",
+            role: parts[2] || "Product Manager",
+            avatarUrl: ""
+          };
+          const currentTestimonials = editedProfile?.testimonials || [];
+          updateField("testimonials", [...currentTestimonials, newTestimonial]);
+        }
+      } else if (field === "brandsLabel") {
+        updateField("brandsLabel", text || "Worked with Global Brands");
+      } else if (field === "company1") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const newExp = {
+            title: "Professional",
+            company: text,
+            duration: "Present",
+            description: ""
+          };
+          setExperience([newExp]);
+          updateField("experience", [newExp]);
+        }
+      } else if (field === "company2") {
+        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
+          const newExp = {
+            title: "Professional",
+            company: text,
+            duration: "Present",
+            description: ""
+          };
+          const currentExp = editedProfile?.experience || [];
+          setExperience([...currentExp, newExp]);
+          updateField("experience", [...currentExp, newExp]);
+        }
+      } else if (field === "projectsSubtitle") {
+        updateField("projectsSubtitle", text || "Every project built to inspire users");
+      } else if (field === "project1") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newProj = {
+            title: parts[0] || "Custom Project",
+            description: parts[1] || "Description of custom project",
+            link: parts[2] || "#",
+            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60"
+          };
+          setProjects([newProj]);
+          updateField("projects", [newProj]);
+        }
+      } else if (field === "project2") {
+        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          const newProj = {
+            title: parts[0] || "Secondary Project",
+            description: parts[1] || "Description of secondary project",
+            link: parts[2] || "#",
+            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60"
+          };
+          const currentProj = editedProfile?.projects || [];
+          setProjects([...currentProj, newProj]);
+          updateField("projects", [...currentProj, newProj]);
+        }
+      } else if (field === "email") {
+        updateField("email", text);
+        const currentLinks = editedProfile?.links || [];
+        const hasEmail = currentLinks.some(l => l.icon === "email");
+        let updatedLinks;
+        if (hasEmail) {
+          updatedLinks = currentLinks.map(l => l.icon === "email" ? { ...l, url: `mailto:${text}` } : l);
+        } else {
+          updatedLinks = [...currentLinks, { label: "Email", url: `mailto:${text}`, icon: "email" as const }];
+        }
+        updateField("links", updatedLinks);
+      } else if (field === "phone") {
+        updateField("phone", text);
+      } else if (field === "linkedinUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const currentLinks = editedProfile?.links || [];
+          const updatedLinks = [...currentLinks.filter(l => l.icon !== "linkedin"), { label: "LinkedIn", url: text, icon: "linkedin" as const }];
+          updateField("links", updatedLinks);
+        }
+      } else if (field === "githubUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const currentLinks = editedProfile?.links || [];
+          const updatedLinks = [...currentLinks.filter(l => l.icon !== "github"), { label: "GitHub", url: text, icon: "github" as const }];
+          updateField("links", updatedLinks);
+        }
+      } else if (field === "twitterUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const currentLinks = editedProfile?.links || [];
+          const updatedLinks = [...currentLinks.filter(l => l.icon !== "twitter"), { label: "Twitter", url: text, icon: "twitter" as const }];
+          updateField("links", updatedLinks);
+        }
+      }
+    }
+
+    const currentIndex = WIZARD_QUESTIONS.findIndex(q => q.step === currentStep && q.subStep === currentSubStep);
+    if (currentIndex !== -1 && currentIndex < WIZARD_QUESTIONS.length - 1) {
+      const nextQuestion = WIZARD_QUESTIONS[currentIndex + 1];
+      setCurrentStep(nextQuestion.step);
+      setCurrentSubStep(nextQuestion.subStep);
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: nextQuestion.prompt }
+      ]);
+    } else {
+      toast.success("Details updated! Please choose a theme card and confirm.");
+    }
+  };
+
+  const handleWizardSkip = () => {
+    const activeQ = WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep);
+    if (!activeQ) return;
+    handleWizardInput("skip");
+  };
+
+  const handleWizardBack = () => {
+    const currentIndex = WIZARD_QUESTIONS.findIndex(q => q.step === currentStep && q.subStep === currentSubStep);
+    if (currentIndex > 0) {
+      const prevQuestion = WIZARD_QUESTIONS[currentIndex - 1];
+      setCurrentStep(prevQuestion.step);
+      setCurrentSubStep(prevQuestion.subStep);
+      setCustomMessages(prev => [
+        ...prev,
+        { id: Date.now().toString(), role: "user" as const, content: "Go back" },
+        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: `Reverting to previous step. ${prevQuestion.prompt}` }
+      ]);
+    }
+  };
 
   // Load website data on mount & Check Auth
   useEffect(() => {
@@ -243,7 +832,7 @@ function EditorInner() {
 
   // Load saved chat history when websiteId is available
   useEffect(() => {
-    if (!websiteId) return;
+    if (!websiteId || currentStep !== 9) return;
     const fetchChatHistory = async () => {
       try {
         const res = await fetch(`/api/chat?websiteId=${websiteId}`);
@@ -261,7 +850,7 @@ function EditorInner() {
       }
     };
     fetchChatHistory();
-  }, [websiteId]);
+  }, [websiteId, currentStep]);
 
   // Load saved onboarding step from sessionStorage or url parameters on mount
   useEffect(() => {
@@ -291,6 +880,22 @@ function EditorInner() {
       sessionStorage.setItem("webild_onboarding_step", currentStep.toString());
     }
   }, [currentStep]);
+
+  // Synchronize onboarding customMessages with current step/subStep on load
+  useEffect(() => {
+    if (currentStep <= 7 && customMessages.length <= 1) {
+      const activeQ = WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep);
+      if (activeQ) {
+        setCustomMessages([
+          {
+            id: "welcome",
+            role: "assistant",
+            content: "Welcome to Webild! Let's configure your professional profile. " + activeQ.prompt
+          }
+        ]);
+      }
+    }
+  }, [currentStep, currentSubStep, customMessages.length]);
 
   // Sync profile data to forms
   useEffect(() => {
@@ -783,13 +1388,11 @@ function EditorInner() {
         </aside>
       </div>
 
-      {/* ── Left Column Panel Switcher based on activeNav ── */}
-      
-      {/* 1. Design / AI Onboarding Wizard Panel */}
+      {/* ── Left Column Panel Switcher based on activeN      {/* 1. Design / AI Onboarding Wizard Panel */}
       {activeNav === 1 && (
         <aside 
           className={`h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300 ${
-            currentStep <= 7
+            currentStep <= 8
               ? "flex-1"
               : "w-[510px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs"
           }`}
@@ -823,10 +1426,10 @@ function EditorInner() {
             <div className="flex flex-col justify-between h-full w-full">
               {/* Title Header */}
               <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
-                <div className={`flex items-center justify-between w-full ${currentStep <= 7 ? "max-w-3xl mx-auto" : ""}`}>
+                <div className={`flex items-center justify-between w-full ${currentStep <= 8 ? "max-w-3xl mx-auto" : ""}`}>
                   <div className="flex items-center gap-2">
                     <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
-                    <div className="w-px h-3 bg-black/10" />
+                    <div className="w-px h-3 bg-slate-200" />
                     <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
                       {profileName}
                     </span>
@@ -841,926 +1444,365 @@ function EditorInner() {
                     <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
                       Editor Mode
                     </span>
-                  </div>
                 </div>
               </div>
+            </div>
 
           {/* Scrollable Wizard History */}
           <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
-            <div className={`space-y-6 flex flex-col ${currentStep <= 7 ? "max-w-3xl mx-auto w-full py-4" : ""}`}>
-            
-            {/* Step 1 Welcome Chat Bubble */}
-            {currentStep >= 1 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
+            <div className={`space-y-6 flex flex-col ${currentStep <= 8 ? "max-w-3xl mx-auto w-full py-4" : ""}`}>
+              
+              {/* Conversational timeline rendering (Steps 1-7 and Step 9) */}
+              {customMessages.map((msg) => (
+                <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                  {msg.role === "user" ? (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
+                        <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full">
+                          {msg.content}
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                      </div>
+                      <div className="w-full text-slate-800 text-[16px] leading-[26px] font-normal whitespace-pre-wrap">
+                        {msg.content}
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Hello{editedProfile?.name ? `, ${editedProfile.name}` : ""}! Welcome to Webild. I've successfully initialized your profile details using your LinkedIn profile.
-                  <br/><br/>
-                  Let's review and customize your portfolio details step-by-step.
-                </div>
-              </div>
-            )}
+              ))}
 
-            {/* User confirmation Step 1 */}
-            {currentStep > 1 && (
-              <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    Let's get started!
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 2 Intro */}
-            {currentStep >= 2 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  First, let's review your <strong>Projects & Portfolio Highlights</strong>. Showcase your best apps, portfolios, or articles.
-                </div>
-              </div>
-            )}
-
-            {/* User confirmation Step 2 */}
-            {currentStep > 2 && (
-              <div className="w-full flex justify-end items-start font-inter">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    I've updated my projects and portfolio details.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 3 (Interests) */}
-            {currentStep >= 3 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Got it. Next, let's document your <strong>Core Interests and Career Goals</strong> to personalize your profile bio.
-                </div>
-              </div>
-            )}
-
-            {/* User confirmation Step 3 */}
-            {currentStep > 3 && (
-              <div className="w-full flex justify-end items-start font-inter">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    Interests and aspirations submitted successfully.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 4 (Skills) */}
-            {currentStep >= 4 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Excellent. Let's adjust your <strong>Core Skills & Tools</strong> tags.
-                </div>
-              </div>
-            )}
-
-            {/* User confirmation Step 4 */}
-            {currentStep > 4 && (
-              <div className="w-full flex justify-end items-start font-inter">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    Skills tags confirmed.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 5 (Experience) */}
-            {currentStep >= 5 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  Perfect. Finally, let's verify your <strong>Work Experience timeline</strong>.
-                </div>
-              </div>
-            )}
-
-            {/* User confirmation Step 5 */}
-            {currentStep > 5 && (
-              <div className="w-full flex justify-end items-start font-inter">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    Work experience details refined.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 6 (AI Refinement Processing or Review) */}
-            {currentStep === 6 && optimizing && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain animate-pulse" />
-                  <span className="font-semibold text-[13.5px] text-black animate-pulse">Webild</span>
-                </div>
-                <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center gap-2 text-xs font-semibold text-neutral-750">
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                  Refinement engine running in the background...
-                </div>
-              </div>
-            )}
-
-            {currentStep >= 6 && !optimizing && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  I've run my AI copy refinement engine on your bio and headline to make them more impactful and professional.
-                  <br/><br/>
-                  Please review the changes below and adjust them to your liking.
-                </div>
-              </div>
-            )}
-
-            {/* User confirmation Step 6 */}
-            {currentStep > 6 && (
-              <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    AI copy refinement modifications approved.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Step 7 (Template Picker) */}
-            {currentStep >= 7 && (
-              <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                <div className="flex items-center gap-2 select-none">
-                  <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                  <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                </div>
-                <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                  AI optimization finished! I've polished your text copy.
-                  <br/><br/>
-                  Now, please **select one of the 4 Framer-inspired template styles** below to apply your design theme.
-                </div>
-              </div>
-            )}
-
-            {/* User confirmation Step 7 */}
-            {currentStep > 7 && (
-              <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                    Template design style chosen.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Free-form chat transition separator & timeline (Step 9) */}
-            {currentStep === 9 && (
-              <>
-                <div className="flex items-center gap-2 py-4 select-none">
-                  <div className="h-px bg-neutral-100 flex-1" />
-                  <span className="text-[10.5px] font-bold text-neutral-400 uppercase tracking-widest font-mono">Free-Form Chat Editor</span>
-                  <div className="h-px bg-neutral-100 flex-1" />
-                </div>
-
-                {/* Setup complete assistant message */}
-                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-300">
+              {/* Thinking / Dots loader */}
+              {isThinking && (
+                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
                   <div className="flex items-center gap-2 select-none">
                     <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                    <span className="font-semibold text-[13.5px] text-black">Webild</span>
+                    <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                   </div>
-                  <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal">
-                    Setup complete! Your website is ready. Tell me what you'd like to change — I can update your headline, summary, skills, links, or swap templates.
-                    <br/><br/>
-                    On the <strong>Daniel Cross</strong> template, you can also ask me to adjust your <strong>Services cards</strong>, client <strong>Reviews</strong>, or design <strong>Process steps</strong>! Or switch to the <strong>✍️ Manual Editor</strong> tab to tweak them visual-form style. What would you like to adjust?
+                  <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center">
+                    <div className="flex items-center gap-[3px] px-1 py-0.5">
+                      {[0, 1, 2].map((i) => (
+                        <div
+                          key={i}
+                          className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
+                          style={{ animationDelay: `${i * 0.18}s` }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
+              )}
 
-                {/* Custom chat history messages */}
-                {customMessages.map((msg) => (
-                  <div key={msg.id} className="w-full flex flex-col gap-2.5">
-                    {msg.role === "user" ? (
-                      <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                        <div className="max-w-[85%] bg-white border border-neutral-200/60 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                          <p className="text-[#171717] text-[14.5px] leading-[22px] font-normal break-words max-w-full">
-                            {msg.content}
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                        <div className="flex items-center gap-2 select-none">
-                          <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                          <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                        </div>
-                        <div className="w-full text-[#171717] text-[14.5px] leading-[22px] font-normal whitespace-pre-wrap">
-                          {msg.content}
-                        </div>
-                      </div>
-                    )}
+              {/* Dynamic Minimalist-UI Progress Steps Checklist */}
+              {currentStep <= 8 && (
+                <div className="pt-4 border-t border-[#EAEAEA] space-y-4">
+                  <div className="flex items-center gap-2 select-none mb-2">
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-mono">Onboarding Setup Checklist</span>
                   </div>
-                ))}
-
-                {/* Thinking / Dots loader */}
-                {isThinking && (
-                  <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
-                    <div className="flex items-center gap-2 select-none">
-                      <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                      <span className="font-semibold text-[13.5px] text-black">Webild</span>
-                    </div>
-                    <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
-                      <div className="flex items-center gap-[3px] px-1 py-0.5">
-                        {[0, 1, 2].map((i) => (
-                          <div
-                            key={i}
-                            className="w-[5px] h-[5px] rounded-full bg-[#2A2A2F]/40 animate-bounce"
-                            style={{ animationDelay: `${i * 0.18}s` }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* DYNAMIC FORMS */}
-            <div className="pt-2">
-              {/* Step 1 Welcome / Kickoff Form */}
-              {currentStep === 1 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Sparkles className="w-4 h-4 text-[#8DB8FF] fill-[#8DB8FF]/10" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">ONBOARDING KICKOFF</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">Welcome to Webild</CardTitle>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="p-6 space-y-5">
-                    {/* User profile card visual slot */}
-                    <div className="flex items-center gap-3.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/80 rounded-xl">
-                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
-                        <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
-                        <p className="text-xs text-neutral-550 truncate max-w-[320px] mt-0.5 font-medium">{editedProfile?.headline || "Professional Headline"}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-3.5">
-                      <h4 className="text-[10px] font-bold text-[#2A2A2F]/60 uppercase tracking-wider font-mono">Your Customization Steps</h4>
-                      <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
-                        <div className="flex items-center gap-2.5">
-                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">1</Badge>
-                          <span>📂 Review Projects & Highlights</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">2</Badge>
-                          <span>🎯 Refine Interests & Aspirations</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">3</Badge>
-                          <span>🛠 Select Core Skills & Tools</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">4</Badge>
-                          <span>💼 Verify Work Experience Timeline</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <Badge className="w-5 h-5 rounded-md p-0 flex items-center justify-center font-mono font-bold text-[10px] bg-[#E1F3FE] text-[#1F6C9F] border-none shadow-none shrink-0">5</Badge>
-                          <span>🎨 Choose Layout Template & Edit Live</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Button
-                      onClick={() => setCurrentStep(2)}
-                      className="w-full h-11 bg-neutral-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.98] transition-transform duration-100 shadow-sm cursor-pointer hover:bg-neutral-800 border-none"
-                    >
-                      Get Started <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Step 2 Form: Projects */}
-              {currentStep === 2 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Folder className="w-4 h-4 text-[#8DB8FF]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 2 OF 7 • PORTFOLIO</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">Projects & Highlights</CardTitle>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-5">
-                    <div className="space-y-1">
-                      {projects.map((proj, idx) => (
-                        <Card 
-                          key={idx} 
-                          className="group flex items-start justify-between p-3.5 rounded-xl hover:bg-neutral-50/80 transition-colors duration-150 relative border-neutral-200/50 bg-[#FBFBFB] mb-2 shadow-none"
-                        >
-                          <div className="flex items-start gap-2.5 min-w-0 flex-1">
-                            <FileText className="w-4 h-4 text-[#2A2A2F]/70 shrink-0 mt-0.5" />
-                            <div className="truncate pr-4 flex-1">
-                              <span className="text-xs font-semibold text-neutral-800 block truncate">{proj.title}</span>
-                              {proj.description && (
-                                <span className="text-[11px] text-[#171717]/60 block truncate mt-0.5 leading-relaxed font-medium">{proj.description}</span>
-                              )}
-                            </div>
-                          </div>
-                          <Button 
-                            onClick={() => removeProject(idx)} 
-                            variant="ghost"
-                            size="icon"
-                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-650 hover:bg-red-50/50 w-7 h-7 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
-                            title="Remove project"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
-                        </Card>
-                      ))}
-                      {projects.length === 0 && !showAddProject && (
-                        <div className="flex flex-col items-center justify-center py-6 bg-[#FBFBFB] border border-dashed border-neutral-200/80 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
-                          <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
-                          <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No projects added yet</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {showAddProject ? (
-                      <Card className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-none">
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Project Title</label>
-                          <Input
-                            type="text"
-                            placeholder="e.g. Financial Dashboard App"
-                            value={newProjTitle}
-                            onChange={(e) => setNewProjTitle(e.target.value)}
-                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Short Description</label>
-                          <Textarea
-                            placeholder="What did you build? What technologies did you use?"
-                            value={newProjDesc}
-                            onChange={(e) => setNewProjDesc(e.target.value)}
-                            rows={2}
-                            className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[70px]"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Project URL (Optional)</label>
-                          <Input
-                            type="text"
-                            placeholder="https://github.com/username/project"
-                            value={newProjLink}
-                            onChange={(e) => setNewProjLink(e.target.value)}
-                            className="w-full h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                          />
-                        </div>
-                        <div className="flex gap-2 justify-end pt-1">
-                          <Button 
-                            onClick={() => setShowAddProject(false)} 
-                            variant="outline"
-                            className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                          >
-                            Cancel
-                          </Button>
-                          <Button 
-                            onClick={addProject} 
-                            className="h-10 px-4 text-xs font-bold bg-[#2A2A2F] hover:bg-[#1f1f22] text-white rounded-xl transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
-                          >
-                            Add Project
-                          </Button>
-                        </div>
-                      </Card>
-                    ) : (
-                      <Button
-                        onClick={() => setShowAddProject(true)}
-                        variant="outline"
-                        className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-350 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.98] duration-100 ease-out"
+                  {[
+                    { step: 1, label: "Basics & Identity" },
+                    { step: 2, label: "Hero Greeting & CTA" },
+                    { step: 3, label: "Services & Offerings" },
+                    { step: 4, label: "Custom Process Steps" },
+                    { step: 5, label: "Bio, Photos & Testimonials" },
+                    { step: 6, label: "Client Logos Ticker List" },
+                    { step: 7, label: "Portfolio Grid Projects" },
+                    { step: 8, label: "Contact, Socials & Theme Layout" }
+                  ].map((stepItem) => {
+                    const isActive = currentStep === stepItem.step;
+                    const isCompleted = currentStep > stepItem.step;
+                    return (
+                      <div
+                        key={stepItem.step}
+                        className={cn(
+                          "border rounded-xl p-4 transition-all duration-200 bg-white",
+                          isActive 
+                            ? "border-[#3B82F6] shadow-[0_4px_20px_rgba(59,130,246,0.04)]" 
+                            : "border-[#EAEAEA] opacity-65"
+                        )}
                       >
-                        <Plus className="w-4 h-4 text-neutral-500" /> Add Project
-                      </Button>
-                    )}
-
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        onClick={handleBackStep} 
-                        variant="outline"
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
-                      >
-                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Step 3 Form: Interests */}
-              {currentStep === 3 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Sparkles className="w-4 h-4 text-[#8DB8FF]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 3 OF 7 • TARGETS</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">Interests & Career Goals</CardTitle>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-5">
-                    <Textarea
-                      placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
-                      value={interests}
-                      onChange={(e) => {
-                        setInterests(e.target.value);
-                        updateField("interests", e.target.value);
-                      }}
-                      rows={5}
-                      className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-[#FBFBFB] focus:bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[120px]"
-                    />
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        onClick={handleBackStep} 
-                        variant="outline"
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
-                      >
-                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Step 4 Form: Skills */}
-              {currentStep === 4 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Wrench className="w-4 h-4 text-[#8DB8FF]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 4 OF 7 • SKILLS</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">Core Skills & Tools</CardTitle>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-5">
-                    <div className="flex flex-wrap gap-1.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
-                      {skills.map((skill, idx) => {
-                        const tagColor = getNotionTagClasses(skill.name);
-                        return (
-                          <Badge 
-                            key={idx} 
-                            variant="outline"
-                            className={cn(
-                              "inline-flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1 rounded-md border transition-transform duration-100 active:scale-[0.95] shadow-none",
-                              tagColor
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2.5">
+                            {isCompleted ? (
+                              <span className="w-5 h-5 rounded-full bg-[#EDF3EC] text-[#346538] flex items-center justify-center font-bold text-xs font-mono">✓</span>
+                            ) : (
+                              <span className={cn(
+                                "w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs font-mono",
+                                isActive ? "bg-[#E1F3FE] text-[#1F6C9F]" : "bg-neutral-100 text-neutral-400"
+                              )}>
+                                {stepItem.step}
+                              </span>
                             )}
-                          >
-                            {skill.name}
-                            <button 
-                              type="button"
-                              onClick={() => removeSkillTag(skill.name)} 
-                              className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-950 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
-                              style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
-                            >
-                              ×
-                            </button>
-                          </Badge>
-                        );
-                      })}
-                      {skills.length === 0 && (
-                        <span className="text-[11px] text-neutral-550 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
-                      )}
-                    </div>
-
-                    <form onSubmit={addSkillTag} className="flex gap-2">
-                      <Input
-                        type="text"
-                        placeholder="e.g. TypeScript, UI Design, Next.js"
-                        value={newSkill}
-                        onChange={(e) => setNewSkill(e.target.value)}
-                        className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                      />
-                      <Button 
-                        type="submit" 
-                        className="px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl transition-transform active:scale-[0.98] duration-100 ease-out h-11 shadow-sm border-none"
-                      >
-                        Add
-                      </Button>
-                    </form>
-
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        onClick={handleBackStep} 
-                        variant="outline"
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
-                      >
-                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Step 5 Form: Experience */}
-              {currentStep === 5 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Briefcase className="w-4 h-4 text-[#8DB8FF]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 5 OF 7 • TIMELINE</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">Work Experience</CardTitle>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-5">
-                    <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
-                      {experience.map((exp, idx) => (
-                        <div 
-                          key={idx} 
-                          className="group bg-[#FBFBFB] border border-neutral-200/85 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
-                        >
-                          <Button 
-                            onClick={() => removeExperienceItem(idx)} 
-                            variant="ghost"
-                            size="icon"
-                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-650 hover:bg-red-50/55 w-7 h-7 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
-                            title="Remove experience"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
-  
-                          <div className="grid grid-cols-2 gap-2.5">
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Job Title</label>
-                              <Input
-                                type="text"
-                                value={exp.title}
-                                placeholder="e.g. Lead Engineer"
-                                onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                              />
-                            </div>
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Company</label>
-                              <Input
-                                type="text"
-                                value={exp.company}
-                                placeholder="e.g. Acme Corp"
-                                onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                              />
-                            </div>
+                            <span className={cn("text-xs font-bold font-sans", isActive ? "text-slate-800" : "text-slate-600")}>
+                              {stepItem.label}
+                            </span>
                           </div>
-                          <div className="grid grid-cols-1 gap-2">
-                            <div className="space-y-1">
-                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Duration</label>
-                              <Input
-                                type="text"
-                                value={exp.duration}
-                                placeholder="e.g. Jan 2024 - Present"
-                                onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                              />
-                            </div>
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Key Responsibilities / Impact</label>
-                            <Textarea
-                              value={exp.description}
-                              placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
-                              rows={2}
-                              onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
-                            />
-                          </div>
-                        </div>
-                      ))}
-                      {experience.length === 0 && (
-                        <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
-                          <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
-                          <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No work history items added yet</span>
-                        </div>
-                      )}
-                    </div>
- 
-                    <Button
-                      onClick={addExperienceItem}
-                      variant="outline"
-                      className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-350 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.98] duration-100 ease-out"
-                    >
-                      <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
-                    </Button>
- 
-                    <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                      <Button 
-                        onClick={handleBackStep} 
-                        variant="outline"
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
-                      >
-                        Refine with AI <Sparkles className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Step 6 Form: AI Copy Refinement Compare */}
-              {currentStep === 6 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Sparkles className="w-4 h-4 text-[#8DFFB3]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DFFB3] uppercase block font-mono">STEP 6 OF 7 • COPYWRITING</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">AI Copy Optimization</CardTitle>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="p-6 space-y-5">
-                    {optimizing ? (
-                      /* AI Refinement Loading Screen */
-                      <div className="py-10 flex flex-col items-center justify-center gap-3">
-                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-                        <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">Refining your portfolio details...</p>
-                      </div>
-                    ) : (
-                      /* Comparison Screen */
-                      <div className="space-y-4">
-                        {/* Headline Compare */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Headline</label>
-                            <Badge className="text-[10px] bg-[#EDF3EC] text-[#346538] px-2 py-0.5 rounded-full font-bold border-none shadow-none font-mono">AI Polished</Badge>
-                          </div>
-                          
-                          {/* Before (original) */}
-                          {originalHeadline && originalHeadline !== editedProfile?.headline && (
-                            <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70">
-                              {originalHeadline}
-                            </div>
+                          {isActive && (
+                            <span className="text-[10px] uppercase font-bold text-[#3B82F6] font-mono tracking-wider animate-pulse">
+                              Active
+                            </span>
                           )}
-                          
-                          {/* After (interactive input) */}
-                          <Input
-                            type="text"
-                            value={editedProfile?.headline || ""}
-                            onChange={(e) => updateField("headline", e.target.value)}
-                            className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-850 focus-visible:ring-1 focus-visible:ring-neutral-400 bg-[#FBFBFB] focus-visible:bg-white transition-all"
-                            placeholder="Your professional headline"
-                          />
                         </div>
 
-                        {/* Bio Compare */}
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block font-mono">Bio Summary</label>
-                            <Badge className="text-[10px] bg-[#EDF3EC] text-[#346538] px-2 py-0.5 rounded-full font-bold border-none shadow-none font-mono">AI Polished</Badge>
-                          </div>
-                          
-                          {/* Before (original) */}
-                          {originalBio && originalBio !== editedProfile?.summary && (
-                            <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-500 leading-normal line-through opacity-70 max-h-24 overflow-y-auto">
-                              {originalBio}
-                            </div>
-                          )}
-                          
-                          {/* After (interactive textarea) */}
-                          <Textarea
-                            rows={4}
-                            value={editedProfile?.summary || ""}
-                            onChange={(e) => updateField("summary", e.target.value)}
-                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-850 focus-visible:ring-1 focus-visible:ring-neutral-400 bg-[#FBFBFB] focus-visible:bg-white transition-all resize-none min-h-[90px]"
-                            placeholder="Your professional bio summary"
-                          />
-                        </div>
-
-                        {/* Action Button */}
-                        <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                          <Button 
-                            onClick={handleBackStep} 
-                            variant="outline"
-                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                          >
-                            <ArrowLeft className="w-3.5 h-3.5" /> Back
-                          </Button>
-                          <Button
-                            onClick={() => setCurrentStep(7)}
-                            className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
-                          >
-                            Apply & Next <ArrowRight className="w-4 h-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-
-              {/* Step 7 Form: Select Template */}
-              {currentStep === 7 && (
-                <Card className="overflow-hidden border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left bg-white">
-                  <CardHeader className="bg-[#2A2A2F] px-6 py-4 flex flex-row items-center gap-3 text-white border-b border-neutral-800 shrink-0 space-y-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Palette className="w-4 h-4 text-[#8DB8FF]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block font-mono">STEP 7 OF 7 • STYLES</span>
-                      <CardTitle className="text-sm font-semibold text-white leading-tight">Theme Styles</CardTitle>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent className="p-6 space-y-5">
-                    <div className="grid grid-cols-2 gap-2.5">
-                      {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                        const isSelected = selectedTemplate === id;
-                        const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                        
-                        let descText = "";
-                        if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                        if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                        if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                        if (id === "biobricks") descText = "Grid-based bento block structure";
- 
-                        return (
-                          <Card
-                            key={id}
-                            onClick={() => selectTemplate(id as any)}
-                            className={`group bg-[#FBFBFB] border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out shadow-none ${
-                              isSelected
-                                ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30 shadow-sm"
-                                : "border-neutral-200 hover:border-neutral-305 hover:bg-neutral-50/20"
-                            }`}
-                          >
-                            <div className="pr-5">
-                              <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
-                              <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                            </div>
-                            {isSelected && (
-                              <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#2A2A2F] flex items-center justify-center">
-                                <Check className="w-2.5 h-2.5 text-white" />
+                        {/* Display values gathered so far for this step */}
+                        {isActive && (
+                          <div className="mt-3.5 space-y-2 text-xs font-medium text-slate-700 bg-slate-50/50 p-3 rounded-lg border border-[#EAEAEA] animate-in fade-in duration-200">
+                            {stepItem.step === 1 && (
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Name:</div><div className="text-slate-800 font-bold">{editedProfile?.name || "Pending..."}</div>
+                                <div>Headline:</div><div className="text-slate-800 truncate">{editedProfile?.headline || "Pending..."}</div>
+                                <div>Location:</div><div className="text-slate-800">{editedProfile?.location || "Pending..."}</div>
+                                <div>Avatar Photo:</div><div className="text-slate-800 truncate">{editedProfile?.avatarUrl || "Pending..."}</div>
                               </div>
                             )}
-                          </Card>
-                        );
-                      })}
-                    </div>
- 
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        onClick={handleBackStep} 
-                        variant="outline"
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.98] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
+                            {stepItem.step === 2 && (
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Greeting Start:</div><div className="text-slate-800 font-bold">{editedProfile?.heroGreetingStart || "Pending..."}</div>
+                                <div>Greeting End:</div><div className="text-slate-800">{editedProfile?.heroGreetingEnd || "Pending..."}</div>
+                                <div>Hero Subheadline:</div><div className="text-slate-800 truncate">{editedProfile?.heroSubheadline || "Pending..."}</div>
+                                <div>Availability Status:</div><div className="text-slate-800">{editedProfile?.statusText || "Pending..."}</div>
+                                <div>CTA Button Label:</div><div className="text-slate-800">{editedProfile?.heroCtaText || "Pending..."}</div>
+                                <div>CTA Link URL:</div><div className="text-slate-800">{editedProfile?.heroCtaUrl || "Pending..."}</div>
+                              </div>
+                            )}
+                            {stepItem.step === 3 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Catchphrase: <span className="text-slate-800 font-bold">{editedProfile?.servicesTitle || "Pending..."}</span></div>
+                                <div>Services Added: <span className="text-slate-800 font-bold">{(editedProfile?.services || []).length} items</span></div>
+                                <div>Consultation Heading: <span className="text-slate-800 truncate">{editedProfile?.servicesCta?.title || "Pending..."}</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 4 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Process title: <span className="text-slate-800 font-bold">{editedProfile?.processTitle || "Pending..."}</span></div>
+                                <div>Process steps count: <span className="text-slate-800 font-bold">{(editedProfile?.processes || []).length} items</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 5 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600 font-normal">
+                                <div>Bio details: <span className="text-slate-800 italic truncate block max-w-full">{editedProfile?.summary || "Pending..."}</span></div>
+                                <div>About Photo URL: <span className="text-slate-800 truncate block max-w-full">{editedProfile?.aboutPhotoUrl || "Pending..."}</span></div>
+                                <div>Signature URL: <span className="text-slate-800 truncate block max-w-full">{editedProfile?.signatureUrl || "Pending..."}</span></div>
+                                <div>Testimonials Heading: <span className="text-slate-800 font-bold">{editedProfile?.testimonialsTitle || "Pending..."}</span></div>
+                                <div>Testimonials Count: <span className="text-slate-800 font-bold">{(editedProfile?.testimonials || []).length} items</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 6 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Marquee Header: <span className="text-slate-800 font-bold">{editedProfile?.brandsLabel || "Pending..."}</span></div>
+                                <div>Client Companies: <span className="text-slate-800 font-bold">{(editedProfile?.experience || []).map(e => e.company).join(", ") || "None yet"}</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 7 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Projects Subtitle: <span className="text-slate-800 font-bold">{editedProfile?.projectsSubtitle || "Pending..."}</span></div>
+                                <div>Portfolio Projects: <span className="text-slate-800 font-bold">{(editedProfile?.projects || []).map(p => p.title).join(", ") || "None yet"}</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 8 && (
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600 font-normal">
+                                <div>Public Email:</div><div className="text-slate-800 font-bold">{editedProfile?.email || "Pending..."}</div>
+                                <div>Phone Number:</div><div className="text-slate-800">{editedProfile?.phone || "Pending..."}</div>
+                                <div>LinkedIn URL:</div><div className="text-slate-800 truncate">{editedProfile?.links?.find(l => l.icon === "linkedin")?.url || "Pending..."}</div>
+                                <div>GitHub URL:</div><div className="text-slate-800 truncate">{editedProfile?.links?.find(l => l.icon === "github")?.url || "Pending..."}</div>
+                                <div>Twitter URL:</div><div className="text-slate-800 truncate">{editedProfile?.links?.find(l => l.icon === "twitter")?.url || "Pending..."}</div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Display Completed state summary */}
+                        {isCompleted && (
+                          <div className="mt-2 text-[11px] font-mono text-slate-500 bg-slate-50/30 p-2.5 rounded-lg border border-[#EAEAEA]/60">
+                            {stepItem.step === 1 && `BASICS: ${editedProfile?.name} • ${editedProfile?.headline}`}
+                            {stepItem.step === 2 && `HERO: ${editedProfile?.heroGreetingStart} "${editedProfile?.heroSubheadline}"`}
+                            {stepItem.step === 3 && `SERVICES: ${(editedProfile?.services || []).length} items configured`}
+                            {stepItem.step === 4 && `PROCESS: ${(editedProfile?.processes || []).length} steps configured`}
+                            {stepItem.step === 5 && `ABOUT & REVIEWS: ${(editedProfile?.testimonials || []).length} client testimonials`}
+                            {stepItem.step === 6 && `EXPERIENCE: ${(editedProfile?.experience || []).map(e => e.company).join(", ")}`}
+                            {stepItem.step === 7 && `PROJECTS: ${(editedProfile?.projects || []).map(p => p.title).join(", ")}`}
+                            {stepItem.step === 8 && `CONTACT: ${editedProfile?.email} • ${editedProfile?.phone}`}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Choose template style layout selector block */}
+                  {currentStep === 8 && currentSubStep === 5 && (
+                    <div className="border border-[#3B82F6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
+                      <div className="flex items-center gap-2">
+                        <Palette className="w-4 h-4 text-[#3B82F6]" />
+                        <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                          const isSelected = selectedTemplate === id;
+                          const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                          
+                          let descText = "";
+                          if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                          if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                          if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                          if (id === "biobricks") descText = "Grid-based bento block structure";
+
+                          return (
+                            <div
+                              key={id}
+                              onClick={() => selectTemplate(id as any)}
+                              className={cn(
+                                "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out",
+                                isSelected
+                                  ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
+                                  : "border-[#EAEAEA] hover:border-slate-350"
+                              )}
+                            >
+                              <div className="pr-5">
+                                <span className="text-xs font-semibold text-slate-800 block">{labelName}</span>
+                                <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                              </div>
+                              {isSelected && (
+                                <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
+                                  <Check className="w-2.5 h-2.5 text-white" />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                       <Button
                         onClick={() => {
-                          // Confirm theme and transition straight to free-form chat (step 9)
                           setCurrentStep(9);
                           toast.success("Theme confirmed and setup complete!");
                         }}
-                        className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none"
+                        className="w-full h-11 bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none cursor-pointer"
                       >
-                        Confirm & Finish <Check className="w-3.5 h-3.5" />
+                        Confirm & Finish Setup <Check className="w-3.5 h-3.5" />
                       </Button>
                     </div>
-                  </CardContent>
-                </Card>
+                  )}
+                </div>
               )}
             </div>
             <div ref={chatEndRef} />
           </div>
-        </div>
-
-          {/* Bottom input composer area */}
+                   {/* Bottom input composer area */}
           <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
-            <div className={`w-full flex flex-col gap-3 ${currentStep <= 7 ? "max-w-3xl mx-auto" : ""}`}>
-              {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
-            {currentStep === 9 && (
-              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-                {SUGGESTIONS.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => sendChatMessage(s)}
-                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-black transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            )}
+            <div className={`w-full flex flex-col gap-3 ${currentStep <= 8 ? "max-w-3xl mx-auto" : ""}`}>
+              {/* Show navigation buttons above text composer when on wizard steps (currentStep <= 8) */}
+              {currentStep <= 8 && (
+                <div className="flex items-center justify-between px-1.5 py-0.5">
+                  <div className="flex gap-2">
+                    {(currentStep > 1 || currentSubStep > 0) && (
+                      <button
+                        onClick={handleWizardBack}
+                        className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                      >
+                        ← Back
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    {WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional ? (
+                      <button
+                        onClick={handleWizardSkip}
+                        className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                      >
+                        Skip Step →
+                      </button>
+                    ) : (
+                      <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest select-none py-1">Required</span>
+                    )}
+                  </div>
+                </div>
+              )}
 
-            {/* Text input composer */}
-            <div className={`bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 ${currentStep === 9 ? "opacity-100" : "opacity-60"}`}>
-              <textarea
-                disabled={currentStep !== 9}
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey && currentStep === 9) {
-                    e.preventDefault();
-                    sendChatMessage();
+              {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
+              {currentStep === 9 && (
+                <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                  {SUGGESTIONS.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => sendChatMessage(s)}
+                      className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Text input composer */}
+              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
+                <textarea
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      if (currentStep <= 8) {
+                        handleWizardInput(chatInput);
+                      } else {
+                        sendChatMessage();
+                      }
+                    }
+                  }}
+                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
+                  placeholder={
+                    currentStep <= 8
+                      ? (WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.placeholder || "Type your answer here...")
+                      : "Ask Webild to adjust copy, headline, template style..."
                   }
-                }}
-                className={`w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter ${currentStep === 9 ? "text-neutral-800 placeholder:text-neutral-400 cursor-text" : "text-neutral-400 placeholder:text-neutral-400 cursor-not-allowed"}`}
-                placeholder={currentStep === 9 ? "Ask Webild to adjust copy, headline, template style..." : "Complete wizard steps above to proceed..."}
-                rows={2}
-              />
-              <div className="flex items-center justify-between px-1">
-                <button
-                  disabled={currentStep !== 9}
-                  onClick={() => toast.info("Attachments coming soon!")}
-                  className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
-                >
-                  <Plus className="w-[18px] h-[18px]" />
-                </button>
-                <div className="flex items-center gap-2">
+                  rows={2}
+                />
+                <div className="flex items-center justify-between px-1">
                   <button
                     disabled={currentStep !== 9}
-                    onClick={() => toast.info("Voice input coming soon!")}
-                    className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
+                    onClick={() => toast.info("Attachments coming soon!")}
+                    className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed opacity-50"}`}
                   >
-                    <Mic className="w-[18px] h-[18px]" />
+                    <Plus className="w-[18px] h-[18px]" />
                   </button>
-                  <button
-                    disabled={currentStep !== 9}
-                    onClick={() => sendChatMessage()}
-                    className={`w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none ${currentStep === 9 ? "bg-[#8DB8FF] hover:bg-[#7ca8f0] cursor-pointer active:scale-[0.93]" : "bg-neutral-200 cursor-not-allowed"}`}
-                  >
-                    <ArrowUp className="w-[18px] h-[18px]" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      disabled={currentStep !== 9}
+                      onClick={() => toast.info("Voice input coming soon!")}
+                      className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed opacity-50"}`}
+                    >
+                      <Mic className="w-[18px] h-[18px]" />
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (currentStep <= 8) {
+                          handleWizardInput(chatInput);
+                        } else {
+                          sendChatMessage();
+                        }
+                      }}
+                      disabled={!chatInput.trim() && !WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional}
+                      className={cn(
+                        "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
+                        (chatInput.trim() || (currentStep <= 8 && WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional))
+                          ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
+                          : "bg-neutral-200 cursor-not-allowed"
+                      )}
+                    >
+                      <ArrowUp className="w-[18px] h-[18px]" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       )}
     </aside>
-      )}
+  )}
 
       {/* 2. Domains Panel */}
       {activeNav === 2 && <DomainsPane />}
@@ -1771,7 +1813,7 @@ function EditorInner() {
       {/* ── Main Canvas Workspace ── */}
       <main 
         className={`flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3 ${
-          activeNav === 1 && currentStep <= 7 ? "hidden" : ""
+          activeNav === 1 && currentStep <= 8 ? "hidden" : ""
         }`}
       >
         
@@ -1873,7 +1915,7 @@ function EditorInner() {
             <div className="flex items-center gap-2">
               <div className="relative group">
                 <button
-                  disabled={activeNav === 1 && currentStep <= 7}
+                  disabled={activeNav === 1 && currentStep <= 8}
                   onClick={() => {
                     if (isSelectionMode) {
                       setIsSelectionMode(false);
@@ -1887,7 +1929,7 @@ function EditorInner() {
                     }
                   }}
                   className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${
-                    activeNav === 1 && currentStep <= 7
+                    activeNav === 1 && currentStep <= 8
                       ? "opacity-30 cursor-not-allowed bg-[#F7F7F7] border-[#E6E6E6] text-neutral-450"
                       : isSelectionMode
                       ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
@@ -1952,9 +1994,9 @@ function EditorInner() {
               <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5">
                 <button
                   onClick={() => setPreviewMode("desktop")}
-                  disabled={activeNav === 1 && currentStep <= 7}
+                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 7
+                    activeNav === 1 && currentStep <= 8
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "desktop"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -1966,9 +2008,9 @@ function EditorInner() {
                 </button>
                 <button
                   onClick={() => setPreviewMode("tablet")}
-                  disabled={activeNav === 1 && currentStep <= 7}
+                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 7
+                    activeNav === 1 && currentStep <= 8
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "tablet"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -1980,9 +2022,9 @@ function EditorInner() {
                 </button>
                 <button
                   onClick={() => setPreviewMode("mobile")}
-                  disabled={activeNav === 1 && currentStep <= 7}
+                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 7
+                    activeNav === 1 && currentStep <= 8
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "mobile"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -2000,9 +2042,9 @@ function EditorInner() {
                       setResizableWidth(800);
                     }
                   }}
-                  disabled={activeNav === 1 && currentStep <= 7}
+                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 7
+                    activeNav === 1 && currentStep <= 8
                       ? "opacity-30 cursor-not-allowed"
                       : previewMode === "resizable"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
@@ -2021,15 +2063,15 @@ function EditorInner() {
           <div 
             ref={previewContainerRef}
             className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
-              activeNav === 1 && currentStep <= 7 
+              activeNav === 1 && currentStep <= 8 
                 ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
                 : "bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
             }`}
           >
             <AnimatePresence mode="wait">
               
-              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 7 */}
-              {activeNav === 1 && currentStep <= 7 ? (
+              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 8 */}
+              {activeNav === 1 && currentStep <= 8 ? (
                 <motion.div
                   key={`anim-${currentStep}`}
                   initial={{ opacity: 0, scale: 0.95 }}
