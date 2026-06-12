@@ -1102,81 +1102,79 @@ function EditorInner() {
 
             {/* DYNAMIC FORMS */}
             <div className="pt-2">
-              {/* Step 1 Welcome / Kickoff Form */}
+              {/* Step 1 */}
               {currentStep === 1 && (
-                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Sparkles className="w-4 h-4 text-[#8DB8FF] fill-[#8DB8FF]/10" />
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Sparkles className="w-4.5 h-4.5" />
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">ONBOARDING KICKOFF</span>
-                      <h3 className="text-sm font-semibold text-white leading-tight">Welcome to Webild</h3>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">ONBOARDING KICKOFF</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Welcome to Webild</h3>
                     </div>
                   </div>
 
-                  <div className="p-6 space-y-5">
-                    {/* User profile card visual slot */}
-                    <div className="flex items-center gap-3.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/80 rounded-xl">
-                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
-                        <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
-                        <p className="text-xs text-neutral-500 truncate max-w-[320px] mt-0.5 font-medium">{editedProfile?.headline || "Professional Headline"}</p>
-                      </div>
+                  {/* User profile card visual slot */}
+                  <div className="flex items-center gap-3.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/80 rounded-xl">
+                    <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
+                      <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
                     </div>
-                    
-                    <div className="space-y-3.5">
-                      <h4 className="text-[10px] font-bold text-[#2A2A2F]/60 uppercase tracking-wider">Your Customization Steps</h4>
-                      <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">1</span>
-                          <span>📂 Review Projects & Highlights</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">2</span>
-                          <span>🎯 Refine Interests & Aspirations</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">3</span>
-                          <span>🛠 Select Core Skills & Tools</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">4</span>
-                          <span>💼 Verify Work Experience Timeline</span>
-                        </div>
-                        <div className="flex items-center gap-2.5">
-                          <span className="w-5 h-5 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center font-bold text-[10px] shrink-0 border border-blue-100">5</span>
-                          <span>🎨 Choose Layout Template & Edit Live</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => setCurrentStep(2)}
-                      className="w-full h-11 bg-neutral-900 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-transform duration-100 shadow-sm cursor-pointer hover:bg-neutral-800"
-                    >
-                      Get Started <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Step 2 Form: Projects */}
-              {currentStep === 2 && (
-                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Folder className="w-4 h-4 text-[#8DB8FF]" />
-                    </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 2 OF 7 • PORTFOLIO</span>
-                      <h3 className="text-sm font-semibold text-white leading-tight">Projects & Highlights</h3>
+                    <div className="min-w-0">
+                      <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
+                      <p className="text-xs text-neutral-550 truncate max-w-[320px] mt-0.5 font-medium">{editedProfile?.headline || "Professional Headline"}</p>
                     </div>
                   </div>
                   
-                  <div className="p-6 space-y-5">
+                  <div className="space-y-3.5">
+                    <h4 className="text-[10px] font-bold text-[#369762] uppercase tracking-wider">Your Customization Steps</h4>
+                    <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">1</span>
+                        <span>📂 Review Projects & Highlights</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">2</span>
+                        <span>🎯 Refine Interests & Aspirations</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">3</span>
+                        <span>🛠 Select Core Skills & Tools</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">4</span>
+                        <span>💼 Verify Work Experience Timeline</span>
+                      </div>
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">5</span>
+                        <span>🎨 Choose Layout Template & Edit Live</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => setCurrentStep(2)}
+                    className="w-full h-11 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-all duration-100 shadow-sm border border-[#8DFFB3]/80 cursor-pointer"
+                  >
+                    Get Started <ArrowRight className="w-4 h-4 text-[#171717]" />
+                  </button>
+                </div>
+              )}
+
+               {/* Step 2 Form: Projects */}
+              {currentStep === 2 && (
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Folder className="w-4.5 h-4.5" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 2 OF 7 • PORTFOLIO</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Projects & Highlights</h3>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-5">
                     <div className="space-y-1">
                       {projects.map((proj, idx) => (
                         <div 
@@ -1250,7 +1248,7 @@ function EditorInner() {
                           </button>
                           <button 
                             onClick={addProject} 
-                            className="h-10 px-4 text-xs font-bold bg-[#2A2A2F] hover:bg-[#1f1f22] text-white rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                            className="h-10 px-4 text-xs font-bold bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                           >
                             Add Project
                           </button>
@@ -1274,7 +1272,7 @@ function EditorInner() {
                       </button>
                       <button
                         onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Save & Next <ArrowRight className="w-3.5 h-3.5" />
                       </button>
@@ -1285,18 +1283,18 @@ function EditorInner() {
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Sparkles className="w-4 h-4 text-[#8DB8FF]" />
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Sparkles className="w-4.5 h-4.5" />
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 3 OF 7 • TARGETS</span>
-                      <h3 className="text-sm font-semibold text-white leading-tight">Interests & Career Goals</h3>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 3 OF 7 • TARGETS</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Interests & Career Goals</h3>
                     </div>
                   </div>
                   
-                  <div className="p-6 space-y-5">
+                  <div className="space-y-5">
                     <textarea
                       placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
                       value={interests}
@@ -1316,7 +1314,7 @@ function EditorInner() {
                       </button>
                       <button
                         onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Save & Next <ArrowRight className="w-3.5 h-3.5" />
                       </button>
@@ -1327,18 +1325,18 @@ function EditorInner() {
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Wrench className="w-4 h-4 text-[#8DB8FF]" />
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Wrench className="w-4.5 h-4.5" />
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 4 OF 7 • SKILLS</span>
-                      <h3 className="text-sm font-semibold text-white leading-tight">Core Skills & Tools</h3>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 4 OF 7 • SKILLS</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Core Skills & Tools</h3>
                     </div>
                   </div>
                   
-                  <div className="p-6 space-y-5">
+                  <div className="space-y-5">
                     <div className="flex flex-wrap gap-1.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
                       {skills.map((skill, idx) => {
                         const tagColor = getNotionTagClasses(skill.name);
@@ -1359,7 +1357,7 @@ function EditorInner() {
                         );
                       })}
                       {skills.length === 0 && (
-                        <span className="text-[11px] text-neutral-550 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
+                        <span className="text-[11px] text-neutral-555 italic self-center mx-auto select-none font-medium">No skills added yet. Add some below.</span>
                       )}
                     </div>
 
@@ -1373,7 +1371,7 @@ function EditorInner() {
                       />
                       <button 
                         type="submit" 
-                        className="px-5 bg-[#2A2A2F] hover:bg-neutral-850 text-white text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm"
+                        className="px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm cursor-pointer"
                       >
                         Add
                       </button>
@@ -1388,7 +1386,7 @@ function EditorInner() {
                       </button>
                       <button
                         onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Save & Next <ArrowRight className="w-3.5 h-3.5" />
                       </button>
@@ -1399,14 +1397,14 @@ function EditorInner() {
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)] space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3 border-b border-neutral-100 pb-4">
-                    <div className="w-9 h-9 rounded-lg bg-neutral-50 border border-neutral-200/80 flex items-center justify-center text-lg shadow-sm shrink-0">
-                      <Briefcase className="w-5 h-5 text-neutral-600 stroke-[1.75]" />
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Briefcase className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-semibold text-neutral-800">Work Experience</h3>
-                      <p className="text-xs text-neutral-550 mt-1 leading-normal font-medium">Refine your work timeline, companies, and achievements.</p>
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 5 OF 7 • TIMELINE</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Work Experience</h3>
                     </div>
                   </div>
                   
@@ -1494,7 +1492,7 @@ function EditorInner() {
                     </button>
                     <button
                       onClick={handleNextStep}
-                      className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                     >
                       Refine with AI <Sparkles className="w-3.5 h-3.5" />
                     </button>
@@ -1504,23 +1502,23 @@ function EditorInner() {
 
               {/* Step 6 Form: AI Copy Refinement Compare */}
               {currentStep === 6 && (
-                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Sparkles className="w-4 h-4 text-[#8DFFB3]" />
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Sparkles className="w-4.5 h-4.5" />
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DFFB3] uppercase block">STEP 6 OF 7 • COPYWRITING</span>
-                      <h3 className="text-sm font-semibold text-white leading-tight">AI Copy Optimization</h3>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 6 OF 7 • COPYWRITING</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">AI Copy Optimization</h3>
                     </div>
                   </div>
 
-                  <div className="p-6 space-y-5">
+                  <div className="space-y-5">
                     {optimizing ? (
                       /* AI Refinement Loading Screen */
                       <div className="py-10 flex flex-col items-center justify-center gap-3">
-                        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
-                        <p className="text-xs font-semibold text-neutral-500 font-mono animate-pulse">Refining your portfolio details...</p>
+                        <Loader2 className="w-8 h-8 animate-spin text-[#369762]" />
+                        <p className="text-xs font-semibold text-[#369762] animate-pulse">Refining your portfolio details...</p>
                       </div>
                     ) : (
                       /* Comparison Screen */
@@ -1529,7 +1527,7 @@ function EditorInner() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
-                            <span className="text-[10px] bg-[#8DFFB3]/15 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                            <span className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
                           </div>
                           
                           {/* Before (original) */}
@@ -1544,7 +1542,7 @@ function EditorInner() {
                             type="text"
                             value={editedProfile?.headline || ""}
                             onChange={(e) => updateField("headline", e.target.value)}
-                            className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all"
+                            className="w-full h-11 px-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all"
                             placeholder="Your professional headline"
                           />
                         </div>
@@ -1553,7 +1551,7 @@ function EditorInner() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
-                            <span className="text-[10px] bg-[#8DFFB3]/15 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                            <span className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
                           </div>
                           
                           {/* Before (original) */}
@@ -1568,7 +1566,7 @@ function EditorInner() {
                             rows={4}
                             value={editedProfile?.summary || ""}
                             onChange={(e) => updateField("summary", e.target.value)}
-                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-blue-500/30 bg-[#FBFBFB] focus:bg-white transition-all resize-none"
+                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all resize-none"
                             placeholder="Your professional bio summary"
                           />
                         </div>
@@ -1583,7 +1581,7 @@ function EditorInner() {
                           </button>
                           <button
                             onClick={() => setCurrentStep(7)}
-                            className="h-11 px-5 bg-[#2A2A2F] hover:bg-[#1f1f22] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                            className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                           >
                             Apply & Next <ArrowRight className="w-4 h-4" />
                           </button>
@@ -1596,18 +1594,18 @@ function EditorInner() {
 
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <div className="overflow-hidden bg-white border border-neutral-200/80 rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.03)] animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="bg-[#2A2A2F] px-6 py-4 flex items-center gap-3 text-white border-b border-neutral-800 shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center text-white shrink-0">
-                      <Palette className="w-4 h-4 text-[#8DB8FF]" />
+                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                    <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
+                      <Palette className="w-4.5 h-4.5" />
                     </div>
-                    <div>
-                      <span className="text-[9px] font-bold tracking-wider text-[#8DB8FF] uppercase block">STEP 7 OF 7 • STYLES</span>
-                      <h3 className="text-sm font-semibold text-white leading-tight">Theme Styles</h3>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 7 OF 7 • STYLES</span>
+                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Theme Styles</h3>
                     </div>
                   </div>
                   
-                  <div className="p-6 space-y-5">
+                  <div className="space-y-5">
                     <div className="grid grid-cols-2 gap-2.5">
                       {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
                         const isSelected = selectedTemplate === id;
@@ -1618,23 +1616,23 @@ function EditorInner() {
                         if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
                         if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
                         if (id === "biobricks") descText = "Grid-based bento block structure";
-
+ 
                         return (
                           <div
                             key={id}
                             onClick={() => selectTemplate(id as any)}
                             className={`group bg-[#FBFBFB] border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.97] transition-transform duration-100 ease-out ${
                               isSelected
-                                ? "border-neutral-900 ring-1 ring-neutral-900 bg-neutral-50/30 shadow-sm"
+                                ? "border-[#369762] ring-1 ring-[#369762] bg-[#8DFFB3]/10 shadow-xs"
                                 : "border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/20"
                             }`}
                           >
                             <div className="pr-5">
                               <span className="text-xs font-semibold text-neutral-800 block">{labelName}</span>
-                              <span className="text-[9.5px] text-neutral-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                              <span className="text-[9.5px] text-neutral-550 block mt-1 leading-tight line-clamp-2">{descText}</span>
                             </div>
                             {isSelected && (
-                              <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#2A2A2F] flex items-center justify-center">
+                              <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#369762] flex items-center justify-center shadow-[0_1px_2px_rgba(0,0,0,0.05)]">
                                 <Check className="w-2.5 h-2.5 text-white" />
                               </div>
                             )}
@@ -1642,7 +1640,7 @@ function EditorInner() {
                         );
                       })}
                     </div>
-
+ 
                     <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
                       <button 
                         onClick={handleBackStep} 
@@ -1656,7 +1654,7 @@ function EditorInner() {
                           setCurrentStep(9);
                           toast.success("Theme confirmed and setup complete!");
                         }}
-                        className="h-11 px-5 bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm"
+                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Confirm & Finish <Check className="w-3.5 h-3.5" />
                       </button>
