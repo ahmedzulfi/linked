@@ -782,10 +782,10 @@ function EditorInner() {
       {/* 1. Design / AI Onboarding Wizard Panel */}
       {activeNav === 1 && (
         <aside 
-          className={`h-full relative z-20 font-inter transition-all duration-300 ${
+          className={`h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300 ${
             currentStep <= 6
-              ? "flex-1 flex items-center justify-center p-6 bg-transparent"
-              : "w-[510px] shrink-0 bg-white border-r border-[#E6E6E6]/60 shadow-xs"
+              ? "flex-1"
+              : "w-[510px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs"
           }`}
         >
           {isSelectionMode ? (
@@ -814,37 +814,34 @@ function EditorInner() {
               </div>
             )
           ) : (
-            <div 
-              className={
-                currentStep <= 6
-                  ? "max-w-[560px] w-full h-[90%] bg-white border border-[#E6E6E6]/60 rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] flex flex-col overflow-hidden animate-in fade-in duration-300"
-                  : "flex flex-col justify-between h-full w-full"
-              }
-            >
+            <div className="flex flex-col justify-between h-full w-full">
               {/* Title Header */}
-              <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center justify-between shrink-0 bg-white">
-            <div className="flex items-center gap-2">
-              <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
-              <div className="w-px h-3 bg-black/10" />
-              <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
-                {profileName}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => router.push("/onboarding")}
-                className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1 rounded-lg"
-              >
-                Restart
-              </button>
-              <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
-                Editor Mode
-              </span>
-            </div>
-          </div>
+              <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
+                <div className={`flex items-center justify-between w-full ${currentStep <= 6 ? "max-w-3xl mx-auto" : ""}`}>
+                  <div className="flex items-center gap-2">
+                    <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
+                    <div className="w-px h-3 bg-black/10" />
+                    <span className="text-[12.5px] font-bold text-[#171717]/65 truncate max-w-[120px]">
+                      {profileName}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => router.push("/onboarding")}
+                      className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1 rounded-lg"
+                    >
+                      Restart
+                    </button>
+                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
+                      Editor Mode
+                    </span>
+                  </div>
+                </div>
+              </div>
 
           {/* Scrollable Wizard History */}
-          <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6" style={{ scrollbarWidth: "none" }}>
+          <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
+            <div className={`space-y-6 flex flex-col ${currentStep <= 6 ? "max-w-3xl mx-auto w-full py-4" : ""}`}>
             
             {/* Step 1 Welcome Chat Bubble */}
             {currentStep >= 1 && (
@@ -1645,12 +1642,14 @@ function EditorInner() {
               )}
             </div>
 
-            <div ref={chatEndRef} />
+              <div ref={chatEndRef} />
+            </div>
           </div>
 
           {/* Bottom input composer area */}
-          <div className="p-4 shrink-0 bg-white flex flex-col gap-3 border-t border-neutral-100">
-            {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
+          <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
+            <div className={`w-full flex flex-col gap-3 ${currentStep <= 6 ? "max-w-3xl mx-auto" : ""}`}>
+              {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
             {currentStep === 9 && (
               <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
                 {SUGGESTIONS.map((s) => (
@@ -1709,6 +1708,7 @@ function EditorInner() {
             </div>
           </div>
         </div>
+      </div>
       )}
     </aside>
       )}
