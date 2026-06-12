@@ -32,6 +32,11 @@ import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
 import WizardAnimations from "@/components/WizardAnimations";
 import { UserMenu } from "@/components/UserMenu";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 
 const ProfilePreview = dynamic(() => import("./components/ProfilePreview"), {
   ssr: false,
@@ -1104,7 +1109,7 @@ function EditorInner() {
             <div className="pt-2">
               {/* Step 1 */}
               {currentStep === 1 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Sparkles className="w-4.5 h-4.5" />
@@ -1152,18 +1157,18 @@ function EditorInner() {
                     </div>
                   </div>
 
-                  <button
+                  <Button
                     onClick={() => setCurrentStep(2)}
                     className="w-full h-11 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-all duration-100 shadow-sm border border-[#8DFFB3]/80 cursor-pointer"
                   >
                     Get Started <ArrowRight className="w-4 h-4 text-[#171717]" />
-                  </button>
-                </div>
+                  </Button>
+                </Card>
               )}
 
-               {/* Step 2 Form: Projects */}
+              {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Folder className="w-4.5 h-4.5" />
@@ -1190,13 +1195,14 @@ function EditorInner() {
                               )}
                             </div>
                           </div>
-                          <button 
+                          <Button 
+                            variant="ghost"
                             onClick={() => removeProject(idx)} 
-                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
+                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2 top-2 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95] h-8 w-8"
                             title="Remove project"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
-                          </button>
+                          </Button>
                         </div>
                       ))}
                       {projects.length === 0 && !showAddProject && (
@@ -1211,7 +1217,7 @@ function EditorInner() {
                       <div className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-xs">
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
-                          <input
+                          <Input
                             type="text"
                             placeholder="e.g. Financial Dashboard App"
                             value={newProjTitle}
@@ -1221,17 +1227,17 @@ function EditorInner() {
                         </div>
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Short Description</label>
-                          <textarea
+                          <Textarea
                             placeholder="What did you build? What technologies did you use?"
                             value={newProjDesc}
                             onChange={(e) => setNewProjDesc(e.target.value)}
                             rows={2}
-                            className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
+                            className="w-full text-xs px-3 py-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
                           />
                         </div>
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project URL (Optional)</label>
-                          <input
+                          <Input
                             type="text"
                             placeholder="https://github.com/username/project"
                             value={newProjLink}
@@ -1240,50 +1246,53 @@ function EditorInner() {
                           />
                         </div>
                         <div className="flex gap-2 justify-end pt-1">
-                          <button 
+                          <Button 
+                            variant="outline"
                             onClick={() => setShowAddProject(false)} 
                             className="h-10 px-4 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                           >
                             Cancel
-                          </button>
-                          <button 
+                          </Button>
+                          <Button 
                             onClick={addProject} 
                             className="h-10 px-4 text-xs font-bold bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                           >
                             Add Project
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     ) : (
-                      <button
+                      <Button
+                        variant="outline"
                         onClick={() => setShowAddProject(true)}
                         className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
                       >
                         <Plus className="w-4 h-4 text-neutral-500" /> Add Project
-                      </button>
+                      </Button>
                     )}
 
                     <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <button 
+                      <Button 
+                        variant="outline"
                         onClick={handleBackStep} 
                         className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                       >
                         <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={handleNextStep}
                         className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                </div>
+                </Card>
               )}
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Sparkles className="w-4.5 h-4.5" />
@@ -1295,7 +1304,7 @@ function EditorInner() {
                   </div>
                   
                   <div className="space-y-5">
-                    <textarea
+                    <Textarea
                       placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
                       value={interests}
                       onChange={(e) => {
@@ -1306,26 +1315,27 @@ function EditorInner() {
                       className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-[#FBFBFB] focus:bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
                     />
                     <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <button 
+                      <Button 
+                        variant="outline"
                         onClick={handleBackStep} 
                         className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                       >
                         <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={handleNextStep}
                         className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                </div>
+                </Card>
               )}
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Wrench className="w-4.5 h-4.5" />
@@ -1341,19 +1351,20 @@ function EditorInner() {
                       {skills.map((skill, idx) => {
                         const tagColor = getNotionTagClasses(skill.name);
                         return (
-                          <span 
+                          <Badge 
                             key={idx} 
-                            className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor} transition-transform duration-105 active:scale-[0.95]`}
+                            className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-md border ${tagColor} hover:bg-opacity-80 transition-transform duration-105 active:scale-[0.95] bg-transparent text-inherit`}
                           >
                             {skill.name}
                             <button 
+                              type="button"
                               onClick={() => removeSkillTag(skill.name)} 
                               className="hover:bg-black/5 rounded-sm p-0.5 text-neutral-500 hover:text-neutral-900 font-bold ml-0.5 transition-transform duration-100 ease-out flex items-center justify-center active:scale-[0.85]"
                               style={{ width: "12px", height: "12px", fontSize: "10px", lineHeight: 1 }}
                             >
                               ×
                             </button>
-                          </span>
+                          </Badge>
                         );
                       })}
                       {skills.length === 0 && (
@@ -1362,42 +1373,43 @@ function EditorInner() {
                     </div>
 
                     <form onSubmit={addSkillTag} className="flex gap-2">
-                      <input
+                      <Input
                         type="text"
                         placeholder="e.g. TypeScript, UI Design, Next.js"
                         value={newSkill}
                         onChange={(e) => setNewSkill(e.target.value)}
                         className="flex-1 h-11 text-xs px-3 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
                       />
-                      <button 
+                      <Button 
                         type="submit" 
                         className="px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl transition-transform active:scale-[0.97] duration-100 ease-out h-11 shadow-sm cursor-pointer"
                       >
                         Add
-                      </button>
+                      </Button>
                     </form>
 
                     <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <button 
+                      <Button 
+                        variant="outline"
                         onClick={handleBackStep} 
                         className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                       >
                         <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={handleNextStep}
                         className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                </div>
+                </Card>
               )}
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Briefcase className="w-4.5 h-4.5" />
@@ -1414,18 +1426,19 @@ function EditorInner() {
                         key={idx} 
                         className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
                       >
-                        <button 
+                        <Button 
+                          variant="ghost"
                           onClick={() => removeExperienceItem(idx)} 
-                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95]"
+                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95] h-8 w-8"
                           title="Remove experience"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        </Button>
  
                         <div className="grid grid-cols-2 gap-2.5">
                           <div className="space-y-1">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
-                            <input
+                            <Input
                               type="text"
                               value={exp.title}
                               placeholder="e.g. Lead Engineer"
@@ -1435,7 +1448,7 @@ function EditorInner() {
                           </div>
                           <div className="space-y-1">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Company</label>
-                            <input
+                            <Input
                               type="text"
                               value={exp.company}
                               placeholder="e.g. Acme Corp"
@@ -1447,7 +1460,7 @@ function EditorInner() {
                         <div className="grid grid-cols-1 gap-2">
                           <div className="space-y-1">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Duration</label>
-                            <input
+                            <Input
                               type="text"
                               value={exp.duration}
                               placeholder="e.g. Jan 2024 - Present"
@@ -1458,12 +1471,12 @@ function EditorInner() {
                         </div>
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Key Responsibilities / Impact</label>
-                          <textarea
+                          <Textarea
                             value={exp.description}
                             placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
                             rows={2}
                             onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors"
+                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
                           />
                         </div>
                       </div>
@@ -1476,33 +1489,35 @@ function EditorInner() {
                     )}
                   </div>
  
-                  <button
+                  <Button
+                    variant="outline"
                     onClick={addExperienceItem}
                     className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
                   >
                     <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
-                  </button>
+                  </Button>
  
                   <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
-                    <button 
+                    <Button 
+                      variant="outline"
                       onClick={handleBackStep} 
                       className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                     >
                       <ArrowLeft className="w-3.5 h-3.5" /> Back
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       onClick={handleNextStep}
                       className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                     >
                       Refine with AI <Sparkles className="w-3.5 h-3.5" />
-                    </button>
+                    </Button>
                   </div>
-                </div>
+                </Card>
               )}
 
               {/* Step 6 Form: AI Copy Refinement Compare */}
               {currentStep === 6 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Sparkles className="w-4.5 h-4.5" />
@@ -1527,7 +1542,7 @@ function EditorInner() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
-                            <span className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                            <Badge className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] hover:bg-[#8DFFB3]/30 border-transparent px-2 py-0.5 rounded-full font-bold">AI Polished</Badge>
                           </div>
                           
                           {/* Before (original) */}
@@ -1538,7 +1553,7 @@ function EditorInner() {
                           )}
                           
                           {/* After (interactive input) */}
-                          <input
+                          <Input
                             type="text"
                             value={editedProfile?.headline || ""}
                             onChange={(e) => updateField("headline", e.target.value)}
@@ -1551,7 +1566,7 @@ function EditorInner() {
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
                             <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
-                            <span className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                            <Badge className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] hover:bg-[#8DFFB3]/30 border-transparent px-2 py-0.5 rounded-full font-bold">AI Polished</Badge>
                           </div>
                           
                           {/* Before (original) */}
@@ -1562,39 +1577,39 @@ function EditorInner() {
                           )}
                           
                           {/* After (interactive textarea) */}
-                          <textarea
+                          <Textarea
                             rows={4}
                             value={editedProfile?.summary || ""}
                             onChange={(e) => updateField("summary", e.target.value)}
-                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all resize-none"
-                            placeholder="Your professional bio summary"
+                            className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all resize-none min-h-[100px]"
                           />
                         </div>
 
                         {/* Action Button */}
                         <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                          <button 
+                          <Button 
+                            variant="outline"
                             onClick={handleBackStep} 
                             className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                           >
                             <ArrowLeft className="w-3.5 h-3.5" /> Back
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             onClick={() => setCurrentStep(7)}
                             className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                           >
                             Apply & Next <ArrowRight className="w-4 h-4" />
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     )}
                   </div>
-                </div>
+                </Card>
               )}
 
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <div className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
                   <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Palette className="w-4.5 h-4.5" />
@@ -1642,13 +1657,14 @@ function EditorInner() {
                     </div>
  
                     <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <button 
+                      <Button 
+                        variant="outline"
                         onClick={handleBackStep} 
                         className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
                       >
                         <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={() => {
                           // Confirm theme and transition straight to free-form chat (step 9)
                           setCurrentStep(9);
@@ -1657,10 +1673,10 @@ function EditorInner() {
                         className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
                       >
                         Confirm & Finish <Check className="w-3.5 h-3.5" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
-                </div>
+                </Card>
               )}
             </div>
 
