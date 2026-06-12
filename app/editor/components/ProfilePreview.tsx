@@ -921,11 +921,14 @@ export default function ProfilePreview({
       });
   }, []);
 
-  // Re-compile whenever profile or raw template changes
+  // Re-compile whenever profile or raw template changes (debounced to avoid keystroke input lag)
   useEffect(() => {
     if (!rawTemplate) return;
-    const html = buildPreviewHtml(rawTemplate, profile);
-    setCompiledHtml(html);
+    const timer = setTimeout(() => {
+      const html = buildPreviewHtml(rawTemplate, profile);
+      setCompiledHtml(html);
+    }, 250);
+    return () => clearTimeout(timer);
   }, [rawTemplate, profile]);
 
   // Handle click captures from iframe
