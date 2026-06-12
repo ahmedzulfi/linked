@@ -126,7 +126,7 @@ interface WizardQuestion {
 }
 
 const WIZARD_QUESTIONS: WizardQuestion[] = [
-  // STEP 1: BASICS & IDENTITY
+  // STEP 1: BASICS & NAVIGATION
   {
     step: 1,
     subStep: 0,
@@ -164,26 +164,43 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
     field: "avatarUrl",
     optional: true,
   },
+  {
+    step: 1,
+    subStep: 5,
+    prompt: "Customize your site's navigation menu link texts? Enter in format: 'Home | About | Projects | Contact' (or skip to keep defaults):",
+    placeholder: "Type 'Home | About | Projects | Contact' (or 'skip')...",
+    field: "navTexts",
+    optional: true,
+  },
+
   // STEP 2: HERO GREETING & CTA
   {
     step: 2,
     subStep: 0,
-    prompt: "Let's customize your hero greeting block. What greeting start word should we use?",
+    prompt: "Let's customize your hero greeting block. What text would you like inside the greeting badge pill (e.g. 'Welcome here ❤️')?",
+    placeholder: "Type badge pill text...",
+    field: "heroBadgeText",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 1,
+    prompt: "What greeting opening word should we use?",
     placeholder: "Type greeting start (default: 'Hey,')...",
     field: "heroGreetingStart",
     optional: true,
   },
   {
     step: 2,
-    subStep: 1,
-    prompt: "What greeting end word should we use?",
+    subStep: 2,
+    prompt: "What greeting closing word should we use?",
     placeholder: "Type greeting end (default: 'here')...",
     field: "heroGreetingEnd",
     optional: true,
   },
   {
     step: 2,
-    subStep: 2,
+    subStep: 3,
     prompt: "Enter your hero subheadline text. This describes what you do in a brief, punchy sentence:",
     placeholder: "Type hero subheadline (e.g. 'I design interfaces, experiences, & brands.')...",
     field: "heroSubheadline",
@@ -191,7 +208,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 2,
-    subStep: 3,
+    subStep: 4,
     prompt: "What is your availability badge status text?",
     placeholder: "Type availability text (default: 'Available for work')...",
     field: "statusText",
@@ -199,7 +216,15 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 2,
-    subStep: 4,
+    subStep: 5,
+    prompt: "What rating/social proof score should we display in the hero badge (e.g., '4.9 / 5')?",
+    placeholder: "Type rating score (default: '4.9 / 5')...",
+    field: "heroRatingText",
+    optional: true,
+  },
+  {
+    step: 2,
+    subStep: 6,
     prompt: "What label should your hero call-to-action button have?",
     placeholder: "Type hero CTA button label (default: 'Book A Call')...",
     field: "heroCtaText",
@@ -207,24 +232,41 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 2,
-    subStep: 5,
+    subStep: 7,
     prompt: "Where should the hero call-to-action button link to?",
     placeholder: "Type hero CTA url (default: '#contact')...",
     field: "heroCtaUrl",
     optional: true,
   },
-  // STEP 3: SERVICES & CONSULTATION
+  {
+    step: 2,
+    subStep: 8,
+    prompt: "What label should we display for your social profile links (e.g., 'Follow me')?",
+    placeholder: "Type social list label (default: 'Follow me')...",
+    field: "followMeLabel",
+    optional: true,
+  },
+
+  // STEP 3: SERVICES & OFFERINGS
   {
     step: 3,
     subStep: 0,
-    prompt: "Let's configure your services. What section catchphrase title should we use?",
-    placeholder: "Type services section catchphrase (e.g. 'Turning ideas into experiences')...",
-    field: "servicesTitle",
+    prompt: "Let's configure your services. What section title tag would you like for services (e.g. 'What I Do')?",
+    placeholder: "Type services section label (default: 'What I Do')...",
+    field: "servicesLabel",
     optional: true,
   },
   {
     step: 3,
     subStep: 1,
+    prompt: "What catchphrase headline should we display for the services section?",
+    placeholder: "Type services headline (e.g. 'Turning ideas into experiences')...",
+    field: "servicesTitle",
+    optional: true,
+  },
+  {
+    step: 3,
+    subStep: 2,
     prompt: "Enter details for your primary service offering in the format: 'Title | Price | Description' (e.g. 'Web Design | $1200 | Clean layouts'):",
     placeholder: "Type service 1 (Title | Price | Description)...",
     field: "service1",
@@ -232,7 +274,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 3,
-    subStep: 2,
+    subStep: 3,
     prompt: "Enter details for a secondary service in the same format: 'Title | Price | Description' (or type 'done' to finish services):",
     placeholder: "Type service 2 or 'done'...",
     field: "service2",
@@ -240,7 +282,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 3,
-    subStep: 3,
+    subStep: 4,
     prompt: "What heading should be displayed on your services free consultation card?",
     placeholder: "Type consultation heading (default: 'Book A 30 min Free Call')...",
     field: "servicesCtaTitle",
@@ -248,24 +290,41 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 3,
-    subStep: 4,
+    subStep: 5,
     prompt: "What description text should be displayed on your services consultation card?",
     placeholder: "Type consultation description details...",
     field: "servicesCtaText",
     optional: true,
   },
+  {
+    step: 3,
+    subStep: 6,
+    prompt: "Enter button details for the consultation card in the format: 'Button Text | URL' (e.g. 'Book A Call | #contact'):",
+    placeholder: "Type consultation button text & URL...",
+    field: "servicesCtaBtn",
+    optional: true,
+  },
+
   // STEP 4: CUSTOM PROCESS STEPS
   {
     step: 4,
     subStep: 0,
-    prompt: "Let's define the steps in your creative process. What section title should we display?",
-    placeholder: "Type process section title (default: 'From ideas to impactful creative results.')...",
-    field: "processTitle",
+    prompt: "Let's define the steps in your creative process. What section title tag would you like (e.g. 'My Process')?",
+    placeholder: "Type process section label (default: 'My Process')...",
+    field: "processLabel",
     optional: true,
   },
   {
     step: 4,
     subStep: 1,
+    prompt: "What process section main title headline should we display?",
+    placeholder: "Type process headline (default: 'From ideas to impactful creative results.')...",
+    field: "processTitle",
+    optional: true,
+  },
+  {
+    step: 4,
+    subStep: 2,
     prompt: "Enter your first process step details in the format: 'Title | Description' (e.g. 'Discovery | We discuss goals...'):",
     placeholder: "Type process step 1...",
     field: "processStep1",
@@ -273,7 +332,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 4,
-    subStep: 2,
+    subStep: 3,
     prompt: "Enter your second process step details in the format: 'Title | Description' (or 'done' to finish):",
     placeholder: "Type process step 2 or 'done'...",
     field: "processStep2",
@@ -281,23 +340,32 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 4,
-    subStep: 3,
+    subStep: 4,
     prompt: "Enter your third process step details in the format: 'Title | Description' (or 'done' to finish):",
     placeholder: "Type process step 3 or 'done'...",
     field: "processStep3",
     optional: true,
   },
+
   // STEP 5: BIO, PHOTOS & TESTIMONIALS
   {
     step: 5,
     subStep: 0,
+    prompt: "What section title tag would you like for the About me section (e.g. 'About me')?",
+    placeholder: "Type about section label (default: 'About me')...",
+    field: "aboutLabel",
+    optional: true,
+  },
+  {
+    step: 5,
+    subStep: 1,
     prompt: "Excellent. Let's write your professional bio/summary paragraph. Describe your background, creative philosophy, and key skills:",
     placeholder: "Type your professional bio/summary text...",
     field: "summary",
   },
   {
     step: 5,
-    subStep: 1,
+    subStep: 2,
     prompt: "Enter a custom image URL for the 'About Photo' block (optional, or 'skip' to keep template default):",
     placeholder: "Enter about photo URL...",
     field: "aboutPhotoUrl",
@@ -305,7 +373,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 5,
-    subStep: 2,
+    subStep: 3,
     prompt: "Enter a custom image URL for your signature overlay (optional, or 'skip' to keep template default):",
     placeholder: "Enter signature image URL...",
     field: "signatureUrl",
@@ -313,15 +381,23 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 5,
-    subStep: 3,
-    prompt: "Let's configure client testimonials. What reviews section heading should we display?",
+    subStep: 4,
+    prompt: "Let's configure client testimonials. What reviews section label tag would you like (e.g. 'Reviews')?",
+    placeholder: "Type reviews section label (default: 'Reviews')...",
+    field: "testimonialsLabel",
+    optional: true,
+  },
+  {
+    step: 5,
+    subStep: 5,
+    prompt: "What testimonials reviews title headline should we display?",
     placeholder: "Type testimonials heading (default: 'Voices of trust from happy clients')...",
     field: "testimonialsTitle",
     optional: true,
   },
   {
     step: 5,
-    subStep: 4,
+    subStep: 6,
     prompt: "Enter details for your first client review in this format: 'Quote | Client Name | Role' (e.g. 'Daniel did amazing work! | James Walker | Director'):",
     placeholder: "Type testimonial 1...",
     field: "testimonial1",
@@ -329,12 +405,13 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 5,
-    subStep: 5,
+    subStep: 7,
     prompt: "Enter details for your second client review in the same format: 'Quote | Client Name | Role' (or type 'done' to finish):",
     placeholder: "Type testimonial 2 or 'done'...",
     field: "testimonial2",
     optional: true,
   },
+
   // STEP 6: SCROLLING TICKER EXPERIENCE
   {
     step: 6,
@@ -360,18 +437,27 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
     field: "company2",
     optional: true,
   },
+
   // STEP 7: PORTFOLIO PROJECTS
   {
     step: 7,
     subStep: 0,
-    prompt: "Let's configure your portfolio projects grid. What tagline subtitle should we display under 'My Portfolio'?",
+    prompt: "Let's configure your portfolio projects grid. What section title tag should we use (e.g. 'My Portfolio')?",
+    placeholder: "Type projects label (default: 'My Portfolio')...",
+    field: "projectsLabel",
+    optional: true,
+  },
+  {
+    step: 7,
+    subStep: 1,
+    prompt: "What tagline subtitle should we display under the projects section?",
     placeholder: "Type projects subtitle (default: 'Every project built to inspire users')...",
     field: "projectsSubtitle",
     optional: true,
   },
   {
     step: 7,
-    subStep: 1,
+    subStep: 2,
     prompt: "Enter details for your first project in the format: 'Title | Description | Demo Link URL' (e.g. 'Webild | Onboarding website editor | https://github.com'):",
     placeholder: "Type project 1 details...",
     field: "project1",
@@ -379,30 +465,55 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 7,
-    subStep: 2,
+    subStep: 3,
     prompt: "Enter details for your second project in the format: 'Title | Description | Link' (or type 'done' to finish):",
     placeholder: "Type project 2 details or 'done'...",
     field: "project2",
     optional: true,
   },
+  {
+    step: 7,
+    subStep: 4,
+    prompt: "Enter details for the explore portfolio button in the format: 'Button Text | URL' (e.g. 'Explore All | #work'):",
+    placeholder: "Type explore button details...",
+    field: "projectsExplore",
+    optional: true,
+  },
+
   // STEP 8: CONTACT, SOCIALS & THEME
   {
     step: 8,
     subStep: 0,
-    prompt: "Almost there! Let's get your public contact information. What is your public email address?",
+    prompt: "Almost there! Let's get your contact footer section details. What section title tag would you like (e.g. 'Have a question')?",
+    placeholder: "Type footer section label (default: 'Have a question')...",
+    field: "footerLabel",
+    optional: true,
+  },
+  {
+    step: 8,
+    subStep: 1,
+    prompt: "Enter a custom image URL for the footer banner background block (or skip):",
+    placeholder: "Enter footer banner URL...",
+    field: "footerBannerUrl",
+    optional: true,
+  },
+  {
+    step: 8,
+    subStep: 2,
+    prompt: "What is your public contact email address?",
     placeholder: "Type public email (e.g. hello@example.com)...",
     field: "email",
   },
   {
     step: 8,
-    subStep: 1,
+    subStep: 3,
     prompt: "What is your public phone number?",
     placeholder: "Type public phone number (e.g. +44 7700 900123)...",
     field: "phone",
   },
   {
     step: 8,
-    subStep: 2,
+    subStep: 4,
     prompt: "What is your LinkedIn profile page URL?",
     placeholder: "Type LinkedIn profile URL (or 'skip')...",
     field: "linkedinUrl",
@@ -410,7 +521,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 8,
-    subStep: 3,
+    subStep: 5,
     prompt: "What is your GitHub profile page URL?",
     placeholder: "Type GitHub profile URL (or 'skip')...",
     field: "githubUrl",
@@ -418,7 +529,7 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 8,
-    subStep: 4,
+    subStep: 6,
     prompt: "What is your Twitter profile page URL?",
     placeholder: "Type Twitter profile URL (or 'skip')...",
     field: "twitterUrl",
@@ -426,7 +537,15 @@ const WIZARD_QUESTIONS: WizardQuestion[] = [
   },
   {
     step: 8,
-    subStep: 5,
+    subStep: 7,
+    prompt: "Enter custom copyright and credits details in the format: 'Copyright Label | Author Name | Tool Name | Tool URL' (or skip):",
+    placeholder: "Type credits format (or 'skip')...",
+    field: "footerCredits",
+    optional: true,
+  },
+  {
+    step: 8,
+    subStep: 8,
     prompt: "Fantastic! All details have been captured. Please select a design template layout card above and click 'Confirm & Finish' to enter the workspace!",
     placeholder: "Select template card above and finish...",
     field: "theme",
@@ -548,6 +667,16 @@ function EditorInner() {
         if (text.toLowerCase() !== "skip" && text !== "") {
           updateField("avatarUrl", text);
         }
+      } else if (field === "navTexts") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          if (parts[0]) updateField("navHomeText", parts[0]);
+          if (parts[1]) updateField("navAboutText", parts[1]);
+          if (parts[2]) updateField("navProjectsText", parts[2]);
+          if (parts[3]) updateField("navContactText", parts[3]);
+        }
+      } else if (field === "heroBadgeText") {
+        updateField("heroBadgeText", text || "Welcome here ❤️");
       } else if (field === "heroGreetingStart") {
         updateField("heroGreetingStart", text || "Hey,");
       } else if (field === "heroGreetingEnd") {
@@ -556,10 +685,16 @@ function EditorInner() {
         updateField("heroSubheadline", text || "I design interfaces, experiences, & brands.");
       } else if (field === "statusText") {
         updateField("statusText", text || "Available for work");
+      } else if (field === "heroRatingText") {
+        updateField("heroRatingText", text || "4.9 / 5");
       } else if (field === "heroCtaText") {
         updateField("heroCtaText", text || "Book A Call");
       } else if (field === "heroCtaUrl") {
         updateField("heroCtaUrl", text || "#contact");
+      } else if (field === "followMeLabel") {
+        updateField("followMeLabel", text || "Follow me");
+      } else if (field === "servicesLabel") {
+        updateField("servicesLabel", text || "What I Do");
       } else if (field === "servicesTitle") {
         updateField("servicesTitle", text || "Turning ideas into digital experiences");
       } else if (field === "service1") {
@@ -597,6 +732,18 @@ function EditorInner() {
           buttonText: "Book A Call",
           buttonUrl: "#contact"
         });
+      } else if (field === "servicesCtaBtn") {
+        const currentCta = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          updateField("servicesCta", {
+            ...currentCta,
+            buttonText: parts[0] || "Book A Call",
+            buttonUrl: parts[1] || "#contact"
+          });
+        }
+      } else if (field === "processLabel") {
+        updateField("processLabel", text || "My Process");
       } else if (field === "processTitle") {
         updateField("processTitle", text || "From ideas to impactful creative results.");
       } else if (field === "processStep1") {
@@ -631,6 +778,8 @@ function EditorInner() {
           const currentSteps = editedProfile?.processes || [];
           updateField("processes", [...currentSteps, newStep]);
         }
+      } else if (field === "aboutLabel") {
+        updateField("aboutLabel", text || "About me");
       } else if (field === "summary") {
         updateField("summary", text);
       } else if (field === "aboutPhotoUrl") {
@@ -641,6 +790,8 @@ function EditorInner() {
         if (text.toLowerCase() !== "skip" && text !== "") {
           updateField("signatureUrl", text);
         }
+      } else if (field === "testimonialsLabel") {
+        updateField("testimonialsLabel", text || "Reviews");
       } else if (field === "testimonialsTitle") {
         updateField("testimonialsTitle", text || "Voices of trust from happy clients");
       } else if (field === "testimonial1") {
@@ -691,6 +842,8 @@ function EditorInner() {
           setExperience([...currentExp, newExp]);
           updateField("experience", [...currentExp, newExp]);
         }
+      } else if (field === "projectsLabel") {
+        updateField("projectsLabel", text || "My Portfolio");
       } else if (field === "projectsSubtitle") {
         updateField("projectsSubtitle", text || "Every project built to inspire users");
       } else if (field === "project1") {
@@ -717,6 +870,18 @@ function EditorInner() {
           const currentProj = editedProfile?.projects || [];
           setProjects([...currentProj, newProj]);
           updateField("projects", [...currentProj, newProj]);
+        }
+      } else if (field === "projectsExplore") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          updateField("projectsExploreText", parts[0] || "Explore All");
+          updateField("projectsExploreUrl", parts[1] || "#work");
+        }
+      } else if (field === "footerLabel") {
+        updateField("footerLabel", text || "Have a question");
+      } else if (field === "footerBannerUrl") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          updateField("footerBannerUrl", text);
         }
       } else if (field === "email") {
         updateField("email", text);
@@ -748,6 +913,14 @@ function EditorInner() {
           const currentLinks = editedProfile?.links || [];
           const updatedLinks = [...currentLinks.filter(l => l.icon !== "twitter"), { label: "Twitter", url: text, icon: "twitter" as const }];
           updateField("links", updatedLinks);
+        }
+      } else if (field === "footerCredits") {
+        if (text.toLowerCase() !== "skip" && text !== "") {
+          const parts = text.split("|").map(s => s.trim());
+          if (parts[0]) updateField("footerCreditText", parts[0]);
+          if (parts[1]) updateField("footerCreditName", parts[1]);
+          if (parts[2]) updateField("builtInFramerText", parts[2]);
+          if (parts[3]) updateField("builtInFramerUrl", parts[3]);
         }
       }
     }
@@ -1634,7 +1807,7 @@ function EditorInner() {
                   })}
 
                   {/* Choose template style layout selector block */}
-                  {currentStep === 8 && currentSubStep === 5 && (
+                  {currentStep === 8 && currentSubStep === 8 && (
                     <div className="border border-[#3B82F6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
                       <div className="flex items-center gap-2">
                         <Palette className="w-4 h-4 text-[#3B82F6]" />
