@@ -197,7 +197,7 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
 - **Left Column Panels (Navigation Switcher):**
   - **Design Tab (Conversational AI Wizard):** Chat-like timeline guiding the user step-by-step with interactive forms.
-    - **Redesigned Step Cards (Steps 1-7):** To match the look and feel of the AI chat bubbles, all onboarding step cards use a clean white header instead of a solid dark charcoal banner. The step cards are styled with a soft shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`), thin borders, and rounded corners (`rounded-[18px]`).
+    - **Redesigned Step Cards (Steps 1-7):** To match the look and feel of the AI chat bubbles, all onboarding step cards use proper, structured `shadcn/ui` component hierarchies (`Card`, `CardHeader`, `CardTitle`, `CardContent`, and `CardFooter`) with a clean white header instead of a solid dark charcoal banner. The step cards are styled with a soft shadow (`shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]`), thin borders, and rounded corners (`rounded-[18px]`).
     - **Lime Green Brand Styling:** The primary lime green brand color is integrated with optimal readability and contrast.
       - **Header Icons:** Housed in a translucent mint green bezel (`bg-[#8DFFB3]/25 border border-[#8DFFB3]/40`) with text and border details in dark green (`text-[#369762]`).
       - **Badges/Tags:** Dynamic indicators utilize translucent green (`bg-[#8DFFB3]/20 text-[#369762]`).

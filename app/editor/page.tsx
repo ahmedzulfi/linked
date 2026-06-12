@@ -32,7 +32,7 @@ import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
 import WizardAnimations from "@/components/WizardAnimations";
 import { UserMenu } from "@/components/UserMenu";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -1109,77 +1109,81 @@ function EditorInner() {
             <div className="pt-2">
               {/* Step 1 */}
               {currentStep === 1 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Sparkles className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">ONBOARDING KICKOFF</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Welcome to Webild</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Welcome to Webild</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
 
-                  {/* User profile card visual slot */}
-                  <div className="flex items-center gap-3.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/80 rounded-xl">
-                    <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
-                      <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
-                      <p className="text-xs text-neutral-550 truncate max-w-[320px] mt-0.5 font-medium">{editedProfile?.headline || "Professional Headline"}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3.5">
-                    <h4 className="text-[10px] font-bold text-[#369762] uppercase tracking-wider">Your Customization Steps</h4>
-                    <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">1</span>
-                        <span>📂 Review Projects & Highlights</span>
+                  <CardContent className="p-6 space-y-5">
+                    {/* User profile card visual slot */}
+                    <div className="flex items-center gap-3.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/80 rounded-xl">
+                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-neutral-200 shrink-0 bg-neutral-100 flex items-center justify-center shadow-xs">
+                        <img src={editedProfile?.avatarUrl || "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
                       </div>
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">2</span>
-                        <span>🎯 Refine Interests & Aspirations</span>
-                      </div>
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">3</span>
-                        <span>🛠 Select Core Skills & Tools</span>
-                      </div>
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">4</span>
-                        <span>💼 Verify Work Experience Timeline</span>
-                      </div>
-                      <div className="flex items-center gap-2.5">
-                        <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">5</span>
-                        <span>🎨 Choose Layout Template & Edit Live</span>
+                      <div className="min-w-0">
+                        <h3 className="text-sm font-bold text-neutral-800 truncate">{editedProfile?.name || "Your Profile"}</h3>
+                        <p className="text-xs text-neutral-550 truncate max-w-[320px] mt-0.5 font-medium">{editedProfile?.headline || "Professional Headline"}</p>
                       </div>
                     </div>
-                  </div>
+                    
+                    <div className="space-y-3.5">
+                      <h4 className="text-[10px] font-bold text-[#369762] uppercase tracking-wider">Your Customization Steps</h4>
+                      <div className="space-y-2.5 text-xs text-neutral-700 font-medium">
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">1</span>
+                          <span>📂 Review Projects & Highlights</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">2</span>
+                          <span>🎯 Refine Interests & Aspirations</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">3</span>
+                          <span>🛠 Select Core Skills & Tools</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">4</span>
+                          <span>💼 Verify Work Experience Timeline</span>
+                        </div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-[#8DFFB3]/20 text-[#369762] flex items-center justify-center font-bold text-[10px] shrink-0 border border-[#8DFFB3]/40">5</span>
+                          <span>🎨 Choose Layout Template & Edit Live</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
 
-                  <Button
-                    onClick={() => setCurrentStep(2)}
-                    className="w-full h-11 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-all duration-100 shadow-sm border border-[#8DFFB3]/80 cursor-pointer"
-                  >
-                    Get Started <ArrowRight className="w-4 h-4 text-[#171717]" />
-                  </Button>
+                  <CardFooter className="p-6 pt-0">
+                    <Button
+                      onClick={() => setCurrentStep(2)}
+                      className="w-full h-11 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] rounded-xl text-xs font-bold flex items-center justify-center gap-2 active:scale-[0.97] transition-all duration-100 shadow-sm border border-[#8DFFB3]/80 cursor-pointer"
+                    >
+                      Get Started <ArrowRight className="w-4 h-4 text-[#171717]" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 2 Form: Projects */}
               {currentStep === 2 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Folder className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 2 OF 7 • PORTFOLIO</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Projects & Highlights</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Projects & Highlights</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
                   
-                  <div className="space-y-5">
+                  <CardContent className="p-6 pt-5 space-y-5">
                     <div className="space-y-1">
                       {projects.map((proj, idx) => (
                         <div 
@@ -1214,7 +1218,7 @@ function EditorInner() {
                     </div>
 
                     {showAddProject ? (
-                      <div className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-xs">
+                      <div className="border border-neutral-200/80 bg-[#FBFBFB] rounded-xl p-4 space-y-3.5 shadow-xs animate-in fade-in duration-200">
                         <div className="space-y-1">
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Project Title</label>
                           <Input
@@ -1270,40 +1274,40 @@ function EditorInner() {
                         <Plus className="w-4 h-4 text-neutral-500" /> Add Project
                       </Button>
                     )}
+                  </CardContent>
 
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        variant="outline"
-                        onClick={handleBackStep} 
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                      >
-                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </div>
+                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
+                    <Button 
+                      variant="outline"
+                      onClick={handleBackStep} 
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </Button>
+                    <Button
+                      onClick={handleNextStep}
+                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                    >
+                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 3 Form: Interests */}
               {currentStep === 3 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Sparkles className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 3 OF 7 • TARGETS</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Interests & Career Goals</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Interests & Career Goals</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
                   
-                  <div className="space-y-5">
+                  <CardContent className="p-6 pt-5 space-y-5">
                     <Textarea
                       placeholder="Write a brief overview of your interests and what drives you. E.g. I am passionate about AI engineering, developer tools, and high-fidelity user experiences..."
                       value={interests}
@@ -1314,39 +1318,40 @@ function EditorInner() {
                       rows={5}
                       className="w-full text-xs p-3.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-[#FBFBFB] focus:bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed focus:ring-1 focus:ring-neutral-400/10 transition-colors"
                     />
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        variant="outline"
-                        onClick={handleBackStep} 
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                      >
-                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </div>
+                  </CardContent>
+
+                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
+                    <Button 
+                      variant="outline"
+                      onClick={handleBackStep} 
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </Button>
+                    <Button
+                      onClick={handleNextStep}
+                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                    >
+                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 4 Form: Skills */}
               {currentStep === 4 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Wrench className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 4 OF 7 • SKILLS</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Core Skills & Tools</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Core Skills & Tools</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
                   
-                  <div className="space-y-5">
+                  <CardContent className="p-6 pt-5 space-y-5">
                     <div className="flex flex-wrap gap-1.5 p-3.5 bg-[#FBFBFB] border border-neutral-200/60 rounded-xl min-h-[90px] max-h-36 overflow-y-auto" style={{ scrollbarWidth: "none" }}>
                       {skills.map((skill, idx) => {
                         const tagColor = getNotionTagClasses(skill.name);
@@ -1387,117 +1392,119 @@ function EditorInner() {
                         Add
                       </Button>
                     </form>
+                  </CardContent>
 
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        variant="outline"
-                        onClick={handleBackStep} 
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={handleNextStep}
-                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                      >
-                        Save & Next <ArrowRight className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </div>
+                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
+                    <Button 
+                      variant="outline"
+                      onClick={handleBackStep} 
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </Button>
+                    <Button
+                      onClick={handleNextStep}
+                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                    >
+                      Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 5 Form: Experience */}
               {currentStep === 5 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Briefcase className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 5 OF 7 • TIMELINE</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Work Experience</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Work Experience</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
                   
-                  <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
-                    {experience.map((exp, idx) => (
-                      <div 
-                        key={idx} 
-                        className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
-                      >
-                        <Button 
-                          variant="ghost"
-                          onClick={() => removeExperienceItem(idx)} 
-                          className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95] h-8 w-8"
-                          title="Remove experience"
+                  <CardContent className="p-6 pt-5 space-y-5">
+                    <div className="space-y-3.5 max-h-72 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+                      {experience.map((exp, idx) => (
+                        <div 
+                          key={idx} 
+                          className="group bg-neutral-50/30 border border-neutral-200/80 rounded-xl p-3.5 space-y-2.5 relative hover:bg-neutral-50/60 transition-colors duration-150"
                         >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </Button>
- 
-                        <div className="grid grid-cols-2 gap-2.5">
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
-                            <Input
-                              type="text"
-                              value={exp.title}
-                              placeholder="e.g. Lead Engineer"
-                              onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
-                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                            />
+                          <Button 
+                            variant="ghost"
+                            onClick={() => removeExperienceItem(idx)} 
+                            className="opacity-0 group-hover:opacity-100 text-neutral-500 hover:text-red-600 hover:bg-red-50/50 p-1.5 rounded-lg transition-[opacity,transform] duration-100 ease-out absolute right-2.5 top-2.5 bg-white border border-neutral-200/40 shadow-xs active:scale-[0.95] h-8 w-8"
+                            title="Remove experience"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+   
+                          <div className="grid grid-cols-2 gap-2.5">
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Job Title</label>
+                              <Input
+                                type="text"
+                                value={exp.title}
+                                placeholder="e.g. Lead Engineer"
+                                onChange={(e) => updateExperienceItem(idx, "title", e.target.value)}
+                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                              />
+                            </div>
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Company</label>
+                              <Input
+                                type="text"
+                                value={exp.company}
+                                placeholder="e.g. Acme Corp"
+                                onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
+                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                              />
+                            </div>
+                          </div>
+                          <div className="grid grid-cols-1 gap-2">
+                            <div className="space-y-1">
+                              <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Duration</label>
+                              <Input
+                                type="text"
+                                value={exp.duration}
+                                placeholder="e.g. Jan 2024 - Present"
+                                onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
+                                className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                              />
+                            </div>
                           </div>
                           <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Company</label>
-                            <Input
-                              type="text"
-                              value={exp.company}
-                              placeholder="e.g. Acme Corp"
-                              onChange={(e) => updateExperienceItem(idx, "company", e.target.value)}
-                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
+                            <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Key Responsibilities / Impact</label>
+                            <Textarea
+                              value={exp.description}
+                              placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
+                              rows={2}
+                              onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
+                              className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
                             />
                           </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-2">
-                          <div className="space-y-1">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Duration</label>
-                            <Input
-                              type="text"
-                              value={exp.duration}
-                              placeholder="e.g. Jan 2024 - Present"
-                              onChange={(e) => updateExperienceItem(idx, "duration", e.target.value)}
-                              className="w-full h-11 text-xs px-2.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 transition-colors"
-                            />
-                          </div>
+                      ))}
+                      {experience.length === 0 && (
+                        <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
+                          <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
+                          <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No work history items added yet</span>
                         </div>
-                        <div className="space-y-1">
-                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Key Responsibilities / Impact</label>
-                          <Textarea
-                            value={exp.description}
-                            placeholder="Built cloud infrastructure; mentored 4 junior engineers..."
-                            rows={2}
-                            onChange={(e) => updateExperienceItem(idx, "description", e.target.value)}
-                            className="w-full text-xs px-2.5 py-1.5 border border-neutral-200 rounded-xl outline-none focus:border-neutral-400 bg-white placeholder-neutral-400 text-neutral-800 resize-none leading-relaxed transition-colors min-h-[60px]"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                    {experience.length === 0 && (
-                      <div className="flex flex-col items-center justify-center py-6 bg-neutral-50/40 border border-dashed border-neutral-200/60 rounded-xl text-neutral-400 text-center animate-in fade-in duration-200">
-                        <Inbox className="w-7 h-7 text-neutral-400 stroke-[1.5]" />
-                        <span className="text-[11px] font-medium mt-1.5 text-neutral-500">No work history items added yet</span>
-                      </div>
-                    )}
-                  </div>
- 
-                  <Button
-                    variant="outline"
-                    onClick={addExperienceItem}
-                    className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
-                  >
-                    <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
-                  </Button>
- 
-                  <div className="flex justify-between items-center pt-2 border-t border-neutral-100">
+                      )}
+                    </div>
+   
+                    <Button
+                      variant="outline"
+                      onClick={addExperienceItem}
+                      className="w-full h-11 border border-dashed border-neutral-200 hover:border-neutral-300 rounded-xl text-xs font-semibold text-neutral-600 flex items-center justify-center gap-1.5 hover:bg-neutral-50/50 transition-transform active:scale-[0.97] duration-100 ease-out"
+                    >
+                      <Plus className="w-4 h-4 text-neutral-500" /> Add Work Experience
+                    </Button>
+                  </CardContent>
+   
+                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
                     <Button 
                       variant="outline"
                       onClick={handleBackStep} 
@@ -1511,24 +1518,24 @@ function EditorInner() {
                     >
                       Refine with AI <Sparkles className="w-3.5 h-3.5" />
                     </Button>
-                  </div>
+                  </CardFooter>
                 </Card>
               )}
 
               {/* Step 6 Form: AI Copy Refinement Compare */}
               {currentStep === 6 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Sparkles className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 6 OF 7 • COPYWRITING</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">AI Copy Optimization</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">AI Copy Optimization</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
 
-                  <div className="space-y-5">
+                  <CardContent className="p-6 pt-5 space-y-5">
                     {optimizing ? (
                       /* AI Refinement Loading Screen */
                       <div className="py-10 flex flex-col items-center justify-center gap-3">
@@ -1541,7 +1548,7 @@ function EditorInner() {
                         {/* Headline Compare */}
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
+                            <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Headline</label>
                             <Badge className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] hover:bg-[#8DFFB3]/30 border-transparent px-2 py-0.5 rounded-full font-bold">AI Polished</Badge>
                           </div>
                           
@@ -1565,7 +1572,7 @@ function EditorInner() {
                         {/* Bio Compare */}
                         <div className="space-y-2">
                           <div className="flex items-center justify-between">
-                            <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
+                            <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider block">Bio Summary</label>
                             <Badge className="text-[10px] bg-[#8DFFB3]/20 text-[#369762] hover:bg-[#8DFFB3]/30 border-transparent px-2 py-0.5 rounded-full font-bold">AI Polished</Badge>
                           </div>
                           
@@ -1584,43 +1591,44 @@ function EditorInner() {
                             className="w-full p-4 border border-neutral-200 rounded-xl text-xs font-medium text-neutral-800 focus:outline-none focus:ring-1 focus:ring-neutral-400 bg-[#FBFBFB] focus:bg-white transition-all resize-none min-h-[100px]"
                           />
                         </div>
-
-                        {/* Action Button */}
-                        <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                          <Button 
-                            variant="outline"
-                            onClick={handleBackStep} 
-                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                          >
-                            <ArrowLeft className="w-3.5 h-3.5" /> Back
-                          </Button>
-                          <Button
-                            onClick={() => setCurrentStep(7)}
-                            className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                          >
-                            Apply & Next <ArrowRight className="w-4 h-4" />
-                          </Button>
-                        </div>
                       </div>
                     )}
-                  </div>
+                  </CardContent>
+
+                  {!optimizing && (
+                    <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
+                      <Button 
+                        variant="outline"
+                        onClick={handleBackStep} 
+                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                      >
+                        <ArrowLeft className="w-3.5 h-3.5" /> Back
+                      </Button>
+                      <Button
+                        onClick={() => setCurrentStep(7)}
+                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                      >
+                        Apply & Next <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </CardFooter>
+                  )}
                 </Card>
               )}
 
               {/* Step 7 Form: Select Template */}
               {currentStep === 7 && (
-                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] p-6 space-y-5 animate-in fade-in duration-300 relative z-10 text-left">
-                  <div className="flex items-start gap-3.5 border-b border-neutral-100/60 pb-4">
+                <Card className="bg-white border border-neutral-200/60 rounded-[18px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] animate-in fade-in duration-300 relative z-10 text-left">
+                  <CardHeader className="flex flex-row items-start gap-3.5 border-b border-neutral-100/60 p-6 space-y-0">
                     <div className="w-9 h-9 rounded-xl bg-[#8DFFB3]/25 border border-[#8DFFB3]/40 flex items-center justify-center text-[#369762] shrink-0 shadow-[0_2px_4px_-1px_rgba(54,151,98,0.06)]">
                       <Palette className="w-4.5 h-4.5" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <span className="text-[10px] font-bold tracking-wider text-[#369762] uppercase block">STEP 7 OF 7 • STYLES</span>
-                      <h3 className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5">Theme Styles</h3>
+                      <CardTitle className="text-[14.5px] font-bold text-neutral-800 leading-snug mt-0.5 tracking-tight">Theme Styles</CardTitle>
                     </div>
-                  </div>
+                  </CardHeader>
                   
-                  <div className="space-y-5">
+                  <CardContent className="p-6 pt-5 space-y-5">
                     <div className="grid grid-cols-2 gap-2.5">
                       {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
                         const isSelected = selectedTemplate === id;
@@ -1655,27 +1663,27 @@ function EditorInner() {
                         );
                       })}
                     </div>
+                  </CardContent>
  
-                    <div className="flex justify-between items-center pt-3 border-t border-neutral-100">
-                      <Button 
-                        variant="outline"
-                        onClick={handleBackStep} 
-                        className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
-                      >
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          // Confirm theme and transition straight to free-form chat (step 9)
-                          setCurrentStep(9);
-                          toast.success("Theme confirmed and setup complete!");
-                        }}
-                        className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
-                      >
-                        Confirm & Finish <Check className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  </div>
+                  <CardFooter className="flex justify-between items-center border-t border-neutral-100/60 p-6 pt-4 bg-[#FBFBFB]/50 rounded-b-[18px]">
+                    <Button 
+                      variant="outline"
+                      onClick={handleBackStep} 
+                      className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-xl border border-neutral-200 bg-white transition-transform active:scale-[0.97] duration-100 ease-out"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        // Confirm theme and transition straight to free-form chat (step 9)
+                        setCurrentStep(9);
+                        toast.success("Theme confirmed and setup complete!");
+                      }}
+                      className="h-11 px-5 bg-[#8DFFB3] hover:bg-[#75eb9d] text-[#171717] border border-[#8DFFB3]/80 text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.97] duration-100 ease-out shadow-sm cursor-pointer"
+                    >
+                      Confirm & Finish <Check className="w-3.5 h-3.5" />
+                    </Button>
+                  </CardFooter>
                 </Card>
               )}
             </div>
