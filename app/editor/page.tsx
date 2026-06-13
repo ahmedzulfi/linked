@@ -116,441 +116,59 @@ const SUGGESTIONS = [
   "Add a new project named Finance App",
 ];
 
-interface WizardQuestion {
+const DEFAULT_SERVICES = [
+  { title: "Web design", price: "$1200", description: "I create visually appealing, responsive websites with clean layouts, ensuring engaging user experiences and professional digital presence." },
+  { title: "UI/UX Design", price: "$1500", description: "I design intuitive user interfaces and seamless experiences, focusing on usability, accessibility, and modern aesthetics to improve user satisfaction." },
+  { title: "Framer Development", price: "$1300", description: "I build interactive, high-performing websites in Framer, smooth animations, & fully responsive layouts tailored to your brand." },
+  { title: "Mobile App Design", price: "$1600", description: "I design user mobile applications with functional layouts, engaging visuals, & optimized experiences for both iOS & Android platforms." },
+  { title: "Branding & Identity", price: "$1000", description: "I craft unique brand identities including logos, typography, & guidelines, helping businesses stand out with consistency & strong visual presence." }
+];
+
+const DEFAULT_SERVICES_CTA = {
+  title: "Book A 30 min Free Call",
+  text: "Let’s connect to discuss your design needs, explore creative ideas, and plan your project effectively together.",
+  buttonText: "Book A Call",
+  buttonUrl: "#contact"
+};
+
+const DEFAULT_PROCESSES = [
+  { stepTag: "/01", title: "Creative Discovery", description: "Through research and collaboration, we uncover goals, audience needs, and brand vision to build a solid creative foundation." },
+  { stepTag: "/02", title: "Design Blueprint", description: "Transforming insights into structured wireframes and prototypes that guide visuals, user experience, and brand alignment seamlessly." },
+  { stepTag: "/03", title: "Delivery & Launch", description: "Executing development and refined animations, ensuring cross-platform testing, and launching a high-performance experience." }
+];
+
+const DEFAULT_TESTIMONIALS = [
+  { quote: "Daniel transformed our digital presence with stunning design and seamless usability. Working with him was a complete delight.", name: "James Walker", role: "Marketing Director, BrightEdge", avatarUrl: "/templates/daniel-cross/3R6WpHw2pAWlgNTDtMQICmJ9as.png" },
+  { quote: "Professional, creative, & highly reliable. he delivered designs that exceeded expectations & strengthened our brand identity across platforms.", name: "Emily Harris", role: "Product Manager, Nexora", avatarUrl: "/templates/daniel-cross/6GdVor1G40eyD13tSRQ8IzSBQ.png" },
+  { quote: "His attention to detail and ability to capture our vision in design made the entire process effortless, inspiring, and memorable.", name: "Oliver Bennett", role: "CEO, Innovent Solutions", avatarUrl: "/templates/daniel-cross/0gmxJBiUekQL1gjvN4nDfGCVIRE.webp" }
+];
+
+interface WizardStep {
   step: number;
-  subStep: number;
+  label: string;
   prompt: string;
-  placeholder: string;
-  field: string;
-  optional?: boolean;
 }
 
-const WIZARD_QUESTIONS: WizardQuestion[] = [
-  // STEP 1: BASICS & NAVIGATION
-  {
-    step: 1,
-    subStep: 0,
-    prompt: "Welcome to Webild! I've loaded your LinkedIn profile data. Let's customize your personal page step-by-step. Press 'Start' or type 'start' below to begin!",
-    placeholder: "Type 'start' or click Start...",
-    field: "start",
-  },
-  {
-    step: 1,
-    subStep: 1,
-    prompt: "Let's begin with your core identity. What is your full name?",
-    placeholder: "Type your full name (e.g. Alex Morgan)...",
-    field: "name",
-  },
-  {
-    step: 1,
-    subStep: 2,
-    prompt: "What is your professional headline or role?",
-    placeholder: "Type your headline (e.g. Senior UX Designer & Creative Director)...",
-    field: "headline",
-  },
-  {
-    step: 1,
-    subStep: 3,
-    prompt: "Where are you professionally based?",
-    placeholder: "Type your location (e.g. San Francisco, CA)...",
-    field: "location",
-    optional: true,
-  },
-  {
-    step: 1,
-    subStep: 4,
-    prompt: "Enter a custom image URL for your profile avatar photo (optional, or type 'skip'):",
-    placeholder: "Enter avatar image URL (or 'skip')...",
-    field: "avatarUrl",
-    optional: true,
-  },
-  {
-    step: 1,
-    subStep: 5,
-    prompt: "Customize your site's navigation menu link texts? Enter in format: 'Home | About | Projects | Contact' (or skip to keep defaults):",
-    placeholder: "Type 'Home | About | Projects | Contact' (or 'skip')...",
-    field: "navTexts",
-    optional: true,
-  },
-
-  // STEP 2: HERO GREETING & CTA
-  {
-    step: 2,
-    subStep: 0,
-    prompt: "Let's customize your hero greeting block. What text would you like inside the greeting badge pill (e.g. 'Welcome here ❤️')?",
-    placeholder: "Type badge pill text...",
-    field: "heroBadgeText",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 1,
-    prompt: "What greeting opening word should we use?",
-    placeholder: "Type greeting start (default: 'Hey,')...",
-    field: "heroGreetingStart",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 2,
-    prompt: "What greeting closing word should we use?",
-    placeholder: "Type greeting end (default: 'here')...",
-    field: "heroGreetingEnd",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 3,
-    prompt: "Enter your hero subheadline text. This describes what you do in a brief, punchy sentence:",
-    placeholder: "Type hero subheadline (e.g. 'I design interfaces, experiences, & brands.')...",
-    field: "heroSubheadline",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 4,
-    prompt: "What is your availability badge status text?",
-    placeholder: "Type availability text (default: 'Available for work')...",
-    field: "statusText",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 5,
-    prompt: "What rating/social proof score should we display in the hero badge (e.g., '4.9 / 5')?",
-    placeholder: "Type rating score (default: '4.9 / 5')...",
-    field: "heroRatingText",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 6,
-    prompt: "What label should your hero call-to-action button have?",
-    placeholder: "Type hero CTA button label (default: 'Book A Call')...",
-    field: "heroCtaText",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 7,
-    prompt: "Where should the hero call-to-action button link to?",
-    placeholder: "Type hero CTA url (default: '#contact')...",
-    field: "heroCtaUrl",
-    optional: true,
-  },
-  {
-    step: 2,
-    subStep: 8,
-    prompt: "What label should we display for your social profile links (e.g., 'Follow me')?",
-    placeholder: "Type social list label (default: 'Follow me')...",
-    field: "followMeLabel",
-    optional: true,
-  },
-
-  // STEP 3: SERVICES & OFFERINGS
-  {
-    step: 3,
-    subStep: 0,
-    prompt: "Let's configure your services. What section title tag would you like for services (e.g. 'What I Do')?",
-    placeholder: "Type services section label (default: 'What I Do')...",
-    field: "servicesLabel",
-    optional: true,
-  },
-  {
-    step: 3,
-    subStep: 1,
-    prompt: "What catchphrase headline should we display for the services section?",
-    placeholder: "Type services headline (e.g. 'Turning ideas into experiences')...",
-    field: "servicesTitle",
-    optional: true,
-  },
-  {
-    step: 3,
-    subStep: 2,
-    prompt: "Enter details for your primary service offering in the format: 'Title | Price | Description' (e.g. 'Web Design | $1200 | Clean layouts'):",
-    placeholder: "Type service 1 (Title | Price | Description)...",
-    field: "service1",
-    optional: true,
-  },
-  {
-    step: 3,
-    subStep: 3,
-    prompt: "Enter details for a secondary service in the same format: 'Title | Price | Description' (or type 'done' to finish services):",
-    placeholder: "Type service 2 or 'done'...",
-    field: "service2",
-    optional: true,
-  },
-  {
-    step: 3,
-    subStep: 4,
-    prompt: "What heading should be displayed on your services free consultation card?",
-    placeholder: "Type consultation heading (default: 'Book A 30 min Free Call')...",
-    field: "servicesCtaTitle",
-    optional: true,
-  },
-  {
-    step: 3,
-    subStep: 5,
-    prompt: "What description text should be displayed on your services consultation card?",
-    placeholder: "Type consultation description details...",
-    field: "servicesCtaText",
-    optional: true,
-  },
-  {
-    step: 3,
-    subStep: 6,
-    prompt: "Enter button details for the consultation card in the format: 'Button Text | URL' (e.g. 'Book A Call | #contact'):",
-    placeholder: "Type consultation button text & URL...",
-    field: "servicesCtaBtn",
-    optional: true,
-  },
-
-  // STEP 4: CUSTOM PROCESS STEPS
-  {
-    step: 4,
-    subStep: 0,
-    prompt: "Let's define the steps in your creative process. What section title tag would you like (e.g. 'My Process')?",
-    placeholder: "Type process section label (default: 'My Process')...",
-    field: "processLabel",
-    optional: true,
-  },
-  {
-    step: 4,
-    subStep: 1,
-    prompt: "What process section main title headline should we display?",
-    placeholder: "Type process headline (default: 'From ideas to impactful creative results.')...",
-    field: "processTitle",
-    optional: true,
-  },
-  {
-    step: 4,
-    subStep: 2,
-    prompt: "Enter your first process step details in the format: 'Title | Description' (e.g. 'Discovery | We discuss goals...'):",
-    placeholder: "Type process step 1...",
-    field: "processStep1",
-    optional: true,
-  },
-  {
-    step: 4,
-    subStep: 3,
-    prompt: "Enter your second process step details in the format: 'Title | Description' (or 'done' to finish):",
-    placeholder: "Type process step 2 or 'done'...",
-    field: "processStep2",
-    optional: true,
-  },
-  {
-    step: 4,
-    subStep: 4,
-    prompt: "Enter your third process step details in the format: 'Title | Description' (or 'done' to finish):",
-    placeholder: "Type process step 3 or 'done'...",
-    field: "processStep3",
-    optional: true,
-  },
-
-  // STEP 5: BIO, PHOTOS & TESTIMONIALS
-  {
-    step: 5,
-    subStep: 0,
-    prompt: "What section title tag would you like for the About me section (e.g. 'About me')?",
-    placeholder: "Type about section label (default: 'About me')...",
-    field: "aboutLabel",
-    optional: true,
-  },
-  {
-    step: 5,
-    subStep: 1,
-    prompt: "Excellent. Let's write your professional bio/summary paragraph. Describe your background, creative philosophy, and key skills:",
-    placeholder: "Type your professional bio/summary text...",
-    field: "summary",
-  },
-  {
-    step: 5,
-    subStep: 2,
-    prompt: "Enter a custom image URL for the 'About Photo' block (optional, or 'skip' to keep template default):",
-    placeholder: "Enter about photo URL...",
-    field: "aboutPhotoUrl",
-    optional: true,
-  },
-  {
-    step: 5,
-    subStep: 3,
-    prompt: "Enter a custom image URL for your signature overlay (optional, or 'skip' to keep template default):",
-    placeholder: "Enter signature image URL...",
-    field: "signatureUrl",
-    optional: true,
-  },
-  {
-    step: 5,
-    subStep: 4,
-    prompt: "Let's configure client testimonials. What reviews section label tag would you like (e.g. 'Reviews')?",
-    placeholder: "Type reviews section label (default: 'Reviews')...",
-    field: "testimonialsLabel",
-    optional: true,
-  },
-  {
-    step: 5,
-    subStep: 5,
-    prompt: "What testimonials reviews title headline should we display?",
-    placeholder: "Type testimonials heading (default: 'Voices of trust from happy clients')...",
-    field: "testimonialsTitle",
-    optional: true,
-  },
-  {
-    step: 5,
-    subStep: 6,
-    prompt: "Enter details for your first client review in this format: 'Quote | Client Name | Role' (e.g. 'Daniel did amazing work! | James Walker | Director'):",
-    placeholder: "Type testimonial 1...",
-    field: "testimonial1",
-    optional: true,
-  },
-  {
-    step: 5,
-    subStep: 7,
-    prompt: "Enter details for your second client review in the same format: 'Quote | Client Name | Role' (or type 'done' to finish):",
-    placeholder: "Type testimonial 2 or 'done'...",
-    field: "testimonial2",
-    optional: true,
-  },
-
-  // STEP 6: SCROLLING TICKER EXPERIENCE
-  {
-    step: 6,
-    subStep: 0,
-    prompt: "Let's configure your client logos/brands scrolling marquee ticker. What marquee label header should we display?",
-    placeholder: "Type marquee label (default: 'Worked with Global Brands')...",
-    field: "brandsLabel",
-    optional: true,
-  },
-  {
-    step: 6,
-    subStep: 1,
-    prompt: "List the first company you have worked with to showcase in the ticker:",
-    placeholder: "Type company name (e.g. Stripe)...",
-    field: "company1",
-    optional: true,
-  },
-  {
-    step: 6,
-    subStep: 2,
-    prompt: "List a second company you have worked with (or type 'done' to finish):",
-    placeholder: "Type company name or 'done'...",
-    field: "company2",
-    optional: true,
-  },
-
-  // STEP 7: PORTFOLIO PROJECTS
-  {
-    step: 7,
-    subStep: 0,
-    prompt: "Let's configure your portfolio projects grid. What section title tag should we use (e.g. 'My Portfolio')?",
-    placeholder: "Type projects label (default: 'My Portfolio')...",
-    field: "projectsLabel",
-    optional: true,
-  },
-  {
-    step: 7,
-    subStep: 1,
-    prompt: "What tagline subtitle should we display under the projects section?",
-    placeholder: "Type projects subtitle (default: 'Every project built to inspire users')...",
-    field: "projectsSubtitle",
-    optional: true,
-  },
-  {
-    step: 7,
-    subStep: 2,
-    prompt: "Enter details for your first project in the format: 'Title | Description | Demo Link URL' (e.g. 'Webild | Onboarding website editor | https://github.com'):",
-    placeholder: "Type project 1 details...",
-    field: "project1",
-    optional: true,
-  },
-  {
-    step: 7,
-    subStep: 3,
-    prompt: "Enter details for your second project in the format: 'Title | Description | Link' (or type 'done' to finish):",
-    placeholder: "Type project 2 details or 'done'...",
-    field: "project2",
-    optional: true,
-  },
-  {
-    step: 7,
-    subStep: 4,
-    prompt: "Enter details for the explore portfolio button in the format: 'Button Text | URL' (e.g. 'Explore All | #work'):",
-    placeholder: "Type explore button details...",
-    field: "projectsExplore",
-    optional: true,
-  },
-
-  // STEP 8: CONTACT, SOCIALS & THEME
-  {
-    step: 8,
-    subStep: 0,
-    prompt: "Almost there! Let's get your contact footer section details. What section title tag would you like (e.g. 'Have a question')?",
-    placeholder: "Type footer section label (default: 'Have a question')...",
-    field: "footerLabel",
-    optional: true,
-  },
-  {
-    step: 8,
-    subStep: 1,
-    prompt: "Enter a custom image URL for the footer banner background block (or skip):",
-    placeholder: "Enter footer banner URL...",
-    field: "footerBannerUrl",
-    optional: true,
-  },
-  {
-    step: 8,
-    subStep: 2,
-    prompt: "What is your public contact email address?",
-    placeholder: "Type public email (e.g. hello@example.com)...",
-    field: "email",
-  },
-  {
-    step: 8,
-    subStep: 3,
-    prompt: "What is your public phone number?",
-    placeholder: "Type public phone number (e.g. +44 7700 900123)...",
-    field: "phone",
-  },
-  {
-    step: 8,
-    subStep: 4,
-    prompt: "What is your LinkedIn profile page URL?",
-    placeholder: "Type LinkedIn profile URL (or 'skip')...",
-    field: "linkedinUrl",
-    optional: true,
-  },
-  {
-    step: 8,
-    subStep: 5,
-    prompt: "What is your GitHub profile page URL?",
-    placeholder: "Type GitHub profile URL (or 'skip')...",
-    field: "githubUrl",
-    optional: true,
-  },
-  {
-    step: 8,
-    subStep: 6,
-    prompt: "What is your Twitter profile page URL?",
-    placeholder: "Type Twitter profile URL (or 'skip')...",
-    field: "twitterUrl",
-    optional: true,
-  },
-  {
-    step: 8,
-    subStep: 7,
-    prompt: "Enter custom copyright and credits details in the format: 'Copyright Label | Author Name | Tool Name | Tool URL' (or skip):",
-    placeholder: "Type credits format (or 'skip')...",
-    field: "footerCredits",
-    optional: true,
-  },
-  {
-    step: 8,
-    subStep: 8,
-    prompt: "Fantastic! All details have been captured. Please select a design template layout card above and click 'Confirm & Finish' to enter the workspace!",
-    placeholder: "Select template card above and finish...",
-    field: "theme",
-  },
+const WIZARD_STEPS: WizardStep[] = [
+  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! Let's build your portfolio page step-by-step. First, please provide your professional identity details below." },
+  { step: 2, label: "Hero Greeting & Status", prompt: "Great. Now let's configure the greeting header and your availability status." },
+  { step: 3, label: "Hero Headline & CTA", prompt: "Let's set up the main headline and call-to-action button for your hero section." },
+  { step: 4, label: "About Me Biography", prompt: "Next, let's write your professional biography and choose your section photos." },
+  { step: 5, label: "Client Logos Ticker List", prompt: "Let's showcase the brands and companies you have worked with in a scrolling ticker." },
+  { step: 6, label: "Portfolio Grid Projects", prompt: "Now, let's add some projects to showcase your portfolio of work." },
+  { step: 7, label: "Projects Explore CTA", prompt: "Let's configure the explore button that redirects to your full projects list." },
+  { step: 8, label: "Services Grid", prompt: "Let's list the core services and packages you offer." },
+  { step: 9, label: "Services CTA Consultation", prompt: "Let's configure the consultation booking card for visitors to schedule a call." },
+  { step: 10, label: "Creative Process Steps", prompt: "Let's outline the steps of your creative process." },
+  { step: 11, label: "Client Testimonials", prompt: "Let's add client reviews and testimonials to build credibility." },
+  { step: 12, label: "Contact Footer & Socials", prompt: "Finally, let's configure your footer links, email, phone, and social media handles." },
+  { step: 13, label: "Free-form Chat Mode & Theme Selection", prompt: "Setup complete! Your website is updated. You can select a template style above or use the chat below to make any further edits." }
 ];
+
+const removeEmojis = (text: string) => {
+  return text.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\uD83D[\uDE00-\uDE4F]|\uD83D[\uDE80-\uDEFF]|[\u2600-\u26FF]|[\u2700-\u27BF]/g, "");
+};
+
 
 const getNotionTagClasses = (name: string) => {
   const colors = [
@@ -593,9 +211,8 @@ function EditorInner() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
-  // Onboarding wizard steps (1 to 7, then 9 for free-form editor mode)
+  // Onboarding wizard steps (1 to 12, then 13 for free-form editor mode)
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [currentSubStep, setCurrentSubStep] = useState<number>(0);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
   const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile" | "resizable">("desktop");
@@ -643,318 +260,50 @@ function EditorInner() {
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
   // Onboarding controllers
-  const handleWizardInput = (inputValue: string) => {
-    const text = inputValue.trim();
-    if (!text && !WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional) return;
-
-    // Add user reply bubble
-    const userMsg = { id: Date.now().toString(), role: "user" as const, content: text || "Skip" };
-    setCustomMessages(prev => [...prev, userMsg]);
-    setChatInput("");
-
-    const activeQ = WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep);
-    if (activeQ) {
-      const field = activeQ.field;
-      if (field === "name") {
-        updateField("name", text);
-        const first = text.split(" ")[0].toLowerCase();
-        updateField("heroGreetingName", first);
-      } else if (field === "headline") {
-        updateField("headline", text);
-      } else if (field === "location") {
-        updateField("location", text || "Remote");
-      } else if (field === "avatarUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          updateField("avatarUrl", text);
+  const goToNextStep = () => {
+    if (currentStep < 13) {
+      const nextStep = currentStep + 1;
+      const stepLabel = WIZARD_STEPS.find(s => s.step === currentStep)?.label || "Step details";
+      setCustomMessages(prev => [
+        ...prev,
+        {
+          id: `user-${Date.now()}`,
+          role: "user" as const,
+          content: `${stepLabel} configured.`
         }
-      } else if (field === "navTexts") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          if (parts[0]) updateField("navHomeText", parts[0]);
-          if (parts[1]) updateField("navAboutText", parts[1]);
-          if (parts[2]) updateField("navProjectsText", parts[2]);
-          if (parts[3]) updateField("navContactText", parts[3]);
-        }
-      } else if (field === "heroBadgeText") {
-        updateField("heroBadgeText", text || "Welcome here ❤️");
-      } else if (field === "heroGreetingStart") {
-        updateField("heroGreetingStart", text || "Hey,");
-      } else if (field === "heroGreetingEnd") {
-        updateField("heroGreetingEnd", text || "here");
-      } else if (field === "heroSubheadline") {
-        updateField("heroSubheadline", text || "I design interfaces, experiences, & brands.");
-      } else if (field === "statusText") {
-        updateField("statusText", text || "Available for work");
-      } else if (field === "heroRatingText") {
-        updateField("heroRatingText", text || "4.9 / 5");
-      } else if (field === "heroCtaText") {
-        updateField("heroCtaText", text || "Book A Call");
-      } else if (field === "heroCtaUrl") {
-        updateField("heroCtaUrl", text || "#contact");
-      } else if (field === "followMeLabel") {
-        updateField("followMeLabel", text || "Follow me");
-      } else if (field === "servicesLabel") {
-        updateField("servicesLabel", text || "What I Do");
-      } else if (field === "servicesTitle") {
-        updateField("servicesTitle", text || "Turning ideas into digital experiences");
-      } else if (field === "service1") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newService = {
-            title: parts[0] || "Custom Service",
-            price: parts[1] || "$100",
-            description: parts[2] || "Description of custom service"
-          };
-          updateField("services", [newService]);
-        }
-      } else if (field === "service2") {
-        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newService = {
-            title: parts[0] || "Secondary Service",
-            price: parts[1] || "$150",
-            description: parts[2] || "Description of secondary service"
-          };
-          const currentServices = editedProfile?.services || [];
-          updateField("services", [...currentServices, newService]);
-        }
-      } else if (field === "servicesCtaTitle") {
-        const currentCta = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
-        updateField("servicesCta", {
-          ...currentCta,
-          title: text || "Book A 30 min Free Call"
-        });
-      } else if (field === "servicesCtaText") {
-        const currentCta = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
-        updateField("servicesCta", {
-          ...currentCta,
-          text: text || "Let’s connect to discuss your design needs, explore creative ideas, and plan your project effectively together.",
-          buttonText: "Book A Call",
-          buttonUrl: "#contact"
-        });
-      } else if (field === "servicesCtaBtn") {
-        const currentCta = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          updateField("servicesCta", {
-            ...currentCta,
-            buttonText: parts[0] || "Book A Call",
-            buttonUrl: parts[1] || "#contact"
-          });
-        }
-      } else if (field === "processLabel") {
-        updateField("processLabel", text || "My Process");
-      } else if (field === "processTitle") {
-        updateField("processTitle", text || "From ideas to impactful creative results.");
-      } else if (field === "processStep1") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newStep = {
-            stepTag: "/01",
-            title: parts[0] || "Discovery",
-            description: parts[1] || "Discovery description"
-          };
-          updateField("processes", [newStep]);
-        }
-      } else if (field === "processStep2") {
-        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newStep = {
-            stepTag: "/02",
-            title: parts[0] || "Design",
-            description: parts[1] || "Design description"
-          };
-          const currentSteps = editedProfile?.processes || [];
-          updateField("processes", [...currentSteps, newStep]);
-        }
-      } else if (field === "processStep3") {
-        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newStep = {
-            stepTag: "/03",
-            title: parts[0] || "Delivery",
-            description: parts[1] || "Delivery description"
-          };
-          const currentSteps = editedProfile?.processes || [];
-          updateField("processes", [...currentSteps, newStep]);
-        }
-      } else if (field === "aboutLabel") {
-        updateField("aboutLabel", text || "About me");
-      } else if (field === "summary") {
-        updateField("summary", text);
-      } else if (field === "aboutPhotoUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          updateField("aboutPhotoUrl", text);
-        }
-      } else if (field === "signatureUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          updateField("signatureUrl", text);
-        }
-      } else if (field === "testimonialsLabel") {
-        updateField("testimonialsLabel", text || "Reviews");
-      } else if (field === "testimonialsTitle") {
-        updateField("testimonialsTitle", text || "Voices of trust from happy clients");
-      } else if (field === "testimonial1") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newTestimonial = {
-            quote: parts[0] || "Amazing work!",
-            name: parts[1] || "Client Name",
-            role: parts[2] || "CEO",
-            avatarUrl: ""
-          };
-          updateField("testimonials", [newTestimonial]);
-        }
-      } else if (field === "testimonial2") {
-        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newTestimonial = {
-            quote: parts[0] || "Professional developer!",
-            name: parts[1] || "Client Name 2",
-            role: parts[2] || "Product Manager",
-            avatarUrl: ""
-          };
-          const currentTestimonials = editedProfile?.testimonials || [];
-          updateField("testimonials", [...currentTestimonials, newTestimonial]);
-        }
-      } else if (field === "brandsLabel") {
-        updateField("brandsLabel", text || "Worked with Global Brands");
-      } else if (field === "company1") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const newExp = {
-            title: "Professional",
-            company: text,
-            duration: "Present",
-            description: ""
-          };
-          setExperience([newExp]);
-          updateField("experience", [newExp]);
-        }
-      } else if (field === "company2") {
-        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
-          const newExp = {
-            title: "Professional",
-            company: text,
-            duration: "Present",
-            description: ""
-          };
-          const currentExp = editedProfile?.experience || [];
-          setExperience([...currentExp, newExp]);
-          updateField("experience", [...currentExp, newExp]);
-        }
-      } else if (field === "projectsLabel") {
-        updateField("projectsLabel", text || "My Portfolio");
-      } else if (field === "projectsSubtitle") {
-        updateField("projectsSubtitle", text || "Every project built to inspire users");
-      } else if (field === "project1") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newProj = {
-            title: parts[0] || "Custom Project",
-            description: parts[1] || "Description of custom project",
-            link: parts[2] || "#",
-            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60"
-          };
-          setProjects([newProj]);
-          updateField("projects", [newProj]);
-        }
-      } else if (field === "project2") {
-        if (text.toLowerCase() !== "done" && text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          const newProj = {
-            title: parts[0] || "Secondary Project",
-            description: parts[1] || "Description of secondary project",
-            link: parts[2] || "#",
-            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60"
-          };
-          const currentProj = editedProfile?.projects || [];
-          setProjects([...currentProj, newProj]);
-          updateField("projects", [...currentProj, newProj]);
-        }
-      } else if (field === "projectsExplore") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          updateField("projectsExploreText", parts[0] || "Explore All");
-          updateField("projectsExploreUrl", parts[1] || "#work");
-        }
-      } else if (field === "footerLabel") {
-        updateField("footerLabel", text || "Have a question");
-      } else if (field === "footerBannerUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          updateField("footerBannerUrl", text);
-        }
-      } else if (field === "email") {
-        updateField("email", text);
-        const currentLinks = editedProfile?.links || [];
-        const hasEmail = currentLinks.some(l => l.icon === "email");
-        let updatedLinks;
-        if (hasEmail) {
-          updatedLinks = currentLinks.map(l => l.icon === "email" ? { ...l, url: `mailto:${text}` } : l);
-        } else {
-          updatedLinks = [...currentLinks, { label: "Email", url: `mailto:${text}`, icon: "email" as const }];
-        }
-        updateField("links", updatedLinks);
-      } else if (field === "phone") {
-        updateField("phone", text);
-      } else if (field === "linkedinUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const currentLinks = editedProfile?.links || [];
-          const updatedLinks = [...currentLinks.filter(l => l.icon !== "linkedin"), { label: "LinkedIn", url: text, icon: "linkedin" as const }];
-          updateField("links", updatedLinks);
-        }
-      } else if (field === "githubUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const currentLinks = editedProfile?.links || [];
-          const updatedLinks = [...currentLinks.filter(l => l.icon !== "github"), { label: "GitHub", url: text, icon: "github" as const }];
-          updateField("links", updatedLinks);
-        }
-      } else if (field === "twitterUrl") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const currentLinks = editedProfile?.links || [];
-          const updatedLinks = [...currentLinks.filter(l => l.icon !== "twitter"), { label: "Twitter", url: text, icon: "twitter" as const }];
-          updateField("links", updatedLinks);
-        }
-      } else if (field === "footerCredits") {
-        if (text.toLowerCase() !== "skip" && text !== "") {
-          const parts = text.split("|").map(s => s.trim());
-          if (parts[0]) updateField("footerCreditText", parts[0]);
-          if (parts[1]) updateField("footerCreditName", parts[1]);
-          if (parts[2]) updateField("builtInFramerText", parts[2]);
-          if (parts[3]) updateField("builtInFramerUrl", parts[3]);
-        }
+      ]);
+      setCurrentStep(nextStep);
+      const nextPrompt = WIZARD_STEPS.find(s => s.step === nextStep)?.prompt || "";
+      if (nextPrompt) {
+        setCustomMessages(prev => [
+          ...prev,
+          {
+            id: `assistant-${Date.now() + 1}`,
+            role: "assistant" as const,
+            content: nextPrompt
+          }
+        ]);
       }
     }
-
-    const currentIndex = WIZARD_QUESTIONS.findIndex(q => q.step === currentStep && q.subStep === currentSubStep);
-    if (currentIndex !== -1 && currentIndex < WIZARD_QUESTIONS.length - 1) {
-      const nextQuestion = WIZARD_QUESTIONS[currentIndex + 1];
-      setCurrentStep(nextQuestion.step);
-      setCurrentSubStep(nextQuestion.subStep);
-      setCustomMessages(prev => [
-        ...prev,
-        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: nextQuestion.prompt }
-      ]);
-    } else {
-      toast.success("Details updated! Please choose a theme card and confirm.");
-    }
   };
 
-  const handleWizardSkip = () => {
-    const activeQ = WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep);
-    if (!activeQ) return;
-    handleWizardInput("skip");
-  };
-
-  const handleWizardBack = () => {
-    const currentIndex = WIZARD_QUESTIONS.findIndex(q => q.step === currentStep && q.subStep === currentSubStep);
-    if (currentIndex > 0) {
-      const prevQuestion = WIZARD_QUESTIONS[currentIndex - 1];
-      setCurrentStep(prevQuestion.step);
-      setCurrentSubStep(prevQuestion.subStep);
+  const goToBackStep = () => {
+    if (currentStep > 1) {
+      const prevStep = currentStep - 1;
+      setCurrentStep(prevStep);
+      const prevPrompt = WIZARD_STEPS.find(s => s.step === prevStep)?.prompt || "";
       setCustomMessages(prev => [
         ...prev,
-        { id: Date.now().toString(), role: "user" as const, content: "Go back" },
-        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: `Reverting to previous step. ${prevQuestion.prompt}` }
+        {
+          id: `user-back-${Date.now()}`,
+          role: "user" as const,
+          content: "Go back to previous step."
+        },
+        {
+          id: `assistant-back-${Date.now() + 1}`,
+          role: "assistant" as const,
+          content: prevPrompt
+        }
       ]);
     }
   };
@@ -1005,7 +354,7 @@ function EditorInner() {
 
   // Load saved chat history when websiteId is available
   useEffect(() => {
-    if (!websiteId || currentStep !== 9) return;
+    if (!websiteId || currentStep !== 13) return;
     const fetchChatHistory = async () => {
       try {
         const res = await fetch(`/api/chat?websiteId=${websiteId}`);
@@ -1030,15 +379,15 @@ function EditorInner() {
     if (typeof window !== "undefined") {
       const isOnboardingFlow = searchParams.get("onboarding") === "true";
       if (!isOnboardingFlow) {
-        // If not in the onboarding flow, default straight to free-form editor (Step 9)
-        setCurrentStep(9);
+        // If not in the onboarding flow, default straight to free-form editor (Step 13)
+        setCurrentStep(13);
         return;
       }
 
       const savedStep = sessionStorage.getItem("webild_onboarding_step");
       if (savedStep) {
         const parsed = parseInt(savedStep, 10);
-        if (!isNaN(parsed) && parsed >= 1 && parsed <= 9) {
+        if (!isNaN(parsed) && parsed >= 1 && parsed <= 13) {
           setCurrentStep(parsed);
         }
       } else {
@@ -1054,21 +403,21 @@ function EditorInner() {
     }
   }, [currentStep]);
 
-  // Synchronize onboarding customMessages with current step/subStep on load
+  // Synchronize onboarding customMessages with current step on load
   useEffect(() => {
-    if (currentStep <= 7 && customMessages.length <= 1) {
-      const activeQ = WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep);
-      if (activeQ) {
+    if (currentStep <= 12 && customMessages.length <= 1) {
+      const activeStep = WIZARD_STEPS.find(s => s.step === currentStep);
+      if (activeStep) {
         setCustomMessages([
           {
             id: "welcome",
             role: "assistant",
-            content: "Welcome to Webild! Let's configure your professional profile. " + activeQ.prompt
+            content: activeStep.prompt
           }
         ]);
       }
     }
-  }, [currentStep, currentSubStep, customMessages.length]);
+  }, [currentStep, customMessages.length]);
 
   // Sync profile data to forms
   useEffect(() => {
@@ -1255,96 +604,23 @@ function EditorInner() {
     }
   };
 
-  const handleNextStep = () => {
-    // Save to context local state on next clicks
-    if (currentStep === 2) updateField("projects", projects);
-    if (currentStep === 3) updateField("interests", interests);
-    if (currentStep === 4) updateField("skills", skills);
-    if (currentStep === 5) updateField("experience", experience);
-
-    setCurrentStep(currentStep + 1);
-  };
-
-  const handleBackStep = () => {
-    if (currentStep > 1) {
-      if (currentStep === 7) {
-        setCurrentStep(6); // Go back to AI comparison view
-      } else {
-        setCurrentStep(currentStep - 1);
-      }
-    }
-  };
-
-  const addProject = () => {
-    if (!newProjTitle.trim()) {
-      toast.error("Project title is required");
-      return;
-    }
-    const updated = [
-      ...projects,
-      {
-        title: newProjTitle.trim(),
-        description: newProjDesc.trim(),
-        link: newProjLink.trim() || undefined,
-        image: `https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60`,
-      },
-    ];
-    setProjects(updated);
-    updateField("projects", updated);
-    setNewProjTitle("");
-    setNewProjDesc("");
-    setNewProjLink("");
-    setShowAddProject(false);
-  };
-
-  const removeProject = (idx: number) => {
-    const updated = projects.filter((_, i) => i !== idx);
-    setProjects(updated);
-    updateField("projects", updated);
-  };
-
-  const addSkillTag = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newSkill.trim()) return;
-    if (skills.some(s => s.name.toLowerCase() === newSkill.trim().toLowerCase())) {
-      setNewSkill("");
-      return;
-    }
-    const updated = [...skills, { name: newSkill.trim() }];
-    setSkills(updated);
-    updateField("skills", updated);
-    setNewSkill("");
-  };
-
-  const removeSkillTag = (name: string) => {
-    const updated = skills.filter(s => s.name !== name);
-    setSkills(updated);
-    updateField("skills", updated);
-  };
-
-  const addExperienceItem = () => {
+  const addBrandCompany = (companyName: string) => {
+    if (!companyName.trim()) return;
     const updated = [
       ...experience,
       {
-        title: "New Role",
-        company: "Company Name",
-        duration: "Jan 2026 - Present",
+        title: "",
+        company: companyName.trim(),
+        duration: "",
         description: "",
-      },
+      }
     ];
     setExperience(updated);
     updateField("experience", updated);
   };
 
-  const updateExperienceItem = (index: number, key: string, value: string) => {
-    const updated = [...experience];
-    updated[index] = { ...updated[index], [key]: value };
-    setExperience(updated);
-    updateField("experience", updated);
-  };
-
-  const removeExperienceItem = (idx: number) => {
-    const updated = experience.filter((_, i) => i !== idx);
+  const removeBrandCompany = (index: number) => {
+    const updated = experience.filter((_, i) => i !== index);
     setExperience(updated);
     updateField("experience", updated);
   };
@@ -1564,11 +840,7 @@ function EditorInner() {
       {/* ── Left Column Panel Switcher based on activeN      {/* 1. Design / AI Onboarding Wizard Panel */}
       {activeNav === 1 && (
         <aside 
-          className={`h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300 ${
-            currentStep <= 8
-              ? "flex-1"
-              : "w-[510px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs"
-          }`}
+          className="h-full w-[510px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col justify-between relative z-20 font-inter shadow-xs"
         >
           {isSelectionMode ? (
             editedProfile ? (
@@ -1599,7 +871,7 @@ function EditorInner() {
             <div className="flex flex-col justify-between h-full w-full">
               {/* Title Header */}
               <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
-                <div className={`flex items-center justify-between w-full ${currentStep <= 8 ? "max-w-3xl mx-auto" : ""}`}>
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2">
                     <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
                     <div className="w-px h-3 bg-slate-200" />
@@ -1617,22 +889,22 @@ function EditorInner() {
                     <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
                       Editor Mode
                     </span>
+                  </div>
                 </div>
               </div>
-            </div>
 
           {/* Scrollable Wizard History */}
           <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
-            <div className={`space-y-6 flex flex-col ${currentStep <= 8 ? "max-w-3xl mx-auto w-full py-4" : ""}`}>
+            <div className="space-y-6 flex flex-col w-full py-4">
               
-              {/* Conversational timeline rendering (Steps 1-7 and Step 9) */}
+              {/* Conversational timeline rendering (Steps 1-13) */}
               {customMessages.map((msg) => (
                 <div key={msg.id} className="w-full flex flex-col gap-2.5">
                   {msg.role === "user" ? (
                     <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
                       <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
                         <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full">
-                          {msg.content}
+                          {removeEmojis(msg.content)}
                         </p>
                       </div>
                     </div>
@@ -1642,8 +914,8 @@ function EditorInner() {
                         <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
                         <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                       </div>
-                      <div className="w-full text-slate-800 text-[16px] leading-[26px] font-normal whitespace-pre-wrap">
-                        {msg.content}
+                      <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] text-[#18181B] text-[16px] leading-[26px] font-normal break-words">
+                        {removeEmojis(msg.content)}
                       </div>
                     </div>
                   )}
@@ -1672,20 +944,24 @@ function EditorInner() {
               )}
 
               {/* Dynamic Minimalist-UI Progress Steps Checklist */}
-              {currentStep <= 8 && (
+              {currentStep <= 12 && (
                 <div className="pt-4 border-t border-[#EAEAEA] space-y-4">
                   <div className="flex items-center gap-2 select-none mb-2">
                     <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-mono">Onboarding Setup Checklist</span>
                   </div>
                   {[
-                    { step: 1, label: "Basics & Identity" },
-                    { step: 2, label: "Hero Greeting & CTA" },
-                    { step: 3, label: "Services & Offerings" },
-                    { step: 4, label: "Custom Process Steps" },
-                    { step: 5, label: "Bio, Photos & Testimonials" },
-                    { step: 6, label: "Client Logos Ticker List" },
-                    { step: 7, label: "Portfolio Grid Projects" },
-                    { step: 8, label: "Contact, Socials & Theme Layout" }
+                    { step: 1, label: "Basics & Profile Identity" },
+                    { step: 2, label: "Hero Greeting & Status" },
+                    { step: 3, label: "Hero Headline & CTA" },
+                    { step: 4, label: "About Me Biography" },
+                    { step: 5, label: "Client Logos Ticker List" },
+                    { step: 6, label: "Portfolio Grid Projects" },
+                    { step: 7, label: "Projects Explore CTA" },
+                    { step: 8, label: "Services Grid" },
+                    { step: 9, label: "Services CTA Consultation" },
+                    { step: 10, label: "Creative Process Steps" },
+                    { step: 11, label: "Client Testimonials" },
+                    { step: 12, label: "Contact Footer & Socials" }
                   ].map((stepItem) => {
                     const isActive = currentStep === stepItem.step;
                     const isCompleted = currentStep > stepItem.step;
@@ -1727,63 +1003,87 @@ function EditorInner() {
                           <div className="mt-3.5 space-y-2 text-xs font-medium text-slate-700 bg-slate-50/50 p-3 rounded-lg border border-[#EAEAEA] animate-in fade-in duration-200">
                             {stepItem.step === 1 && (
                               <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Name:</div><div className="text-slate-800 font-bold">{editedProfile?.name || "Pending..."}</div>
-                                <div>Headline:</div><div className="text-slate-800 truncate">{editedProfile?.headline || "Pending..."}</div>
-                                <div>Location:</div><div className="text-slate-800">{editedProfile?.location || "Pending..."}</div>
-                                <div>Avatar Photo:</div><div className="text-slate-800 truncate">{editedProfile?.avatarUrl || "Pending..."}</div>
+                                <div>Name:</div><div className="text-[#18181B] font-bold">{editedProfile?.name || "Pending..."}</div>
+                                <div>Headline:</div><div className="text-[#18181B] truncate">{editedProfile?.headline || "Pending..."}</div>
+                                <div>Location:</div><div className="text-[#18181B]">{editedProfile?.location || "Pending..."}</div>
+                                <div>Avatar Photo:</div><div className="text-[#18181B] truncate">{editedProfile?.avatarUrl || "Pending..."}</div>
                               </div>
                             )}
                             {stepItem.step === 2 && (
                               <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Greeting Start:</div><div className="text-slate-800 font-bold">{editedProfile?.heroGreetingStart || "Pending..."}</div>
-                                <div>Greeting End:</div><div className="text-slate-800">{editedProfile?.heroGreetingEnd || "Pending..."}</div>
-                                <div>Hero Subheadline:</div><div className="text-slate-800 truncate">{editedProfile?.heroSubheadline || "Pending..."}</div>
-                                <div>Availability Status:</div><div className="text-slate-800">{editedProfile?.statusText || "Pending..."}</div>
-                                <div>CTA Button Label:</div><div className="text-slate-800">{editedProfile?.heroCtaText || "Pending..."}</div>
-                                <div>CTA Link URL:</div><div className="text-slate-800">{editedProfile?.heroCtaUrl || "Pending..."}</div>
+                                <div>Greeting Badge:</div><div className="text-[#18181B] font-bold">{editedProfile?.heroBadgeText || "Pending..."}</div>
+                                <div>Greeting Start:</div><div className="text-[#18181B]">{editedProfile?.heroGreetingStart || "Pending..."}</div>
+                                <div>Greeting End:</div><div className="text-[#18181B]">{editedProfile?.heroGreetingEnd || "Pending..."}</div>
+                                <div>Availability Status:</div><div className="text-[#18181B]">{editedProfile?.statusText || "Pending..."}</div>
                               </div>
                             )}
                             {stepItem.step === 3 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Catchphrase: <span className="text-slate-800 font-bold">{editedProfile?.servicesTitle || "Pending..."}</span></div>
-                                <div>Services Added: <span className="text-slate-800 font-bold">{(editedProfile?.services || []).length} items</span></div>
-                                <div>Consultation Heading: <span className="text-slate-800 truncate">{editedProfile?.servicesCta?.title || "Pending..."}</span></div>
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Value Prop:</div><div className="text-[#18181B] truncate">{editedProfile?.heroSubheadline || "Pending..."}</div>
+                                <div>CTA Button:</div><div className="text-[#18181B]">{editedProfile?.heroCtaText || "Pending..."}</div>
+                                <div>CTA Link URL:</div><div className="text-[#18181B]">{editedProfile?.heroCtaUrl || "Pending..."}</div>
+                                <div>Rating Text:</div><div className="text-[#18181B]">{editedProfile?.heroRatingText || "Pending..."}</div>
                               </div>
                             )}
                             {stepItem.step === 4 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Process title: <span className="text-slate-800 font-bold">{editedProfile?.processTitle || "Pending..."}</span></div>
-                                <div>Process steps count: <span className="text-slate-800 font-bold">{(editedProfile?.processes || []).length} items</span></div>
+                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
+                                <div>About Label:</div><div className="text-[#18181B] font-bold">{editedProfile?.aboutLabel || "Pending..."}</div>
+                                <div>Bio details:</div><div className="text-[#18181B] truncate">{editedProfile?.summary || "Pending..."}</div>
+                                <div>About Photo URL:</div><div className="text-[#18181B] truncate">{editedProfile?.aboutPhotoUrl || "Pending..."}</div>
+                                <div>Signature URL:</div><div className="text-[#18181B] truncate">{editedProfile?.signatureUrl || "Pending..."}</div>
                               </div>
                             )}
                             {stepItem.step === 5 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600 font-normal">
-                                <div>Bio details: <span className="text-slate-800 italic truncate block max-w-full">{editedProfile?.summary || "Pending..."}</span></div>
-                                <div>About Photo URL: <span className="text-slate-800 truncate block max-w-full">{editedProfile?.aboutPhotoUrl || "Pending..."}</span></div>
-                                <div>Signature URL: <span className="text-slate-800 truncate block max-w-full">{editedProfile?.signatureUrl || "Pending..."}</span></div>
-                                <div>Testimonials Heading: <span className="text-slate-800 font-bold">{editedProfile?.testimonialsTitle || "Pending..."}</span></div>
-                                <div>Testimonials Count: <span className="text-slate-800 font-bold">{(editedProfile?.testimonials || []).length} items</span></div>
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Marquee Header: <span className="text-[#18181B] font-bold">{editedProfile?.brandsLabel || "Pending..."}</span></div>
+                                <div>Client Companies: <span className="text-[#18181B] font-bold">{(editedProfile?.experience || []).map(e => e.company).join(", ") || "None yet"}</span></div>
                               </div>
                             )}
                             {stepItem.step === 6 && (
                               <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Marquee Header: <span className="text-slate-800 font-bold">{editedProfile?.brandsLabel || "Pending..."}</span></div>
-                                <div>Client Companies: <span className="text-slate-800 font-bold">{(editedProfile?.experience || []).map(e => e.company).join(", ") || "None yet"}</span></div>
+                                <div>Projects Label: <span className="text-[#18181B] font-bold">{editedProfile?.projectsLabel || "Pending..."}</span></div>
+                                <div>Projects Subtitle: <span className="text-[#18181B]">{editedProfile?.projectsSubtitle || "Pending..."}</span></div>
+                                <div>Projects Count: <span className="text-[#18181B] font-bold">{(editedProfile?.projects || []).length} items</span></div>
                               </div>
                             )}
                             {stepItem.step === 7 && (
                               <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Projects Subtitle: <span className="text-slate-800 font-bold">{editedProfile?.projectsSubtitle || "Pending..."}</span></div>
-                                <div>Portfolio Projects: <span className="text-slate-800 font-bold">{(editedProfile?.projects || []).map(p => p.title).join(", ") || "None yet"}</span></div>
+                                <div>Explore Text: <span className="text-[#18181B] font-bold">{editedProfile?.projectsExploreText || "Pending..."}</span></div>
+                                <div>Explore Link: <span className="text-[#18181B]">{editedProfile?.projectsExploreUrl || "Pending..."}</span></div>
                               </div>
                             )}
                             {stepItem.step === 8 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Services Label: <span className="text-[#18181B] font-bold">{editedProfile?.servicesLabel || "Pending..."}</span></div>
+                                <div>Services Catchphrase: <span className="text-[#18181B]">{editedProfile?.servicesTitle || "Pending..."}</span></div>
+                                <div>Services Count: <span className="text-[#18181B] font-bold">{(editedProfile?.services || []).length} items</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 9 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Consultation Title: <span className="text-[#18181B] font-bold">{editedProfile?.servicesCta?.title || "Pending..."}</span></div>
+                                <div>Consultation Button: <span className="text-[#18181B]">{editedProfile?.servicesCta?.buttonText || "Pending..."}</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 10 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Process Label: <span className="text-[#18181B] font-bold">{editedProfile?.processLabel || "Pending..."}</span></div>
+                                <div>Process Title: <span className="text-[#18181B]">{editedProfile?.processTitle || "Pending..."}</span></div>
+                                <div>Process steps count: <span className="text-[#18181B] font-bold">{(editedProfile?.processes || []).length} items</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 11 && (
+                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
+                                <div>Reviews Label: <span className="text-[#18181B] font-bold">{editedProfile?.testimonialsLabel || "Pending..."}</span></div>
+                                <div>Reviews Title: <span className="text-[#18181B]">{editedProfile?.testimonialsTitle || "Pending..."}</span></div>
+                                <div>Testimonials Count: <span className="text-[#18181B] font-bold">{(editedProfile?.testimonials || []).length} items</span></div>
+                              </div>
+                            )}
+                            {stepItem.step === 12 && (
                               <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600 font-normal">
-                                <div>Public Email:</div><div className="text-slate-800 font-bold">{editedProfile?.email || "Pending..."}</div>
-                                <div>Phone Number:</div><div className="text-slate-800">{editedProfile?.phone || "Pending..."}</div>
-                                <div>LinkedIn URL:</div><div className="text-slate-800 truncate">{editedProfile?.links?.find(l => l.icon === "linkedin")?.url || "Pending..."}</div>
-                                <div>GitHub URL:</div><div className="text-slate-800 truncate">{editedProfile?.links?.find(l => l.icon === "github")?.url || "Pending..."}</div>
-                                <div>Twitter URL:</div><div className="text-slate-800 truncate">{editedProfile?.links?.find(l => l.icon === "twitter")?.url || "Pending..."}</div>
+                                <div>Footer Label:</div><div className="text-[#18181B] font-bold">{editedProfile?.footerLabel || "Pending..."}</div>
+                                <div>Email:</div><div className="text-[#18181B] truncate">{editedProfile?.email || "Pending..."}</div>
+                                <div>Phone:</div><div className="text-[#18181B]">{editedProfile?.phone || "Pending..."}</div>
                               </div>
                             )}
                           </div>
@@ -1793,72 +1093,78 @@ function EditorInner() {
                         {isCompleted && (
                           <div className="mt-2 text-[11px] font-mono text-slate-500 bg-slate-50/30 p-2.5 rounded-lg border border-[#EAEAEA]/60">
                             {stepItem.step === 1 && `BASICS: ${editedProfile?.name} • ${editedProfile?.headline}`}
-                            {stepItem.step === 2 && `HERO: ${editedProfile?.heroGreetingStart} "${editedProfile?.heroSubheadline}"`}
-                            {stepItem.step === 3 && `SERVICES: ${(editedProfile?.services || []).length} items configured`}
-                            {stepItem.step === 4 && `PROCESS: ${(editedProfile?.processes || []).length} steps configured`}
-                            {stepItem.step === 5 && `ABOUT & REVIEWS: ${(editedProfile?.testimonials || []).length} client testimonials`}
-                            {stepItem.step === 6 && `EXPERIENCE: ${(editedProfile?.experience || []).map(e => e.company).join(", ")}`}
-                            {stepItem.step === 7 && `PROJECTS: ${(editedProfile?.projects || []).map(p => p.title).join(", ")}`}
-                            {stepItem.step === 8 && `CONTACT: ${editedProfile?.email} • ${editedProfile?.phone}`}
+                            {stepItem.step === 2 && `HERO: ${editedProfile?.heroGreetingStart} "${editedProfile?.heroBadgeText}"`}
+                            {stepItem.step === 3 && `HEADLINE: "${editedProfile?.heroSubheadline}"`}
+                            {stepItem.step === 4 && `ABOUT: ${editedProfile?.aboutLabel} • Bio details`}
+                            {stepItem.step === 5 && `EXPERIENCE: ${(editedProfile?.experience || []).map(e => e.company).join(", ")}`}
+                            {stepItem.step === 6 && `PROJECTS: ${(editedProfile?.projects || []).length} items configured`}
+                            {stepItem.step === 7 && `EXPLORE: ${editedProfile?.projectsExploreText} → ${editedProfile?.projectsExploreUrl}`}
+                            {stepItem.step === 8 && `SERVICES: ${(editedProfile?.services || []).length} items configured`}
+                            {stepItem.step === 9 && `CONSULTATION: ${editedProfile?.servicesCta?.title}`}
+                            {stepItem.step === 10 && `PROCESS: ${(editedProfile?.processes || []).length} steps configured`}
+                            {stepItem.step === 11 && `TESTIMONIALS: ${(editedProfile?.testimonials || []).length} testimonials`}
+                            {stepItem.step === 12 && `CONTACT: ${editedProfile?.email} • ${editedProfile?.phone}`}
                           </div>
                         )}
                       </div>
                     );
                   })}
+                </div>
+              )}
 
-                  {/* Choose template style layout selector block */}
-                  {currentStep === 8 && currentSubStep === 8 && (
-                    <div className="border border-[#3B82F6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
-                      <div className="flex items-center gap-2">
-                        <Palette className="w-4 h-4 text-[#3B82F6]" />
-                        <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2.5">
-                        {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                          const isSelected = selectedTemplate === id;
-                          const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                          
-                          let descText = "";
-                          if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                          if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                          if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                          if (id === "biobricks") descText = "Grid-based bento block structure";
+              {/* Choose template style layout selector block */}
+              {currentStep === 13 && (
+                <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
+                  <div className="flex items-center gap-2">
+                    <Palette className="w-4 h-4 text-[#3B82F6]" />
+                    <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                      const isSelected = selectedTemplate === id;
+                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                      const isPro = id !== "daniel-cross";
+                      
+                      let descText = "";
+                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                      if (id === "biobricks") descText = "Grid-based bento block structure";
 
-                          return (
-                            <div
-                              key={id}
-                              onClick={() => selectTemplate(id as any)}
-                              className={cn(
-                                "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out",
-                                isSelected
-                                  ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
-                                  : "border-[#EAEAEA] hover:border-slate-350"
-                              )}
-                            >
-                              <div className="pr-5">
-                                <span className="text-xs font-semibold text-slate-800 block">{labelName}</span>
-                                <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                              </div>
-                              {isSelected && (
-                                <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
-                                  <Check className="w-2.5 h-2.5 text-white" />
-                                </div>
-                              )}
+                      return (
+                        <div
+                          key={id}
+                          onClick={() => {
+                            if (isPro) {
+                              toast.info("Upgrade to Pro to unlock this layout style!");
+                            } else {
+                              selectTemplate(id as any);
+                            }
+                          }}
+                          className={cn(
+                            "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out",
+                            isSelected
+                              ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
+                              : "border-[#EAEAEA] hover:border-slate-350",
+                            isPro && "opacity-60 hover:opacity-85"
+                          )}
+                        >
+                          <div className="pr-5">
+                            <span className="text-xs font-semibold text-slate-800 block flex items-center gap-1">
+                              {labelName}
+                              {isPro && <span className="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-mono">PRO</span>}
+                            </span>
+                            <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                          </div>
+                          {isSelected && (
+                            <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
+                              <Check className="w-2.5 h-2.5 text-white" />
                             </div>
-                          );
-                        })}
-                      </div>
-                      <Button
-                        onClick={() => {
-                          setCurrentStep(9);
-                          toast.success("Theme confirmed and setup complete!");
-                        }}
-                        className="w-full h-11 bg-[#3B82F6] hover:bg-[#2563EB] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm border-none cursor-pointer"
-                      >
-                        Confirm & Finish Setup <Check className="w-3.5 h-3.5" />
-                      </Button>
-                    </div>
-                  )}
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
@@ -1866,110 +1172,935 @@ function EditorInner() {
           </div>
                    {/* Bottom input composer area */}
           <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
-            <div className={`w-full flex flex-col gap-3 ${currentStep <= 8 ? "max-w-3xl mx-auto" : ""}`}>
-              {/* Show navigation buttons above text composer when on wizard steps (currentStep <= 8) */}
-              {currentStep <= 8 && (
-                <div className="flex items-center justify-between px-1.5 py-0.5">
-                  <div className="flex gap-2">
-                    {(currentStep > 1 || currentSubStep > 0) && (
-                      <button
-                        onClick={handleWizardBack}
-                        className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
-                      >
-                        ← Back
-                      </button>
-                    )}
-                  </div>
-                  <div className="flex gap-2">
-                    {WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional ? (
-                      <button
-                        onClick={handleWizardSkip}
-                        className="px-3 py-1.5 text-xs font-bold text-slate-600 hover:text-slate-800 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
-                      >
-                        Skip Step →
-                      </button>
-                    ) : (
-                      <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest select-none py-1">Required</span>
-                    )}
+            <div className="w-full flex flex-col gap-3">
+              {currentStep <= 12 ? (
+                <div className="w-full bg-white rounded-xl p-3 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] transition-all animate-in fade-in duration-200">
+                  {currentStep === 1 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Full Name</label>
+                        <Input
+                          value={editedProfile?.name || ""}
+                          onChange={(e) => updateField("name", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Daniel Cross"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Headline</label>
+                        <Input
+                          value={editedProfile?.headline || ""}
+                          onChange={(e) => updateField("headline", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. UI/UX Designer"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Location</label>
+                        <Input
+                          value={editedProfile?.location || ""}
+                          onChange={(e) => updateField("location", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. London, UK"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Avatar Photo URL</label>
+                        <Input
+                          value={editedProfile?.avatarUrl || ""}
+                          onChange={(e) => updateField("avatarUrl", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="Avatar URL"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 2 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting Badge Text</label>
+                        <Input
+                          value={editedProfile?.heroBadgeText || ""}
+                          onChange={(e) => updateField("heroBadgeText", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Welcome here ❤️"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting Start</label>
+                        <Input
+                          value={editedProfile?.heroGreetingStart || ""}
+                          onChange={(e) => updateField("heroGreetingStart", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Hey,"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting Name</label>
+                        <Input
+                          value={editedProfile?.heroGreetingName || ""}
+                          onChange={(e) => updateField("heroGreetingName", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Daniel"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting End</label>
+                        <Input
+                          value={editedProfile?.heroGreetingEnd || ""}
+                          onChange={(e) => updateField("heroGreetingEnd", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. here"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5 col-span-2">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Availability Status Text</label>
+                        <Input
+                          value={editedProfile?.statusText || ""}
+                          onChange={(e) => updateField("statusText", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Available for work"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 3 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5 col-span-2">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Hero Subheadline / Value Prop</label>
+                        <Input
+                          value={editedProfile?.heroSubheadline || ""}
+                          onChange={(e) => updateField("heroSubheadline", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. I design Interfaces, experiences, & brands."
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">CTA Button Label</label>
+                        <Input
+                          value={editedProfile?.heroCtaText || ""}
+                          onChange={(e) => updateField("heroCtaText", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Book A Call"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">CTA URL</label>
+                        <Input
+                          value={editedProfile?.heroCtaUrl || ""}
+                          onChange={(e) => updateField("heroCtaUrl", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. #contact"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Rating Text</label>
+                        <Input
+                          value={editedProfile?.heroRatingText || ""}
+                          onChange={(e) => updateField("heroRatingText", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. 4.9 / 5"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Social Follow Label</label>
+                        <Input
+                          value={editedProfile?.followMeLabel || ""}
+                          onChange={(e) => updateField("followMeLabel", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Follow me"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 4 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5 col-span-2">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">About Section Label</label>
+                        <Input
+                          value={editedProfile?.aboutLabel || ""}
+                          onChange={(e) => updateField("aboutLabel", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. About me"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5 col-span-2">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Bio Summary Text</label>
+                        <Textarea
+                          value={editedProfile?.summary || ""}
+                          onChange={(e) => updateField("summary", e.target.value)}
+                          className="min-h-[80px] text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="Tell us about yourself..."
+                          rows={3}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Portrait Photo URL</label>
+                        <Input
+                          value={editedProfile?.aboutPhotoUrl || ""}
+                          onChange={(e) => updateField("aboutPhotoUrl", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="Portrait photo URL"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Signature Image URL</label>
+                        <Input
+                          value={editedProfile?.signatureUrl || ""}
+                          onChange={(e) => updateField("signatureUrl", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="Signature URL"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 5 && (
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Brands Marquee Header</label>
+                        <Input
+                          value={editedProfile?.brandsLabel || ""}
+                          onChange={(e) => updateField("brandsLabel", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Worked with Global Brands"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-2 bg-slate-50/50 border border-slate-100 p-3 rounded-xl">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Logos Ticker Companies</span>
+                        <div className="flex gap-2">
+                          <Input
+                            id="new-brand-input"
+                            className="h-9 text-[13px] bg-white border-slate-200 rounded-lg"
+                            placeholder="Company Name (e.g. Google)"
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") {
+                                const input = document.getElementById("new-brand-input") as HTMLInputElement;
+                                if (input && input.value.trim()) {
+                                  addBrandCompany(input.value);
+                                  input.value = "";
+                                }
+                              }
+                            }}
+                          />
+                          <button
+                            onClick={() => {
+                              const input = document.getElementById("new-brand-input") as HTMLInputElement;
+                              if (input && input.value.trim()) {
+                                addBrandCompany(input.value);
+                                input.value = "";
+                              }
+                            }}
+                            className="px-3 bg-[#3B82F6] text-white rounded-lg text-xs font-semibold hover:bg-[#2563EB]"
+                          >
+                            Add
+                          </button>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 mt-2">
+                          {(editedProfile?.experience || []).map((exp, idx) => (
+                            <div key={idx} className="flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded-full text-xs font-medium text-slate-700 animate-in zoom-in-95 duration-150">
+                              <span>{exp.company}</span>
+                              <button
+                                onClick={() => removeBrandCompany(idx)}
+                                className="text-slate-400 hover:text-red-500 font-bold ml-1 text-[11px]"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          ))}
+                          {(editedProfile?.experience || []).length === 0 && (
+                            <span className="text-xs text-slate-400 font-normal italic">No companies added yet.</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 6 && (
+                    <div className="flex flex-col gap-3">
+                      <div className="grid grid-cols-2 gap-3.5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Projects Label</label>
+                          <Input
+                            value={editedProfile?.projectsLabel || ""}
+                            onChange={(e) => updateField("projectsLabel", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. My Portfolio"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Projects Subtitle</label>
+                          <Input
+                            value={editedProfile?.projectsSubtitle || ""}
+                            onChange={(e) => updateField("projectsSubtitle", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. Every project built to inspire users"
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Portfolio Projects ({(editedProfile?.projects || []).length})</span>
+                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
+                          {(editedProfile?.projects || []).map((proj, idx) => (
+                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[13px] font-bold text-slate-800 block truncate">{proj.title}</span>
+                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{proj.description}</span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  const updated = (editedProfile?.projects || []).filter((_, i) => i !== idx);
+                                  updateField("projects", updated);
+                                }}
+                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                          {(editedProfile?.projects || []).length === 0 && (
+                            <span className="text-xs text-slate-400 font-normal italic block py-2">No projects configured. Add one below!</span>
+                          )}
+                        </div>
+
+                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add New Project</span>
+                          <div className="grid grid-cols-2 gap-2">
+                            <Input
+                              id="new-proj-title"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              placeholder="Project Title"
+                            />
+                            <Input
+                              id="new-proj-link"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              placeholder="Link / URL"
+                            />
+                            <Input
+                              id="new-proj-desc"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              placeholder="Short Description"
+                            />
+                            <Input
+                              id="new-proj-img"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              placeholder="Cover Image URL (Optional)"
+                            />
+                          </div>
+                          <button
+                            onClick={() => {
+                              const titleEl = document.getElementById("new-proj-title") as HTMLInputElement;
+                              const descEl = document.getElementById("new-proj-desc") as HTMLInputElement;
+                              const linkEl = document.getElementById("new-proj-link") as HTMLInputElement;
+                              const imgEl = document.getElementById("new-proj-img") as HTMLInputElement;
+                              if (titleEl && titleEl.value.trim() && descEl && descEl.value.trim()) {
+                                const updated = [
+                                  ...(editedProfile?.projects || []),
+                                  {
+                                    title: titleEl.value.trim(),
+                                    description: descEl.value.trim(),
+                                    link: linkEl ? linkEl.value.trim() : undefined,
+                                    image: imgEl ? imgEl.value.trim() : undefined
+                                  }
+                                ];
+                                updateField("projects", updated);
+                                titleEl.value = "";
+                                descEl.value = "";
+                                if (linkEl) linkEl.value = "";
+                                if (imgEl) imgEl.value = "";
+                              } else {
+                                toast.error("Please fill in the project title and description.");
+                              }
+                            }}
+                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
+                          >
+                            Add Project Item
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 7 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Explore CTA Button Text</label>
+                        <Input
+                          value={editedProfile?.projectsExploreText || ""}
+                          onChange={(e) => updateField("projectsExploreText", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Explore All"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Explore CTA Redirect URL</label>
+                        <Input
+                          value={editedProfile?.projectsExploreUrl || ""}
+                          onChange={(e) => updateField("projectsExploreUrl", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. #work"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 8 && (
+                    <div className="flex flex-col gap-3">
+                      <div className="grid grid-cols-2 gap-3.5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Services Label</label>
+                          <Input
+                            value={editedProfile?.servicesLabel || ""}
+                            onChange={(e) => updateField("servicesLabel", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. What I Do"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Services Catchphrase Title</label>
+                          <Input
+                            value={editedProfile?.servicesTitle || ""}
+                            onChange={(e) => updateField("servicesTitle", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. Turning ideas into digital experiences"
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Offered Services ({(editedProfile?.services || DEFAULT_SERVICES).length})</span>
+                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
+                          {(editedProfile?.services || DEFAULT_SERVICES).map((srv, idx) => (
+                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[13px] font-bold text-slate-800 block truncate">{srv.title} ({srv.price})</span>
+                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{srv.description}</span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  const currentList = editedProfile?.services || DEFAULT_SERVICES;
+                                  const updated = currentList.filter((_, i) => i !== idx);
+                                  updateField("services", updated);
+                                }}
+                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add New Service Card</span>
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input
+                              id="new-srv-title"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              placeholder="Service Title"
+                            />
+                            <Input
+                              id="new-srv-price"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              placeholder="Price"
+                            />
+                            <Input
+                              id="new-srv-desc"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-3"
+                              placeholder="Description summary..."
+                            />
+                          </div>
+                          <button
+                            onClick={() => {
+                              const titleEl = document.getElementById("new-srv-title") as HTMLInputElement;
+                              const priceEl = document.getElementById("new-srv-price") as HTMLInputElement;
+                              const descEl = document.getElementById("new-srv-desc") as HTMLInputElement;
+                              if (titleEl && titleEl.value.trim() && priceEl && priceEl.value.trim() && descEl && descEl.value.trim()) {
+                                const currentList = editedProfile?.services || DEFAULT_SERVICES;
+                                const updated = [
+                                  ...currentList,
+                                  {
+                                    title: titleEl.value.trim(),
+                                    price: priceEl.value.trim(),
+                                    description: descEl.value.trim()
+                                  }
+                                ];
+                                updateField("services", updated);
+                                titleEl.value = "";
+                                priceEl.value = "";
+                                descEl.value = "";
+                              } else {
+                                toast.error("Please fill in all service fields.");
+                              }
+                            }}
+                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
+                          >
+                            Add Service Item
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 9 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5 col-span-2">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Booking Card Title</label>
+                        <Input
+                          value={editedProfile?.servicesCta?.title || ""}
+                          onChange={(e) => {
+                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
+                            updateField("servicesCta", { ...sCta, title: e.target.value });
+                          }}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Book A 30 min Free Call"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5 col-span-2">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Description Details</label>
+                        <Input
+                          value={editedProfile?.servicesCta?.text || ""}
+                          onChange={(e) => {
+                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
+                            updateField("servicesCta", { ...sCta, text: e.target.value });
+                          }}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="Card call-to-action details description"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Button Label</label>
+                        <Input
+                          value={editedProfile?.servicesCta?.buttonText || ""}
+                          onChange={(e) => {
+                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
+                            updateField("servicesCta", { ...sCta, buttonText: e.target.value });
+                          }}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Book A Call"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Button Booking URL</label>
+                        <Input
+                          value={editedProfile?.servicesCta?.buttonUrl || ""}
+                          onChange={(e) => {
+                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
+                            updateField("servicesCta", { ...sCta, buttonUrl: e.target.value });
+                          }}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. #contact"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 10 && (
+                    <div className="flex flex-col gap-3">
+                      <div className="grid grid-cols-2 gap-3.5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Label</label>
+                          <Input
+                            value={editedProfile?.processLabel || ""}
+                            onChange={(e) => updateField("processLabel", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. My Process"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Section Title</label>
+                          <Input
+                            value={editedProfile?.processTitle || ""}
+                            onChange={(e) => updateField("processTitle", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. From ideas to impactful creative results."
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Steps ({(editedProfile?.processes || DEFAULT_PROCESSES).length})</span>
+                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
+                          {(editedProfile?.processes || DEFAULT_PROCESSES).map((prc, idx) => (
+                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[13px] font-bold text-slate-800 block truncate">{prc.stepTag} - {prc.title}</span>
+                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{prc.description}</span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  const currentList = editedProfile?.processes || DEFAULT_PROCESSES;
+                                  const updated = currentList.filter((_, i) => i !== idx);
+                                  updateField("processes", updated);
+                                }}
+                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add Process Step Card</span>
+                          <div className="grid grid-cols-3 gap-2">
+                            <Input
+                              id="new-prc-tag"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              placeholder="Tag (e.g. /01)"
+                            />
+                            <Input
+                              id="new-prc-title"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              placeholder="Step Name"
+                            />
+                            <Input
+                              id="new-prc-desc"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-3"
+                              placeholder="Description text details..."
+                            />
+                          </div>
+                          <button
+                            onClick={() => {
+                              const tagEl = document.getElementById("new-prc-tag") as HTMLInputElement;
+                              const titleEl = document.getElementById("new-prc-title") as HTMLInputElement;
+                              const descEl = document.getElementById("new-prc-desc") as HTMLInputElement;
+                              if (tagEl && tagEl.value.trim() && titleEl && titleEl.value.trim() && descEl && descEl.value.trim()) {
+                                const currentList = editedProfile?.processes || DEFAULT_PROCESSES;
+                                const updated = [
+                                  ...currentList,
+                                  {
+                                    stepTag: tagEl.value.trim(),
+                                    title: titleEl.value.trim(),
+                                    description: descEl.value.trim()
+                                  }
+                                ];
+                                updateField("processes", updated);
+                                tagEl.value = "";
+                                titleEl.value = "";
+                                descEl.value = "";
+                              } else {
+                                toast.error("Please fill in all process fields.");
+                              }
+                            }}
+                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
+                          >
+                            Add Step Card
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 11 && (
+                    <div className="flex flex-col gap-3">
+                      <div className="grid grid-cols-2 gap-3.5">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Reviews Section Label</label>
+                          <Input
+                            value={editedProfile?.testimonialsLabel || ""}
+                            onChange={(e) => updateField("testimonialsLabel", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. Reviews"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Reviews Title</label>
+                          <Input
+                            value={editedProfile?.testimonialsTitle || ""}
+                            onChange={(e) => updateField("testimonialsTitle", e.target.value)}
+                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                            placeholder="e.g. Voices of trust from happy clients"
+                          />
+                        </div>
+                      </div>
+                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Reviews ({(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).length})</span>
+                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
+                          {(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).map((tst, idx) => (
+                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
+                              <div className="min-w-0 flex-1">
+                                <span className="text-[13px] font-bold text-slate-800 block truncate">{tst.name} ({tst.role})</span>
+                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">"{tst.quote}"</span>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  const currentList = editedProfile?.testimonials || DEFAULT_TESTIMONIALS;
+                                  const updated = currentList.filter((_, i) => i !== idx);
+                                  updateField("testimonials", updated);
+                                }}
+                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add New Testimonial Review</span>
+                          <div className="grid grid-cols-2 gap-2">
+                            <Input
+                              id="new-tst-name"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              placeholder="Client Name"
+                            />
+                            <Input
+                              id="new-tst-role"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              placeholder="Role / Title"
+                            />
+                            <Input
+                              id="new-tst-quote"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              placeholder="Review / Quote..."
+                            />
+                            <Input
+                              id="new-tst-avatar"
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              placeholder="Avatar Photo URL (Optional)"
+                            />
+                          </div>
+                          <button
+                            onClick={() => {
+                              const nameEl = document.getElementById("new-tst-name") as HTMLInputElement;
+                              const roleEl = document.getElementById("new-tst-role") as HTMLInputElement;
+                              const quoteEl = document.getElementById("new-tst-quote") as HTMLInputElement;
+                              const avatarEl = document.getElementById("new-tst-avatar") as HTMLInputElement;
+                              if (nameEl && nameEl.value.trim() && roleEl && roleEl.value.trim() && quoteEl && quoteEl.value.trim()) {
+                                const currentList = editedProfile?.testimonials || DEFAULT_TESTIMONIALS;
+                                const updated = [
+                                  ...currentList,
+                                  {
+                                    name: nameEl.value.trim(),
+                                    role: roleEl.value.trim(),
+                                    quote: quoteEl.value.trim(),
+                                    avatarUrl: avatarEl ? avatarEl.value.trim() : ""
+                                  }
+                                ];
+                                updateField("testimonials", updated);
+                                nameEl.value = "";
+                                roleEl.value = "";
+                                quoteEl.value = "";
+                                if (avatarEl) avatarEl.value = "";
+                              } else {
+                                toast.error("Please fill in all testimonial fields.");
+                              }
+                            }}
+                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
+                          >
+                            Add Testimonial Review
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentStep === 12 && (
+                    <div className="grid grid-cols-2 gap-3.5">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Footer Label</label>
+                        <Input
+                          value={editedProfile?.footerLabel || ""}
+                          onChange={(e) => updateField("footerLabel", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="e.g. Have a question"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Footer Banner Photo URL</label>
+                        <Input
+                          value={editedProfile?.footerBannerUrl || ""}
+                          onChange={(e) => updateField("footerBannerUrl", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="Banner image URL"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Contact Email</label>
+                        <Input
+                          value={editedProfile?.email || ""}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            updateField("email", val);
+                            const currentLinks = editedProfile?.links || [];
+                            const idx = currentLinks.findIndex((l) => l.icon === "email");
+                            const updated = [...currentLinks];
+                            if (idx !== -1) {
+                              updated[idx] = { ...updated[idx], url: val.startsWith("mailto:") ? val : `mailto:${val}` };
+                            } else {
+                              updated.push({ label: "Email", icon: "email", url: val.startsWith("mailto:") ? val : `mailto:${val}` });
+                            }
+                            updateField("links", updated);
+                          }}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="hello@example.com"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Contact Phone</label>
+                        <Input
+                          value={editedProfile?.phone || ""}
+                          onChange={(e) => updateField("phone", e.target.value)}
+                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                          placeholder="+44 7700 900123"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1.5 col-span-2 border-t border-slate-100 pt-3">
+                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans block mb-1">Social Media Links</span>
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-slate-400 font-sans">LinkedIn URL</label>
+                            <Input
+                              value={(() => {
+                                const lnk = (editedProfile?.links || []).find(l => l.icon === "linkedin");
+                                return lnk ? lnk.url : "";
+                              })()}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                const currentLinks = editedProfile?.links || [];
+                                const idx = currentLinks.findIndex((l) => l.icon === "linkedin");
+                                const updated = [...currentLinks];
+                                if (idx !== -1) {
+                                  updated[idx] = { ...updated[idx], url: val };
+                                } else {
+                                  updated.push({ label: "LinkedIn", icon: "linkedin", url: val });
+                                }
+                                updateField("links", updated);
+                              }}
+                              className="h-8.5 text-xs bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                              placeholder="LinkedIn URL"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-slate-400 font-sans">GitHub URL</label>
+                            <Input
+                              value={(() => {
+                                const lnk = (editedProfile?.links || []).find(l => l.icon === "github");
+                                return lnk ? lnk.url : "";
+                              })()}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                const currentLinks = editedProfile?.links || [];
+                                const idx = currentLinks.findIndex((l) => l.icon === "github");
+                                const updated = [...currentLinks];
+                                if (idx !== -1) {
+                                  updated[idx] = { ...updated[idx], url: val };
+                                } else {
+                                  updated.push({ label: "GitHub", icon: "github", url: val });
+                                }
+                                updateField("links", updated);
+                              }}
+                              className="h-8.5 text-xs bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                              placeholder="GitHub URL"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <label className="text-[10px] font-bold text-slate-400 font-sans">Twitter URL</label>
+                            <Input
+                              value={(() => {
+                                const lnk = (editedProfile?.links || []).find(l => l.icon === "twitter");
+                                return lnk ? lnk.url : "";
+                              })()}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                const currentLinks = editedProfile?.links || [];
+                                const idx = currentLinks.findIndex((l) => l.icon === "twitter");
+                                const updated = [...currentLinks];
+                                if (idx !== -1) {
+                                  updated[idx] = { ...updated[idx], url: val };
+                                } else {
+                                  updated.push({ label: "Twitter", icon: "twitter", url: val });
+                                }
+                                updateField("links", updated);
+                              }}
+                              className="h-8.5 text-xs bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                              placeholder="Twitter URL"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-3.5 mt-3.5 select-none">
+                    <div>
+                      {currentStep > 1 && (
+                        <button
+                          onClick={goToBackStep}
+                          className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                        >
+                          ← Back
+                        </button>
+                      )}
+                    </div>
+                    <button
+                      onClick={goToNextStep}
+                      className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                    >
+                      Continue →
+                    </button>
                   </div>
                 </div>
-              )}
+              ) : (
+                <>
+                  <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                    {SUGGESTIONS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => sendChatMessage(s)}
+                        className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
 
-              {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
-              {currentStep === 9 && (
-                <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-                  {SUGGESTIONS.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => sendChatMessage(s)}
-                      className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Text input composer */}
-              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
-                <textarea
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      if (currentStep <= 8) {
-                        handleWizardInput(chatInput);
-                      } else {
-                        sendChatMessage();
-                      }
-                    }
-                  }}
-                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
-                  placeholder={
-                    currentStep <= 8
-                      ? (WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.placeholder || "Type your answer here...")
-                      : "Ask Webild to adjust copy, headline, template style..."
-                  }
-                  rows={2}
-                />
-                <div className="flex items-center justify-between px-1">
-                  <button
-                    disabled={currentStep !== 9}
-                    onClick={() => toast.info("Attachments coming soon!")}
-                    className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed opacity-50"}`}
-                  >
-                    <Plus className="w-[18px] h-[18px]" />
-                  </button>
-                  <div className="flex items-center gap-2">
-                    <button
-                      disabled={currentStep !== 9}
-                      onClick={() => toast.info("Voice input coming soon!")}
-                      className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed opacity-50"}`}
-                    >
-                      <Mic className="w-[18px] h-[18px]" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (currentStep <= 8) {
-                          handleWizardInput(chatInput);
-                        } else {
+                  <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
+                    <textarea
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
                           sendChatMessage();
                         }
                       }}
-                      disabled={!chatInput.trim() && !WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional}
-                      className={cn(
-                        "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
-                        (chatInput.trim() || (currentStep <= 8 && WIZARD_QUESTIONS.find(q => q.step === currentStep && q.subStep === currentSubStep)?.optional))
-                          ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
-                          : "bg-neutral-200 cursor-not-allowed"
-                      )}
-                    >
-                      <ArrowUp className="w-[18px] h-[18px]" />
-                    </button>
+                      className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
+                      placeholder="Ask Webild to adjust copy, headline, template style..."
+                      rows={2}
+                    />
+                    <div className="flex items-center justify-between px-1 select-none">
+                      <button
+                        onClick={() => toast.info("Attachments coming soon!")}
+                        className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
+                      >
+                        <Plus className="w-[18px] h-[18px]" />
+                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => toast.info("Voice input coming soon!")}
+                          className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
+                        >
+                          <Mic className="w-[18px] h-[18px]" />
+                        </button>
+                        <button
+                          onClick={() => sendChatMessage()}
+                          disabled={!chatInput.trim()}
+                          className={cn(
+                            "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
+                            chatInput.trim()
+                              ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
+                              : "bg-neutral-200 cursor-not-allowed"
+                          )}
+                        >
+                          <ArrowUp className="w-[18px] h-[18px]" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -1985,9 +2116,7 @@ function EditorInner() {
 
       {/* ── Main Canvas Workspace ── */}
       <main 
-        className={`flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3 ${
-          activeNav === 1 && currentStep <= 8 ? "hidden" : ""
-        }`}
+        className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3"
       >
         
         {/* Top Navbar */}
@@ -2088,7 +2217,6 @@ function EditorInner() {
             <div className="flex items-center gap-2">
               <div className="relative group">
                 <button
-                  disabled={activeNav === 1 && currentStep <= 8}
                   onClick={() => {
                     if (isSelectionMode) {
                       setIsSelectionMode(false);
@@ -2102,10 +2230,8 @@ function EditorInner() {
                     }
                   }}
                   className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${
-                    activeNav === 1 && currentStep <= 8
-                      ? "opacity-30 cursor-not-allowed bg-[#F7F7F7] border-[#E6E6E6] text-neutral-450"
-                      : isSelectionMode
-                      ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+                    isSelectionMode
+                      ? "bg-[#3B82F6] border-[#3B82F6] text-white hover:bg-[#2563EB]"
                       : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
                   }`}
                 >
@@ -2164,14 +2290,11 @@ function EditorInner() {
               <div className="w-px h-4 bg-[#E6E6E6] mx-0.5" />
 
               {/* Responsive Toggles */}
-              <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5">
+              <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5 select-none">
                 <button
                   onClick={() => setPreviewMode("desktop")}
-                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 8
-                      ? "opacity-30 cursor-not-allowed"
-                      : previewMode === "desktop"
+                    previewMode === "desktop"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
                       : "text-[#171717]/40 hover:text-[#2A2A2F]"
                   }`}
@@ -2181,11 +2304,8 @@ function EditorInner() {
                 </button>
                 <button
                   onClick={() => setPreviewMode("tablet")}
-                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 8
-                      ? "opacity-30 cursor-not-allowed"
-                      : previewMode === "tablet"
+                    previewMode === "tablet"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
                       : "text-[#171717]/40 hover:text-[#2A2A2F]"
                   }`}
@@ -2195,11 +2315,8 @@ function EditorInner() {
                 </button>
                 <button
                   onClick={() => setPreviewMode("mobile")}
-                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 8
-                      ? "opacity-30 cursor-not-allowed"
-                      : previewMode === "mobile"
+                    previewMode === "mobile"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
                       : "text-[#171717]/40 hover:text-[#2A2A2F]"
                   }`}
@@ -2210,16 +2327,12 @@ function EditorInner() {
                 <button
                   onClick={() => {
                     setPreviewMode("resizable");
-                    // Reset to a sensible width if it's default
                     if (resizableWidth === 800) {
                       setResizableWidth(800);
                     }
                   }}
-                  disabled={activeNav === 1 && currentStep <= 8}
                   className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    activeNav === 1 && currentStep <= 8
-                      ? "opacity-30 cursor-not-allowed"
-                      : previewMode === "resizable"
+                    previewMode === "resizable"
                       ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
                       : "text-[#171717]/40 hover:text-[#2A2A2F]"
                   }`}
@@ -2235,142 +2348,116 @@ function EditorInner() {
           {/* Canvas Main content area */}
           <div 
             ref={previewContainerRef}
-            className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
-              activeNav === 1 && currentStep <= 8 
-                ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
-                : "bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
-            }`}
+            className="flex-1 flex items-center justify-center overflow-hidden relative bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
           >
             <AnimatePresence mode="wait">
-              
-              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 8 */}
-              {activeNav === 1 && currentStep <= 8 ? (
-                <motion.div
-                  key={`anim-${currentStep}`}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="w-full flex items-center justify-center"
-                >
-                  <WizardAnimations 
-                    step={currentStep} 
-                    profile={editedProfile}
-                    projects={projects}
-                    interests={interests}
-                    skills={skills}
-                    experience={experience}
-                  />
-                </motion.div>
-              ) : (
-                /* Show resizable Live Preview for template choosing/publishing or other tabs */
-                <motion.div
-                  key={`preview-wrapper-${selectedTemplate}`}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.35, ease: "easeOut" }}
-                  className="w-full h-full flex items-center justify-center"
-                >
-                  {editedProfile ? (
-                    <motion.div
-                      animate={{ 
-                        width: 
-                          previewMode === "desktop" ? "100%" : 
-                          previewMode === "tablet" ? 768 : 
-                          previewMode === "mobile" ? 375 : 
-                          resizableWidth 
+              <motion.div
+                key={`preview-wrapper-${selectedTemplate}`}
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="w-full h-full flex items-center justify-center"
+              >
+                {editedProfile ? (
+                  <motion.div
+                    animate={{ 
+                      width: 
+                        previewMode === "desktop" ? "100%" : 
+                        previewMode === "tablet" ? 768 : 
+                        previewMode === "mobile" ? 375 : 
+                        resizableWidth 
+                    }}
+                    transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+                    className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                  >
+                    {/* Browser Header Bezel */}
+                    <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
+                      {/* 3 macOS dots */}
+                      <div className="flex items-center gap-1.5 w-16">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
+                      </div>
+                      
+                      {/* Address Bar */}
+                      <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
+                        <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                        <span className="truncate text-neutral-650 font-mono">
+                          {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                        </span>
+                        <span className="text-neutral-300 mx-1">|</span>
+                        <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
+                          {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
+                           previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
+                           previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
+                           `Custom • ${actualWidth}px`}
+                        </span>
+                      </div>
+
+                      {/* Right side status indicator */}
+                      <div className="w-16 flex justify-end">
+                        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
+                          {previewMode}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Iframe Viewport Container */}
+                    <div className="flex-1 w-full bg-white relative overflow-hidden">
+                      {/* Drag Overlay to prevent iframe event interception */}
+                      {isDragging && (
+                        <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
+                      )}
+                      
+                      <ProfilePreview
+                        profile={editedProfile}
+                        template={selectedTemplate}
+                        fluid={true}
+                        onFieldClick={handleFieldClick}
+                        isSelectionMode={isSelectionMode}
+                        selectedField={selectedField}
+                        selectedIndex={selectedIndex}
+                        currentStep={currentStep}
+                      />
+                    </div>
+
+                    {/* Left Resizing Drag Handle */}
+                    <div
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
                       }}
-                      transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
-                      className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                      className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                      title="Drag to resize"
                     >
-                      {/* Browser Header Bezel */}
-                      <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
-                        {/* 3 macOS dots */}
-                        <div className="flex items-center gap-1.5 w-16">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
-                        </div>
-                        
-                        {/* Address Bar */}
-                        <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
-                          <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                          <span className="truncate text-neutral-650 font-mono">
-                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
-                          </span>
-                          <span className="text-neutral-300 mx-1">|</span>
-                          <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
-                            {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
-                             previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
-                             previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
-                             `Custom • ${actualWidth}px`}
-                          </span>
-                        </div>
-
-                        {/* Right side status indicator */}
-                        <div className="w-16 flex justify-end">
-                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
-                            {previewMode}
-                          </span>
-                        </div>
+                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
                       </div>
+                    </div>
 
-                      {/* Iframe Viewport Container */}
-                      <div className="flex-1 w-full bg-white relative overflow-hidden">
-                        {/* Drag Overlay to prevent iframe event interception */}
-                        {isDragging && (
-                          <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
-                        )}
-                        
-                        <ProfilePreview
-                          profile={editedProfile}
-                          template={selectedTemplate}
-                          fluid={true}
-                          onFieldClick={handleFieldClick}
-                          isSelectionMode={isSelectionMode}
-                          selectedField={selectedField}
-                          selectedIndex={selectedIndex}
-                        />
+                    {/* Right Resizing Drag Handle */}
+                    <div
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
+                      }}
+                      className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                      title="Drag to resize"
+                    >
+                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
                       </div>
-
-                      {/* Left Resizing Drag Handle */}
-                      <div
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setIsDragging(true);
-                        }}
-                        className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                        title="Drag to resize"
-                      >
-                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        </div>
-                      </div>
-
-                      {/* Right Resizing Drag Handle */}
-                      <div
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setIsDragging(true);
-                        }}
-                        className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                        title="Drag to resize"
-                      >
-                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
-                  )}
-                </motion.div>
-              )}
+                    </div>
+                  </motion.div>
+                ) : (
+                  <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
+                )}
+              </motion.div>
 
             </AnimatePresence>
           </div>
