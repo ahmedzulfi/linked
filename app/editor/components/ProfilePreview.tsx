@@ -864,6 +864,51 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
         }
       }
     }
+    if (e.data && e.data.type === 'SCROLL_TO_SECTION') {
+      const step = e.data.step;
+      let target = null;
+      if (step === 1) {
+        target = document.querySelector('[data-editable-field="name"]') || document.body;
+      } else if (step === 2) {
+        target = document.querySelector('[data-editable-field="heroBadgeText"]') || document.querySelector('[data-editable-field="statusText"]') || document.body;
+      } else if (step === 3) {
+        target = document.querySelector('[data-editable-field="heroSubheadline"]') || document.querySelector('[data-editable-field="heroCtaText"]') || document.body;
+      } else if (step === 4) {
+        target = document.querySelector('[data-framer-name="About"]') || document.querySelector('[data-editable-field="summary"]') || document.querySelector('[data-editable-field="aboutPhotoUrl"]');
+      } else if (step === 5) {
+        target = document.querySelector('[data-framer-name="Ticker logos"]') || document.querySelector('[data-editable-field="experience"]');
+      } else if (step === 6) {
+        target = document.querySelector('[data-framer-name="work wrapper"]') || document.querySelector('[data-editable-field="project"]');
+      } else if (step === 7) {
+        target = document.querySelector('[data-editable-field="projectsExploreText"]') || document.querySelector('[data-editable-field="projectsExploreUrl"]');
+      } else if (step === 8) {
+        target = document.querySelector('[data-framer-name="Grid 3x"]') || document.querySelector('[data-editable-field="servicesTitle"]');
+      } else if (step === 9) {
+        target = document.querySelector('[data-editable-field="servicesCta"]') || document.querySelector('[data-framer-name="Services Contact card"]');
+      } else if (step === 10) {
+        target = document.querySelector('[data-framer-name="Process steps"]') || document.querySelector('[data-editable-field="processTitle"]');
+      } else if (step === 11) {
+        target = document.querySelector('[data-framer-name="Reviews card"]') || document.querySelector('[data-editable-field="testimonialsTitle"]');
+      } else if (step === 12) {
+        target = document.querySelector('[data-framer-name="Footer"]') || document.querySelector('[data-editable-field="email"]') || document.querySelector('[data-editable-field="phone"]');
+      } else if (step === 13) {
+        target = document.body;
+      }
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const originalOutline = target.style.outline;
+        const originalOutlineOffset = target.style.outlineOffset;
+        const originalTransition = target.style.transition;
+        target.style.transition = 'outline 0.3s ease';
+        target.style.outline = '2px dashed #3B82F6';
+        target.style.outlineOffset = '4px';
+        setTimeout(() => {
+          target.style.outline = originalOutline;
+          target.style.outlineOffset = originalOutlineOffset;
+          target.style.transition = originalTransition;
+        }, 2500);
+      }
+    }
   });
 
   // Capture clicks on customizable elements and post them to parent
@@ -896,6 +941,18 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   return html;
 }
 
+interface ProfilePreviewProps {
+  profile: ProfileData;
+  template: TemplateId;
+  scale?: number;
+  onFieldClick?: (fieldName: string, index?: number) => void;
+  fluid?: boolean;
+  isSelectionMode?: boolean;
+  selectedField?: string | null;
+  selectedIndex?: number;
+  currentStep?: number;
+}
+
 // ── Main exported component ──────────────────────────────────────────────────
 export default function ProfilePreview({
   profile,
@@ -906,6 +963,7 @@ export default function ProfilePreview({
   selectedField = null,
   selectedIndex,
   onFieldClick,
+  currentStep,
 }: ProfilePreviewProps) {
   const [rawTemplate, setRawTemplate] = useState<string | null>(null);
   const [compiledHtml, setCompiledHtml] = useState<string>("");
@@ -921,14 +979,11 @@ export default function ProfilePreview({
       });
   }, []);
 
-  // Re-compile whenever profile or raw template changes (debounced to avoid keystroke input lag)
+  // Re-compile whenever profile or raw template changes
   useEffect(() => {
     if (!rawTemplate) return;
-    const timer = setTimeout(() => {
-      const html = buildPreviewHtml(rawTemplate, profile);
-      setCompiledHtml(html);
-    }, 250);
-    return () => clearTimeout(timer);
+    const html = buildPreviewHtml(rawTemplate, profile);
+    setCompiledHtml(html);
   }, [rawTemplate, profile]);
 
   // Handle click captures from iframe
@@ -961,6 +1016,16 @@ export default function ProfilePreview({
     }, "*");
   }, [isSelectionMode, selectedField, selectedIndex, compiledHtml]);
 
+  // Send scroll command when currentStep changes
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe || !iframe.contentWindow) return;
+    iframe.contentWindow.postMessage({
+      type: "SCROLL_TO_SECTION",
+      step: currentStep
+    }, "*");
+  }, [currentStep, compiledHtml]);
+
   const PREVIEW_W = 1200;
   const PREVIEW_H = 900;
 
@@ -975,7 +1040,6 @@ export default function ProfilePreview({
           sandbox="allow-same-origin allow-scripts"
           title="Profile Preview"
           onLoad={() => {
-            // Push active state immediately on iframe load completion to prevent race conditions
             const iframe = iframeRef.current;
             if (iframe && iframe.contentWindow) {
               iframe.contentWindow.postMessage({
@@ -987,6 +1051,12 @@ export default function ProfilePreview({
                   type: "SET_SELECTED_FIELD",
                   field: selectedField,
                   index: selectedIndex
+                }, "*");
+              }
+              if (currentStep) {
+                iframe.contentWindow.postMessage({
+                  type: "SCROLL_TO_SECTION",
+                  step: currentStep
                 }, "*");
               }
             }
@@ -1037,6 +1107,12 @@ export default function ProfilePreview({
                 type: "SET_SELECTED_FIELD",
                 field: selectedField,
                 index: selectedIndex
+              }, "*");
+            }
+            if (currentStep) {
+              iframe.contentWindow.postMessage({
+                type: "SCROLL_TO_SECTION",
+                step: currentStep
               }, "*");
             }
           }
