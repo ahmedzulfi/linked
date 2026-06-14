@@ -173,7 +173,7 @@ const removeEmojis = (text: string) => {
 };
 
 const cleanMessageContent = (text: string) => {
-  return text.replace(/\[MILESTONE:(PROJECTS|SERVICES|IMAGES)\]/g, "").trim();
+  return text.replace(/\[MILESTONE:[A-Z_]+\]/g, "").trim();
 };
 
 
