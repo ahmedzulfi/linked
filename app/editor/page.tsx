@@ -112,10 +112,10 @@ const navItems: NavItem[] = [
 ];
 
 const SUGGESTIONS = [
+  "Start",
   "Make my headline more impactful",
   "Shorten my summary",
   "Switch to Julian Mercer style",
-  "Add a new project named Finance App",
 ];
 
 const DEFAULT_SERVICES = [
@@ -284,6 +284,7 @@ function EditorInner() {
     ];
   });
   const [chatInput, setChatInput] = useState("");
+  const [suggestions, setSuggestions] = useState<string[]>(SUGGESTIONS);
   const [isThinking, setIsThinking] = useState(false);
 
   const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
@@ -673,6 +674,7 @@ function EditorInner() {
     const msg = text ?? chatInput.trim();
     if (!msg) return;
     if (!text) setChatInput("");
+    setSuggestions([]); // clear suggestions while thinking
 
     // Append user message bubble to timeline
     const userMsg = { id: Date.now().toString(), role: "user" as const, content: msg };
@@ -703,6 +705,12 @@ function EditorInner() {
         ...prev,
         { id: (Date.now() + 2).toString(), role: "assistant" as const, content: data.reply }
       ]);
+
+      if (data.suggestions && data.suggestions.length > 0) {
+        setSuggestions(data.suggestions);
+      } else {
+        setSuggestions(SUGGESTIONS);
+      }
 
       if (data.template) {
         selectTemplate(data.template);
@@ -1304,7 +1312,7 @@ function EditorInner() {
           <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
             <div className="w-full flex flex-col gap-3">
               <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-                {SUGGESTIONS.map((s) => (
+                {suggestions.map((s) => (
                   <button
                     key={s}
                     onClick={() => sendChatMessage(s)}
