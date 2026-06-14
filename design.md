@@ -202,7 +202,11 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
     - **Wizard Onboarding Flow & Form Logic:**
       - The onboarding wizard consists of exactly 12 steps. Redundant CTAs and Hero Headline button inputs are removed to reduce friction.
       - **Services Grid Capping:** The services grid is capped at a maximum of 5 cards. Once reached, add service controls are disabled and a warning alert is displayed.
-      - **Two-Column Project Modal:** Inline project inputs on Step 6 are replaced by a styled modal. The left column captures the title, redirect link, and cover image, while the right column hosts the description textarea. Includes full add, edit, and delete capability.
+      - **Two-Column Modals for Content Creation:** Inline inputs in composer steps are replaced by premium two-column modals with backdrop blur overlays:
+        - **Projects Modal (Step 6):** Left column captures title, redirect link, and cover image URL; right column hosts description textarea. Includes full CRUD (add, edit, delete).
+        - **Services Modal (Step 7):** Left column captures service title and price; right column hosts description textarea. Enforces 5-card maximum limits.
+        - **Process Steps Modal (Step 9):** Left column captures step tag (e.g. /01) and step name; right column hosts description textarea.
+        - **Client Testimonials Modal (Step 10):** Left column captures client name, role/position, and avatar URL; right column hosts the client review quote textarea.
     - **Data Persistence:** To prevent data loss on page reloads, form state mutations are synced to the database context in real-time (triggering debounced autosaves), the last edited website draft ID is stored in `sessionStorage` (key: `linkedpage_last_website_id`), the active wizard step status is preserved in `sessionStorage` (key: `webild_onboarding_step`), and chat history is fully restored from `/api/chat` on load.
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
