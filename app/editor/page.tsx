@@ -1085,7 +1085,6 @@ function EditorInner() {
                           {removeEmojis(cleanContent)}
                         </div>
 
-                        {/* Milestone widgets */}
                         {hasProjectsMilestone && (
                           <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
                             <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left">
@@ -1096,29 +1095,27 @@ function EditorInner() {
                               <p className="text-[12px] text-slate-650 leading-relaxed font-sans">
                                 Click below to open the project builder. Specify custom titles, redirect links, descriptions, and cover images.
                               </p>
-                              <button
-                                onClick={() => {
-                                  setModalProjectTitle("");
-                                  setModalProjectLink("");
-                                  setModalProjectImage("");
-                                  setModalProjectDescription("");
-                                  setEditingProjectIndex(null);
-                                  setIsProjectModalOpen(true);
-                                }}
-                                className="h-9 w-full bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-medium transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.97] shadow-sm cursor-pointer border-none"
-                              >
-                                <Plus className="w-3.5 h-3.5" /> Add New Project
-                              </button>
 
-                              {/* Projects list with Edit option */}
-                              {(editedProfile?.projects || []).length > 0 && (
-                                <div className="space-y-2.5 mt-2">
-                                  {(editedProfile.projects || []).map((p, pIdx) => (
-                                    <div key={pIdx} className="group flex items-center justify-between bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 px-4 py-3 rounded-xl text-[13px] font-medium text-slate-800 shadow-sm transition-all duration-200">
-                                      <div className="flex-1 min-w-0 pr-3">
-                                        <p className="font-semibold text-slate-800 truncate">{p.title}</p>
-                                        {p.link && <p className="text-[10px] text-slate-400 truncate mt-0.5">{p.link}</p>}
-                                      </div>
+                              {/* Projects grid */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                                {(editedProfile?.projects || []).map((p, pIdx) => (
+                                  <div key={pIdx} className="relative bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 p-4 rounded-xl shadow-xs transition-all duration-200 flex flex-col justify-between h-[140px]">
+                                    <div>
+                                      <h4 className="font-['Inter_Tight'] font-semibold text-slate-900 text-[13px] leading-tight truncate">
+                                        {p.title}
+                                      </h4>
+                                      {p.link && (
+                                        <p className="text-[9px] text-slate-400 truncate font-mono mt-0.5">
+                                          {p.link}
+                                        </p>
+                                      )}
+                                      {p.description && (
+                                        <p className="text-[10px] text-slate-500 line-clamp-3 leading-normal mt-1.5">
+                                          {p.description}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <div className="flex justify-end pt-1">
                                       <button
                                         onClick={() => {
                                           setModalProjectTitle(p.title || "");
@@ -1128,14 +1125,29 @@ function EditorInner() {
                                           setEditingProjectIndex(pIdx);
                                           setIsProjectModalOpen(true);
                                         }}
-                                        className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white/90 hover:bg-slate-900 hover:text-white border border-slate-200 hover:border-slate-900 text-slate-700 text-[11px] font-medium transition-all duration-150 cursor-pointer shadow-xs"
+                                        className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white border border-slate-200 hover:border-slate-900 text-slate-700 hover:text-white text-[10px] font-medium transition-all duration-155 cursor-pointer shadow-xs"
                                       >
                                         <Pencil className="w-3 h-3" /> Edit
                                       </button>
                                     </div>
-                                  ))}
-                                </div>
-                              )}
+                                  </div>
+                                ))}
+
+                                <button
+                                  onClick={() => {
+                                    setModalProjectTitle("");
+                                    setModalProjectLink("");
+                                    setModalProjectImage("");
+                                    setModalProjectDescription("");
+                                    setEditingProjectIndex(null);
+                                    setIsProjectModalOpen(true);
+                                  }}
+                                  className="border border-dashed border-slate-300 hover:border-slate-800 bg-white/20 hover:bg-white/40 transition-all rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 h-[140px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] border-none"
+                                >
+                                  <Plus className="w-5 h-5" />
+                                  <span className="text-xs font-semibold">Add New Project</span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         )}
@@ -1147,55 +1159,61 @@ function EditorInner() {
                                 <Briefcase className="w-4 h-4 text-slate-800" />
                                 <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Services & Pricing</span>
                               </div>
-                              <p className="text-[12px] text-slate-650 leading-relaxed font-sans">
+                              <p className="text-[12px] text-slate-655 leading-relaxed font-sans">
                                 Click below to open the service packages manager. You can offer up to 5 custom service offerings.
                               </p>
-                              <button
-                                disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
-                                onClick={() => {
-                                  setModalServiceTitle("");
-                                  setModalServicePrice("");
-                                  setModalServiceDescription("");
-                                  setEditingServiceIndex(null);
-                                  setIsServicesModalOpen(true);
-                                }}
-                                className={cn(
-                                  "h-9 w-full rounded-xl text-xs font-medium transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.97] border-none shadow-sm",
-                                  (editedProfile?.services || DEFAULT_SERVICES).length >= 5
-                                    ? "bg-slate-100 text-slate-450 cursor-not-allowed"
-                                    : "bg-slate-900 hover:bg-slate-800 text-white cursor-pointer"
-                                )}
-                              >
-                                <Plus className="w-3.5 h-3.5" /> Add New Service
-                              </button>
 
-                              {/* Services list with Edit option */}
-                              <div className="space-y-2.5 mt-2">
+                              {/* Services grid */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                                 {(editedProfile?.services || DEFAULT_SERVICES).map((srv, sIdx) => (
-                                  <div key={sIdx} className="group flex items-center justify-between bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 px-4 py-3 rounded-xl text-[13px] font-medium text-slate-800 shadow-sm transition-all duration-200">
-                                    <div className="flex-1 min-w-0 pr-3">
-                                      <div className="flex items-center gap-2">
-                                        <span className="font-semibold text-slate-800 truncate">{srv.title}</span>
-                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-900/5 text-slate-850 border border-slate-900/5">
+                                  <div key={sIdx} className="relative bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 p-4 rounded-xl shadow-xs transition-all duration-200 flex flex-col justify-between h-[140px]">
+                                    <div>
+                                      <div className="flex items-start justify-between gap-2">
+                                        <h4 className="font-['Inter_Tight'] font-semibold text-slate-900 text-[13px] leading-tight truncate max-w-[70%]">
+                                          {srv.title}
+                                        </h4>
+                                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-900 text-white leading-none">
                                           {srv.price}
                                         </span>
                                       </div>
-                                      {srv.description && <p className="text-[10px] text-slate-400 truncate mt-0.5">{srv.description}</p>}
+                                      {srv.description && (
+                                        <p className="text-[10px] text-slate-500 line-clamp-3 leading-normal mt-1.5">
+                                          {srv.description}
+                                        </p>
+                                      )}
                                     </div>
-                                    <button
-                                      onClick={() => {
-                                        setModalServiceTitle(srv.title || "");
-                                        setModalServicePrice(srv.price || "");
-                                        setModalServiceDescription(srv.description || "");
-                                        setEditingServiceIndex(sIdx);
-                                        setIsServicesModalOpen(true);
-                                      }}
-                                      className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white/90 hover:bg-slate-900 hover:text-white border border-slate-200 hover:border-slate-900 text-slate-700 text-[11px] font-medium transition-all duration-150 cursor-pointer shadow-xs"
-                                    >
-                                      <Pencil className="w-3 h-3" /> Edit
-                                    </button>
+                                    <div className="flex justify-end pt-1">
+                                      <button
+                                        onClick={() => {
+                                          setModalServiceTitle(srv.title || "");
+                                          setModalServicePrice(srv.price || "");
+                                          setModalServiceDescription(srv.description || "");
+                                          setEditingServiceIndex(sIdx);
+                                          setIsServicesModalOpen(true);
+                                        }}
+                                        className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white border border-slate-200 hover:border-slate-900 text-slate-700 hover:text-white text-[10px] font-medium transition-all duration-155 cursor-pointer shadow-xs"
+                                      >
+                                        <Pencil className="w-3 h-3" /> Edit
+                                      </button>
+                                    </div>
                                   </div>
                                 ))}
+
+                                {(editedProfile?.services || DEFAULT_SERVICES).length < 5 && (
+                                  <button
+                                    onClick={() => {
+                                      setModalServiceTitle("");
+                                      setModalServicePrice("");
+                                      setModalServiceDescription("");
+                                      setEditingServiceIndex(null);
+                                      setIsServicesModalOpen(true);
+                                    }}
+                                    className="border border-dashed border-slate-350 hover:border-slate-800 bg-white/20 hover:bg-white/40 transition-all rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 h-[140px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] border-none"
+                                  >
+                                    <Plus className="w-5 h-5" />
+                                    <span className="text-xs font-semibold">Add New Service</span>
+                                  </button>
+                                )}
                               </div>
                             </div>
                           </div>
