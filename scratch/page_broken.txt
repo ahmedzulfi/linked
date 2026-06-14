@@ -1,0 +1,3041 @@
+"use client";
+
+import { useState, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEditor } from "@/context/EditorContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
+import {
+  Check,
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  Sparkles,
+  Plus,
+  Trash2,
+  Globe,
+  Loader2,
+  Smartphone,
+  Tablet,
+  Monitor,
+  MoveHorizontal,
+  Mic,
+  ArrowUp,
+  Folder,
+  Briefcase,
+  Wrench,
+  Palette,
+  Inbox,
+  FileText,
+} from "lucide-react";
+import dynamic from "next/dynamic";
+import PropertiesPanel from "./components/PropertiesPanel";
+import WizardAnimations from "@/components/WizardAnimations";
+import { UserMenu } from "@/components/UserMenu";
+
+const ProfilePreview = dynamic(() => import("./components/ProfilePreview"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center text-sm text-neutral-400 font-sans">
+      <div className="flex flex-col items-center gap-2">
+        <div className="w-6 h-6 border-2 border-neutral-300 border-t-neutral-600 rounded-full animate-spin" />
+        <span>Loading preview…</span>
+      </div>
+    </div>
+  )
+});
+
+const DomainsPane = dynamic(() => import("./components/DomainsPane"), {
+  ssr: false,
+  loading: () => <div className="p-8 text-neutral-400 text-sm">Loading domains config...</div>,
+});
+
+const SettingsPane = dynamic(() => import("./components/SettingsPane"), {
+  ssr: false,
+  loading: () => <div className="p-8 text-neutral-400 text-sm">Loading settings...</div>,
+});
+
+// User avatar placeholder
+function UserAvatar() {
+  return (
+    <div className="w-8 h-8 rounded-full bg-neutral-200 border border-neutral-300 flex items-center justify-center shrink-0 shadow-xs">
+      <span className="text-[10px] font-bold text-neutral-600 uppercase">You</span>
+    </div>
+  );
+}
+
+// Left Sidebar Icons type
+type NavItem = { icon: React.ReactNode; label: string; active?: boolean };
+
+const navItems: NavItem[] = [
+  {
+    label: "Home",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Design",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Domains",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+  {
+    label: "Site Settings",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+      </svg>
+    ),
+  },
+];
+
+const SUGGESTIONS = [
+  "Make my headline more impactful",
+  "Shorten my summary",
+  "Switch to Julian Mercer style",
+  "Add a new project named Finance App",
+];
+
+const getNotionTagClasses = (name: string) => {
+  const colors = [
+    "bg-neutral-50 text-neutral-700 border-neutral-200",
+    "bg-orange-50 text-orange-700 border-orange-200/60",
+    "bg-amber-50/70 text-amber-800 border-amber-200/60",
+    "bg-emerald-50/80 text-emerald-700 border-emerald-200/60",
+    "bg-blue-50 text-blue-700 border-blue-200/60",
+    "bg-indigo-50 text-indigo-700 border-indigo-200/60",
+    "bg-pink-50 text-pink-700 border-pink-200/60",
+    "bg-rose-50 text-rose-800 border-rose-200/60"
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+};
+
+function EditorInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
+  const {
+    websiteId,
+    editedProfile,
+    selectedTemplate,
+    selectTemplate,
+    loadWebsite,
+    updateField,
+    isDirty,
+    resetEdits,
+  } = useEditor();
+
+  // Navigation Panel tab state (1: Design/Wizard, 2: Domains, 3: Site Settings)
+  const [activeNav, setActiveNav] = useState(1);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  // Onboarding wizard steps (1 to 7, then 9 for free-form editor mode)
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [originalHeadline, setOriginalHeadline] = useState("");
+  const [originalBio, setOriginalBio] = useState("");
+  const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile" | "resizable">("desktop");
+  const [resizableWidth, setResizableWidth] = useState<number>(800);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [actualWidth, setActualWidth] = useState<number>(1200);
+  const [publishing, setPublishing] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
+
+  // Form states
+  const [projects, setProjects] = useState<{ title: string; description: string; link?: string; image?: string }[]>([]);
+  const [interests, setInterests] = useState("");
+  const [skills, setSkills] = useState<{ name: string }[]>([]);
+  const [experience, setExperience] = useState<{ title: string; company: string; duration: string; description: string }[]>([]);
+  const [services, setServices] = useState<{ title: string; price: string; description: string }[]>([]);
+  const [processes, setProcesses] = useState<{ stepTag: string; title: string; description: string }[]>([]);
+  const [testimonials, setTestimonials] = useState<{ quote: string; name: string; role: string; avatarUrl: string }[]>([]);
+  const [links, setLinks] = useState<{ label: string; url: string; icon?: "linkedin" | "twitter" | "github" | "website" | "email" | "other" }[]>([]);
+  const [phone, setPhone] = useState("");
+  const [subdomain, setSubdomain] = useState("");
+  const [checkingSubdomain, setCheckingSubdomain] = useState(false);
+  const [isSubdomainAvailable, setIsSubdomainAvailable] = useState<boolean | null>(null);
+
+  // Inline Add states
+  const [newProjTitle, setNewProjTitle] = useState("");
+  const [newProjDesc, setNewProjDesc] = useState("");
+  const [newProjLink, setNewProjLink] = useState("");
+  const [showAddProject, setShowAddProject] = useState(false);
+
+  const [newExpTitle, setNewExpTitle] = useState("");
+  const [newExpCompany, setNewExpCompany] = useState("");
+  const [newExpDuration, setNewExpDuration] = useState("");
+  const [newExpDesc, setNewExpDesc] = useState("");
+  const [showAddExperience, setShowAddExperience] = useState(false);
+
+  const [newServiceTitle, setNewServiceTitle] = useState("");
+  const [newServicePrice, setNewServicePrice] = useState("");
+  const [newServiceDesc, setNewServiceDesc] = useState("");
+  const [showAddService, setShowAddService] = useState(false);
+
+  const [newProcessTag, setNewProcessTag] = useState("");
+  const [newProcessTitle, setNewProcessTitle] = useState("");
+  const [newProcessDesc, setNewProcessDesc] = useState("");
+  const [showAddProcess, setShowAddProcess] = useState(false);
+
+  const [newTestimonialQuote, setNewTestimonialQuote] = useState("");
+  const [newTestimonialName, setNewTestimonialName] = useState("");
+  const [newTestimonialRole, setNewTestimonialRole] = useState("");
+  const [newTestimonialAvatar, setNewTestimonialAvatar] = useState("");
+  const [showAddTestimonial, setShowAddTestimonial] = useState(false);
+
+  const [newLinkLabel, setNewLinkLabel] = useState("");
+  const [newLinkUrl, setNewLinkUrl] = useState("");
+  const [newLinkIcon, setNewLinkIcon] = useState<"linkedin" | "twitter" | "github" | "website" | "email" | "other">("website");
+  const [showAddLink, setShowAddLink] = useState(false);
+
+  const [newSkill, setNewSkill] = useState("");
+
+  // Free-form editor mode states (Step 9)
+  const [customMessages, setCustomMessages] = useState<{ id: string; role: "user" | "assistant"; content: string }[]>([]);
+  const [chatInput, setChatInput] = useState("");
+  const [isThinking, setIsThinking] = useState(false);
+
+  // Selection mode states for the visual customizer
+  const [isSelectionMode, setIsSelectionMode] = useState<boolean>(false);
+  const [selectedField, setSelectedField] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
+
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const previewContainerRef = useRef<HTMLDivElement>(null);
+
+  // Load website data on mount & Check Auth
+  useEffect(() => {
+    const checkUserAndLoad = async () => {
+      try {
+        const authRes = await fetch("/api/auth/me");
+        const authData = await authRes.json();
+        if (!authRes.ok) {
+          router.push("/login");
+          return;
+        }
+        setUserName(`${authData.user.firstName} ${authData.user.lastName}`);
+        setUserEmail(authData.user.email);
+
+        if (id) {
+          await loadWebsite(id);
+        } else {
+          // Attempt to restore last active website
+          const lastId = sessionStorage.getItem("linkedpage_last_website_id");
+          if (lastId) {
+            router.push(`/editor?id=${lastId}`);
+            return;
+          }
+
+          // Otherwise fetch from database
+          const websRes = await fetch("/api/websites");
+          const websData = await websRes.json();
+          if (websRes.ok && websData.success && websData.websites && websData.websites.length > 0) {
+            // Sort by updatedAt desc to get latest draft
+            const sorted = websData.websites.sort((a: any, b: any) => 
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+            );
+            const latestId = sorted[0].id;
+            router.push(`/editor?id=${latestId}`);
+          } else {
+            router.push("/onboarding");
+          }
+        }
+      } catch {
+        router.push("/login");
+      }
+    };
+    checkUserAndLoad();
+  }, [id, loadWebsite, router]);
+
+  // Load saved chat history when websiteId is available
+  useEffect(() => {
+    if (!websiteId) return;
+    const fetchChatHistory = async () => {
+      try {
+        const res = await fetch(`/api/chat?websiteId=${websiteId}`);
+        const data = await res.json();
+        if (res.ok && data.success && data.history) {
+          const formatted = data.history.map((msg: any) => ({
+            id: msg.id || String(msg.createdAt),
+            role: msg.role as "user" | "assistant",
+            content: msg.content,
+          }));
+          setCustomMessages(formatted);
+        }
+      } catch (err) {
+        console.error("Failed to load chat history:", err);
+      }
+    };
+    fetchChatHistory();
+  }, [websiteId]);
+
+  // Load saved onboarding step from sessionStorage or url parameters on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isOnboardingFlow = searchParams.get("onboarding") === "true";
+      if (!isOnboardingFlow) {
+        // If not in the onboarding flow, default straight to free-form editor (Step 13)
+        setCurrentStep(13);
+        return;
+      }
+
+      const savedStep = sessionStorage.getItem("webild_onboarding_step");
+      if (savedStep) {
+        const parsed = parseInt(savedStep, 10);
+        if (!isNaN(parsed) && parsed >= 1 && parsed <= 13) {
+          setCurrentStep(parsed);
+        }
+      } else {
+        setCurrentStep(1);
+      }
+    }
+  }, [searchParams]);
+
+  // Save currentStep to sessionStorage on changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("webild_onboarding_step", currentStep.toString());
+    }
+  }, [currentStep]);
+
+  // Sync profile data to forms
+  useEffect(() => {
+    if (editedProfile) {
+      if (projects.length === 0 && editedProfile.projects) {
+        setProjects(editedProfile.projects);
+      }
+      if (!interests && editedProfile.interests) {
+        setInterests(editedProfile.interests);
+      }
+      if (skills.length === 0 && editedProfile.skills) {
+        setSkills(editedProfile.skills);
+      }
+      if (experience.length === 0 && editedProfile.experience) {
+        setExperience(editedProfile.experience.map(exp => ({
+          title: exp.title,
+          company: exp.company,
+          duration: exp.duration,
+          description: exp.description || ""
+        })));
+      }
+      
+      const defaultServices = [
+        { title: "Web design", price: "$1200", description: "I create visually appealing, responsive websites with clean layouts, ensuring engaging user experiences and professional digital presence." },
+        { title: "UI/UX Design", price: "$1500", description: "I design intuitive user interfaces and seamless experiences, focusing on usability, accessibility, and modern aesthetics to improve user satisfaction." },
+        { title: "Framer Development", price: "$1300", description: "I build interactive, high-performing websites in Framer, smooth animations, & fully responsive layouts tailored to your brand." },
+        { title: "Mobile App Design", price: "$1600", description: "I design user mobile applications with functional layouts, engaging visuals, & optimized experiences for both iOS & Android platforms." },
+        { title: "Branding & Identity", price: "$1000", description: "I craft unique brand identities including logos, typography, & guidelines, helping businesses stand out with consistency & strong visual presence." }
+      ];
+
+      const defaultProcesses = [
+        { stepTag: "/01", title: "Creative Discovery", description: "Through research and collaboration, we uncover goals, audience needs, and brand vision to build a solid creative foundation." },
+        { stepTag: "/02", title: "Design Blueprint", description: "Transforming insights into structured wireframes and prototypes that guide visuals, user experience, and brand alignment seamlessly." },
+        { stepTag: "/03", title: "Delivery & Launch", description: "Executing development and refined animations, ensuring cross-platform testing, and launching a high-performance experience." }
+      ];
+
+      const defaultTestimonials = [
+        { quote: "Daniel transformed our digital presence with stunning design and seamless usability. Working with him was a complete delight.", name: "James Walker", role: "Marketing Director, BrightEdge", avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" },
+        { quote: "Professional, creative, & highly reliable. he delivered designs that exceeded expectations & strengthened our brand identity across platforms.", name: "Emily Harris", role: "Product Manager, Nexora", avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" },
+        { quote: "His attention to detail and ability to capture our vision in design made the entire process effortless, inspiring, and memorable.", name: "Oliver Bennett", role: "CEO, Innovent Solutions", avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" }
+      ];
+
+      if (services.length === 0) {
+        setServices(editedProfile.services && editedProfile.services.length > 0 ? editedProfile.services : defaultServices);
+      }
+      if (processes.length === 0) {
+        setProcesses(editedProfile.processes && editedProfile.processes.length > 0 ? editedProfile.processes : defaultProcesses);
+      }
+      if (testimonials.length === 0) {
+        setTestimonials(editedProfile.testimonials && editedProfile.testimonials.length > 0 ? editedProfile.testimonials : defaultTestimonials);
+      }
+      if (links.length === 0 && editedProfile.links) {
+        setLinks(editedProfile.links);
+      }
+      if (!phone && editedProfile.phone) {
+        setPhone(editedProfile.phone);
+      }
+
+      if (!subdomain && editedProfile.name) {
+        const slug = editedProfile.name.toLowerCase().replace(/\s+/g, "").replace(/[^a-z0-9]/g, "");
+        setSubdomain(slug);
+      }
+    }
+  }, [editedProfile]);
+
+  // Check subdomain availability
+  useEffect(() => {
+    if (subdomain.length < 3) {
+      setIsSubdomainAvailable(null);
+      return;
+    }
+    setCheckingSubdomain(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/websites/subdomain/check?slug=${subdomain}${websiteId ? `&websiteId=${websiteId}` : ""}`);
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setIsSubdomainAvailable(data.available);
+        } else {
+          setIsSubdomainAvailable(null);
+        }
+      } catch {
+        setIsSubdomainAvailable(null);
+      } finally {
+        setCheckingSubdomain(false);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [subdomain, websiteId]);
+
+  // Auto-scroll to bottom of chat
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [currentStep, showAddProject, customMessages, isThinking]);
+
+  // Listen for mouse dragging events to resize preview canvas
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!previewContainerRef.current) return;
+      const rect = previewContainerRef.current.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      const distance = Math.abs(e.clientX - center);
+      const calculatedWidth = Math.round(distance * 2);
+      const maxWidth = Math.min(1600, rect.width - 40); // 20px padding on each side
+      setResizableWidth(Math.max(320, Math.min(maxWidth, calculatedWidth)));
+      setPreviewMode("resizable");
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
+
+  // Keep actualWidth state in sync with rendered preview frame width
+  useEffect(() => {
+    const updateWidth = () => {
+      if (previewContainerRef.current) {
+        let width = previewContainerRef.current.getBoundingClientRect().width - 48; // -48 for p-6 padding
+        if (previewMode === "tablet") {
+          width = Math.min(width, 768);
+        } else if (previewMode === "mobile") {
+          width = Math.min(width, 375);
+        } else if (previewMode === "resizable") {
+          width = Math.min(width, resizableWidth);
+        }
+        setActualWidth(Math.round(width));
+      }
+    };
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, [previewMode, resizableWidth]);
+
+  // Step 11: AI Optimization
+  useEffect(() => {
+    if (currentStep === 11) {
+      if (editedProfile) {
+        setOriginalHeadline(editedProfile.headline || "");
+        setOriginalBio(editedProfile.summary || "");
+      }
+      const runAiRefinement = async () => {
+        setOptimizing(true);
+        try {
+          const res = await fetch("/api/onboarding/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              websiteId,
+              projects,
+              interests,
+              skills,
+              experience,
+            }),
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            toast.success("AI copy refinement complete!");
+            if (websiteId) {
+              await loadWebsite(websiteId);
+            }
+          }
+        } catch (err) {
+          console.error("AI refinement failed:", err);
+          setCurrentStep(12);
+        } finally {
+          setOptimizing(false);
+        }
+      };
+      runAiRefinement();
+    }
+  }, [currentStep]);
+
+  // Handle final publish
+  const handlePublish = async () => {
+    if (!websiteId) return;
+    setPublishing(true);
+    const toastId = toast.loading("Publishing your professional portfolio page...");
+    try {
+      // 1. Update slug & template preference in DB
+      const saveRes = await fetch(`/api/websites/${websiteId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subdomainSlug: subdomain,
+          templateId: selectedTemplate,
+          profile: editedProfile,
+        }),
+      });
+
+      if (!saveRes.ok) {
+        throw new Error("Failed to save subdomain slug settings.");
+      }
+
+      // 2. Call publish API
+      const response = await fetch(`/api/websites/${websiteId}/publish`, {
+        method: "POST",
+      });
+      const data = await response.json();
+      toast.dismiss(toastId);
+      setPublishing(false);
+      if (!response.ok) {
+        toast.error(data.error || "Failed to publish website");
+        return;
+      }
+      toast.success("Your page is live! 🎉");
+      router.push(`/publish?slug=${data.slug}`);
+    } catch (err: any) {
+      toast.dismiss(toastId);
+      setPublishing(false);
+      toast.error(err.message || "Network error. Failed to publish website.");
+    }
+  };
+
+  const handleNextStep = () => {
+    // Save to context local state on next clicks
+    if (currentStep === 4) updateField("experience", experience);
+    if (currentStep === 5) updateField("projects", projects);
+    if (currentStep === 6) updateField("services", services);
+    if (currentStep === 8) updateField("processes", processes);
+    if (currentStep === 9) updateField("testimonials", testimonials);
+    if (currentStep === 10) {
+      updateField("links", links);
+      updateField("phone", phone);
+    }
+
+    setCurrentStep(currentStep + 1);
+  };
+
+  const handleBackStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  // Services helpers
+  const addService = () => {
+    if (!newServiceTitle.trim()) {
+      toast.error("Service title is required");
+      return;
+    }
+    const updated = [
+      ...services,
+      {
+        title: newServiceTitle.trim(),
+        price: newServicePrice.trim() || "$1000",
+        description: newServiceDesc.trim(),
+      },
+    ];
+    setServices(updated);
+    updateField("services", updated);
+    setNewServiceTitle("");
+    setNewServicePrice("");
+    setNewServiceDesc("");
+    setShowAddService(false);
+  };
+
+  const removeService = (idx: number) => {
+    const updated = services.filter((_, i) => i !== idx);
+    setServices(updated);
+    updateField("services", updated);
+  };
+
+  // Processes helpers
+  const addProcess = () => {
+    if (!newProcessTitle.trim()) {
+      toast.error("Process step title is required");
+      return;
+    }
+    const nextStepNum = processes.length + 1;
+    const tag = newProcessTag.trim() || `/0${nextStepNum}`;
+    const updated = [
+      ...processes,
+      {
+        stepTag: tag,
+        title: newProcessTitle.trim(),
+        description: newProcessDesc.trim(),
+      },
+    ];
+    setProcesses(updated);
+    updateField("processes", updated);
+    setNewProcessTag("");
+    setNewProcessTitle("");
+    setNewProcessDesc("");
+    setShowAddProcess(false);
+  };
+
+  const removeProcess = (idx: number) => {
+    const updated = processes.filter((_, i) => i !== idx);
+    // Re-adjust tags dynamically
+    const reTagged = updated.map((p, i) => ({
+      ...p,
+      stepTag: `/0${i + 1}`,
+    }));
+    setProcesses(reTagged);
+    updateField("processes", reTagged);
+  };
+
+  // Testimonials helpers
+  const addTestimonial = () => {
+    if (!newTestimonialQuote.trim() || !newTestimonialName.trim()) {
+      toast.error("Quote and client name are required");
+      return;
+    }
+    const updated = [
+      ...testimonials,
+      {
+        quote: newTestimonialQuote.trim(),
+        name: newTestimonialName.trim(),
+        role: newTestimonialRole.trim() || "Client",
+        avatarUrl: newTestimonialAvatar.trim() || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(newTestimonialName)}`,
+      },
+    ];
+    setTestimonials(updated);
+    updateField("testimonials", updated);
+    setNewTestimonialQuote("");
+    setNewTestimonialName("");
+    setNewTestimonialRole("");
+    setNewTestimonialAvatar("");
+    setShowAddTestimonial(false);
+  };
+
+  const removeTestimonial = (idx: number) => {
+    const updated = testimonials.filter((_, i) => i !== idx);
+    setTestimonials(updated);
+    updateField("testimonials", updated);
+  };
+
+  // Links helpers
+  const addLink = () => {
+    if (!newLinkLabel.trim() || !newLinkUrl.trim()) {
+      toast.error("Link label and URL are required");
+      return;
+    }
+    const updated = [
+      ...links,
+      {
+        label: newLinkLabel.trim(),
+        url: newLinkUrl.trim(),
+        icon: newLinkIcon,
+      },
+    ];
+    setLinks(updated);
+    updateField("links", updated);
+    setNewLinkLabel("");
+    setNewLinkUrl("");
+    setNewLinkIcon("website");
+    setShowAddLink(false);
+  };
+
+  const removeLink = (idx: number) => {
+    const updated = links.filter((_, i) => i !== idx);
+    setLinks(updated);
+    updateField("links", updated);
+  };
+
+  const addProject = () => {
+    if (!newProjTitle.trim()) {
+      toast.error("Project title is required");
+      return;
+    }
+    const updated = [
+      ...projects,
+      {
+        title: newProjTitle.trim(),
+        description: newProjDesc.trim(),
+        link: newProjLink.trim() || undefined,
+        image: `https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60`,
+      },
+    ];
+    setProjects(updated);
+    updateField("projects", updated);
+    setNewProjTitle("");
+    setNewProjDesc("");
+    setNewProjLink("");
+    setShowAddProject(false);
+  };
+
+  const removeProject = (idx: number) => {
+    const updated = projects.filter((_, i) => i !== idx);
+    setProjects(updated);
+    updateField("projects", updated);
+  };
+
+  const addSkillTag = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newSkill.trim()) return;
+    if (skills.some(s => s.name.toLowerCase() === newSkill.trim().toLowerCase())) {
+      setNewSkill("");
+      return;
+    }
+    const updated = [...skills, { name: newSkill.trim() }];
+    setSkills(updated);
+    updateField("skills", updated);
+    setNewSkill("");
+  };
+
+  const removeSkillTag = (name: string) => {
+    const updated = skills.filter(s => s.name !== name);
+    setSkills(updated);
+    updateField("skills", updated);
+  };
+
+  const addExperienceItem = () => {
+    const updated = [
+      ...experience,
+      {
+        title: "New Role",
+        company: "Company Name",
+        duration: "Jan 2026 - Present",
+        description: "",
+      },
+    ];
+    setExperience(updated);
+    updateField("experience", updated);
+  };
+
+  const updateExperienceItem = (index: number, key: string, value: string) => {
+    const updated = [...experience];
+    updated[index] = { ...updated[index], [key]: value };
+    setExperience(updated);
+    updateField("experience", updated);
+  };
+
+  const removeExperienceItem = (idx: number) => {
+    const updated = experience.filter((_, i) => i !== idx);
+    setExperience(updated);
+    updateField("experience", updated);
+  };
+
+  // Dispatch free-form messages to backend AI route
+  const sendChatMessage = async (text?: string) => {
+    const msg = text ?? chatInput.trim();
+    if (!msg) return;
+    if (!text) setChatInput("");
+
+    // Append user message bubble to timeline
+    const userMsg = { id: Date.now().toString(), role: "user" as const, content: msg };
+    setCustomMessages(prev => [...prev, userMsg]);
+
+    if (!websiteId) {
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 1).toString(), role: "assistant" as const, content: "No active site loaded. Please select a website from the dashboard first." }
+      ]);
+      return;
+    }
+
+    setIsThinking(true);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: msg, websiteId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to get AI reply");
+      }
+
+      // Append assistant text answer
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 2).toString(), role: "assistant" as const, content: data.reply }
+      ]);
+
+      if (data.template) {
+        selectTemplate(data.template);
+      }
+
+      if (data.profileUpdates) {
+        for (const [k, v] of Object.entries(data.profileUpdates)) {
+          updateField(k as any, v as any);
+        }
+      }
+
+      // Reload website details to sync latest changes to local context and preview
+      await loadWebsite(websiteId);
+    } catch (err: any) {
+      setCustomMessages(prev => [
+        ...prev,
+        { id: (Date.now() + 3).toString(), role: "assistant" as const, content: `Error: ${err.message || "Failed to parse AI response."}` }
+      ]);
+    } finally {
+      setIsThinking(false);
+    }
+  };
+
+  // Preview click handler to map sections to wizard steps or select elements
+  const handleFieldClick = (fieldName: string, index?: number) => {
+    if (isSelectionMode) {
+      setSelectedField(fieldName);
+      setSelectedIndex(index);
+    } else {
+      setActiveNav(1); // Switch back to Design/Wizard tab
+      const field = fieldName.toLowerCase();
+      if (field === "name" || field === "headline" || field === "avatarurl") {
+        setCurrentStep(1);
+      } else if (field.startsWith("hero") || field === "statustext" || field === "followmelabel" || field === "badge") {
+        setCurrentStep(2);
+      } else if (field === "summary" || field === "location" || field === "bannerurl" || field === "aboutlabel" || field === "aboutphotourl") {
+        setCurrentStep(3);
+      } else if (field === "skills" || field === "brandslabel") {
+        setCurrentStep(4);
+      } else if (field === "project" || field === "projects" || field === "projectslabel" || field === "projectssubtitle" || field === "projectsexploretext" || field === "projectsexploreurl") {
+        setCurrentStep(5);
+      } else if (field === "service" || field === "services" || field === "serviceslabel" || field === "servicestitle") {
+        setCurrentStep(6);
+      } else if (field === "servicescta") {
+        setCurrentStep(7);
+      } else if (field === "process" || field === "processes" || field === "processlabel" || field === "processtitle") {
+        setCurrentStep(8);
+      } else if (field === "testimonial" || field === "testimonials" || field === "testimonialslabel" || field === "testimonialstitle") {
+        setCurrentStep(9);
+      } else if (field === "email" || field === "phone" || field === "links" || field === "footerlabel") {
+        setCurrentStep(10);
+      } else {
+        toast.info(`Select the options in the chat flow to modify your ${fieldName}.`);
+      }
+    }
+  };
+
+  const handleImageUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: string,
+    index?: number
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image file is too large (max 2MB)");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      if (index !== undefined) {
+        if (field === "projects") {
+          const list = [...projects];
+          list[index] = { ...list[index], image: base64 };
+          setProjects(list);
+          updateField("projects", list);
+        } else if (field === "testimonials") {
+          const list = [...testimonials];
+          list[index] = { ...list[index], avatarUrl: base64 };
+          setTestimonials(list);
+          updateField("testimonials", list);
+        }
+      } else {
+        updateField(field as any, base64);
+      }
+      toast.success("Image updated successfully!");
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const profileName = editedProfile?.name ?? "Your Profile";
+  const desktopScale = 0.54;
+  const mobileScale = 0.44;
+
+  return (
+    <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
+      
+      {/* ── Left Sidebar (Collapsible hover style) ── */}
+      <div className="w-[60px] h-full shrink-0 relative z-[60]">
+        <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_32px_#ffff] py-4">
+          <div className="flex flex-col items-start w-full">
+            {/* Project/Brand logo icon */}
+            <div className="flex items-center px-[10px] mb-4 w-full cursor-pointer group/project relative">
+              <div className="w-10 h-10 flex shrink-0 items-center justify-center rounded-[12px] bg-white border border-[#E6E6E6] text-[#2A2A2F] font-semibold text-[15px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] group-hover:mr-3 transition-all duration-300 relative z-10 overflow-hidden p-1.5">
+                <img src="/logoicon.png" alt="Logo" className="w-full h-full object-contain" />
+              </div>
+              <div className="flex items-center justify-between w-[170px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-[62px] pointer-events-none group-hover:pointer-events-auto">
+                <span className="font-medium text-[#2A2A2F] text-[15px] truncate">{profileName}</span>
+                <svg className="w-5 h-5 text-[#171717]/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="w-full px-4 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="h-px w-full bg-[#E6E6E6]/60" />
+            </div>
+
+            {/* Navigation links */}
+            <nav className="flex flex-col gap-[2px] w-full px-2">
+              {navItems.map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    if (i === 0) {
+                      router.push("/dashboard");
+                    } else {
+                      setActiveNav(i);
+                      if (i !== 1) {
+                        setIsSelectionMode(false);
+                        setSelectedField(null);
+                        setSelectedIndex(undefined);
+                      }
+                    }
+                  }}
+                  title={item.label}
+                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${
+                    activeNav === i
+                      ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                      : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
+                  }`}
+                >
+                  <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                    {item.icon}
+                  </div>
+                  <span className={`ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none ${activeNav === i ? "text-[#3b82f6]" : ""}`}>
+                    {item.label}
+                  </span>
+                </button>
+              ))}
+            </nav>
+          </div>
+
+          <div className="flex flex-col items-center w-full mt-auto">
+            {/* Upgrade Plan Promo Card */}
+            <div className="px-3 w-full mb-3 opacity-0 group-hover:opacity-100 transition-all duration-300 max-h-0 group-hover:max-h-[250px] overflow-hidden flex-shrink-0">
+              <div className="relative p-[14px] bg-white border border-[#E6E6E6] rounded-[14px] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] overflow-hidden text-left mt-2">
+                <p className="text-[14px] font-semibold text-[#2A2A2F] leading-[1.3] mb-3">
+                  ONLY {process.env.NEXT_PUBLIC_UPGRADE_PRICE || "$16"} to<br />unlock Premium<br />Features
+                </p>
+                <button
+                  onClick={() => toast.info("Premium plans unlocking soon!")}
+                  className="w-full py-1.5 bg-[#4b93ff] text-white rounded-lg text-[13px] font-medium hover:bg-[#3b82f6] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                >
+                  Upgrade Now
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom links */}
+            <div className="flex flex-col gap-1 w-full px-2">
+              <button
+                onClick={() => setActiveNav(3)}
+                className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
+              >
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Settings
+                </span>
+              </button>
+              <button
+                onClick={() => toast.info("Check back later for help articles.")}
+                className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/70 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
+              >
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Help
+                </span>
+              </button>
+            </div>
+
+            <div className="w-full px-4 my-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="h-px w-full bg-[#E6E6E6]/60" />
+            </div>
+
+            <div className="px-2 w-full">
+              <button
+                onClick={() => router.push("/onboarding")}
+                className="w-full flex items-center h-9 px-2 rounded-[10px] text-[#171717]/80 hover:bg-[#E6E6E6]/50 hover:text-[#2A2A2F] transition-all duration-150 relative"
+              >
+                <div className="w-5 h-5 flex items-center justify-center shrink-0">
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+                <span className="ml-3 font-medium text-[14px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap absolute left-[44px] pointer-events-none">
+                  Add new website
+                </span>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      {/* ── Left Column Panel Switcher based on activeNav ── */}
+      
+      {/* 1. Design / AI Onboarding Wizard Panel */}
+      {activeNav === 1 && (
+        <aside className="h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300 w-[510px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs">
+          {isSelectionMode ? (
+            editedProfile ? (
+              <PropertiesPanel
+                profile={editedProfile}
+                selectedField={selectedField}
+                selectedIndex={selectedIndex}
+                onChange={updateField}
+                onClose={() => {
+                  setIsSelectionMode(false);
+                  setSelectedField(null);
+                  setSelectedIndex(undefined);
+                }}
+                onSelectField={(field, idx) => {
+                  setSelectedField(field);
+                  setSelectedIndex(idx);
+                }}
+              />
+            ) : (
+              <div className="flex-1 flex items-center justify-center text-sm text-neutral-450 font-sans">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-6 h-6 border-2 border-neutral-350 border-t-neutral-600 rounded-full animate-spin" />
+                  <span>Loading customizer...</span>
+                </div>
+              </div>
+            )
+          ) : (
+            <div className="flex flex-col justify-between h-full w-full bg-white">
+              {/* Title Header */}
+              <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
+                <div className="flex items-center justify-between w-full">
+                  <div className="flex items-center gap-2">
+                    <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
+                    <div className="w-px h-3 bg-[#18181B]/10" />
+                    <span className="text-[12.5px] font-bold text-[#18181B]/70 truncate max-w-[120px]">
+                      {profileName}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        sessionStorage.removeItem("webild_onboarding_step");
+                        setCurrentStep(1);
+                        router.push("/onboarding?retry=true");
+                      }}
+                      className="text-[11px] font-semibold text-neutral-450 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1 rounded-lg"
+                    >
+                      Restart
+                    </button>
+                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
+                      Editor Mode
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Scrollable Wizard History */}
+              <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
+                <div className="space-y-6 flex flex-col">
+                  
+                  {/* Step 1 Welcome */}
+                  {currentStep >= 1 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Hello! Welcome to Webild. I have successfully initialized your profile details using your LinkedIn profile. Let's review and customize your portfolio details step-by-step. First, let's verify your basic identity details.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 1 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Profile identity details confirmed.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 2 Hero Details */}
+                  {currentStep >= 2 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Let's refine your Hero Section details. This is the first section visitors see, so we want to make it stand out. Please review the greeting, main headline, status badge, and call-to-action details.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 2 && (
+                    <div className="w-full flex justify-end items-start font-inter">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Hero section details saved.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3 About Me */}
+                  {currentStep >= 3 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Next, let's customize your About Me section. Please verify your bio summary, the section label, and your portrait photo URL.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 3 && (
+                    <div className="w-full flex justify-end items-start font-inter">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Bio summary and location updated.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 4 Skills & Brands Ticker */}
+                  {currentStep >= 4 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Excellent. Let's adjust your Core Skills and Tools tags, and the headline label for the client brands ticker.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 4 && (
+                    <div className="w-full flex justify-end items-start font-inter">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Skills and brand tags updated.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 5 Projects & Highlights */}
+                  {currentStep >= 5 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Let's review your Projects and Portfolio Highlights. You can customize the portfolio section label, the subtitle description, and add or remove projects.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 5 && (
+                    <div className="w-full flex justify-end items-start font-inter">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Projects list saved.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 6 Services Grid */}
+                  {currentStep >= 6 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Great. Now let's outline the core services and pricing packages you offer to prospective clients.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 6 && (
+                    <div className="w-full flex justify-end items-start font-inter">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Services grid details saved.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 7 Services Call-To-Action */}
+                  {currentStep >= 7 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Let's define your Services Call-To-Action banner. This is a highlighted block prompting visitors to book a call or get in touch.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 7 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Services call-to-action details updated.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 8 Processes */}
+                  {currentStep >= 8 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Let's detail your work process. Showing step-by-step how you collaborate makes the project execution transparent for clients.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 8 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Work process steps saved.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 9 Reviews & Testimonials */}
+                  {currentStep >= 9 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Let's add client reviews and testimonials. Direct social proof from clients builds instant credibility.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 9 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Testimonials and client reviews saved.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 10 Contact & Socials */}
+                  {currentStep >= 10 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        Finally, let's verify your contact information, phone number, and custom social or portfolio links for the footer.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 10 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Contact info and footer links updated.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 11 AI Refinement */}
+                  {currentStep >= 11 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                        {optimizing ? (
+                          <div className="flex items-center gap-2">
+                            <Loader2 className="w-4 h-4 animate-spin text-[#3B82F6]" />
+                            Refining your bio summary and headline with AI for optimal conversion...
+                          </div>
+                        ) : (
+                          <span>I have optimized your headline and bio summary using AI to make them sound more professional and impactful. You can compare the original and polished copy below, and tweak them to your liking.</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 11 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          AI copywriting refinement approved.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 12 Template Picker */}
+                  {currentStep >= 12 && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      <div className="flex items-center gap-2 select-none">
+                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                        <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                      </div>
+                      <div className="w-full bg-[#FBFBFB] border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs font-inter">
+                        Excellent! We are almost done. Now, select one of the four premium Framer-inspired template styles below to apply to your entire layout.
+                      </div>
+                    </div>
+                  )}
+                  {currentStep > 12 && (
+                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                      <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                        <p className="text-[#18181B] text-[15px] leading-[22px] font-normal">
+                          Layout design template chosen.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 13 Free-form Chat Mode */}
+                  {currentStep === 13 && (
+                    <>
+                      <div className="flex items-center gap-2 py-4 select-none">
+                        <div className="h-px bg-zinc-200/50 flex-1" />
+                        <span className="text-[10.5px] font-bold text-zinc-400 uppercase tracking-widest font-mono">Free-Form Chat Editor</span>
+                        <div className="h-px bg-zinc-200/50 flex-1" />
+                      </div>
+
+                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-300">
+                        <div className="flex items-center gap-2 select-none">
+                          <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                          <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                        </div>
+                        <div className="w-full bg-white border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs">
+                          Setup complete! Your portfolio page is ready. You can ask me to change copy, layout templates, update details, or click on customize mode to edit details manually.
+                        </div>
+                      </div>
+
+                      {/* Custom chat history messages */}
+                      {customMessages.map((msg) => (
+                        <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                          {msg.role === "user" ? (
+                            <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                              <div className="max-w-[85%] bg-[#F3F3F3] border border-[#E6E6E6]/40 rounded-2xl px-4 py-3 shadow-xs">
+                                <p className="text-[#18181B] text-[15px] leading-[22px] font-normal break-words max-w-full">
+                                  {msg.content}
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                              <div className="flex items-center gap-2 select-none">
+                                <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                                <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                              </div>
+                              <div className="w-full bg-white border border-zinc-200/50 rounded-2xl p-5 text-left text-[#18181B] text-[16px] leading-[26px] font-normal shadow-xs whitespace-pre-wrap">
+                                {msg.content}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {/* Thinking / Dots loader */}
+                      {isThinking && (
+                        <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
+                          <div className="flex items-center gap-2 select-none">
+                            <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                            <span className="font-semibold text-[13.5px] text-[#18181B]">Webild</span>
+                          </div>
+                          <div className="bg-white px-4 py-3 rounded-2xl border border-zinc-200/50 shadow-xs flex items-center justify-center">
+                            <div className="flex items-center gap-[3px] px-1 py-0.5">
+                              {[0, 1, 2].map((i) => (
+                                <div
+                                  key={i}
+                                  className="w-[5px] h-[5px] rounded-full bg-[#18181B]/40 animate-bounce"
+                                  style={{ animationDelay: `${i * 0.18}s` }}
+                                />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Bottom input composer area */}
+              <div className="p-4 shrink-0 bg-white border-t border-zinc-200/50 flex flex-col gap-3">
+                <div className="w-full flex flex-col gap-3">
+                  <div className="max-h-[380px] overflow-y-auto pr-1 space-y-4 text-left" style={{ scrollbarWidth: "none" }}>
+                    
+                    {/* Step 1 Form: Profile Identity */}
+                    {currentStep === 1 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Full Name</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.name || ""}
+                              onChange={(e) => updateField("name", e.target.value)}
+                              placeholder="e.g. Alex Morgan"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Headline</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.headline || ""}
+                              onChange={(e) => updateField("headline", e.target.value)}
+                              placeholder="e.g. Senior Lead Designer"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Location</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.location || ""}
+                              onChange={(e) => updateField("location", e.target.value)}
+                              placeholder="e.g. San Francisco, CA"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Avatar Photo URL</label>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="text"
+                                className="flex-1 h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-xs transition-all outline-none font-mono"
+                                value={editedProfile?.avatarUrl || ""}
+                                onChange={(e) => updateField("avatarUrl", e.target.value)}
+                                placeholder="https://..."
+                              />
+                              <input
+                                type="file"
+                                id="onboarding-avatar-file"
+                                accept="image/*"
+                                onChange={(e) => handleImageUpload(e, "avatarUrl")}
+                                className="hidden"
+                              />
+                              <button
+                                onClick={() => document.getElementById("onboarding-avatar-file")?.click()}
+                                className="h-11 px-4 text-xs font-bold bg-[#F3F3F3] hover:bg-zinc-200 text-[#18181B] rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all active:scale-[0.98] cursor-pointer"
+                              >
+                                Upload
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-end pt-2">
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Confirm & Continue <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 2 Form: Hero Details */}
+                    {currentStep === 2 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting Start</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3 text-sm transition-all outline-none"
+                              value={editedProfile?.heroGreetingStart || ""}
+                              onChange={(e) => updateField("heroGreetingStart", e.target.value)}
+                              placeholder="Hey,"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting Name</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3 text-sm transition-all outline-none"
+                              value={editedProfile?.heroGreetingName || ""}
+                              onChange={(e) => updateField("heroGreetingName", e.target.value)}
+                              placeholder="Alex"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Greeting End</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3 text-sm transition-all outline-none"
+                              value={editedProfile?.heroGreetingEnd || ""}
+                              onChange={(e) => updateField("heroGreetingEnd", e.target.value)}
+                              placeholder="here"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Badge Text</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3 text-sm transition-all outline-none"
+                              value={editedProfile?.heroBadgeText || ""}
+                              onChange={(e) => updateField("heroBadgeText", e.target.value)}
+                              placeholder="Welcome here"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Rating Text</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3 text-sm transition-all outline-none font-mono"
+                              value={editedProfile?.heroRatingText || ""}
+                              onChange={(e) => updateField("heroRatingText", e.target.value)}
+                              placeholder="4.9 / 5"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Hero Subheadline</label>
+                          <input
+                            type="text"
+                            className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                            value={editedProfile?.heroSubheadline || ""}
+                            onChange={(e) => updateField("heroSubheadline", e.target.value)}
+                            placeholder="Turning ideas into digital experiences"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">CTA Button Label</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.heroCtaText || ""}
+                              onChange={(e) => updateField("heroCtaText", e.target.value)}
+                              placeholder="Book A Call"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">CTA Button Link</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-xs transition-all outline-none font-mono"
+                              value={editedProfile?.heroCtaUrl || ""}
+                              onChange={(e) => updateField("heroCtaUrl", e.target.value)}
+                              placeholder="#contact"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-between pt-2">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 3 Form: About Me */}
+                    {currentStep === 3 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Label</label>
+                          <input
+                            type="text"
+                            className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                            value={editedProfile?.aboutLabel || ""}
+                            onChange={(e) => updateField("aboutLabel", e.target.value)}
+                            placeholder="About me"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Bio Summary</label>
+                          <textarea
+                            className="border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl p-3.5 text-xs transition-all outline-none resize-none leading-relaxed"
+                            value={editedProfile?.summary || ""}
+                            onChange={(e) => updateField("summary", e.target.value)}
+                            placeholder="Introduce yourself..."
+                            rows={4}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Portrait Photo URL</label>
+                          <div className="flex items-center gap-2">
+                            <input
+                              type="text"
+                              className="flex-1 h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-xs transition-all outline-none font-mono"
+                              value={editedProfile?.bannerUrl || ""}
+                              onChange={(e) => updateField("bannerUrl", e.target.value)}
+                              placeholder="https://..."
+                            />
+                            <input
+                              type="file"
+                              id="onboarding-portrait-file"
+                              accept="image/*"
+                              onChange={(e) => handleImageUpload(e, "bannerUrl")}
+                              className="hidden"
+                            />
+                            <button
+                              onClick={() => document.getElementById("onboarding-portrait-file")?.click()}
+                              className="h-11 px-4 text-xs font-bold bg-[#F3F3F3] hover:bg-zinc-200 text-[#18181B] rounded-xl border border-neutral-200 hover:border-neutral-300 transition-all active:scale-[0.98] cursor-pointer"
+                            >
+                              Upload
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex justify-between pt-2">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 4 Form: Skills & Brands */}
+                    {currentStep === 4 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Brand Ticker Headline</label>
+                          <input
+                            type="text"
+                            className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                            value={editedProfile?.brandsLabel || ""}
+                            onChange={(e) => updateField("brandsLabel", e.target.value)}
+                            placeholder="Worked with Global Brands"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Core Skills & Tools</label>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Add a skill, e.g. TailwindCSS"
+                              value={newSkill}
+                              onChange={(e) => setNewSkill(e.target.value)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                  e.preventDefault();
+                                  addSkillTag(e);
+                                }
+                              }}
+                              className="flex-1 h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-xs transition-all outline-none"
+                            />
+                            <button
+                              type="button"
+                              onClick={(e) => addSkillTag(e)}
+                              className="h-11 px-4 text-xs font-bold bg-[#18181B] hover:bg-zinc-800 text-white rounded-xl transition-all active:scale-[0.98] cursor-pointer border-none"
+                            >
+                              Add
+                            </button>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5 p-3.5 bg-neutral-50/50 border border-neutral-200/60 rounded-xl max-h-36 overflow-y-auto mt-1" style={{ scrollbarWidth: "none" }}>
+                            {skills.map((skill, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white border border-neutral-200/80 rounded-full text-xs font-semibold text-[#18181B] shadow-xs animate-in zoom-in-95 duration-100 select-none"
+                              >
+                                {skill.name}
+                                <button
+                                  type="button"
+                                  onClick={() => removeSkillTag(skill.name)}
+                                  className="w-3.5 h-3.5 rounded-full hover:bg-red-50 text-neutral-400 hover:text-red-650 flex items-center justify-center border-none text-[10px] cursor-pointer"
+                                >
+                                  x
+                                </button>
+                              </span>
+                            ))}
+                            {skills.length === 0 && (
+                              <span className="text-xs text-neutral-400 italic">No skills added yet</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex justify-between pt-2">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 5 Form: Projects */}
+                    {currentStep === 5 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Label</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.projectsLabel || ""}
+                              onChange={(e) => updateField("projectsLabel", e.target.value)}
+                              placeholder="My Portfolio"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Subtitle</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.projectsSubtitle || ""}
+                              onChange={(e) => updateField("projectsSubtitle", e.target.value)}
+                              placeholder="Every project built to inspire users"
+                            />
+                          </div>
+                        </div>
+
+                        {showAddProject ? (
+                          <div className="border border-neutral-200/80 bg-neutral-50/50 rounded-xl p-4 space-y-3 shadow-xs">
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Project Title</label>
+                              <input
+                                type="text"
+                                placeholder="e.g. Financial Dashboard App"
+                                value={newProjTitle}
+                                onChange={(e) => setNewProjTitle(e.target.value)}
+                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Short Description</label>
+                              <textarea
+                                placeholder="What did you build? What tech did you use?"
+                                value={newProjDesc}
+                                onChange={(e) => setNewProjDesc(e.target.value)}
+                                rows={2}
+                                className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800 resize-none leading-relaxed"
+                              />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Project URL</label>
+                              <input
+                                type="text"
+                                placeholder="https://..."
+                                value={newProjLink}
+                                onChange={(e) => setNewProjLink(e.target.value)}
+                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800"
+                              />
+                            </div>
+                            <div className="flex gap-2 justify-end pt-1">
+                              <button 
+                                onClick={() => setShowAddProject(false)} 
+                                className="h-9 px-3 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-lg border border-neutral-200 bg-white transition-all active:scale-[0.97] cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                              <button 
+                                onClick={addProject} 
+                                className="h-9 px-3 text-xs font-bold bg-[#3B82F6] hover:bg-[#2563eb] text-white rounded-lg transition-all active:scale-[0.97] shadow-sm cursor-pointer border-none"
+                              >
+                                Add Project
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Project Highlights ({projects.length})</span>
+                              <button
+                                onClick={() => setShowAddProject(true)}
+                                className="h-8 px-3 bg-[#18181B] hover:bg-zinc-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 active:scale-[0.97] transition-all cursor-pointer border-none"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add Project
+                              </button>
+                            </div>
+                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+                              {projects.map((proj, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className="flex items-center justify-between p-2.5 bg-neutral-50 border border-neutral-200/50 rounded-xl"
+                                >
+                                  <div className="truncate pr-4 flex-1">
+                                    <span className="text-xs font-bold text-[#18181B] block truncate">{proj.title}</span>
+                                    {proj.description && (
+                                      <span className="text-[10px] text-neutral-550 block truncate mt-0.5">{proj.description}</span>
+                                    )}
+                                  </div>
+                                  <button 
+                                    onClick={() => removeProject(idx)} 
+                                    className="text-neutral-400 hover:text-red-655 p-1.5 rounded-lg active:scale-95 transition-all border-none bg-transparent cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                              {projects.length === 0 && (
+                                <div className="text-center py-6 text-xs text-neutral-450 italic">No projects added yet.</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 6 Form: Services */}
+                    {currentStep === 6 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Label</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.servicesLabel || ""}
+                              onChange={(e) => updateField("servicesLabel", e.target.value)}
+                              placeholder="What I Do"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Headline</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.servicesTitle || ""}
+                              onChange={(e) => updateField("servicesTitle", e.target.value)}
+                              placeholder="Turning ideas into digital experiences"
+                            />
+                          </div>
+                        </div>
+
+                        {showAddService ? (
+                          <div className="border border-neutral-200/80 bg-neutral-50/50 rounded-xl p-4 space-y-3 shadow-xs">
+                            <div className="grid grid-cols-3 gap-2">
+                              <div className="col-span-2 flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Service Title</label>
+                                <input
+                                  type="text"
+                                  placeholder="e.g. Web Design"
+                                  value={newServiceTitle}
+                                  onChange={(e) => setNewServiceTitle(e.target.value)}
+                                  className="h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Price</label>
+                                <input
+                                  type="text"
+                                  placeholder="e.g. $1000"
+                                  value={newServicePrice}
+                                  onChange={(e) => setNewServicePrice(e.target.value)}
+                                  className="h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800 font-mono"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Description</label>
+                              <textarea
+                                placeholder="Brief description of service deliverables..."
+                                value={newServiceDesc}
+                                onChange={(e) => setNewServiceDesc(e.target.value)}
+                                rows={2}
+                                className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800 resize-none leading-relaxed"
+                              />
+                            </div>
+                            <div className="flex gap-2 justify-end pt-1">
+                              <button 
+                                onClick={() => setShowAddService(false)} 
+                                className="h-9 px-3 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-lg border border-neutral-200 bg-white transition-all active:scale-[0.97] cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                              <button 
+                                onClick={addService} 
+                                className="h-9 px-3 text-xs font-bold bg-[#3B82F6] hover:bg-[#2563eb] text-white rounded-lg transition-all active:scale-[0.97] shadow-sm cursor-pointer border-none"
+                              >
+                                Add Service
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Services Offered ({services.length})</span>
+                              <button
+                                onClick={() => setShowAddService(true)}
+                                className="h-8 px-3 bg-[#18181B] hover:bg-zinc-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 active:scale-[0.97] transition-all cursor-pointer border-none"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add Service
+                              </button>
+                            </div>
+                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+                              {services.map((srv, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className="flex items-center justify-between p-2.5 bg-neutral-50 border border-neutral-200/50 rounded-xl"
+                                >
+                                  <div className="truncate pr-4 flex-1">
+                                    <span className="text-xs font-bold text-[#18181B]">{srv.title}</span>
+                                    <span className="text-[10px] text-neutral-550 block truncate mt-0.5">{srv.description}</span>
+                                  </div>
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-xs font-mono font-bold text-neutral-600 shrink-0">{srv.price}</span>
+                                    <button 
+                                      onClick={() => removeService(idx)} 
+                                      className="text-neutral-400 hover:text-red-655 p-1.5 rounded-lg active:scale-95 transition-all border-none bg-transparent cursor-pointer"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                </div>
+                              ))}
+                              {services.length === 0 && (
+                                <div className="text-center py-6 text-xs text-neutral-450 italic">No services added yet.</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 7 Form: Services CTA */}
+                    {currentStep === 7 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">CTA Banner Title</label>
+                          <input
+                            type="text"
+                            className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                            value={editedProfile?.servicesCta?.title || ""}
+                            onChange={(e) => {
+                              const ctaVal = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+                              updateField("servicesCta", { ...ctaVal, title: e.target.value });
+                            }}
+                            placeholder="Book A 30 min Free Call"
+                          />
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">CTA Description Text</label>
+                          <textarea
+                            className="border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl p-3.5 text-xs transition-all outline-none resize-none leading-relaxed font-normal"
+                            value={editedProfile?.servicesCta?.text || ""}
+                            onChange={(e) => {
+                              const ctaVal = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+                              updateField("servicesCta", { ...ctaVal, text: e.target.value });
+                            }}
+                            placeholder="Let's connect to discuss your design needs..."
+                            rows={3}
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Button Label</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.servicesCta?.buttonText || ""}
+                              onChange={(e) => {
+                                const ctaVal = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+                                updateField("servicesCta", { ...ctaVal, buttonText: e.target.value });
+                              }}
+                              placeholder="Book A Call"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Button Link / URL</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-xs transition-all outline-none font-mono"
+                              value={editedProfile?.servicesCta?.buttonUrl || ""}
+                              onChange={(e) => {
+                                const ctaVal = editedProfile?.servicesCta || { title: "", text: "", buttonText: "", buttonUrl: "" };
+                                updateField("servicesCta", { ...ctaVal, buttonUrl: e.target.value });
+                              }}
+                              placeholder="#contact"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 8 Form: Processes */}
+                    {currentStep === 8 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Headline</label>
+                          <input
+                            type="text"
+                            className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                            value={editedProfile?.processTitle || ""}
+                            onChange={(e) => updateField("processTitle", e.target.value)}
+                            placeholder="My Process"
+                          />
+                        </div>
+
+                        {showAddProcess ? (
+                          <div className="border border-neutral-200/80 bg-neutral-50/50 rounded-xl p-4 space-y-3 shadow-xs">
+                            <div className="grid grid-cols-4 gap-2">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Tag</label>
+                                <input
+                                  type="text"
+                                  placeholder="/01"
+                                  value={newProcessTag}
+                                  onChange={(e) => setNewProcessTag(e.target.value)}
+                                  className="h-10 text-xs px-2.5 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-850 font-mono text-center"
+                                />
+                              </div>
+                              <div className="col-span-3 flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Step Title</label>
+                                <input
+                                  type="text"
+                                  placeholder="e.g. Discovery"
+                                  value={newProcessTitle}
+                                  onChange={(e) => setNewProcessTitle(e.target.value)}
+                                  className="h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-800 font-semibold"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Description</label>
+                              <textarea
+                                placeholder="Brief details of this collaboration phase..."
+                                value={newProcessDesc}
+                                onChange={(e) => setNewProcessDesc(e.target.value)}
+                                rows={2}
+                                className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-800 resize-none leading-relaxed"
+                              />
+                            </div>
+                            <div className="flex gap-2 justify-end pt-1">
+                              <button 
+                                onClick={() => setShowAddProcess(false)} 
+                                className="h-9 px-3 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-lg border border-neutral-200 bg-white transition-all active:scale-[0.97] cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                              <button 
+                                onClick={addProcess} 
+                                className="h-9 px-3 text-xs font-bold bg-[#3B82F6] hover:bg-[#2563eb] text-white rounded-lg transition-all active:scale-[0.97] shadow-sm cursor-pointer border-none"
+                              >
+                                Add Step
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Work Process Steps ({processes.length})</span>
+                              <button
+                                onClick={() => setShowAddProcess(true)}
+                                className="h-8 px-3 bg-[#18181B] hover:bg-zinc-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 active:scale-[0.97] transition-all cursor-pointer border-none"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add Step
+                              </button>
+                            </div>
+                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+                              {processes.map((prc, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className="flex items-center justify-between p-2.5 bg-neutral-50 border border-neutral-200/50 rounded-xl"
+                                >
+                                  <div className="flex items-center gap-2.5 truncate pr-4 flex-1">
+                                    <span className="text-xs font-mono font-bold text-neutral-500 shrink-0">{prc.stepTag}</span>
+                                    <span className="text-xs font-bold text-[#18181B] truncate">{prc.title}</span>
+                                  </div>
+                                  <button 
+                                    onClick={() => removeProcess(idx)} 
+                                    className="text-neutral-400 hover:text-red-655 p-1.5 rounded-lg active:scale-95 transition-all border-none bg-transparent cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                              {processes.length === 0 && (
+                                <div className="text-center py-6 text-xs text-neutral-450 italic">No process steps added yet.</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 9 Form: Testimonials */}
+                    {currentStep === 9 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Section Headline</label>
+                          <input
+                            type="text"
+                            className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                            value={editedProfile?.testimonialsTitle || ""}
+                            onChange={(e) => updateField("testimonialsTitle", e.target.value)}
+                            placeholder="Reviews"
+                          />
+                        </div>
+
+                        {showAddTestimonial ? (
+                          <div className="border border-neutral-200/80 bg-neutral-50/50 rounded-xl p-4 space-y-3 shadow-xs">
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Quote / Feedback</label>
+                              <textarea
+                                placeholder="Outstanding design deliverables..."
+                                value={newTestimonialQuote}
+                                onChange={(e) => setNewTestimonialQuote(e.target.value)}
+                                rows={2}
+                                className="w-full text-xs px-3 py-2 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-800 resize-none leading-relaxed animate-in"
+                              />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Client Name</label>
+                                <input
+                                  type="text"
+                                  placeholder="James Morgan"
+                                  value={newTestimonialName}
+                                  onChange={(e) => setNewTestimonialName(e.target.value)}
+                                  className="h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-800"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">Role / Position</label>
+                                  <input
+                                  type="text"
+                                  placeholder="VP of Growth"
+                                  value={newTestimonialRole}
+                                  onChange={(e) => setNewTestimonialRole(e.target.value)}
+                                  className="h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-800"
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-1.5">
+                              <label className="text-[10px] font-bold text-neutral-550 uppercase tracking-wider">Client Avatar URL</label>
+                              <div className="flex items-center gap-2">
+                                <input
+                                  type="text"
+                                  placeholder="https://..."
+                                  value={newTestimonialAvatar}
+                                  onChange={(e) => setNewTestimonialAvatar(e.target.value)}
+                                  className="flex-1 h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none bg-white text-neutral-800 font-mono"
+                                />
+                                <input
+                                  type="file"
+                                  id="onboarding-review-avatar"
+                                  accept="image/*"
+                                  onChange={(e) => handleImageUpload(e, "testimonials", testimonials.length)}
+                                  className="hidden"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => document.getElementById("onboarding-review-avatar")?.click()}
+                                  className="h-10 px-3 bg-[#F3F3F3] border border-neutral-200 text-neutral-700 hover:bg-neutral-200 text-xs rounded-lg active:scale-95 transition-all cursor-pointer"
+                                >
+                                  Upload
+                                </button>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 justify-end pt-1">
+                              <button 
+                                onClick={() => setShowAddTestimonial(false)} 
+                                className="h-9 px-3 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-lg border border-neutral-200 bg-white transition-all active:scale-[0.97] cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                              <button 
+                                onClick={addTestimonial} 
+                                className="h-9 px-3 text-xs font-bold bg-[#3B82F6] hover:bg-[#2563eb] text-white rounded-lg transition-all active:scale-[0.97] shadow-sm cursor-pointer border-none"
+                              >
+                                Add Review
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Client Testimonials ({testimonials.length})</span>
+                              <button
+                                onClick={() => setShowAddTestimonial(true)}
+                                className="h-8 px-3 bg-[#18181B] hover:bg-zinc-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 active:scale-[0.97] transition-all cursor-pointer border-none"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add Review
+                              </button>
+                            </div>
+                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+                              {testimonials.map((tst, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className="flex items-center justify-between p-2.5 bg-neutral-50 border border-neutral-200/50 rounded-xl"
+                                >
+                                  <div className="truncate pr-4 flex-1">
+                                    <span className="text-xs font-bold text-[#18181B] block truncate">{tst.name}</span>
+                                    <span className="text-[10px] text-neutral-500 block truncate mt-0.5">{tst.quote}</span>
+                                  </div>
+                                  <button 
+                                    onClick={() => removeTestimonial(idx)} 
+                                    className="text-neutral-400 hover:text-red-655 p-1.5 rounded-lg active:scale-95 transition-all border-none bg-transparent cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                              {testimonials.length === 0 && (
+                                <div className="text-center py-6 text-xs text-neutral-450 italic">No reviews added yet.</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 10 Form: Contact & Socials */}
+                    {currentStep === 10 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Email</label>
+                            <input
+                              type="email"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none"
+                              value={editedProfile?.email || ""}
+                              onChange={(e) => updateField("email", e.target.value)}
+                              placeholder="e.g. alex@gmail.com"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Phone</label>
+                            <input
+                              type="text"
+                              className="h-11 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 bg-white placeholder-neutral-400 text-[#18181B] rounded-xl px-3.5 text-sm transition-all outline-none font-mono"
+                              value={phone}
+                              onChange={(e) => {
+                                setPhone(e.target.value);
+                                updateField("phone", e.target.value);
+                              }}
+                              placeholder="e.g. +44 7700 900123"
+                            />
+                          </div>
+                        </div>
+
+                        {showAddLink ? (
+                          <div className="border border-neutral-200/80 bg-neutral-50/50 rounded-xl p-4 space-y-3 shadow-xs">
+                            <div className="grid grid-cols-2 gap-2">
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-[#18181B] uppercase tracking-wider">Link Label</label>
+                                <input
+                                  type="text"
+                                  placeholder="e.g. GitHub"
+                                  value={newLinkLabel}
+                                  onChange={(e) => setNewLinkLabel(e.target.value)}
+                                  className="h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800"
+                                />
+                              </div>
+                              <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-[#18181B] uppercase tracking-wider">Icon Type</label>
+                                <select
+                                  value={newLinkIcon}
+                                  onChange={(e) => setNewLinkIcon(e.target.value as any)}
+                                  className="h-10 text-xs px-2 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800"
+                                >
+                                  <option value="website">Website</option>
+                                  <option value="linkedin">LinkedIn</option>
+                                  <option value="twitter">Twitter</option>
+                                  <option value="github">GitHub</option>
+                                  <option value="email">Email</option>
+                                  <option value="other">Other</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap-1">
+                              <label className="text-[10px] font-bold text-[#18181B] uppercase tracking-wider">URL Link</label>
+                              <input
+                                type="text"
+                                placeholder="https://..."
+                                value={newLinkUrl}
+                                onChange={(e) => setNewLinkUrl(e.target.value)}
+                                className="w-full h-10 text-xs px-3 border border-neutral-200 rounded-lg outline-none focus:border-neutral-400 bg-white text-neutral-800 font-mono"
+                              />
+                            </div>
+                            <div className="flex gap-2 justify-end pt-1">
+                              <button 
+                                onClick={() => setShowAddLink(false)} 
+                                className="h-9 px-3 text-xs font-semibold text-neutral-700 hover:bg-neutral-50 rounded-lg border border-neutral-200 bg-white transition-all active:scale-[0.97] cursor-pointer"
+                              >
+                                Cancel
+                              </button>
+                              <button 
+                                onClick={addLink} 
+                                className="h-9 px-3 text-xs font-bold bg-[#3B82F6] hover:bg-[#2563eb] text-white rounded-lg transition-all active:scale-[0.97] shadow-sm cursor-pointer border-none"
+                              >
+                                Add Link
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5">
+                            <div className="flex items-center justify-between">
+                              <span className="text-[11px] font-bold text-neutral-500 uppercase tracking-wide">Social & Portfolio Links ({links.length})</span>
+                              <button
+                                onClick={() => setShowAddLink(true)}
+                                className="h-8 px-3 bg-[#18181B] hover:bg-zinc-800 text-white rounded-xl text-xs font-bold flex items-center gap-1 active:scale-[0.97] transition-all cursor-pointer border-none"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add Link
+                              </button>
+                            </div>
+                            <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1" style={{ scrollbarWidth: "none" }}>
+                              {links.map((lnk, idx) => (
+                                <div 
+                                  key={idx} 
+                                  className="flex items-center justify-between p-2.5 bg-neutral-50 border border-neutral-200/50 rounded-xl"
+                                >
+                                  <div className="truncate pr-4 flex-1">
+                                    <span className="text-xs font-bold text-[#18181B]">{lnk.label}</span>
+                                    <span className="text-[10px] text-neutral-500 block truncate mt-0.5 font-mono">{lnk.url}</span>
+                                  </div>
+                                  <button 
+                                    onClick={() => removeLink(idx)} 
+                                    className="text-neutral-400 hover:text-red-655 p-1.5 rounded-lg active:scale-95 transition-all border-none bg-transparent cursor-pointer"
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                              ))}
+                              {links.length === 0 && (
+                                <div className="text-center py-6 text-xs text-neutral-450 italic">No links added yet.</div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            onClick={handleNextStep}
+                            className="h-11 px-6 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer border-none"
+                          >
+                            Save & Next <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 11 Form: AI Copy Refinement */}
+                    {currentStep === 11 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        {optimizing ? (
+                          <div className="py-8 flex flex-col items-center justify-center gap-3 animate-pulse">
+                            <Loader2 className="w-8 h-8 animate-spin text-[#3B82F6]" />
+                            <p className="text-xs font-bold text-zinc-500 font-mono">Refining your bio summary and headline with AI...</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            {/* Headline Compare */}
+                            <div className="space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Headline</label>
+                                <span className="text-[9px] bg-green-50 border border-green-200/50 text-green-700 px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                              </div>
+                              {originalHeadline && originalHeadline !== editedProfile?.headline && (
+                                <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-550 leading-normal line-through opacity-70">
+                                  {originalHeadline}
+                                </div>
+                              )}
+                              <input
+                                type="text"
+                                value={editedProfile?.headline || ""}
+                                onChange={(e) => updateField("headline", e.target.value)}
+                                className="w-full h-11 px-4 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 rounded-xl text-xs font-semibold text-[#18181B] bg-white transition-all outline-none"
+                                placeholder="Your professional headline"
+                              />
+                            </div>
+
+                            {/* Bio Compare */}
+                            <div className="space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <label className="text-[11px] font-bold text-neutral-500 uppercase tracking-wider block">Bio Summary</label>
+                                <span className="text-[9px] bg-green-50 border border-green-200/50 text-green-700 px-2 py-0.5 rounded-full font-bold">AI Polished</span>
+                              </div>
+                              {originalBio && originalBio !== editedProfile?.summary && (
+                                <div className="bg-neutral-50 border border-neutral-200/50 rounded-xl p-3 text-[11px] text-neutral-550 leading-normal line-through opacity-70 max-h-20 overflow-y-auto">
+                                  {originalBio}
+                                </div>
+                              )}
+                              <textarea
+                                rows={3}
+                                value={editedProfile?.summary || ""}
+                                onChange={(e) => updateField("summary", e.target.value)}
+                                className="w-full p-3.5 border border-neutral-200 focus:border-[#3B82F6] focus:ring-2 focus:ring-[#3B82F6]/20 rounded-xl text-xs font-semibold text-[#18181B] bg-white transition-all resize-none outline-none leading-relaxed"
+                                placeholder="Your professional bio summary"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-between pt-2 border-t border-neutral-100">
+                          <button 
+                            disabled={optimizing}
+                            onClick={handleBackStep} 
+                            className="h-11 px-4 flex items-center gap-1.5 text-xs font-semibold text-[#18181B] hover:bg-zinc-200 rounded-xl border border-neutral-200 bg-[#F3F3F3] transition-transform active:scale-[0.98] duration-100 ease-out cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed border-none"
+                          >
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back
+                          </button>
+                          <button
+                            disabled={optimizing}
+                            onClick={handleNextStep}
+                            className="h-11 px-5 bg-[#3B82F6] hover:bg-[#2563eb] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-transform active:scale-[0.98] duration-100 ease-out shadow-sm cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed border-none"
+                          >
+                            Confirm & Continue <ArrowRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step 12 Form: Template Selector */}
+                    {currentStep === 12 && (
+                      <div className="flex flex-col gap-4 text-left">
+                        <div className="grid grid-cols-2 gap-2.5">
+          </div>
+
+          {/* Bottom input composer area */}
+          <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
+            <div className={`w-full flex flex-col gap-3 ${currentStep <= 6 ? "max-w-3xl mx-auto" : ""}`}>
+              {/* Show Suggestion pills on top of composer only when setup is complete (Step 9) */}
+            {currentStep === 9 && (
+              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => sendChatMessage(s)}
+                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-black transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Text input composer */}
+            <div className={`bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 ${currentStep === 9 ? "opacity-100" : "opacity-60"}`}>
+              <textarea
+                disabled={currentStep !== 9}
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey && currentStep === 9) {
+                    e.preventDefault();
+                    sendChatMessage();
+                  }
+                }}
+                className={`w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter ${currentStep === 9 ? "text-neutral-800 placeholder:text-neutral-400 cursor-text" : "text-neutral-400 placeholder:text-neutral-400 cursor-not-allowed"}`}
+                placeholder={currentStep === 9 ? "Ask Webild to adjust copy, headline, template style..." : "Complete wizard steps above to proceed..."}
+                rows={2}
+              />
+              <div className="flex items-center justify-between px-1">
+                <button
+                  disabled={currentStep !== 9}
+                  onClick={() => toast.info("Attachments coming soon!")}
+                  className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
+                >
+                  <Plus className="w-[18px] h-[18px]" />
+                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    disabled={currentStep !== 9}
+                    onClick={() => toast.info("Voice input coming soon!")}
+                    className={`w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none ${currentStep === 9 ? "hover:bg-neutral-200 cursor-pointer" : "cursor-not-allowed"}`}
+                  >
+                    <Mic className="w-[18px] h-[18px]" />
+                  </button>
+                  <button
+                    disabled={currentStep !== 9}
+                    onClick={() => sendChatMessage()}
+                    className={`w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none ${currentStep === 9 ? "bg-[#8DB8FF] hover:bg-[#7ca8f0] cursor-pointer active:scale-[0.93]" : "bg-neutral-200 cursor-not-allowed"}`}
+                  >
+                    <ArrowUp className="w-[18px] h-[18px]" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      )}
+    </aside>
+      )}
+
+      {/* 2. Domains Panel */}
+      {activeNav === 2 && <DomainsPane />}
+
+      {/* 3. Settings Panel */}
+      {activeNav === 3 && <SettingsPane profileName={profileName} router={router} />}
+
+      {/* ── Main Canvas Workspace ── */}
+      <main 
+        className={`flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3 ${
+          activeNav === 1 && currentStep <= 6 ? "hidden" : ""
+        }`}
+      >
+        
+        {/* Top Navbar */}
+        <div className="flex items-center justify-between shrink-0 h-9 bg-white">
+          
+          {/* Left Side: Collapse Button + Saving Indicator */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => toast.info("Upgrade to Pro to link custom domains & unlock premium features!")}
+              className="flex items-center gap-2 h-10 px-2 text-sm font-medium bg-white border border-[#E6E6E6] rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+              style={{ boxShadow: "0 1px 4px #fff" }}
+            >
+              <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M4 6h16M4 12h16M4 18h7" />
+              </svg>
+            </button>
+
+            {/* Saved Indicators */}
+            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500">
+              {isDirty ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                  <span>Unsaved edits</span>
+                  <button 
+                    onClick={resetEdits}
+                    className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
+                  >
+                    Reset
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span>All changes saved</span>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Right Side: Share + Publish + Avatar menu */}
+          <div className="flex items-center gap-2 relative">
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`);
+                toast.success("Share link copied to clipboard!");
+              }}
+              className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+            >
+              Share
+            </button>
+            <button
+              id="onboarding-publish-btn"
+              onClick={handlePublish}
+              disabled={publishing}
+              className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+            >
+              {publishing && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+              Publish
+            </button>
+            
+            {/* Profile Avatar Button */}
+            <button
+              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+              className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
+            >
+              <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+            </button>
+
+            {/* Profile User Menu Dropdown */}
+            <AnimatePresence>
+              {isUserMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                  transition={{ duration: 0.15, ease: "easeOut" }}
+                  className="absolute right-0 top-10 z-50"
+                >
+                  <UserMenu 
+                    name={userName} 
+                    email={userEmail} 
+                    onClose={() => setIsUserMenuOpen(false)} 
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+        </div>
+
+        {/* Elevated Canvas Card Frame */}
+        <div className="relative flex-1 bg-white/75 backdrop-blur-xl rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_rgba(255,255,255,0.6)_inset]">
+          
+          {/* Canvas Toolbar */}
+          <div className="relative z-30 flex items-center gap-3 w-full h-[54px] border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md px-4">
+            
+            {/* Left: Customize + Page switcher */}
+            <div className="flex items-center gap-2">
+              <div className="relative group">
+                <button
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  onClick={() => {
+                    if (isSelectionMode) {
+                      setIsSelectionMode(false);
+                      setSelectedField(null);
+                      setSelectedIndex(undefined);
+                    } else {
+                      setIsSelectionMode(true);
+                      setActiveNav(1); // Make sure Design tab is active
+                      setSelectedField(null);
+                      setSelectedIndex(undefined);
+                    }
+                  }}
+                  className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed bg-[#F7F7F7] border-[#E6E6E6] text-neutral-450"
+                      : isSelectionMode
+                      ? "bg-blue-600 border-blue-600 text-white hover:bg-blue-700"
+                      : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
+                  }`}
+                >
+                  <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
+                    <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
+                    <path d="M7.2 2.2 8 5.1" />
+                    <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
+                  </svg>
+                  {isSelectionMode ? "Editing Canvas" : "Customize"}
+                </button>
+              </div>
+
+              <div className="relative group">
+                <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                  <span className="text-sm leading-tight">Home</span>
+                  <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Center: Subdomain Address Status */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg">
+                <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
+                  <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
+                  <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
+                    {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                  </span>
+                  {checkingSubdomain ? (
+                    <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
+                  ) : isSubdomainAvailable === true ? (
+                    <span className="hidden lg:inline text-[#369762] font-semibold text-xs">available!</span>
+                  ) : isSubdomainAvailable === false ? (
+                    <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">taken!</span>
+                  ) : null}
+                </span>
+              </div>
+            </div>
+
+            {/* Right: Device scale switches */}
+            <div className="flex items-center gap-1.5">
+              {/* Undo/Redo/History Placeholders */}
+              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+                </svg>
+              </button>
+              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+                </svg>
+              </button>
+
+              <div className="w-px h-4 bg-[#E6E6E6] mx-0.5" />
+
+              {/* Responsive Toggles */}
+              <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5">
+                <button
+                  onClick={() => setPreviewMode("desktop")}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "desktop"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Desktop preview"
+                >
+                  <Monitor className="w-[14px] h-[14px]" />
+                </button>
+                <button
+                  onClick={() => setPreviewMode("tablet")}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "tablet"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Tablet preview"
+                >
+                  <Tablet className="w-[14px] h-[14px]" />
+                </button>
+                <button
+                  onClick={() => setPreviewMode("mobile")}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "mobile"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Mobile preview"
+                >
+                  <Smartphone className="w-[14px] h-[14px]" />
+                </button>
+                <button
+                  onClick={() => {
+                    setPreviewMode("resizable");
+                    // Reset to a sensible width if it's default
+                    if (resizableWidth === 800) {
+                      setResizableWidth(800);
+                    }
+                  }}
+                  disabled={activeNav === 1 && currentStep <= 6}
+                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
+                    activeNav === 1 && currentStep <= 6
+                      ? "opacity-30 cursor-not-allowed"
+                      : previewMode === "resizable"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                  }`}
+                  title="Drag-to-resize preview"
+                >
+                  <MoveHorizontal className="w-[14px] h-[14px]" />
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Canvas Main content area */}
+          <div 
+            ref={previewContainerRef}
+            className={`flex-1 flex items-center justify-center overflow-hidden relative transition-all duration-500 ${
+              activeNav === 1 && currentStep <= 6 
+                ? "bg-[#FBFBFB] bg-[radial-gradient(#E8E8E8_1.5px,transparent_1.5px)] [background-size:32px_32px] p-8" 
+                : "bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
+            }`}
+          >
+            <AnimatePresence mode="wait">
+              
+              {/* Show SVG animations when Wizard (activeNav === 1) is active and currentStep <= 6 */}
+              {activeNav === 1 && currentStep <= 6 ? (
+                <motion.div
+                  key={`anim-${currentStep}`}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="w-full flex items-center justify-center"
+                >
+                  <WizardAnimations 
+                    step={currentStep} 
+                    profile={editedProfile}
+                    projects={projects}
+                    interests={interests}
+                    skills={skills}
+                    experience={experience}
+                  />
+                </motion.div>
+              ) : (
+                /* Show resizable Live Preview for template choosing/publishing or other tabs */
+                <motion.div
+                  key={`preview-wrapper-${selectedTemplate}`}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="w-full h-full flex items-center justify-center"
+                >
+                  {editedProfile ? (
+                    <motion.div
+                      animate={{ 
+                        width: 
+                          previewMode === "desktop" ? "100%" : 
+                          previewMode === "tablet" ? 768 : 
+                          previewMode === "mobile" ? 375 : 
+                          resizableWidth 
+                      }}
+                      transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+                      className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                    >
+                      {/* Browser Header Bezel */}
+                      <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
+                        {/* 3 macOS dots */}
+                        <div className="flex items-center gap-1.5 w-16">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
+                        </div>
+                        
+                        {/* Address Bar */}
+                        <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
+                          <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          <span className="truncate text-neutral-650 font-mono">
+                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                          </span>
+                          <span className="text-neutral-300 mx-1">|</span>
+                          <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
+                            {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
+                             previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
+                             previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
+                             `Custom • ${actualWidth}px`}
+                          </span>
+                        </div>
+
+                        {/* Right side status indicator */}
+                        <div className="w-16 flex justify-end">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
+                            {previewMode}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Iframe Viewport Container */}
+                      <div className="flex-1 w-full bg-white relative overflow-hidden">
+                        {/* Drag Overlay to prevent iframe event interception */}
+                        {isDragging && (
+                          <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
+                        )}
+                        
+                        <ProfilePreview
+                          profile={editedProfile}
+                          template={selectedTemplate}
+                          fluid={true}
+                          onFieldClick={handleFieldClick}
+                          isSelectionMode={isSelectionMode}
+                          selectedField={selectedField}
+                          selectedIndex={selectedIndex}
+                        />
+                      </div>
+
+                      {/* Left Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+
+                      {/* Right Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
+                  )}
+                </motion.div>
+              )}
+
+            </AnimatePresence>
+          </div>
+
+        </div>
+      </main>
+
+    </div>
+  );
+}
+
+export default function EditorPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <Loader2 className="w-6 h-6 text-neutral-800 animate-spin" />
+            <span className="text-xs text-neutral-400 font-mono">Loading workspace...</span>
+          </div>
+        </div>
+      }
+    >
+      <EditorInner />
+    </Suspense>
+  );
+}

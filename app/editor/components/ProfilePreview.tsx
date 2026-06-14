@@ -872,7 +872,7 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
       } else if (step === 2) {
         target = document.querySelector('[data-editable-field="heroBadgeText"]') || document.querySelector('[data-editable-field="statusText"]') || document.body;
       } else if (step === 3) {
-        target = document.querySelector('[data-editable-field="heroSubheadline"]') || document.querySelector('[data-editable-field="heroCtaText"]') || document.body;
+        target = document.querySelector('[data-editable-field="heroSubheadline"]') || document.body;
       } else if (step === 4) {
         target = document.querySelector('[data-framer-name="About"]') || document.querySelector('[data-editable-field="summary"]') || document.querySelector('[data-editable-field="aboutPhotoUrl"]');
       } else if (step === 5) {
@@ -880,18 +880,16 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
       } else if (step === 6) {
         target = document.querySelector('[data-framer-name="work wrapper"]') || document.querySelector('[data-editable-field="project"]');
       } else if (step === 7) {
-        target = document.querySelector('[data-editable-field="projectsExploreText"]') || document.querySelector('[data-editable-field="projectsExploreUrl"]');
-      } else if (step === 8) {
         target = document.querySelector('[data-framer-name="Grid 3x"]') || document.querySelector('[data-editable-field="servicesTitle"]');
-      } else if (step === 9) {
+      } else if (step === 8) {
         target = document.querySelector('[data-editable-field="servicesCta"]') || document.querySelector('[data-framer-name="Services Contact card"]');
-      } else if (step === 10) {
+      } else if (step === 9) {
         target = document.querySelector('[data-framer-name="Process steps"]') || document.querySelector('[data-editable-field="processTitle"]');
-      } else if (step === 11) {
+      } else if (step === 10) {
         target = document.querySelector('[data-framer-name="Reviews card"]') || document.querySelector('[data-editable-field="testimonialsTitle"]');
-      } else if (step === 12) {
+      } else if (step === 11) {
         target = document.querySelector('[data-framer-name="Footer"]') || document.querySelector('[data-editable-field="email"]') || document.querySelector('[data-editable-field="phone"]');
-      } else if (step === 13) {
+      } else if (step === 12) {
         target = document.body;
       }
       if (target) {
