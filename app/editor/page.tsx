@@ -1800,7 +1800,7 @@ function EditorInner() {
             <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
               <button
                 onClick={() => setIsProjectModalOpen(false)}
-                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-[#18181B] hover:bg-slate-50/80 border border-slate-200 rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1829,7 +1829,7 @@ function EditorInner() {
                   setIsProjectModalOpen(false);
                   toast.success(editingProjectIndex !== null ? "Project updated successfully!" : "Project added successfully!");
                 }}
-                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Save Project
               </button>
@@ -1898,7 +1898,7 @@ function EditorInner() {
             <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
               <button
                 onClick={() => setIsServicesModalOpen(false)}
-                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-[#18181B] hover:bg-slate-50/80 border border-slate-200 rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -1929,7 +1929,7 @@ function EditorInner() {
                   setIsServicesModalOpen(false);
                   toast.success(editingServiceIndex !== null ? "Service updated successfully!" : "Service added successfully!");
                 }}
-                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Save Service
               </button>
@@ -1998,7 +1998,7 @@ function EditorInner() {
             <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
               <button
                 onClick={() => setIsProcessesModalOpen(false)}
-                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-[#18181B] hover:bg-slate-50/80 border border-slate-200 rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -2025,7 +2025,7 @@ function EditorInner() {
                   setIsProcessesModalOpen(false);
                   toast.success(editingProcessIndex !== null ? "Process step updated successfully!" : "Process step added successfully!");
                 }}
-                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Save Step
               </button>
@@ -2103,7 +2103,7 @@ function EditorInner() {
             <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
               <button
                 onClick={() => setIsTestimonialsModalOpen(false)}
-                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-[#18181B] hover:bg-slate-50/80 border border-slate-200 rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Cancel
               </button>
@@ -2131,7 +2131,7 @@ function EditorInner() {
                   setIsTestimonialsModalOpen(false);
                   toast.success(editingTestimonialIndex !== null ? "Testimonial review updated successfully!" : "Testimonial review added successfully!");
                 }}
-                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+                className="h-10 px-6 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Save Review
               </button>
