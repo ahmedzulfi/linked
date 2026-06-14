@@ -1202,92 +1202,89 @@ function EditorInner() {
                             )}
                           </div>
                         )}
-
                         {hasImagesMilestone && (
-                          <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
-                            <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left font-sans">
-                              <div className="flex items-center gap-2">
-                                <Palette className="w-4 h-4 text-slate-800" />
-                                <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Upload Images & Visuals</span>
-                              </div>
-                              
-                              <div className="space-y-3">
-                                {[
-                                  { id: "avatarUrl", label: "Profile Avatar Image", value: editedProfile?.avatarUrl },
-                                  { id: "bannerUrl", label: "Hero Portrait Photo", value: editedProfile?.bannerUrl || editedProfile?.avatarUrl },
-                                  { id: "aboutPhotoUrl", label: "About Section Portrait", value: editedProfile?.aboutPhotoUrl }
-                                ].map((imgItem) => (
-                                  <div key={imgItem.id} className="bg-white/50 backdrop-blur-xs border border-white/60 rounded-xl p-3.5 space-y-3 shadow-xs">
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">{imgItem.label}</span>
-                                      {imgItem.value && (
-                                        <span className="text-[9px] text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/30 px-2 py-0.5 rounded-full font-semibold">Configured</span>
-                                      )}
-                                    </div>
-                                    
-                                    <div className="flex items-start gap-4">
-                                      {imgItem.value ? (
-                                        <div className="w-14 h-14 rounded-xl overflow-hidden border border-slate-250 shadow-xs shrink-0 bg-slate-50 flex items-center justify-center">
-                                          <img src={imgItem.value} className="w-full h-full object-cover" />
-                                        </div>
-                                      ) : (
-                                        <div className="w-14 h-14 rounded-xl border border-dashed border-slate-200 flex items-center justify-center text-slate-400 shrink-0 bg-slate-50/50">
-                                          <Palette className="w-5 h-5 text-slate-400 stroke-[1.25]" />
-                                        </div>
-                                      )}
-                                      
-                                      <div className="flex-1 min-w-0 flex flex-col gap-2">
-                                        <input
-                                          type="text"
-                                          value={imgItem.value || ""}
-                                          onChange={(e) => updateField(imgItem.id as any, e.target.value)}
-                                          placeholder="Paste URL..."
-                                          className="h-8 text-xs bg-white/70 border border-slate-200 rounded-lg px-2.5 w-full focus:bg-white focus:border-slate-800 outline-none text-slate-800 font-mono shadow-inner transition-all"
-                                        />
-                                        
-                                        <div className="flex items-center gap-2">
-                                          <input
-                                            type="file"
-                                            id={`file-upload-${imgItem.id}`}
-                                            accept="image/*"
-                                            onChange={(e) => {
-                                              const file = e.target.files?.[0];
-                                              if (!file) return;
-                                              if (file.size > 2 * 1024 * 1024) {
-                                                toast.error("Image file is too large (max 2MB)");
-                                                return;
-                                              }
-                                              const reader = new FileReader();
-                                              reader.onload = (event) => {
-                                                const base64 = event.target?.result as string;
-                                                updateField(imgItem.id as any, base64);
-                                                toast.success(`${imgItem.label} updated!`);
-                                              };
-                                              reader.readAsDataURL(file);
-                                            }}
-                                            className="hidden"
-                                          />
-                                          <button
-                                            onClick={() => document.getElementById(`file-upload-${imgItem.id}`)?.click()}
-                                            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 hover:text-slate-900 text-[10px] font-bold border-none transition-all duration-150 cursor-pointer"
-                                          >
-                                            Upload File
-                                          </button>
-                                          {imgItem.value && (
-                                            <button
-                                              onClick={() => updateField(imgItem.id as any, "")}
-                                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 text-[10px] font-bold border-none transition-all duration-150 cursor-pointer"
-                                            >
-                                              Clear
-                                            </button>
-                                          )}
-                                        </div>
-                                      </div>
-                                    </div>
+                          <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
+                            {[
+                              { id: "avatarUrl", label: "Profile Avatar Image", value: editedProfile?.avatarUrl },
+                              { id: "bannerUrl", label: "Hero Portrait Photo", value: editedProfile?.bannerUrl || editedProfile?.avatarUrl },
+                              { id: "aboutPhotoUrl", label: "About Section Portrait", value: editedProfile?.aboutPhotoUrl }
+                            ].map((imgItem) => (
+                              <div
+                                key={imgItem.id}
+                                className="relative bg-[#FAF8F5] border border-[#EAE6DF] p-5 rounded-2xl shadow-xs flex flex-col justify-between h-full min-h-[260px] text-left group transition-all duration-205"
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[13.5px] leading-tight truncate">
+                                      {imgItem.label}
+                                    </span>
+                                    {imgItem.value && (
+                                      <span className="text-[9px] text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/30 px-2 py-0.5 rounded-full font-semibold">
+                                        Configured
+                                      </span>
+                                    )}
                                   </div>
-                                ))}
+
+                                  {imgItem.value ? (
+                                    <div className="w-full h-24 rounded-xl overflow-hidden border border-[#EAE6DF] shadow-xs shrink-0 bg-slate-50 flex items-center justify-center mt-3">
+                                      <img src={imgItem.value} className="w-full h-full object-cover" />
+                                    </div>
+                                  ) : (
+                                    <div className="w-full h-24 rounded-xl border border-dashed border-[#C5BFB6] flex items-center justify-center text-slate-400 shrink-0 bg-slate-50/50 mt-3">
+                                      <Palette className="w-5 h-5 text-slate-400 stroke-[1.25]" />
+                                    </div>
+                                  )}
+                                </div>
+
+                                <div className="mt-4 flex flex-col gap-2">
+                                  <input
+                                    type="text"
+                                    value={imgItem.value || ""}
+                                    onChange={(e) => updateField(imgItem.id as any, e.target.value)}
+                                    placeholder="Paste URL..."
+                                    className="h-9 text-xs bg-white border border-[#EAE6DF] rounded-xl px-3 w-full focus:border-slate-400 outline-none text-slate-800 font-sans shadow-inner transition-all"
+                                  />
+                                  
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      type="file"
+                                      id={`file-upload-${imgItem.id}`}
+                                      accept="image/*"
+                                      onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        if (file.size > 2 * 1024 * 1024) {
+                                          toast.error("Image file is too large (max 2MB)");
+                                          return;
+                                        }
+                                        const reader = new FileReader();
+                                        reader.onload = (event) => {
+                                          const base64 = event.target?.result as string;
+                                          updateField(imgItem.id as any, base64);
+                                          toast.success(`${imgItem.label} updated!`);
+                                        };
+                                        reader.readAsDataURL(file);
+                                      }}
+                                      className="hidden"
+                                    />
+                                    <button
+                                      onClick={() => document.getElementById(`file-upload-${imgItem.id}`)?.click()}
+                                      className="flex-1 h-9 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-[11px] font-semibold transition-all duration-150 cursor-pointer border-none"
+                                    >
+                                      Upload File
+                                    </button>
+                                    {imgItem.value && (
+                                      <button
+                                        onClick={() => updateField(imgItem.id as any, "")}
+                                        className="h-9 flex items-center justify-center px-4 rounded-full bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-semibold transition-all duration-150 cursor-pointer border-none"
+                                      >
+                                        Clear
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
+                            ))}
                           </div>
                         )}
 
