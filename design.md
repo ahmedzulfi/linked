@@ -189,36 +189,25 @@ Buttons are the most expressive component family. `button-primary` uses the char
 
 Cards use `card` styling: pale `#FBFBFB` surfaces, 13px radii, modest 11px padding, and a soft shadow. They should feel like display containers rather than hard modules, especially when paired with imagery or template previews. Inputs should stay bright, minimally bordered, and comfortably padded, with clear text contrast and no heavy outline treatment. Chips and icon buttons should remain pill-shaped, compact, and lightly elevated, with icon buttons sized around 36px to preserve the airy control cluster seen in the header and prompt composer. Navigation links should be simple, medium-gray text with minimal chrome, and should not compete with action
 
-### Editor Dashboard Layout & Wizard Integration
-The editor `/editor` displays the full dashboard layout shell integrated with the conversational wizard and sub-panels:
+### Editor Dashboard Layout & Conversational AI Builder
+The editor `/editor` displays the full dashboard layout shell integrated with the conversational AI builder and sub-panels:
 - **Left Sidebar (Collapsible Drawer):**
   - Hovering expands the panel from `60px` to `250px`.
   - Hosts navigation items: Home (dashboard redirect), Design (active workspace), Domains (custom domain panel), and Site Settings (site details).
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
-- **Left Column Panels (Navigation Switcher):**
-        - **Services:** Services grid cards (title, price, description), services call-to-action details (title, text, button text/URL), and custom process steps (step tag, title, description).
-        - **Reviews:** Custom client testimonials (quote, client name, role, avatar URL).
-        - **Links:** Contact, social, and portfolio links, compiled dynamically replacing the hardcoded social links.
-    - **Wizard Onboarding Flow & Form Logic:**
-      - The onboarding wizard consists of exactly 12 steps. Redundant CTAs and Hero Headline button inputs are removed to reduce friction.
-      - **ChatGPT-Style Centered Chat:** During onboarding (steps 1–11), the onboarding chat pane occupies a centered full-screen ChatGPT-like view (`max-w-3xl mx-auto`) with no live preview on the right. This maximizes user focus on the conversation.
-      - **Live Preview Toggle:** A header button ("Show Live Preview" / "Hide Live Preview") enables users to split the screen at any time to see the live browser simulator canvas, highlighting active sections in real-time.
-      - **Contextual Composer Triggers:** Action buttons adapt dynamically based on the current step, appearing above the composer textarea:
-        - Step 1 (Basics): "Upload Avatar Image"
-        - Step 4 (About): "Upload Portrait Image", "Upload Signature Image"
-        - Step 6 (Projects): "Add Project (Modal)"
-        - Step 7 (Services): "Add Service (Modal)"
-        - Step 9 (Process): "Add Process Step (Modal)"
-        - Step 10 (Testimonials): "Add Testimonial Review (Modal)"
-        - Step 11 (Contact & Socials): "Upload Footer Banner Image"
-      - **AI Copywriting Rule:** The user never directly fills headings, CTA text, descriptions, section content, or pricing copy. The user provides raw conversational input, and the AI automatically generates premium, high-converting copy and updates the database fields in real-time.
-      - **Services Grid Capping:** The services grid is capped at a maximum of 5 cards. Once reached, add service controls are disabled and a warning alert is displayed.
-      - **Two-Column Modals for Content Creation:** Inline inputs in composer steps are replaced by premium two-column modals with backdrop blur overlays:
-        - **Projects Modal (Step 6):** Left column captures title, redirect link, and cover image URL; right column hosts description textarea. Includes full CRUD (add, edit, delete).
-        - **Services Modal (Step 7):** Left column captures service title and price; right column hosts description textarea. Enforces 5-card maximum limits.
-        - **Process Steps Modal (Step 9):** Left column captures step tag (e.g. /01) and step name; right column hosts description textarea.
-        - **Client Testimonials Modal (Step 10):** Left column captures client name, role/position, and avatar URL; right column hosts the client review quote textarea.
-    - **Data Persistence:** To prevent data loss on page reloads, form state mutations are synced to the database context in real-time (triggering debounced autosaves), the last edited website draft ID is stored in `sessionStorage` (key: `linkedpage_last_website_id`), the active wizard step status is preserved in `sessionStorage` (key: `webild_onboarding_step`), and chat history is fully restored from `/api/chat` on load.
+- **Conversational Builder Workspace:**
+  - **Centered Chat Layout:** Center-aligned ChatGPT-style conversational pane with a bottom input composer and auto-scroll behavior. The live browser preview is hidden by default.
+  - **Live Preview Toggle:** Header button to toggle between full-width chat and side-by-side split screen workspace with the resizable iframe simulator.
+  - **Visual Milestone Forms:** Renders interactive inline triggers below bubbles when the AI parses milestones:
+    - **Projects Milestone (`[MILESTONE:PROJECTS]`):** Show inline buttons to open the Projects Modal and manage portfolio grid items.
+    - **Services Milestone (`[MILESTONE:SERVICES]`):** Render services package lists (capped at 5) and edit actions.
+    - **Images Milestone (`[MILESTONE:IMAGES]`):** Show visual image configurators supporting drag-and-drop file upload (base64) or direct URL inputs for Avatar, Hero Portrait, and About Photo.
+- **Two-Column Modals for Content Creation:**
+  - **Projects Modal:** Left column captures title, redirect link, and cover image URL; right column hosts description textarea. Includes full CRUD.
+  - **Services Modal:** Left column captures service title and price; right column hosts description textarea. Enforces 5-card maximum limits.
+  - **Process Steps Modal:** Left column captures step tag (e.g. /01) and step name; right column hosts description textarea.
+  - **Client Testimonials Modal:** Left column captures client name, role/position, and avatar URL; right column hosts the client review quote textarea.
+- **Data Persistence:** Syncs modifications to the database in real-time, stores the last active website ID in `sessionStorage` (key: `linkedpage_last_website_id`), caches the current view step in `sessionStorage` (key: `webild_onboarding_step`), and restores chat history immediately on mount from `/api/chat`.
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
 - **Top Navbar:**
