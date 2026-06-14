@@ -29,6 +29,7 @@ import {
   FileText,
   Eye,
   EyeOff,
+  Pencil,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
@@ -1087,13 +1088,13 @@ function EditorInner() {
                         {/* Milestone widgets */}
                         {hasProjectsMilestone && (
                           <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
-                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-xs space-y-3 font-sans text-left">
+                            <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left">
                               <div className="flex items-center gap-2">
-                                <Folder className="w-4 h-4 text-[#3B82F6]" />
-                                <span className="text-xs font-bold text-slate-800">Portfolio Projects</span>
+                                <Folder className="w-4 h-4 text-slate-800" />
+                                <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Portfolio Projects</span>
                               </div>
-                              <p className="text-[11px] text-slate-500 leading-normal">
-                                Click below to open the project builder modal. Specify custom titles, links, descriptions, and cover images.
+                              <p className="text-[12px] text-slate-650 leading-relaxed font-sans">
+                                Click below to open the project builder. Specify custom titles, redirect links, descriptions, and cover images.
                               </p>
                               <button
                                 onClick={() => {
@@ -1104,17 +1105,20 @@ function EditorInner() {
                                   setEditingProjectIndex(null);
                                   setIsProjectModalOpen(true);
                                 }}
-                                className="h-8 w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 active:scale-[0.97] border-none cursor-pointer"
+                                className="h-9 w-full bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-medium transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.97] shadow-sm cursor-pointer border-none"
                               >
                                 <Plus className="w-3.5 h-3.5" /> Add New Project
                               </button>
 
                               {/* Projects list with Edit option */}
                               {(editedProfile?.projects || []).length > 0 && (
-                                <div className="space-y-1.5 mt-2">
+                                <div className="space-y-2.5 mt-2">
                                   {(editedProfile.projects || []).map((p, pIdx) => (
-                                    <div key={pIdx} className="flex items-center justify-between bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 shadow-xxs">
-                                      <span className="truncate pr-2 font-semibold">{p.title}</span>
+                                    <div key={pIdx} className="group flex items-center justify-between bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 px-4 py-3 rounded-xl text-[13px] font-medium text-slate-800 shadow-sm transition-all duration-200">
+                                      <div className="flex-1 min-w-0 pr-3">
+                                        <p className="font-semibold text-slate-800 truncate">{p.title}</p>
+                                        {p.link && <p className="text-[10px] text-slate-400 truncate mt-0.5">{p.link}</p>}
+                                      </div>
                                       <button
                                         onClick={() => {
                                           setModalProjectTitle(p.title || "");
@@ -1124,9 +1128,9 @@ function EditorInner() {
                                           setEditingProjectIndex(pIdx);
                                           setIsProjectModalOpen(true);
                                         }}
-                                        className="text-xs text-blue-500 hover:text-blue-600 font-semibold border-none bg-transparent cursor-pointer"
+                                        className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white/90 hover:bg-slate-900 hover:text-white border border-slate-200 hover:border-slate-900 text-slate-700 text-[11px] font-medium transition-all duration-150 cursor-pointer shadow-xs"
                                       >
-                                        Edit
+                                        <Pencil className="w-3 h-3" /> Edit
                                       </button>
                                     </div>
                                   ))}
@@ -1138,12 +1142,12 @@ function EditorInner() {
 
                         {hasServicesMilestone && (
                           <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
-                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-xs space-y-3 font-sans text-left">
+                            <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left">
                               <div className="flex items-center gap-2">
-                                <Briefcase className="w-4 h-4 text-[#3B82F6]" />
-                                <span className="text-xs font-bold text-slate-800">Services & Pricing</span>
+                                <Briefcase className="w-4 h-4 text-slate-800" />
+                                <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Services & Pricing</span>
                               </div>
-                              <p className="text-[11px] text-slate-500 leading-normal">
+                              <p className="text-[12px] text-slate-650 leading-relaxed font-sans">
                                 Click below to open the service packages manager. You can offer up to 5 custom service offerings.
                               </p>
                               <button
@@ -1156,20 +1160,28 @@ function EditorInner() {
                                   setIsServicesModalOpen(true);
                                 }}
                                 className={cn(
-                                  "h-8 w-full rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 active:scale-[0.97]",
+                                  "h-9 w-full rounded-xl text-xs font-medium transition-all duration-200 flex items-center justify-center gap-1.5 active:scale-[0.97] border-none shadow-sm",
                                   (editedProfile?.services || DEFAULT_SERVICES).length >= 5
-                                    ? "bg-slate-200 text-slate-400 cursor-not-allowed border-none"
-                                    : "bg-[#3B82F6] hover:bg-[#2563EB] text-white border-none cursor-pointer"
+                                    ? "bg-slate-100 text-slate-450 cursor-not-allowed"
+                                    : "bg-slate-900 hover:bg-slate-800 text-white cursor-pointer"
                                 )}
                               >
                                 <Plus className="w-3.5 h-3.5" /> Add New Service
                               </button>
 
                               {/* Services list with Edit option */}
-                              <div className="space-y-1.5 mt-2">
+                              <div className="space-y-2.5 mt-2">
                                 {(editedProfile?.services || DEFAULT_SERVICES).map((srv, sIdx) => (
-                                  <div key={sIdx} className="flex items-center justify-between bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 shadow-xxs">
-                                    <span className="truncate pr-2 font-semibold">{srv.title} ({srv.price})</span>
+                                  <div key={sIdx} className="group flex items-center justify-between bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 px-4 py-3 rounded-xl text-[13px] font-medium text-slate-800 shadow-sm transition-all duration-200">
+                                    <div className="flex-1 min-w-0 pr-3">
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-semibold text-slate-800 truncate">{srv.title}</span>
+                                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-900/5 text-slate-850 border border-slate-900/5">
+                                          {srv.price}
+                                        </span>
+                                      </div>
+                                      {srv.description && <p className="text-[10px] text-slate-400 truncate mt-0.5">{srv.description}</p>}
+                                    </div>
                                     <button
                                       onClick={() => {
                                         setModalServiceTitle(srv.title || "");
@@ -1178,9 +1190,9 @@ function EditorInner() {
                                         setEditingServiceIndex(sIdx);
                                         setIsServicesModalOpen(true);
                                       }}
-                                      className="text-xs text-blue-500 hover:text-blue-600 font-semibold border-none bg-transparent cursor-pointer"
+                                      className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white/90 hover:bg-slate-900 hover:text-white border border-slate-200 hover:border-slate-900 text-slate-700 text-[11px] font-medium transition-all duration-150 cursor-pointer shadow-xs"
                                     >
-                                      Edit
+                                      <Pencil className="w-3 h-3" /> Edit
                                     </button>
                                   </div>
                                 ))}
@@ -1191,10 +1203,10 @@ function EditorInner() {
 
                         {hasImagesMilestone && (
                           <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
-                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-xs space-y-4 font-sans text-left">
+                            <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left font-sans">
                               <div className="flex items-center gap-2">
-                                <Palette className="w-4 h-4 text-[#3B82F6]" />
-                                <span className="text-xs font-bold text-slate-800">Upload Images & Visuals</span>
+                                <Palette className="w-4 h-4 text-slate-800" />
+                                <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Upload Images & Visuals</span>
                               </div>
                               
                               <div className="space-y-3">
@@ -1203,32 +1215,32 @@ function EditorInner() {
                                   { id: "bannerUrl", label: "Hero Portrait Photo", value: editedProfile?.bannerUrl || editedProfile?.avatarUrl },
                                   { id: "aboutPhotoUrl", label: "About Section Portrait", value: editedProfile?.aboutPhotoUrl }
                                 ].map((imgItem) => (
-                                  <div key={imgItem.id} className="bg-white border border-slate-200 rounded-lg p-3 space-y-2">
+                                  <div key={imgItem.id} className="bg-white/50 backdrop-blur-xs border border-white/60 rounded-xl p-3.5 space-y-3 shadow-xs">
                                     <div className="flex items-center justify-between">
-                                      <span className="text-[10px] font-bold text-slate-500 uppercase font-mono">{imgItem.label}</span>
+                                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider font-mono">{imgItem.label}</span>
                                       {imgItem.value && (
-                                        <span className="text-[9px] text-green-600 bg-green-50 px-1.5 py-0.2 rounded font-semibold">Configured</span>
+                                        <span className="text-[9px] text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/30 px-2 py-0.5 rounded-full font-semibold">Configured</span>
                                       )}
                                     </div>
                                     
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-start gap-4">
                                       {imgItem.value ? (
-                                        <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 shrink-0 bg-slate-50 flex items-center justify-center">
+                                        <div className="w-14 h-14 rounded-xl overflow-hidden border border-slate-250 shadow-xs shrink-0 bg-slate-50 flex items-center justify-center">
                                           <img src={imgItem.value} className="w-full h-full object-cover" />
                                         </div>
                                       ) : (
-                                        <div className="w-12 h-12 rounded-lg border border-dashed border-slate-200 flex items-center justify-center text-slate-400 shrink-0 bg-slate-50">
+                                        <div className="w-14 h-14 rounded-xl border border-dashed border-slate-200 flex items-center justify-center text-slate-400 shrink-0 bg-slate-50/50">
                                           <Palette className="w-5 h-5 text-slate-400 stroke-[1.25]" />
                                         </div>
                                       )}
                                       
-                                      <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                                      <div className="flex-1 min-w-0 flex flex-col gap-2">
                                         <input
                                           type="text"
                                           value={imgItem.value || ""}
                                           onChange={(e) => updateField(imgItem.id as any, e.target.value)}
                                           placeholder="Paste URL..."
-                                          className="h-7 text-xs bg-slate-50 border border-slate-200 rounded px-2 w-full focus:bg-white focus:border-blue-500 outline-none text-slate-700 font-mono"
+                                          className="h-8 text-xs bg-white/70 border border-slate-200 rounded-lg px-2.5 w-full focus:bg-white focus:border-slate-800 outline-none text-slate-800 font-mono shadow-inner transition-all"
                                         />
                                         
                                         <div className="flex items-center gap-2">
@@ -1255,14 +1267,14 @@ function EditorInner() {
                                           />
                                           <button
                                             onClick={() => document.getElementById(`file-upload-${imgItem.id}`)?.click()}
-                                            className="text-[10px] font-bold text-blue-500 hover:text-blue-600 bg-blue-50/50 px-2 py-0.5 rounded cursor-pointer border-none"
+                                            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 hover:text-slate-900 text-[10px] font-bold border-none transition-all duration-150 cursor-pointer"
                                           >
                                             Upload File
                                           </button>
                                           {imgItem.value && (
                                             <button
                                               onClick={() => updateField(imgItem.id as any, "")}
-                                              className="text-[10px] font-bold text-red-500 hover:text-red-650 bg-red-50/50 px-2 py-0.5 rounded cursor-pointer border-none"
+                                              className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 hover:text-red-700 text-[10px] font-bold border-none transition-all duration-150 cursor-pointer"
                                             >
                                               Clear
                                             </button>
