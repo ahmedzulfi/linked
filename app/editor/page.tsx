@@ -24,7 +24,6 @@ import {
   Folder,
   Briefcase,
   Wrench,
-  Palette,
   Inbox,
   FileText,
   Eye,
@@ -267,12 +266,6 @@ function EditorInner() {
   const [modalTestimonialRole, setModalTestimonialRole] = useState("");
   const [modalTestimonialQuote, setModalTestimonialQuote] = useState("");
   const [modalTestimonialAvatar, setModalTestimonialAvatar] = useState("");
-
-  // Images Modal states
-  const [isImagesModalOpen, setIsImagesModalOpen] = useState(false);
-  const [modalImageField, setModalImageField] = useState<"avatarUrl" | "bannerUrl" | "aboutPhotoUrl" | "">("");
-  const [modalImageLabel, setModalImageLabel] = useState("");
-  const [modalImageValue, setModalImageValue] = useState("");
 
   // Inline Add states
   const [newProjTitle, setNewProjTitle] = useState("");
@@ -1069,7 +1062,6 @@ function EditorInner() {
                 const cleanContent = cleanMessageContent(msg.content);
                 const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]");
                 const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]");
-                const hasImagesMilestone = msg.content.includes("[MILESTONE:IMAGES]");
 
                 return (
                   <div key={msg.id} className="w-full flex flex-col gap-2.5">
@@ -1208,60 +1200,8 @@ function EditorInner() {
                             )}
                           </div>
                         )}
-                        {hasImagesMilestone && (
-                          <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
-                            {[
-                              { id: "avatarUrl", label: "Profile Avatar Image", value: editedProfile?.avatarUrl },
-                              { id: "bannerUrl", label: "Hero Portrait Photo", value: editedProfile?.bannerUrl || editedProfile?.avatarUrl },
-                              { id: "aboutPhotoUrl", label: "About Section Portrait", value: editedProfile?.aboutPhotoUrl }
-                            ].map((imgItem) => (
-                              <div
-                                key={imgItem.id}
-                                onClick={() => {
-                                  setModalImageField(imgItem.id as any);
-                                  setModalImageLabel(imgItem.label);
-                                  setModalImageValue(imgItem.value || "");
-                                  setIsImagesModalOpen(true);
-                                }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
-                              >
-                                <div>
-                                  <div className="flex items-start justify-between gap-2">
-                                    <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight max-w-[75%] truncate">
-                                      {imgItem.label}
-                                    </h4>
-                                    {imgItem.value ? (
-                                      <span className="text-[9px] text-[#369762] bg-[#8DFFB3]/25 border border-[#8DFFB3]/30 px-2 py-0.5 rounded-full font-semibold shrink-0">
-                                        Configured
-                                      </span>
-                                    ) : (
-                                      <span className="text-[9px] text-slate-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full font-semibold shrink-0">
-                                        Empty
-                                      </span>
-                                    )}
-                                  </div>
 
-                                  <div className="flex items-center gap-3 mt-3.5">
-                                    {imgItem.value ? (
-                                      <div className="w-12 h-12 rounded-xl overflow-hidden border border-[#EAE6DF] bg-slate-50 flex items-center justify-center shrink-0">
-                                        <img src={imgItem.value} className="w-full h-full object-cover" />
-                                      </div>
-                                    ) : (
-                                      <div className="w-12 h-12 rounded-xl border border-dashed border-[#C5BFB6] flex items-center justify-center text-slate-400 bg-slate-50/50 shrink-0">
-                                        <Palette className="w-4 h-4 text-slate-400 stroke-[1.25]" />
-                                      </div>
-                                    )}
-                                    <p className="text-[12px] text-slate-500 leading-normal font-sans line-clamp-2">
-                                      {imgItem.id === "avatarUrl" && "The profile photo displayed in headers and sidebar menus."}
-                                      {imgItem.id === "bannerUrl" && "The primary background photo featured in your hero section."}
-                                      {imgItem.id === "aboutPhotoUrl" && "The secondary biography portrait shown next to your story text."}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+
 
                       </div>
                     )}
@@ -2115,128 +2055,6 @@ function EditorInner() {
                 className="h-10 px-6 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
               >
                 Save Review
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── Two-Column Images Modal ── */}
-      {isImagesModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div 
-            className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header */}
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-              <h3 className="text-[15px] font-bold text-slate-800">
-                Edit {modalImageLabel}
-              </h3>
-              <button 
-                onClick={() => setIsImagesModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
-              >
-                ×
-              </button>
-            </div>
-
-            {/* Modal Body: Two Columns */}
-            <div className="p-6 grid grid-cols-2 gap-6">
-              {/* Column 1 (Left Column): URL Input & File Upload */}
-              <div className="space-y-4 flex flex-col justify-between">
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Image Source URL</label>
-                  <Input 
-                    value={modalImageValue}
-                    onChange={(e) => setModalImageValue(e.target.value)}
-                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800 font-sans"
-                    placeholder="Paste image URL here..."
-                  />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Or Upload Local Image</label>
-                  <input
-                    type="file"
-                    id="modal-image-file-upload"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      if (file.size > 2 * 1024 * 1024) {
-                        toast.error("Image file is too large (max 2MB)");
-                        return;
-                      }
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        const base64 = event.target?.result as string;
-                        setModalImageValue(base64);
-                        toast.success("Local file loaded successfully!");
-                      };
-                      reader.readAsDataURL(file);
-                    }}
-                    className="hidden"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => document.getElementById("modal-image-file-upload")?.click()}
-                      className="flex-1 h-10 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-850 text-[12px] font-semibold transition-all duration-150 cursor-pointer border border-slate-200/60 active:scale-[0.97]"
-                    >
-                      Choose File
-                    </button>
-                    {modalImageValue && (
-                      <button
-                        onClick={() => setModalImageValue("")}
-                        className="h-10 px-4 flex items-center justify-center rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-[12px] font-semibold transition-all duration-150 cursor-pointer border border-rose-100 active:scale-[0.97]"
-                      >
-                        Clear
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Column 2 (Right Column): Preview Area */}
-              <div className="flex flex-col gap-1.5 h-full">
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Live Visual Preview</label>
-                <div className="flex-1 min-h-[178px] border border-dashed border-[#C5BFB6] rounded-xl bg-slate-50/50 flex items-center justify-center overflow-hidden p-2 relative shadow-inner">
-                  {modalImageValue ? (
-                    <img 
-                      src={modalImageValue} 
-                      alt="Preview" 
-                      className="max-w-full max-h-[180px] object-contain rounded-lg shadow-sm border border-slate-200 bg-white"
-                    />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center text-slate-400 text-center p-4">
-                      <Palette className="w-8 h-8 text-slate-400 stroke-[1.25] mb-2" />
-                      <span className="text-[11px] font-medium font-sans">No Image Selected</span>
-                      <span className="text-[9px] text-slate-400 mt-0.5">Upload a local image or paste a web URL to preview</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Modal Footer */}
-            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
-              <button
-                onClick={() => setIsImagesModalOpen(false)}
-                className="h-10 px-6 text-xs font-bold text-[#18181B] hover:bg-slate-50/80 border border-slate-200 rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  if (modalImageField) {
-                    updateField(modalImageField, modalImageValue.trim());
-                    setIsImagesModalOpen(false);
-                    toast.success(`${modalImageLabel} updated!`);
-                  }
-                }}
-                className="h-10 px-6 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-full transition-colors cursor-pointer active:scale-[0.97] flex items-center justify-center"
-              >
-                Save Changes
               </button>
             </div>
           </div>
