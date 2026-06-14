@@ -1127,10 +1127,19 @@ function EditorInner() {
                                 setEditingProjectIndex(null);
                                 setIsProjectModalOpen(true);
                               }}
-                              className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
+                              className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
                             >
-                              <Plus className="w-5 h-5" />
-                              <span className="text-xs font-semibold">Add New Project</span>
+                              <div>
+                                <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
+                                  Add New Project
+                                </h4>
+                                <p className="text-[12px] text-blue-100/90 leading-normal mt-2.5 font-sans line-clamp-3">
+                                  Showcase a new project in your portfolio. Add custom titles, redirect links, and descriptions.
+                                </p>
+                              </div>
+                              <div className="w-full bg-white hover:bg-blue-50 text-[#3B82F6] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
+                                Add Project
+                              </div>
                             </div>
                           </div>
                         )}
@@ -1176,10 +1185,19 @@ function EditorInner() {
                                   setEditingServiceIndex(null);
                                   setIsServicesModalOpen(true);
                                 }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
+                                className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
                               >
-                                <Plus className="w-5 h-5" />
-                                <span className="text-xs font-semibold">Add New Service</span>
+                                <div>
+                                  <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
+                                    Add New Service
+                                  </h4>
+                                  <p className="text-[12px] text-blue-100/90 leading-normal mt-2.5 font-sans line-clamp-3">
+                                    Create a new package with custom pricing deliverables, features, and details.
+                                  </p>
+                                </div>
+                                <div className="w-full bg-white hover:bg-blue-50 text-[#3B82F6] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
+                                  Add Service
+                                </div>
                               </div>
                             )}
                           </div>
