@@ -837,6 +837,15 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
     outline-offset: 2px;
     background-color: rgba(37, 99, 235, 0.08) !important;
   }
+  [data-editable-field].step-highlight-active,
+  div.step-highlight-active,
+  section.step-highlight-active,
+  ul.step-highlight-active,
+  li.step-highlight-active {
+    outline: 2px dashed #3b82f6 !important;
+    outline-offset: 4px !important;
+    background-color: rgba(59, 130, 246, 0.05) !important;
+  }
 </style>
 <script id="editable-highlight-script">
   // Listen for selection mode updates from host
@@ -892,19 +901,15 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
       } else if (step === 12) {
         target = document.body;
       }
+      
+      // Clear previous active highlights
+      document.querySelectorAll('.step-highlight-active').forEach(el => el.classList.remove('step-highlight-active'));
+      
       if (target) {
+        if (target !== document.body) {
+          target.classList.add('step-highlight-active');
+        }
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        const originalOutline = target.style.outline;
-        const originalOutlineOffset = target.style.outlineOffset;
-        const originalTransition = target.style.transition;
-        target.style.transition = 'outline 0.3s ease';
-        target.style.outline = '2px dashed #3B82F6';
-        target.style.outlineOffset = '4px';
-        setTimeout(() => {
-          target.style.outline = originalOutline;
-          target.style.outlineOffset = originalOutlineOffset;
-          target.style.transition = originalTransition;
-        }, 2500);
       }
     }
   });

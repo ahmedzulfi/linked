@@ -2336,120 +2336,100 @@ function EditorInner() {
                 className="w-full h-full flex items-center justify-center"
               >
                 {editedProfile ? (
-                  activeNav === 1 && currentStep <= 6 ? (
-                    <motion.div
-                      key={`anim-${currentStep}`}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.35, ease: "easeOut" }}
-                      className="w-full h-full flex items-center justify-center"
-                    >
-                      <WizardAnimations
-                        step={currentStep}
+                  <motion.div
+                    animate={{ 
+                      width: 
+                        previewMode === "desktop" ? "100%" : 
+                        previewMode === "tablet" ? 768 : 
+                        previewMode === "mobile" ? 375 : 
+                        resizableWidth 
+                    }}
+                    transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+                    className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                  >
+                    {/* Browser Header Bezel */}
+                    <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
+                      {/* 3 macOS dots */}
+                      <div className="flex items-center gap-1.5 w-16">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
+                      </div>
+                      
+                      {/* Address Bar */}
+                      <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
+                        <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                        <span className="truncate text-neutral-650 font-mono">
+                          {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                        </span>
+                        <span className="text-neutral-300 mx-1">|</span>
+                        <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
+                          {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
+                           previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
+                           previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
+                           `Custom • ${actualWidth}px`}
+                        </span>
+                      </div>
+
+                      {/* Right side status indicator */}
+                      <div className="w-16 flex justify-end">
+                        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
+                          {previewMode}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Iframe Viewport Container */}
+                    <div className="flex-1 w-full bg-white relative overflow-hidden">
+                      {/* Drag Overlay to prevent iframe event interception */}
+                      {isDragging && (
+                        <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
+                      )}
+                      
+                      <ProfilePreview
                         profile={editedProfile}
-                        projects={projects}
-                        interests={interests}
-                        skills={skills}
-                        experience={experience}
+                        template={selectedTemplate}
+                        fluid={true}
+                        onFieldClick={handleFieldClick}
+                        isSelectionMode={isSelectionMode}
+                        selectedField={selectedField}
+                        selectedIndex={selectedIndex}
+                        currentStep={currentStep}
                       />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      animate={{ 
-                        width: 
-                          previewMode === "desktop" ? "100%" : 
-                          previewMode === "tablet" ? 768 : 
-                          previewMode === "mobile" ? 375 : 
-                          resizableWidth 
+                    </div>
+
+                    {/* Left Resizing Drag Handle */}
+                    <div
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
                       }}
-                      transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
-                      className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                      className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                      title="Drag to resize"
                     >
-                      {/* Browser Header Bezel */}
-                      <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
-                        {/* 3 macOS dots */}
-                        <div className="flex items-center gap-1.5 w-16">
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
-                        </div>
-                        
-                        {/* Address Bar */}
-                        <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
-                          <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                          <span className="truncate text-neutral-650 font-mono">
-                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
-                          </span>
-                          <span className="text-neutral-300 mx-1">|</span>
-                          <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
-                            {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
-                             previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
-                             previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
-                             `Custom • ${actualWidth}px`}
-                          </span>
-                        </div>
-
-                        {/* Right side status indicator */}
-                        <div className="w-16 flex justify-end">
-                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
-                            {previewMode}
-                          </span>
-                        </div>
+                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
                       </div>
+                    </div>
 
-                      {/* Iframe Viewport Container */}
-                      <div className="flex-1 w-full bg-white relative overflow-hidden">
-                        {/* Drag Overlay to prevent iframe event interception */}
-                        {isDragging && (
-                          <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
-                        )}
-                        
-                        <ProfilePreview
-                          profile={editedProfile}
-                          template={selectedTemplate}
-                          fluid={true}
-                          onFieldClick={handleFieldClick}
-                          isSelectionMode={isSelectionMode}
-                          selectedField={selectedField}
-                          selectedIndex={selectedIndex}
-                          currentStep={currentStep}
-                        />
+                    {/* Right Resizing Drag Handle */}
+                    <div
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        setIsDragging(true);
+                      }}
+                      className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                      title="Drag to resize"
+                    >
+                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
                       </div>
-
-                      {/* Left Resizing Drag Handle */}
-                      <div
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setIsDragging(true);
-                        }}
-                        className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                        title="Drag to resize"
-                      >
-                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        </div>
-                      </div>
-
-                      {/* Right Resizing Drag Handle */}
-                      <div
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          setIsDragging(true);
-                        }}
-                        className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                        title="Drag to resize"
-                      >
-                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  )
+                    </div>
+                  </motion.div>
                 ) : (
                   <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
                 )}
