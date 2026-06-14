@@ -150,18 +150,18 @@ interface WizardStep {
 }
 
 const WIZARD_STEPS: WizardStep[] = [
-  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! Let's build your portfolio page step-by-step. First, please provide your professional identity details below." },
-  { step: 2, label: "Hero Greeting & Status", prompt: "Great. Now let's configure the greeting header and your availability status." },
-  { step: 3, label: "Hero Headline & Value Prop", prompt: "Let's set up the main headline and value prop for your hero section." },
-  { step: 4, label: "About Me Biography", prompt: "Next, let's write your professional biography and choose your section photos." },
-  { step: 5, label: "Client Logos Ticker List", prompt: "Let's showcase the brands and companies you have worked with in a scrolling ticker." },
-  { step: 6, label: "Portfolio Grid Projects", prompt: "Now, let's add some projects to showcase your portfolio of work." },
-  { step: 7, label: "Services Grid", prompt: "Let's list the core services and packages you offer. Note: you can add up to 5 services." },
-  { step: 8, label: "Services CTA Consultation", prompt: "Let's configure the consultation booking card for visitors to schedule a call." },
-  { step: 9, label: "Creative Process Steps", prompt: "Let's outline the steps of your creative process." },
-  { step: 10, label: "Client Testimonials", prompt: "Let's add client reviews and testimonials to build credibility." },
-  { step: 11, label: "Contact Footer & Socials", prompt: "Finally, let's configure your footer links, email, phone, and social media handles." },
-  { step: 12, label: "Free-form Chat Mode & Theme Selection", prompt: "Setup complete! Your website is updated. You can select a template style above or use the chat below to make any further edits." }
+  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! I'm your AI builder. Let's create your portfolio page step-by-step. To get started, what's your name, where are you based, and what is your main profession or role?" },
+  { step: 2, label: "Hero Greeting & Status", prompt: "Got it! Next, let's configure your welcome greeting and status. Are you currently available for new projects or freelance work?" },
+  { step: 3, label: "Hero Headline & Value Prop", prompt: "Perfect. Now let's establish the core value proposition for your hero section. Who do you help, what problems do you solve, or what makes your work stand out?" },
+  { step: 4, label: "About Me Biography", prompt: "Excellent. Let's write a compelling professional biography. Tell me a bit about your journey, background, or major milestones. (Feel free to upload a profile photo or signature using the buttons below!)" },
+  { step: 5, label: "Client Logos Ticker List", prompt: "Impressive! Let's add the logos of companies, clients, or brands you've worked with to build trust. Which brands or company names should we display?" },
+  { step: 6, label: "Portfolio Grid Projects", prompt: "Awesome. Now let's highlight some of your best work in your portfolio. Tell me about a key project you've completed, or use the 'Add Project' button below to enter its details!" },
+  { step: 7, label: "Services Grid", prompt: "Brilliant! Let's list the core services or packages you offer. What services do you provide to clients, and what are their typical prices? (You can also use the 'Add Service' button below)" },
+  { step: 8, label: "Services CTA Consultation", prompt: "Got it. Let's set up a consultation booking card so visitors can schedule a call with you. Do you have a booking link (like Calendly), or what is the main action you want visitors to take?" },
+  { step: 9, label: "Creative Process Steps", prompt: "Understood. Let's outline your creative or working process. In a few steps, how do you typically work with a client from start to finish? (e.g. Discovery, Design, Delivery)" },
+  { step: 10, label: "Client Testimonials", prompt: "Great! Let's add client testimonials or reviews to build strong social proof. What have clients said about working with you? (Or use the 'Add Testimonial Review' button below)" },
+  { step: 11, label: "Contact Footer & Socials", prompt: "Finally, let's set up your footer contact information and social handles. What is your email, and what links (like LinkedIn, GitHub, or Twitter) would you like to include?" },
+  { step: 12, label: "Free-form Chat Mode & Theme Selection", prompt: "Congratulations, your portfolio is fully set up! You can switch layout styles above or use the chat below to make any design, copy, or content edits you want." }
 ];
 
 const removeEmojis = (text: string) => {
