@@ -1130,7 +1130,7 @@ function EditorInner() {
                               className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
                             >
                               <Plus className="w-5 h-5" />
-                              <span className="text-xs font-semibold">Add New Project</span>
+                              <span className="text-xs font-semibold">Add Card</span>
                             </div>
                           </div>
                         )}
@@ -1179,7 +1179,7 @@ function EditorInner() {
                                 className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
                               >
                                 <Plus className="w-5 h-5" />
-                                <span className="text-xs font-semibold">Add New Service</span>
+                                <span className="text-xs font-semibold">Add Card</span>
                               </div>
                             )}
 
