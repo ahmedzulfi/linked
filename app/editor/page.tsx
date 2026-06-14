@@ -997,12 +997,9 @@ function EditorInner() {
               </div>
             )
           ) : (
-            <div className={cn(
-              "flex flex-col justify-between h-full w-full overflow-hidden",
-              !isPreviewVisible && "max-w-3xl mx-auto px-4"
-            )}>
+            <div className="flex flex-col h-full w-full overflow-hidden bg-white">
               {/* Title Header */}
-              <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
+              <div className="h-[64px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none w-full">
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2">
                     <img src="/logo.png" alt="LinkedPage" className="h-6 w-auto object-contain" />
@@ -1040,6 +1037,12 @@ function EditorInner() {
                   </div>
                 </div>
               </div>
+
+              {/* Chat Content Wrapper (centered when preview is hidden) */}
+              <div className={cn(
+                "flex-1 flex flex-col justify-between overflow-hidden w-full",
+                !isPreviewVisible && "max-w-3xl mx-auto px-4"
+              )}>
 
           {/* Scrollable Wizard History */}
           <div className="flex-1 overflow-y-auto px-6 py-4 font-sans" style={{ scrollbarWidth: "none" }}>
@@ -1292,59 +1295,7 @@ function EditorInner() {
                 </div>
               )}
 
-              {/* Always show choose template style layout selector block */}
-              <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-xs space-y-4 animate-in fade-in duration-350 text-left mt-4">
-                <div className="flex items-center gap-2">
-                  <Palette className="w-4 h-4 text-[#3B82F6]" />
-                  <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2.5">
-                  {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((tId) => {
-                    const isSelected = selectedTemplate === tId;
-                    const labelName = tId === "daniel-cross" ? "Daniel Cross" : tId === "julian-mercer" ? "Julian Mercer" : tId === "link-hunt" ? "Link Hunt" : "Biobricks";
-                    const isPro = tId !== "daniel-cross";
-                    
-                    let descText = "";
-                    if (tId === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                    if (tId === "julian-mercer") descText = "Warm paper, elegant serif text";
-                    if (tId === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                    if (tId === "biobricks") descText = "Grid-based bento block structure";
 
-                    return (
-                      <div
-                        key={tId}
-                        onClick={() => {
-                          if (isPro) {
-                            toast.info("Upgrade to Pro to unlock this layout style!");
-                          } else {
-                            selectTemplate(tId as any);
-                          }
-                        }}
-                        className={cn(
-                          "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out font-sans",
-                          isSelected
-                            ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
-                            : "border-[#EAEAEA] hover:border-slate-350",
-                          isPro && "opacity-60 hover:opacity-85"
-                        )}
-                      >
-                        <div className="pr-5">
-                          <span className="text-xs font-semibold text-slate-800 block flex items-center gap-1">
-                            {labelName}
-                            {isPro && <span className="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-mono">PRO</span>}
-                          </span>
-                          <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                        </div>
-                        {isSelected && (
-                          <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
-                            <Check className="w-2.5 h-2.5 text-white" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
 
             </div>
             <div ref={chatEndRef} />
@@ -1410,6 +1361,7 @@ function EditorInner() {
             </div>
           </div>
         </div>
+      </div>
       )}
     </aside>
   )}
