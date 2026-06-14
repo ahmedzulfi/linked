@@ -27,6 +27,8 @@ import {
   Palette,
   Inbox,
   FileText,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
@@ -150,22 +152,26 @@ interface WizardStep {
 }
 
 const WIZARD_STEPS: WizardStep[] = [
-  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! I'm your AI builder. Let's create your portfolio page step-by-step. To get started, what's your name, where are you based, and what is your main profession or role?" },
-  { step: 2, label: "Hero Greeting & Status", prompt: "Got it! Next, let's configure your welcome greeting and status. Are you currently available for new projects or freelance work?" },
-  { step: 3, label: "Hero Headline & Value Prop", prompt: "Perfect. Now let's establish the core value proposition for your hero section. Who do you help, what problems do you solve, or what makes your work stand out?" },
-  { step: 4, label: "About Me Biography", prompt: "Excellent. Let's write a compelling professional biography. Tell me a bit about your journey, background, or major milestones. (Feel free to upload a profile photo or signature using the buttons below!)" },
-  { step: 5, label: "Client Logos Ticker List", prompt: "Impressive! Let's add the logos of companies, clients, or brands you've worked with to build trust. Which brands or company names should we display?" },
-  { step: 6, label: "Portfolio Grid Projects", prompt: "Awesome. Now let's highlight some of your best work in your portfolio. Tell me about a key project you've completed, or use the 'Add Project' button below to enter its details!" },
-  { step: 7, label: "Services Grid", prompt: "Brilliant! Let's list the core services or packages you offer. What services do you provide to clients, and what are their typical prices? (You can also use the 'Add Service' button below)" },
-  { step: 8, label: "Services CTA Consultation", prompt: "Got it. Let's set up a consultation booking card so visitors can schedule a call with you. Do you have a booking link (like Calendly), or what is the main action you want visitors to take?" },
-  { step: 9, label: "Creative Process Steps", prompt: "Understood. Let's outline your creative or working process. In a few steps, how do you typically work with a client from start to finish? (e.g. Discovery, Design, Delivery)" },
-  { step: 10, label: "Client Testimonials", prompt: "Great! Let's add client testimonials or reviews to build strong social proof. What have clients said about working with you? (Or use the 'Add Testimonial Review' button below)" },
-  { step: 11, label: "Contact Footer & Socials", prompt: "Finally, let's set up your footer contact information and social handles. What is your email, and what links (like LinkedIn, GitHub, or Twitter) would you like to include?" },
-  { step: 12, label: "Free-form Chat Mode & Theme Selection", prompt: "Congratulations, your portfolio is fully set up! You can switch layout styles above or use the chat below to make any design, copy, or content edits you want." }
+  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! Let's build your portfolio page step-by-step. First, please provide your professional identity details below." },
+  { step: 2, label: "Hero Greeting & Status", prompt: "Great. Now let's configure the greeting header and your availability status." },
+  { step: 3, label: "Hero Headline & Value Prop", prompt: "Let's set up the main headline and value prop for your hero section." },
+  { step: 4, label: "About Me Biography", prompt: "Next, let's write your professional biography and choose your section photos." },
+  { step: 5, label: "Client Logos Ticker List", prompt: "Let's showcase the brands and companies you have worked with in a scrolling ticker." },
+  { step: 6, label: "Portfolio Grid Projects", prompt: "Now, let's add some projects to showcase your portfolio of work." },
+  { step: 7, label: "Services Grid", prompt: "Let's list the core services and packages you offer. Note: you can add up to 5 services." },
+  { step: 8, label: "Services CTA Consultation", prompt: "Let's configure the consultation booking card for visitors to schedule a call." },
+  { step: 9, label: "Creative Process Steps", prompt: "Let's outline the steps of your creative process." },
+  { step: 10, label: "Client Testimonials", prompt: "Let's add client reviews and testimonials to build credibility." },
+  { step: 11, label: "Contact Footer & Socials", prompt: "Finally, let's configure your footer links, email, phone, and social media handles." },
+  { step: 12, label: "Free-form Chat Mode & Theme Selection", prompt: "Setup complete! Your website is updated. You can select a template style above or use the chat below to make any further edits." }
 ];
 
 const removeEmojis = (text: string) => {
   return text.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF]|\uD83D[\uDE00-\uDE4F]|\uD83D[\uDE80-\uDEFF]|[\u2600-\u26FF]|[\u2700-\u27BF]/g, "");
+};
+
+const cleanMessageContent = (text: string) => {
+  return text.replace(/\[MILESTONE:(PROJECTS|SERVICES|IMAGES)\]/g, "").trim();
 };
 
 
@@ -212,7 +218,6 @@ function EditorInner() {
 
   // Onboarding wizard steps (1 to 11, then 12 for free-form editor mode)
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [showOnboardingPreview, setShowOnboardingPreview] = useState(false);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
   const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile" | "resizable">("desktop");
@@ -281,153 +286,12 @@ function EditorInner() {
   const [chatInput, setChatInput] = useState("");
   const [isThinking, setIsThinking] = useState(false);
 
-  // Selection mode states for the visual customizer
+  const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
   const [isSelectionMode, setIsSelectionMode] = useState<boolean>(false);
   const [selectedField, setSelectedField] = useState<string | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
-
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const centeredChatEndRef = useRef<HTMLDivElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadFieldTarget, setUploadFieldTarget] = useState<string | null>(null);
-
-  const showCenteredChat = currentStep <= 11 && !showOnboardingPreview;
-
-  const triggerImageUpload = (field: string) => {
-    setUploadFieldTarget(field);
-    fileInputRef.current?.click();
-  };
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !uploadFieldTarget) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64String = reader.result as string;
-      updateField(uploadFieldTarget as any, base64String);
-      toast.success(`${uploadFieldTarget} image uploaded successfully!`);
-      sendChatMessage(`[Uploaded image for ${uploadFieldTarget}]`);
-    };
-    reader.readAsDataURL(file);
-    e.target.value = ""; // reset
-  };
-
-  const renderContextualActions = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <button
-            onClick={() => triggerImageUpload("avatarUrl")}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload Avatar Image
-          </button>
-        );
-      case 4:
-        return (
-          <div className="flex gap-2">
-            <button
-              onClick={() => triggerImageUpload("aboutPhotoUrl")}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
-            >
-              <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload About Photo
-            </button>
-            <button
-              onClick={() => triggerImageUpload("signatureUrl")}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
-            >
-              <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload Signature
-            </button>
-          </div>
-        );
-      case 6:
-        return (
-          <button
-            onClick={() => {
-              setModalProjectTitle("");
-              setModalProjectLink("");
-              setModalProjectImage("");
-              setModalProjectDescription("");
-              setEditingProjectIndex(null);
-              setIsProjectModalOpen(true);
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Project (Modal)
-          </button>
-        );
-      case 7:
-        const servicesCount = (editedProfile?.services || DEFAULT_SERVICES).length;
-        return (
-          <button
-            onClick={() => {
-              if (servicesCount >= 5) {
-                toast.error("Maximum of 5 services reached.");
-                return;
-              }
-              setModalServiceTitle("");
-              setModalServicePrice("");
-              setModalServiceDescription("");
-              setEditingServiceIndex(null);
-              setIsServicesModalOpen(true);
-            }}
-            disabled={servicesCount >= 5}
-            className={cn(
-              "flex items-center gap-1.5 px-3 py-1.5 border rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer",
-              servicesCount >= 5
-                ? "bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed"
-                : "bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
-            )}
-          >
-            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Service (Modal)
-          </button>
-        );
-      case 9:
-        return (
-          <button
-            onClick={() => {
-              setModalProcessTag("");
-              setModalProcessTitle("");
-              setModalProcessDescription("");
-              setEditingProcessIndex(null);
-              setIsProcessesModalOpen(true);
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Process Step (Modal)
-          </button>
-        );
-      case 10:
-        return (
-          <button
-            onClick={() => {
-              setModalTestimonialName("");
-              setModalTestimonialRole("");
-              setModalTestimonialQuote("");
-              setModalTestimonialAvatar("");
-              setEditingTestimonialIndex(null);
-              setIsTestimonialsModalOpen(true);
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Testimonial Review (Modal)
-          </button>
-        );
-      case 11:
-        return (
-          <button
-            onClick={() => triggerImageUpload("footerBannerUrl")}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
-          >
-            <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload Footer Banner Image
-          </button>
-        );
-      default:
-        return null;
-    }
-  };
 
   // Onboarding controllers
   const goToNextStep = () => {
@@ -524,25 +388,34 @@ function EditorInner() {
 
   // Load saved chat history when websiteId is available
   useEffect(() => {
-    if (!websiteId || currentStep !== 12) return;
+    if (!websiteId) return;
     const fetchChatHistory = async () => {
       try {
         const res = await fetch(`/api/chat?websiteId=${websiteId}`);
         const data = await res.json();
-        if (res.ok && data.success && data.history) {
+        if (res.ok && data.success && data.history && data.history.length > 0) {
           const formatted = data.history.map((msg: any) => ({
             id: msg.id || String(msg.createdAt),
             role: msg.role as "user" | "assistant",
             content: msg.content,
           }));
           setCustomMessages(formatted);
+        } else {
+          // Empty history, set welcome message
+          setCustomMessages([
+            {
+              id: "welcome",
+              role: "assistant",
+              content: "Hi! I'm Webild, your AI website builder companion. I will guide you step-by-step to create your premium portfolio page. Let's start with the basics—what's your name, and what is your professional role?"
+            }
+          ]);
         }
       } catch (err) {
         console.error("Failed to load chat history:", err);
       }
     };
     fetchChatHistory();
-  }, [websiteId, currentStep]);
+  }, [websiteId]);
 
   // Load saved onboarding step from sessionStorage or url parameters on mount
   useEffect(() => {
@@ -645,7 +518,6 @@ function EditorInner() {
   // Auto-scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    centeredChatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentStep, showAddProject, customMessages, isThinking]);
 
   // Listen for mouse dragging events to resize preview canvas
@@ -819,7 +691,7 @@ function EditorInner() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg, websiteId, currentStep }),
+        body: JSON.stringify({ message: msg, websiteId }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -839,6 +711,30 @@ function EditorInner() {
       if (data.profileUpdates) {
         for (const [k, v] of Object.entries(data.profileUpdates)) {
           updateField(k as any, v as any);
+          // Auto-scroll preview based on updated key
+          if (["name", "headline", "location", "avatarUrl"].includes(k)) {
+            setCurrentStep(1);
+          } else if (["heroBadgeText", "heroGreetingStart", "heroGreetingEnd", "statusText"].includes(k)) {
+            setCurrentStep(2);
+          } else if (["heroSubheadline", "heroRatingText", "followMeLabel"].includes(k)) {
+            setCurrentStep(3);
+          } else if (["aboutLabel", "summary", "aboutPhotoUrl", "signatureUrl"].includes(k)) {
+            setCurrentStep(4);
+          } else if (["experience", "brandsLabel"].includes(k)) {
+            setCurrentStep(5);
+          } else if (["projects", "projectsLabel", "projectsSubtitle"].includes(k)) {
+            setCurrentStep(6);
+          } else if (["services", "servicesLabel", "servicesTitle"].includes(k)) {
+            setCurrentStep(7);
+          } else if (["servicesCta"].includes(k)) {
+            setCurrentStep(8);
+          } else if (["processes", "processLabel", "processTitle"].includes(k)) {
+            setCurrentStep(9);
+          } else if (["testimonials", "testimonialsLabel", "testimonialsTitle"].includes(k)) {
+            setCurrentStep(10);
+          } else if (["footerLabel", "email", "phone", "links"].includes(k)) {
+            setCurrentStep(11);
+          }
         }
       }
 
@@ -1067,11 +963,13 @@ function EditorInner() {
         </aside>
       </div>
 
-      {/* ── Left Column Panel Switcher based on activeNav ── */}
-      {/* 1. Design / AI Onboarding Wizard Panel */}
-      {activeNav === 1 && !showCenteredChat && (
+      {/* ── Left Column Panel Switcher based on activeN      {/* 1. Design / AI Onboarding Wizard Panel */}
+      {activeNav === 1 && (
         <aside 
-          className="h-full w-[510px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col justify-between relative z-20 font-inter shadow-xs"
+          className={cn(
+            "h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300",
+            isPreviewVisible ? "w-[480px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs" : "flex-1"
+          )}
         >
           {isSelectionMode ? (
             editedProfile ? (
@@ -1099,7 +997,10 @@ function EditorInner() {
               </div>
             )
           ) : (
-            <div className="flex flex-col justify-between h-full w-full">
+            <div className={cn(
+              "flex flex-col justify-between h-full w-full overflow-hidden",
+              !isPreviewVisible && "max-w-3xl mx-auto px-4"
+            )}>
               {/* Title Header */}
               <div className="h-[54px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
                 <div className="flex items-center justify-between w-full">
@@ -1111,17 +1012,25 @@ function EditorInner() {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    {currentStep <= 11 && (
-                      <button
-                        onClick={() => setShowOnboardingPreview(false)}
-                        className="text-[11px] font-semibold text-[#3B82F6] hover:text-[#2563EB] transition-colors border border-[#3B82F6]/20 bg-[#E1F3FE]/35 px-2.5 py-1 rounded-lg active:scale-[0.98] cursor-pointer"
-                      >
-                        Hide Preview
-                      </button>
-                    )}
+                    <button
+                      onClick={() => setIsPreviewVisible(!isPreviewVisible)}
+                      className="text-[11.5px] font-semibold text-neutral-600 hover:text-neutral-900 transition-colors border border-[#E6E6E6] px-2.5 py-1 rounded-lg flex items-center gap-1.5 bg-white shadow-xs"
+                    >
+                      {isPreviewVisible ? (
+                        <>
+                          <EyeOff className="w-3.5 h-3.5" />
+                          <span>Hide Preview</span>
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="w-3.5 h-3.5 text-[#3b82f6]" />
+                          <span>Show Preview</span>
+                        </>
+                      )}
+                    </button>
                     <button
                       onClick={() => router.push("/onboarding")}
-                      className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1.5 rounded-lg active:scale-[0.98] cursor-pointer"
+                      className="text-[11.5px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1 rounded-lg"
                     >
                       Restart
                     </button>
@@ -1132,235 +1041,23 @@ function EditorInner() {
                 </div>
               </div>
 
-              {/* Scrollable Wizard History */}
-              <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
-                <div className="space-y-6 flex flex-col w-full py-4">
-                  {/* Conversational timeline rendering (Steps 1-12) */}
-                  {customMessages.map((msg) => (
-                    <div key={msg.id} className="w-full flex flex-col gap-2.5">
-                      {msg.role === "user" ? (
-                        <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                          <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
-                            <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full">
-                              {removeEmojis(msg.content)}
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
-                          <div className="flex items-center gap-2 select-none">
-                            <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                            <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
-                          </div>
-                          <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] text-[#18181B] text-[16px] leading-[26px] font-normal break-words">
-                            {removeEmojis(msg.content)}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+          {/* Scrollable Wizard History */}
+          <div className="flex-1 overflow-y-auto px-6 py-4 font-sans" style={{ scrollbarWidth: "none" }}>
+            <div className="space-y-6 flex flex-col w-full py-4">
+              
+              {/* Conversational timeline rendering */}
+              {customMessages.map((msg) => {
+                const cleanContent = cleanMessageContent(msg.content);
+                const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]");
+                const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]");
+                const hasImagesMilestone = msg.content.includes("[MILESTONE:IMAGES]");
 
-                  {/* Thinking / Dots loader */}
-                  {isThinking && (
-                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
-                      <div className="flex items-center gap-2 select-none">
-                        <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                        <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
-                      </div>
-                      <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center">
-                        <div className="flex items-center gap-[3px] px-1 py-0.5">
-                          {[0, 1, 2].map((i) => (
-                            <div
-                              key={i}
-                              className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
-                              style={{ animationDelay: `${i * 0.18}s` }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Choose template style layout selector block */}
-                  {currentStep === 12 && (
-                    <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
-                      <div className="flex items-center gap-2">
-                        <Palette className="w-4 h-4 text-[#3B82F6]" />
-                        <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2.5">
-                        {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                          const isSelected = selectedTemplate === id;
-                          const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                          const isPro = id !== "daniel-cross";
-                          
-                          let descText = "";
-                          if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                          if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                          if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                          if (id === "biobricks") descText = "Grid-based bento block structure";
-
-                          return (
-                            <div
-                              key={id}
-                              onClick={() => {
-                                if (isPro) {
-                                  toast.info("Upgrade to Pro to unlock this layout style!");
-                                } else {
-                                  selectTemplate(id as any);
-                                }
-                              }}
-                              className={cn(
-                                "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out",
-                                isSelected
-                                  ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
-                                  : "border-[#EAEAEA] hover:border-slate-350",
-                                isPro && "opacity-60 hover:opacity-85"
-                              )}
-                            >
-                              <div className="pr-5">
-                                <span className="text-xs font-semibold text-slate-800 block flex items-center gap-1">
-                                  {labelName}
-                                  {isPro && <span className="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-mono">PRO</span>}
-                                </span>
-                                <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                              </div>
-                              {isSelected && (
-                                <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
-                                  <Check className="w-2.5 h-2.5 text-white" />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* Bottom input composer area */}
-              <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100 gap-3">
-                {/* Contextual Action Buttons */}
-                {currentStep <= 11 && (
-                  <div className="flex flex-wrap gap-2">
-                    {renderContextualActions()}
-                  </div>
-                )}
-
-                {/* Suggestions */}
-                {currentStep === 12 && (
-                  <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-                    {SUGGESTIONS.map((s) => (
-                      <button
-                        key={s}
-                        onClick={() => sendChatMessage(s)}
-                        className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                )}
-
-                {/* Composer Box */}
-                <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
-                  <textarea
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        sendChatMessage();
-                      }
-                    }}
-                    className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
-                    placeholder={currentStep <= 11 ? `Tell Webild about your ${WIZARD_STEPS.find(s => s.step === currentStep)?.label.toLowerCase()}...` : "Ask Webild to adjust copy, headline, template style..."}
-                    rows={2}
-                  />
-                  <div className="flex items-center justify-between px-1 select-none">
-                    <div className="flex items-center gap-1.5">
-                      {currentStep <= 11 && currentStep > 1 && (
-                        <button
-                          onClick={goToBackStep}
-                          className="h-8 px-3 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.97]"
-                        >
-                          ← Back
-                        </button>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {currentStep <= 11 && (
-                        <button
-                          onClick={goToNextStep}
-                          className="h-8 px-3 text-xs font-bold text-slate-700 hover:text-slate-800 bg-[#F7F6F3] hover:bg-[#EAEAEA] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.97]"
-                        >
-                          Skip / Continue →
-                        </button>
-                      )}
-                      <button
-                        onClick={() => sendChatMessage()}
-                        disabled={!chatInput.trim()}
-                        className={cn(
-                          "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
-                          chatInput.trim()
-                            ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
-                            : "bg-neutral-200 cursor-not-allowed"
-                        )}
-                      >
-                        <ArrowUp className="w-[18px] h-[18px]" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </aside>
-      )}
-
-      {/* ── Centered Onboarding Chat View (ChatGPT Style) ── */}
-      {activeNav === 1 && showCenteredChat && (
-        <div className="flex-1 h-full bg-slate-50/15 flex items-center justify-center relative z-20 overflow-hidden font-inter p-6">
-          <div className="max-w-3xl w-full h-full flex flex-col justify-between bg-white border border-[#E6E6E6]/65 rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.02)] overflow-hidden animate-in zoom-in-98 duration-200">
-            {/* Header */}
-            <div className="h-[58px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center gap-2.5">
-                  <img src="/logoicon.png" alt="Logo" className="h-5.5 w-auto object-contain" />
-                  <span className="text-[14px] font-bold text-slate-800 font-sans">Webild AI Builder</span>
-                  <div className="w-px h-3.5 bg-slate-200" />
-                  <span className="text-[12px] font-medium text-slate-500">
-                    Step {currentStep} of 11: {WIZARD_STEPS.find(s => s.step === currentStep)?.label}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setShowOnboardingPreview(true)}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-[#3B82F6] hover:text-[#2563EB] transition-colors border border-[#3B82F6]/20 bg-[#E1F3FE]/35 px-3 py-1.5 rounded-lg active:scale-[0.98] cursor-pointer"
-                  >
-                    <Monitor className="w-3.5 h-3.5" /> Show Live Preview
-                  </button>
-                  <button
-                    onClick={() => router.push("/onboarding")}
-                    className="text-xs font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1.5 rounded-lg active:scale-[0.98] cursor-pointer"
-                  >
-                    Restart
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Scrollable Chat History */}
-            <div className="flex-1 overflow-y-auto px-6 py-6" style={{ scrollbarWidth: "none" }}>
-              <div className="space-y-6 flex flex-col w-full py-4 max-w-2xl mx-auto">
-                {customMessages.map((msg) => (
+                return (
                   <div key={msg.id} className="w-full flex flex-col gap-2.5">
                     {msg.role === "user" ? (
                       <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                        <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[20px] px-5 py-3.5 shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.04)]">
-                          <p className="text-slate-800 text-[15.5px] leading-[26px] font-normal break-words max-w-full">
+                        <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
+                          <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full font-sans">
                             {removeEmojis(msg.content)}
                           </p>
                         </div>
@@ -1371,46 +1068,303 @@ function EditorInner() {
                           <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
                           <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                         </div>
-                        <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[20px] px-5 py-3.5 shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.04)] text-[#18181B] text-[15.5px] leading-[26px] font-normal break-words">
-                          {removeEmojis(msg.content)}
+                        <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] text-[#18181B] text-[16px] leading-[26px] font-normal break-words font-sans">
+                          {removeEmojis(cleanContent)}
                         </div>
+
+                        {/* Milestone widgets */}
+                        {hasProjectsMilestone && (
+                          <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
+                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-xs space-y-3 font-sans text-left">
+                              <div className="flex items-center gap-2">
+                                <Folder className="w-4 h-4 text-[#3B82F6]" />
+                                <span className="text-xs font-bold text-slate-800">Portfolio Projects</span>
+                              </div>
+                              <p className="text-[11px] text-slate-500 leading-normal">
+                                Click below to open the project builder modal. Specify custom titles, links, descriptions, and cover images.
+                              </p>
+                              <button
+                                onClick={() => {
+                                  setModalProjectTitle("");
+                                  setModalProjectLink("");
+                                  setModalProjectImage("");
+                                  setModalProjectDescription("");
+                                  setEditingProjectIndex(null);
+                                  setIsProjectModalOpen(true);
+                                }}
+                                className="h-8 w-full bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 active:scale-[0.97] border-none cursor-pointer"
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add New Project
+                              </button>
+
+                              {/* Projects list with Edit option */}
+                              {(editedProfile?.projects || []).length > 0 && (
+                                <div className="space-y-1.5 mt-2">
+                                  {(editedProfile.projects || []).map((p, pIdx) => (
+                                    <div key={pIdx} className="flex items-center justify-between bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 shadow-xxs">
+                                      <span className="truncate pr-2 font-semibold">{p.title}</span>
+                                      <button
+                                        onClick={() => {
+                                          setModalProjectTitle(p.title || "");
+                                          setModalProjectLink(p.link || "");
+                                          setModalProjectImage(p.image || "");
+                                          setModalProjectDescription(p.description || "");
+                                          setEditingProjectIndex(pIdx);
+                                          setIsProjectModalOpen(true);
+                                        }}
+                                        className="text-xs text-blue-500 hover:text-blue-600 font-semibold border-none bg-transparent cursor-pointer"
+                                      >
+                                        Edit
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {hasServicesMilestone && (
+                          <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
+                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-xs space-y-3 font-sans text-left">
+                              <div className="flex items-center gap-2">
+                                <Briefcase className="w-4 h-4 text-[#3B82F6]" />
+                                <span className="text-xs font-bold text-slate-800">Services & Pricing</span>
+                              </div>
+                              <p className="text-[11px] text-slate-500 leading-normal">
+                                Click below to open the service packages manager. You can offer up to 5 custom service offerings.
+                              </p>
+                              <button
+                                disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
+                                onClick={() => {
+                                  setModalServiceTitle("");
+                                  setModalServicePrice("");
+                                  setModalServiceDescription("");
+                                  setEditingServiceIndex(null);
+                                  setIsServicesModalOpen(true);
+                                }}
+                                className={cn(
+                                  "h-8 w-full rounded-lg text-xs font-semibold transition-colors flex items-center justify-center gap-1 active:scale-[0.97]",
+                                  (editedProfile?.services || DEFAULT_SERVICES).length >= 5
+                                    ? "bg-slate-200 text-slate-400 cursor-not-allowed border-none"
+                                    : "bg-[#3B82F6] hover:bg-[#2563EB] text-white border-none cursor-pointer"
+                                )}
+                              >
+                                <Plus className="w-3.5 h-3.5" /> Add New Service
+                              </button>
+
+                              {/* Services list with Edit option */}
+                              <div className="space-y-1.5 mt-2">
+                                {(editedProfile?.services || DEFAULT_SERVICES).map((srv, sIdx) => (
+                                  <div key={sIdx} className="flex items-center justify-between bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 shadow-xxs">
+                                    <span className="truncate pr-2 font-semibold">{srv.title} ({srv.price})</span>
+                                    <button
+                                      onClick={() => {
+                                        setModalServiceTitle(srv.title || "");
+                                        setModalServicePrice(srv.price || "");
+                                        setModalServiceDescription(srv.description || "");
+                                        setEditingServiceIndex(sIdx);
+                                        setIsServicesModalOpen(true);
+                                      }}
+                                      className="text-xs text-blue-500 hover:text-blue-600 font-semibold border-none bg-transparent cursor-pointer"
+                                    >
+                                      Edit
+                                    </button>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {hasImagesMilestone && (
+                          <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
+                            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 shadow-xs space-y-4 font-sans text-left">
+                              <div className="flex items-center gap-2">
+                                <Palette className="w-4 h-4 text-[#3B82F6]" />
+                                <span className="text-xs font-bold text-slate-800">Upload Images & Visuals</span>
+                              </div>
+                              
+                              <div className="space-y-3">
+                                {[
+                                  { id: "avatarUrl", label: "Profile Avatar Image", value: editedProfile?.avatarUrl },
+                                  { id: "bannerUrl", label: "Hero Portrait Photo", value: editedProfile?.bannerUrl || editedProfile?.avatarUrl },
+                                  { id: "aboutPhotoUrl", label: "About Section Portrait", value: editedProfile?.aboutPhotoUrl }
+                                ].map((imgItem) => (
+                                  <div key={imgItem.id} className="bg-white border border-slate-200 rounded-lg p-3 space-y-2">
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[10px] font-bold text-slate-500 uppercase font-mono">{imgItem.label}</span>
+                                      {imgItem.value && (
+                                        <span className="text-[9px] text-green-600 bg-green-50 px-1.5 py-0.2 rounded font-semibold">Configured</span>
+                                      )}
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-3">
+                                      {imgItem.value ? (
+                                        <div className="w-12 h-12 rounded-lg overflow-hidden border border-slate-200 shrink-0 bg-slate-50 flex items-center justify-center">
+                                          <img src={imgItem.value} className="w-full h-full object-cover" />
+                                        </div>
+                                      ) : (
+                                        <div className="w-12 h-12 rounded-lg border border-dashed border-slate-200 flex items-center justify-center text-slate-400 shrink-0 bg-slate-50">
+                                          <Palette className="w-5 h-5 text-slate-400 stroke-[1.25]" />
+                                        </div>
+                                      )}
+                                      
+                                      <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+                                        <input
+                                          type="text"
+                                          value={imgItem.value || ""}
+                                          onChange={(e) => updateField(imgItem.id as any, e.target.value)}
+                                          placeholder="Paste URL..."
+                                          className="h-7 text-xs bg-slate-50 border border-slate-200 rounded px-2 w-full focus:bg-white focus:border-blue-500 outline-none text-slate-700 font-mono"
+                                        />
+                                        
+                                        <div className="flex items-center gap-2">
+                                          <input
+                                            type="file"
+                                            id={`file-upload-${imgItem.id}`}
+                                            accept="image/*"
+                                            onChange={(e) => {
+                                              const file = e.target.files?.[0];
+                                              if (!file) return;
+                                              if (file.size > 2 * 1024 * 1024) {
+                                                toast.error("Image file is too large (max 2MB)");
+                                                return;
+                                              }
+                                              const reader = new FileReader();
+                                              reader.onload = (event) => {
+                                                const base64 = event.target?.result as string;
+                                                updateField(imgItem.id as any, base64);
+                                                toast.success(`${imgItem.label} updated!`);
+                                              };
+                                              reader.readAsDataURL(file);
+                                            }}
+                                            className="hidden"
+                                          />
+                                          <button
+                                            onClick={() => document.getElementById(`file-upload-${imgItem.id}`)?.click()}
+                                            className="text-[10px] font-bold text-blue-500 hover:text-blue-600 bg-blue-50/50 px-2 py-0.5 rounded cursor-pointer border-none"
+                                          >
+                                            Upload File
+                                          </button>
+                                          {imgItem.value && (
+                                            <button
+                                              onClick={() => updateField(imgItem.id as any, "")}
+                                              className="text-[10px] font-bold text-red-500 hover:text-red-650 bg-red-50/50 px-2 py-0.5 rounded cursor-pointer border-none"
+                                            >
+                                              Clear
+                                            </button>
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
                       </div>
                     )}
                   </div>
-                ))}
+                );
+              })}
 
-                {isThinking && (
-                  <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
-                    <div className="flex items-center gap-2 select-none">
-                      <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                      <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
-                    </div>
-                    <div className="bg-white px-5 py-3.5 rounded-[20px] border border-[#EAEAEA] shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.04)] flex items-center justify-center">
-                      <div className="flex items-center gap-[3px] px-1 py-0.5">
-                        {[0, 1, 2].map((i) => (
-                          <div
-                            key={i}
-                            className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
-                            style={{ animationDelay: `${i * 0.18}s` }}
-                          />
-                        ))}
-                      </div>
+              {/* Thinking / Dots loader */}
+              {isThinking && (
+                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
+                  <div className="flex items-center gap-2 select-none">
+                    <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                    <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                  </div>
+                  <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center">
+                    <div className="flex items-center gap-[3px] px-1 py-0.5">
+                      {[0, 1, 2].map((i) => (
+                        <div
+                          key={i}
+                          className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
+                          style={{ animationDelay: `${i * 0.18}s` }}
+                        />
+                      ))}
                     </div>
                   </div>
-                )}
-                <div ref={centeredChatEndRef} />
+                </div>
+              )}
+
+              {/* Always show choose template style layout selector block */}
+              <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-xs space-y-4 animate-in fade-in duration-350 text-left mt-4">
+                <div className="flex items-center gap-2">
+                  <Palette className="w-4 h-4 text-[#3B82F6]" />
+                  <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((tId) => {
+                    const isSelected = selectedTemplate === tId;
+                    const labelName = tId === "daniel-cross" ? "Daniel Cross" : tId === "julian-mercer" ? "Julian Mercer" : tId === "link-hunt" ? "Link Hunt" : "Biobricks";
+                    const isPro = tId !== "daniel-cross";
+                    
+                    let descText = "";
+                    if (tId === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                    if (tId === "julian-mercer") descText = "Warm paper, elegant serif text";
+                    if (tId === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                    if (tId === "biobricks") descText = "Grid-based bento block structure";
+
+                    return (
+                      <div
+                        key={tId}
+                        onClick={() => {
+                          if (isPro) {
+                            toast.info("Upgrade to Pro to unlock this layout style!");
+                          } else {
+                            selectTemplate(tId as any);
+                          }
+                        }}
+                        className={cn(
+                          "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out font-sans",
+                          isSelected
+                            ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
+                            : "border-[#EAEAEA] hover:border-slate-350",
+                          isPro && "opacity-60 hover:opacity-85"
+                        )}
+                      >
+                        <div className="pr-5">
+                          <span className="text-xs font-semibold text-slate-800 block flex items-center gap-1">
+                            {labelName}
+                            {isPro && <span className="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-mono">PRO</span>}
+                          </span>
+                          <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                        </div>
+                        {isSelected && (
+                          <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
+                            <Check className="w-2.5 h-2.5 text-white" />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
+
             </div>
-
-            {/* Composer Input Area */}
-            <div className="p-5 shrink-0 bg-white flex flex-col border-t border-neutral-100 gap-3">
-              {/* Contextual Action Buttons */}
-              <div className="flex flex-wrap gap-2 max-w-2xl mx-auto w-full">
-                {renderContextualActions()}
+            <div ref={chatEndRef} />
+          </div>
+                   {/* Bottom input composer area */}
+          <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
+            <div className="w-full flex flex-col gap-3">
+              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => sendChatMessage(s)}
+                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                  >
+                    {s}
+                  </button>
+                ))}
               </div>
 
-              {/* Chat Composer */}
-              <div className="max-w-2xl mx-auto w-full bg-white rounded-[22px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.06)]">
+              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
                 <textarea
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
@@ -1420,29 +1374,23 @@ function EditorInner() {
                       sendChatMessage();
                     }
                   }}
-                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14.5px] px-3 py-2 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
-                  placeholder={`Tell Webild about your ${WIZARD_STEPS.find(s => s.step === currentStep)?.label.toLowerCase()}...`}
+                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
+                  placeholder="Ask Webild to adjust copy, headline, template style..."
                   rows={2}
                 />
-                <div className="flex items-center justify-between px-1.5 select-none">
-                  <div className="flex items-center gap-1.5">
-                    {/* Back navigation */}
-                    {currentStep > 1 && (
-                      <button
-                        onClick={goToBackStep}
-                        className="h-8 px-3.5 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-[#F7F6F3] border border-[#EAEAEA] rounded-xl transition-colors cursor-pointer active:scale-[0.97]"
-                      >
-                        ← Back
-                      </button>
-                    )}
-                  </div>
+                <div className="flex items-center justify-between px-1 select-none">
+                  <button
+                    onClick={() => toast.info("Attachments coming soon!")}
+                    className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
+                  >
+                    <Plus className="w-[18px] h-[18px]" />
+                  </button>
                   <div className="flex items-center gap-2">
-                    {/* Continue navigation */}
                     <button
-                      onClick={goToNextStep}
-                      className="h-8 px-4 text-xs font-bold text-slate-700 hover:text-slate-800 bg-[#F7F6F3] hover:bg-[#EAEAEA] border border-[#EAEAEA] rounded-xl transition-colors cursor-pointer active:scale-[0.97]"
+                      onClick={() => toast.info("Voice input coming soon!")}
+                      className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
                     >
-                      Skip / Continue →
+                      <Mic className="w-[18px] h-[18px]" />
                     </button>
                     <button
                       onClick={() => sendChatMessage()}
@@ -1463,6 +1411,8 @@ function EditorInner() {
           </div>
         </div>
       )}
+    </aside>
+  )}
 
       {/* 2. Domains Panel */}
       {activeNav === 2 && <DomainsPane />}
@@ -1471,7 +1421,7 @@ function EditorInner() {
       {activeNav === 3 && <SettingsPane profileName={profileName} router={router} />}
 
       {/* ── Main Canvas Workspace ── */}
-      {!showCenteredChat && (
+      {isPreviewVisible && (
         <main 
           className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3"
         >
@@ -1820,7 +1770,7 @@ function EditorInner() {
           </div>
 
         </div>
-      </main>
+        </main>
       )}
 
       {/* ── Two-Column Project Modal ── */}
@@ -2231,13 +2181,6 @@ function EditorInner() {
           </div>
         </div>
       )}
-      <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleImageChange}
-        accept="image/*"
-        className="hidden"
-      />
     </div>
   );
 }
