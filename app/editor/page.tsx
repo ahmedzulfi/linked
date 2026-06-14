@@ -1086,136 +1086,131 @@ function EditorInner() {
                         </div>
 
                         {hasProjectsMilestone && (
-                          <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
-                            <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left">
-                              <div className="flex items-center gap-2">
-                                <Folder className="w-4 h-4 text-slate-800" />
-                                <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Portfolio Projects</span>
+                          <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
+                            {(editedProfile?.projects || []).map((p, pIdx) => (
+                              <div
+                                key={pIdx}
+                                onClick={() => {
+                                  setModalProjectTitle(p.title || "");
+                                  setModalProjectLink(p.link || "");
+                                  setModalProjectImage(p.image || "");
+                                  setModalProjectDescription(p.description || "");
+                                  setEditingProjectIndex(pIdx);
+                                  setIsProjectModalOpen(true);
+                                }}
+                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                              >
+                                <div>
+                                  <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight truncate">
+                                    {p.title}
+                                  </h4>
+                                  {p.link && (
+                                    <p className="text-[10px] text-slate-400 truncate font-mono mt-1">
+                                      {p.link}
+                                    </p>
+                                  )}
+                                  {p.description && (
+                                    <p className="text-[12px] text-slate-550 line-clamp-3 leading-normal mt-2.5 font-sans">
+                                      {p.description}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-                              <p className="text-[12px] text-slate-650 leading-relaxed font-sans">
-                                Click below to open the project builder. Specify custom titles, redirect links, descriptions, and cover images.
-                              </p>
+                            ))}
 
-                              {/* Projects grid */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                                {(editedProfile?.projects || []).map((p, pIdx) => (
-                                  <div key={pIdx} className="relative bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 p-4 rounded-xl shadow-xs transition-all duration-200 flex flex-col justify-between h-[140px]">
-                                    <div>
-                                      <h4 className="font-['Inter_Tight'] font-semibold text-slate-900 text-[13px] leading-tight truncate">
-                                        {p.title}
-                                      </h4>
-                                      {p.link && (
-                                        <p className="text-[9px] text-slate-400 truncate font-mono mt-0.5">
-                                          {p.link}
-                                        </p>
-                                      )}
-                                      {p.description && (
-                                        <p className="text-[10px] text-slate-500 line-clamp-3 leading-normal mt-1.5">
-                                          {p.description}
-                                        </p>
-                                      )}
-                                    </div>
-                                    <div className="flex justify-end pt-1">
-                                      <button
-                                        onClick={() => {
-                                          setModalProjectTitle(p.title || "");
-                                          setModalProjectLink(p.link || "");
-                                          setModalProjectImage(p.image || "");
-                                          setModalProjectDescription(p.description || "");
-                                          setEditingProjectIndex(pIdx);
-                                          setIsProjectModalOpen(true);
-                                        }}
-                                        className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white border border-slate-200 hover:border-slate-900 text-slate-700 hover:text-white text-[10px] font-medium transition-all duration-155 cursor-pointer shadow-xs"
-                                      >
-                                        <Pencil className="w-3 h-3" /> Edit
-                                      </button>
-                                    </div>
-                                  </div>
-                                ))}
-
-                                <button
-                                  onClick={() => {
-                                    setModalProjectTitle("");
-                                    setModalProjectLink("");
-                                    setModalProjectImage("");
-                                    setModalProjectDescription("");
-                                    setEditingProjectIndex(null);
-                                    setIsProjectModalOpen(true);
-                                  }}
-                                  className="border border-dashed border-slate-300 hover:border-slate-800 bg-white/20 hover:bg-white/40 transition-all rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 h-[140px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] border-none"
-                                >
-                                  <Plus className="w-5 h-5" />
-                                  <span className="text-xs font-semibold">Add New Project</span>
-                                </button>
-                              </div>
+                            <div
+                              onClick={() => {
+                                setModalProjectTitle("");
+                                setModalProjectLink("");
+                                setModalProjectImage("");
+                                setModalProjectDescription("");
+                                setEditingProjectIndex(null);
+                                setIsProjectModalOpen(true);
+                              }}
+                              className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
+                            >
+                              <Plus className="w-5 h-5" />
+                              <span className="text-xs font-semibold">Add New Project</span>
                             </div>
                           </div>
                         )}
 
                         {hasServicesMilestone && (
-                          <div className="mt-1 ml-7 flex flex-col gap-2 w-full max-w-[85%]">
-                            <div className="backdrop-blur-md bg-white/40 border border-white/40 rounded-2xl p-5 shadow-[0_8px_32px_0_rgba(31,38,135,0.04)] space-y-4 text-left">
-                              <div className="flex items-center gap-2">
-                                <Briefcase className="w-4 h-4 text-slate-800" />
-                                <span className="font-['Inter_Tight'] font-semibold text-slate-900 tracking-tight text-sm">Services & Pricing</span>
-                              </div>
-                              <p className="text-[12px] text-slate-655 leading-relaxed font-sans">
-                                Click below to open the service packages manager. You can offer up to 5 custom service offerings.
-                              </p>
-
-                              {/* Services grid */}
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-                                {(editedProfile?.services || DEFAULT_SERVICES).map((srv, sIdx) => (
-                                  <div key={sIdx} className="relative bg-white/60 hover:bg-white border border-white/60 hover:border-slate-200/80 p-4 rounded-xl shadow-xs transition-all duration-200 flex flex-col justify-between h-[140px]">
-                                    <div>
-                                      <div className="flex items-start justify-between gap-2">
-                                        <h4 className="font-['Inter_Tight'] font-semibold text-slate-900 text-[13px] leading-tight truncate max-w-[70%]">
-                                          {srv.title}
-                                        </h4>
-                                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-slate-900 text-white leading-none">
-                                          {srv.price}
-                                        </span>
-                                      </div>
-                                      {srv.description && (
-                                        <p className="text-[10px] text-slate-500 line-clamp-3 leading-normal mt-1.5">
-                                          {srv.description}
-                                        </p>
-                                      )}
-                                    </div>
-                                    <div className="flex justify-end pt-1">
-                                      <button
-                                        onClick={() => {
-                                          setModalServiceTitle(srv.title || "");
-                                          setModalServicePrice(srv.price || "");
-                                          setModalServiceDescription(srv.description || "");
-                                          setEditingServiceIndex(sIdx);
-                                          setIsServicesModalOpen(true);
-                                        }}
-                                        className="flex items-center gap-1.5 h-7 px-3 rounded-lg bg-white border border-slate-200 hover:border-slate-900 text-slate-700 hover:text-white text-[10px] font-medium transition-all duration-155 cursor-pointer shadow-xs"
-                                      >
-                                        <Pencil className="w-3 h-3" /> Edit
-                                      </button>
-                                    </div>
+                          <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
+                            {(editedProfile?.services || DEFAULT_SERVICES).map((srv, sIdx) => (
+                              <div
+                                key={sIdx}
+                                onClick={() => {
+                                  setModalServiceTitle(srv.title || "");
+                                  setModalServicePrice(srv.price || "");
+                                  setModalServiceDescription(srv.description || "");
+                                  setEditingServiceIndex(sIdx);
+                                  setIsServicesModalOpen(true);
+                                }}
+                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                              >
+                                <div>
+                                  <div className="flex items-start justify-between gap-2">
+                                    <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight max-w-[70%]">
+                                      {srv.title}
+                                    </h4>
+                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2A2A2F] text-white leading-none shrink-0">
+                                      {srv.price}
+                                    </span>
                                   </div>
-                                ))}
-
-                                {(editedProfile?.services || DEFAULT_SERVICES).length < 5 && (
-                                  <button
-                                    onClick={() => {
-                                      setModalServiceTitle("");
-                                      setModalServicePrice("");
-                                      setModalServiceDescription("");
-                                      setEditingServiceIndex(null);
-                                      setIsServicesModalOpen(true);
-                                    }}
-                                    className="border border-dashed border-slate-350 hover:border-slate-800 bg-white/20 hover:bg-white/40 transition-all rounded-xl p-4 flex flex-col items-center justify-center gap-1.5 h-[140px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] border-none"
-                                  >
-                                    <Plus className="w-5 h-5" />
-                                    <span className="text-xs font-semibold">Add New Service</span>
-                                  </button>
-                                )}
+                                  {srv.description && (
+                                    <p className="text-[12px] text-slate-550 line-clamp-3 leading-normal mt-2.5 font-sans">
+                                      {srv.description}
+                                    </p>
+                                  )}
+                                </div>
                               </div>
-                            </div>
+                            ))}
+
+                            {(editedProfile?.services || DEFAULT_SERVICES).length < 5 && (
+                              <div
+                                onClick={() => {
+                                  setModalServiceTitle("");
+                                  setModalServicePrice("");
+                                  setModalServiceDescription("");
+                                  setEditingServiceIndex(null);
+                                  setIsServicesModalOpen(true);
+                                }}
+                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
+                              >
+                                <Plus className="w-5 h-5" />
+                                <span className="text-xs font-semibold">Add New Service</span>
+                              </div>
+                            )}
+
+                            {/* Call to Action card */}
+                            {(() => {
+                              const cta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
+                              return (
+                                <div
+                                  onClick={() => {
+                                    setIsSelectionMode(true);
+                                    setSelectedField("servicesCta");
+                                    setActiveNav(1);
+                                  }}
+                                  className="relative bg-[#4E3B2F] hover:bg-[#4E3B2F]/90 p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group border border-transparent active:scale-[0.98]"
+                                >
+                                  <div>
+                                    <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
+                                      {cta.title}
+                                    </h4>
+                                    {cta.text && (
+                                      <p className="text-[12px] text-stone-200/80 leading-normal mt-2.5 font-sans line-clamp-3">
+                                        {cta.text}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="w-full bg-white hover:bg-stone-50 text-[#4E3B2F] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
+                                    {cta.buttonText || "Book A Call"}
+                                  </div>
+                                </div>
+                              );
+                            })()}
                           </div>
                         )}
 
