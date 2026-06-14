@@ -40,6 +40,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { ShiningText } from "@/components/ui/shining-text";
 
 const ProfilePreview = dynamic(() => import("./components/ProfilePreview"), {
   ssr: false,
@@ -1284,12 +1285,12 @@ function EditorInner() {
 
               {/* Thinking / Dots loader */}
               {isThinking && (
-                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
+                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
                   <div className="flex items-center gap-2 select-none">
                     <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
                     <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                   </div>
-                  <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center">
+                  <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center gap-3">
                     <div className="flex items-center gap-[3px] px-1 py-0.5">
                       {[0, 1, 2].map((i) => (
                         <div
@@ -1299,6 +1300,7 @@ function EditorInner() {
                         />
                       ))}
                     </div>
+                    <ShiningText text="Webild is thinking..." />
                   </div>
                 </div>
               )}
