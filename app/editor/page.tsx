@@ -238,6 +238,28 @@ function EditorInner() {
   const [modalProjectLink, setModalProjectLink] = useState("");
   const [modalProjectImage, setModalProjectImage] = useState("");
 
+  // Services Modal states
+  const [isServicesModalOpen, setIsServicesModalOpen] = useState(false);
+  const [editingServiceIndex, setEditingServiceIndex] = useState<number | null>(null);
+  const [modalServiceTitle, setModalServiceTitle] = useState("");
+  const [modalServicePrice, setModalServicePrice] = useState("");
+  const [modalServiceDescription, setModalServiceDescription] = useState("");
+
+  // Process steps Modal states
+  const [isProcessesModalOpen, setIsProcessesModalOpen] = useState(false);
+  const [editingProcessIndex, setEditingProcessIndex] = useState<number | null>(null);
+  const [modalProcessTag, setModalProcessTag] = useState("");
+  const [modalProcessTitle, setModalProcessTitle] = useState("");
+  const [modalProcessDescription, setModalProcessDescription] = useState("");
+
+  // Testimonials Modal states
+  const [isTestimonialsModalOpen, setIsTestimonialsModalOpen] = useState(false);
+  const [editingTestimonialIndex, setEditingTestimonialIndex] = useState<number | null>(null);
+  const [modalTestimonialName, setModalTestimonialName] = useState("");
+  const [modalTestimonialRole, setModalTestimonialRole] = useState("");
+  const [modalTestimonialQuote, setModalTestimonialQuote] = useState("");
+  const [modalTestimonialAvatar, setModalTestimonialAvatar] = useState("");
+
   // Inline Add states
   const [newProjTitle, setNewProjTitle] = useState("");
   const [newProjDesc, setNewProjDesc] = useState("");
@@ -1566,7 +1588,27 @@ function EditorInner() {
                         </div>
                       </div>
                       <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Offered Services ({(editedProfile?.services || DEFAULT_SERVICES).length})</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Offered Services ({(editedProfile?.services || DEFAULT_SERVICES).length})</span>
+                          <button
+                            disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
+                            onClick={() => {
+                              setModalServiceTitle("");
+                              setModalServicePrice("");
+                              setModalServiceDescription("");
+                              setEditingServiceIndex(null);
+                              setIsServicesModalOpen(true);
+                            }}
+                            className={cn(
+                              "flex items-center gap-1 px-2.5 py-1 bg-white border rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97] cursor-pointer",
+                              (editedProfile?.services || DEFAULT_SERVICES).length >= 5
+                                ? "text-neutral-350 border-neutral-200 bg-neutral-50/50 cursor-not-allowed"
+                                : "text-[#3B82F6] border-[#3B82F6]/30 hover:bg-slate-50 hover:border-[#3B82F6]/65"
+                            )}
+                          >
+                            <Plus className="w-3 h-3" /> Add Service
+                          </button>
+                        </div>
                         <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
                           {(editedProfile?.services || DEFAULT_SERVICES).map((srv, idx) => (
                             <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
@@ -1574,86 +1616,43 @@ function EditorInner() {
                                 <span className="text-[13px] font-bold text-slate-800 block truncate">{srv.title} ({srv.price})</span>
                                 <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{srv.description}</span>
                               </div>
-                              <button
-                                onClick={() => {
-                                  const currentList = editedProfile?.services || DEFAULT_SERVICES;
-                                  const updated = currentList.filter((_, i) => i !== idx);
-                                  updateField("services", updated);
-                                }}
-                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => {
+                                    setModalServiceTitle(srv.title || "");
+                                    setModalServicePrice(srv.price || "");
+                                    setModalServiceDescription(srv.description || "");
+                                    setEditingServiceIndex(idx);
+                                    setIsServicesModalOpen(true);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
+                                  title="Edit service"
+                                >
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const currentList = editedProfile?.services || DEFAULT_SERVICES;
+                                    const updated = currentList.filter((_, i) => i !== idx);
+                                    updateField("services", updated);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                                  title="Delete service"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             </div>
                           ))}
                         </div>
-
-                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add New Service Card</span>
-                          <div className="grid grid-cols-3 gap-2">
-                            <Input
-                              id="new-srv-title"
-                              disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2 disabled:opacity-50"
-                              placeholder="Service Title"
-                            />
-                            <Input
-                              id="new-srv-price"
-                              disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg disabled:opacity-50"
-                              placeholder="Price"
-                            />
-                            <Input
-                              id="new-srv-desc"
-                              disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-3 disabled:opacity-50"
-                              placeholder="Description summary..."
-                            />
+                        {(editedProfile?.services || DEFAULT_SERVICES).length >= 5 && (
+                          <div className="flex items-center gap-2 text-amber-600 bg-amber-50 border border-amber-200/60 p-2.5 rounded-lg text-[11px] font-medium animate-in fade-in duration-200 select-none">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>Maximum of 5 services reached. Delete an existing service to add a new one.</span>
                           </div>
-                          {(editedProfile?.services || DEFAULT_SERVICES).length >= 5 && (
-                            <div className="flex items-center gap-2 text-amber-600 bg-amber-50 border border-amber-200/60 p-2.5 rounded-lg text-[11px] font-medium animate-in fade-in duration-200 select-none">
-                              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                              <span>Maximum of 5 services reached. Delete an existing service to add a new one.</span>
-                            </div>
-                          )}
-                          <button
-                            disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
-                            onClick={() => {
-                              const currentList = editedProfile?.services || DEFAULT_SERVICES;
-                              if (currentList.length >= 5) {
-                                toast.error("You cannot add more than 5 services.");
-                                return;
-                              }
-                              const titleEl = document.getElementById("new-srv-title") as HTMLInputElement;
-                              const priceEl = document.getElementById("new-srv-price") as HTMLInputElement;
-                              const descEl = document.getElementById("new-srv-desc") as HTMLInputElement;
-                              if (titleEl && titleEl.value.trim() && priceEl && priceEl.value.trim() && descEl && descEl.value.trim()) {
-                                const updated = [
-                                  ...currentList,
-                                  {
-                                    title: titleEl.value.trim(),
-                                    price: priceEl.value.trim(),
-                                    description: descEl.value.trim()
-                                  }
-                                ];
-                                updateField("services", updated);
-                                titleEl.value = "";
-                                priceEl.value = "";
-                                descEl.value = "";
-                              } else {
-                                toast.error("Please fill in all service fields.");
-                              }
-                            }}
-                            className={cn(
-                              "w-full py-1.5 text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]",
-                              (editedProfile?.services || DEFAULT_SERVICES).length >= 5
-                                ? "bg-neutral-100 text-neutral-400 cursor-not-allowed border-none"
-                                : "bg-[#3B82F6] hover:bg-[#2563EB]"
-                            )}
-                          >
-                            Add Service Item
-                          </button>
-                        </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1734,7 +1733,21 @@ function EditorInner() {
                         </div>
                       </div>
                       <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Steps ({(editedProfile?.processes || DEFAULT_PROCESSES).length})</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Steps ({(editedProfile?.processes || DEFAULT_PROCESSES).length})</span>
+                          <button
+                            onClick={() => {
+                              setModalProcessTag("");
+                              setModalProcessTitle("");
+                              setModalProcessDescription("");
+                              setEditingProcessIndex(null);
+                              setIsProcessesModalOpen(true);
+                            }}
+                            className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#3B82F6] border border-[#3B82F6]/30 hover:border-[#3B82F6]/65 rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97] cursor-pointer"
+                          >
+                            <Plus className="w-3 h-3" /> Add Step
+                          </button>
+                        </div>
                         <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
                           {(editedProfile?.processes || DEFAULT_PROCESSES).map((prc, idx) => (
                             <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
@@ -1742,66 +1755,36 @@ function EditorInner() {
                                 <span className="text-[13px] font-bold text-slate-800 block truncate">{prc.stepTag} - {prc.title}</span>
                                 <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{prc.description}</span>
                               </div>
-                              <button
-                                onClick={() => {
-                                  const currentList = editedProfile?.processes || DEFAULT_PROCESSES;
-                                  const updated = currentList.filter((_, i) => i !== idx);
-                                  updateField("processes", updated);
-                                }}
-                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => {
+                                    setModalProcessTag(prc.stepTag || "");
+                                    setModalProcessTitle(prc.title || "");
+                                    setModalProcessDescription(prc.description || "");
+                                    setEditingProcessIndex(idx);
+                                    setIsProcessesModalOpen(true);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
+                                  title="Edit step"
+                                >
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const currentList = editedProfile?.processes || DEFAULT_PROCESSES;
+                                    const updated = currentList.filter((_, i) => i !== idx);
+                                    updateField("processes", updated);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                                  title="Delete step"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             </div>
                           ))}
-                        </div>
-
-                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add Process Step Card</span>
-                          <div className="grid grid-cols-3 gap-2">
-                            <Input
-                              id="new-prc-tag"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
-                              placeholder="Tag (e.g. /01)"
-                            />
-                            <Input
-                              id="new-prc-title"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
-                              placeholder="Step Name"
-                            />
-                            <Input
-                              id="new-prc-desc"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-3"
-                              placeholder="Description text details..."
-                            />
-                          </div>
-                          <button
-                            onClick={() => {
-                              const tagEl = document.getElementById("new-prc-tag") as HTMLInputElement;
-                              const titleEl = document.getElementById("new-prc-title") as HTMLInputElement;
-                              const descEl = document.getElementById("new-prc-desc") as HTMLInputElement;
-                              if (tagEl && tagEl.value.trim() && titleEl && titleEl.value.trim() && descEl && descEl.value.trim()) {
-                                const currentList = editedProfile?.processes || DEFAULT_PROCESSES;
-                                const updated = [
-                                  ...currentList,
-                                  {
-                                    stepTag: tagEl.value.trim(),
-                                    title: titleEl.value.trim(),
-                                    description: descEl.value.trim()
-                                  }
-                                ];
-                                updateField("processes", updated);
-                                tagEl.value = "";
-                                titleEl.value = "";
-                                descEl.value = "";
-                              } else {
-                                toast.error("Please fill in all process fields.");
-                              }
-                            }}
-                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
-                          >
-                            Add Step Card
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -1830,7 +1813,22 @@ function EditorInner() {
                         </div>
                       </div>
                       <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Reviews ({(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).length})</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Reviews ({(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).length})</span>
+                          <button
+                            onClick={() => {
+                              setModalTestimonialName("");
+                              setModalTestimonialRole("");
+                              setModalTestimonialQuote("");
+                              setModalTestimonialAvatar("");
+                              setEditingTestimonialIndex(null);
+                              setIsTestimonialsModalOpen(true);
+                            }}
+                            className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#3B82F6] border border-[#3B82F6]/30 hover:border-[#3B82F6]/65 rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97] cursor-pointer"
+                          >
+                            <Plus className="w-3 h-3" /> Add Review
+                          </button>
+                        </div>
                         <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
                           {(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).map((tst, idx) => (
                             <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
@@ -1838,74 +1836,37 @@ function EditorInner() {
                                 <span className="text-[13px] font-bold text-slate-800 block truncate">{tst.name} ({tst.role})</span>
                                 <span className="text-[10.5px] text-slate-500 block truncate leading-tight">"{tst.quote}"</span>
                               </div>
-                              <button
-                                onClick={() => {
-                                  const currentList = editedProfile?.testimonials || DEFAULT_TESTIMONIALS;
-                                  const updated = currentList.filter((_, i) => i !== idx);
-                                  updateField("testimonials", updated);
-                                }}
-                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => {
+                                    setModalTestimonialName(tst.name || "");
+                                    setModalTestimonialRole(tst.role || "");
+                                    setModalTestimonialQuote(tst.quote || "");
+                                    setModalTestimonialAvatar(tst.avatarUrl || "");
+                                    setEditingTestimonialIndex(idx);
+                                    setIsTestimonialsModalOpen(true);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
+                                  title="Edit review"
+                                >
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const currentList = editedProfile?.testimonials || DEFAULT_TESTIMONIALS;
+                                    const updated = currentList.filter((_, i) => i !== idx);
+                                    updateField("testimonials", updated);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                                  title="Delete review"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             </div>
                           ))}
-                        </div>
-
-                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add New Testimonial Review</span>
-                          <div className="grid grid-cols-2 gap-2">
-                            <Input
-                              id="new-tst-name"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
-                              placeholder="Client Name"
-                            />
-                            <Input
-                              id="new-tst-role"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
-                              placeholder="Role / Title"
-                            />
-                            <Input
-                              id="new-tst-quote"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
-                              placeholder="Review / Quote..."
-                            />
-                            <Input
-                              id="new-tst-avatar"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
-                              placeholder="Avatar Photo URL (Optional)"
-                            />
-                          </div>
-                          <button
-                            onClick={() => {
-                              const nameEl = document.getElementById("new-tst-name") as HTMLInputElement;
-                              const roleEl = document.getElementById("new-tst-role") as HTMLInputElement;
-                              const quoteEl = document.getElementById("new-tst-quote") as HTMLInputElement;
-                              const avatarEl = document.getElementById("new-tst-avatar") as HTMLInputElement;
-                              if (nameEl && nameEl.value.trim() && roleEl && roleEl.value.trim() && quoteEl && quoteEl.value.trim()) {
-                                const currentList = editedProfile?.testimonials || DEFAULT_TESTIMONIALS;
-                                const updated = [
-                                  ...currentList,
-                                  {
-                                    name: nameEl.value.trim(),
-                                    role: roleEl.value.trim(),
-                                    quote: quoteEl.value.trim(),
-                                    avatarUrl: avatarEl ? avatarEl.value.trim() : ""
-                                  }
-                                ];
-                                updateField("testimonials", updated);
-                                nameEl.value = "";
-                                roleEl.value = "";
-                                quoteEl.value = "";
-                                if (avatarEl) avatarEl.value = "";
-                              } else {
-                                toast.error("Please fill in all testimonial fields.");
-                              }
-                            }}
-                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
-                          >
-                            Add Testimonial Review
-                          </button>
                         </div>
                       </div>
                     </div>
@@ -2601,6 +2562,308 @@ function EditorInner() {
                 className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
               >
                 Save Project
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Two-Column Services Modal ── */}
+      {isServicesModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div 
+            className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-[15px] font-bold text-slate-800">
+                {editingServiceIndex !== null ? "Edit Offered Service" : "Add Offered Service"}
+              </h3>
+              <button 
+                onClick={() => setIsServicesModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Body: Two Columns */}
+            <div className="p-6 grid grid-cols-2 gap-6">
+              {/* Column 1 (Left Column): Title, Price */}
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Service Title</label>
+                  <Input 
+                    value={modalServiceTitle}
+                    onChange={(e) => setModalServiceTitle(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. Web design"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Price</label>
+                  <Input 
+                    value={modalServicePrice}
+                    onChange={(e) => setModalServicePrice(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. $1200"
+                  />
+                </div>
+              </div>
+
+              {/* Column 2 (Right Column): Description Textarea */}
+              <div className="flex flex-col gap-1.5 h-full">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Service Description</label>
+                <textarea
+                  value={modalServiceDescription}
+                  onChange={(e) => setModalServiceDescription(e.target.value)}
+                  className="flex-1 min-h-[120px] text-[14px] bg-slate-50 border border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800 p-3.5 outline-none resize-none animate-none"
+                  placeholder="Describe what this service covers and details of the deliverables..."
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
+              <button
+                onClick={() => setIsServicesModalOpen(false)}
+                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (!modalServiceTitle.trim() || !modalServicePrice.trim() || !modalServiceDescription.trim()) {
+                    toast.error("Please fill in all service fields.");
+                    return;
+                  }
+                  const currentSrv = {
+                    title: modalServiceTitle.trim(),
+                    price: modalServicePrice.trim(),
+                    description: modalServiceDescription.trim()
+                  };
+
+                  let updatedServices = [...(editedProfile?.services || DEFAULT_SERVICES)];
+                  if (editingServiceIndex !== null) {
+                    updatedServices[editingServiceIndex] = currentSrv;
+                  } else {
+                    if (updatedServices.length >= 5) {
+                      toast.error("Maximum of 5 services reached.");
+                      return;
+                    }
+                    updatedServices.push(currentSrv);
+                  }
+
+                  updateField("services", updatedServices);
+                  setIsServicesModalOpen(false);
+                  toast.success(editingServiceIndex !== null ? "Service updated successfully!" : "Service added successfully!");
+                }}
+                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Save Service
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Two-Column Process Steps Modal ── */}
+      {isProcessesModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div 
+            className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-[15px] font-bold text-slate-800">
+                {editingProcessIndex !== null ? "Edit Process Step" : "Add Process Step"}
+              </h3>
+              <button 
+                onClick={() => setIsProcessesModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Body: Two Columns */}
+            <div className="p-6 grid grid-cols-2 gap-6">
+              {/* Column 1 (Left Column): Tag, Title */}
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Step Tag</label>
+                  <Input 
+                    value={modalProcessTag}
+                    onChange={(e) => setModalProcessTag(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. /01"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Step Name</label>
+                  <Input 
+                    value={modalProcessTitle}
+                    onChange={(e) => setModalProcessTitle(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. Creative Discovery"
+                  />
+                </div>
+              </div>
+
+              {/* Column 2 (Right Column): Description Textarea */}
+              <div className="flex flex-col gap-1.5 h-full">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Step Description</label>
+                <textarea
+                  value={modalProcessDescription}
+                  onChange={(e) => setModalProcessDescription(e.target.value)}
+                  className="flex-1 min-h-[120px] text-[14px] bg-slate-50 border border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800 p-3.5 outline-none resize-none animate-none"
+                  placeholder="Describe what is accomplished during this process step..."
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
+              <button
+                onClick={() => setIsProcessesModalOpen(false)}
+                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (!modalProcessTag.trim() || !modalProcessTitle.trim() || !modalProcessDescription.trim()) {
+                    toast.error("Please fill in all process step fields.");
+                    return;
+                  }
+                  const currentPrc = {
+                    stepTag: modalProcessTag.trim(),
+                    title: modalProcessTitle.trim(),
+                    description: modalProcessDescription.trim()
+                  };
+
+                  let updatedProcesses = [...(editedProfile?.processes || DEFAULT_PROCESSES)];
+                  if (editingProcessIndex !== null) {
+                    updatedProcesses[editingProcessIndex] = currentPrc;
+                  } else {
+                    updatedProcesses.push(currentPrc);
+                  }
+
+                  updateField("processes", updatedProcesses);
+                  setIsProcessesModalOpen(false);
+                  toast.success(editingProcessIndex !== null ? "Process step updated successfully!" : "Process step added successfully!");
+                }}
+                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Save Step
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Two-Column Client Testimonials Modal ── */}
+      {isTestimonialsModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div 
+            className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-[15px] font-bold text-slate-800">
+                {editingTestimonialIndex !== null ? "Edit Client Review" : "Add Client Review"}
+              </h3>
+              <button 
+                onClick={() => setIsTestimonialsModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Body: Two Columns */}
+            <div className="p-6 grid grid-cols-2 gap-6">
+              {/* Column 1 (Left Column): Name, Role, Avatar */}
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Name</label>
+                  <Input 
+                    value={modalTestimonialName}
+                    onChange={(e) => setModalTestimonialName(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. James Walker"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Role / Position</label>
+                  <Input 
+                    value={modalTestimonialRole}
+                    onChange={(e) => setModalTestimonialRole(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. Marketing Director, BrightEdge"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Avatar Photo URL (Optional)</label>
+                  <Input 
+                    value={modalTestimonialAvatar}
+                    onChange={(e) => setModalTestimonialAvatar(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. avatar image URL"
+                  />
+                </div>
+              </div>
+
+              {/* Column 2 (Right Column): Quote Textarea */}
+              <div className="flex flex-col gap-1.5 h-full">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Quote / Review</label>
+                <textarea
+                  value={modalTestimonialQuote}
+                  onChange={(e) => setModalTestimonialQuote(e.target.value)}
+                  className="flex-1 min-h-[178px] text-[14px] bg-slate-50 border border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800 p-3.5 outline-none resize-none animate-none"
+                  placeholder="Enter the client testimonial review text here..."
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
+              <button
+                onClick={() => setIsTestimonialsModalOpen(false)}
+                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (!modalTestimonialName.trim() || !modalTestimonialRole.trim() || !modalTestimonialQuote.trim()) {
+                    toast.error("Please fill in all testimonial fields.");
+                    return;
+                  }
+                  const currentTst = {
+                    name: modalTestimonialName.trim(),
+                    role: modalTestimonialRole.trim(),
+                    quote: modalTestimonialQuote.trim(),
+                    avatarUrl: modalTestimonialAvatar.trim() || undefined
+                  };
+
+                  let updatedTestimonials = [...(editedProfile?.testimonials || DEFAULT_TESTIMONIALS)];
+                  if (editingTestimonialIndex !== null) {
+                    updatedTestimonials[editingTestimonialIndex] = currentTst;
+                  } else {
+                    updatedTestimonials.push(currentTst);
+                  }
+
+                  updateField("testimonials", updatedTestimonials);
+                  setIsTestimonialsModalOpen(false);
+                  toast.success(editingTestimonialIndex !== null ? "Testimonial review updated successfully!" : "Testimonial review added successfully!");
+                }}
+                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Save Review
               </button>
             </div>
           </div>
