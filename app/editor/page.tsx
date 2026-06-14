@@ -1098,7 +1098,7 @@ function EditorInner() {
                                   setEditingProjectIndex(pIdx);
                                   setIsProjectModalOpen(true);
                                 }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
                               >
                                 <div>
                                   <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight truncate">
@@ -1127,7 +1127,7 @@ function EditorInner() {
                                 setEditingProjectIndex(null);
                                 setIsProjectModalOpen(true);
                               }}
-                              className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                              className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
                             >
                               <div>
                                 <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
@@ -1156,7 +1156,7 @@ function EditorInner() {
                                   setEditingServiceIndex(sIdx);
                                   setIsServicesModalOpen(true);
                                 }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
                               >
                                 <div>
                                   <div className="flex items-start justify-between gap-2">
@@ -1185,7 +1185,7 @@ function EditorInner() {
                                   setEditingServiceIndex(null);
                                   setIsServicesModalOpen(true);
                                 }}
-                                className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
                               >
                                 <div>
                                   <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
@@ -1304,16 +1304,7 @@ function EditorInner() {
                     <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
                     <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                   </div>
-                  <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center gap-3">
-                    <div className="flex items-center gap-[3px] px-1 py-0.5">
-                      {[0, 1, 2].map((i) => (
-                        <div
-                          key={i}
-                          className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
-                          style={{ animationDelay: `${i * 0.18}s` }}
-                        />
-                      ))}
-                    </div>
+                  <div className="bg-white px-4 py-3 rounded-[18px] flex items-center justify-center gap-3">
                     <ShiningText text="Webild is thinking..." />
                   </div>
                 </div>
