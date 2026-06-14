@@ -201,6 +201,17 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
         - **Links:** Contact, social, and portfolio links, compiled dynamically replacing the hardcoded social links.
     - **Wizard Onboarding Flow & Form Logic:**
       - The onboarding wizard consists of exactly 12 steps. Redundant CTAs and Hero Headline button inputs are removed to reduce friction.
+      - **ChatGPT-Style Centered Chat:** During onboarding (steps 1–11), the onboarding chat pane occupies a centered full-screen ChatGPT-like view (`max-w-3xl mx-auto`) with no live preview on the right. This maximizes user focus on the conversation.
+      - **Live Preview Toggle:** A header button ("Show Live Preview" / "Hide Live Preview") enables users to split the screen at any time to see the live browser simulator canvas, highlighting active sections in real-time.
+      - **Contextual Composer Triggers:** Action buttons adapt dynamically based on the current step, appearing above the composer textarea:
+        - Step 1 (Basics): "Upload Avatar Image"
+        - Step 4 (About): "Upload Portrait Image", "Upload Signature Image"
+        - Step 6 (Projects): "Add Project (Modal)"
+        - Step 7 (Services): "Add Service (Modal)"
+        - Step 9 (Process): "Add Process Step (Modal)"
+        - Step 10 (Testimonials): "Add Testimonial Review (Modal)"
+        - Step 11 (Contact & Socials): "Upload Footer Banner Image"
+      - **AI Copywriting Rule:** The user never directly fills headings, CTA text, descriptions, section content, or pricing copy. The user provides raw conversational input, and the AI automatically generates premium, high-converting copy and updates the database fields in real-time.
       - **Services Grid Capping:** The services grid is capped at a maximum of 5 cards. Once reached, add service controls are disabled and a warning alert is displayed.
       - **Two-Column Modals for Content Creation:** Inline inputs in composer steps are replaced by premium two-column modals with backdrop blur overlays:
         - **Projects Modal (Step 6):** Left column captures title, redirect link, and cover image URL; right column hosts description textarea. Includes full CRUD (add, edit, delete).

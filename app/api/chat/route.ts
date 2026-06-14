@@ -156,45 +156,108 @@ function createDefaultBlocks(profile: ProfileData): CustomBlock[] {
   return blocks;
 }
 
+const WIZARD_STEPS_INFO: Record<number, { label: string; prompt: string; instructions: string }> = {
+  1: {
+    label: "Basics & Profile Identity",
+    prompt: "Ask for name, location, and a quick summary of what they do.",
+    instructions: "Greet the user conversationally (e.g. 'Welcome to Webild! I am your AI builder. Let's start by getting to know you. What is your name, where are you based, and what do you do?'). Extract their name and location, and generate a polished professional headline. NEVER ask the user to write the headline text. Use the 'update_profile_field' tool to save fields (name, location, avatarUrl, headline)."
+  },
+  2: {
+    label: "Hero Greeting & Status",
+    prompt: "Configure welcome greeting and active work availability status.",
+    instructions: "Acknowledge the user's name if known (e.g. 'Hi Ahmed!'). Automatically generate a friendly, premium greeting start, badge text, and active availability status. Do NOT ask the user for specific copy text (e.g. footer labels or badge ratings). Use 'update_profile_field' for 'heroBadgeText', 'heroGreetingStart', 'heroGreetingName', 'heroGreetingEnd', 'statusText'."
+  },
+  3: {
+    label: "Hero Headline & Value Prop",
+    prompt: "Establish the core value proposition of the hero section.",
+    instructions: "Ask the user what they solve or who they help. The user must never write headlines or value props directly. Generate a high-converting, professional value proposition subtitle (heroSubheadline), rating text (e.g., '4.9/5 from 20+ clients'), and follow me label yourself. Use 'update_profile_field' for 'heroSubheadline', 'heroRatingText', 'followMeLabel'."
+  },
+  4: {
+    label: "About Me Biography",
+    prompt: "Gather raw background information for biography.",
+    instructions: "Ask the user for raw bio details, experiences, or achievements. Generate a polished, refined professional biography (summary) yourself. Mention that they can upload a portrait or signature image. Use 'update_profile_field' for 'summary', 'aboutLabel', 'aboutPhotoUrl', 'signatureUrl'."
+  },
+  5: {
+    label: "Client Logos Ticker List",
+    prompt: "List companies and brands worked with.",
+    instructions: "Ask the user about brands/companies they have worked with. Generate a ticker headline (brandsLabel) yourself. Use the 'update_experience' tool to populate the experience list with company items."
+  },
+  6: {
+    label: "Portfolio Grid Projects",
+    prompt: "Gather projects to showcase in the portfolio.",
+    instructions: "Ask the user to describe their key projects (or tell them they can use the 'Add Project' modal). If they describe them in text, automatically generate high-converting project titles, descriptions, and CTA links. Use 'update_projects' to save the complete array of projects. Generously design projects subtitle and explore labels yourself."
+  },
+  7: {
+    label: "Services Grid",
+    prompt: "List offered services (maximum of 5 services).",
+    instructions: "Ask the user about the core services they offer (or tell them they can use the 'Add Service' modal). Generate elegant service titles, pricing details (e.g. '$1,500' or 'Custom'), and descriptions. Ensure a maximum of 5 services. Use 'update_services' tool to save."
+  },
+  8: {
+    label: "Services CTA Consultation",
+    prompt: "Set up the consultation booking card.",
+    instructions: "Automatically generate a consultation booking title (e.g. 'Book a free strategy session'), description body, buttonText, and booking link. Do NOT ask the user for specific text. Call 'update_services' with updated servicesCta."
+  },
+  9: {
+    label: "Creative Process Steps",
+    prompt: "Outline the steps of the creative process.",
+    instructions: "Ask the user how they work or their process timeline. Generate step tags (e.g., '/01', '/02'), names, and brief descriptions yourself. Use 'update_processes' to save the list."
+  },
+  10: {
+    label: "Client Testimonials",
+    prompt: "Add client reviews and testimonials.",
+    instructions: "Ask the user for testimonials or what clients say about them (or use 'Add Review' modal). Generate polished client names, roles, review quotes, and avatar URLs. Use 'update_testimonials' to save."
+  },
+  11: {
+    label: "Contact Footer & Socials",
+    prompt: "Configure footer contact info and social media handles.",
+    instructions: "Ask the user for email, phone, and links (LinkedIn, GitHub, Twitter). Generate the footer title and labels yourself. Use 'update_profile_field' and 'update_links' to save."
+  },
+  12: {
+    label: "Free-form Chat Mode",
+    prompt: "Perform any layout, content, styling, or template edits based on user request.",
+    instructions: "Interact freely with the user. Support full custom updates, template switches, and custom HTML/Tailwind block adjustments. Generate copy details automatically where needed."
+  }
+};
+
 function buildSystemPrompt(
   profile: ProfileData,
   currentTemplate: string,
+  currentStep: number,
 ): string {
-  const currentBlocksList = (profile.blocks || [])
-    .map((b) => `- ID: "${b.id}" (Type: "${b.type}", Title: "${b.title}")`)
-    .join("\n");
+  const stepInfo = WIZARD_STEPS_INFO[currentStep] || WIZARD_STEPS_INFO[12];
 
-  return `You are an expert AI website generator and editor assistant for "LinkedPage" (a platform that transforms LinkedIn profiles into personal websites).
-Your task is to conversationally interact with the user and execute their requested updates.
+  return `You are an expert AI website generator and editor assistant named "Webild" for "LinkedPage" (a platform that transforms LinkedIn profiles into premium personal portfolio websites).
+You are currently helping the user build their website step-by-step using a conversational onboarding process.
 
-### 🌟 PREMIUM TEMPLATE (daniel-cross) CUSTOMIZATION
-When the active template is "daniel-cross", the layout features highly stylized, responsive sections including:
-- **What I Do / Services section**: Services grid cards (title, price, description) and a customizable Call-to-Action (CTA) block. Use 'update_services' to edit these.
-- **My Process Steps timeline**: Timeline steps (stepTag like '/01', title, description). Use 'update_processes' to edit these.
-- **Client Testimonials / Reviews slider**: A gorgeous client testimonials slider (quote, name, role, avatarUrl). Use 'update_testimonials' to edit these.
-- **Graphics & Portrait Overrides**: Custom About photo/portrait url ('aboutPhotoUrl'), handwritten signature graphic ('signatureUrl'), and footer banner graphic ('footerBannerUrl'). Use 'update_profile_field' to set these URLs.
+### 🌟 CURRENT FOCUS STEP
+You are currently on: **Step ${currentStep} of 11: ${stepInfo.label}**
+Your prompt/goal for this step is: "${stepInfo.prompt}"
+
+Here are your instructions for this step:
+${stepInfo.instructions}
+
+### ⚠️ CRITICAL SYSTEM RULES
+1. **User NEVER fills copy:** The user must NEVER write titles, headings, Call-to-Action (CTA) text, descriptions, section content, or pricing copy. You MUST automatically generate all of these fields. The user only provides raw meaning (e.g. "My name is Ahmed", "I build APIs for startups", "I have worked with Google and Amazon", "Here is a project detail"). You generate high-converting, professional, and elegant copy.
+2. **Step-by-Step Focus:** Keep the conversation focused on the current step. When the user provides the answers, perform the necessary tool calls to update the fields for this step, and then confirm conversationally that it's updated, explaining what copy you generated for them. Invite them to proceed to the next step.
+3. **Greet the User:** Greet the user conversationally and politely. If you know the user's name (from profile.name or the chat history), greet them by name (e.g. "Hi Ahmed!").
+4. **Do not ask super specific questions:** Do not ask the user technical questions like "what should be the text of the footer button?" or "what rating score should we show?". Make these creative decisions yourself.
+5. **Contextual actions:** Let the user know they can also use the buttons/modals in the composer (like "Add Project", "Add Service", or Upload Buttons) to add items.
 
 Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
 - Profile Data JSON:
 ${JSON.stringify({ ...profile, blocks: undefined }, null, 2)}
 
-### 🛠️ STANDARD PROFILE TOOLS
-You also have standard tools to update structured profile fields:
-- To update text fields like name, headline, summary, location, avatarUrl, bannerUrl, aboutPhotoUrl, signatureUrl, footerBannerUrl, servicesTitle, processTitle, testimonialsTitle, use 'update_profile_field'.
-- To replace experience items, use 'update_experience'.
-- To replace education items, use 'update_education'.
-- To replace skills, use 'update_skills'.
-- To replace links, use 'update_links'.
-- To replace or update testimonials/reviews, use 'update_testimonials'.
-- To replace or update services grid cards & call-to-action block, use 'update_services'.
-- To replace or update work/design process steps, use 'update_processes'.
-- To switch the template style, use 'switch_template' (available templates: "daniel-cross").
-
-### 📋 INSTRUCTIONS
-1. If the user asks you to modify services, client reviews/testimonials, process timeline, or profile override graphics, use the specialized tools ('update_services', 'update_testimonials', 'update_processes', 'update_profile_field').
-2. Explain friendly and conversationally what updates you are making in your response.
-3. Keep updates clean, beautiful, premium, and highly responsive.`;
+### 🛠️ TOOLS REFERENCE
+- Use 'update_profile_field' to update single text fields.
+- Use 'update_projects' to update the complete projects list.
+- Use 'update_services' to update services and services CTA.
+- Use 'update_processes' to update process steps.
+- Use 'update_testimonials' to update testimonials/reviews.
+- Use 'update_experience' to update experience items (companies).
+- Use 'update_skills' to update skills.
+- Use 'update_links' to update contact/social links.
+- Use 'switch_template' to switch the template style (available: "daniel-cross").`;
 }
 
 export async function GET(request: Request) {
@@ -251,7 +314,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { message, websiteId } = body;
+    const { message, websiteId, currentStep = 12 } = body;
 
     if (!message || !websiteId) {
       return NextResponse.json(
@@ -304,6 +367,7 @@ export async function POST(request: Request) {
     const systemPromptContent = buildSystemPrompt(
       website.profile as ProfileData,
       website.templateId || "minimal-card",
+      currentStep,
     );
 
     // Format chat messages history for Vercel AI SDK
@@ -323,7 +387,7 @@ export async function POST(request: Request) {
       tools: {
         update_profile_field: tool({
           description:
-            "Updates a single string/text field in the user's profile (name, headline, summary, location, avatarUrl, bannerUrl, aboutPhotoUrl, signatureUrl, footerBannerUrl, servicesTitle, processTitle, testimonialsTitle). Only call this for text fields.",
+            "Updates a single string/text field in the user's profile (name, headline, summary, location, avatarUrl, bannerUrl, aboutPhotoUrl, signatureUrl, footerBannerUrl, servicesTitle, processTitle, testimonialsTitle, projectsLabel, projectsSubtitle, testimonialsLabel, processLabel, servicesLabel, footerLabel). Only call this for text fields.",
           inputSchema: z.object({
             key: z
               .enum([
@@ -339,7 +403,14 @@ export async function POST(request: Request) {
                 "servicesTitle",
                 "processTitle",
                 "testimonialsTitle",
+                "projectsLabel",
+                "projectsSubtitle",
+                "testimonialsLabel",
+                "processLabel",
+                "servicesLabel",
+                "footerLabel",
               ])
+
               .describe("The field name to update"),
             value: z.string().describe("The new value for the field"),
           }),
@@ -355,6 +426,45 @@ export async function POST(request: Request) {
                 await updateWebsite(websiteId, { profile: newProfile });
               }
               return { success: true, updated: key, value };
+            } catch (err: any) {
+              return { success: false, error: err.message || err };
+            }
+          },
+        }),
+        update_projects: tool({
+          description:
+            "Replaces/updates the projects list and optional titles under the projects section. Always provide the complete updated array.",
+          inputSchema: z.object({
+            projectsLabel: z.string().optional().describe("Optional new label/title for the projects section"),
+            projectsSubtitle: z.string().optional().describe("Optional new subtitle for the projects section"),
+            projects: z
+              .array(
+                z.object({
+                  title: z.string().describe("Project name/title"),
+                  description: z.string().describe("Description of project"),
+                  link: z.string().optional().describe("Optional external link for project"),
+                  image: z.string().optional().describe("Optional cover image URL for project"),
+                })
+              )
+              .describe("The complete list of projects"),
+          }),
+          execute: async ({ projectsLabel, projectsSubtitle, projects }) => {
+            try {
+              if (projectsLabel) profileUpdates.projectsLabel = projectsLabel;
+              if (projectsSubtitle) profileUpdates.projectsSubtitle = projectsSubtitle;
+              profileUpdates.projects = projects;
+              
+              const current = await getWebsiteById(websiteId);
+              if (current) {
+                const newProfile = {
+                  ...current.profile,
+                  projects,
+                  ...(projectsLabel ? { projectsLabel } : {}),
+                  ...(projectsSubtitle ? { projectsSubtitle } : {}),
+                };
+                await updateWebsite(websiteId, { profile: newProfile });
+              }
+              return { success: true, updated: "projects", count: projects.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }

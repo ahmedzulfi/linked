@@ -212,6 +212,7 @@ function EditorInner() {
 
   // Onboarding wizard steps (1 to 11, then 12 for free-form editor mode)
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [showOnboardingPreview, setShowOnboardingPreview] = useState(false);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
   const [previewMode, setPreviewMode] = useState<"desktop" | "tablet" | "mobile" | "resizable">("desktop");
@@ -286,7 +287,147 @@ function EditorInner() {
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const centeredChatEndRef = useRef<HTMLDivElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadFieldTarget, setUploadFieldTarget] = useState<string | null>(null);
+
+  const showCenteredChat = currentStep <= 11 && !showOnboardingPreview;
+
+  const triggerImageUpload = (field: string) => {
+    setUploadFieldTarget(field);
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !uploadFieldTarget) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64String = reader.result as string;
+      updateField(uploadFieldTarget as any, base64String);
+      toast.success(`${uploadFieldTarget} image uploaded successfully!`);
+      sendChatMessage(`[Uploaded image for ${uploadFieldTarget}]`);
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ""; // reset
+  };
+
+  const renderContextualActions = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <button
+            onClick={() => triggerImageUpload("avatarUrl")}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload Avatar Image
+          </button>
+        );
+      case 4:
+        return (
+          <div className="flex gap-2">
+            <button
+              onClick={() => triggerImageUpload("aboutPhotoUrl")}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload About Photo
+            </button>
+            <button
+              onClick={() => triggerImageUpload("signatureUrl")}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload Signature
+            </button>
+          </div>
+        );
+      case 6:
+        return (
+          <button
+            onClick={() => {
+              setModalProjectTitle("");
+              setModalProjectLink("");
+              setModalProjectImage("");
+              setModalProjectDescription("");
+              setEditingProjectIndex(null);
+              setIsProjectModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Project (Modal)
+          </button>
+        );
+      case 7:
+        const servicesCount = (editedProfile?.services || DEFAULT_SERVICES).length;
+        return (
+          <button
+            onClick={() => {
+              if (servicesCount >= 5) {
+                toast.error("Maximum of 5 services reached.");
+                return;
+              }
+              setModalServiceTitle("");
+              setModalServicePrice("");
+              setModalServiceDescription("");
+              setEditingServiceIndex(null);
+              setIsServicesModalOpen(true);
+            }}
+            disabled={servicesCount >= 5}
+            className={cn(
+              "flex items-center gap-1.5 px-3 py-1.5 border rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer",
+              servicesCount >= 5
+                ? "bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed"
+                : "bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700"
+            )}
+          >
+            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Service (Modal)
+          </button>
+        );
+      case 9:
+        return (
+          <button
+            onClick={() => {
+              setModalProcessTag("");
+              setModalProcessTitle("");
+              setModalProcessDescription("");
+              setEditingProcessIndex(null);
+              setIsProcessesModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Process Step (Modal)
+          </button>
+        );
+      case 10:
+        return (
+          <button
+            onClick={() => {
+              setModalTestimonialName("");
+              setModalTestimonialRole("");
+              setModalTestimonialQuote("");
+              setModalTestimonialAvatar("");
+              setEditingTestimonialIndex(null);
+              setIsTestimonialsModalOpen(true);
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-700 rounded-lg text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-blue-500" /> Add Testimonial Review (Modal)
+          </button>
+        );
+      case 11:
+        return (
+          <button
+            onClick={() => triggerImageUpload("footerBannerUrl")}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition-colors shadow-xs cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5 text-slate-500" /> Upload Footer Banner Image
+          </button>
+        );
+      default:
+        return null;
+    }
+  };
 
   // Onboarding controllers
   const goToNextStep = () => {
@@ -504,6 +645,7 @@ function EditorInner() {
   // Auto-scroll to bottom of chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    centeredChatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [currentStep, showAddProject, customMessages, isThinking]);
 
   // Listen for mouse dragging events to resize preview canvas
@@ -677,7 +819,7 @@ function EditorInner() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg, websiteId }),
+        body: JSON.stringify({ message: msg, websiteId, currentStep }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -925,8 +1067,9 @@ function EditorInner() {
         </aside>
       </div>
 
-      {/* ── Left Column Panel Switcher based on activeN      {/* 1. Design / AI Onboarding Wizard Panel */}
-      {activeNav === 1 && (
+      {/* ── Left Column Panel Switcher based on activeNav ── */}
+      {/* 1. Design / AI Onboarding Wizard Panel */}
+      {activeNav === 1 && !showCenteredChat && (
         <aside 
           className="h-full w-[510px] shrink-0 border-r border-[#E6E6E6]/60 bg-white flex flex-col justify-between relative z-20 font-inter shadow-xs"
         >
@@ -968,9 +1111,17 @@ function EditorInner() {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
+                    {currentStep <= 11 && (
+                      <button
+                        onClick={() => setShowOnboardingPreview(false)}
+                        className="text-[11px] font-semibold text-[#3B82F6] hover:text-[#2563EB] transition-colors border border-[#3B82F6]/20 bg-[#E1F3FE]/35 px-2.5 py-1 rounded-lg active:scale-[0.98] cursor-pointer"
+                      >
+                        Hide Preview
+                      </button>
+                    )}
                     <button
                       onClick={() => router.push("/onboarding")}
-                      className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1 rounded-lg"
+                      className="text-[11px] font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1.5 rounded-lg active:scale-[0.98] cursor-pointer"
                     >
                       Restart
                     </button>
@@ -981,1045 +1132,125 @@ function EditorInner() {
                 </div>
               </div>
 
-          {/* Scrollable Wizard History */}
-          <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
-            <div className="space-y-6 flex flex-col w-full py-4">
-              
-              {/* Conversational timeline rendering (Steps 1-12) */}
-              {customMessages.map((msg) => (
-                <div key={msg.id} className="w-full flex flex-col gap-2.5">
-                  {msg.role === "user" ? (
-                    <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                      <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
-                        <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full">
-                          {removeEmojis(msg.content)}
-                        </p>
-                      </div>
+              {/* Scrollable Wizard History */}
+              <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
+                <div className="space-y-6 flex flex-col w-full py-4">
+                  {/* Conversational timeline rendering (Steps 1-12) */}
+                  {customMessages.map((msg) => (
+                    <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                      {msg.role === "user" ? (
+                        <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                          <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
+                            <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full">
+                              {removeEmojis(msg.content)}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                          <div className="flex items-center gap-2 select-none">
+                            <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                            <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                          </div>
+                          <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] text-[#18181B] text-[16px] leading-[26px] font-normal break-words">
+                            {removeEmojis(msg.content)}
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                  ))}
+
+                  {/* Thinking / Dots loader */}
+                  {isThinking && (
+                    <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
                       <div className="flex items-center gap-2 select-none">
                         <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
                         <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                       </div>
-                      <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] text-[#18181B] text-[16px] leading-[26px] font-normal break-words">
-                        {removeEmojis(msg.content)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              {/* Thinking / Dots loader */}
-              {isThinking && (
-                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
-                  <div className="flex items-center gap-2 select-none">
-                    <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                    <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
-                  </div>
-                  <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center">
-                    <div className="flex items-center gap-[3px] px-1 py-0.5">
-                      {[0, 1, 2].map((i) => (
-                        <div
-                          key={i}
-                          className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
-                          style={{ animationDelay: `${i * 0.18}s` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Dynamic Minimalist-UI Progress Steps Checklist */}
-              {currentStep <= 11 && (
-                <div className="pt-4 border-t border-[#EAEAEA] space-y-4">
-                  <div className="flex items-center gap-2 select-none mb-2">
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-mono">Onboarding Setup Checklist</span>
-                  </div>
-                  {[
-                    { step: 1, label: "Basics & Profile Identity" },
-                    { step: 2, label: "Hero Greeting & Status" },
-                    { step: 3, label: "Hero Headline & Value Prop" },
-                    { step: 4, label: "About Me Biography" },
-                    { step: 5, label: "Client Logos Ticker List" },
-                    { step: 6, label: "Portfolio Grid Projects" },
-                    { step: 7, label: "Services Grid" },
-                    { step: 8, label: "Services CTA Consultation" },
-                    { step: 9, label: "Creative Process Steps" },
-                    { step: 10, label: "Client Testimonials" },
-                    { step: 11, label: "Contact Footer & Socials" }
-                  ].map((stepItem) => {
-                    const isActive = currentStep === stepItem.step;
-                    const isCompleted = currentStep > stepItem.step;
-                    return (
-                      <div
-                        key={stepItem.step}
-                        className={cn(
-                          "border rounded-xl p-4 transition-all duration-200 bg-white",
-                          isActive 
-                            ? "border-[#3B82F6] shadow-[0_4px_20px_rgba(59,130,246,0.04)]" 
-                            : "border-[#EAEAEA] opacity-65"
-                        )}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2.5">
-                            {isCompleted ? (
-                              <span className="w-5 h-5 rounded-full bg-[#EDF3EC] text-[#346538] flex items-center justify-center font-bold text-xs font-mono">✓</span>
-                            ) : (
-                              <span className={cn(
-                                "w-5 h-5 rounded-full flex items-center justify-center font-bold text-xs font-mono",
-                                isActive ? "bg-[#E1F3FE] text-[#1F6C9F]" : "bg-neutral-100 text-neutral-400"
-                              )}>
-                                {stepItem.step}
-                              </span>
-                            )}
-                            <span className={cn("text-xs font-bold font-sans", isActive ? "text-slate-800" : "text-slate-600")}>
-                              {stepItem.label}
-                            </span>
-                          </div>
-                          {isActive && (
-                            <span className="text-[10px] uppercase font-bold text-[#3B82F6] font-mono tracking-wider animate-pulse">
-                              Active
-                            </span>
-                          )}
-                        </div>
-
-                        {/* Display values gathered so far for this step */}
-                        {isActive && (
-                          <div className="mt-3.5 space-y-2 text-xs font-medium text-slate-700 bg-slate-50/50 p-3 rounded-lg border border-[#EAEAEA] animate-in fade-in duration-200">
-                            {stepItem.step === 1 && (
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Name:</div><div className="text-[#18181B] font-bold">{editedProfile?.name || "Pending..."}</div>
-                                <div>Headline:</div><div className="text-[#18181B] truncate">{editedProfile?.headline || "Pending..."}</div>
-                                <div>Location:</div><div className="text-[#18181B]">{editedProfile?.location || "Pending..."}</div>
-                                <div>Avatar Photo:</div><div className="text-[#18181B] truncate">{editedProfile?.avatarUrl || "Pending..."}</div>
-                              </div>
-                            )}
-                            {stepItem.step === 2 && (
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Greeting Badge:</div><div className="text-[#18181B] font-bold">{editedProfile?.heroBadgeText || "Pending..."}</div>
-                                <div>Greeting Start:</div><div className="text-[#18181B]">{editedProfile?.heroGreetingStart || "Pending..."}</div>
-                                <div>Greeting End:</div><div className="text-[#18181B]">{editedProfile?.heroGreetingEnd || "Pending..."}</div>
-                                <div>Availability Status:</div><div className="text-[#18181B]">{editedProfile?.statusText || "Pending..."}</div>
-                              </div>
-                            )}
-                            {stepItem.step === 3 && (
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Value Prop:</div><div className="text-[#18181B] truncate">{editedProfile?.heroSubheadline || "Pending..."}</div>
-                                <div>Rating Text:</div><div className="text-[#18181B]">{editedProfile?.heroRatingText || "Pending..."}</div>
-                                <div>Follow Label:</div><div className="text-[#18181B]">{editedProfile?.followMeLabel || "Pending..."}</div>
-                              </div>
-                            )}
-                            {stepItem.step === 4 && (
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
-                                <div>About Label:</div><div className="text-[#18181B] font-bold">{editedProfile?.aboutLabel || "Pending..."}</div>
-                                <div>Bio details:</div><div className="text-[#18181B] truncate">{editedProfile?.summary || "Pending..."}</div>
-                                <div>About Photo URL:</div><div className="text-[#18181B] truncate">{editedProfile?.aboutPhotoUrl || "Pending..."}</div>
-                                <div>Signature URL:</div><div className="text-[#18181B] truncate">{editedProfile?.signatureUrl || "Pending..."}</div>
-                              </div>
-                            )}
-                            {stepItem.step === 5 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Marquee Header: <span className="text-[#18181B] font-bold">{editedProfile?.brandsLabel || "Pending..."}</span></div>
-                                <div>Client Companies: <span className="text-[#18181B] font-bold">{(editedProfile?.experience || []).map(e => e.company).join(", ") || "None yet"}</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 6 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Projects Label: <span className="text-[#18181B] font-bold">{editedProfile?.projectsLabel || "Pending..."}</span></div>
-                                <div>Projects Subtitle: <span className="text-[#18181B]">{editedProfile?.projectsSubtitle || "Pending..."}</span></div>
-                                <div>Projects Count: <span className="text-[#18181B] font-bold">{(editedProfile?.projects || []).length} items</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 7 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Services Label: <span className="text-[#18181B] font-bold">{editedProfile?.servicesLabel || "Pending..."}</span></div>
-                                <div>Services Catchphrase: <span className="text-[#18181B]">{editedProfile?.servicesTitle || "Pending..."}</span></div>
-                                <div>Services Count: <span className="text-[#18181B] font-bold">{(editedProfile?.services || []).length} items</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 8 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Consultation Title: <span className="text-[#18181B] font-bold">{editedProfile?.servicesCta?.title || "Pending..."}</span></div>
-                                <div>Consultation Button: <span className="text-[#18181B]">{editedProfile?.servicesCta?.buttonText || "Pending..."}</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 9 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Process Label: <span className="text-[#18181B] font-bold">{editedProfile?.processLabel || "Pending..."}</span></div>
-                                <div>Process Title: <span className="text-[#18181B]">{editedProfile?.processTitle || "Pending..."}</span></div>
-                                <div>Process steps count: <span className="text-[#18181B] font-bold">{(editedProfile?.processes || []).length} items</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 10 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Reviews Label: <span className="text-[#18181B] font-bold">{editedProfile?.testimonialsLabel || "Pending..."}</span></div>
-                                <div>Reviews Title: <span className="text-[#18181B]">{editedProfile?.testimonialsTitle || "Pending..."}</span></div>
-                                <div>Testimonials Count: <span className="text-[#18181B] font-bold">{(editedProfile?.testimonials || []).length} items</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 11 && (
-                              <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600 font-normal">
-                                <div>Footer Label:</div><div className="text-[#18181B] font-bold">{editedProfile?.footerLabel || "Pending..."}</div>
-                                <div>Email:</div><div className="text-[#18181B] truncate">{editedProfile?.email || "Pending..."}</div>
-                                <div>Phone:</div><div className="text-[#18181B]">{editedProfile?.phone || "Pending..."}</div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Display Completed state summary */}
-                        {isCompleted && (
-                          <div className="mt-2 text-[11px] font-mono text-slate-500 bg-slate-50/30 p-2.5 rounded-lg border border-[#EAEAEA]/60">
-                            {stepItem.step === 1 && `BASICS: ${editedProfile?.name} • ${editedProfile?.headline}`}
-                            {stepItem.step === 2 && `HERO: ${editedProfile?.heroGreetingStart} "${editedProfile?.heroBadgeText}"`}
-                            {stepItem.step === 3 && `HEADLINE: "${editedProfile?.heroSubheadline}"`}
-                            {stepItem.step === 4 && `ABOUT: ${editedProfile?.aboutLabel} • Bio details`}
-                            {stepItem.step === 5 && `EXPERIENCE: ${(editedProfile?.experience || []).map(e => e.company).join(", ")}`}
-                            {stepItem.step === 6 && `PROJECTS: ${(editedProfile?.projects || []).length} items configured`}
-                            {stepItem.step === 7 && `SERVICES: ${(editedProfile?.services || []).length} items configured`}
-                            {stepItem.step === 8 && `CONSULTATION: ${editedProfile?.servicesCta?.title}`}
-                            {stepItem.step === 9 && `PROCESS: ${(editedProfile?.processes || []).length} steps configured`}
-                            {stepItem.step === 10 && `TESTIMONIALS: ${(editedProfile?.testimonials || []).length} testimonials`}
-                            {stepItem.step === 11 && `CONTACT: ${editedProfile?.email} • ${editedProfile?.phone}`}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-
-              {/* Choose template style layout selector block */}
-              {currentStep === 12 && (
-                <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
-                  <div className="flex items-center gap-2">
-                    <Palette className="w-4 h-4 text-[#3B82F6]" />
-                    <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
-                      const isSelected = selectedTemplate === id;
-                      const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
-                      const isPro = id !== "daniel-cross";
-                      
-                      let descText = "";
-                      if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
-                      if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
-                      if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
-                      if (id === "biobricks") descText = "Grid-based bento block structure";
-
-                      return (
-                        <div
-                          key={id}
-                          onClick={() => {
-                            if (isPro) {
-                              toast.info("Upgrade to Pro to unlock this layout style!");
-                            } else {
-                              selectTemplate(id as any);
-                            }
-                          }}
-                          className={cn(
-                            "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out",
-                            isSelected
-                              ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
-                              : "border-[#EAEAEA] hover:border-slate-350",
-                            isPro && "opacity-60 hover:opacity-85"
-                          )}
-                        >
-                          <div className="pr-5">
-                            <span className="text-xs font-semibold text-slate-800 block flex items-center gap-1">
-                              {labelName}
-                              {isPro && <span className="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-mono">PRO</span>}
-                            </span>
-                            <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
-                          </div>
-                          {isSelected && (
-                            <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
-                              <Check className="w-2.5 h-2.5 text-white" />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-            </div>
-            <div ref={chatEndRef} />
-          </div>
-                   {/* Bottom input composer area */}
-          <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
-            <div className="w-full flex flex-col gap-3">
-              {currentStep <= 11 ? (
-                <div className="w-full bg-white rounded-xl p-3 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] transition-all animate-in fade-in duration-200">
-                  {currentStep === 1 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Full Name</label>
-                        <Input
-                          value={editedProfile?.name || ""}
-                          onChange={(e) => updateField("name", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Daniel Cross"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Headline</label>
-                        <Input
-                          value={editedProfile?.headline || ""}
-                          onChange={(e) => updateField("headline", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. UI/UX Designer"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Location</label>
-                        <Input
-                          value={editedProfile?.location || ""}
-                          onChange={(e) => updateField("location", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. London, UK"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Avatar Photo URL</label>
-                        <Input
-                          value={editedProfile?.avatarUrl || ""}
-                          onChange={(e) => updateField("avatarUrl", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="Avatar URL"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 2 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting Badge Text</label>
-                        <Input
-                          value={editedProfile?.heroBadgeText || ""}
-                          onChange={(e) => updateField("heroBadgeText", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Welcome here ❤️"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting Start</label>
-                        <Input
-                          value={editedProfile?.heroGreetingStart || ""}
-                          onChange={(e) => updateField("heroGreetingStart", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Hey,"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting Name</label>
-                        <Input
-                          value={editedProfile?.heroGreetingName || ""}
-                          onChange={(e) => updateField("heroGreetingName", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Daniel"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Greeting End</label>
-                        <Input
-                          value={editedProfile?.heroGreetingEnd || ""}
-                          onChange={(e) => updateField("heroGreetingEnd", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. here"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5 col-span-2">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Availability Status Text</label>
-                        <Input
-                          value={editedProfile?.statusText || ""}
-                          onChange={(e) => updateField("statusText", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Available for work"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 3 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5 col-span-2">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Hero Subheadline / Value Prop</label>
-                        <Input
-                          value={editedProfile?.heroSubheadline || ""}
-                          onChange={(e) => updateField("heroSubheadline", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. I design Interfaces, experiences, & brands."
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Rating Text</label>
-                        <Input
-                          value={editedProfile?.heroRatingText || ""}
-                          onChange={(e) => updateField("heroRatingText", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. 4.9 / 5"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Social Follow Label</label>
-                        <Input
-                          value={editedProfile?.followMeLabel || ""}
-                          onChange={(e) => updateField("followMeLabel", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Follow me"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 4 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5 col-span-2">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">About Section Label</label>
-                        <Input
-                          value={editedProfile?.aboutLabel || ""}
-                          onChange={(e) => updateField("aboutLabel", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. About me"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5 col-span-2">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Bio Summary Text</label>
-                        <Textarea
-                          value={editedProfile?.summary || ""}
-                          onChange={(e) => updateField("summary", e.target.value)}
-                          className="min-h-[80px] text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="Tell us about yourself..."
-                          rows={3}
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Portrait Photo URL</label>
-                        <Input
-                          value={editedProfile?.aboutPhotoUrl || ""}
-                          onChange={(e) => updateField("aboutPhotoUrl", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="Portrait photo URL"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Signature Image URL</label>
-                        <Input
-                          value={editedProfile?.signatureUrl || ""}
-                          onChange={(e) => updateField("signatureUrl", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="Signature URL"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 5 && (
-                    <div className="flex flex-col gap-3">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Brands Marquee Header</label>
-                        <Input
-                          value={editedProfile?.brandsLabel || ""}
-                          onChange={(e) => updateField("brandsLabel", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Worked with Global Brands"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2 bg-slate-50/50 border border-slate-100 p-3 rounded-xl">
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Logos Ticker Companies</span>
-                        <div className="flex gap-2">
-                          <Input
-                            id="new-brand-input"
-                            className="h-9 text-[13px] bg-white border-slate-200 rounded-lg"
-                            placeholder="Company Name (e.g. Google)"
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") {
-                                const input = document.getElementById("new-brand-input") as HTMLInputElement;
-                                if (input && input.value.trim()) {
-                                  addBrandCompany(input.value);
-                                  input.value = "";
-                                }
-                              }
-                            }}
-                          />
-                          <button
-                            onClick={() => {
-                              const input = document.getElementById("new-brand-input") as HTMLInputElement;
-                              if (input && input.value.trim()) {
-                                addBrandCompany(input.value);
-                                input.value = "";
-                              }
-                            }}
-                            className="px-3 bg-[#3B82F6] text-white rounded-lg text-xs font-semibold hover:bg-[#2563EB]"
-                          >
-                            Add
-                          </button>
-                        </div>
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {(editedProfile?.experience || []).map((exp, idx) => (
-                            <div key={idx} className="flex items-center gap-1 bg-white border border-slate-200 px-2.5 py-1 rounded-full text-xs font-medium text-slate-700 animate-in zoom-in-95 duration-150">
-                              <span>{exp.company}</span>
-                              <button
-                                onClick={() => removeBrandCompany(idx)}
-                                className="text-slate-400 hover:text-red-500 font-bold ml-1 text-[11px]"
-                              >
-                                ×
-                              </button>
-                            </div>
-                          ))}
-                          {(editedProfile?.experience || []).length === 0 && (
-                            <span className="text-xs text-slate-400 font-normal italic">No companies added yet.</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 6 && (
-                    <div className="flex flex-col gap-3">
-                      <div className="grid grid-cols-2 gap-3.5">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Projects Label</label>
-                          <Input
-                            value={editedProfile?.projectsLabel || ""}
-                            onChange={(e) => updateField("projectsLabel", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. My Portfolio"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Projects Subtitle</label>
-                          <Input
-                            value={editedProfile?.projectsSubtitle || ""}
-                            onChange={(e) => updateField("projectsSubtitle", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. Every project built to inspire users"
-                          />
-                        </div>
-                      </div>
-                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Portfolio Projects ({(editedProfile?.projects || []).length})</span>
-                          <button
-                            onClick={() => {
-                              setModalProjectTitle("");
-                              setModalProjectLink("");
-                              setModalProjectImage("");
-                              setModalProjectDescription("");
-                              setEditingProjectIndex(null);
-                              setIsProjectModalOpen(true);
-                            }}
-                            className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#3B82F6] border border-[#3B82F6]/30 hover:border-[#3B82F6]/65 rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97]"
-                          >
-                            <Plus className="w-3 h-3" /> Add Project
-                          </button>
-                        </div>
-                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
-                          {(editedProfile?.projects || []).map((proj, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
-                              <div className="min-w-0 flex-1">
-                                <span className="text-[13px] font-bold text-slate-800 block truncate">{proj.title}</span>
-                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{proj.description}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <button
-                                  onClick={() => {
-                                    setModalProjectTitle(proj.title || "");
-                                    setModalProjectLink(proj.link || "");
-                                    setModalProjectImage(proj.image || "");
-                                    setModalProjectDescription(proj.description || "");
-                                    setEditingProjectIndex(idx);
-                                    setIsProjectModalOpen(true);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
-                                  title="Edit project"
-                                >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    const updated = (editedProfile?.projects || []).filter((_, i) => i !== idx);
-                                    setProjects(updated);
-                                    updateField("projects", updated);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                                  title="Delete project"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                          {(editedProfile?.projects || []).length === 0 && (
-                            <span className="text-xs text-slate-400 font-normal italic block py-2">No projects configured. Click Add Project to start.</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 7 && (
-                    <div className="flex flex-col gap-3">
-                      <div className="grid grid-cols-2 gap-3.5">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Services Label</label>
-                          <Input
-                            value={editedProfile?.servicesLabel || ""}
-                            onChange={(e) => updateField("servicesLabel", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. What I Do"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Services Catchphrase Title</label>
-                          <Input
-                            value={editedProfile?.servicesTitle || ""}
-                            onChange={(e) => updateField("servicesTitle", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. Turning ideas into digital experiences"
-                          />
-                        </div>
-                      </div>
-                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Offered Services ({(editedProfile?.services || DEFAULT_SERVICES).length})</span>
-                          <button
-                            disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
-                            onClick={() => {
-                              setModalServiceTitle("");
-                              setModalServicePrice("");
-                              setModalServiceDescription("");
-                              setEditingServiceIndex(null);
-                              setIsServicesModalOpen(true);
-                            }}
-                            className={cn(
-                              "flex items-center gap-1 px-2.5 py-1 bg-white border rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97] cursor-pointer",
-                              (editedProfile?.services || DEFAULT_SERVICES).length >= 5
-                                ? "text-neutral-350 border-neutral-200 bg-neutral-50/50 cursor-not-allowed"
-                                : "text-[#3B82F6] border-[#3B82F6]/30 hover:bg-slate-50 hover:border-[#3B82F6]/65"
-                            )}
-                          >
-                            <Plus className="w-3 h-3" /> Add Service
-                          </button>
-                        </div>
-                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
-                          {(editedProfile?.services || DEFAULT_SERVICES).map((srv, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
-                              <div className="min-w-0 flex-1">
-                                <span className="text-[13px] font-bold text-slate-800 block truncate">{srv.title} ({srv.price})</span>
-                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{srv.description}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <button
-                                  onClick={() => {
-                                    setModalServiceTitle(srv.title || "");
-                                    setModalServicePrice(srv.price || "");
-                                    setModalServiceDescription(srv.description || "");
-                                    setEditingServiceIndex(idx);
-                                    setIsServicesModalOpen(true);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
-                                  title="Edit service"
-                                >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    const currentList = editedProfile?.services || DEFAULT_SERVICES;
-                                    const updated = currentList.filter((_, i) => i !== idx);
-                                    updateField("services", updated);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                                  title="Delete service"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        {(editedProfile?.services || DEFAULT_SERVICES).length >= 5 && (
-                          <div className="flex items-center gap-2 text-amber-600 bg-amber-50 border border-amber-200/60 p-2.5 rounded-lg text-[11px] font-medium animate-in fade-in duration-200 select-none">
-                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-                            <span>Maximum of 5 services reached. Delete an existing service to add a new one.</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 8 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5 col-span-2">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Booking Card Title</label>
-                        <Input
-                          value={editedProfile?.servicesCta?.title || ""}
-                          onChange={(e) => {
-                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
-                            updateField("servicesCta", { ...sCta, title: e.target.value });
-                          }}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Book A 30 min Free Call"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5 col-span-2">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Description Details</label>
-                        <Input
-                          value={editedProfile?.servicesCta?.text || ""}
-                          onChange={(e) => {
-                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
-                            updateField("servicesCta", { ...sCta, text: e.target.value });
-                          }}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="Card call-to-action details description"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Button Label</label>
-                        <Input
-                          value={editedProfile?.servicesCta?.buttonText || ""}
-                          onChange={(e) => {
-                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
-                            updateField("servicesCta", { ...sCta, buttonText: e.target.value });
-                          }}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Book A Call"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Button Booking URL</label>
-                        <Input
-                          value={editedProfile?.servicesCta?.buttonUrl || ""}
-                          onChange={(e) => {
-                            const sCta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
-                            updateField("servicesCta", { ...sCta, buttonUrl: e.target.value });
-                          }}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. #contact"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 9 && (
-                    <div className="flex flex-col gap-3">
-                      <div className="grid grid-cols-2 gap-3.5">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Label</label>
-                          <Input
-                            value={editedProfile?.processLabel || ""}
-                            onChange={(e) => updateField("processLabel", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. My Process"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Section Title</label>
-                          <Input
-                            value={editedProfile?.processTitle || ""}
-                            onChange={(e) => updateField("processTitle", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. From ideas to impactful creative results."
-                          />
-                        </div>
-                      </div>
-                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Process Steps ({(editedProfile?.processes || DEFAULT_PROCESSES).length})</span>
-                          <button
-                            onClick={() => {
-                              setModalProcessTag("");
-                              setModalProcessTitle("");
-                              setModalProcessDescription("");
-                              setEditingProcessIndex(null);
-                              setIsProcessesModalOpen(true);
-                            }}
-                            className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#3B82F6] border border-[#3B82F6]/30 hover:border-[#3B82F6]/65 rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97] cursor-pointer"
-                          >
-                            <Plus className="w-3 h-3" /> Add Step
-                          </button>
-                        </div>
-                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
-                          {(editedProfile?.processes || DEFAULT_PROCESSES).map((prc, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
-                              <div className="min-w-0 flex-1">
-                                <span className="text-[13px] font-bold text-slate-800 block truncate">{prc.stepTag} - {prc.title}</span>
-                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{prc.description}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <button
-                                  onClick={() => {
-                                    setModalProcessTag(prc.stepTag || "");
-                                    setModalProcessTitle(prc.title || "");
-                                    setModalProcessDescription(prc.description || "");
-                                    setEditingProcessIndex(idx);
-                                    setIsProcessesModalOpen(true);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
-                                  title="Edit step"
-                                >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    const currentList = editedProfile?.processes || DEFAULT_PROCESSES;
-                                    const updated = currentList.filter((_, i) => i !== idx);
-                                    updateField("processes", updated);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                                  title="Delete step"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 10 && (
-                    <div className="flex flex-col gap-3">
-                      <div className="grid grid-cols-2 gap-3.5">
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Reviews Section Label</label>
-                          <Input
-                            value={editedProfile?.testimonialsLabel || ""}
-                            onChange={(e) => updateField("testimonialsLabel", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. Reviews"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Reviews Title</label>
-                          <Input
-                            value={editedProfile?.testimonialsTitle || ""}
-                            onChange={(e) => updateField("testimonialsTitle", e.target.value)}
-                            className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                            placeholder="e.g. Voices of trust from happy clients"
-                          />
-                        </div>
-                      </div>
-                      <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Reviews ({(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).length})</span>
-                          <button
-                            onClick={() => {
-                              setModalTestimonialName("");
-                              setModalTestimonialRole("");
-                              setModalTestimonialQuote("");
-                              setModalTestimonialAvatar("");
-                              setEditingTestimonialIndex(null);
-                              setIsTestimonialsModalOpen(true);
-                            }}
-                            className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#3B82F6] border border-[#3B82F6]/30 hover:border-[#3B82F6]/65 rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97] cursor-pointer"
-                          >
-                            <Plus className="w-3 h-3" /> Add Review
-                          </button>
-                        </div>
-                        <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
-                          {(editedProfile?.testimonials || DEFAULT_TESTIMONIALS).map((tst, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
-                              <div className="min-w-0 flex-1">
-                                <span className="text-[13px] font-bold text-slate-800 block truncate">{tst.name} ({tst.role})</span>
-                                <span className="text-[10.5px] text-slate-500 block truncate leading-tight">"{tst.quote}"</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <button
-                                  onClick={() => {
-                                    setModalTestimonialName(tst.name || "");
-                                    setModalTestimonialRole(tst.role || "");
-                                    setModalTestimonialQuote(tst.quote || "");
-                                    setModalTestimonialAvatar(tst.avatarUrl || "");
-                                    setEditingTestimonialIndex(idx);
-                                    setIsTestimonialsModalOpen(true);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
-                                  title="Edit review"
-                                >
-                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    const currentList = editedProfile?.testimonials || DEFAULT_TESTIMONIALS;
-                                    const updated = currentList.filter((_, i) => i !== idx);
-                                    updateField("testimonials", updated);
-                                  }}
-                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                                  title="Delete review"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 11 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Footer Label</label>
-                        <Input
-                          value={editedProfile?.footerLabel || ""}
-                          onChange={(e) => updateField("footerLabel", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Have a question"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Footer Banner Photo URL</label>
-                        <Input
-                          value={editedProfile?.footerBannerUrl || ""}
-                          onChange={(e) => updateField("footerBannerUrl", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="Banner image URL"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Contact Email</label>
-                        <Input
-                          value={editedProfile?.email || ""}
-                          onChange={(e) => {
-                            const val = e.target.value;
-                            updateField("email", val);
-                            const currentLinks = editedProfile?.links || [];
-                            const idx = currentLinks.findIndex((l) => l.icon === "email");
-                            const updated = [...currentLinks];
-                            if (idx !== -1) {
-                              updated[idx] = { ...updated[idx], url: val.startsWith("mailto:") ? val : `mailto:${val}` };
-                            } else {
-                              updated.push({ label: "Email", icon: "email", url: val.startsWith("mailto:") ? val : `mailto:${val}` });
-                            }
-                            updateField("links", updated);
-                          }}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="hello@example.com"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Contact Phone</label>
-                        <Input
-                          value={editedProfile?.phone || ""}
-                          onChange={(e) => updateField("phone", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="+44 7700 900123"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5 col-span-2 border-t border-slate-100 pt-3">
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans block mb-1">Social Media Links</span>
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-bold text-slate-400 font-sans">LinkedIn URL</label>
-                            <Input
-                              value={(() => {
-                                  const lnk = (editedProfile?.links || []).find(l => l.icon === "linkedin");
-                                  return lnk ? lnk.url : "";
-                                })()}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const currentLinks = editedProfile?.links || [];
-                                const idx = currentLinks.findIndex((l) => l.icon === "linkedin");
-                                const updated = [...currentLinks];
-                                if (idx !== -1) {
-                                  updated[idx] = { ...updated[idx], url: val };
-                                } else {
-                                  updated.push({ label: "LinkedIn", icon: "linkedin", url: val });
-                                }
-                                updateField("links", updated);
-                              }}
-                              className="h-8.5 text-xs bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                              placeholder="LinkedIn URL"
+                      <div className="bg-white px-4 py-3 rounded-[18px] border border-[#EAEAEA] shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] flex items-center justify-center">
+                        <div className="flex items-center gap-[3px] px-1 py-0.5">
+                          {[0, 1, 2].map((i) => (
+                            <div
+                              key={i}
+                              className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
+                              style={{ animationDelay: `${i * 0.18}s` }}
                             />
-                          </div>
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-bold text-slate-400 font-sans">GitHub URL</label>
-                            <Input
-                              value={(() => {
-                                  const lnk = (editedProfile?.links || []).find(l => l.icon === "github");
-                                  return lnk ? lnk.url : "";
-                                })()}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const currentLinks = editedProfile?.links || [];
-                                const idx = currentLinks.findIndex((l) => l.icon === "github");
-                                const updated = [...currentLinks];
-                                if (idx !== -1) {
-                                  updated[idx] = { ...updated[idx], url: val };
-                                } else {
-                                  updated.push({ label: "GitHub", icon: "github", url: val });
-                                }
-                                updateField("links", updated);
-                              }}
-                              className="h-8.5 text-xs bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                              placeholder="GitHub URL"
-                            />
-                          </div>
-                          <div className="flex flex-col gap-1">
-                            <label className="text-[10px] font-bold text-slate-400 font-sans">Twitter URL</label>
-                            <Input
-                              value={(() => {
-                                  const lnk = (editedProfile?.links || []).find(l => l.icon === "twitter");
-                                  return lnk ? lnk.url : "";
-                                })()}
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                const currentLinks = editedProfile?.links || [];
-                                const idx = currentLinks.findIndex((l) => l.icon === "twitter");
-                                const updated = [...currentLinks];
-                                if (idx !== -1) {
-                                  updated[idx] = { ...updated[idx], url: val };
-                                } else {
-                                  updated.push({ label: "Twitter", icon: "twitter", url: val });
-                                }
-                                updateField("links", updated);
-                              }}
-                              className="h-8.5 text-xs bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                              placeholder="Twitter URL"
-                            />
-                          </div>
+                          ))}
                         </div>
                       </div>
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between border-t border-slate-100 pt-3.5 mt-3.5 select-none">
-                    <div>
-                      {currentStep > 1 && (
-                        <button
-                          onClick={goToBackStep}
-                          className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
-                        >
-                          ← Back
-                        </button>
-                      )}
+                  {/* Choose template style layout selector block */}
+                  {currentStep === 12 && (
+                    <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
+                      <div className="flex items-center gap-2">
+                        <Palette className="w-4 h-4 text-[#3B82F6]" />
+                        <span className="text-xs font-bold text-slate-800 font-sans">Select Theme Layout Style</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {["daniel-cross", "julian-mercer", "link-hunt", "biobricks"].map((id) => {
+                          const isSelected = selectedTemplate === id;
+                          const labelName = id === "daniel-cross" ? "Daniel Cross" : id === "julian-mercer" ? "Julian Mercer" : id === "link-hunt" ? "Link Hunt" : "Biobricks";
+                          const isPro = id !== "daniel-cross";
+                          
+                          let descText = "";
+                          if (id === "daniel-cross") descText = "Stark, high-contrast, bold headlines";
+                          if (id === "julian-mercer") descText = "Warm paper, elegant serif text";
+                          if (id === "link-hunt") descText = "Centered links-in-bio aesthetic";
+                          if (id === "biobricks") descText = "Grid-based bento block structure";
+
+                          return (
+                            <div
+                              key={id}
+                              onClick={() => {
+                                if (isPro) {
+                                  toast.info("Upgrade to Pro to unlock this layout style!");
+                                } else {
+                                  selectTemplate(id as any);
+                                }
+                              }}
+                              className={cn(
+                                "group bg-slate-50/50 border p-3.5 rounded-xl cursor-pointer text-left flex flex-col justify-between h-[95px] relative active:scale-[0.98] transition-transform duration-100 ease-out",
+                                isSelected
+                                  ? "border-[#3B82F6] ring-1 ring-[#3B82F6] bg-slate-50"
+                                  : "border-[#EAEAEA] hover:border-slate-350",
+                                isPro && "opacity-60 hover:opacity-85"
+                              )}
+                            >
+                              <div className="pr-5">
+                                <span className="text-xs font-semibold text-slate-800 block flex items-center gap-1">
+                                  {labelName}
+                                  {isPro && <span className="text-[8px] bg-amber-100 text-amber-800 px-1 py-0.2 rounded font-mono">PRO</span>}
+                                </span>
+                                <span className="text-[9.5px] text-slate-500 block mt-1 leading-tight line-clamp-2">{descText}</span>
+                              </div>
+                              {isSelected && (
+                                <div className="absolute top-2.5 right-2.5 w-4 h-4 rounded-full bg-[#3B82F6] flex items-center justify-center">
+                                  <Check className="w-2.5 h-2.5 text-white" />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                    <button
-                      onClick={goToNextStep}
-                      className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
-                    >
-                      Continue →
-                    </button>
-                  </div>
+                  )}
                 </div>
-              ) : (
-                <>
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Bottom input composer area */}
+              <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100 gap-3">
+                {/* Contextual Action Buttons */}
+                {currentStep <= 11 && (
+                  <div className="flex flex-wrap gap-2">
+                    {renderContextualActions()}
+                  </div>
+                )}
+
+                {/* Suggestions */}
+                {currentStep === 12 && (
                   <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
                     {SUGGESTIONS.map((s) => (
                       <button
@@ -2031,58 +1262,207 @@ function EditorInner() {
                       </button>
                     ))}
                   </div>
+                )}
 
-                  <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
-                    <textarea
-                      value={chatInput}
-                      onChange={(e) => setChatInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          sendChatMessage();
-                        }
-                      }}
-                      className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
-                      placeholder="Ask Webild to adjust copy, headline, template style..."
-                      rows={2}
-                    />
-                    <div className="flex items-center justify-between px-1 select-none">
+                {/* Composer Box */}
+                <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]">
+                  <textarea
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        sendChatMessage();
+                      }
+                    }}
+                    className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
+                    placeholder={currentStep <= 11 ? `Tell Webild about your ${WIZARD_STEPS.find(s => s.step === currentStep)?.label.toLowerCase()}...` : "Ask Webild to adjust copy, headline, template style..."}
+                    rows={2}
+                  />
+                  <div className="flex items-center justify-between px-1 select-none">
+                    <div className="flex items-center gap-1.5">
+                      {currentStep <= 11 && currentStep > 1 && (
+                        <button
+                          onClick={goToBackStep}
+                          className="h-8 px-3 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-[#F7F6F3] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.97]"
+                        >
+                          ← Back
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {currentStep <= 11 && (
+                        <button
+                          onClick={goToNextStep}
+                          className="h-8 px-3 text-xs font-bold text-slate-700 hover:text-slate-800 bg-[#F7F6F3] hover:bg-[#EAEAEA] border border-[#EAEAEA] rounded-lg transition-colors cursor-pointer active:scale-[0.97]"
+                        >
+                          Skip / Continue →
+                        </button>
+                      )}
                       <button
-                        onClick={() => toast.info("Attachments coming soon!")}
-                        className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
+                        onClick={() => sendChatMessage()}
+                        disabled={!chatInput.trim()}
+                        className={cn(
+                          "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
+                          chatInput.trim()
+                            ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
+                            : "bg-neutral-200 cursor-not-allowed"
+                        )}
                       >
-                        <Plus className="w-[18px] h-[18px]" />
+                        <ArrowUp className="w-[18px] h-[18px]" />
                       </button>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => toast.info("Voice input coming soon!")}
-                          className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
-                        >
-                          <Mic className="w-[18px] h-[18px]" />
-                        </button>
-                        <button
-                          onClick={() => sendChatMessage()}
-                          disabled={!chatInput.trim()}
-                          className={cn(
-                            "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
-                            chatInput.trim()
-                              ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
-                              : "bg-neutral-200 cursor-not-allowed"
-                          )}
-                        >
-                          <ArrowUp className="w-[18px] h-[18px]" />
-                        </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </aside>
+      )}
+
+      {/* ── Centered Onboarding Chat View (ChatGPT Style) ── */}
+      {activeNav === 1 && showCenteredChat && (
+        <div className="flex-1 h-full bg-slate-50/15 flex items-center justify-center relative z-20 overflow-hidden font-inter p-6">
+          <div className="max-w-3xl w-full h-full flex flex-col justify-between bg-white border border-[#E6E6E6]/65 rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.02)] overflow-hidden animate-in zoom-in-98 duration-200">
+            {/* Header */}
+            <div className="h-[58px] border-b border-[#E6E6E6]/40 px-6 flex items-center shrink-0 bg-white select-none">
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-2.5">
+                  <img src="/logoicon.png" alt="Logo" className="h-5.5 w-auto object-contain" />
+                  <span className="text-[14px] font-bold text-slate-800 font-sans">Webild AI Builder</span>
+                  <div className="w-px h-3.5 bg-slate-200" />
+                  <span className="text-[12px] font-medium text-slate-500">
+                    Step {currentStep} of 11: {WIZARD_STEPS.find(s => s.step === currentStep)?.label}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowOnboardingPreview(true)}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-[#3B82F6] hover:text-[#2563EB] transition-colors border border-[#3B82F6]/20 bg-[#E1F3FE]/35 px-3 py-1.5 rounded-lg active:scale-[0.98] cursor-pointer"
+                  >
+                    <Monitor className="w-3.5 h-3.5" /> Show Live Preview
+                  </button>
+                  <button
+                    onClick={() => router.push("/onboarding")}
+                    className="text-xs font-semibold text-neutral-400 hover:text-neutral-700 transition-colors border border-[#E6E6E6]/60 px-2.5 py-1.5 rounded-lg active:scale-[0.98] cursor-pointer"
+                  >
+                    Restart
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Scrollable Chat History */}
+            <div className="flex-1 overflow-y-auto px-6 py-6" style={{ scrollbarWidth: "none" }}>
+              <div className="space-y-6 flex flex-col w-full py-4 max-w-2xl mx-auto">
+                {customMessages.map((msg) => (
+                  <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                    {msg.role === "user" ? (
+                      <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                        <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[20px] px-5 py-3.5 shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.04)]">
+                          <p className="text-slate-800 text-[15.5px] leading-[26px] font-normal break-words max-w-full">
+                            {removeEmojis(msg.content)}
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                        <div className="flex items-center gap-2 select-none">
+                          <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                          <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                        </div>
+                        <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[20px] px-5 py-3.5 shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.04)] text-[#18181B] text-[15.5px] leading-[26px] font-normal break-words">
+                          {removeEmojis(msg.content)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {isThinking && (
+                  <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-pulse">
+                    <div className="flex items-center gap-2 select-none">
+                      <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                      <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                    </div>
+                    <div className="bg-white px-5 py-3.5 rounded-[20px] border border-[#EAEAEA] shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.04)] flex items-center justify-center">
+                      <div className="flex items-center gap-[3px] px-1 py-0.5">
+                        {[0, 1, 2].map((i) => (
+                          <div
+                            key={i}
+                            className="w-[5px] h-[5px] rounded-full bg-slate-400 animate-bounce"
+                            style={{ animationDelay: `${i * 0.18}s` }}
+                          />
+                        ))}
                       </div>
                     </div>
                   </div>
-                </>
-              )}
+                )}
+                <div ref={centeredChatEndRef} />
+              </div>
+            </div>
+
+            {/* Composer Input Area */}
+            <div className="p-5 shrink-0 bg-white flex flex-col border-t border-neutral-100 gap-3">
+              {/* Contextual Action Buttons */}
+              <div className="flex flex-wrap gap-2 max-w-2xl mx-auto w-full">
+                {renderContextualActions()}
+              </div>
+
+              {/* Chat Composer */}
+              <div className="max-w-2xl mx-auto w-full bg-white rounded-[22px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_12px_-6px_rgba(0,0,0,0.06)]">
+                <textarea
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      sendChatMessage();
+                    }
+                  }}
+                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14.5px] px-3 py-2 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
+                  placeholder={`Tell Webild about your ${WIZARD_STEPS.find(s => s.step === currentStep)?.label.toLowerCase()}...`}
+                  rows={2}
+                />
+                <div className="flex items-center justify-between px-1.5 select-none">
+                  <div className="flex items-center gap-1.5">
+                    {/* Back navigation */}
+                    {currentStep > 1 && (
+                      <button
+                        onClick={goToBackStep}
+                        className="h-8 px-3.5 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-[#F7F6F3] border border-[#EAEAEA] rounded-xl transition-colors cursor-pointer active:scale-[0.97]"
+                      >
+                        ← Back
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {/* Continue navigation */}
+                    <button
+                      onClick={goToNextStep}
+                      className="h-8 px-4 text-xs font-bold text-slate-700 hover:text-slate-800 bg-[#F7F6F3] hover:bg-[#EAEAEA] border border-[#EAEAEA] rounded-xl transition-colors cursor-pointer active:scale-[0.97]"
+                    >
+                      Skip / Continue →
+                    </button>
+                    <button
+                      onClick={() => sendChatMessage()}
+                      disabled={!chatInput.trim()}
+                      className={cn(
+                        "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
+                        chatInput.trim()
+                          ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
+                          : "bg-neutral-200 cursor-not-allowed"
+                      )}
+                    >
+                      <ArrowUp className="w-[18px] h-[18px]" />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
-    </aside>
-  )}
 
       {/* 2. Domains Panel */}
       {activeNav === 2 && <DomainsPane />}
@@ -2091,9 +1471,10 @@ function EditorInner() {
       {activeNav === 3 && <SettingsPane profileName={profileName} router={router} />}
 
       {/* ── Main Canvas Workspace ── */}
-      <main 
-        className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3"
-      >
+      {!showCenteredChat && (
+        <main 
+          className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3"
+        >
         
         {/* Top Navbar */}
         <div className="flex items-center justify-between shrink-0 h-9 bg-white">
@@ -2440,6 +1821,7 @@ function EditorInner() {
 
         </div>
       </main>
+      )}
 
       {/* ── Two-Column Project Modal ── */}
       {isProjectModalOpen && (
@@ -2849,6 +2231,13 @@ function EditorInner() {
           </div>
         </div>
       )}
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleImageChange}
+        accept="image/*"
+        className="hidden"
+      />
     </div>
   );
 }
