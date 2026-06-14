@@ -201,10 +201,11 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - **Visual Milestone Forms:** Renders interactive inline triggers below bubbles when the AI parses milestones:
     - **Projects Milestone (`[MILESTONE:PROJECTS]`):** Show inline buttons to open the Projects Modal and manage portfolio grid items.
     - **Services Milestone (`[MILESTONE:SERVICES]`):** Render services package lists (capped at 5) and edit actions.
-    - **Images Milestone (`[MILESTONE:IMAGES]`):** Show visual image configurators supporting drag-and-drop file upload (base64) or direct URL inputs for Avatar, Hero Portrait, and About Photo.
+    - **Images Milestone (`[MILESTONE:IMAGES]`):** Show visual preview cards that match the project and services grid design system, opening an interactive two-column Images Modal on click to upload or edit image URLs.
 - **Two-Column Modals for Content Creation:**
   - **Projects Modal:** Left column captures title, redirect link, and cover image URL; right column hosts description textarea. Includes full CRUD.
   - **Services Modal:** Left column captures service title and price; right column hosts description textarea. Enforces 5-card maximum limits.
+  - **Images Modal:** Left column captures direct image source URL and local file upload triggers; right column displays a live visual preview container.
   - **Process Steps Modal:** Left column captures step tag (e.g. /01) and step name; right column hosts description textarea.
   - **Client Testimonials Modal:** Left column captures client name, role/position, and avatar URL; right column hosts the client review quote textarea.
 - **Data Persistence:** Syncs modifications to the database in real-time, stores the last active website ID in `sessionStorage` (key: `linkedpage_last_website_id`), caches the current view step in `sessionStorage` (key: `webild_onboarding_step`), and restores chat history immediately on mount from `/api/chat`.
