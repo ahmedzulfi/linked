@@ -1182,35 +1182,6 @@ function EditorInner() {
                                 <span className="text-xs font-semibold">Add New Service</span>
                               </div>
                             )}
-
-                            {/* Call to Action card */}
-                            {(() => {
-                              const cta = editedProfile?.servicesCta || DEFAULT_SERVICES_CTA;
-                              return (
-                                <div
-                                  onClick={() => {
-                                    setIsSelectionMode(true);
-                                    setSelectedField("servicesCta");
-                                    setActiveNav(1);
-                                  }}
-                                  className="relative bg-[#4E3B2F] hover:bg-[#4E3B2F]/90 p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between min-h-[160px] text-left cursor-pointer group border border-transparent active:scale-[0.98]"
-                                >
-                                  <div>
-                                    <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
-                                      {cta.title}
-                                    </h4>
-                                    {cta.text && (
-                                      <p className="text-[12px] text-stone-200/80 leading-normal mt-2.5 font-sans line-clamp-3">
-                                        {cta.text}
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="w-full bg-white hover:bg-stone-50 text-[#4E3B2F] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
-                                    {cta.buttonText || "Book A Call"}
-                                  </div>
-                                </div>
-                              );
-                            })()}
                           </div>
                         )}
 
