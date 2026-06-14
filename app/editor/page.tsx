@@ -1137,7 +1137,7 @@ function EditorInner() {
 
                         {hasServicesMilestone && (
                           <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
-                            {(editedProfile?.services || DEFAULT_SERVICES).map((srv, sIdx) => (
+                            {(editedProfile?.services || []).map((srv, sIdx) => (
                               <div
                                 key={sIdx}
                                 onClick={() => {
@@ -1167,7 +1167,7 @@ function EditorInner() {
                               </div>
                             ))}
 
-                            {(editedProfile?.services || DEFAULT_SERVICES).length < 5 && (
+                            {(editedProfile?.services || []).length < 5 && (
                               <div
                                 onClick={() => {
                                   setModalServiceTitle("");
@@ -1176,9 +1176,10 @@ function EditorInner() {
                                   setEditingServiceIndex(null);
                                   setIsServicesModalOpen(true);
                                 }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex items-center justify-center min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200 text-center"
+                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-dashed border-[#C5BFB6] hover:border-slate-800 p-5 rounded-2xl flex flex-col items-center justify-center gap-1.5 min-h-[160px] text-slate-500 hover:text-slate-800 cursor-pointer active:scale-[0.98] transition-all duration-200"
                               >
-                                <span className="text-sm font-semibold">To add more services</span>
+                                <Plus className="w-5 h-5" />
+                                <span className="text-xs font-semibold">Add New Service</span>
                               </div>
                             )}
 
@@ -1942,7 +1943,7 @@ function EditorInner() {
                     description: modalServiceDescription.trim()
                   };
 
-                  let updatedServices = [...(editedProfile?.services || DEFAULT_SERVICES)];
+                  let updatedServices = [...(editedProfile?.services || [])];
                   if (editingServiceIndex !== null) {
                     updatedServices[editingServiceIndex] = currentSrv;
                   } else {
