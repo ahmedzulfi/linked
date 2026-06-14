@@ -1469,9 +1469,7 @@ export default function WizardAnimations({
   experience,
 }: WizardAnimationsProps) {
   if (step === 1) return <WelcomeAnimation profile={profile} />;
-  if (step === 2) return <ProjectsAnimation projects={projects} />;
-  if (step === 3) return <InterestsAnimation interests={interests} />;
-  if (step === 4) return <SkillsAnimation skills={skills} />;
   if (step === 5) return <ExperienceAnimation experience={experience} />;
+  if (step === 6) return <ProjectsAnimation projects={projects} />;
   return <GeneratingAnimation />;
 }

@@ -199,6 +199,10 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
         - **Services:** Services grid cards (title, price, description), services call-to-action details (title, text, button text/URL), and custom process steps (step tag, title, description).
         - **Reviews:** Custom client testimonials (quote, client name, role, avatar URL).
         - **Links:** Contact, social, and portfolio links, compiled dynamically replacing the hardcoded social links.
+    - **Wizard Onboarding Flow & Form Logic:**
+      - The onboarding wizard consists of exactly 12 steps. Redundant CTAs and Hero Headline button inputs are removed to reduce friction.
+      - **Services Grid Capping:** The services grid is capped at a maximum of 5 cards. Once reached, add service controls are disabled and a warning alert is displayed.
+      - **Two-Column Project Modal:** Inline project inputs on Step 6 are replaced by a styled modal. The left column captures the title, redirect link, and cover image, while the right column hosts the description textarea. Includes full add, edit, and delete capability.
     - **Data Persistence:** To prevent data loss on page reloads, form state mutations are synced to the database context in real-time (triggering debounced autosaves), the last edited website draft ID is stored in `sessionStorage` (key: `linkedpage_last_website_id`), the active wizard step status is preserved in `sessionStorage` (key: `webild_onboarding_step`), and chat history is fully restored from `/api/chat` on load.
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.

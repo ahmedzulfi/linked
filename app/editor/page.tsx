@@ -152,17 +152,16 @@ interface WizardStep {
 const WIZARD_STEPS: WizardStep[] = [
   { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! Let's build your portfolio page step-by-step. First, please provide your professional identity details below." },
   { step: 2, label: "Hero Greeting & Status", prompt: "Great. Now let's configure the greeting header and your availability status." },
-  { step: 3, label: "Hero Headline & CTA", prompt: "Let's set up the main headline and call-to-action button for your hero section." },
+  { step: 3, label: "Hero Headline & Value Prop", prompt: "Let's set up the main headline and value prop for your hero section." },
   { step: 4, label: "About Me Biography", prompt: "Next, let's write your professional biography and choose your section photos." },
   { step: 5, label: "Client Logos Ticker List", prompt: "Let's showcase the brands and companies you have worked with in a scrolling ticker." },
   { step: 6, label: "Portfolio Grid Projects", prompt: "Now, let's add some projects to showcase your portfolio of work." },
-  { step: 7, label: "Projects Explore CTA", prompt: "Let's configure the explore button that redirects to your full projects list." },
-  { step: 8, label: "Services Grid", prompt: "Let's list the core services and packages you offer." },
-  { step: 9, label: "Services CTA Consultation", prompt: "Let's configure the consultation booking card for visitors to schedule a call." },
-  { step: 10, label: "Creative Process Steps", prompt: "Let's outline the steps of your creative process." },
-  { step: 11, label: "Client Testimonials", prompt: "Let's add client reviews and testimonials to build credibility." },
-  { step: 12, label: "Contact Footer & Socials", prompt: "Finally, let's configure your footer links, email, phone, and social media handles." },
-  { step: 13, label: "Free-form Chat Mode & Theme Selection", prompt: "Setup complete! Your website is updated. You can select a template style above or use the chat below to make any further edits." }
+  { step: 7, label: "Services Grid", prompt: "Let's list the core services and packages you offer. Note: you can add up to 5 services." },
+  { step: 8, label: "Services CTA Consultation", prompt: "Let's configure the consultation booking card for visitors to schedule a call." },
+  { step: 9, label: "Creative Process Steps", prompt: "Let's outline the steps of your creative process." },
+  { step: 10, label: "Client Testimonials", prompt: "Let's add client reviews and testimonials to build credibility." },
+  { step: 11, label: "Contact Footer & Socials", prompt: "Finally, let's configure your footer links, email, phone, and social media handles." },
+  { step: 12, label: "Free-form Chat Mode & Theme Selection", prompt: "Setup complete! Your website is updated. You can select a template style above or use the chat below to make any further edits." }
 ];
 
 const removeEmojis = (text: string) => {
@@ -211,7 +210,7 @@ function EditorInner() {
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
 
-  // Onboarding wizard steps (1 to 12, then 13 for free-form editor mode)
+  // Onboarding wizard steps (1 to 11, then 12 for free-form editor mode)
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [originalHeadline, setOriginalHeadline] = useState("");
   const [originalBio, setOriginalBio] = useState("");
@@ -230,6 +229,14 @@ function EditorInner() {
   const [subdomain, setSubdomain] = useState("");
   const [checkingSubdomain, setCheckingSubdomain] = useState(false);
   const [isSubdomainAvailable, setIsSubdomainAvailable] = useState<boolean | null>(null);
+
+  // Project Modal states
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [editingProjectIndex, setEditingProjectIndex] = useState<number | null>(null);
+  const [modalProjectTitle, setModalProjectTitle] = useState("");
+  const [modalProjectDescription, setModalProjectDescription] = useState("");
+  const [modalProjectLink, setModalProjectLink] = useState("");
+  const [modalProjectImage, setModalProjectImage] = useState("");
 
   // Inline Add states
   const [newProjTitle, setNewProjTitle] = useState("");
@@ -261,7 +268,7 @@ function EditorInner() {
 
   // Onboarding controllers
   const goToNextStep = () => {
-    if (currentStep < 13) {
+    if (currentStep < 12) {
       const nextStep = currentStep + 1;
       const stepLabel = WIZARD_STEPS.find(s => s.step === currentStep)?.label || "Step details";
       setCustomMessages(prev => [
@@ -354,7 +361,7 @@ function EditorInner() {
 
   // Load saved chat history when websiteId is available
   useEffect(() => {
-    if (!websiteId || currentStep !== 13) return;
+    if (!websiteId || currentStep !== 12) return;
     const fetchChatHistory = async () => {
       try {
         const res = await fetch(`/api/chat?websiteId=${websiteId}`);
@@ -379,15 +386,15 @@ function EditorInner() {
     if (typeof window !== "undefined") {
       const isOnboardingFlow = searchParams.get("onboarding") === "true";
       if (!isOnboardingFlow) {
-        // If not in the onboarding flow, default straight to free-form editor (Step 13)
-        setCurrentStep(13);
+        // If not in the onboarding flow, default straight to free-form editor (Step 12)
+        setCurrentStep(12);
         return;
       }
 
       const savedStep = sessionStorage.getItem("webild_onboarding_step");
       if (savedStep) {
         const parsed = parseInt(savedStep, 10);
-        if (!isNaN(parsed) && parsed >= 1 && parsed <= 13) {
+        if (!isNaN(parsed) && parsed >= 1 && parsed <= 12) {
           setCurrentStep(parsed);
         }
       } else {
@@ -405,7 +412,7 @@ function EditorInner() {
 
   // Synchronize onboarding customMessages with current step on load
   useEffect(() => {
-    if (currentStep <= 12 && customMessages.length <= 1) {
+    if (currentStep <= 11 && customMessages.length <= 1) {
       const activeStep = WIZARD_STEPS.find(s => s.step === currentStep);
       if (activeStep) {
         setCustomMessages([
@@ -690,14 +697,73 @@ function EditorInner() {
       setSelectedIndex(index);
     } else {
       setActiveNav(1); // Switch back to Design/Wizard tab
-      if (fieldName === "projects" || fieldName.startsWith("block-")) {
+      if (
+        fieldName === "name" ||
+        fieldName === "headline" ||
+        fieldName === "location" ||
+        fieldName === "avatarUrl"
+      ) {
+        setCurrentStep(1);
+      } else if (
+        fieldName === "heroBadgeText" ||
+        fieldName === "heroGreetingStart" ||
+        fieldName === "heroGreetingEnd" ||
+        fieldName === "statusText"
+      ) {
         setCurrentStep(2);
-      } else if (fieldName === "interests" || fieldName === "summary") {
+      } else if (
+        fieldName === "heroSubheadline" ||
+        fieldName === "heroRatingText" ||
+        fieldName === "followMeLabel"
+      ) {
         setCurrentStep(3);
-      } else if (fieldName === "skills") {
+      } else if (
+        fieldName === "aboutLabel" ||
+        fieldName === "summary" ||
+        fieldName === "aboutPhotoUrl" ||
+        fieldName === "signatureUrl"
+      ) {
         setCurrentStep(4);
-      } else if (fieldName === "experience") {
+      } else if (
+        fieldName === "experience" ||
+        fieldName === "brandsLabel"
+      ) {
         setCurrentStep(5);
+      } else if (
+        fieldName === "project" ||
+        fieldName === "projectsLabel" ||
+        fieldName === "projectsSubtitle"
+      ) {
+        setCurrentStep(6);
+      } else if (
+        fieldName === "services" ||
+        fieldName === "servicesLabel" ||
+        fieldName === "servicesTitle"
+      ) {
+        setCurrentStep(7);
+      } else if (
+        fieldName === "servicesCta"
+      ) {
+        setCurrentStep(8);
+      } else if (
+        fieldName === "process" ||
+        fieldName === "processLabel" ||
+        fieldName === "processTitle"
+      ) {
+        setCurrentStep(9);
+      } else if (
+        fieldName === "testimonials" ||
+        fieldName === "testimonialsLabel" ||
+        fieldName === "testimonialsTitle"
+      ) {
+        setCurrentStep(10);
+      } else if (
+        fieldName === "footerLabel" ||
+        fieldName === "email" ||
+        fieldName === "phone" ||
+        fieldName === "links"
+      ) {
+        setCurrentStep(11);
       } else {
         toast.info(`Select the options in the chat flow to modify your ${fieldName}.`);
       }
@@ -897,7 +963,7 @@ function EditorInner() {
           <div className="flex-1 overflow-y-auto px-6 py-4" style={{ scrollbarWidth: "none" }}>
             <div className="space-y-6 flex flex-col w-full py-4">
               
-              {/* Conversational timeline rendering (Steps 1-13) */}
+              {/* Conversational timeline rendering (Steps 1-12) */}
               {customMessages.map((msg) => (
                 <div key={msg.id} className="w-full flex flex-col gap-2.5">
                   {msg.role === "user" ? (
@@ -944,7 +1010,7 @@ function EditorInner() {
               )}
 
               {/* Dynamic Minimalist-UI Progress Steps Checklist */}
-              {currentStep <= 12 && (
+              {currentStep <= 11 && (
                 <div className="pt-4 border-t border-[#EAEAEA] space-y-4">
                   <div className="flex items-center gap-2 select-none mb-2">
                     <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-mono">Onboarding Setup Checklist</span>
@@ -952,16 +1018,15 @@ function EditorInner() {
                   {[
                     { step: 1, label: "Basics & Profile Identity" },
                     { step: 2, label: "Hero Greeting & Status" },
-                    { step: 3, label: "Hero Headline & CTA" },
+                    { step: 3, label: "Hero Headline & Value Prop" },
                     { step: 4, label: "About Me Biography" },
                     { step: 5, label: "Client Logos Ticker List" },
                     { step: 6, label: "Portfolio Grid Projects" },
-                    { step: 7, label: "Projects Explore CTA" },
-                    { step: 8, label: "Services Grid" },
-                    { step: 9, label: "Services CTA Consultation" },
-                    { step: 10, label: "Creative Process Steps" },
-                    { step: 11, label: "Client Testimonials" },
-                    { step: 12, label: "Contact Footer & Socials" }
+                    { step: 7, label: "Services Grid" },
+                    { step: 8, label: "Services CTA Consultation" },
+                    { step: 9, label: "Creative Process Steps" },
+                    { step: 10, label: "Client Testimonials" },
+                    { step: 11, label: "Contact Footer & Socials" }
                   ].map((stepItem) => {
                     const isActive = currentStep === stepItem.step;
                     const isCompleted = currentStep > stepItem.step;
@@ -1020,9 +1085,8 @@ function EditorInner() {
                             {stepItem.step === 3 && (
                               <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600">
                                 <div>Value Prop:</div><div className="text-[#18181B] truncate">{editedProfile?.heroSubheadline || "Pending..."}</div>
-                                <div>CTA Button:</div><div className="text-[#18181B]">{editedProfile?.heroCtaText || "Pending..."}</div>
-                                <div>CTA Link URL:</div><div className="text-[#18181B]">{editedProfile?.heroCtaUrl || "Pending..."}</div>
                                 <div>Rating Text:</div><div className="text-[#18181B]">{editedProfile?.heroRatingText || "Pending..."}</div>
+                                <div>Follow Label:</div><div className="text-[#18181B]">{editedProfile?.followMeLabel || "Pending..."}</div>
                               </div>
                             )}
                             {stepItem.step === 4 && (
@@ -1048,38 +1112,32 @@ function EditorInner() {
                             )}
                             {stepItem.step === 7 && (
                               <div className="space-y-1 font-mono text-[11px] text-slate-600">
-                                <div>Explore Text: <span className="text-[#18181B] font-bold">{editedProfile?.projectsExploreText || "Pending..."}</span></div>
-                                <div>Explore Link: <span className="text-[#18181B]">{editedProfile?.projectsExploreUrl || "Pending..."}</span></div>
-                              </div>
-                            )}
-                            {stepItem.step === 8 && (
-                              <div className="space-y-1 font-mono text-[11px] text-slate-600">
                                 <div>Services Label: <span className="text-[#18181B] font-bold">{editedProfile?.servicesLabel || "Pending..."}</span></div>
                                 <div>Services Catchphrase: <span className="text-[#18181B]">{editedProfile?.servicesTitle || "Pending..."}</span></div>
                                 <div>Services Count: <span className="text-[#18181B] font-bold">{(editedProfile?.services || []).length} items</span></div>
                               </div>
                             )}
-                            {stepItem.step === 9 && (
+                            {stepItem.step === 8 && (
                               <div className="space-y-1 font-mono text-[11px] text-slate-600">
                                 <div>Consultation Title: <span className="text-[#18181B] font-bold">{editedProfile?.servicesCta?.title || "Pending..."}</span></div>
                                 <div>Consultation Button: <span className="text-[#18181B]">{editedProfile?.servicesCta?.buttonText || "Pending..."}</span></div>
                               </div>
                             )}
-                            {stepItem.step === 10 && (
+                            {stepItem.step === 9 && (
                               <div className="space-y-1 font-mono text-[11px] text-slate-600">
                                 <div>Process Label: <span className="text-[#18181B] font-bold">{editedProfile?.processLabel || "Pending..."}</span></div>
                                 <div>Process Title: <span className="text-[#18181B]">{editedProfile?.processTitle || "Pending..."}</span></div>
                                 <div>Process steps count: <span className="text-[#18181B] font-bold">{(editedProfile?.processes || []).length} items</span></div>
                               </div>
                             )}
-                            {stepItem.step === 11 && (
+                            {stepItem.step === 10 && (
                               <div className="space-y-1 font-mono text-[11px] text-slate-600">
                                 <div>Reviews Label: <span className="text-[#18181B] font-bold">{editedProfile?.testimonialsLabel || "Pending..."}</span></div>
                                 <div>Reviews Title: <span className="text-[#18181B]">{editedProfile?.testimonialsTitle || "Pending..."}</span></div>
                                 <div>Testimonials Count: <span className="text-[#18181B] font-bold">{(editedProfile?.testimonials || []).length} items</span></div>
                               </div>
                             )}
-                            {stepItem.step === 12 && (
+                            {stepItem.step === 11 && (
                               <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[11px] text-slate-600 font-normal">
                                 <div>Footer Label:</div><div className="text-[#18181B] font-bold">{editedProfile?.footerLabel || "Pending..."}</div>
                                 <div>Email:</div><div className="text-[#18181B] truncate">{editedProfile?.email || "Pending..."}</div>
@@ -1098,12 +1156,11 @@ function EditorInner() {
                             {stepItem.step === 4 && `ABOUT: ${editedProfile?.aboutLabel} • Bio details`}
                             {stepItem.step === 5 && `EXPERIENCE: ${(editedProfile?.experience || []).map(e => e.company).join(", ")}`}
                             {stepItem.step === 6 && `PROJECTS: ${(editedProfile?.projects || []).length} items configured`}
-                            {stepItem.step === 7 && `EXPLORE: ${editedProfile?.projectsExploreText} → ${editedProfile?.projectsExploreUrl}`}
-                            {stepItem.step === 8 && `SERVICES: ${(editedProfile?.services || []).length} items configured`}
-                            {stepItem.step === 9 && `CONSULTATION: ${editedProfile?.servicesCta?.title}`}
-                            {stepItem.step === 10 && `PROCESS: ${(editedProfile?.processes || []).length} steps configured`}
-                            {stepItem.step === 11 && `TESTIMONIALS: ${(editedProfile?.testimonials || []).length} testimonials`}
-                            {stepItem.step === 12 && `CONTACT: ${editedProfile?.email} • ${editedProfile?.phone}`}
+                            {stepItem.step === 7 && `SERVICES: ${(editedProfile?.services || []).length} items configured`}
+                            {stepItem.step === 8 && `CONSULTATION: ${editedProfile?.servicesCta?.title}`}
+                            {stepItem.step === 9 && `PROCESS: ${(editedProfile?.processes || []).length} steps configured`}
+                            {stepItem.step === 10 && `TESTIMONIALS: ${(editedProfile?.testimonials || []).length} testimonials`}
+                            {stepItem.step === 11 && `CONTACT: ${editedProfile?.email} • ${editedProfile?.phone}`}
                           </div>
                         )}
                       </div>
@@ -1113,7 +1170,7 @@ function EditorInner() {
               )}
 
               {/* Choose template style layout selector block */}
-              {currentStep === 13 && (
+              {currentStep === 12 && (
                 <div className="border border-[#E6E6E6] rounded-xl p-4 bg-white shadow-sm space-y-4 animate-in fade-in duration-350">
                   <div className="flex items-center gap-2">
                     <Palette className="w-4 h-4 text-[#3B82F6]" />
@@ -1173,7 +1230,7 @@ function EditorInner() {
                    {/* Bottom input composer area */}
           <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
             <div className="w-full flex flex-col gap-3">
-              {currentStep <= 12 ? (
+              {currentStep <= 11 ? (
                 <div className="w-full bg-white rounded-xl p-3 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] transition-all animate-in fade-in duration-200">
                   {currentStep === 1 && (
                     <div className="grid grid-cols-2 gap-3.5">
@@ -1275,24 +1332,6 @@ function EditorInner() {
                           onChange={(e) => updateField("heroSubheadline", e.target.value)}
                           className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
                           placeholder="e.g. I design Interfaces, experiences, & brands."
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">CTA Button Label</label>
-                        <Input
-                          value={editedProfile?.heroCtaText || ""}
-                          onChange={(e) => updateField("heroCtaText", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Book A Call"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">CTA URL</label>
-                        <Input
-                          value={editedProfile?.heroCtaUrl || ""}
-                          onChange={(e) => updateField("heroCtaUrl", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. #contact"
                         />
                       </div>
                       <div className="flex flex-col gap-1.5">
@@ -1442,7 +1481,22 @@ function EditorInner() {
                         </div>
                       </div>
                       <div className="bg-slate-50/50 border border-slate-100 p-3.5 rounded-xl space-y-3">
-                        <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Portfolio Projects ({(editedProfile?.projects || []).length})</span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Portfolio Projects ({(editedProfile?.projects || []).length})</span>
+                          <button
+                            onClick={() => {
+                              setModalProjectTitle("");
+                              setModalProjectLink("");
+                              setModalProjectImage("");
+                              setModalProjectDescription("");
+                              setEditingProjectIndex(null);
+                              setIsProjectModalOpen(true);
+                            }}
+                            className="flex items-center gap-1 px-2.5 py-1 bg-white hover:bg-slate-50 text-[#3B82F6] border border-[#3B82F6]/30 hover:border-[#3B82F6]/65 rounded-lg text-[11px] font-semibold transition-colors shadow-xs active:scale-[0.97]"
+                          >
+                            <Plus className="w-3 h-3" /> Add Project
+                          </button>
+                        </div>
                         <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1" style={{ scrollbarWidth: "thin" }}>
                           {(editedProfile?.projects || []).map((proj, idx) => (
                             <div key={idx} className="flex items-center justify-between bg-white border border-slate-200 p-2.5 rounded-xl shadow-xs gap-3">
@@ -1450,104 +1504,46 @@ function EditorInner() {
                                 <span className="text-[13px] font-bold text-slate-800 block truncate">{proj.title}</span>
                                 <span className="text-[10.5px] text-slate-500 block truncate leading-tight">{proj.description}</span>
                               </div>
-                              <button
-                                onClick={() => {
-                                  const updated = (editedProfile?.projects || []).filter((_, i) => i !== idx);
-                                  updateField("projects", updated);
-                                }}
-                                className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => {
+                                    setModalProjectTitle(proj.title || "");
+                                    setModalProjectLink(proj.link || "");
+                                    setModalProjectImage(proj.image || "");
+                                    setModalProjectDescription(proj.description || "");
+                                    setEditingProjectIndex(idx);
+                                    setIsProjectModalOpen(true);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-[#3B82F6] transition-colors"
+                                  title="Edit project"
+                                >
+                                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                  </svg>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    const updated = (editedProfile?.projects || []).filter((_, i) => i !== idx);
+                                    setProjects(updated);
+                                    updateField("projects", updated);
+                                  }}
+                                  className="p-1.5 text-slate-400 hover:text-red-500 transition-colors"
+                                  title="Delete project"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             </div>
                           ))}
                           {(editedProfile?.projects || []).length === 0 && (
-                            <span className="text-xs text-slate-400 font-normal italic block py-2">No projects configured. Add one below!</span>
+                            <span className="text-xs text-slate-400 font-normal italic block py-2">No projects configured. Click Add Project to start.</span>
                           )}
-                        </div>
-
-                        <div className="border-t border-slate-200/60 pt-3 space-y-2.5">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block font-sans">Add New Project</span>
-                          <div className="grid grid-cols-2 gap-2">
-                            <Input
-                              id="new-proj-title"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
-                              placeholder="Project Title"
-                            />
-                            <Input
-                              id="new-proj-link"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
-                              placeholder="Link / URL"
-                            />
-                            <Input
-                              id="new-proj-desc"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
-                              placeholder="Short Description"
-                            />
-                            <Input
-                              id="new-proj-img"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
-                              placeholder="Cover Image URL (Optional)"
-                            />
-                          </div>
-                          <button
-                            onClick={() => {
-                              const titleEl = document.getElementById("new-proj-title") as HTMLInputElement;
-                              const descEl = document.getElementById("new-proj-desc") as HTMLInputElement;
-                              const linkEl = document.getElementById("new-proj-link") as HTMLInputElement;
-                              const imgEl = document.getElementById("new-proj-img") as HTMLInputElement;
-                              if (titleEl && titleEl.value.trim() && descEl && descEl.value.trim()) {
-                                const updated = [
-                                  ...(editedProfile?.projects || []),
-                                  {
-                                    title: titleEl.value.trim(),
-                                    description: descEl.value.trim(),
-                                    link: linkEl ? linkEl.value.trim() : undefined,
-                                    image: imgEl ? imgEl.value.trim() : undefined
-                                  }
-                                ];
-                                updateField("projects", updated);
-                                titleEl.value = "";
-                                descEl.value = "";
-                                if (linkEl) linkEl.value = "";
-                                if (imgEl) imgEl.value = "";
-                              } else {
-                                toast.error("Please fill in the project title and description.");
-                              }
-                            }}
-                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
-                          >
-                            Add Project Item
-                          </button>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {currentStep === 7 && (
-                    <div className="grid grid-cols-2 gap-3.5">
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Explore CTA Button Text</label>
-                        <Input
-                          value={editedProfile?.projectsExploreText || ""}
-                          onChange={(e) => updateField("projectsExploreText", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. Explore All"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Explore CTA Redirect URL</label>
-                        <Input
-                          value={editedProfile?.projectsExploreUrl || ""}
-                          onChange={(e) => updateField("projectsExploreUrl", e.target.value)}
-                          className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
-                          placeholder="e.g. #work"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {currentStep === 8 && (
                     <div className="flex flex-col gap-3">
                       <div className="grid grid-cols-2 gap-3.5">
                         <div className="flex flex-col gap-1.5">
@@ -1597,27 +1593,41 @@ function EditorInner() {
                           <div className="grid grid-cols-3 gap-2">
                             <Input
                               id="new-srv-title"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2"
+                              disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-2 disabled:opacity-50"
                               placeholder="Service Title"
                             />
                             <Input
                               id="new-srv-price"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg"
+                              disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg disabled:opacity-50"
                               placeholder="Price"
                             />
                             <Input
                               id="new-srv-desc"
-                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-3"
+                              disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
+                              className="h-8.5 text-xs bg-white border-slate-200 rounded-lg col-span-3 disabled:opacity-50"
                               placeholder="Description summary..."
                             />
                           </div>
+                          {(editedProfile?.services || DEFAULT_SERVICES).length >= 5 && (
+                            <div className="flex items-center gap-2 text-amber-600 bg-amber-50 border border-amber-200/60 p-2.5 rounded-lg text-[11px] font-medium animate-in fade-in duration-200 select-none">
+                              <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                              <span>Maximum of 5 services reached. Delete an existing service to add a new one.</span>
+                            </div>
+                          )}
                           <button
+                            disabled={(editedProfile?.services || DEFAULT_SERVICES).length >= 5}
                             onClick={() => {
+                              const currentList = editedProfile?.services || DEFAULT_SERVICES;
+                              if (currentList.length >= 5) {
+                                toast.error("You cannot add more than 5 services.");
+                                return;
+                              }
                               const titleEl = document.getElementById("new-srv-title") as HTMLInputElement;
                               const priceEl = document.getElementById("new-srv-price") as HTMLInputElement;
                               const descEl = document.getElementById("new-srv-desc") as HTMLInputElement;
                               if (titleEl && titleEl.value.trim() && priceEl && priceEl.value.trim() && descEl && descEl.value.trim()) {
-                                const currentList = editedProfile?.services || DEFAULT_SERVICES;
                                 const updated = [
                                   ...currentList,
                                   {
@@ -1634,7 +1644,12 @@ function EditorInner() {
                                 toast.error("Please fill in all service fields.");
                               }
                             }}
-                            className="w-full py-1.5 bg-[#3B82F6] hover:bg-[#2563EB] text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]"
+                            className={cn(
+                              "w-full py-1.5 text-white rounded-lg text-xs font-semibold transition-colors active:scale-[0.98]",
+                              (editedProfile?.services || DEFAULT_SERVICES).length >= 5
+                                ? "bg-neutral-100 text-neutral-400 cursor-not-allowed border-none"
+                                : "bg-[#3B82F6] hover:bg-[#2563EB]"
+                            )}
                           >
                             Add Service Item
                           </button>
@@ -1643,7 +1658,7 @@ function EditorInner() {
                     </div>
                   )}
 
-                  {currentStep === 9 && (
+                  {currentStep === 8 && (
                     <div className="grid grid-cols-2 gap-3.5">
                       <div className="flex flex-col gap-1.5 col-span-2">
                         <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Booking Card Title</label>
@@ -1696,7 +1711,7 @@ function EditorInner() {
                     </div>
                   )}
 
-                  {currentStep === 10 && (
+                  {currentStep === 9 && (
                     <div className="flex flex-col gap-3">
                       <div className="grid grid-cols-2 gap-3.5">
                         <div className="flex flex-col gap-1.5">
@@ -1792,7 +1807,7 @@ function EditorInner() {
                     </div>
                   )}
 
-                  {currentStep === 11 && (
+                  {currentStep === 10 && (
                     <div className="flex flex-col gap-3">
                       <div className="grid grid-cols-2 gap-3.5">
                         <div className="flex flex-col gap-1.5">
@@ -1896,7 +1911,7 @@ function EditorInner() {
                     </div>
                   )}
 
-                  {currentStep === 12 && (
+                  {currentStep === 11 && (
                     <div className="grid grid-cols-2 gap-3.5">
                       <div className="flex flex-col gap-1.5">
                         <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Footer Label</label>
@@ -1953,9 +1968,9 @@ function EditorInner() {
                             <label className="text-[10px] font-bold text-slate-400 font-sans">LinkedIn URL</label>
                             <Input
                               value={(() => {
-                                const lnk = (editedProfile?.links || []).find(l => l.icon === "linkedin");
-                                return lnk ? lnk.url : "";
-                              })()}
+                                  const lnk = (editedProfile?.links || []).find(l => l.icon === "linkedin");
+                                  return lnk ? lnk.url : "";
+                                })()}
                               onChange={(e) => {
                                 const val = e.target.value;
                                 const currentLinks = editedProfile?.links || [];
@@ -1976,9 +1991,9 @@ function EditorInner() {
                             <label className="text-[10px] font-bold text-slate-400 font-sans">GitHub URL</label>
                             <Input
                               value={(() => {
-                                const lnk = (editedProfile?.links || []).find(l => l.icon === "github");
-                                return lnk ? lnk.url : "";
-                              })()}
+                                  const lnk = (editedProfile?.links || []).find(l => l.icon === "github");
+                                  return lnk ? lnk.url : "";
+                                })()}
                               onChange={(e) => {
                                 const val = e.target.value;
                                 const currentLinks = editedProfile?.links || [];
@@ -1999,9 +2014,9 @@ function EditorInner() {
                             <label className="text-[10px] font-bold text-slate-400 font-sans">Twitter URL</label>
                             <Input
                               value={(() => {
-                                const lnk = (editedProfile?.links || []).find(l => l.icon === "twitter");
-                                return lnk ? lnk.url : "";
-                              })()}
+                                  const lnk = (editedProfile?.links || []).find(l => l.icon === "twitter");
+                                  return lnk ? lnk.url : "";
+                                })()}
                               onChange={(e) => {
                                 const val = e.target.value;
                                 const currentLinks = editedProfile?.links || [];
@@ -2360,100 +2375,120 @@ function EditorInner() {
                 className="w-full h-full flex items-center justify-center"
               >
                 {editedProfile ? (
-                  <motion.div
-                    animate={{ 
-                      width: 
-                        previewMode === "desktop" ? "100%" : 
-                        previewMode === "tablet" ? 768 : 
-                        previewMode === "mobile" ? 375 : 
-                        resizableWidth 
-                    }}
-                    transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
-                    className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
-                  >
-                    {/* Browser Header Bezel */}
-                    <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
-                      {/* 3 macOS dots */}
-                      <div className="flex items-center gap-1.5 w-16">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
-                      </div>
-                      
-                      {/* Address Bar */}
-                      <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
-                        <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                        <span className="truncate text-neutral-650 font-mono">
-                          {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
-                        </span>
-                        <span className="text-neutral-300 mx-1">|</span>
-                        <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
-                          {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
-                           previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
-                           previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
-                           `Custom • ${actualWidth}px`}
-                        </span>
-                      </div>
-
-                      {/* Right side status indicator */}
-                      <div className="w-16 flex justify-end">
-                        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
-                          {previewMode}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Iframe Viewport Container */}
-                    <div className="flex-1 w-full bg-white relative overflow-hidden">
-                      {/* Drag Overlay to prevent iframe event interception */}
-                      {isDragging && (
-                        <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
-                      )}
-                      
-                      <ProfilePreview
+                  activeNav === 1 && currentStep <= 6 ? (
+                    <motion.div
+                      key={`anim-${currentStep}`}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.35, ease: "easeOut" }}
+                      className="w-full h-full flex items-center justify-center"
+                    >
+                      <WizardAnimations
+                        step={currentStep}
                         profile={editedProfile}
-                        template={selectedTemplate}
-                        fluid={true}
-                        onFieldClick={handleFieldClick}
-                        isSelectionMode={isSelectionMode}
-                        selectedField={selectedField}
-                        selectedIndex={selectedIndex}
-                        currentStep={currentStep}
+                        projects={projects}
+                        interests={interests}
+                        skills={skills}
+                        experience={experience}
                       />
-                    </div>
-
-                    {/* Left Resizing Drag Handle */}
-                    <div
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setIsDragging(true);
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      animate={{ 
+                        width: 
+                          previewMode === "desktop" ? "100%" : 
+                          previewMode === "tablet" ? 768 : 
+                          previewMode === "mobile" ? 375 : 
+                          resizableWidth 
                       }}
-                      className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                      title="Drag to resize"
+                      transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+                      className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
                     >
-                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                      </div>
-                    </div>
+                      {/* Browser Header Bezel */}
+                      <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
+                        {/* 3 macOS dots */}
+                        <div className="flex items-center gap-1.5 w-16">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
+                        </div>
+                        
+                        {/* Address Bar */}
+                        <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
+                          <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          <span className="truncate text-neutral-650 font-mono">
+                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                          </span>
+                          <span className="text-neutral-300 mx-1">|</span>
+                          <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
+                            {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
+                             previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
+                             previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
+                             `Custom • ${actualWidth}px`}
+                          </span>
+                        </div>
 
-                    {/* Right Resizing Drag Handle */}
-                    <div
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setIsDragging(true);
-                      }}
-                      className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                      title="Drag to resize"
-                    >
-                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        {/* Right side status indicator */}
+                        <div className="w-16 flex justify-end">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
+                            {previewMode}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
+
+                      {/* Iframe Viewport Container */}
+                      <div className="flex-1 w-full bg-white relative overflow-hidden">
+                        {/* Drag Overlay to prevent iframe event interception */}
+                        {isDragging && (
+                          <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
+                        )}
+                        
+                        <ProfilePreview
+                          profile={editedProfile}
+                          template={selectedTemplate}
+                          fluid={true}
+                          onFieldClick={handleFieldClick}
+                          isSelectionMode={isSelectionMode}
+                          selectedField={selectedField}
+                          selectedIndex={selectedIndex}
+                          currentStep={currentStep}
+                        />
+                      </div>
+
+                      {/* Left Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+
+                      {/* Right Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )
                 ) : (
                   <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
                 )}
@@ -2465,6 +2500,112 @@ function EditorInner() {
         </div>
       </main>
 
+      {/* ── Two-Column Project Modal ── */}
+      {isProjectModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
+          <div 
+            className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <h3 className="text-[15px] font-bold text-slate-800">
+                {editingProjectIndex !== null ? "Edit Portfolio Project" : "Add Portfolio Project"}
+              </h3>
+              <button 
+                onClick={() => setIsProjectModalOpen(false)}
+                className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Body: Two Columns */}
+            <div className="p-6 grid grid-cols-2 gap-6">
+              {/* Column 1 (Left Column): Title, Link, Cover Image */}
+              <div className="space-y-4">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Project Title</label>
+                  <Input 
+                    value={modalProjectTitle}
+                    onChange={(e) => setModalProjectTitle(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. Acme SaaS App"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Link / Redirect URL</label>
+                  <Input 
+                    value={modalProjectLink}
+                    onChange={(e) => setModalProjectLink(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="e.g. https://myproject.com"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Cover Image URL</label>
+                  <Input 
+                    value={modalProjectImage}
+                    onChange={(e) => setModalProjectImage(e.target.value)}
+                    className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
+                    placeholder="Cover image URL"
+                  />
+                </div>
+              </div>
+
+              {/* Column 2 (Right Column): Description Textarea */}
+              <div className="flex flex-col gap-1.5 h-full">
+                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Project Description</label>
+                <textarea
+                  value={modalProjectDescription}
+                  onChange={(e) => setModalProjectDescription(e.target.value)}
+                  className="flex-1 min-h-[178px] text-[14px] bg-slate-50 border border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800 p-3.5 outline-none resize-none animate-none"
+                  placeholder="Describe the project goals, tech stack, and your key contributions..."
+                />
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
+              <button
+                onClick={() => setIsProjectModalOpen(false)}
+                className="h-9.5 px-4 text-xs font-bold text-[#18181B] hover:text-[#18181B]/80 bg-white border border-slate-200 rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  if (!modalProjectTitle.trim() || !modalProjectDescription.trim()) {
+                    toast.error("Please enter a title and description for the project.");
+                    return;
+                  }
+                  const currentProj = {
+                    title: modalProjectTitle.trim(),
+                    description: modalProjectDescription.trim(),
+                    link: modalProjectLink.trim() || undefined,
+                    image: modalProjectImage.trim() || undefined
+                  };
+
+                  let updatedProjects = [...(editedProfile?.projects || [])];
+                  if (editingProjectIndex !== null) {
+                    updatedProjects[editingProjectIndex] = currentProj;
+                  } else {
+                    updatedProjects.push(currentProj);
+                  }
+
+                  setProjects(updatedProjects);
+                  updateField("projects", updatedProjects);
+                  setIsProjectModalOpen(false);
+                  toast.success(editingProjectIndex !== null ? "Project updated successfully!" : "Project added successfully!");
+                }}
+                className="h-9.5 px-5 text-xs font-bold text-white bg-[#3B82F6] hover:bg-[#2563EB] rounded-lg transition-colors cursor-pointer active:scale-[0.98]"
+              >
+                Save Project
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
