@@ -30,7 +30,7 @@ import {
   EyeOff,
   Pencil,
   Copy,
-  Share,
+  Share2,
   RotateCw,
   MoreHorizontal,
 } from "lucide-react";
@@ -674,6 +674,59 @@ function EditorInner() {
     updateField("experience", updated);
   };
 
+  const regenerateLastMessage = async (index: number) => {
+    let lastUserMessage = "";
+    for (let i = index - 1; i >= 0; i--) {
+      if (customMessages[i].role === "user") {
+        lastUserMessage = customMessages[i].content;
+        break;
+      }
+    }
+    if (!lastUserMessage) return;
+
+    setIsThinking(true);
+    setSuggestions([]);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: lastUserMessage, websiteId }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to get AI reply");
+      }
+
+      setCustomMessages(prev => {
+        const copy = [...prev];
+        if (copy[index]) {
+          copy[index] = { ...copy[index], content: data.reply };
+        }
+        return copy;
+      });
+
+      if (data.suggestions && data.suggestions.length > 0) {
+        setSuggestions(data.suggestions);
+      } else {
+        setSuggestions(SUGGESTIONS);
+      }
+
+      if (data.template) {
+        selectTemplate(data.template);
+      }
+
+      if (data.profileUpdates) {
+        for (const [k, v] of Object.entries(data.profileUpdates)) {
+          updateField(k as any, v as any);
+        }
+      }
+    } catch (err: any) {
+      toast.error(err.message || "Failed to regenerate reply");
+    } finally {
+      setIsThinking(false);
+    }
+  };
+
   // Dispatch free-form messages to backend AI route
   const sendChatMessage = async (text?: string) => {
     const msg = text ?? chatInput.trim();
@@ -890,8 +943,8 @@ function EditorInner() {
                   }}
                   title={item.label}
                   className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
-                      ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-                      : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
+                    ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                    : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
                     }`}
                 >
                   <div className="w-5 h-5 flex items-center justify-center shrink-0">
@@ -1043,7 +1096,7 @@ function EditorInner() {
                     >
                       Restart
                     </button>
-                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#d4ff66]/25 text-[#d4ff66] rounded-md">
+                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
                       Editor Mode
                     </span>
                   </div>
@@ -1078,7 +1131,7 @@ function EditorInner() {
                     </div>
 
                     {/* Conversational timeline rendering */}
-                    {customMessages.map((msg) => {
+                    {customMessages.map((msg, idx) => {
                       const cleanContent = cleanMessageContent(msg.content);
                       const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]");
                       const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]");
@@ -1087,66 +1140,54 @@ function EditorInner() {
                         <div key={msg.id} className="w-full flex flex-col gap-2.5">
                           {msg.role === "user" ? (
                             <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                              <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
-                                <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full font-sans">
+                              <div className="max-w-[65%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-3.5 py-2 shadow-[0px_4px_8px_-4px_rgba(0,0,0,0.03)]">
+                                <p className="text-slate-800 text-[14.5px] leading-[22px] font-normal break-words max-w-full font-sans">
                                   {removeEmojis(msg.content)}
                                 </p>
                               </div>
                             </div>
                           ) : (
                             <div className="w-full flex flex-col justify-start items-start gap-1 font-inter animate-in fade-in duration-200">
-                              <div className="max-w-[90%] text-[#18181B] text-[16px] leading-[26px] font-normal break-words font-sans px-0 py-1">
+                              <div className="flex items-center gap-2 select-none mb-1">
+                                <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
+                                <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                              </div>
+                              <div className="max-w-[90%] text-[#18181B] text-[15px] leading-[24px] font-normal break-words font-sans px-0 py-0.5">
                                 {removeEmojis(cleanContent)}
                               </div>
 
-                              {/* Action Icons Row */}
-                              <div className="flex items-center gap-4 mt-2 select-none">
+                              {/* Action Icons Bar */}
+                              <div className="flex items-center gap-3 mt-2 mb-1 select-none">
                                 <button
                                   onClick={() => {
-                                    navigator.clipboard.writeText(cleanContent);
-                                    toast.success("Message copied to clipboard!");
+                                    navigator.clipboard.writeText(removeEmojis(cleanContent));
+                                    toast.success("Copied to clipboard!");
                                   }}
-                                  title="Copy message"
-                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
+                                  className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
+                                  title="Copy to clipboard"
                                 >
-                                  <Copy className="w-3.5 h-3.5" />
+                                  <Copy className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
                                 </button>
-                                
                                 <button
-                                  onClick={() => {
-                                    navigator.clipboard.writeText(window.location.href);
-                                    toast.success("Page link copied to clipboard!");
-                                  }}
+                                  onClick={() => toast.info("Sharing coming soon!")}
+                                  className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
                                   title="Share"
-                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
                                 >
-                                  <Share className="w-3.5 h-3.5" />
+                                  <Share2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
                                 </button>
-
                                 <button
-                                  onClick={() => {
-                                    const userMessages = customMessages.filter(m => m.role === "user");
-                                    if (userMessages.length > 0) {
-                                      const lastUserMsg = userMessages[userMessages.length - 1];
-                                      sendChatMessage(lastUserMsg.content);
-                                    } else {
-                                      toast.info("No messages to regenerate yet!");
-                                    }
-                                  }}
-                                  title="Regenerate response"
-                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
+                                  onClick={() => regenerateLastMessage(idx)}
+                                  className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
+                                  title="Regenerate reply"
                                 >
-                                  <RotateCw className="w-3.5 h-3.5" />
+                                  <RotateCw className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
                                 </button>
-
                                 <button
-                                  onClick={() => {
-                                    toast.info("More actions coming soon!");
-                                  }}
+                                  onClick={() => toast.info("Options coming soon!")}
+                                  className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
                                   title="More options"
-                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
                                 >
-                                  <MoreHorizontal className="w-3.5 h-3.5" />
+                                  <MoreHorizontal className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
                                 </button>
                               </div>
 
@@ -1483,8 +1524,8 @@ function EditorInner() {
                       }
                     }}
                     className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${isSelectionMode
-                        ? "bg-[#3B82F6] border-[#3B82F6] text-white hover:bg-[#2563EB]"
-                        : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
+                      ? "bg-[#3B82F6] border-[#3B82F6] text-white hover:bg-[#2563EB]"
+                      : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
                       }`}
                   >
                     <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
@@ -1517,7 +1558,7 @@ function EditorInner() {
                     {checkingSubdomain ? (
                       <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
                     ) : isSubdomainAvailable === true ? (
-                      <span className="hidden lg:inline text-[#d4ff66] font-semibold text-xs">available!</span>
+                      <span className="hidden lg:inline text-[#369762] font-semibold text-xs">available!</span>
                     ) : isSubdomainAvailable === false ? (
                       <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">taken!</span>
                     ) : null}
@@ -1546,8 +1587,8 @@ function EditorInner() {
                   <button
                     onClick={() => setPreviewMode("desktop")}
                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "desktop"
-                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
                       }`}
                     title="Desktop preview"
                   >
@@ -1556,8 +1597,8 @@ function EditorInner() {
                   <button
                     onClick={() => setPreviewMode("tablet")}
                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "tablet"
-                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
                       }`}
                     title="Tablet preview"
                   >
@@ -1566,8 +1607,8 @@ function EditorInner() {
                   <button
                     onClick={() => setPreviewMode("mobile")}
                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "mobile"
-                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
                       }`}
                     title="Mobile preview"
                   >
@@ -1581,8 +1622,8 @@ function EditorInner() {
                       }
                     }}
                     className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "resizable"
-                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
                       }`}
                     title="Drag-to-resize preview"
                   >
@@ -1625,7 +1666,7 @@ function EditorInner() {
                         <div className="flex items-center gap-1.5 w-16">
                           <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
                           <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#d4ff66]/85 hover:bg-[#d4ff66] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
                         </div>
 
                         {/* Address Bar */}

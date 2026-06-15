@@ -162,7 +162,7 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           </button>
           <button
             onClick={() => { toast.success("Micro-site published live on reidhoffman.linkedpage.me!"); onClose(); }}
-            className="h-10 px-5      rounded-lg   bg-[#E6FFE6] border border-[#d4ff66]/40 text-[#d4ff66] text-[12px] font-medium hover:bg-[#D4FCD4] transition-colors active:scale-95"
+            className="h-10 px-5      rounded-lg   bg-[#d4ff66] border border-[#d4ff66]/40 text-[#d4ff66] text-[12px] font-medium hover:bg-[#D4FCD4] transition-colors active:scale-95"
           >
             Publish Live
           </button>
@@ -442,7 +442,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden mr-8">
-            <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #d4ff66 0%, #E6FFE6 100%)" }} />
+            <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #d4ff66 0%, #d4ff66 100%)" }} />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -623,7 +623,7 @@ function BusinessSection() {
                   {isActive && (
                     <motion.div
                       layoutId="active-business-tab"
-                      className="absolute inset-0 bg-[#E6FFE6] border border-[#d4ff66]/40 rounded-[10px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  -z-10"
+                      className="absolute inset-0 bg-[#d4ff66] border border-[#d4ff66]/40 rounded-[10px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  -z-10"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}

@@ -45,7 +45,7 @@ class LinkedinProfileSpider(scrapy.Spider):
         # Extract avatar url
         avatar_url = response.css(".top-card-layout__entity-image-container img::attr(src)").get()
         if not avatar_url:
-            avatar_url = f"https://api.dicebear.com/7.x/initials/svg?seed={name}&backgroundColor=8db8ff,8dffb3,2a2a2f"
+            avatar_url = f"https://api.dicebear.com/7.x/initials/svg?seed={name}&backgroundColor=8db8ff,d4ff66,2a2a2f"
 
         # Parse experience
         experience = []

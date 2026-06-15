@@ -112,7 +112,7 @@ function PublishInner() {
               {url}
             </p>
             {copied ? (
-              <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
+              <Check className="w-5 h-5 text-[#d4ff66] flex-shrink-0" />
             ) : (
               <Copy className="w-5 h-5 text-[#9CA3AF] flex-shrink-0" />
             )}

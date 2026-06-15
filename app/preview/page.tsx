@@ -176,7 +176,7 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
           linkedpage.io/{slug}
         </p>
         {copied ? (
-          <Check className="w-5 h-5 text-[#369762] flex-shrink-0" />
+          <Check className="w-5 h-5 text-[#d4ff66] flex-shrink-0" />
         ) : (
           <Share2 className="w-5 h-5 text-[#9CA3AF] group-hover:text-black flex-shrink-0 transition-colors" />
         )}
@@ -531,7 +531,7 @@ function PreviewInner() {
                   key={i}
                   className="flex items-center gap-2 text-xs text-[#171717]"
                 >
-                  <div className="w-5 h-5 rounded-lg bg-[#8DFFB3] flex items-center justify-center flex-shrink-0">
+                  <div className="w-5 h-5 rounded-lg bg-[#d4ff66] flex items-center justify-center flex-shrink-0">
                     <Check
                       className="w-2.5 h-2.5 text-[#1a5c3a]"
                       strokeWidth={2.5}

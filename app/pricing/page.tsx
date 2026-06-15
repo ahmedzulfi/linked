@@ -78,7 +78,7 @@ export default function PricingPage() {
       {/* ── Background Graphic (Polished Light Mesh Gradient) ── */}
       <div className="absolute inset-0 z-0 select-none pointer-events-none overflow-hidden bg-[#FBFBFB]">
         <div className="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-gradient-to-br from-[#8DB8FF]/12 to-[#E0EBFF]/5 blur-[120px] opacity-70" />
-        <div className="absolute -bottom-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#8DFFB3]/8 to-[#E0FFE7]/5 blur-[100px] opacity-45" />
+        <div className="absolute -bottom-[30%] -right-[10%] w-[60%] h-[60%] rounded-full bg-gradient-to-br from-[#d4ff66]/8 to-[#d4ff66]/5 blur-[100px] opacity-45" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/50 to-[#FBFBFB]" />
       </div>
 
@@ -247,7 +247,7 @@ export default function PricingPage() {
                       key={f}
                       className="flex items-center gap-2.5 text-[13.5px] font-medium text-gray-600"
                     >
-                      <Check className="w-4 h-4 text-[#369762]" />
+                      <Check className="w-4 h-4 text-[#d4ff66]" />
                       {f}
                     </li>
                   ))}
@@ -304,7 +304,7 @@ export default function PricingPage() {
                       key={f}
                       className="flex items-center gap-2.5 text-[13.5px] font-medium text-gray-600"
                     >
-                      <Check className="w-4 h-4 text-[#369762]" />
+                      <Check className="w-4 h-4 text-[#d4ff66]" />
                       {f}
                     </li>
                   ))}

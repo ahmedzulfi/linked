@@ -198,7 +198,6 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
 - **Conversational Builder Workspace:**
   - **Centered Chat Layout:** Center-aligned ChatGPT-style conversational pane with a bottom input composer and auto-scroll behavior. The live browser preview is hidden by default.
   - **Start Agent Header:** Renders a clean logo image (`/logo.png`) and title heading ("About Linked") at the top of the scroll container, with no background, border, shadow, profile CTAs, or handle details, offset with margin spacing (`mb-8`) to position the initial greeting bubble downwards.
-  - **AI Response Bubble Style:** Renders raw text on a transparent background with no outline border or shadow, in light mode (charcoal/dark-slate text). Renders a row of minimal action icon buttons (Copy, Share, Regenerate, More Options) directly below the message.
   - **Live Preview Toggle:** Header button to toggle between full-width chat and side-by-side split screen workspace with the resizable iframe simulator.
   - **Visual Milestone Forms:** Renders interactive inline triggers below bubbles when the AI parses milestones:
     - **Projects Milestone (`[MILESTONE:PROJECTS]`):** Show inline buttons to open the Projects Modal and manage portfolio grid items.
