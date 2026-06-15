@@ -22,7 +22,7 @@ function DarkButton({
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[#369762] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">
+    <p className="text-[#d4ff66] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">
       {children}
     </p>
   );
@@ -328,7 +328,7 @@ function TemplatesSection() {
             <div
               className="h-full w-1/4   rounded-lg"
               style={{
-                background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)",
+                background: "linear-gradient(90deg, #d4ff66 0%, #d4ff66 100%)",
               }}
             />
           </div>
@@ -470,7 +470,7 @@ function BusinessSection() {
                 onClick={() => setActiveTab(i)}
                 className={`h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-all duration-150 whitespace-nowrap font-inter-tight ${
                   activeTab === i
-                    ? "bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  font-semibold"
+                    ? "bg-[#d4ff66] border border-[#d4ff66]/40 text-[#d4ff66]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  font-semibold"
                     : "text-[#171717]/60 hover:text-black hover:bg-black/5"
                 }`}
               >

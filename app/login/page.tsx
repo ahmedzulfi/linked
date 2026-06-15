@@ -243,7 +243,7 @@ export default function LoginPage() {
         </div>
 
         {/* ── Right: Hero Illustration ── */}
-        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#8DFFB3]/10 items-center justify-center border border-[#E6E6E6]">
+        <div className="relative hidden md:flex rounded-[20px] overflow-hidden bg-gradient-to-tr from-[#8DB8FF]/10 to-[#d4ff66]/10 items-center justify-center border border-[#E6E6E6]">
           <img
             className="absolute inset-0 size-full object-cover opacity-80"
             alt="Auth background"

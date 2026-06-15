@@ -39,7 +39,7 @@ function DarkButton({ children, className = "", onClick }: { children: React.Rea
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[#369762] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">{children}</p>
+    <p className="text-[#d4ff66] text-[13px] leading-[18px] font-semibold uppercase tracking-wider mb-2 font-inter-tight">{children}</p>
   );
 }
 
@@ -102,7 +102,7 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-[#F3F3F3]">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5   rounded-lg bg-[#369762]" />
+            <span className="w-2.5 h-2.5   rounded-lg bg-[#d4ff66]" />
             <span className="text-[13px] font-semibold text-black font-mono">reidhoffman.linkedpage.me</span>
           </div>
           <button
@@ -162,7 +162,7 @@ function PreviewModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           </button>
           <button
             onClick={() => { toast.success("Micro-site published live on reidhoffman.linkedpage.me!"); onClose(); }}
-            className="h-10 px-5      rounded-lg   bg-[#E6FFE6] border border-[#8DFFB3]/40 text-[#1B5E20] text-[12px] font-medium hover:bg-[#D4FCD4] transition-colors active:scale-95"
+            className="h-10 px-5      rounded-lg   bg-[#E6FFE6] border border-[#d4ff66]/40 text-[#d4ff66] text-[12px] font-medium hover:bg-[#D4FCD4] transition-colors active:scale-95"
           >
             Publish Live
           </button>
@@ -215,7 +215,7 @@ function HabitlineProductShowcase() {
     <div className="relative w-full select-none pointer-events-none">
       {/* Background ambient glows */}
       <div className="absolute top-1/4 left-1/4 w-44 h-44 bg-[#8DB8FF]/10 rounded-full blur-[60px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-44 h-44 bg-[#8DFFB3]/10 rounded-full blur-[60px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-44 h-44 bg-[#d4ff66]/10 rounded-full blur-[60px] pointer-events-none" />
 
       {/* Clipped image container */}
       <motion.div
@@ -442,7 +442,7 @@ function TemplatesSection({ onSelectTemplate }: { onSelectTemplate: (name: strin
         {/* Progress + controls */}
         <div className="flex items-center justify-between mt-6">
           <div className="flex-1 h-2   rounded-lg border border-[#E6E6E6] bg-[#FBFBFB]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  overflow-hidden mr-8">
-            <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #8DFFB3 0%, #E6FFE6 100%)" }} />
+            <div className="h-full w-1/4   rounded-lg" style={{ background: "linear-gradient(90deg, #d4ff66 0%, #E6FFE6 100%)" }} />
           </div>
           <div className="flex items-center gap-3">
             <button
@@ -618,12 +618,12 @@ function BusinessSection() {
                 <button
                   key={tab}
                   onClick={() => handleTabClick(i)}
-                  className={`relative h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-colors duration-200 whitespace-nowrap font-inter-tight z-10 ${isActive ? "text-[#1B5E20] font-semibold" : "text-[#171717]/60 hover:text-black"}`}
+                  className={`relative h-9 px-6 text-[14px] leading-[20px] rounded-[10px] transition-colors duration-200 whitespace-nowrap font-inter-tight z-10 ${isActive ? "text-[#d4ff66] font-semibold" : "text-[#171717]/60 hover:text-black"}`}
                 >
                   {isActive && (
                     <motion.div
                       layoutId="active-business-tab"
-                      className="absolute inset-0 bg-[#E6FFE6] border border-[#8DFFB3]/40 rounded-[10px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  -z-10"
+                      className="absolute inset-0 bg-[#E6FFE6] border border-[#d4ff66]/40 rounded-[10px]  shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]  -z-10"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}

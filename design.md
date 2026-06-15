@@ -163,9 +163,9 @@ Webild feels airy, optimistic, and lightly futuristic, with a polished landing-p
 - **Border (#E6E6E6):** A faint divider color for structural separation and soft edges, especially on floating panels and controls.
 - **Accent (#8DB8FF):** A gentle sky-blue highlight used for active states, visual emphasis, and lightweight interactive cues.
 - **Accent-soft (#DCEAFF):** A pale blue companion for low-emphasis highlights and blended interface accents.
-- **Accent-green (#8DFFB3):** A soft mint green highlight matching the luminance and shade of the sky-blue accent, used for visual accents, progress indicators, and active highlights.
-- **Accent-green-dark (#369762):** A deeper version of the mint green accent, optimized for text readability and high-contrast labels on white backgrounds.
-- **Success (#BFE7A9):** A fresh green used sparingly for positive signals and subtle environmental warmth.
+- **Accent-green (#d4ff66):** A bright lime green highlight used for visual accents, progress indicators, and active highlights.
+- **Accent-green-dark (#d4ff66):** A bright lime green accent, used for consistency across the application.
+- **Success (#d4ff66):** A bright lime green used sparingly for positive signals and subtle environmental warmth.
 - **Error (#E45A5A):** A restrained red reserved for destructive states, validation, and alert messaging.
 
 ## Typography
@@ -198,6 +198,7 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
 - **Conversational Builder Workspace:**
   - **Centered Chat Layout:** Center-aligned ChatGPT-style conversational pane with a bottom input composer and auto-scroll behavior. The live browser preview is hidden by default.
   - **Start Agent Header:** Renders a clean logo image (`/logo.png`) and title heading ("About Linked") at the top of the scroll container, with no background, border, shadow, profile CTAs, or handle details, offset with margin spacing (`mb-8`) to position the initial greeting bubble downwards.
+  - **AI Response Bubble Style:** Renders raw text on a transparent background with no outline border or shadow, in light mode (charcoal/dark-slate text). Renders a row of minimal action icon buttons (Copy, Share, Regenerate, More Options) directly below the message.
   - **Live Preview Toggle:** Header button to toggle between full-width chat and side-by-side split screen workspace with the resizable iframe simulator.
   - **Visual Milestone Forms:** Renders interactive inline triggers below bubbles when the AI parses milestones:
     - **Projects Milestone (`[MILESTONE:PROJECTS]`):** Show inline buttons to open the Projects Modal and manage portfolio grid items.

@@ -472,8 +472,8 @@ export default function DashboardPage() {
                             </h3>
                             <p className="text-xs leading-tight truncate text-gray-500 mt-1">
                               {web.isPublished ? (
-                                <span className="text-[#369762] font-semibold flex items-center gap-1">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-[#369762]" />
+                                <span className="text-[#d4ff66] font-semibold flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#d4ff66]" />
                                   Live: {web.subdomainSlug}.linkedpage.io
                                 </span>
                               ) : (

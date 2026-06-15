@@ -30,8 +30,8 @@ export function AnimatedUploadIllustration() {
           </linearGradient>
 
           <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#8DFFB3" />
-            <stop offset="100%" stopColor="#369762" />
+            <stop offset="0%" stopColor="#d4ff66" />
+            <stop offset="100%" stopColor="#d4ff66" />
           </linearGradient>
         </defs>
 
@@ -136,7 +136,7 @@ export function AnimatedUploadIllustration() {
           {/* Browser Dots */}
           <circle cx="40" cy="51" r="2.5" fill="#E45A5A" />
           <circle cx="48" cy="51" r="2.5" fill="#E9C46A" />
-          <circle cx="56" cy="51" r="2.5" fill="#369762" />
+          <circle cx="56" cy="51" r="2.5" fill="#d4ff66" />
 
           {/* Fake Grid Layout Elements inside Browser */}
           <rect
@@ -197,7 +197,7 @@ export function AnimatedUploadIllustration() {
 
         {/* 3. Floating Particles */}
         <circle cx="25" cy="40" r="3" fill="#8DB8FF" className="svg-p1" />
-        <circle cx="178" cy="65" r="2" fill="#8DFFB3" className="svg-p2" />
+        <circle cx="178" cy="65" r="2" fill="#d4ff66" className="svg-p2" />
         <circle
           cx="165"
           cy="30"
@@ -299,8 +299,8 @@ export function AnimatedGeneratingIllustration() {
           </linearGradient>
 
           <linearGradient id="bentoAccent" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#8DFFB3" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#369762" stopOpacity="0.2" />
+            <stop offset="0%" stopColor="#d4ff66" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#d4ff66" stopOpacity="0.2" />
           </linearGradient>
         </defs>
 
@@ -422,7 +422,7 @@ export function AnimatedGeneratingIllustration() {
           {/* Mini star nodes */}
           <path
             d="M 120 40 L 122 45 L 127 45 L 123 48 L 125 53 L 120 50 L 115 53 L 117 48 L 113 45 L 118 45 Z"
-            fill="#8DFFB3"
+            fill="#d4ff66"
             opacity="0.6"
           />
           <path
@@ -442,7 +442,7 @@ export function AnimatedGeneratingIllustration() {
             height="50"
             rx="8"
             fill="url(#bentoAccent)"
-            stroke="#8DFFB3"
+            stroke="#d4ff66"
             strokeWidth="1.2"
           />
           <line
@@ -450,7 +450,7 @@ export function AnimatedGeneratingIllustration() {
             y1="57"
             x2="62"
             y2="57"
-            stroke="#369762"
+            stroke="#d4ff66"
             strokeWidth="2.5"
             strokeLinecap="round"
           />
@@ -459,14 +459,14 @@ export function AnimatedGeneratingIllustration() {
             y1="67"
             x2="52"
             y2="67"
-            stroke="#369762"
+            stroke="#d4ff66"
             strokeWidth="1.5"
             strokeLinecap="round"
             opacity="0.6"
           />
-          <circle cx="35" cy="82" r="3" fill="#369762" />
-          <circle cx="45" cy="82" r="3" fill="#369762" />
-          <circle cx="55" cy="82" r="3" fill="#369762" />
+          <circle cx="35" cy="82" r="3" fill="#d4ff66" />
+          <circle cx="45" cy="82" r="3" fill="#d4ff66" />
+          <circle cx="55" cy="82" r="3" fill="#d4ff66" />
         </g>
 
         {/* Center Main block */}
@@ -612,7 +612,7 @@ export function AnimatedSuccessIllustration() {
           cx="40"
           cy="40"
           r="3"
-          fill="#8DFFB3"
+          fill="#d4ff66"
           className="success-con-2"
         />
         <circle
@@ -641,7 +641,7 @@ export function AnimatedSuccessIllustration() {
             cx="40"
             cy="40"
             r="32"
-            fill="#8DFFB3"
+            fill="#d4ff66"
             opacity="0.25"
             filter="url(#success-blur)"
           />
@@ -650,8 +650,8 @@ export function AnimatedSuccessIllustration() {
             cx="40"
             cy="40"
             r="32"
-            fill="#8DFFB3"
-            stroke="#369762"
+            fill="#d4ff66"
+            stroke="#d4ff66"
             strokeWidth="3"
             className="success-circle-bg"
           />
@@ -896,7 +896,7 @@ export function AnimatedThinkingIllustration() {
           cx="34"
           cy="8"
           r="4.5"
-          fill="#8DFFB3"
+          fill="#d4ff66"
           className="think-bubble-3"
         />
       </svg>

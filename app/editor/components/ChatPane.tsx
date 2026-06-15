@@ -256,7 +256,7 @@ export default function ChatPane({
             {profileName || "LinkedPage"}
           </span>
         </div>
-        <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
+        <span className="text-[11px] font-bold px-2 py-0.5 bg-[#d4ff66]/25 text-[#d4ff66] rounded-md">
           Editor Mode
         </span>
       </div>

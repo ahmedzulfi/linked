@@ -38,10 +38,10 @@
     /* #8DB8FF */
     --accent-foreground: 0 0% 0%;
 
-    --accent-green: 140 100% 77.6%;
-    /* #8DFFB3 */
-    --accent-green-dark: 140 47.1% 40.4%;
-    /* #369762 */
+    --accent-green: 77 100% 70%;
+    /* #d4ff66 */
+    --accent-green-dark: 77 100% 70%;
+    /* #d4ff66 */
 
     --destructive: 0 74.3% 62.5%;
     /* #E45A5A (error) */

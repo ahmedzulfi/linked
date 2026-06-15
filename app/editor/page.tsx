@@ -29,6 +29,10 @@ import {
   Eye,
   EyeOff,
   Pencil,
+  Copy,
+  Share,
+  RotateCw,
+  MoreHorizontal,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
@@ -372,7 +376,7 @@ function EditorInner() {
           const websData = await websRes.json();
           if (websRes.ok && websData.success && websData.websites && websData.websites.length > 0) {
             // Sort by updatedAt desc to get latest draft
-            const sorted = websData.websites.sort((a: any, b: any) => 
+            const sorted = websData.websites.sort((a: any, b: any) =>
               new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
             );
             const latestId = sorted[0].id;
@@ -845,7 +849,7 @@ function EditorInner() {
 
   return (
     <div className="h-screen w-full flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50/30 font-inter select-none">
-      
+
       {/* ── Left Sidebar (Collapsible hover style) ── */}
       <div className="w-[60px] h-full shrink-0 relative z-[60]">
         <aside className="absolute top-0 left-0 h-full w-[60px] hover:w-[250px] bg-white/60 backdrop-blur-xl border-r border-[#0101]/5 transition-all duration-300 overflow-hidden flex flex-col justify-between group shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_32px_#ffff] py-4">
@@ -885,11 +889,10 @@ function EditorInner() {
                     }
                   }}
                   title={item.label}
-                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${
-                    activeNav === i
+                  className={`w-full flex items-center h-[38px] px-2 rounded-[10px] transition-all duration-150 ${activeNav === i
                       ? "bg-[#ebf5ff] text-[#3b82f6] border border-[#3b82f6]/20 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
                       : "text-[#171717]/70 hover:bg-[#fff]/50 hover:text-[#2A2A2F] border border-transparent"
-                  }`}
+                    }`}
                 >
                   <div className="w-5 h-5 flex items-center justify-center shrink-0">
                     {item.icon}
@@ -974,7 +977,7 @@ function EditorInner() {
 
       {/* ── Left Column Panel Switcher based on activeN      {/* 1. Design / AI Onboarding Wizard Panel */}
       {activeNav === 1 && (
-        <aside 
+        <aside
           className={cn(
             "h-full bg-white flex flex-col justify-between relative z-20 font-inter transition-all duration-300",
             isPreviewVisible ? "w-[480px] shrink-0 border-r border-[#E6E6E6]/60 shadow-xs" : "flex-1"
@@ -1040,7 +1043,7 @@ function EditorInner() {
                     >
                       Restart
                     </button>
-                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#8DFFB3]/25 text-[#369762] rounded-md">
+                    <span className="text-[11px] font-bold px-2 py-0.5 bg-[#d4ff66]/25 text-[#d4ff66] rounded-md">
                       Editor Mode
                     </span>
                   </div>
@@ -1053,262 +1056,309 @@ function EditorInner() {
                 !isPreviewVisible && "max-w-3xl mx-auto px-4"
               )}>
 
-          {/* Scrollable Wizard History */}
-          <div className="flex-1 overflow-y-auto px-6 py-4 font-sans" style={{ scrollbarWidth: "none" }}>
-            <div className="space-y-6 flex flex-col w-full py-4">
-              {/* Profile Card Header */}
-              <div className="text-center flex flex-col items-center justify-center py-6 select-none animate-in fade-in duration-300 mb-8">
-                {/* Logo Image */}
-                <img 
-                  src="/logo.png" 
-                  alt="Linked Logo" 
-                  className="h-10 w-auto object-contain mb-4" 
-                />
+                {/* Scrollable Wizard History */}
+                <div className="flex-1 overflow-y-auto px-6 py-4 font-sans" style={{ scrollbarWidth: "none" }}>
+                  <div className="space-y-6 flex flex-col w-full py-4">
+                    {/* Profile Card Header */}
+                    <div className="text-center flex flex-col items-center justify-center py-6 select-none animate-in fade-in duration-300 mb-8">
+                      {/* Logo Image */}
+                      <img
+                        src="/logo.png"
+                        alt="Linked Logo"
+                        className="h-10 w-auto object-contain mb-4"
+                      />
 
-                {/* Title */}
-                <h2 className="text-[#2A2A2F] text-[20px] font-bold font-sans tracking-tight">
-                  About Linked
-                </h2>
-                <p className="text-slate-500 text-[14px] leading-[22px] max-w-lg mx-auto mt-3 font-normal font-sans">
-                  Linked is your intelligent workspace for building premium portfolios. Chat with the AI builder to construct your biography, list services, showcase projects, and compile a high-converting web profile. Use the quick reply suggestions to answer, and toggle the preview on the top-right to watch your page build in real-time.
-                </p>
-              </div>
+                      {/* Title */}
+                      <h2 className="text-[#2A2A2F] text-[20px] font-bold font-sans tracking-tight">
+                        About Linked
+                      </h2>
+                      <p className="text-slate-500 text-[14px] leading-[22px] max-w-lg mx-auto mt-3 font-normal font-sans">
+                        Linked is your intelligent workspace for building premium portfolios.
+                      </p>
+                    </div>
 
-              {/* Conversational timeline rendering */}
-              {customMessages.map((msg) => {
-                const cleanContent = cleanMessageContent(msg.content);
-                const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]");
-                const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]");
+                    {/* Conversational timeline rendering */}
+                    {customMessages.map((msg) => {
+                      const cleanContent = cleanMessageContent(msg.content);
+                      const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]");
+                      const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]");
 
-                return (
-                  <div key={msg.id} className="w-full flex flex-col gap-2.5">
-                    {msg.role === "user" ? (
-                      <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
-                        <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
-                          <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full font-sans">
-                            {removeEmojis(msg.content)}
-                          </p>
+                      return (
+                        <div key={msg.id} className="w-full flex flex-col gap-2.5">
+                          {msg.role === "user" ? (
+                            <div className="w-full flex justify-end items-start font-inter animate-in fade-in duration-200">
+                              <div className="max-w-[85%] bg-[#E1F3FE] border border-[#3B82F6]/10 rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)]">
+                                <p className="text-slate-800 text-[16px] leading-[26px] font-normal break-words max-w-full font-sans">
+                                  {removeEmojis(msg.content)}
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="w-full flex flex-col justify-start items-start gap-1 font-inter animate-in fade-in duration-200">
+                              <div className="max-w-[90%] text-[#18181B] text-[16px] leading-[26px] font-normal break-words font-sans px-0 py-1">
+                                {removeEmojis(cleanContent)}
+                              </div>
+
+                              {/* Action Icons Row */}
+                              <div className="flex items-center gap-4 mt-2 select-none">
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(cleanContent);
+                                    toast.success("Message copied to clipboard!");
+                                  }}
+                                  title="Copy message"
+                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
+                                >
+                                  <Copy className="w-3.5 h-3.5" />
+                                </button>
+                                
+                                <button
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(window.location.href);
+                                    toast.success("Page link copied to clipboard!");
+                                  }}
+                                  title="Share"
+                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
+                                >
+                                  <Share className="w-3.5 h-3.5" />
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    const userMessages = customMessages.filter(m => m.role === "user");
+                                    if (userMessages.length > 0) {
+                                      const lastUserMsg = userMessages[userMessages.length - 1];
+                                      sendChatMessage(lastUserMsg.content);
+                                    } else {
+                                      toast.info("No messages to regenerate yet!");
+                                    }
+                                  }}
+                                  title="Regenerate response"
+                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
+                                >
+                                  <RotateCw className="w-3.5 h-3.5" />
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    toast.info("More actions coming soon!");
+                                  }}
+                                  title="More options"
+                                  className="p-1 text-slate-400 hover:text-slate-600 transition-colors bg-transparent border-none cursor-pointer active:scale-95 flex items-center justify-center"
+                                >
+                                  <MoreHorizontal className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+
+                              {hasProjectsMilestone && (
+                                <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
+                                  {(editedProfile?.projects || []).map((p, pIdx) => (
+                                    <div
+                                      key={pIdx}
+                                      onClick={() => {
+                                        setModalProjectTitle(p.title || "");
+                                        setModalProjectLink(p.link || "");
+                                        setModalProjectImage(p.image || "");
+                                        setModalProjectDescription(p.description || "");
+                                        setEditingProjectIndex(pIdx);
+                                        setIsProjectModalOpen(true);
+                                      }}
+                                      className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                    >
+                                      <div>
+                                        <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight truncate">
+                                          {p.title}
+                                        </h4>
+                                        {p.link && (
+                                          <p className="text-[10px] text-slate-400 truncate font-mono mt-1">
+                                            {p.link}
+                                          </p>
+                                        )}
+                                        {p.description && (
+                                          <p className="text-[12px] text-slate-550 line-clamp-3 leading-normal mt-2.5 font-sans">
+                                            {p.description}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+
+                                  <div
+                                    onClick={() => {
+                                      setModalProjectTitle("");
+                                      setModalProjectLink("");
+                                      setModalProjectImage("");
+                                      setModalProjectDescription("");
+                                      setEditingProjectIndex(null);
+                                      setIsProjectModalOpen(true);
+                                    }}
+                                    className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                  >
+                                    <div>
+                                      <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
+                                        Add New Project
+                                      </h4>
+                                      <p className="text-[12px] text-blue-100/90 leading-normal mt-2.5 font-sans line-clamp-3">
+                                        Showcase a new project in your portfolio. Add custom titles, redirect links, and descriptions.
+                                      </p>
+                                    </div>
+                                    <div className="w-full bg-white hover:bg-blue-50 text-[#3B82F6] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
+                                      Add Project
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {hasServicesMilestone && (
+                                <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
+                                  {(editedProfile?.services || []).map((srv, sIdx) => (
+                                    <div
+                                      key={sIdx}
+                                      onClick={() => {
+                                        setModalServiceTitle(srv.title || "");
+                                        setModalServicePrice(srv.price || "");
+                                        setModalServiceDescription(srv.description || "");
+                                        setEditingServiceIndex(sIdx);
+                                        setIsServicesModalOpen(true);
+                                      }}
+                                      className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                    >
+                                      <div>
+                                        <div className="flex items-start justify-between gap-2">
+                                          <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight max-w-[70%]">
+                                            {srv.title}
+                                          </h4>
+                                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2A2A2F] text-white leading-none shrink-0">
+                                            {srv.price}
+                                          </span>
+                                        </div>
+                                        {srv.description && (
+                                          <p className="text-[12px] text-slate-550 line-clamp-3 leading-normal mt-2.5 font-sans">
+                                            {srv.description}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+
+                                  {(editedProfile?.services || []).length < 5 && (
+                                    <div
+                                      onClick={() => {
+                                        setModalServiceTitle("");
+                                        setModalServicePrice("");
+                                        setModalServiceDescription("");
+                                        setEditingServiceIndex(null);
+                                        setIsServicesModalOpen(true);
+                                      }}
+                                      className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
+                                    >
+                                      <div>
+                                        <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
+                                          Add New Service
+                                        </h4>
+                                        <p className="text-[12px] text-blue-100/90 leading-normal mt-2.5 font-sans line-clamp-3">
+                                          Create a new package with custom pricing deliverables, features, and details.
+                                        </p>
+                                      </div>
+                                      <div className="w-full bg-white hover:bg-blue-50 text-[#3B82F6] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
+                                        Add Service
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+
+
+
+                            </div>
+                          )}
                         </div>
-                      </div>
-                    ) : (
-                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter animate-in fade-in duration-200">
+                      );
+                    })}
+
+                    {/* Thinking / Dots loader */}
+                    {isThinking && (
+                      <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
                         <div className="flex items-center gap-2 select-none">
                           <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
                           <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
                         </div>
-                        <div className="max-w-[85%] bg-white border border-[#E6E6E6] rounded-[18px] px-4 py-3 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.05)] text-[#18181B] text-[16px] leading-[26px] font-normal break-words font-sans">
-                          {removeEmojis(cleanContent)}
+                        <div className="bg-white px-4 py-3 rounded-[18px] flex items-center justify-center gap-3">
+                          <ShiningText text="Webild is thinking..." />
                         </div>
-
-                        {hasProjectsMilestone && (
-                          <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
-                            {(editedProfile?.projects || []).map((p, pIdx) => (
-                              <div
-                                key={pIdx}
-                                onClick={() => {
-                                  setModalProjectTitle(p.title || "");
-                                  setModalProjectLink(p.link || "");
-                                  setModalProjectImage(p.image || "");
-                                  setModalProjectDescription(p.description || "");
-                                  setEditingProjectIndex(pIdx);
-                                  setIsProjectModalOpen(true);
-                                }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
-                              >
-                                <div>
-                                  <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight truncate">
-                                    {p.title}
-                                  </h4>
-                                  {p.link && (
-                                    <p className="text-[10px] text-slate-400 truncate font-mono mt-1">
-                                      {p.link}
-                                    </p>
-                                  )}
-                                  {p.description && (
-                                    <p className="text-[12px] text-slate-550 line-clamp-3 leading-normal mt-2.5 font-sans">
-                                      {p.description}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-
-                            <div
-                              onClick={() => {
-                                setModalProjectTitle("");
-                                setModalProjectLink("");
-                                setModalProjectImage("");
-                                setModalProjectDescription("");
-                                setEditingProjectIndex(null);
-                                setIsProjectModalOpen(true);
-                              }}
-                              className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
-                            >
-                              <div>
-                                <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
-                                  Add New Project
-                                </h4>
-                                <p className="text-[12px] text-blue-100/90 leading-normal mt-2.5 font-sans line-clamp-3">
-                                  Showcase a new project in your portfolio. Add custom titles, redirect links, and descriptions.
-                                </p>
-                              </div>
-                              <div className="w-full bg-white hover:bg-blue-50 text-[#3B82F6] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
-                                Add Project
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {hasServicesMilestone && (
-                          <div className="mt-2 ml-7 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full max-w-[95%] animate-in fade-in duration-200">
-                            {(editedProfile?.services || []).map((srv, sIdx) => (
-                              <div
-                                key={sIdx}
-                                onClick={() => {
-                                  setModalServiceTitle(srv.title || "");
-                                  setModalServicePrice(srv.price || "");
-                                  setModalServiceDescription(srv.description || "");
-                                  setEditingServiceIndex(sIdx);
-                                  setIsServicesModalOpen(true);
-                                }}
-                                className="relative bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 border border-[#EAE6DF] hover:border-slate-400 p-5 rounded-2xl shadow-xs transition-all duration-205 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
-                              >
-                                <div>
-                                  <div className="flex items-start justify-between gap-2">
-                                    <h4 className="font-['Inter_Tight'] font-semibold text-[#2A2A2F] text-[15px] leading-tight max-w-[70%]">
-                                      {srv.title}
-                                    </h4>
-                                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#2A2A2F] text-white leading-none shrink-0">
-                                      {srv.price}
-                                    </span>
-                                  </div>
-                                  {srv.description && (
-                                    <p className="text-[12px] text-slate-550 line-clamp-3 leading-normal mt-2.5 font-sans">
-                                      {srv.description}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            ))}
-
-                            {(editedProfile?.services || []).length < 5 && (
-                              <div
-                                onClick={() => {
-                                  setModalServiceTitle("");
-                                  setModalServicePrice("");
-                                  setModalServiceDescription("");
-                                  setEditingServiceIndex(null);
-                                  setIsServicesModalOpen(true);
-                                }}
-                                className="relative bg-[#3B82F6] hover:bg-[#2563EB] p-5 rounded-2xl shadow-xs transition-all duration-200 flex flex-col justify-between h-full min-h-[160px] text-left cursor-pointer group active:scale-[0.98]"
-                              >
-                                <div>
-                                  <h4 className="font-['Inter_Tight'] font-semibold text-white text-[15px] leading-tight">
-                                    Add New Service
-                                  </h4>
-                                  <p className="text-[12px] text-blue-100/90 leading-normal mt-2.5 font-sans line-clamp-3">
-                                    Create a new package with custom pricing deliverables, features, and details.
-                                  </p>
-                                </div>
-                                <div className="w-full bg-white hover:bg-blue-50 text-[#3B82F6] font-semibold text-[13px] py-2 px-4 rounded-xl text-center mt-4 transition-colors">
-                                  Add Service
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-
-
                       </div>
                     )}
-                  </div>
-                );
-              })}
 
-              {/* Thinking / Dots loader */}
-              {isThinking && (
-                <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
-                  <div className="flex items-center gap-2 select-none">
-                    <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                    <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+
+
                   </div>
-                  <div className="bg-white px-4 py-3 rounded-[18px] flex items-center justify-center gap-3">
-                    <ShiningText text="Webild is thinking..." />
-                  </div>
+                  <div ref={chatEndRef} />
                 </div>
-              )}
+                {/* Bottom input composer area */}
+                <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
+                  <div className="w-full flex flex-col gap-3">
+                    <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
+                      {suggestions.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => sendChatMessage(s)}
+                          className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
 
-
-
-            </div>
-            <div ref={chatEndRef} />
-          </div>
-                   {/* Bottom input composer area */}
-          <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
-            <div className="w-full flex flex-col gap-3">
-              <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-                {suggestions.map((s) => (
-                  <button
-                    key={s}
-                    onClick={() => sendChatMessage(s)}
-                    className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-
-              <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
-                <textarea
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      sendChatMessage();
-                    }
-                  }}
-                  className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
-                  placeholder="Ask Webild to adjust copy, headline, template style..."
-                  rows={2}
-                />
-                <div className="flex items-center justify-between px-1 select-none">
-                  <button
-                    onClick={() => toast.info("Attachments coming soon!")}
-                    className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
-                  >
-                    <Plus className="w-[18px] h-[18px]" />
-                  </button>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => toast.info("Voice input coming soon!")}
-                      className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
-                    >
-                      <Mic className="w-[18px] h-[18px]" />
-                    </button>
-                    <button
-                      onClick={() => sendChatMessage()}
-                      disabled={!chatInput.trim()}
-                      className={cn(
-                        "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
-                        chatInput.trim()
-                          ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
-                          : "bg-neutral-200 cursor-not-allowed"
-                      )}
-                    >
-                      <ArrowUp className="w-[18px] h-[18px]" />
-                    </button>
+                    <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
+                      <textarea
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !e.shiftKey) {
+                            e.preventDefault();
+                            sendChatMessage();
+                          }
+                        }}
+                        className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
+                        placeholder="Ask Webild to adjust copy, headline, template style..."
+                        rows={2}
+                      />
+                      <div className="flex items-center justify-between px-1 select-none">
+                        <button
+                          onClick={() => toast.info("Attachments coming soon!")}
+                          className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
+                        >
+                          <Plus className="w-[18px] h-[18px]" />
+                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => toast.info("Voice input coming soon!")}
+                            className="w-9 h-9 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center transition-colors border-none hover:bg-neutral-200 cursor-pointer"
+                          >
+                            <Mic className="w-[18px] h-[18px]" />
+                          </button>
+                          <button
+                            onClick={() => sendChatMessage()}
+                            disabled={!chatInput.trim()}
+                            className={cn(
+                              "w-9 h-9 rounded-full text-white flex items-center justify-center transition-[background-color,transform] duration-100 border-none",
+                              chatInput.trim()
+                                ? "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer active:scale-[0.93]"
+                                : "bg-neutral-200 cursor-not-allowed"
+                            )}
+                          >
+                            <ArrowUp className="w-[18px] h-[18px]" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
+          )}
+        </aside>
       )}
-    </aside>
-  )}
 
       {/* 2. Domains Panel */}
       {activeNav === 2 && <DomainsPane />}
@@ -1318,361 +1368,356 @@ function EditorInner() {
 
       {/* ── Main Canvas Workspace ── */}
       {isPreviewVisible && (
-        <main 
+        <main
           className="flex-1 h-full flex flex-col bg-white overflow-hidden p-5 gap-3"
         >
-        
-        {/* Top Navbar */}
-        <div className="flex items-center justify-between shrink-0 h-9 bg-white">
-          
-          {/* Left Side: Collapse Button + Saving Indicator */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => toast.info("Upgrade to Pro to link custom domains & unlock premium features!")}
-              className="flex items-center gap-2 h-10 px-2 text-sm font-medium bg-white border border-[#E6E6E6] rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-              style={{ boxShadow: "0 1px 4px #fff" }}
-            >
-              <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M4 6h16M4 12h16M4 18h7" />
-              </svg>
-            </button>
 
-            {/* Saved Indicators */}
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-500">
-              {isDirty ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                  <span>Unsaved edits</span>
-                  <button 
-                    onClick={resetEdits}
-                    className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
-                  >
-                    Reset
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span>All changes saved</span>
-                </>
-              )}
-            </div>
-          </div>
+          {/* Top Navbar */}
+          <div className="flex items-center justify-between shrink-0 h-9 bg-white">
 
-          {/* Right Side: Share + Publish + Avatar menu */}
-          <div className="flex items-center gap-2 relative">
-            <button
-              onClick={() => {
-                navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`);
-                toast.success("Share link copied to clipboard!");
-              }}
-              className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-            >
-              Share
-            </button>
-            <button
-              id="onboarding-publish-btn"
-              onClick={handlePublish}
-              disabled={publishing}
-              className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
-            >
-              {publishing && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
-              Publish
-            </button>
-            
-            {/* Profile Avatar Button */}
-            <button
-              onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-              className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
-            >
-              <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
-            </button>
-
-            {/* Profile User Menu Dropdown */}
-            <AnimatePresence>
-              {isUserMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -8 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                  transition={{ duration: 0.15, ease: "easeOut" }}
-                  className="absolute right-0 top-10 z-50"
-                >
-                  <UserMenu 
-                    name={userName} 
-                    email={userEmail} 
-                    onClose={() => setIsUserMenuOpen(false)} 
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-        </div>
-
-        {/* Elevated Canvas Card Frame */}
-        <div className="relative flex-1 bg-white/75 backdrop-blur-xl rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_rgba(255,255,255,0.6)_inset]">
-          
-          {/* Canvas Toolbar */}
-          <div className="relative z-30 flex items-center gap-3 w-full h-[54px] border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md px-4">
-            
-            {/* Left: Customize + Page switcher */}
-            <div className="flex items-center gap-2">
-              <div className="relative group">
-                <button
-                  onClick={() => {
-                    if (isSelectionMode) {
-                      setIsSelectionMode(false);
-                      setSelectedField(null);
-                      setSelectedIndex(undefined);
-                    } else {
-                      setIsSelectionMode(true);
-                      setActiveNav(1); // Make sure Design tab is active
-                      setSelectedField(null);
-                      setSelectedIndex(undefined);
-                    }
-                  }}
-                  className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${
-                    isSelectionMode
-                      ? "bg-[#3B82F6] border-[#3B82F6] text-white hover:bg-[#2563EB]"
-                      : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
-                  }`}
-                >
-                  <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
-                    <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
-                    <path d="M7.2 2.2 8 5.1" />
-                    <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
-                  </svg>
-                  {isSelectionMode ? "Editing Canvas" : "Customize"}
-                </button>
-              </div>
-
-              <div className="relative group">
-                <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
-                  <span className="text-sm leading-tight">Home</span>
-                  <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Center: Subdomain Address Status */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg">
-                <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
-                  <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
-                  <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
-                    {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
-                  </span>
-                  {checkingSubdomain ? (
-                    <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
-                  ) : isSubdomainAvailable === true ? (
-                    <span className="hidden lg:inline text-[#369762] font-semibold text-xs">available!</span>
-                  ) : isSubdomainAvailable === false ? (
-                    <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">taken!</span>
-                  ) : null}
-                </span>
-              </div>
-            </div>
-
-            {/* Right: Device scale switches */}
-            <div className="flex items-center gap-1.5">
-              {/* Undo/Redo/History Placeholders */}
-              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
-                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
-                </svg>
-              </button>
-              <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
-                <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
-                  <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
-                </svg>
-              </button>
-
-              <div className="w-px h-4 bg-[#E6E6E6] mx-0.5" />
-
-              {/* Responsive Toggles */}
-              <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5 select-none">
-                <button
-                  onClick={() => setPreviewMode("desktop")}
-                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    previewMode === "desktop"
-                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
-                  }`}
-                  title="Desktop preview"
-                >
-                  <Monitor className="w-[14px] h-[14px]" />
-                </button>
-                <button
-                  onClick={() => setPreviewMode("tablet")}
-                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    previewMode === "tablet"
-                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
-                  }`}
-                  title="Tablet preview"
-                >
-                  <Tablet className="w-[14px] h-[14px]" />
-                </button>
-                <button
-                  onClick={() => setPreviewMode("mobile")}
-                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    previewMode === "mobile"
-                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
-                  }`}
-                  title="Mobile preview"
-                >
-                  <Smartphone className="w-[14px] h-[14px]" />
-                </button>
-                <button
-                  onClick={() => {
-                    setPreviewMode("resizable");
-                    if (resizableWidth === 800) {
-                      setResizableWidth(800);
-                    }
-                  }}
-                  className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${
-                    previewMode === "resizable"
-                      ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
-                      : "text-[#171717]/40 hover:text-[#2A2A2F]"
-                  }`}
-                  title="Drag-to-resize preview"
-                >
-                  <MoveHorizontal className="w-[14px] h-[14px]" />
-                </button>
-              </div>
-            </div>
-
-          </div>
-
-          {/* Canvas Main content area */}
-          <div 
-            ref={previewContainerRef}
-            className="flex-1 flex items-center justify-center overflow-hidden relative bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`preview-wrapper-${selectedTemplate}`}
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.98 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="w-full h-full flex items-center justify-center"
+            {/* Left Side: Collapse Button + Saving Indicator */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => toast.info("Upgrade to Pro to link custom domains & unlock premium features!")}
+                className="flex items-center gap-2 h-10 px-2 text-sm font-medium bg-white border border-[#E6E6E6] rounded-sm text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+                style={{ boxShadow: "0 1px 4px #fff" }}
               >
-                {editedProfile ? (
-                  <motion.div
-                    animate={{ 
-                      width: 
-                        previewMode === "desktop" ? "100%" : 
-                        previewMode === "tablet" ? 768 : 
-                        previewMode === "mobile" ? 375 : 
-                        resizableWidth 
-                    }}
-                    transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
-                    className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
-                  >
-                    {/* Browser Header Bezel */}
-                    <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
-                      {/* 3 macOS dots */}
-                      <div className="flex items-center gap-1.5 w-16">
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-[#369762]/85 hover:bg-[#369762] transition-colors" />
-                      </div>
-                      
-                      {/* Address Bar */}
-                      <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
-                        <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
-                        <span className="truncate text-neutral-650 font-mono">
-                          {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
-                        </span>
-                        <span className="text-neutral-300 mx-1">|</span>
-                        <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
-                          {previewMode === "desktop" ? `Desktop • ${actualWidth}px` : 
-                           previewMode === "tablet" ? `Tablet • ${actualWidth}px` : 
-                           previewMode === "mobile" ? `Mobile • ${actualWidth}px` : 
-                           `Custom • ${actualWidth}px`}
-                        </span>
-                      </div>
+                <svg className="w-[20px] h-[20px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+              </button>
 
-                      {/* Right side status indicator */}
-                      <div className="w-16 flex justify-end">
-                        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
-                          {previewMode}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Iframe Viewport Container */}
-                    <div className="flex-1 w-full bg-white relative overflow-hidden">
-                      {/* Drag Overlay to prevent iframe event interception */}
-                      {isDragging && (
-                        <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
-                      )}
-                      
-                      <ProfilePreview
-                        profile={editedProfile}
-                        template={selectedTemplate}
-                        fluid={true}
-                        onFieldClick={handleFieldClick}
-                        isSelectionMode={isSelectionMode}
-                        selectedField={selectedField}
-                        selectedIndex={selectedIndex}
-                        currentStep={currentStep}
-                      />
-                    </div>
-
-                    {/* Left Resizing Drag Handle */}
-                    <div
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setIsDragging(true);
-                      }}
-                      className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                      title="Drag to resize"
+              {/* Saved Indicators */}
+              <div className="flex items-center gap-2 text-xs font-semibold text-gray-500">
+                {isDirty ? (
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                    <span>Unsaved edits</span>
+                    <button
+                      onClick={resetEdits}
+                      className="underline text-[11px] text-gray-400 hover:text-black transition-colors ml-1"
                     >
-                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                      </div>
-                    </div>
-
-                    {/* Right Resizing Drag Handle */}
-                    <div
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        setIsDragging(true);
-                      }}
-                      className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
-                      title="Drag to resize"
-                    >
-                      <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                        <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
-                      </div>
-                    </div>
-                  </motion.div>
+                      Reset
+                    </button>
+                  </>
                 ) : (
-                  <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
+                  <>
+                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span>All changes saved</span>
+                  </>
                 )}
-              </motion.div>
+              </div>
+            </div>
 
-            </AnimatePresence>
+            {/* Right Side: Share + Publish + Avatar menu */}
+            <div className="flex items-center gap-2 relative">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`https://linkedpage.io/${editedProfile?.name.toLowerCase().replace(/\s+/g, "-") ?? "profile"}`);
+                  toast.success("Share link copied to clipboard!");
+                }}
+                className="h-8 px-4 text-sm font-medium bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-colors shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+              >
+                Share
+              </button>
+              <button
+                id="onboarding-publish-btn"
+                onClick={handlePublish}
+                disabled={publishing}
+                className="h-8 px-5 text-sm font-medium bg-[#3b82f6] text-white rounded-lg hover:bg-[#2563eb] transition-colors active:scale-[0.97] flex items-center gap-1.5 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)]"
+              >
+                {publishing && <span className="w-3 h-3 rounded-lg border-2 border-white border-t-transparent animate-spin" />}
+                Publish
+              </button>
+
+              {/* Profile Avatar Button */}
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] hover:scale-105 active:scale-95 transition-transform ml-1"
+              >
+                <img src={editedProfile?.avatarUrl ?? "https://i.pravatar.cc/80?img=47"} alt="Avatar" className="w-full h-full object-cover" />
+              </button>
+
+              {/* Profile User Menu Dropdown */}
+              <AnimatePresence>
+                {isUserMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95, y: -8 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95, y: -8 }}
+                    transition={{ duration: 0.15, ease: "easeOut" }}
+                    className="absolute right-0 top-10 z-50"
+                  >
+                    <UserMenu
+                      name={userName}
+                      email={userEmail}
+                      onClose={() => setIsUserMenuOpen(false)}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
           </div>
 
-        </div>
+          {/* Elevated Canvas Card Frame */}
+          <div className="relative flex-1 bg-white/75 backdrop-blur-xl rounded-[14px] flex flex-col overflow-hidden shadow-[0_4px_24px_#ffff,0_0_0_1px_rgba(255,255,255,0.6)_inset]">
+
+            {/* Canvas Toolbar */}
+            <div className="relative z-30 flex items-center gap-3 w-full h-[54px] border-b border-white/30 shrink-0 bg-white/50 backdrop-blur-md px-4">
+
+              {/* Left: Customize + Page switcher */}
+              <div className="flex items-center gap-2">
+                <div className="relative group">
+                  <button
+                    onClick={() => {
+                      if (isSelectionMode) {
+                        setIsSelectionMode(false);
+                        setSelectedField(null);
+                        setSelectedIndex(undefined);
+                      } else {
+                        setIsSelectionMode(true);
+                        setActiveNav(1); // Make sure Design tab is active
+                        setSelectedField(null);
+                        setSelectedIndex(undefined);
+                      }
+                    }}
+                    className={`flex items-center gap-2 h-8 px-3 text-sm font-medium rounded-lg transition-colors border ${isSelectionMode
+                        ? "bg-[#3B82F6] border-[#3B82F6] text-white hover:bg-[#2563EB]"
+                        : "bg-[#F7F7F7] border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F0F0F0]"
+                      }`}
+                  >
+                    <svg className="w-[14px] h-[14px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24">
+                      <path d="M14 4.1 12 6" /><path d="m5.1 8-2.9-.8" /><path d="m6 12-1.9 2" />
+                      <path d="M7.2 2.2 8 5.1" />
+                      <path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z" />
+                    </svg>
+                    {isSelectionMode ? "Editing Canvas" : "Customize"}
+                  </button>
+                </div>
+
+                <div className="relative group">
+                  <button className="flex items-center gap-2 h-8 px-3 text-sm font-medium bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F0F0F0] transition-colors">
+                    <span className="text-sm leading-tight">Home</span>
+                    <svg className="w-3.5 h-3.5 text-[#171717]/50" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              {/* Center: Subdomain Address Status */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-3 px-4 h-9 bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg">
+                  <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
+                    <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
+                    <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
+                      {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                    </span>
+                    {checkingSubdomain ? (
+                      <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
+                    ) : isSubdomainAvailable === true ? (
+                      <span className="hidden lg:inline text-[#d4ff66] font-semibold text-xs">available!</span>
+                    ) : isSubdomainAvailable === false ? (
+                      <span className="hidden lg:inline text-[#E45A5A] font-semibold text-xs">taken!</span>
+                    ) : null}
+                  </span>
+                </div>
+              </div>
+
+              {/* Right: Device scale switches */}
+              <div className="flex items-center gap-1.5">
+                {/* Undo/Redo/History Placeholders */}
+                <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                  <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M9 14 4 9l5-5" /><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+                  </svg>
+                </button>
+                <button disabled className="w-8 h-8 flex items-center justify-center rounded-lg text-[#171717]/30 cursor-not-allowed">
+                  <svg className="w-[15px] h-[15px]" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="m15 14 5-5-5-5" /><path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+                  </svg>
+                </button>
+
+                <div className="w-px h-4 bg-[#E6E6E6] mx-0.5" />
+
+                {/* Responsive Toggles */}
+                <div className="flex items-center bg-[#F7F7F7] border border-[#E6E6E6] rounded-lg overflow-hidden p-0.5 gap-0.5 select-none">
+                  <button
+                    onClick={() => setPreviewMode("desktop")}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "desktop"
+                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      }`}
+                    title="Desktop preview"
+                  >
+                    <Monitor className="w-[14px] h-[14px]" />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode("tablet")}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "tablet"
+                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      }`}
+                    title="Tablet preview"
+                  >
+                    <Tablet className="w-[14px] h-[14px]" />
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode("mobile")}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "mobile"
+                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      }`}
+                    title="Mobile preview"
+                  >
+                    <Smartphone className="w-[14px] h-[14px]" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setPreviewMode("resizable");
+                      if (resizableWidth === 800) {
+                        setResizableWidth(800);
+                      }
+                    }}
+                    className={`w-8 h-8 flex items-center justify-center rounded-[6px] transition-all duration-200 ${previewMode === "resizable"
+                        ? "bg-white shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] text-[#2A2A2F]"
+                        : "text-[#171717]/40 hover:text-[#2A2A2F]"
+                      }`}
+                    title="Drag-to-resize preview"
+                  >
+                    <MoveHorizontal className="w-[14px] h-[14px]" />
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Canvas Main content area */}
+            <div
+              ref={previewContainerRef}
+              className="flex-1 flex items-center justify-center overflow-hidden relative bg-[#F5F5F7] bg-[radial-gradient(#E2E2E9_1.2px,transparent_1.2px)] [background-size:24px_24px] p-6"
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`preview-wrapper-${selectedTemplate}`}
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                  className="w-full h-full flex items-center justify-center"
+                >
+                  {editedProfile ? (
+                    <motion.div
+                      animate={{
+                        width:
+                          previewMode === "desktop" ? "100%" :
+                            previewMode === "tablet" ? 768 :
+                              previewMode === "mobile" ? 375 :
+                                resizableWidth
+                      }}
+                      transition={isDragging ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 30 }}
+                      className="h-full max-w-full flex flex-col bg-white rounded-xl border border-neutral-200 shadow-[0_20px_50px_rgba(0,0,0,0.06)] overflow-hidden relative group/frame"
+                    >
+                      {/* Browser Header Bezel */}
+                      <div className="h-11 shrink-0 bg-neutral-50 border-b border-neutral-200/80 px-4 flex items-center justify-between select-none">
+                        {/* 3 macOS dots */}
+                        <div className="flex items-center gap-1.5 w-16">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#E45A5A]/85 hover:bg-[#E45A5A] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]/85 hover:bg-[#FFBD2E] transition-colors" />
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#d4ff66]/85 hover:bg-[#d4ff66] transition-colors" />
+                        </div>
+
+                        {/* Address Bar */}
+                        <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
+                          <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
+                          <span className="truncate text-neutral-650 font-mono">
+                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                          </span>
+                          <span className="text-neutral-300 mx-1">|</span>
+                          <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
+                            {previewMode === "desktop" ? `Desktop • ${actualWidth}px` :
+                              previewMode === "tablet" ? `Tablet • ${actualWidth}px` :
+                                previewMode === "mobile" ? `Mobile • ${actualWidth}px` :
+                                  `Custom • ${actualWidth}px`}
+                          </span>
+                        </div>
+
+                        {/* Right side status indicator */}
+                        <div className="w-16 flex justify-end">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-wider bg-neutral-200/50 px-1.5 py-0.5 rounded">
+                            {previewMode}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Iframe Viewport Container */}
+                      <div className="flex-1 w-full bg-white relative overflow-hidden">
+                        {/* Drag Overlay to prevent iframe event interception */}
+                        {isDragging && (
+                          <div className="absolute inset-0 bg-transparent z-50 cursor-ew-resize" />
+                        )}
+
+                        <ProfilePreview
+                          profile={editedProfile}
+                          template={selectedTemplate}
+                          fluid={true}
+                          onFieldClick={handleFieldClick}
+                          isSelectionMode={isSelectionMode}
+                          selectedField={selectedField}
+                          selectedIndex={selectedIndex}
+                          currentStep={currentStep}
+                        />
+                      </div>
+
+                      {/* Left Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute left-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+
+                      {/* Right Resizing Drag Handle */}
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          setIsDragging(true);
+                        }}
+                        className="absolute right-0 top-11 bottom-0 w-3 cursor-ew-resize flex items-center justify-center z-[60] bg-transparent group/handle transition-all"
+                        title="Drag to resize"
+                      >
+                        <div className="w-1 h-12 rounded-full bg-neutral-300 hover:bg-neutral-400 group-hover/handle:scale-y-110 group-hover/handle:bg-neutral-400/80 transition-all flex flex-col justify-between py-1 shadow-sm">
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                          <span className="w-0.5 h-0.5 rounded-full bg-white mx-auto" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <div className="text-neutral-400 text-xs font-mono">Loading preview data...</div>
+                  )}
+                </motion.div>
+
+              </AnimatePresence>
+            </div>
+
+          </div>
         </main>
       )}
 
       {/* ── Two-Column Project Modal ── */}
       {isProjectModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div 
+          <div
             className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1681,7 +1726,7 @@ function EditorInner() {
               <h3 className="text-[15px] font-bold text-slate-800">
                 {editingProjectIndex !== null ? "Edit Portfolio Project" : "Add Portfolio Project"}
               </h3>
-              <button 
+              <button
                 onClick={() => setIsProjectModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
               >
@@ -1695,7 +1740,7 @@ function EditorInner() {
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Project Title</label>
-                  <Input 
+                  <Input
                     value={modalProjectTitle}
                     onChange={(e) => setModalProjectTitle(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1704,7 +1749,7 @@ function EditorInner() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Link / Redirect URL</label>
-                  <Input 
+                  <Input
                     value={modalProjectLink}
                     onChange={(e) => setModalProjectLink(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1713,7 +1758,7 @@ function EditorInner() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Cover Image URL</label>
-                  <Input 
+                  <Input
                     value={modalProjectImage}
                     onChange={(e) => setModalProjectImage(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1779,7 +1824,7 @@ function EditorInner() {
       {/* ── Two-Column Services Modal ── */}
       {isServicesModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div 
+          <div
             className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1788,7 +1833,7 @@ function EditorInner() {
               <h3 className="text-[15px] font-bold text-slate-800">
                 {editingServiceIndex !== null ? "Edit Offered Service" : "Add Offered Service"}
               </h3>
-              <button 
+              <button
                 onClick={() => setIsServicesModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
               >
@@ -1802,7 +1847,7 @@ function EditorInner() {
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Service Title</label>
-                  <Input 
+                  <Input
                     value={modalServiceTitle}
                     onChange={(e) => setModalServiceTitle(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1811,7 +1856,7 @@ function EditorInner() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Price</label>
-                  <Input 
+                  <Input
                     value={modalServicePrice}
                     onChange={(e) => setModalServicePrice(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1879,7 +1924,7 @@ function EditorInner() {
       {/* ── Two-Column Process Steps Modal ── */}
       {isProcessesModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div 
+          <div
             className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1888,7 +1933,7 @@ function EditorInner() {
               <h3 className="text-[15px] font-bold text-slate-800">
                 {editingProcessIndex !== null ? "Edit Process Step" : "Add Process Step"}
               </h3>
-              <button 
+              <button
                 onClick={() => setIsProcessesModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
               >
@@ -1902,7 +1947,7 @@ function EditorInner() {
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Step Tag</label>
-                  <Input 
+                  <Input
                     value={modalProcessTag}
                     onChange={(e) => setModalProcessTag(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1911,7 +1956,7 @@ function EditorInner() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Step Name</label>
-                  <Input 
+                  <Input
                     value={modalProcessTitle}
                     onChange={(e) => setModalProcessTitle(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -1975,7 +2020,7 @@ function EditorInner() {
       {/* ── Two-Column Client Testimonials Modal ── */}
       {isTestimonialsModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/40 backdrop-blur-xs animate-in fade-in duration-200">
-          <div 
+          <div
             className="w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden font-inter select-none animate-in zoom-in-95 duration-200"
             onClick={(e) => e.stopPropagation()}
           >
@@ -1984,7 +2029,7 @@ function EditorInner() {
               <h3 className="text-[15px] font-bold text-slate-800">
                 {editingTestimonialIndex !== null ? "Edit Client Review" : "Add Client Review"}
               </h3>
-              <button 
+              <button
                 onClick={() => setIsTestimonialsModalOpen(false)}
                 className="text-slate-400 hover:text-slate-600 transition-colors text-lg font-bold font-mono"
               >
@@ -1998,7 +2043,7 @@ function EditorInner() {
               <div className="space-y-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Client Name</label>
-                  <Input 
+                  <Input
                     value={modalTestimonialName}
                     onChange={(e) => setModalTestimonialName(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -2007,7 +2052,7 @@ function EditorInner() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Role / Position</label>
-                  <Input 
+                  <Input
                     value={modalTestimonialRole}
                     onChange={(e) => setModalTestimonialRole(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"
@@ -2016,7 +2061,7 @@ function EditorInner() {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider font-sans">Avatar Photo URL (Optional)</label>
-                  <Input 
+                  <Input
                     value={modalTestimonialAvatar}
                     onChange={(e) => setModalTestimonialAvatar(e.target.value)}
                     className="h-10 text-[14px] bg-slate-50 border-slate-200 focus:border-[#3B82F6] focus:bg-white rounded-lg text-slate-800"

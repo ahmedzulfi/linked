@@ -298,8 +298,8 @@ export function ProjectsAnimation({
             <stop offset="100%" stop-color="#4B89FF" />
           </linearGradient>
           <linearGradient id="greenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8DFFB3" />
-            <stop offset="100%" stop-color="#369762" />
+            <stop offset="0%" stop-color="#d4ff66" />
+            <stop offset="100%" stop-color="#d4ff66" />
           </linearGradient>
           <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stop-color="#DCEAFF" />
@@ -331,7 +331,7 @@ export function ProjectsAnimation({
         {/* Controls */}
         <g>
           <circle cx="45" cy="52" r="6" fill="#E45A5A" opacity="0.8" />
-          <circle cx="61" cy="52" r="6" fill="#BFE7A9" opacity="0.8" />
+          <circle cx="61" cy="52" r="6" fill="#d4ff66" opacity="0.8" />
           <circle cx="77" cy="52" r="6" fill="#8DB8FF" opacity="0.8" />
 
           <rect x="110" y="40" width="180" height="24" rx="12" fill="#F3F3F3" />
@@ -555,8 +555,8 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
             <stop offset="100%" stop-color="#4B89FF" />
           </linearGradient>
           <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#8DFFB3" />
-            <stop offset="100%" stop-color="#369762" />
+            <stop offset="0%" stop-color="#d4ff66" />
+            <stop offset="100%" stop-color="#d4ff66" />
           </linearGradient>
         </defs>
 
@@ -584,16 +584,16 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
         />
         <path
           d="M 200 200 Q 270 260, 310 292"
-          stroke="#BFE7A9"
+          stroke="#d4ff66"
           strokeWidth="3"
           className="pathway"
           strokeLinecap="round"
         />
 
         <circle cx="70" cy="88" r="4" fill="#8DB8FF" />
-        <circle cx="310" cy="98" r="4" fill="#8DFFB3" />
+        <circle cx="310" cy="98" r="4" fill="#d4ff66" />
         <circle cx="80" cy="302" r="4" fill="#8DB8FF" />
-        <circle cx="310" cy="292" r="4" fill="#BFE7A9" />
+        <circle cx="310" cy="292" r="4" fill="#d4ff66" />
 
         {/* Center Orb */}
         <g className="center-orb">
@@ -656,7 +656,7 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
             stroke="#E6E6E6"
             strokeWidth="1.5"
           />
-          <circle cx="-50" cy="0" r="6" fill="#8DFFB3" />
+          <circle cx="-50" cy="0" r="6" fill="#d4ff66" />
           <text
             x="-36"
             y="4"
@@ -708,7 +708,7 @@ export function InterestsAnimation({ interests }: { interests?: string }) {
             stroke="#E6E6E6"
             strokeWidth="1.5"
           />
-          <circle cx="-50" cy="0" r="6" fill="#BFE7A9" />
+          <circle cx="-50" cy="0" r="6" fill="#d4ff66" />
           <text
             x="-36"
             y="4"
@@ -945,14 +945,14 @@ export function SkillsAnimation({ skills }: { skills?: { name: string }[] }) {
             stroke="#E6E6E6"
             strokeWidth="1.5"
           />
-          <circle cx="130" cy="255" r="18" fill="#8DFFB3" opacity="0.1" />
+          <circle cx="130" cy="255" r="18" fill="#d4ff66" opacity="0.1" />
           <path
             d="M 120 255 Q 130 240, 140 255 Q 130 270, 120 255 Z"
-            stroke="#369762"
+            stroke="#d4ff66"
             strokeWidth="2"
             fill="none"
           />
-          <circle cx="130" cy="255" r="4" fill="#369762" />
+          <circle cx="130" cy="255" r="4" fill="#d4ff66" />
 
           <text
             x="130"
@@ -1223,7 +1223,7 @@ export function ExperienceAnimation({
         <g className="anim-node-exp2">
           <path
             d="M 200 290 Q 250 290, 290 305"
-            stroke="#8DFFB3"
+            stroke="#d4ff66"
             strokeWidth="3.5"
             strokeLinecap="round"
           />
@@ -1232,7 +1232,7 @@ export function ExperienceAnimation({
             cy="290"
             r="8"
             fill="white"
-            stroke="#8DFFB3"
+            stroke="#d4ff66"
             strokeWidth="3"
           />
         </g>
@@ -1278,7 +1278,7 @@ export function ExperienceAnimation({
           <text
             x="12"
             y="66"
-            fill="#369762"
+            fill="#d4ff66"
             fontSize="9"
             fontWeight="900"
             fontFamily="sans-serif"
@@ -1386,10 +1386,10 @@ export function GeneratingAnimation() {
             strokeWidth="2"
             strokeDasharray="8 16"
           />
-          <circle cx="200" cy="70" r="5" fill="#8DFFB3" />
+          <circle cx="200" cy="70" r="5" fill="#d4ff66" />
           <circle cx="200" cy="330" r="5" fill="#8DB8FF" />
-          <circle cx="70" cy="200" r="5" fill="#BFE7A9" />
-          <circle cx="330" cy="200" r="5" fill="#8DFFB3" />
+          <circle cx="70" cy="200" r="5" fill="#d4ff66" />
+          <circle cx="330" cy="200" r="5" fill="#d4ff66" />
         </g>
 
         <g className="spin-mesh-inner">
@@ -1428,7 +1428,7 @@ export function GeneratingAnimation() {
           cx="200"
           cy="200"
           r="65"
-          stroke="#8DFFB3"
+          stroke="#d4ff66"
           strokeWidth="3.5"
           opacity="0.6"
           className="breath-mesh"

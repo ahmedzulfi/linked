@@ -59,7 +59,7 @@ async function scrapeLinkedInProfileWithFallback(
         location: scrapyData.location || "San Francisco, CA",
         avatarUrl:
           scrapyData.avatarUrl ||
-          `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
+          `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(scrapyData.name || "John Doe")}&backgroundColor=8db8ff,d4ff66,2a2a2f`,
         experience:
           scrapyData.experience && scrapyData.experience.length > 0
             ? scrapyData.experience
@@ -157,7 +157,7 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
         (el) => (el as HTMLImageElement).src,
       )
       .catch(() => {
-        return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=8db8ff,8dffb3,2a2a2f`;
+        return `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(name)}&backgroundColor=8db8ff,d4ff66,2a2a2f`;
       });
 
     // Parse experience

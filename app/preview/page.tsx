@@ -112,7 +112,7 @@ function PublishPanel({
               availability...
             </span>
           ) : isAvailable ? (
-            <p className="text-xs text-[#369762] flex items-center gap-1">
+            <p className="text-xs text-[#d4ff66] flex items-center gap-1">
               <Check className="w-4 h-4" />
               linkedpage.io/{slug} is available!
             </p>
@@ -161,7 +161,7 @@ function PublishedPanel({ url, slug }: { url: string; slug: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2">
-        <div className="w-5 h-5 rounded-lg bg-[#8DFFB3] flex items-center justify-center">
+        <div className="w-5 h-5 rounded-lg bg-[#d4ff66] flex items-center justify-center">
           <Check className="w-5 h-5 text-[#1a5c3a]" strokeWidth={2.5} />
         </div>
         <h3 className="text-sm font-medium text-black">Your page is live!</h3>

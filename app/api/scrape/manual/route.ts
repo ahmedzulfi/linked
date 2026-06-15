@@ -170,7 +170,7 @@ export async function POST(request: Request) {
       headline,
       summary,
       location,
-      avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(fullName)}&backgroundColor=8db8ff,8dffb3,2a2a2f`,
+      avatarUrl: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(fullName)}&backgroundColor=8db8ff,d4ff66,2a2a2f`,
       experience,
       education: education.length > 0 ? education : MOCK_PROFILE.education,
       skills: skills.length > 0 ? skills : MOCK_PROFILE.skills,
