@@ -197,7 +197,7 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
 - **Conversational Builder Workspace:**
   - **Centered Chat Layout:** Center-aligned ChatGPT-style conversational pane with a bottom input composer and auto-scroll behavior. The live browser preview is hidden by default.
-  - **Start Profile Header Card:** Renders a beautiful Instagram-style card in the brand's signature sand-beige style (`bg-[#FAF8F5]`, `border-[#EAE6DF]`, `rounded-[24px]`) at the very top of the scroll container to introduce the brand's circular avatar, name/role headline, and account handle, with spacing (`mb-8`) to position the initial chat bubble further down.
+  - **Start Agent Header:** Renders a clean logo image (`/logo.png`) and title heading ("About Linked") at the top of the scroll container, with no background, border, shadow, profile CTAs, or handle details, offset with margin spacing (`mb-8`) to position the initial greeting bubble downwards.
   - **Live Preview Toggle:** Header button to toggle between full-width chat and side-by-side split screen workspace with the resizable iframe simulator.
   - **Visual Milestone Forms:** Renders interactive inline triggers below bubbles when the AI parses milestones:
     - **Projects Milestone (`[MILESTONE:PROJECTS]`):** Show inline buttons to open the Projects Modal and manage portfolio grid items.

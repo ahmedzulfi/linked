@@ -1057,42 +1057,21 @@ function EditorInner() {
           <div className="flex-1 overflow-y-auto px-6 py-4 font-sans" style={{ scrollbarWidth: "none" }}>
             <div className="space-y-6 flex flex-col w-full py-4">
               {/* Profile Card Header */}
-              <div className="bg-[#FAF8F5] rounded-[24px] p-8 pb-10 text-center flex flex-col items-center justify-center relative shadow-[0_8px_24px_-10px_rgba(0,0,0,0.06)] mb-8 select-none border border-[#EAE6DF] animate-in fade-in duration-300">
-                {/* Profile Circle Logo */}
-                <div className="w-24 h-24 rounded-full overflow-hidden bg-[#EAE6DF] flex items-center justify-center border-4 border-white shadow-md transition-transform duration-300 hover:scale-105">
-                  {editedProfile?.avatarUrl ? (
-                    <img 
-                      src={editedProfile.avatarUrl} 
-                      alt="Profile Avatar" 
-                      className="w-full h-full object-cover" 
-                    />
-                  ) : (
-                    <div className="text-[#2A2A2F] text-xl font-bold font-sans">
-                      {editedProfile?.name
-                        ? editedProfile.name.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase()
-                        : "PF"}
-                    </div>
-                  )}
-                </div>
+              <div className="text-center flex flex-col items-center justify-center py-6 select-none animate-in fade-in duration-300 mb-8">
+                {/* Logo Image */}
+                <img 
+                  src="/logo.png" 
+                  alt="Linked Logo" 
+                  className="h-10 w-auto object-contain mb-4" 
+                />
 
-                {/* Title (Name | Headline) */}
-                <h2 className="text-[#2A2A2F] text-[18px] md:text-[20px] font-bold font-sans tracking-tight mt-5 leading-snug">
-                  {editedProfile?.name || "Pro Funk Media"}
-                  {editedProfile?.headline ? ` | ${editedProfile.headline}` : " | Production House | Pune"}
+                {/* Title */}
+                <h2 className="text-[#2A2A2F] text-[20px] font-bold font-sans tracking-tight">
+                  About Linked
                 </h2>
-
-                {/* Subtitle (subdomain · Instagram) */}
-                <p className="text-[12.5px] text-slate-500 mt-2 font-normal font-sans tracking-wide">
-                  {subdomain || editedProfile?.name?.toLowerCase().replace(/\s+/g, "") || "profunkmedia"} · Instagram
+                <p className="text-slate-500 text-[14px] leading-[22px] max-w-lg mx-auto mt-3 font-normal font-sans">
+                  Linked is your intelligent workspace for building premium portfolios. Chat with the AI builder to construct your biography, list services, showcase projects, and compile a high-converting web profile. Use the quick reply suggestions to answer, and toggle the preview on the top-right to watch your page build in real-time.
                 </p>
-
-                {/* View Profile Button */}
-                <button
-                  onClick={() => setIsPreviewVisible(true)}
-                  className="mt-6 h-9 px-6 rounded-full bg-[#2A2A2F] hover:bg-neutral-800 border-none text-white text-[12.5px] font-semibold transition-all duration-150 cursor-pointer active:scale-[0.97] flex items-center justify-center gap-1.5 shadow-xs"
-                >
-                  View profile
-                </button>
               </div>
 
               {/* Conversational timeline rendering */}
