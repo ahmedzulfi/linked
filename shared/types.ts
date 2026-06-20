@@ -54,6 +54,7 @@ export interface ProfileData {
   interests?: string;
   // raw LinkedIn URL that was scraped
   linkedinUrl: string;
+  importedFromZip?: boolean;
   // AI-generated dynamic blocks
   blocks?: CustomBlock[];
 

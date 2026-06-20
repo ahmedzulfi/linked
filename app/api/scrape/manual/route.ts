@@ -179,6 +179,7 @@ export async function POST(request: Request) {
         { label: "Website", url: "#", icon: "website" },
       ],
       linkedinUrl: "https://linkedin.com",
+      importedFromZip: true,
     };
 
     return NextResponse.json({

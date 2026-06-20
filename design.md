@@ -209,6 +209,10 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - **Process Steps Modal:** Left column captures step tag (e.g. /01) and step name; right column hosts description textarea.
   - **Client Testimonials Modal:** Left column captures client name, role/position, and avatar URL; right column hosts the client review quote textarea.
 - **Data Persistence:** Syncs modifications to the database in real-time, stores the last active website ID in `sessionStorage` (key: `linkedpage_last_website_id`), caches the current view step in `sessionStorage` (key: `webild_onboarding_step`), and restores chat history immediately on mount from `/api/chat`.
+- **LinkedIn ZIP Import Integration**:
+  - **Import Processing**: Uploading a LinkedIn ZIP archive parses profile data in the backend (retrieving name, headline, location, summary, work positions, skills, and education) and flags the profile as `importedFromZip: true`.
+  - **Wizard Bypass**: On page load, if `importedFromZip` is true, the editor bypasses the static 11-step form wizard, immediately initializing the editor view on Step 12 (free-form AI chat editor).
+  - **Dynamic AI Milestone Checking**: In Phase 1 onboarding, the AI parses the current populated Profile Data state and skips questions for milestones that are already satisfied (e.g. name, work experience, education) from the ZIP. It greets the user, confirms what was successfully imported, and asks only for remaining/missing information (such as custom projects or service pricing packages).
   - **Domains Tab:** Displays the `DomainsPane` to connect custom domains and verify DNS settings.
   - **Site Settings Tab:** Displays the `SettingsPane` with fields to configure brand details, SEO tags, and delete websites.
 - **Top Navbar:**

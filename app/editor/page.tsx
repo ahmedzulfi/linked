@@ -413,20 +413,30 @@ function EditorInner() {
           setCustomMessages(formatted);
         } else {
           // Empty history, set welcome message
-          setCustomMessages([
-            {
-              id: "welcome",
-              role: "assistant",
-              content: "Hi! I'm Webild, your AI website builder companion. I will guide you step-by-step to create your premium portfolio page. Let's start with the basics—what's your name, and what is your professional role?"
-            }
-          ]);
+          if (editedProfile?.importedFromZip) {
+            setCustomMessages([
+              {
+                id: "welcome",
+                role: "assistant",
+                content: `Hi ${editedProfile.name || "there"}! I've successfully imported your LinkedIn profile data. Let's finish building your premium portfolio. I have your name, headline, location, experience, and education details.\n\nTo make your page stand out, what are some key projects you'd like to feature? Tell me a bit about them, and I'll add them to your portfolio!`
+              }
+            ]);
+          } else {
+            setCustomMessages([
+              {
+                id: "welcome",
+                role: "assistant",
+                content: "Hi! I'm Webild, your AI website builder companion. I will guide you step-by-step to create your premium portfolio page. Let's start with the basics—what's your name, and what is your professional role?"
+              }
+            ]);
+          }
         }
       } catch (err) {
         console.error("Failed to load chat history:", err);
       }
     };
     fetchChatHistory();
-  }, [websiteId]);
+  }, [websiteId, editedProfile]);
 
   // Load saved onboarding step from sessionStorage or url parameters on mount
   useEffect(() => {
@@ -434,6 +444,12 @@ function EditorInner() {
       const isOnboardingFlow = searchParams.get("onboarding") === "true";
       if (!isOnboardingFlow) {
         // If not in the onboarding flow, default straight to free-form editor (Step 12)
+        setCurrentStep(12);
+        return;
+      }
+
+      if (editedProfile?.importedFromZip) {
+        // If profile was imported from a ZIP, default straight to free-form editor (Step 12)
         setCurrentStep(12);
         return;
       }
@@ -448,7 +464,7 @@ function EditorInner() {
         setCurrentStep(1);
       }
     }
-  }, [searchParams]);
+  }, [searchParams, editedProfile]);
 
   // Save currentStep to sessionStorage on changes
   useEffect(() => {
