@@ -650,15 +650,24 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   html = html.replace(/srcset="[^"]*?MlC72sVCQio6ooebpIaFFKLOVDA[^"]*?"/g, "");
   html = html.replace(/srcset="[^"]*?tWZ2VFb5FDPeKYQ9yBBM9vYwvM[^"]*?"/g, "");
   html = html.replace(/srcset="[^"]*?9AC9XJeFmKrPFObuCUzsjnfqI[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?9GBbApze5hUVXQgG9ZiXatQdLa0[^"]*?"/g, "");
+
+  const avatarPhoto = profile.avatarUrl;
+  const bannerPhoto = profile.bannerUrl || profile.avatarUrl;
+  const aboutPhoto = profile.aboutPhotoUrl || profile.bannerUrl || profile.avatarUrl;
 
   if (profile.avatarUrl) {
     html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl));
   }
-  const heroPhoto = profile.bannerUrl || profile.avatarUrl;
-  if (heroPhoto) {
-    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto));
-    html = replaceAll(html, "/templates/daniel-cross/tWZ2VFb5FDPeKYQ9yBBM9vYwvM.png", esc(heroPhoto));
-    html = replaceAll(html, "/templates/daniel-cross/9AC9XJeFmKrPFObuCUzsjnfqI.png", esc(heroPhoto));
+  if (avatarPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/9AC9XJeFmKrPFObuCUzsjnfqI.png", esc(avatarPhoto));
+  }
+  if (bannerPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(bannerPhoto));
+  }
+  if (aboutPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/tWZ2VFb5FDPeKYQ9yBBM9vYwvM.png", esc(aboutPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/9GBbApze5hUVXQgG9ZiXatQdLa0.png", esc(aboutPhoto));
   }
 
   // Replace custom section titles if provided

@@ -628,6 +628,7 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   html = html.replace(/srcset="[^"]*?MlC72sVCQio6ooebpIaFFKLOVDA[^"]*?"/g, "");
   html = html.replace(/srcset="[^"]*?tWZ2VFb5FDPeKYQ9yBBM9vYwvM[^"]*?"/g, "");
   html = html.replace(/srcset="[^"]*?9AC9XJeFmKrPFObuCUzsjnfqI[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?9GBbApze5hUVXQgG9ZiXatQdLa0[^"]*?"/g, "");
 
   // Tag container divs with data-editable-field so they are easily clicked/selected in selection mode
   html = replaceAll(html, '<div class="framer-pnceva" data-framer-name="Profile image"', '<div class="framer-pnceva" data-framer-name="Profile image" data-editable-field="avatarUrl" data-editable-type="image"');
@@ -635,10 +636,10 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Tiny fan-out heading icons:
   html = replaceAll(html, '<div class="framer-1m8xtt5" data-framer-appear-id="1m8xtt5" data-framer-name="Image 01"', '<div class="framer-1m8xtt5" data-framer-appear-id="1m8xtt5" data-framer-name="Image 01" data-editable-field="bannerUrl" data-editable-type="image"');
   html = replaceAll(html, '<div class="framer-19db7zm" data-framer-appear-id="19db7zm" data-framer-name="Image 02"', '<div class="framer-19db7zm" data-framer-appear-id="19db7zm" data-framer-name="Image 02" data-editable-field="avatarUrl" data-editable-type="image"');
-  html = replaceAll(html, '<div class="framer-yfhmy0" data-framer-appear-id="yfhmy0" data-framer-name="Image 03"', '<div class="framer-yfhmy0" data-framer-appear-id="yfhmy0" data-framer-name="Image 03" data-editable-field="bannerUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-yfhmy0" data-framer-appear-id="yfhmy0" data-framer-name="Image 03"', '<div class="framer-yfhmy0" data-framer-appear-id="yfhmy0" data-framer-name="Image 03" data-editable-field="aboutPhotoUrl" data-editable-type="image"');
   
   // Large hero image grid fans:
-  html = replaceAll(html, '<div class="framer-1u0qqnx" data-framer-name="Image 01"', '<div class="framer-1u0qqnx" data-framer-name="Image 01" data-editable-field="bannerUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-1u0qqnx" data-framer-name="Image 01"', '<div class="framer-1u0qqnx" data-framer-name="Image 01" data-editable-field="aboutPhotoUrl" data-editable-type="image"');
   html = replaceAll(html, '<div class="framer-1i9qvch" data-framer-name="Image 02"', '<div class="framer-1i9qvch" data-framer-name="Image 02" data-editable-field="avatarUrl" data-editable-type="image"');
   html = replaceAll(html, '<div class="framer-nswwcw" data-framer-name="Image 03"', '<div class="framer-nswwcw" data-framer-name="Image 03" data-editable-field="bannerUrl" data-editable-type="image"');
 
@@ -646,15 +647,23 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   html = replaceAll(html, '<div class="framer-12lay3g" data-framer-name="Signature"', '<div class="framer-12lay3g" data-framer-name="Signature" data-editable-field="signatureUrl" data-editable-type="image"');
   html = replaceAll(html, '<div class="framer-opxp2k"', '<div class="framer-opxp2k" data-editable-field="footerBannerUrl" data-editable-type="image"');
 
-  // Replace avatars and banners src
+  // Replace avatars and banners src with logical fallbacks to prevent empty images
+  const avatarPhoto = profile.avatarUrl;
+  const bannerPhoto = profile.bannerUrl || profile.avatarUrl;
+  const aboutPhoto = profile.aboutPhotoUrl || profile.bannerUrl || profile.avatarUrl;
+
   if (profile.avatarUrl) {
     html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl));
   }
-  const heroPhoto = profile.bannerUrl || profile.avatarUrl;
-  if (heroPhoto) {
-    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto));
-    html = replaceAll(html, "/templates/daniel-cross/tWZ2VFb5FDPeKYQ9yBBM9vYwvM.png", esc(heroPhoto));
-    html = replaceAll(html, "/templates/daniel-cross/9AC9XJeFmKrPFObuCUzsjnfqI.png", esc(heroPhoto));
+  if (avatarPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/9AC9XJeFmKrPFObuCUzsjnfqI.png", esc(avatarPhoto));
+  }
+  if (bannerPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(bannerPhoto));
+  }
+  if (aboutPhoto) {
+    html = replaceAll(html, "/templates/daniel-cross/tWZ2VFb5FDPeKYQ9yBBM9vYwvM.png", esc(aboutPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/9GBbApze5hUVXQgG9ZiXatQdLa0.png", esc(aboutPhoto));
   }
 
   // Replace custom section titles if provided, wrapped in spans
