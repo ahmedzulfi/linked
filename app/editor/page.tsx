@@ -28,11 +28,8 @@ import {
   FileText,
   Eye,
   EyeOff,
-  Pencil,
   Copy,
-  Share2,
   RotateCw,
-  MoreHorizontal,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import PropertiesPanel from "./components/PropertiesPanel";
@@ -1122,9 +1119,7 @@ function EditorInner() {
                       />
 
                       {/* Title */}
-                      <h2 className="text-[#2A2A2F] text-[20px] font-bold font-sans tracking-tight">
-                        About Linked
-                      </h2>
+
                       <p className="text-slate-500 text-[14px] leading-[22px] max-w-lg mx-auto mt-3 font-normal font-sans">
                         Linked is your intelligent workspace for building premium portfolios.
                       </p>
@@ -1169,25 +1164,11 @@ function EditorInner() {
                                   <Copy className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
                                 </button>
                                 <button
-                                  onClick={() => toast.info("Sharing coming soon!")}
-                                  className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
-                                  title="Share"
-                                >
-                                  <Share2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
-                                </button>
-                                <button
                                   onClick={() => regenerateLastMessage(idx)}
                                   className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
                                   title="Regenerate reply"
                                 >
                                   <RotateCw className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
-                                </button>
-                                <button
-                                  onClick={() => toast.info("Options coming soon!")}
-                                  className="p-1 rounded hover:bg-slate-100 transition-colors border-none bg-transparent cursor-pointer group flex items-center justify-center animate-in fade-in"
-                                  title="More options"
-                                >
-                                  <MoreHorizontal className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-650 transition-colors" />
                                 </button>
                               </div>
 
