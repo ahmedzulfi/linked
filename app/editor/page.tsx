@@ -173,7 +173,12 @@ const removeEmojis = (text: string) => {
 };
 
 const cleanMessageContent = (text: string) => {
-  return text.replace(/\[MILESTONE:[A-Z_]+\]/g, "").trim();
+  let cleaned = text.replace(/\[MILESTONE:[A-Z_]+\]/g, "");
+  // Strip suggested replies leakage formats
+  cleaned = cleaned.replace(/\*?\(?Suggested replies:[^\n)]+\)?\*?/gi, "");
+  cleaned = cleaned.replace(/\*Suggested replies:[^\n*]+\*/gi, "");
+  cleaned = cleaned.replace(/Suggested replies:[^\n]+/gi, "");
+  return cleaned.trim();
 };
 
 
