@@ -218,7 +218,8 @@ You have the following tools to update structured profile fields:
 
 ### 📋 INSTRUCTIONS
 1. Do NOT call profile editing tools during Phase 1. Only call profile editing tools during Phase 2 when all information has been gathered.
-2. Keep the website content premium, cohesive, and high-fidelity.`;
+2. Keep the website content premium, cohesive, and high-fidelity.
+3. CRITICAL: Do NOT list, print, or output suggested replies anywhere inside the text of your response (e.g. do not write "Suggested replies: ..." or "*(Suggested replies: ...)*"). The UI will render them automatically from your "suggest_replies" tool call. If you output suggested replies as conversational text, it will be flagged as a bug.`;
 }
 
 export async function GET(request: Request) {

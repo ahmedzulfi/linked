@@ -174,12 +174,20 @@ const removeEmojis = (text: string) => {
 
 const cleanMessageContent = (text: string) => {
   let cleaned = text.replace(/\[MILESTONE:[A-Z_]+\]/g, "");
-  // Strip suggested replies leakage formats
-  cleaned = cleaned.replace(/\*?\(?Suggested replies:[^\n)]+\)?\*?/gi, "");
-  cleaned = cleaned.replace(/\*Suggested replies:[^\n*]+\*/gi, "");
-  cleaned = cleaned.replace(/Suggested replies:[^\n]+/gi, "");
+  
+  // 1. Strip block of suggested replies starting with optional * or ( or both, and matching all the way to the closing ) or * or end of line.
+  // Match *(Suggested replies: ...) or (Suggested replies: ...)
+  cleaned = cleaned.replace(/\*?\(?Suggested replies:[^)]+\)?\*?/gi, "");
+  
+  // Match *Suggested replies:* ... or *Suggested replies:...*
+  cleaned = cleaned.replace(/\*Suggested replies:\*?[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "");
+  
+  // Match plain Suggested replies: ...
+  cleaned = cleaned.replace(/Suggested replies:[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "");
+  
   return cleaned.trim();
 };
+
 
 
 const getNotionTagClasses = (name: string) => {
