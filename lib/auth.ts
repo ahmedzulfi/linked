@@ -4,6 +4,13 @@ import { headers } from "next/headers";
 import { User, db } from "./db";
 import * as schema from "./schema";
 
+const productionUrl = process.env.BETTER_AUTH_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000");
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -12,13 +19,16 @@ export const auth = betterAuth({
   secret:
     process.env.BETTER_AUTH_SECRET ||
     "linkedpage_local_secret_key_123456_better",
-  baseURL:
-    process.env.BETTER_AUTH_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000"),
+  baseURL: productionUrl,
+  trustedOrigins: [
+    "https://fusion-starter-529.vercel.app",
+    "http://localhost:3000",
+    // Also trust any preview deployment URLs
+    ...(process.env.VERCEL_URL ? [`https://${process.env.VERCEL_URL}`] : []),
+    ...(process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? [`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`]
+      : []),
+  ],
   emailAndPassword: {
     enabled: true,
     autoSignIn: true,
