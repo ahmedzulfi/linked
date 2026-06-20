@@ -1142,8 +1142,15 @@ function EditorInner() {
                     {/* Conversational timeline rendering */}
                     {customMessages.map((msg, idx) => {
                       const cleanContent = cleanMessageContent(msg.content);
-                      const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]");
-                      const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]");
+                      const contentUpper = msg.content.toUpperCase();
+                      const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]") || 
+                        (msg.role === "assistant" && 
+                         (contentUpper.includes("PORTFOLIO PROJECTS") || contentUpper.includes("KEY PROJECTS") || contentUpper.includes("PROJECTS YOU'D LIKE TO FEATURE")) &&
+                         !contentUpper.includes("GATHERED ALL YOUR DETAILS"));
+                      const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]") || 
+                        (msg.role === "assistant" && 
+                         (contentUpper.includes("OFFERED SERVICES") || contentUpper.includes("WHAT SERVICES OR PACKAGES") || contentUpper.includes("WHAT SERVICES DO YOU OFFER") || contentUpper.includes("MILESTONE 6: OFFERED SERVICES")) &&
+                         !contentUpper.includes("GATHERED ALL YOUR DETAILS"));
 
                       return (
                         <div key={msg.id} className="w-full flex flex-col gap-2.5">
