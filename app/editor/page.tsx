@@ -113,12 +113,7 @@ const navItems: NavItem[] = [
   },
 ];
 
-const SUGGESTIONS = [
-  "Start",
-  "Make my headline more impactful",
-  "Shorten my summary",
-  "Switch to Julian Mercer style",
-];
+// Suggestions removed
 
 const DEFAULT_SERVICES = [
   { title: "Web design", price: "$1200", description: "I create visually appealing, responsive websites with clean layouts, ensuring engaging user experiences and professional digital presence." },
@@ -294,12 +289,12 @@ function EditorInner() {
       {
         id: "welcome",
         role: "assistant",
-        content: "Welcome to Webild! I've loaded your LinkedIn data. Let's customize your profile step-by-step. Press 'Start' or type 'start' below to begin!"
+        content: "Welcome to Webild! I've loaded your LinkedIn data. Let's customize your profile step-by-step. Type 'start' below to begin!"
       }
     ];
   });
   const [chatInput, setChatInput] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>(SUGGESTIONS);
+  // Suggestions state removed
   const [isThinking, setIsThinking] = useState(false);
 
   const [isPreviewVisible, setIsPreviewVisible] = useState<boolean>(false);
@@ -695,7 +690,6 @@ function EditorInner() {
     if (!lastUserMessage) return;
 
     setIsThinking(true);
-    setSuggestions([]);
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
@@ -714,12 +708,6 @@ function EditorInner() {
         }
         return copy;
       });
-
-      if (data.suggestions && data.suggestions.length > 0) {
-        setSuggestions(data.suggestions);
-      } else {
-        setSuggestions(SUGGESTIONS);
-      }
 
       if (data.template) {
         selectTemplate(data.template);
@@ -742,7 +730,6 @@ function EditorInner() {
     const msg = text ?? chatInput.trim();
     if (!msg) return;
     if (!text) setChatInput("");
-    setSuggestions([]); // clear suggestions while thinking
 
     // Append user message bubble to timeline
     const userMsg = { id: Date.now().toString(), role: "user" as const, content: msg };
@@ -773,12 +760,6 @@ function EditorInner() {
         ...prev,
         { id: (Date.now() + 2).toString(), role: "assistant" as const, content: data.reply }
       ]);
-
-      if (data.suggestions && data.suggestions.length > 0) {
-        setSuggestions(data.suggestions);
-      } else {
-        setSuggestions(SUGGESTIONS);
-      }
 
       if (data.template) {
         selectTemplate(data.template);
@@ -1332,17 +1313,7 @@ function EditorInner() {
                 {/* Bottom input composer area */}
                 <div className="p-4 shrink-0 bg-white flex flex-col border-t border-neutral-100">
                   <div className="w-full flex flex-col gap-3">
-                    <div className="flex gap-2 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
-                      {suggestions.map((s) => (
-                        <button
-                          key={s}
-                          onClick={() => sendChatMessage(s)}
-                          className="flex-shrink-0 h-9 px-4 bg-white hover:bg-neutral-50 border border-neutral-200/60 rounded-full text-[13px] font-medium text-slate-800 transition-[background-color,transform] duration-150 whitespace-nowrap shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] cursor-pointer active:scale-[0.95]"
-                        >
-                          {s}
-                        </button>
-                      ))}
-                    </div>
+                    {/* Suggestions removed */}
 
                     <div className="bg-white rounded-[20px] p-2.5 flex flex-col gap-2 border border-neutral-200/80 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] transition-opacity duration-300 opacity-100">
                       <textarea

@@ -195,7 +195,7 @@ You must strictly follow a two-phase onboarding workflow:
 3. **Trigger Milestone UI Widgets**: Help the user by triggering specialized form modals or upload buttons in the chat when they are needed. You must append one of these tags at the very end of your response to enable the buttons on the front-end:
    - When suggesting the user add projects or discussing projects: append '[MILESTONE:PROJECTS]'.
    - When suggesting the user add services or discussing services: append '[MILESTONE:SERVICES]'.
-4. **Dynamic Suggestions**: Whenever you ask the user a question (e.g. at each Phase 1 milestone or during subsequent follow-up questions), you MUST call the 'suggest_replies' tool to suggest 3-4 replies that the user can choose from. The suggestions should be short, concise, and representative of what a user would say (e.g., if you ask for location, suggest things like "San Francisco, CA" or "Remote / No location"). Do NOT use static options. Do NOT list or write these suggestions inside your text response itself. They will be rendered as separate quick-reply button pills automatically. Keep your text reply clean and focused only on the conversational greeting or question.
+4. **No Suggestions**: Do NOT offer or suggest replies for the user. Let the user type their custom answers naturally.
 
 Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
@@ -214,7 +214,6 @@ You have the following tools to update structured profile fields:
 - To replace skills, use 'update_skills'.
 - To replace links, use 'update_links'.
 - To switch the template style, use 'switch_template' (available templates: "daniel-cross", "julian-mercer", "link-hunt", "biobricks").
-- To suggest dynamic quick-reply answers for the user to choose, use 'suggest_replies'.
 
 ### 📋 INSTRUCTIONS
 1. Do NOT call profile editing tools during Phase 1. Only call profile editing tools during Phase 2 when all information has been gathered.
@@ -325,7 +324,6 @@ export async function POST(request: Request) {
     // Local accumulation of updates performed by tools
     const profileUpdates: Partial<ProfileData> = {};
     let templateUpdate: TemplateId | null = null;
-    let chatSuggestions: string[] = [];
 
     const systemPromptContent = buildSystemPrompt(
       website.profile as ProfileData,
@@ -901,21 +899,6 @@ export async function POST(request: Request) {
             }
           },
         }),
-        suggest_replies: tool({
-          description:
-            "Suggests 3-4 contextually relevant, short, conversational reply options for the user to choose from. ALWAYS call this tool when asking a question to guide the user's answer.",
-          inputSchema: z.object({
-            replies: z
-              .array(z.string())
-              .min(2)
-              .max(4)
-              .describe("3-4 recommended short replies (typically 1-5 words each)"),
-          }),
-          execute: async ({ replies }) => {
-            chatSuggestions = replies;
-            return { success: true };
-          },
-        }),
       },
     });
 
@@ -929,7 +912,7 @@ export async function POST(request: Request) {
       reply: replyText,
       profileUpdates,
       template: templateUpdate,
-      suggestions: chatSuggestions,
+      suggestions: [],
     });
   } catch (e: any) {
     console.error("[Chat API] Error processing request:", e);

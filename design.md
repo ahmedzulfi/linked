@@ -196,8 +196,8 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
   - Hosts navigation items: Home (dashboard redirect), Design (active workspace), Domains (custom domain panel), and Site Settings (site details).
   - Houses the pricing promo card and shortcut links for help, settings, and adding new websites.
 - **Conversational Builder Workspace:**
-  - **Centered Chat Layout:** Center-aligned ChatGPT-style conversational pane with a bottom input composer and auto-scroll behavior. The live browser preview is hidden by default.
-  - **Assistant Bubble Content Cleaning:** Strips out all raw suggested replies leakage strings (e.g. `*(Suggested replies: ...)*`, `*Suggested replies:...*`, `Suggested replies: ...`) and custom milestone markers before rendering bubbles to ensure clean conversational text.
+  - **Centered Chat Layout:** Center-aligned ChatGPT-style conversational pane with a bottom input composer and auto-scroll behavior. The live browser preview is hidden by default. The input composer does not display any suggested replies or pills, keeping the input flow natural and text-driven.
+  - **Assistant Bubble Content Cleaning:** Defensive client-side filters strip out any legacy suggested replies format blocks (e.g. `*(Suggested replies: ...)*`, `*Suggested replies:...*`, `Suggested replies: ...`) and custom milestone markers before rendering bubbles to ensure clean conversational text.
   - **Start Agent Header:** Renders a clean logo image (`/logo.png`) and title heading ("About Linked") at the top of the scroll container, with no background, border, shadow, profile CTAs, or handle details, offset with margin spacing (`mb-8`) to position the initial greeting bubble downwards.
   - **Live Preview Toggle:** Header button to toggle between full-width chat and side-by-side split screen workspace with the resizable iframe simulator.
   - **Visual Milestone Forms:** Renders interactive inline triggers below bubbles when the AI parses milestones:
