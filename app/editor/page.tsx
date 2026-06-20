@@ -418,7 +418,7 @@ function EditorInner() {
               {
                 id: "welcome",
                 role: "assistant",
-                content: `Hi ${editedProfile.name || "there"}! I've successfully imported your LinkedIn profile data. Let's finish building your premium portfolio. I have your name, headline, location, experience, and education details.\n\nTo make your page stand out, what are some key projects you'd like to feature? Tell me a bit about them, and I'll add them to your portfolio!`
+                content: `Hi ${editedProfile.name || "there"}! I've successfully imported your LinkedIn profile data. Let's finish building your premium portfolio. I have your name, headline, location, experience, and education details.\n\nTo make your page stand out, what are some key projects you'd like to feature? Tell me a bit about them, and I'll add them to your portfolio! [MILESTONE:PROJECTS]`
               }
             ]);
           } else {
