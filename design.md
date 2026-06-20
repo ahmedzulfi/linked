@@ -227,7 +227,9 @@ The editor `/editor` displays the full dashboard layout shell integrated with th
 
 ### Template Style System (4 Premium Framer-Inspired Layouts)
 The templates utilize generic system font stacks (sans-serif, serif, mono) for simplicity and fast loads:
-- **Daniel Cross:** stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
+- **Daniel Cross**: stark, high-contrast, editorial style. Uses bold display headlines (`font-sans font-black uppercase`), thick black dividers, border-2 outlines, and a clean white background.
+  - **Sidebar Removal & Centering**: The profile/navigation sidebar has been completely removed from the layout. The main content column is styled to span full width and center itself on all device sizes (desktop, tablet, mobile), creating a clean, modern, column-based editorial flow.
+  - **Conditional Section Removal**: To maintain visual consistency, sections for projects, services, testimonials, and the footer contact details block are automatically stripped from the HTML DOM tree if the profile has no associated data for those elements.
   - **Mobile & Tablet Responsiveness Overrides**: To enable complete responsive support on smaller viewports (max-width: 1199.98px) without altering the desktop layout, the system injects a custom style override block:
     - **Fluid Viewport Containers**: Converts absolute width layouts (e.g. `.framer-nqzx6h`'s default `1200px` / `810px` / `390px`, `.framer-ha6joy`'s `950px` / `390px`) to `100%` width with fluid spacing boundaries (`max-width: 100vw !important`).
     - **Breakpoint Hiding Helpers**: Defines `.hidden-18pvjnd` (hides elements when screen width <= 809.98px) and `.hidden-1bkts62` (hides elements when screen width is between 810px and 1199.98px) as media-query specific `display: none !important` rules to override Framer's absolute breakpoint containers.

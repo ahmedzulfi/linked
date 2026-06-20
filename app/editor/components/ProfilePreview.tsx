@@ -70,6 +70,38 @@ function esc(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
+function removeHtmlSection(html: string, startIndicator: string, tagName: string = "section"): string {
+  const startIdx = html.indexOf(startIndicator);
+  if (startIdx === -1) return html;
+
+  // Trace back to find the actual start tag of this element (e.g., <section or <footer)
+  const tagOpenIdx = html.lastIndexOf(`<${tagName}`, startIdx);
+  if (tagOpenIdx === -1) return html;
+
+  let pos = tagOpenIdx + tagName.length + 1;
+  let depth = 1;
+  while (depth > 0 && pos < html.length) {
+    const nextOpen = html.indexOf(`<${tagName}`, pos);
+    const nextClose = html.indexOf(`</${tagName}>`, pos);
+
+    if (nextClose === -1) break;
+
+    if (nextOpen !== -1 && nextOpen < nextClose) {
+      depth++;
+      pos = nextOpen + tagName.length + 1;
+    } else {
+      depth--;
+      pos = nextClose + tagName.length + 3;
+    }
+  }
+
+  if (depth === 0) {
+    return html.substring(0, tagOpenIdx) + html.substring(pos);
+  }
+
+  return html;
+}
+
 function buildProjectCard(
   title: string,
   description: string,
@@ -502,7 +534,7 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // About me paragraph wrapped for selection
   html = replaceAll(
     html,
-    "I'm Daniel Cross, a passionate UI/UX Designer dedicated to crafting digital experiences that truly connect with people. With a focus on simplicity, usability, and creativity, I design products that not only look beautiful but also solve real problems. My approach blends strategy, design, and technology to transform ideas into meaningful solutions. Whether it's designing intuitive interfaces, building websites, or shaping brand identities, I bring every project to life with precision and purpose.",
+    "I’m Daniel Cross, a passionate UI/UX Designer dedicated to crafting digital experiences that truly connect with people. With a focus on simplicity, usability, and creativity, I design products that not only look beautiful but also solve real problems. My approach blends strategy, design, and technology to transform ideas into meaningful solutions. Whether it’s designing intuitive interfaces, building websites, or shaping brand identities, I bring every project to life with precision and purpose.",
     `<span data-editable-field="summary">${esc(profile.summary)}</span>`
   );
 
@@ -673,6 +705,36 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   // Add custom responsive stylesheet overrides
   const responsiveStyles = `
 <style data-custom-responsive="true">
+  /* Complete sidebar removal overrides */
+  .framer-11htobf,
+  .framer-11htobf-container,
+  [data-framer-name="Sidebar wrapper"],
+  [data-framer-name="Sidebar"] {
+    display: none !important;
+  }
+  
+  .framer-NYla7 .framer-1qj9dji {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .framer-NYla7 .framer-vprhwm {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 0 auto !important;
+  }
+  
+  .framer-DKwHu.framer-ha6joy {
+    margin: 0 auto !important;
+  }
+
   /* Base hidden class overrides */
   @media (max-width: 809.98px) {
     .hidden-18pvjnd {
@@ -940,6 +1002,25 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
 `;
 
   html = html.replace("</head>", `${responsiveStyles}${colorStyles}${selectionScripts}</head>`);
+
+  // ─── 15. Conditional Section Removal ────────────────────────────────
+  if (!profile.testimonials || profile.testimonials.length === 0) {
+    html = removeHtmlSection(html, 'data-framer-name="Reviews"', 'section');
+  }
+  if (!profile.services || profile.services.length === 0) {
+    html = removeHtmlSection(html, 'data-framer-name="Services"', 'section');
+  }
+  if (!profile.projects || profile.projects.length === 0) {
+    html = removeHtmlSection(html, 'data-framer-name="Projects"', 'section');
+  }
+
+  const emailLinkForFooter = profile.links?.find((l) => l.icon === "email");
+  const emailVal = profile.email || (emailLinkForFooter ? emailLinkForFooter.url.replace("mailto:", "") : "");
+  const phoneVal = profile.phone || "";
+  const hasLinks = profile.links && profile.links.length > 0;
+  if (!emailVal && !phoneVal && !hasLinks) {
+    html = removeHtmlSection(html, 'name="CTA &amp; Footer"', 'footer');
+  }
 
   return html;
 }
