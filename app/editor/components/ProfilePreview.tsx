@@ -620,17 +620,41 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
     }
   }
 
-  // Replace avatars and banners tagged for selection
+  // Remove srcset overrides to force browser fallback to custom src
+  html = html.replace(/srcset="[^"]*?6fz6fw6ZIqdfPnGjg9h6yUfYitE[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?B3sqQm2pBUNJyRcswxM209Q[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?8pmcaHy6B2IO4Rap9XhFCnzKA[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?jI4zwMAO3uowSwVm4sMQEYbksMc[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?MlC72sVCQio6ooebpIaFFKLOVDA[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?tWZ2VFb5FDPeKYQ9yBBM9vYwvM[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?9AC9XJeFmKrPFObuCUzsjnfqI[^"]*?"/g, "");
+
+  // Tag container divs with data-editable-field so they are easily clicked/selected in selection mode
+  html = replaceAll(html, '<div class="framer-pnceva" data-framer-name="Profile image"', '<div class="framer-pnceva" data-framer-name="Profile image" data-editable-field="avatarUrl" data-editable-type="image"');
+  
+  // Tiny fan-out heading icons:
+  html = replaceAll(html, '<div class="framer-1m8xtt5" data-framer-appear-id="1m8xtt5" data-framer-name="Image 01"', '<div class="framer-1m8xtt5" data-framer-appear-id="1m8xtt5" data-framer-name="Image 01" data-editable-field="bannerUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-19db7zm" data-framer-appear-id="19db7zm" data-framer-name="Image 02"', '<div class="framer-19db7zm" data-framer-appear-id="19db7zm" data-framer-name="Image 02" data-editable-field="avatarUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-yfhmy0" data-framer-appear-id="yfhmy0" data-framer-name="Image 03"', '<div class="framer-yfhmy0" data-framer-appear-id="yfhmy0" data-framer-name="Image 03" data-editable-field="bannerUrl" data-editable-type="image"');
+  
+  // Large hero image grid fans:
+  html = replaceAll(html, '<div class="framer-1u0qqnx" data-framer-name="Image 01"', '<div class="framer-1u0qqnx" data-framer-name="Image 01" data-editable-field="bannerUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-1i9qvch" data-framer-name="Image 02"', '<div class="framer-1i9qvch" data-framer-name="Image 02" data-editable-field="avatarUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-nswwcw" data-framer-name="Image 03"', '<div class="framer-nswwcw" data-framer-name="Image 03" data-editable-field="bannerUrl" data-editable-type="image"');
+
+  html = replaceAll(html, '<div class="framer-1npp3u0" data-framer-name="Main image"', '<div class="framer-1npp3u0" data-framer-name="Main image" data-editable-field="aboutPhotoUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-12lay3g" data-framer-name="Signature"', '<div class="framer-12lay3g" data-framer-name="Signature" data-editable-field="signatureUrl" data-editable-type="image"');
+  html = replaceAll(html, '<div class="framer-opxp2k"', '<div class="framer-opxp2k" data-editable-field="footerBannerUrl" data-editable-type="image"');
+
+  // Replace avatars and banners src
   if (profile.avatarUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl) + '" data-editable-field="avatarUrl" data-editable-type="image');
-  } else {
-    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", '/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg" data-editable-field="avatarUrl" data-editable-type="image');
+    html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl));
   }
   const heroPhoto = profile.bannerUrl || profile.avatarUrl;
   if (heroPhoto) {
-    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto) + '" data-editable-field="bannerUrl" data-editable-type="image');
-  } else {
-    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", '/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png" data-editable-field="bannerUrl" data-editable-type="image');
+    html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/tWZ2VFb5FDPeKYQ9yBBM9vYwvM.png", esc(heroPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/9AC9XJeFmKrPFObuCUzsjnfqI.png", esc(heroPhoto));
   }
 
   // Replace custom section titles if provided, wrapped in spans
@@ -650,21 +674,15 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
     html = replaceAll(html, ">Voices of trust from happy clients<", `><span data-editable-field="testimonialsTitle">Voices of trust from happy clients</span><`);
   }
 
-  // Replace customizable images if provided, tagged for selection
+  // Replace customizable images src if provided
   if (profile.aboutPhotoUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png", esc(profile.aboutPhotoUrl) + '" data-editable-field="aboutPhotoUrl" data-editable-type="image');
-  } else {
-    html = replaceAll(html, "/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png", '/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png" data-editable-field="aboutPhotoUrl" data-editable-type="image');
+    html = replaceAll(html, "/templates/daniel-cross/8pmcaHy6B2IO4Rap9XhFCnzKA.png", esc(profile.aboutPhotoUrl));
   }
   if (profile.signatureUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png", esc(profile.signatureUrl) + '" data-editable-field="signatureUrl" data-editable-type="image');
-  } else {
-    html = replaceAll(html, "/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png", '/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png" data-editable-field="signatureUrl" data-editable-type="image');
+    html = replaceAll(html, "/templates/daniel-cross/jI4zwMAO3uowSwVm4sMQEYbksMc.png", esc(profile.signatureUrl));
   }
   if (profile.footerBannerUrl) {
-    html = replaceAll(html, "/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png", esc(profile.footerBannerUrl) + '" data-editable-field="footerBannerUrl" data-editable-type="image');
-  } else {
-    html = replaceAll(html, "/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png", '/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png" data-editable-field="footerBannerUrl" data-editable-type="image');
+    html = replaceAll(html, "/templates/daniel-cross/MlC72sVCQio6ooebpIaFFKLOVDA.png", esc(profile.footerBannerUrl));
   }
 
   // Compile custom services

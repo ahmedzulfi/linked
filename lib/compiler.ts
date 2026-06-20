@@ -643,12 +643,22 @@ export function compileStaticHtml(profile: ProfileData, _templateId: TemplateId)
   html = replaceAll(html, "transform: translateX(-1214px);", "transform: translateX(0px);");
 
   // ─── 14. Replace avatars and banners ──────────────────────────────────
+  html = html.replace(/srcset="[^"]*?6fz6fw6ZIqdfPnGjg9h6yUfYitE[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?B3sqQm2pBUNJyRcswxM209Q[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?8pmcaHy6B2IO4Rap9XhFCnzKA[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?jI4zwMAO3uowSwVm4sMQEYbksMc[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?MlC72sVCQio6ooebpIaFFKLOVDA[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?tWZ2VFb5FDPeKYQ9yBBM9vYwvM[^"]*?"/g, "");
+  html = html.replace(/srcset="[^"]*?9AC9XJeFmKrPFObuCUzsjnfqI[^"]*?"/g, "");
+
   if (profile.avatarUrl) {
     html = replaceAll(html, "/templates/daniel-cross/6fz6fw6ZIqdfPnGjg9h6yUfYitE.jpg", esc(profile.avatarUrl));
   }
   const heroPhoto = profile.bannerUrl || profile.avatarUrl;
   if (heroPhoto) {
     html = replaceAll(html, "/templates/daniel-cross/B3sqQm2pBUNJyRcswxM209Q.png", esc(heroPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/tWZ2VFb5FDPeKYQ9yBBM9vYwvM.png", esc(heroPhoto));
+    html = replaceAll(html, "/templates/daniel-cross/9AC9XJeFmKrPFObuCUzsjnfqI.png", esc(heroPhoto));
   }
 
   // Replace custom section titles if provided
