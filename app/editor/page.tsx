@@ -727,12 +727,14 @@ function EditorInner() {
 
       if (data.template) {
         selectTemplate(data.template);
+        setIsPreviewVisible(true);
       }
 
       if (data.profileUpdates) {
         for (const [k, v] of Object.entries(data.profileUpdates)) {
           updateField(k as any, v as any);
         }
+        setIsPreviewVisible(true);
       }
     } catch (err: any) {
       toast.error(err.message || "Failed to regenerate reply");
@@ -779,6 +781,7 @@ function EditorInner() {
 
       if (data.template) {
         selectTemplate(data.template);
+        setIsPreviewVisible(true);
       }
 
       if (data.profileUpdates) {
@@ -809,6 +812,7 @@ function EditorInner() {
             setCurrentStep(11);
           }
         }
+        setIsPreviewVisible(true);
       }
 
       // Reload website details to sync latest changes to local context and preview
