@@ -16,7 +16,12 @@ export async function middleware(request: NextRequest) {
   }
 
   // 2. Identify if host is subdomain or custom domain
-  const mainDomains = ["linkedpage.io", "linkedpage.me", "localhost:3000"];
+  const mainDomains = [
+    "linkedpage.io",
+    "linkedpage.me",
+    "localhost:3000",
+    "fusion-starter-529.vercel.app", // production Vercel URL
+  ];
   let subdomainSlug: string | null = null;
 
   for (const domain of mainDomains) {
