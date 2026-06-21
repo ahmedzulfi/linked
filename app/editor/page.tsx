@@ -1545,7 +1545,7 @@ function EditorInner() {
                   <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
                     <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
                     <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
-                      {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                      fusion-starter-529.vercel.app/p/{subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}
                     </span>
                     {checkingSubdomain ? (
                       <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
@@ -1665,7 +1665,7 @@ function EditorInner() {
                         <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
                           <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                           <span className="truncate text-neutral-650 font-mono">
-                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
+                            fusion-starter-529.vercel.app/p/{subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}
                           </span>
                           <span className="text-neutral-300 mx-1">|</span>
                           <span className="text-neutral-455 shrink-0 text-[10px] font-mono">

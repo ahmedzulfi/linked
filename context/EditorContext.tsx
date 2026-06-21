@@ -140,7 +140,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       sessionStorage.setItem("linkedpage_brand_name", profileData.name);
       sessionStorage.setItem(
         "linkedpage_subdomain",
-        `${createData.website.subdomainSlug}.linkedpage.io`,
+        `https://fusion-starter-529.vercel.app/p/${createData.website.subdomainSlug}`,
       );
       return newId;
     },
@@ -169,7 +169,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       sessionStorage.setItem("linkedpage_brand_name", web.brandName);
       sessionStorage.setItem(
         "linkedpage_subdomain",
-        `${web.subdomainSlug}.linkedpage.io`,
+        `https://fusion-starter-529.vercel.app/p/${web.subdomainSlug}`,
       );
     } catch (e: any) {
       toast.error(e.message || "Failed to load website.");

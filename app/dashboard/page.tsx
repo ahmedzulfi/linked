@@ -144,10 +144,11 @@ export default function DashboardPage() {
         <div className="flex items-center gap-2 relative">
           <button
             onClick={() => {
-              const sub = websites[0]
-                ? `${websites[0].subdomainSlug}.linkedpage.io`
-                : "linkedpage.io";
-              navigator.clipboard.writeText(`https://${sub}`);
+              const slug = websites[0]?.subdomainSlug;
+              const url = slug
+                ? `https://fusion-starter-529.vercel.app/p/${slug}`
+                : "https://fusion-starter-529.vercel.app";
+              navigator.clipboard.writeText(url);
               toast.success("Site link copied to clipboard!");
             }}
             className="h-8 px-4 text-xs font-semibold bg-white border border-[#E6E6E6] rounded-lg text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
@@ -474,7 +475,7 @@ export default function DashboardPage() {
                               {web.isPublished ? (
                                 <span className="text-[#d4ff66] font-semibold flex items-center gap-1">
                                   <span className="w-1.5 h-1.5 rounded-full bg-[#d4ff66]" />
-                                  Live: {web.subdomainSlug}.linkedpage.io
+                                  Live: fusion-starter-529.vercel.app/p/{web.subdomainSlug}
                                 </span>
                               ) : (
                                 <span>Draft (Unpublished)</span>
@@ -486,10 +487,10 @@ export default function DashboardPage() {
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
-                                const sub = web.subdomainSlug
-                                  ? `${web.subdomainSlug}.linkedpage.io`
-                                  : "linkedpage.io";
-                                navigator.clipboard.writeText(`https://${sub}`);
+                                const url = web.subdomainSlug
+                                  ? `https://fusion-starter-529.vercel.app/p/${web.subdomainSlug}`
+                                  : "https://fusion-starter-529.vercel.app";
+                                navigator.clipboard.writeText(url);
                                 toast.success("Site link copied to clipboard!");
                               }}
                               className="inline-flex h-8 px-2.5 text-xs font-semibold cursor-pointer items-center justify-center rounded-lg bg-white border border-[#E6E6E6] text-[#2A2A2F] hover:bg-[#F7F7F7] transition-all"
@@ -533,12 +534,10 @@ export default function DashboardPage() {
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      const sub = web.subdomainSlug
-                                        ? `${web.subdomainSlug}.linkedpage.io`
-                                        : "linkedpage.io";
-                                      navigator.clipboard.writeText(
-                                        `https://${sub}`,
-                                      );
+                                      const url = web.subdomainSlug
+                                        ? `https://fusion-starter-529.vercel.app/p/${web.subdomainSlug}`
+                                        : "https://fusion-starter-529.vercel.app";
+                                      navigator.clipboard.writeText(url);
                                       toast.success(
                                         "Site link copied to clipboard!",
                                       );
