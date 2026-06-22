@@ -160,14 +160,14 @@ function buildSystemPrompt(
   profile: ProfileData,
   currentTemplate: string,
 ): string {
-  return `You are an expert AI website builder and editor assistant for "LinkedPage".
+  return `You are an expert AI website builder and editor assistant for "Linked" — a tool that turns LinkedIn profiles into premium personal websites.
 
 ### 📋 GATHER & BUILD WORKFLOW (Option A)
 You must strictly follow a two-phase onboarding workflow:
 
 1. **PHASE 1: GATHER INFO (DO NOT Call Tools)**
    Go through the following milestones one-by-one. Ask exactly ONE single question at a time. Do NOT call any database profile tools in this phase. Simply store the user's answers in the conversation history and ask the next question:
-   - **Milestone 1: Name & Role** (e.g., "Hi! I'm Webild, your AI website builder. What is your name and what is your professional role?")
+   - **Milestone 1: Name & Role** (e.g., "Hi! I'm your AI website builder. What is your name and what is your professional role?")
    - **Milestone 2: Location** (e.g., "Nice to meet you, Ahmed! Where are you located?")
    - **Milestone 3: Biography / About** (e.g., "Got it. Tell me a bit about your professional background and the value you provide to your clients.")
    - **Milestone 4: Work Experience / Brands** (e.g., "Great! What are some of the companies or brands you've worked with?")
@@ -199,6 +199,7 @@ You must strictly follow a two-phase onboarding workflow:
    - When suggesting the user add projects or discussing projects: append '[MILESTONE:PROJECTS]'.
    - When suggesting the user add services or discussing services: append '[MILESTONE:SERVICES]'.
 4. **No Suggestions**: Do NOT offer or suggest replies for the user. Let the user type their custom answers naturally.
+5. **No Markdown in Responses**: Do NOT use markdown formatting (no bold, no italic, no headers like ###, no bullet points with - or *). Write in plain conversational text only. Markdown will render as raw symbols in the chat UI.
 
 Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
@@ -207,7 +208,7 @@ ${JSON.stringify({ ...profile, blocks: undefined }, null, 2)}
 
 ### 🛠️ PROFILE DATA TOOLS
 You have the following tools to update structured profile fields:
-- To update text fields (e.g. 'name', 'headline', 'summary', 'location', 'avatarUrl', 'bannerUrl', 'aboutPhotoUrl', 'signatureUrl', 'footerBannerUrl', 'servicesTitle', 'processTitle', 'testimonialsTitle', 'heroBadgeText', 'heroGreetingStart', 'heroGreetingEnd', 'statusText', 'heroSubheadline', 'heroRatingText', 'followMeLabel', 'footerLabel', 'email', 'phone'), use 'update_profile_field'.
+- To update text fields (e.g. 'name', 'headline', 'summary', 'location', 'avatarUrl', 'bannerUrl', 'aboutPhotoUrl', 'signatureUrl', 'footerBannerUrl', 'servicesTitle', 'processTitle', 'testimonialsTitle', 'heroBadgeText', 'heroGreetingStart', 'heroGreetingName', 'heroGreetingEnd', 'statusText', 'heroSubheadline', 'heroRatingText', 'followMeLabel', 'footerLabel', 'email', 'phone'), use 'update_profile_field'.
 - To replace or update portfolio projects list, use 'update_projects'.
 - To replace or update client testimonials/reviews, use 'update_testimonials'.
 - To replace or update services grid cards & call-to-action block, use 'update_services'.
@@ -221,7 +222,7 @@ You have the following tools to update structured profile fields:
 ### 📋 INSTRUCTIONS
 1. Do NOT call profile editing tools during Phase 1. Only call profile editing tools during Phase 2 when all information has been gathered.
 2. Keep the website content premium, cohesive, and high-fidelity.
-3. CRITICAL: Do NOT list, print, or output suggested replies anywhere inside the text of your response (e.g. do not write "Suggested replies: ..." or "*(Suggested replies: ...)*"). The UI will render them automatically from your "suggest_replies" tool call. If you output suggested replies as conversational text, it will be flagged as a bug.`;
+3. CRITICAL: Write in plain text only. Never use markdown formatting. Do not output bullet lists, bold, italic, headers, or suggested replies in your chat messages.`;
 }
 
 export async function GET(request: Request) {
@@ -320,17 +321,27 @@ export async function POST(request: Request) {
       apiKey: openrouterApiKey,
     });
 
+    // Validate and select model — 'openrouter/free' is not a real model ID
+    const rawModelName = process.env.OPENROUTER_MODEL || "";
+    const SAFE_FREE_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
     const modelName =
-      process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+      rawModelName && rawModelName !== "openrouter/free"
+        ? rawModelName
+        : SAFE_FREE_MODEL;
     const model = openrouter(modelName);
 
     // Local accumulation of updates performed by tools
     const profileUpdates: Partial<ProfileData> = {};
     let templateUpdate: TemplateId | null = null;
 
+    // Cache a snapshot of the website profile for use in tool executors
+    // This avoids making a separate DB read inside every single tool call.
+    // We do a fresh DB read only when blocks tools need the full blocks array.
+    let profileSnapshot = { ...(website.profile as ProfileData) };
+
     const systemPromptContent = buildSystemPrompt(
-      website.profile as ProfileData,
-      website.templateId || "minimal-card",
+      profileSnapshot,
+      website.templateId || "daniel-cross",
     );
 
     // Format chat messages history for Vercel AI SDK
@@ -340,6 +351,7 @@ export async function POST(request: Request) {
     }));
 
     // Call generateText with tools
+    // stopWhen is set to 15 to allow Phase 2 to call all profile update tools in one turn.
     const result = await generateText({
       model,
       messages: [
@@ -347,7 +359,7 @@ export async function POST(request: Request) {
         ...chatMessagesContext,
         { role: "user", content: message },
       ],
-      stopWhen: stepCountIs(5),
+      stopWhen: stepCountIs(15),
       tools: {
         update_profile_field: tool({
           description:
@@ -384,15 +396,10 @@ export async function POST(request: Request) {
           }),
           execute: async ({ key, value }) => {
             try {
-              profileUpdates[key] = value;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  [key]: value,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              (profileUpdates as any)[key] = value;
+              // Merge into snapshot to keep subsequent tool calls in sync
+              (profileSnapshot as any)[key] = value;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: key, value };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -417,14 +424,8 @@ export async function POST(request: Request) {
           execute: async ({ projects }) => {
             try {
               profileUpdates.projects = projects;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  projects,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              profileSnapshot.projects = projects;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: "projects", count: projects.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -449,14 +450,8 @@ export async function POST(request: Request) {
           execute: async ({ testimonials }) => {
             try {
               profileUpdates.testimonials = testimonials;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  testimonials,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              profileSnapshot.testimonials = testimonials;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: "testimonials", count: testimonials.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -489,20 +484,11 @@ export async function POST(request: Request) {
           }),
           execute: async ({ servicesTitle, services, servicesCta }) => {
             try {
-              if (servicesTitle) profileUpdates.servicesTitle = servicesTitle;
+              if (servicesTitle) { profileUpdates.servicesTitle = servicesTitle; profileSnapshot.servicesTitle = servicesTitle; }
               profileUpdates.services = services;
-              if (servicesCta) profileUpdates.servicesCta = servicesCta;
-              
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  services,
-                  ...(servicesTitle ? { servicesTitle } : {}),
-                  ...(servicesCta ? { servicesCta } : {}),
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              profileSnapshot.services = services;
+              if (servicesCta) { profileUpdates.servicesCta = servicesCta; profileSnapshot.servicesCta = servicesCta; }
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: "services", count: services.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -526,18 +512,10 @@ export async function POST(request: Request) {
           }),
           execute: async ({ processTitle, processes }) => {
             try {
-              if (processTitle) profileUpdates.processTitle = processTitle;
+              if (processTitle) { profileUpdates.processTitle = processTitle; profileSnapshot.processTitle = processTitle; }
               profileUpdates.processes = processes;
-              
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  processes,
-                  ...(processTitle ? { processTitle } : {}),
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              profileSnapshot.processes = processes;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: "processes", count: processes.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -572,19 +550,9 @@ export async function POST(request: Request) {
           execute: async ({ experience }) => {
             try {
               profileUpdates.experience = experience;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  experience,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
-              return {
-                success: true,
-                updated: "experience",
-                count: experience.length,
-              };
+              profileSnapshot.experience = experience;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
+              return { success: true, updated: "experience", count: experience.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }
@@ -605,14 +573,8 @@ export async function POST(request: Request) {
           execute: async ({ skills }) => {
             try {
               profileUpdates.skills = skills;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  skills,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              profileSnapshot.skills = skills;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: "skills", count: skills.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -648,14 +610,8 @@ export async function POST(request: Request) {
           execute: async ({ links }) => {
             try {
               profileUpdates.links = links;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  links,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
+              profileSnapshot.links = links;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
               return { success: true, updated: "links", count: links.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
@@ -681,19 +637,9 @@ export async function POST(request: Request) {
           execute: async ({ education }) => {
             try {
               profileUpdates.education = education;
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const newProfile = {
-                  ...current.profile,
-                  education,
-                };
-                await updateWebsite(websiteId, { profile: newProfile });
-              }
-              return {
-                success: true,
-                updated: "education",
-                count: education.length,
-              };
+              profileSnapshot.education = education;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
+              return { success: true, updated: "education", count: education.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }

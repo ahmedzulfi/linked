@@ -169,17 +169,17 @@ const removeEmojis = (text: string) => {
 
 const cleanMessageContent = (text: string) => {
   let cleaned = text.replace(/\[MILESTONE:[A-Z_]+\]/g, "");
-  
+
   // 1. Strip block of suggested replies starting with optional * or ( or both, and matching all the way to the closing ) or * or end of line.
   // Match *(Suggested replies: ...) or (Suggested replies: ...)
   cleaned = cleaned.replace(/\*?\(?Suggested replies:[^)]+\)?\*?/gi, "");
-  
+
   // Match *Suggested replies:* ... or *Suggested replies:...*
   cleaned = cleaned.replace(/\*Suggested replies:\*?[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "");
-  
+
   // Match plain Suggested replies: ...
   cleaned = cleaned.replace(/Suggested replies:[\s\S]*?(?=\n\n|\n[A-Z]|$)/gi, "");
-  
+
   return cleaned.trim();
 };
 
@@ -289,7 +289,7 @@ function EditorInner() {
       {
         id: "welcome",
         role: "assistant",
-        content: "Welcome to Webild! I've loaded your LinkedIn data. Let's customize your profile step-by-step. Type 'start' below to begin!"
+        content: "Welcome to Linked! I've loaded your LinkedIn data. Let's build your premium portfolio page. Type 'start' below to begin!"
       }
     ];
   });
@@ -426,7 +426,7 @@ function EditorInner() {
               {
                 id: "welcome",
                 role: "assistant",
-                content: "Hi! I'm Webild, your AI website builder companion. I will guide you step-by-step to create your premium portfolio page. Let's start with the basics—what's your name, and what is your professional role?"
+                content: "Hi! I'm your AI website builder companion. I will guide you step-by-step to create your premium portfolio page. Let's start with the basics — what's your name, and what is your professional role?"
               }
             ]);
           }
@@ -1143,14 +1143,14 @@ function EditorInner() {
                     {customMessages.map((msg, idx) => {
                       const cleanContent = cleanMessageContent(msg.content);
                       const contentUpper = msg.content.toUpperCase();
-                      const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]") || 
-                        (msg.role === "assistant" && 
-                         (contentUpper.includes("PORTFOLIO PROJECTS") || contentUpper.includes("KEY PROJECTS") || contentUpper.includes("PROJECTS YOU'D LIKE TO FEATURE")) &&
-                         !contentUpper.includes("GATHERED ALL YOUR DETAILS"));
-                      const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]") || 
-                        (msg.role === "assistant" && 
-                         (contentUpper.includes("OFFERED SERVICES") || contentUpper.includes("WHAT SERVICES OR PACKAGES") || contentUpper.includes("WHAT SERVICES DO YOU OFFER") || contentUpper.includes("MILESTONE 6: OFFERED SERVICES")) &&
-                         !contentUpper.includes("GATHERED ALL YOUR DETAILS"));
+                      const hasProjectsMilestone = msg.content.includes("[MILESTONE:PROJECTS]") ||
+                        (msg.role === "assistant" &&
+                          (contentUpper.includes("PORTFOLIO PROJECTS") || contentUpper.includes("KEY PROJECTS") || contentUpper.includes("PROJECTS YOU'D LIKE TO FEATURE")) &&
+                          !contentUpper.includes("GATHERED ALL YOUR DETAILS"));
+                      const hasServicesMilestone = msg.content.includes("[MILESTONE:SERVICES]") ||
+                        (msg.role === "assistant" &&
+                          (contentUpper.includes("OFFERED SERVICES") || contentUpper.includes("WHAT SERVICES OR PACKAGES") || contentUpper.includes("WHAT SERVICES DO YOU OFFER") || contentUpper.includes("MILESTONE 6: OFFERED SERVICES")) &&
+                          !contentUpper.includes("GATHERED ALL YOUR DETAILS"));
 
                       return (
                         <div key={msg.id} className="w-full flex flex-col gap-2.5">
@@ -1166,7 +1166,7 @@ function EditorInner() {
                             <div className="w-full flex flex-col justify-start items-start gap-1 font-inter animate-in fade-in duration-200">
                               <div className="flex items-center gap-2 select-none mb-1">
                                 <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                                <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                                <span className="font-semibold text-[13.5px] text-slate-700">Linked AI</span>
                               </div>
                               <div className="max-w-[90%] text-[#18181B] text-[15px] leading-[24px] font-normal break-words font-sans px-0 py-0.5">
                                 {removeEmojis(cleanContent)}
@@ -1324,10 +1324,10 @@ function EditorInner() {
                       <div className="w-full flex flex-col justify-start items-start gap-2.5 font-inter">
                         <div className="flex items-center gap-2 select-none">
                           <img src="/logoicon.png" alt="Logo" className="h-5 w-auto object-contain" />
-                          <span className="font-semibold text-[13.5px] text-slate-700">Webild</span>
+                          <span className="font-semibold text-[13.5px] text-slate-700">Linked AI</span>
                         </div>
                         <div className="bg-white px-4 py-3 rounded-[18px] flex items-center justify-center gap-3">
-                          <ShiningText text="Webild is thinking..." />
+                          <ShiningText text="Linked AI is thinking..." />
                         </div>
                       </div>
                     )}
@@ -1353,7 +1353,7 @@ function EditorInner() {
                           }
                         }}
                         className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 outline-none font-inter text-neutral-800 placeholder:text-neutral-400 cursor-text"
-                        placeholder="Ask Webild to adjust copy, headline, template style..."
+                        placeholder="Ask Linked AI to adjust copy, headline, template style..."
                         rows={2}
                       />
                       <div className="flex items-center justify-between px-1 select-none">
@@ -1545,7 +1545,7 @@ function EditorInner() {
                   <span className="flex items-center min-w-0 gap-2 text-sm font-medium">
                     <Globe className="w-[14px] h-[14px] text-[#3b82f6] shrink-0" />
                     <span className="min-w-0 truncate text-[#3b82f6] font-medium font-mono">
-                      fusion-starter-529.vercel.app/p/{subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}
+                      {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
                     </span>
                     {checkingSubdomain ? (
                       <span className="hidden lg:inline text-gray-400 font-normal">checking...</span>
@@ -1665,7 +1665,7 @@ function EditorInner() {
                         <div className="flex-1 max-w-md mx-auto px-4 h-7 bg-white border border-neutral-200/80 rounded-lg flex items-center justify-center gap-1.5 shadow-xs text-neutral-550 font-sans text-[11px] font-medium leading-none">
                           <Globe className="w-3.5 h-3.5 text-neutral-400 shrink-0" />
                           <span className="truncate text-neutral-650 font-mono">
-                            fusion-starter-529.vercel.app/p/{subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}
+                            {subdomain || editedProfile?.name.toLowerCase().replace(/\s+/g, "") || "yourname"}.linkedpage.io
                           </span>
                           <span className="text-neutral-300 mx-1">|</span>
                           <span className="text-neutral-455 shrink-0 text-[10px] font-mono">
