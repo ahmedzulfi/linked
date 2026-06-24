@@ -358,7 +358,7 @@ export default function ChatPane({
                               className="h-5 w-auto object-contain"
                             />
                             <span className="font-semibold text-[13.5px] text-black">
-                              Webild
+                            LinkedPage
                             </span>
                           </div>
 
@@ -387,7 +387,7 @@ export default function ChatPane({
                           className="h-5 w-auto object-contain animate-pulse"
                         />
                         <span className="font-semibold text-[13.5px] text-black animate-pulse">
-                          Webild
+                          LinkedPage
                         </span>
                       </div>
                       <div className="bg-white px-4 py-3 rounded-[18px] border border-neutral-200/60 shadow-[0px_6px_10px_-6px_rgba(0,0,0,0.09)] flex items-center justify-center">
@@ -430,7 +430,7 @@ export default function ChatPane({
                     }
                   }}
                   className="w-full bg-transparent border-none resize-none focus:ring-0 text-[14px] px-2.5 py-1.5 text-neutral-800 placeholder:text-neutral-400 h-16 outline-none font-inter"
-                  placeholder="Ask Webild..."
+                  placeholder="Ask LinkedPage AI..."
                 />
                 {input.length > 200 && (
                   <div className="text-[10px] text-gray-400 self-end mr-2 -mt-1 select-none font-inter">

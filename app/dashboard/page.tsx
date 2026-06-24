@@ -130,7 +130,7 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3">
           <img
             src="/logo.png"
-            alt="Webild"
+            alt="LinkedPage"
             className="h-7 w-auto object-contain cursor-pointer"
             onClick={() => router.push("/")}
           />
@@ -169,16 +169,22 @@ export default function DashboardPage() {
             Publish
           </button>
 
-          {/* User Menu Avatar Trigger */}
+          {/* User Menu Avatar Trigger — initials derived from real userName */}
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="w-8 h-8 rounded-lg bg-[#E6E6E6] overflow-hidden border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1"
+            className="w-8 h-8 rounded-lg bg-[#2A2A2F] border-2 border-white hover:scale-105 active:scale-95 transition-all ml-1 flex items-center justify-center flex-shrink-0"
+            title={userName || "Account"}
           >
-            <img
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              alt="Avatar"
-              className="w-full h-full object-cover"
-            />
+            {userName ? (
+              <span className="text-white text-[11px] font-bold leading-none select-none">
+                {userName.trim().split(" ").filter(Boolean).map((n: string) => n[0].toUpperCase()).slice(0, 2).join("")}
+              </span>
+            ) : (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            )}
           </button>
 
           {/* User Dropdown Menu */}

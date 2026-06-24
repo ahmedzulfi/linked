@@ -19,12 +19,19 @@ const interTight = Inter_Tight({
 export const metadata: Metadata = {
   title: "LinkedPage – Turn Your LinkedIn Into a Beautiful Personal Site",
   description:
-    "Paste your LinkedIn URL and get a stunning personal micro-site in under 60 seconds. Pick a template, edit inline, publish free.",
+    "Upload your LinkedIn data export and get a stunning personal website in under 60 seconds. Pick a template, edit inline, publish free.",
   openGraph: {
     title: "LinkedPage – LinkedIn → Personal Site in 60 Seconds",
     description:
-      "Convert your LinkedIn profile into a beautiful micro-site. No code. Just paste, customise, publish.",
+      "Convert your LinkedIn profile into a beautiful personal website. No code. Just upload, customise, publish.",
     type: "website",
+    siteName: "LinkedPage",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "LinkedPage – Turn Your LinkedIn Into a Beautiful Personal Site",
+    description:
+      "Convert your LinkedIn profile into a beautiful personal website in under 60 seconds.",
   },
 };
 

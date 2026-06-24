@@ -149,7 +149,7 @@ interface WizardStep {
 }
 
 const WIZARD_STEPS: WizardStep[] = [
-  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to Webild! Let's build your portfolio page step-by-step. First, please provide your professional identity details below." },
+  { step: 1, label: "Basics & Profile Identity", prompt: "Welcome to LinkedPage! Let's build your portfolio page step-by-step. First, please provide your professional identity details below." },
   { step: 2, label: "Hero Greeting & Status", prompt: "Great. Now let's configure the greeting header and your availability status." },
   { step: 3, label: "Hero Headline & Value Prop", prompt: "Let's set up the main headline and value prop for your hero section." },
   { step: 4, label: "About Me Biography", prompt: "Next, let's write your professional biography and choose your section photos." },

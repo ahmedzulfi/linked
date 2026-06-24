@@ -79,7 +79,7 @@ export default function SignupPage() {
         );
       }
 
-      toast.success("Account created! Welcome to Webild 🎉");
+      toast.success("Account created! Welcome to LinkedPage 🎉");
 
       const params = new URLSearchParams(window.location.search);
       if (params.get("intent") === "save_scrape") {
@@ -124,7 +124,7 @@ export default function SignupPage() {
                   Create your account
                 </h1>
                 <p className="text-sm text-black">
-                  Get started with Webild today
+                  Get started with LinkedPage today
                 </p>
               </div>
 
