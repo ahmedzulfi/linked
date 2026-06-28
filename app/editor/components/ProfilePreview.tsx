@@ -482,7 +482,13 @@ function replaceTestimonialsContent(html: string, testimonialsHtml: string): str
 
 // ── Client-side buildPreviewHtml function ───────────────────────────────────
 
-function buildPreviewHtml(template: string, profile: ProfileData): string {
+function buildPreviewHtml(
+  template: string,
+  profile: ProfileData,
+  selectedField?: string | null,
+  selectedIndex?: number,
+  isSelectionMode?: boolean
+): string {
   let html = template;
 
   const replaceAll = (t: string, s: string, r: string) => t.split(s).join(r);
@@ -937,6 +943,29 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
   }
 </style>
 <script id="editable-highlight-script">
+  window.__INITIAL_SELECTION_MODE__ = ${isSelectionMode ? 'true' : 'false'};
+  window.__INITIAL_SELECTED_FIELD__ = ${selectedField ? `'${selectedField}'` : 'null'};
+  window.__INITIAL_SELECTED_INDEX__ = ${selectedIndex !== undefined && selectedIndex !== null && !isNaN(selectedIndex) ? selectedIndex : 'null'};
+
+  function applyInitialSelection() {
+    if (window.__INITIAL_SELECTION_MODE__) {
+      document.body.classList.add('selection-mode-active');
+    }
+    if (window.__INITIAL_SELECTED_FIELD__) {
+      let selector = '[data-editable-field="' + window.__INITIAL_SELECTED_FIELD__ + '"]';
+      if (window.__INITIAL_SELECTED_INDEX__ !== null) {
+        selector += '[data-editable-index="' + window.__INITIAL_SELECTED_INDEX__ + '"]';
+      }
+      document.querySelectorAll(selector).forEach(el => el.classList.add('selected-element'));
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyInitialSelection);
+  } else {
+    applyInitialSelection();
+  }
+
   // Listen for selection mode updates from host
   window.addEventListener('message', (e) => {
     if (e.data && e.data.type === 'SET_SELECTION_MODE') {
@@ -953,13 +982,11 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
       const index = e.data.index;
       if (field) {
         let selector = '[data-editable-field="' + field + '"]';
-        if (index !== undefined && index !== null) {
+        if (index !== undefined && index !== null && !isNaN(index)) {
           selector += '[data-editable-index="' + index + '"]';
         }
-        const target = document.querySelector(selector);
-        if (target) {
-          target.classList.add('selected-element');
-        }
+        const targets = document.querySelectorAll(selector);
+        targets.forEach(t => t.classList.add('selected-element'));
       }
     }
     if (e.data && e.data.type === 'SCROLL_TO_SECTION') {
@@ -1013,15 +1040,22 @@ function buildPreviewHtml(template: string, profile: ProfileData): string {
       e.stopPropagation();
       
       const field = target.getAttribute('data-editable-field');
-      const index = target.getAttribute('data-editable-index');
+      const indexVal = target.getAttribute('data-editable-index');
+      const parsedIndex = (indexVal !== null && indexVal !== undefined && indexVal !== '') ? parseInt(indexVal, 10) : undefined;
       
       document.querySelectorAll('.selected-element').forEach(el => el.classList.remove('selected-element'));
-      target.classList.add('selected-element');
+      
+      // Highlight all matching elements
+      let selector = '[data-editable-field="' + field + '"]';
+      if (parsedIndex !== undefined) {
+        selector += '[data-editable-index="' + parsedIndex + '"]';
+      }
+      document.querySelectorAll(selector).forEach(el => el.classList.add('selected-element'));
       
       window.parent.postMessage({
         type: 'ELEMENT_CLICKED',
         field: field,
-        index: index ? parseInt(index, 10) : undefined
+        index: parsedIndex
       }, '*');
     }
   }, true);
@@ -1093,7 +1127,8 @@ export default function ProfilePreview({
   // Re-compile whenever profile or raw template changes
   useEffect(() => {
     if (!rawTemplate) return;
-    const html = buildPreviewHtml(rawTemplate, profile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const html = buildPreviewHtml(rawTemplate, profile, selectedField, selectedIndex, isSelectionMode);
     setCompiledHtml(html);
   }, [rawTemplate, profile]);
 
@@ -1125,7 +1160,7 @@ export default function ProfilePreview({
       field: selectedField,
       index: selectedIndex
     }, "*");
-  }, [isSelectionMode, selectedField, selectedIndex, compiledHtml]);
+  }, [isSelectionMode, selectedField, selectedIndex]);
 
   // Send scroll command when currentStep changes
   useEffect(() => {
@@ -1135,7 +1170,7 @@ export default function ProfilePreview({
       type: "SCROLL_TO_SECTION",
       step: currentStep
     }, "*");
-  }, [currentStep, compiledHtml]);
+  }, [currentStep]);
 
   const PREVIEW_W = 1200;
   const PREVIEW_H = 900;

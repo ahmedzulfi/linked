@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { ProfileData, ProfileExperience, ProfileLink, ProfileProject } from "@/shared/types";
 import { 
   User, Briefcase, Link as LinkIcon, Folder, Plus, Trash2, 
@@ -25,7 +25,7 @@ export default function PropertiesPanel({
   onClose,
   onSelectField,
 }: PropertiesPanelProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   // Helper to handle local base64 image uploads
   const handleImageUpload = (
@@ -76,10 +76,7 @@ export default function PropertiesPanel({
     toast.success("Theme colors reset to template defaults!");
   };
 
-  // Helper to trigger file upload click
-  const triggerImageUpload = () => {
-    fileInputRef.current?.click();
-  };
+
 
   const themeColors = profile.themeColors || {};
 
@@ -166,13 +163,13 @@ export default function PropertiesPanel({
             <div className="flex gap-2 w-full mt-1">
               <input
                 type="file"
-                ref={fileInputRef}
+                id={`file-graphic-${currentImg.id}`}
                 accept="image/*"
                 onChange={(e) => handleImageUpload(e, currentImg.id)}
                 className="hidden"
               />
               <button
-                onClick={triggerImageUpload}
+                onClick={() => document.getElementById(`file-graphic-${currentImg.id}`)?.click()}
                 className="flex-1 h-9 bg-neutral-900 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 active:scale-[0.97] transition-transform duration-100 shadow-sm hover:bg-neutral-800 cursor-pointer border-none"
               >
                 <Upload className="w-3.5 h-3.5" /> Upload File
@@ -372,13 +369,13 @@ export default function PropertiesPanel({
             <div className="flex gap-2 w-full mt-1">
               <input
                 type="file"
-                ref={fileInputRef}
+                id={`file-project-${idx}`}
                 accept="image/*"
                 onChange={(e) => handleImageUpload(e, "projects", idx)}
                 className="hidden"
               />
               <button
-                onClick={triggerImageUpload}
+                onClick={() => document.getElementById(`file-project-${idx}`)?.click()}
                 className="flex-1 h-9 bg-neutral-900 text-white rounded-lg text-xs font-bold flex items-center justify-center gap-1.5 active:scale-[0.97] transition-transform duration-100 shadow-sm hover:bg-neutral-800 cursor-pointer border-none"
               >
                 <Upload className="w-3.5 h-3.5" /> Upload File
