@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       apiKey: openrouterApiKey,
     });
     const modelName =
-      process.env.OPENROUTER_MODEL || "google/gemini-flash-1.5";
+      process.env.OPENROUTER_MODEL || "google/gemini-2.0-flash-001";
     const model = openrouter(modelName);
 
     const prompt = `

@@ -44,6 +44,10 @@ if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) 
   } catch (err) {
     console.error("Failed to initialize Upstash Redis rate limiter:", err);
   }
+} else {
+  console.warn(
+    "[Rate Limit Warning] UPSTASH_REDIS_REST_URL and/or UPSTASH_REDIS_REST_TOKEN are not defined. Falling back to temporary in-memory rate limiter (resets on serverless cold starts).",
+  );
 }
 
 async function checkRateLimit(userId: string): Promise<boolean> {
@@ -366,7 +370,7 @@ export async function POST(request: Request) {
 
     // Validate and select model — 'openrouter/free' is not a real model ID
     const rawModelName = process.env.OPENROUTER_MODEL || "";
-    const SAFE_FREE_MODEL = "google/gemini-flash-1.5";
+    const SAFE_FREE_MODEL = "google/gemini-2.0-flash-001";
     const modelName =
       rawModelName && rawModelName !== "openrouter/free"
         ? rawModelName
@@ -392,9 +396,12 @@ export async function POST(request: Request) {
       (!profileSnapshot.summary ||
         profileSnapshot.summary === "Welcome to my personal micro-site.");
 
-    // We are in Phase 2 if we are in Step 12 (freeform mode) OR the profile is already populated (not blank) OR we have at least 8 user messages in chat onboarding.
+    // We are in Phase 2 if we have at least 8 user messages in history OR the profile is already populated (not blank, meaning they filled it via forms/ZIP import).
+    // The currentStep === 12 client input is checked but validated against the profile status to prevent spoofing.
     const isPhase2 =
-      currentStep === 12 || !isBlankProfile || userMessagesCount >= 8;
+      userMessagesCount >= 8 ||
+      (currentStep === 12 && !isBlankProfile) ||
+      (!isBlankProfile && website.templateId !== "daniel-cross");
 
     const systemPromptContent = buildSystemPrompt(
       profileSnapshot,
