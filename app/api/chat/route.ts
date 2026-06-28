@@ -10,10 +10,12 @@ import { ProfileData, TemplateId, CustomBlock } from "@/shared/types";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { generateText, tool, stepCountIs } from "ai";
 import { z } from "zod";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
-function checkRateLimit(userId: string): boolean {
+function checkInMemoryRateLimit(userId: string): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(userId);
 
@@ -26,6 +28,38 @@ function checkRateLimit(userId: string): boolean {
 
   entry.count++;
   return true;
+}
+
+let upstashRatelimit: Ratelimit | null = null;
+if (process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN) {
+  try {
+    const redis = new Redis({
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+    });
+    upstashRatelimit = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(10, "1 m"),
+    });
+  } catch (err) {
+    console.error("Failed to initialize Upstash Redis rate limiter:", err);
+  }
+}
+
+async function checkRateLimit(userId: string): Promise<boolean> {
+  if (upstashRatelimit) {
+    try {
+      const { success } = await upstashRatelimit.limit(userId);
+      return success;
+    } catch (err) {
+      console.warn(
+        "Upstash rate limit check failed, falling back to in-memory:",
+        err,
+      );
+      return checkInMemoryRateLimit(userId);
+    }
+  }
+  return checkInMemoryRateLimit(userId);
 }
 
 function createDefaultBlocks(profile: ProfileData): CustomBlock[] {
@@ -160,6 +194,15 @@ function buildSystemPrompt(
   profile: ProfileData,
   currentTemplate: string,
 ): string {
+  const profileSummary = Object.fromEntries(
+    Object.entries(profile).filter(([_, v]) => {
+      if (v === null || v === undefined) return false;
+      if (typeof v === "string" && v.trim() === "") return false;
+      if (Array.isArray(v) && v.length === 0) return false;
+      return true;
+    }),
+  );
+
   return `You are an expert AI website builder and editor assistant for "Linked" — a tool that turns LinkedIn profiles into premium personal websites.
 
 ### 📋 GATHER & BUILD WORKFLOW (Option A)
@@ -204,7 +247,7 @@ You must strictly follow a two-phase onboarding workflow:
 Here is the CURRENT website state for context:
 - Template: "${currentTemplate}"
 - Profile Data JSON:
-${JSON.stringify({ ...profile, blocks: undefined }, null, 2)}
+${JSON.stringify({ ...profileSummary, blocks: undefined }, null, 2)}
 
 ### 🛠️ PROFILE DATA TOOLS
 You have the following tools to update structured profile fields:
@@ -268,7 +311,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (!checkRateLimit(user.id)) {
+    if (!(await checkRateLimit(user.id))) {
       return NextResponse.json(
         {
           error:
@@ -279,7 +322,7 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { message, websiteId } = body;
+    const { message, websiteId, currentStep } = body;
 
     if (!message || !websiteId) {
       return NextResponse.json(
@@ -323,7 +366,7 @@ export async function POST(request: Request) {
 
     // Validate and select model — 'openrouter/free' is not a real model ID
     const rawModelName = process.env.OPENROUTER_MODEL || "";
-    const SAFE_FREE_MODEL = "meta-llama/llama-3.3-70b-instruct:free";
+    const SAFE_FREE_MODEL = "google/gemini-flash-1.5";
     const modelName =
       rawModelName && rawModelName !== "openrouter/free"
         ? rawModelName
@@ -339,19 +382,34 @@ export async function POST(request: Request) {
     // We do a fresh DB read only when blocks tools need the full blocks array.
     let profileSnapshot = { ...(website.profile as ProfileData) };
 
+    // Derive phase server-side to enforce safety rules
+    // User answers each milestone in Phase 1, so after 8 user messages (or when profile is already populated), we enter Phase 2.
+    const userMessagesCount = history.filter((m) => m.role === "user").length;
+    const isBlankProfile =
+      profileSnapshot.name === "Your Name" &&
+      (profileSnapshot.headline === "Your Professional Headline" ||
+        profileSnapshot.headline === "Senior Professional") &&
+      (!profileSnapshot.summary ||
+        profileSnapshot.summary === "Welcome to my personal micro-site.");
+
+    // We are in Phase 2 if we are in Step 12 (freeform mode) OR the profile is already populated (not blank) OR we have at least 8 user messages in chat onboarding.
+    const isPhase2 =
+      currentStep === 12 || !isBlankProfile || userMessagesCount >= 8;
+
     const systemPromptContent = buildSystemPrompt(
       profileSnapshot,
       website.templateId || "daniel-cross",
     );
 
-    // Format chat messages history for Vercel AI SDK
-    const chatMessagesContext = history.map((msg) => ({
+    // Format chat messages history for Vercel AI SDK (limit to recent 20 messages to avoid context overflow)
+    const recentHistory = history.slice(-20);
+    const chatMessagesContext = recentHistory.map((msg) => ({
       role: msg.role as "user" | "assistant",
       content: msg.content,
     }));
 
     // Call generateText with tools
-    // stopWhen is set to 15 to allow Phase 2 to call all profile update tools in one turn.
+    // stopWhen is set to 20 to allow Phase 2 to call all profile update tools in one turn.
     const result = await generateText({
       model,
       messages: [
@@ -359,8 +417,9 @@ export async function POST(request: Request) {
         ...chatMessagesContext,
         { role: "user", content: message },
       ],
-      stopWhen: stepCountIs(15),
-      tools: {
+      stopWhen: stepCountIs(20),
+      maxOutputTokens: 4000,
+      tools: isPhase2 ? {
         update_profile_field: tool({
           description:
             "Updates a single string/text field in the user's profile. Only call this for text fields.",
@@ -675,22 +734,15 @@ export async function POST(request: Request) {
           inputSchema: z.object({}),
           execute: async () => {
             try {
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const blocks = createDefaultBlocks(current.profile);
-                const newProfile = {
-                  ...current.profile,
-                  blocks,
-                };
-                profileUpdates.blocks = blocks;
-                templateUpdate = "daniel-cross";
-                await updateWebsite(websiteId, {
-                  profile: newProfile,
-                  templateId: "daniel-cross",
-                });
-                return { success: true, blocksCount: blocks.length };
-              }
-              return { success: false, error: "Website not found" };
+              const blocks = createDefaultBlocks(profileSnapshot);
+              profileSnapshot.blocks = blocks;
+              profileUpdates.blocks = blocks;
+              templateUpdate = "daniel-cross";
+              await updateWebsite(websiteId, {
+                profile: { ...profileSnapshot },
+                templateId: "daniel-cross",
+              });
+              return { success: true, blocksCount: blocks.length };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }
@@ -720,31 +772,24 @@ export async function POST(request: Request) {
           }),
           execute: async ({ type, title, html, index }) => {
             try {
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const blocks = [...(current.profile.blocks || [])];
-                const newBlock = {
-                  id:
-                    "block_custom_" +
-                    Math.random().toString(36).substring(2, 9),
-                  type,
-                  title,
-                  html,
-                };
-                if (typeof index === "number") {
-                  blocks.splice(index, 0, newBlock);
-                } else {
-                  blocks.push(newBlock);
-                }
-                const newProfile = {
-                  ...current.profile,
-                  blocks,
-                };
-                profileUpdates.blocks = blocks;
-                await updateWebsite(websiteId, { profile: newProfile });
-                return { success: true, addedBlockId: newBlock.id };
+              const blocks = [...(profileSnapshot.blocks || [])];
+              const newBlock = {
+                id:
+                  "block_custom_" +
+                  Math.random().toString(36).substring(2, 9),
+                type,
+                title,
+                html,
+              };
+              if (typeof index === "number") {
+                blocks.splice(index, 0, newBlock);
+              } else {
+                blocks.push(newBlock);
               }
-              return { success: false, error: "Website not found" };
+              profileSnapshot.blocks = blocks;
+              profileUpdates.blocks = blocks;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
+              return { success: true, addedBlockId: newBlock.id };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }
@@ -761,23 +806,16 @@ export async function POST(request: Request) {
           }),
           execute: async ({ id, html }) => {
             try {
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const blocks = (current.profile.blocks || []).map((b) => {
-                  if (b.id === id || id.startsWith(`block-${b.id}`)) {
-                    return { ...b, html };
-                  }
-                  return b;
-                });
-                const newProfile = {
-                  ...current.profile,
-                  blocks,
-                };
-                profileUpdates.blocks = blocks;
-                await updateWebsite(websiteId, { profile: newProfile });
-                return { success: true, updatedBlockId: id };
-              }
-              return { success: false, error: "Website not found" };
+              const blocks = (profileSnapshot.blocks || []).map((b) => {
+                if (b.id === id || id.startsWith(`block-${b.id}`)) {
+                  return { ...b, html };
+                }
+                return b;
+              });
+              profileSnapshot.blocks = blocks;
+              profileUpdates.blocks = blocks;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
+              return { success: true, updatedBlockId: id };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }
@@ -790,20 +828,13 @@ export async function POST(request: Request) {
           }),
           execute: async ({ id }) => {
             try {
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const blocks = (current.profile.blocks || []).filter(
-                  (b) => b.id !== id && !id.startsWith(`block-${b.id}`),
-                );
-                const newProfile = {
-                  ...current.profile,
-                  blocks,
-                };
-                profileUpdates.blocks = blocks;
-                await updateWebsite(websiteId, { profile: newProfile });
-                return { success: true, deletedBlockId: id };
-              }
-              return { success: false, error: "Website not found" };
+              const blocks = (profileSnapshot.blocks || []).filter(
+                (b) => b.id !== id && !id.startsWith(`block-${b.id}`),
+              );
+              profileSnapshot.blocks = blocks;
+              profileUpdates.blocks = blocks;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
+              return { success: true, deletedBlockId: id };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }
@@ -817,38 +848,31 @@ export async function POST(request: Request) {
           }),
           execute: async ({ ids }) => {
             try {
-              const current = await getWebsiteById(websiteId);
-              if (current) {
-                const currentBlocks = current.profile.blocks || [];
-                const reordered = ids
-                  .map((id) =>
-                    currentBlocks.find(
-                      (b) => b.id === id || id.startsWith(`block-${b.id}`),
-                    ),
-                  )
-                  .filter(Boolean) as any[];
+              const currentBlocks = profileSnapshot.blocks || [];
+              const reordered = ids
+                .map((id) =>
+                  currentBlocks.find(
+                    (b) => b.id === id || id.startsWith(`block-${b.id}`),
+                  ),
+                )
+                .filter(Boolean) as any[];
 
-                // Add any missing blocks back at the end
-                for (const b of currentBlocks) {
-                  if (!reordered.some((r) => r.id === b.id)) {
-                    reordered.push(b);
-                  }
+              // Add any missing blocks back at the end
+              for (const b of currentBlocks) {
+                if (!reordered.some((r) => r.id === b.id)) {
+                  reordered.push(b);
                 }
-                const newProfile = {
-                  ...current.profile,
-                  blocks: reordered,
-                };
-                profileUpdates.blocks = reordered;
-                await updateWebsite(websiteId, { profile: newProfile });
-                return { success: true };
               }
-              return { success: false, error: "Website not found" };
+              profileSnapshot.blocks = reordered;
+              profileUpdates.blocks = reordered;
+              await updateWebsite(websiteId, { profile: { ...profileSnapshot } });
+              return { success: true };
             } catch (err: any) {
               return { success: false, error: err.message || err };
             }
           },
         }),
-      },
+      } : {},
     });
 
     const replyText = result.text || "I have updated your page successfully.";

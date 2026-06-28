@@ -710,7 +710,7 @@ function EditorInner() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: lastUserMessage, websiteId }),
+        body: JSON.stringify({ message: lastUserMessage, websiteId, currentStep }),
       });
       const data = await response.json();
       if (!response.ok) {
@@ -766,7 +766,7 @@ function EditorInner() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg, websiteId }),
+        body: JSON.stringify({ message: msg, websiteId, currentStep }),
       });
       const data = await response.json();
       if (!response.ok) {

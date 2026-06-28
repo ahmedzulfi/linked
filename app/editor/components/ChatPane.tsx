@@ -162,7 +162,7 @@ export default function ChatPane({
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msg, websiteId }),
+        body: JSON.stringify({ message: msg, websiteId, currentStep: 12 }),
       });
       const data = await response.json();
       if (!response.ok) {

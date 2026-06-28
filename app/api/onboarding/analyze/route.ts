@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       apiKey: openrouterApiKey,
     });
     const modelName =
-      process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
+      process.env.OPENROUTER_MODEL || "google/gemini-flash-1.5";
     const model = openrouter(modelName);
 
     const prompt = `
@@ -110,13 +110,13 @@ JSON Output Structure:
       const response = await generateText({
         model,
         prompt,
+        temperature: 0,
+        maxOutputTokens: 2000,
       });
 
-      const cleanText = response.text
-        .trim()
-        .replace(/^```json|```$/g, "")
-        .trim();
-      const parsedData = JSON.parse(cleanText);
+      const match = response.text.match(/```(?:json)?\s*([\s\S]*?)```/);
+      const clean = (match ? match[1] : response.text).trim();
+      const parsedData = JSON.parse(clean);
 
       // Construct refined profile
       const refinedProfile: ProfileData = {

@@ -43,13 +43,17 @@ async function runScrapyScraper(url: string): Promise<any> {
 
 async function scrapeLinkedInProfileWithFallback(
   url: string,
-): Promise<ProfileData> {
+): Promise<{
+  profileData: ProfileData;
+  scraper: "scrapy" | "playwright";
+  fallbackReason?: string;
+}> {
   if (process.env.SCRAPY_ENABLED === "true") {
     console.log(`[Scrape] Attempting Python Scrapy scraper for: ${url}`);
     try {
       const scrapyData = await runScrapyScraper(url);
       console.log(`[Scrape] Scrapy scraper succeeded for: ${url}`);
-      return {
+      const profileData = {
         ...MOCK_PROFILE,
         name: scrapyData.name || "John Doe",
         headline: scrapyData.headline || "Professional expert",
@@ -70,17 +74,21 @@ async function scrapeLinkedInProfileWithFallback(
             : MOCK_PROFILE.education,
         linkedinUrl: url,
         links: [
-          { label: "LinkedIn", url, icon: "linkedin" },
-          { label: "Website", url: "#", icon: "website" },
+          { label: "LinkedIn", url, icon: "linkedin" as const },
+          { label: "Website", url: "#", icon: "website" as const },
         ],
       };
+      return { profileData, scraper: "scrapy" };
     } catch (err: any) {
-      console.warn(
-        `[Scrape] Scrapy scraper failed: ${err.message}. Falling back to Playwright...`,
+      console.error(
+        `[Scrapy] Failed, falling back to Playwright. Reason: ${err.message}`,
       );
+      const profileData = await scrapeLinkedInProfile(url);
+      return { profileData, scraper: "playwright", fallbackReason: err.message };
     }
   }
-  return scrapeLinkedInProfile(url);
+  const profileData = await scrapeLinkedInProfile(url);
+  return { profileData, scraper: "playwright" };
 }
 
 async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
@@ -244,8 +252,8 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
       education: education.length > 0 ? education : MOCK_PROFILE.education,
       linkedinUrl: url,
       links: [
-        { label: "LinkedIn", url, icon: "linkedin" },
-        { label: "Website", url: "#", icon: "website" },
+        { label: "LinkedIn", url, icon: "linkedin" as const },
+        { label: "Website", url: "#", icon: "website" as const },
       ],
     };
   } catch (e) {
@@ -257,9 +265,9 @@ async function scrapeLinkedInProfile(url: string): Promise<ProfileData> {
 export async function POST(request: Request) {
   try {
     const user = await getAuthenticatedUser();
-    // if (!user) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
     const body = await request.json();
     const { url } = body;
@@ -282,11 +290,14 @@ export async function POST(request: Request) {
       );
     }
 
-    const profileData = await scrapeLinkedInProfileWithFallback(url);
+    const { profileData, scraper, fallbackReason } =
+      await scrapeLinkedInProfileWithFallback(url);
 
     return NextResponse.json({
       success: true,
       data: profileData,
+      scraper,
+      scraper_fallback_reason: fallbackReason,
     });
   } catch (e: any) {
     return NextResponse.json(
